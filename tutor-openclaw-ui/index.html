@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Tutor Agent · Visual Learning Copilot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=Nunito+Sans:wght@400;500;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="shape shape-a"></div>
+    <div class="shape shape-b"></div>
+    <div class="shape shape-c"></div>
+    <div class="noise-layer"></div>
+
+    <div class="site-shell">
+        <header class="top-nav card-surface">
+            <div class="brand">
+                <div class="brand-mark">
+                    <span></span>
+                </div>
+                <div>
+                    <p class="brand-title">Tutor Agent</p>
+                    <p class="brand-sub">Visual Learning Copilot</p>
+                </div>
+            </div>
+
+            <nav class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#workspace">Workspace</a>
+                <a href="#examples">Examples</a>
+            </nav>
+
+            <div class="nav-pill">Live Demo</div>
+        </header>
+
+        <section class="hero" id="features">
+            <div class="hero-main card-surface">
+                <p class="scribble">No more abstract confusion</p>
+                <h1>
+                    把复杂原理，
+                    <span>变成一眼看懂的图文解释</span>
+                </h1>
+                <p class="hero-desc">
+                    给我一个学习主题（算法 / 数学 / 信号处理），我会返回结构化讲解 + 教学配图，
+                    让你在展示、复习、备课时都能快速进入“啊哈时刻”。
+                </p>
+
+                <div class="cta-row" id="examples">
+                    <button class="prompt-chip" data-prompt="讲解 DFS 原理并配图">Try DFS</button>
+                    <button class="prompt-chip" data-prompt="讲解傅立叶变换原理并配图">Try Fourier</button>
+                    <button class="prompt-chip" data-prompt="讲解 Dijkstra 最短路径并配图">Try Dijkstra</button>
+                </div>
+
+                <div class="hero-metrics">
+                    <div>
+                        <strong>24 / 7</strong>
+                        <p>随时可用</p>
+                    </div>
+                    <div>
+                        <strong>Text + Visual</strong>
+                        <p>图文双通道理解</p>
+                    </div>
+                    <div>
+                        <strong>秒级返回</strong>
+                        <p>用于课堂 demo</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-stage card-surface">
+                <div class="stage-head">
+                    <span class="dot"></span>
+                    <p>Realtime tutoring snapshot</p>
+                </div>
+
+                <div class="stage-bubble user">“讲解 BFS，并画出队列变化图”</div>
+                <div class="stage-bubble bot">收到，我会用步骤图 + 节点层级解释。</div>
+
+                <div class="stage-visual">
+                    <div class="grid"></div>
+                    <p>AI 教学配图生成中…</p>
+                </div>
+
+                <ul>
+                    <li>✅ 核心概念先解释</li>
+                    <li>✅ 关键步骤可视化</li>
+                    <li>✅ 适合展示 / 讲解 / 复盘</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="benefit-row">
+            <article class="benefit-card card-surface">
+                <p class="kicker">Understand faster</p>
+                <h3>从“背概念”到“看懂过程”</h3>
+                <p>不再只有抽象定义，直接看到算法或原理如何运行。</p>
+            </article>
+
+            <article class="benefit-card card-surface">
+                <p class="kicker">Teach better</p>
+                <h3>讲课和汇报更有说服力</h3>
+                <p>把复杂知识转成结构化叙事，学生和老师都更容易 follow。</p>
+            </article>
+
+            <article class="benefit-card card-surface">
+                <p class="kicker">Build momentum</p>
+                <h3>持续学习，不靠临时抱佛脚</h3>
+                <p>随问随学，快速补齐薄弱点，节奏更稳定。</p>
+            </article>
+        </section>
+
+        <section class="workspace" id="workspace">
+            <aside class="feature-panel card-surface">
+                <h3>提问模板（直接点）</h3>
+                <p>推荐使用「讲解 + 对象 + 输出形式」来获得更稳定的图文质量。</p>
+
+                <div class="sample-list">
+                    <button class="sample-item prompt-chip" data-prompt="讲解 BFS 原理，并画出队列变化示意图">BFS + 队列变化</button>
+                    <button class="sample-item prompt-chip" data-prompt="讲解 DFS 原理，并画出回溯过程图">DFS + 回溯过程</button>
+                    <button class="sample-item prompt-chip" data-prompt="讲解傅立叶变换原理，并画出时域频域对照图">傅立叶 + 时域频域</button>
+                    <button class="sample-item prompt-chip" data-prompt="讲解最短路径算法，并画一个带权图案例">最短路径 + 带权图</button>
+                </div>
+
+                <div class="tips-card">
+                    <p class="tips-title">Prompt 小贴士</p>
+                    <ul>
+                        <li>说清楚你是“复习”还是“演示”</li>
+                        <li>指定你想要的图类型（流程图/对照图/示意图）</li>
+                        <li>要我输出“面向初学者”或“面向进阶”版本</li>
+                    </ul>
+                </div>
+            </aside>
+
+            <main class="chat-panel card-surface">
+                <div class="chat-head">
+                    <div>
+                        <h3>Learning Workspace</h3>
+                        <p>发送问题，获取图文解释</p>
+                    </div>
+                    <span class="status-dot">Online</span>
+                </div>
+
+                <div class="chat-container" id="chatContainer">
+                    <div class="welcome-card">
+                        <p class="welcome-title">👋 欢迎来到 Tutor Agent</p>
+                        <p>我会把你的问题转换成“可讲清、可展示”的图文答案。</p>
+                        <ul>
+                            <li>优先输出关键概念 + 步骤结构</li>
+                            <li>自动插入教学配图（适合你的 demo）</li>
+                            <li>支持你持续追问，直到你完全听懂</li>
+                        </ul>
+                        <p class="welcome-tip">示例：<strong>“讲解 DFS 原理并配图，面向初学者”</strong></p>
+                    </div>
+                </div>
+
+                <footer class="composer">
+                    <div class="input-wrapper">
+                        <input type="text" id="userInput" placeholder="例如：讲解傅立叶变换原理并配图，面向新手" autocomplete="off">
+                        <button id="sendBtn" onclick="sendMessage()" aria-label="发送">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                        </button>
+                    </div>
+                </footer>
+            </main>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
