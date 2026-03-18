@@ -6,7 +6,7 @@
  *
  * 说明：
  * - 按 MVP 要求，用户原始 prompt 不做改写，直接透传给生图脚本。
- * - 脚本内部调用 Nano Banana 2 (google/gemini-3.1-flash-image-preview)。
+ * - 脚本内部调用 OpenRouter 的 google/gemini-3.1-flash-image-preview。
  */
 
 const http = require('http');
