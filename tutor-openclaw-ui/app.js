@@ -426,11 +426,17 @@ const learnOverlay    = document.getElementById('learnOverlay');
 const learnTitle      = document.getElementById('learnTitle');
 const learnClose      = document.getElementById('learnClose');
 const learnIntroCard  = document.getElementById('learnIntroCard');
+const learnIntroMeta  = document.getElementById('learnIntroMeta');
 const learnIntroText  = document.getElementById('learnIntroText');
 const learnStartBtn   = document.getElementById('learnStartBtn');
 const learnBody       = document.getElementById('learnBody');
 const learnLoading    = document.getElementById('learnLoading');
 const learnLoadingText = document.getElementById('learnLoadingText');
+const learnSplash     = document.getElementById('learnSplash');
+const learnSplashNote = document.getElementById('learnSplashNote');
+const learnWebSection  = document.getElementById('learnWebSection');
+const learnWebSectionCount = document.getElementById('learnWebSectionCount');
+const learnWebCards    = document.getElementById('learnWebCards');
 const learnBookPages  = document.getElementById('learnBookPages');
 const learnPageLabel  = document.getElementById('learnPageLabel');
 const learnPagePrev   = document.getElementById('learnPagePrev');
@@ -453,6 +459,43 @@ let learnSectionId = '';
 let learnSectionTitle = '';
 let learnWebData = [];
 let learnAbort = null;
+
+// ── Splash stage control ──────────────────────────────────────────────────
+let splashTimer = null;
+function showSplash() {
+  learnSplash.classList.remove('hidden');
+  [1,2,3,4].forEach(n => {
+    const el = document.getElementById(`lss-${n}`);
+    if (el) { el.classList.remove('active','done'); }
+  });
+  setSplashStage(1);
+}
+function hideSplash() {
+  if (splashTimer) { clearInterval(splashTimer); splashTimer = null; }
+  learnSplash.classList.add('hidden');
+}
+function setSplashStage(n) {
+  [1,2,3,4].forEach(i => {
+    const el = document.getElementById(`lss-${i}`);
+    if (!el) return;
+    el.classList.remove('active','done');
+    if (i < n) el.classList.add('done');
+    else if (i === n) el.classList.add('active');
+  });
+}
+function startSplashProgress(fromStage, toStage, totalMs) {
+  let stage = fromStage;
+  setSplashStage(stage);
+  const steps = toStage - fromStage;
+  if (steps <= 0) return;
+  const interval = totalMs / steps;
+  splashTimer = setInterval(() => {
+    stage++;
+    setSplashStage(stage);
+    if (stage >= toStage) { clearInterval(splashTimer); splashTimer = null; }
+  }, interval);
+}
+// ─────────────────────────────────────────────────────────────────────────────
 
 function setLearnLoading(show, text = 'Loading…') {
   learnLoading.classList.toggle('hidden', !show);
@@ -513,6 +556,28 @@ function renderLearnWebSources(sources) {
   }).join('');
 }
 
+function renderLearnWebSection(webSources) {
+  if (!learnWebSection) return;
+  if (!webSources || !webSources.length) {
+    learnWebSection.classList.add('hidden');
+    return;
+  }
+  learnWebSectionCount.textContent = webSources.length;
+  learnWebCards.innerHTML = webSources.map(w => {
+    const d = w.domain || domainOf(w.url);
+    const fav = d ? `https://www.google.com/s2/favicons?sz=32&domain=${encodeURIComponent(d)}` : '';
+    return `<a class="learn-web-card" href="${escapeHtml(w.url)}" target="_blank" rel="noopener noreferrer">
+      <div class="lwc-head">
+        ${fav ? `<img class="lwc-fav" src="${fav}" alt="">` : ''}
+        <div class="lwc-title">${escapeHtml(w.title || d || w.url)}</div>
+      </div>
+      ${d ? `<div class="lwc-domain">${escapeHtml(d)}</div>` : ''}
+      ${w.snippet ? `<div class="lwc-snippet">${escapeHtml(w.snippet)}</div>` : ''}
+    </a>`;
+  }).join('');
+  learnWebSection.classList.remove('hidden');
+}
+
 async function openLearnMode(sectionId, sectionTitle) {
   learnSectionId = sectionId;
   learnSectionTitle = sectionTitle;
@@ -524,10 +589,10 @@ async function openLearnMode(sectionId, sectionTitle) {
   learnIntroCard.classList.remove('hidden');
   learnBody.classList.add('hidden');
   learnIntroText.textContent = '';
+  if (learnIntroMeta) learnIntroMeta.innerHTML = '';
   learnOverlay.classList.remove('hidden');
   document.body.style.overflow = 'hidden';
-
-  setLearnLoading(true, 'Generating section overview…');
+  showSplash();
 
   if (learnAbort) learnAbort.abort();
   learnAbort = new AbortController();
@@ -541,23 +606,27 @@ async function openLearnMode(sectionId, sectionTitle) {
     });
     const data = await res.json();
     learnPages = data.bookPages || [];
-    learnIntroText.textContent = data.intro || '加载导读失败。';
+    hideSplash();
+    if (learnIntroMeta && data.bookPages && data.bookPages.length) {
+      learnIntroMeta.innerHTML = [
+        `<span class="learn-intro-badge">📚 ${data.bookPages.length} textbook page${data.bookPages.length !== 1 ? 's' : ''}</span>`,
+        `<span class="learn-intro-badge">💡 ${sectionTitle}</span>`
+      ].join('');
+    }
+    learnIntroText.textContent = data.intro || 'Ready to start learning.';
     setLearnLoading(false);
   } catch (err) {
+    hideSplash();
     if (err.name === 'AbortError') return;
-    learnIntroText.textContent = '加载失败：' + err.message;
+    learnIntroText.textContent = 'Failed to load: ' + err.message;
     setLearnLoading(false);
   }
 }
 
 async function startLesson() {
   learnIntroCard.classList.add('hidden');
-  learnBody.classList.remove('hidden');
-  learnExplainContent.innerHTML = '<p class="ghost">Lesson Architect is planning… Tutor is writing…</p>';
-  renderLearnPages();
-  renderLearnWebSources([]);
-
-  setLearnLoading(true, '🧠 Planning lesson blueprint — then generating explanation…');
+  showSplash();
+  startSplashProgress(1, 3, 8000); // animate stages 1-3 over ~8s (real API determines actual timing)
 
   if (learnAbort) learnAbort.abort();
   learnAbort = new AbortController();
@@ -569,8 +638,11 @@ async function startLesson() {
       body: JSON.stringify({ sectionId: learnSectionId, sectionTitle: learnSectionTitle, mode: 'lesson', language: window.tutorLang || 'en' }),
       signal: learnAbort.signal
     });
+    setSplashStage(4); // charts / rendering
     const data = await res.json();
-    setLearnLoading(false);
+    hideSplash();
+
+    learnBody.classList.remove('hidden');
     learnPages = data.bookPages || learnPages;
     tutorState.learnSectionId = learnSectionId;
     tutorState.learnSectionTitle = learnSectionTitle;
@@ -581,18 +653,21 @@ async function startLesson() {
       ? [{ role: 'assistant', content: tutorState.learnLessonMarkdown }]
       : [];
     renderLearnPages();
-    learnExplainContent.innerHTML = markdownToHtml(data.lesson || '暂无讲解内容');
+    learnExplainContent.innerHTML = markdownToHtml(data.lesson || 'No explanation available.');
     setTimeout(() => {
       if (window.MathJax && window.MathJax.typesetPromise) {
         window.MathJax.typesetPromise([learnExplainContent]).catch(() => {});
       }
     }, 50);
     renderLearnWebSources(data.webSources || []);
+    renderLearnWebSection(data.webSources || []);
     learnExplainScroll.scrollTop = 0;
-  } catch (err) {
     setLearnLoading(false);
+  } catch (err) {
+    hideSplash();
     if (err.name === 'AbortError') return;
-    learnExplainContent.innerHTML = `<div class="error-box"><strong>加载失败</strong><p>${escapeHtml(err.message)}</p></div>`;
+    learnBody.classList.remove('hidden');
+    learnExplainContent.innerHTML = `<div class="error-box"><strong>Failed to load lesson</strong><p>${escapeHtml(err.message)}</p></div>`;
   }
 }
 
@@ -629,9 +704,10 @@ async function sendLearnFollowup(rawPrompt) {
 
   const answerId = `learn-followup-answer-${Date.now()}`;
   learnExplainContent.insertAdjacentHTML('beforeend', `
-    <hr>
-    <p><strong>Follow-up question:</strong> ${escapeHtml(prompt)}</p>
-    <div id="${answerId}"><p class="ghost">Thinking with context from this section…</p></div>
+    <div class="followup-bubble" id="${answerId}">
+      <div class="fub-q">${escapeHtml(prompt)}</div>
+      <div class="fub-a ghost">Thinking with context from this section…</div>
+    </div>
   `);
   learnExplainScroll.scrollTop = learnExplainScroll.scrollHeight;
 
@@ -651,7 +727,11 @@ async function sendLearnFollowup(rawPrompt) {
     });
 
     const target = document.getElementById(answerId);
-    if (target) target.innerHTML = markdownToHtml(data.explanation || '暂无讲解内容');
+    if (target) {
+      const answerDiv = target.querySelector('.fub-a') || target;
+      answerDiv.className = 'fub-a';
+      answerDiv.innerHTML = markdownToHtml(data.explanation || 'No explanation available.');
+    }
     setTimeout(() => {
       if (window.MathJax && window.MathJax.typesetPromise) {
         window.MathJax.typesetPromise([learnExplainContent]).catch(() => {});
@@ -665,6 +745,7 @@ async function sendLearnFollowup(rawPrompt) {
     tutorState.learnBookPages = data.bookPages || tutorState.learnBookPages;
     tutorState.learnWebSources = data.webSources || tutorState.learnWebSources;
     renderLearnWebSources(tutorState.learnWebSources);
+    renderLearnWebSection(tutorState.learnWebSources);
     learnExplainScroll.scrollTop = learnExplainScroll.scrollHeight;
   } catch (err) {
     if (err.name === 'AbortError') return;

@@ -1,0 +1,15 @@
+[Index] Section map loaded: 61 sections
+================================================================
+Tutor Agent Bridge
+================================================================
+HTTP Server : http://localhost:9000
+Indexed OCR : 104 pages
+Skill Script: /Users/chenghaoxiang/.agents/skills/image-animation-generation/scripts/gen_image.py
+
+Endpoints:
+  - http://localhost:9000/           (Web UI)
+  - http://localhost:9000/api/ask    (RAG + Web + Claude Opus)
+  - http://localhost:9000/api/tutor  (Legacy API preserved)
+  - http://localhost:9000/health     (Health check)
+================================================================
+[HTTP] GET /health

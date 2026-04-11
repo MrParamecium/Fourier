@@ -1,0 +1,40 @@
+--- tutor-openclaw-ui/style.css
++++ tutor-openclaw-ui/style.css
+@@ -2,21 +2,21 @@
+   /* Colors */
+-  --bg-body: #f8f9fb;
+-  --bg-sidebar: #ffffff;
+-  --bg-main: #ffffff;
++  --bg-body: #fffaf5;
++  --bg-sidebar: #fffdfa;
++  --bg-main: #fffdfa;
+   --bg-panel: #ffffff;
+   --bg-input: #ffffff;
+-  --bg-hover: #f1f3f7;
+-  --bg-active: #e8ecf4;
+-  --border: #e5e7eb;
+-  --border-strong: #d1d5db;
+-  --border-focus: #5b8cff;
++  --bg-hover: #fff3e0;
++  --bg-active: #ffedd5;
++  --border: #f3e8d9;
++  --border-strong: #eaddcb;
++  --border-focus: #fb923c;
+   
+-  --text-primary: #111827;
+-  --text-secondary: #4b5563;
+-  --text-muted: #9ca3af;
+-  --accent: #2563eb;
+-  --text-accent: #2563eb;
++  --text-primary: #2d241c;
++  --text-secondary: #5a4b3c;
++  --text-muted: #9f8c7a;
++  --accent: #f59e0b;
++  --text-accent: #d97706;
+   --success: #10b981;
+   --danger: #ef4444;
+ 
+@@ -37,7 +37,7 @@
+   --book-width: 400px;
+   --header-height: 60px;
+ }

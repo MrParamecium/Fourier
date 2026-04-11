@@ -36,6 +36,9 @@ function resolveHomePath(p) {
 const SKILL_SCRIPT = resolveHomePath(
     process.env.TUTOR_SKILL_SCRIPT || '~/.agents/skills/image-animation-generation/scripts/gen_image.py'
 );
+const MATPLOTLIB_GEN = path.join(__dirname, 'matplotlib_gen.py');
+const GENERATED_DIR = path.join(__dirname, 'generated');
+try { if (!fs.existsSync(GENERATED_DIR)) fs.mkdirSync(GENERATED_DIR, { recursive: true }); } catch (_) {}
 
 const MIME_TYPES = {
     '.html': 'text/html; charset=utf-8',
@@ -858,7 +861,7 @@ async function agentB_execute(blueprint, bookPages, webSources, language = 'en')
     // Try to parse Agent B's JSON output and convert to Markdown
     const rendered = tryParseJsonLoose(raw);
     if (rendered && Array.isArray(rendered.rendered_blocks)) {
-        return blueprintToMarkdown(rendered.rendered_blocks, existingPageImages);
+        return await blueprintToMarkdown(rendered.rendered_blocks, existingPageImages);
     }
 
     // If not valid JSON, return raw (it may already be Markdown)
@@ -869,7 +872,7 @@ async function agentB_execute(blueprint, bookPages, webSources, language = 'en')
 /**
  * Convert Agent B's rendered_blocks JSON → Markdown string for the frontend.
  */
-function blueprintToMarkdown(blocks, pageImages) {
+async function blueprintToMarkdown(blocks, pageImages) {
     const parts = [];
 
     for (const block of blocks) {
@@ -906,16 +909,36 @@ function blueprintToMarkdown(blocks, pageImages) {
                 break;
 
             case 'generate_image':
-                // python_matplotlib: embed script as code block with note
                 if (block.tool === 'python_matplotlib') {
-                    parts.push(`> 📊 **Generated chart** — rendered by Python/matplotlib`);
-                    if (block.caption) parts.push(`*${block.caption}*`);
-                    // Script is available server-side; frontend will receive output_path once executed
-                    if (block.output_path) parts.push(`![Chart](/${block.output_path})`);
+                    const chartFile = `chart-${Date.now()}-${Math.random().toString(36).slice(2,7)}.png`;
+                    const chartPath = path.join(GENERATED_DIR, chartFile);
+                    const spec = Object.assign({}, block.python_spec || {}, { output_path: chartPath });
+                    try {
+                        const result = await runPython3(MATPLOTLIB_GEN, JSON.stringify(spec));
+                        const parsed = JSON.parse(result);
+                        if (parsed.ok) {
+                            if (block.caption) parts.push(`*📊 ${block.caption}*`);
+                            parts.push(`![Chart](/generated/${chartFile})`);
+                        } else {
+                            parts.push(`> ⚠️ Chart render failed: ${parsed.error || 'unknown'}`);
+                        }
+                    } catch (e) {
+                        parts.push(`> ⚠️ Chart render error: ${e.message}`);
+                    }
                 } else if (block.tool === 'nano_banana2') {
-                    parts.push(`> 🎨 **Illustration** — generated image`);
-                    if (block.caption) parts.push(`*${block.caption}*`);
-                    if (block.output_path) parts.push(`![Illustration](/${block.output_path})`);
+                    const prompt = block.prompt || block.spec || (block.python_spec && block.python_spec.description) || block.reason || 'educational illustration';
+                    try {
+                        const imgResult = await callTutorSkillRaw(prompt);
+                        const urls = (imgResult.match(/https?:\/\/[^\s)"']+\.(?:png|jpg|jpeg|webp|gif)[^\s)"']*/gi) || []);
+                        if (urls.length > 0) {
+                            if (block.caption) parts.push(`*🎨 ${block.caption}*`);
+                            parts.push(`![Illustration](${urls[0]})`);
+                        } else {
+                            parts.push(`> *(Illustration generation attempted — no image returned)*`);
+                        }
+                    } catch (e) {
+                        parts.push(`> *(Illustration unavailable: ${e.message})*`);
+                    }
                 }
                 break;
 
@@ -1021,6 +1044,29 @@ async function _legacyGenerateSectionLesson(sectionId, sectionTitle, bookPages, 
             { role: 'system', content: '你是一位耐心、准确、会讲人话的理工科导师。你的目标是让完全没学过这门课的学生在短时间内真正理解这个知识点。' },
             { role: 'user', content: prompt }
         ]
+    });
+}
+
+/**
+ * 通用 Python3 runner — executes scriptPath with a single string argument
+ */
+function runPython3(scriptPath, arg, timeoutMs = 30000) {
+    return new Promise((resolve, reject) => {
+        const child = spawn('python3', [scriptPath, arg], {
+            env: process.env,
+            stdio: ['ignore', 'pipe', 'pipe']
+        });
+        let stdout = '';
+        let stderr = '';
+        const timer = setTimeout(() => { child.kill('SIGKILL'); reject(new Error('python3 timeout')); }, timeoutMs);
+        child.stdout.on('data', d => { stdout += d.toString('utf8'); });
+        child.stderr.on('data', d => { stderr += d.toString('utf8'); });
+        child.on('error', e => { clearTimeout(timer); reject(e); });
+        child.on('close', code => {
+            clearTimeout(timer);
+            if (code !== 0) return reject(new Error(stderr || `exit ${code}`));
+            resolve(stdout.trim());
+        });
     });
 }
 
@@ -1287,6 +1333,12 @@ const server = http.createServer(async (req, res) => {
     if (pathname.startsWith('/pages/')) {
         const filename = pathname.replace(/^\/pages\//, '');
         serveStaticFromDir(res, PAGE_IMAGE_DIR, filename);
+        return;
+    }
+
+    if (pathname.startsWith('/generated/')) {
+        const filename = pathname.replace(/^\/generated\//, '');
+        serveStaticFromDir(res, GENERATED_DIR, filename);
         return;
     }
 

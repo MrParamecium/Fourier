@@ -171,10 +171,25 @@
 
       <!-- Intro Card -->
       <div class="learn-intro-card" id="learnIntroCard">
+        <div class="learn-intro-meta" id="learnIntroMeta"></div>
         <p class="learn-intro-text" id="learnIntroText"></p>
         <button class="learn-start-btn" id="learnStartBtn">
-          <span>▶</span> Start Learning
+          <span>▶</span> Start Learning This Section
         </button>
+      </div>
+
+      <!-- Full-screen loading overlay inside learn -->
+      <div class="learn-splash hidden" id="learnSplash">
+        <div class="learn-splash-inner">
+          <div class="learn-spinner"></div>
+          <div class="learn-splash-stages" id="learnSplashStages">
+            <div class="lss-item" id="lss-1"><span class="lss-icon">📚</span><span class="lss-text">Retrieving textbook pages…</span></div>
+            <div class="lss-item" id="lss-2"><span class="lss-icon">🧠</span><span class="lss-text">Agent A (Gemini) is planning the lesson structure…</span></div>
+            <div class="lss-item" id="lss-3"><span class="lss-icon">✍️</span><span class="lss-text">Agent B (Claude) is writing the explanation…</span></div>
+            <div class="lss-item" id="lss-4"><span class="lss-icon">📊</span><span class="lss-text">Rendering charts and images…</span></div>
+          </div>
+          <p class="learn-splash-note" id="learnSplashNote">This takes 20-40 seconds…</p>
+        </div>
       </div>
 
       <!-- Learn Body (hidden initially) -->
@@ -209,6 +224,14 @@
             <div class="learn-explain-scroll" id="learnExplainScroll">
               <div class="learn-explain-body" id="learnExplainContent">
                 <p class="ghost">Lesson is being prepared...</p>
+              </div>
+              <!-- Web sources section - shown by default after lesson loads -->
+              <div class="learn-web-section hidden" id="learnWebSection">
+                <div class="learn-web-section-title">
+                  <span>🌐</span> Web References
+                  <span class="learn-web-section-count" id="learnWebSectionCount"></span>
+                </div>
+                <div class="learn-web-cards" id="learnWebCards"></div>
               </div>
             </div>
             <div class="learn-followup-bar">
