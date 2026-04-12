@@ -2192,3 +2192,112 @@ html, body {
   box-shadow: none !important;
   background: #f3f3f3 !important;
 }
+
+/* ═══════════════════════════════════════════════════════
+   EDITORIAL TYPOGRAPHY — Heading hierarchy overhaul
+   Target: both Q&A (.explain-body) and Learn (.learn-explain-body)
+═══════════════════════════════════════════════════════ */
+
+.explain-body,
+.learn-explain-body {
+  --h1-color: #111111;
+  --h2-color: #1a1a1a;
+  --h3-color: #444444;
+  --h4-color: #666666;
+  --rule-color: #e0e0e0;
+  --callout-bg: #f7f7f7;
+  --callout-border: #222222;
+}
+
+/* H1 — Section opener, Playfair Display, large & authoritative */
+.explain-body h1,
+.learn-explain-body h1 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--h1-color);
+  letter-spacing: -0.5px;
+  margin: 2rem 0 0.75rem;
+  line-height: 1.25;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #111;
+}
+
+/* H2 — Major subsection, Inter bold with left accent bar */
+.explain-body h2,
+.learn-explain-body h2 {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--h2-color);
+  margin: 2rem 0 0.6rem;
+  padding-left: 14px;
+  border-left: 3px solid #111;
+  letter-spacing: -0.2px;
+  line-height: 1.4;
+}
+
+/* H3 — Sub-subsection, DM Mono uppercase label style */
+.explain-body h3,
+.learn-explain-body h3 {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--h3-color);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin: 1.8rem 0 0.5rem;
+  padding: 0;
+  border: none;
+}
+
+/* H4 — Inline label, Inter italic, muted */
+.explain-body h4,
+.learn-explain-body h4 {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--h4-color);
+  margin: 1.4rem 0 0.35rem;
+  letter-spacing: 0;
+}
+
+/* HR — elegant thin rule replacing ugly --- */
+.explain-body hr,
+.learn-explain-body hr {
+  border: none;
+  border-top: 1px solid var(--rule-color);
+  margin: 2rem 0;
+}
+
+/* Blockquote — used for callout boxes / objectives */
+.explain-body blockquote,
+.learn-explain-body blockquote {
+  background: var(--callout-bg);
+  border-left: 3px solid var(--callout-border);
+  margin: 1.5rem 0;
+  padding: 14px 20px;
+  border-radius: 0 6px 6px 0;
+  color: #333;
+  font-size: 0.97rem;
+}
+.explain-body blockquote p,
+.learn-explain-body blockquote p {
+  margin: 0;
+}
+
+/* Strong — make sure bold text is true black */
+.explain-body strong,
+.learn-explain-body strong {
+  color: #111;
+  font-weight: 700;
+}
+
+/* Remove first-child top margin for all headings */
+.explain-body > h1:first-child,
+.explain-body > h2:first-child,
+.learn-explain-body > h1:first-child,
+.learn-explain-body > h2:first-child {
+  margin-top: 0;
+}
