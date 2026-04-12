@@ -561,6 +561,11 @@ function renderLearnWebSection(webSources) {
   learnWebSection.classList.remove('hidden');
 }
 
+// Open Learn Mode without touching the right TOC (used when clicking sub-items in TOC)
+async function openLearnModeKeepToc(sectionId, sectionTitle) {
+  return openLearnMode(sectionId, sectionTitle, null /* null = keep existing TOC */);
+}
+
 async function openLearnMode(sectionId, sectionTitle, subsections = []) {
   learnSectionId = sectionId;
   learnSectionTitle = sectionTitle;
@@ -575,19 +580,21 @@ async function openLearnMode(sectionId, sectionTitle, subsections = []) {
   if (learnIntroMeta) learnIntroMeta.innerHTML = '';
   showLearnView();
   showSplash();
-  // Build right TOC: section title + subsections
-  {
+  // Build right TOC: section title + subsections (skip if null = preserve existing TOC)
+  if (subsections !== null) {
     const tocItems = [{ title: sectionTitle, depth: 1, anchor: '' }];
     subsections.forEach(sub => tocItems.push({ title: sub, depth: 2, anchor: '' }));
     buildToc(tocItems);
-    // Wire subsection depth-2 items to open that subsection
+    // Wire depth-2 items to open sub-lesson WITHOUT rebuilding TOC
     if (tocNav && subsections.length) {
       tocNav.querySelectorAll('.toc-item.depth-2').forEach((tocBtn, i) => {
         const subTitle = subsections[i];
         if (subTitle) {
           tocBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            openLearnMode(subTitle, subTitle, []);
+            tocNav.querySelectorAll('.toc-item').forEach(b => b.classList.remove('active'));
+            tocBtn.classList.add('active');
+            openLearnModeKeepToc(subTitle, subTitle);
           });
         }
       });
