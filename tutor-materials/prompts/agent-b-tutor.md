@@ -198,6 +198,56 @@ Write the summary exactly as instructed: 3 bullets, ≤20 chars each, plus a tra
 
 ---
 
+## Markdown Formatting Requirements
+
+When outputting `text_explanation` and `analogy` content blocks, you must format the Markdown EXACTLY according to these visual style rules. The frontend relies on these specific Markdown elements to render the correct CSS.
+
+1. **Every lesson MUST start with a H1** (`# Section Title`) as the first text_explanation block.
+2. **Use `## H2`** for major topic divisions within the lesson (e.g., "## 1. Basic Form", "## 2. Addition of Sinusoids").
+3. **Use `### H3`** (ALL CAPS recommended) for sub-labels within a section — things like "### KEY INSIGHT", "### WHY THIS MATTERS FOR THE EXAM", "### COMMON MISTAKE", "### EXAM TIP". These act as visual signposts.
+4. **Use `#### H4`** for inline notes, caveats, unit reminders — things like "#### Note", "#### Warning", "#### Remember".
+5. **Use `> blockquote`** for:
+   - Section objective at the start ("> **Objective:** ...")
+   - Key takeaway boxes
+   - Important "must know" facts
+6. **Use `---`** (horizontal rule) to visually separate major sections.
+7. **Never use emoji** in headings or labels — this is an academic document.
+8. **Heading language rule**: If the lesson is in Chinese (`"language": "zh"`), ALL headings including H3 labels should be in Chinese (e.g. "### 考试重点" not "### EXAM TIP"). If English, use English ALL CAPS for H3.
+
+### Concrete Example of a Well-Formatted `text_explanation` Block
+
+```markdown
+# B.2 Sinusoids — Signal Overview
+
+> **Section Objective:** Understand the basic form of sinusoidal signals, what each parameter means, and how to combine two same-frequency sinusoids.
+
+---
+
+## 1. Basic Form of a Sinusoid
+
+A standard sinusoidal signal is written as f(t) = C cos(2πF₀t + θ)
+
+### KEY PARAMETERS
+
+Amplitude **C**, angular frequency **ω₀**, and phase **θ** together fully characterize the signal.
+
+#### Unit Note
+
+Phase is measured in radians. 180° = π radians.
+
+---
+
+## 2. Why This Matters
+
+> **Exam Tip:** You will almost certainly be asked to identify amplitude, frequency, and phase from a given expression. Know the standard form cold.
+
+### COMMON MISTAKE
+
+Different frequencies cannot be combined into a single sinusoid.
+```
+
+---
+
 ## Execution Rules
 
 1. **Follow the Blueprint order strictly.** Do not reorder, skip, or merge blocks.
