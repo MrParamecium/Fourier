@@ -791,14 +791,52 @@ html, body {
   overflow: hidden;
 }
 
-/* Left: Book Panel */
-.col-book {
-  width: var(--book-width);
-  border-right: 1px solid var(--border);
-  background: var(--bg-body);
+/* Left: Book Panel (Hidden completely as requested to simulate d2l.ai clean view) */
+.col-book,
+.learn-book-col {
+  display: none !important;
+}
+
+/* Make explanation area span everything and look like a beautiful document */
+.col-explain,
+.learn-explain-col {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  flex-shrink: 0;
+  position: relative;
+  background: var(--bg-main);
+  align-items: center; /* Center the text container horizontally */
+}
+
+/* The scrolling container inside the col */
+.explain-scroll,
+.learn-explain-scroll {
+  width: 100%;
+  max-width: 900px; /* Wide, clean reading column like d2l.ai */
+  margin: 0 auto;
+  flex: 1;
+  overflow-y: auto;
+  padding: 40px 16px 140px; /* Pad bottom heavily so followup bar doesn't overlap text */
+  scroll-behavior: smooth;
+}
+
+/* Hide scrollbars for cleaner Notion-like look */
+.explain-scroll::-webkit-scrollbar,
+.learn-explain-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+.explain-scroll::-webkit-scrollbar-thumb,
+.learn-explain-scroll::-webkit-scrollbar-thumb {
+  background: rgba(245, 158, 11, 0.2);
+  border-radius: 4px;
+}
+
+.explain-body,
+.learn-explain-body {
+  font-size: 16.5px; /* Bumped up for readability */
+  line-height: 1.8;
+  color: var(--text-primary);
+  width: 100%;
 }
 
 .col-title {
@@ -812,7 +850,7 @@ html, body {
   color: var(--text-secondary);
   background: var(--bg-panel);
 }
-.col-title::after { content: 'Textbook Reference'; margin-left: -5px; }
+.col-title::after { content: 'Content Reference'; margin-left: -5px; }
 
 .col-count {
   font-size: 11px;
@@ -1048,7 +1086,7 @@ html, body {
 .step:has(.active) .step-label { color: var(--text-primary); }
 .step:has(.done) .step-label { color: var(--text-secondary); }
 
-#step-1 .step-label::after { content: 'Retrieve book pages'; }
+#step-1 .step-label::after { content: 'Extract concepts & formulas'; }
 #step-2 .step-label::after { content: 'Search the web'; }
 #step-3 .step-label::after { content: 'Synthesize answer'; }
 
@@ -1057,27 +1095,7 @@ html, body {
   50% { opacity: 0.5; transform: scale(0.8); }
 }
 
-/* Explanation Content Area */
-.explain-scroll {
-  flex: 1;
-  overflow-y: auto;
-  padding: 32px;
-  padding-bottom: 120px; /* space for followup bar */
-}
-
-.explain-scroll::-webkit-scrollbar { width: 8px; }
-.explain-scroll::-webkit-scrollbar-thumb {
-  background: var(--border-strong);
-  border-radius: var(--radius-pill);
-}
-
-.explain-body {
-  max-width: 760px;
-  margin: 0 auto;
-  font-size: 15px;
-  line-height: 1.7;
-  color: var(--text-primary);
-}
+/* Explanation Content Area merged into the top declarations */
 
 .explain-body p { margin-top: 0; margin-bottom: 1em; }
 .explain-body p:last-child { margin-bottom: 0; }
@@ -1140,7 +1158,7 @@ html, body {
   color: var(--text-secondary);
   margin-bottom: 12px;
 }
-#bookSourcesCount::before { content: 'Book Sources ('; }
+#bookSourcesCount::before { content: 'Content Sources ('; }
 #bookSourcesCount::after { content: ')'; }
 #webSourcesCount::before { content: 'Web Sources ('; }
 #webSourcesCount::after { content: ')'; }

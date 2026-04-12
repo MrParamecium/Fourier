@@ -92,13 +92,13 @@ const stepsBar = document.getElementById('stepsBar');
 const answerContent = document.getElementById('answerContent');
 const answerScroll = document.getElementById('answerScroll');
 
-const bookPagesContainer = document.getElementById('bookPagesContainer');
-const bookPanelMeta = document.getElementById('bookPanelMeta');
+const bookPagesContainer = document.getElementById('bookPagesContainer') || { innerHTML: '' };
+const bookPanelMeta = document.getElementById('bookPanelMeta') || { textContent: '' };
 
 const sourcesSection = document.getElementById('sourcesSection');
-const bookSourcesRail = document.getElementById('bookSourcesRail');
+const bookSourcesRail = document.getElementById('bookSourcesRail') || { innerHTML: '' };
 const webSourcesRail = document.getElementById('webSourcesRail');
-const bookSourcesCount = document.getElementById('bookSourcesCount');
+const bookSourcesCount = document.getElementById('bookSourcesCount') || { textContent: '' };
 const webSourcesCount = document.getElementById('webSourcesCount');
 
 const followupInput = document.getElementById('followupInput');
@@ -420,18 +420,18 @@ const learnSplashNote = document.getElementById('learnSplashNote');
 const learnWebSection  = document.getElementById('learnWebSection');
 const learnWebSectionCount = document.getElementById('learnWebSectionCount');
 const learnWebCards    = document.getElementById('learnWebCards');
-const learnBookPages  = document.getElementById('learnBookPages');
-const learnPageLabel  = document.getElementById('learnPageLabel');
-const learnPagePrev   = document.getElementById('learnPagePrev');
-const learnPageNext   = document.getElementById('learnPageNext');
+const learnBookPages  = document.getElementById('learnBookPages') || { innerHTML: '', querySelectorAll: () => [] };
+const learnPageLabel  = document.getElementById('learnPageLabel') || { textContent: '' };
+const learnPagePrev   = document.getElementById('learnPagePrev') || { classList: { add() {}, remove() {} }, addEventListener() {} };
+const learnPageNext   = document.getElementById('learnPageNext') || { classList: { add() {}, remove() {} }, addEventListener() {} };
 const learnExplainContent = document.getElementById('learnExplainContent');
 const learnExplainScroll  = document.getElementById('learnExplainScroll');
 const learnFollowupInput  = document.getElementById('learnFollowupInput');
 const learnFollowupBtn    = document.getElementById('learnFollowupBtn');
-const learnWebToggle  = document.getElementById('learnWebToggle');
-const learnWebBtn     = document.getElementById('learnWebBtn');
-const learnWebCount   = document.getElementById('learnWebCount');
-const learnWebSources = document.getElementById('learnWebSources');
+const learnWebToggle  = document.getElementById('learnWebToggle') || { classList: { add() {}, remove() {}, toggle() {} } };
+const learnWebBtn     = document.getElementById('learnWebBtn') || { classList: { add() {}, remove() {}, toggle() {} }, addEventListener() {} };
+const learnWebCount   = document.getElementById('learnWebCount') || { textContent: '' };
+const learnWebSources = document.getElementById('learnWebSources') || { innerHTML: '', classList: { add() {}, remove() {}, toggle() {}, contains() { return true; } } };
 const lightbox        = document.getElementById('lightbox');
 const lightboxImg     = document.getElementById('lightboxImg');
 const lightboxClose   = document.getElementById('lightboxClose');
@@ -486,32 +486,11 @@ function setLearnLoading(show, text = 'Loading…') {
 }
 
 function renderLearnPages() {
-  if (!learnPages.length) {
-    learnBookPages.innerHTML = '<p class="learn-empty">No book pages found for this section.</p>';
-    learnPageLabel.textContent = '—';
-    learnPagePrev.classList.add('hidden');
-    learnPageNext.classList.add('hidden');
-    return;
-  }
-
-  learnPageLabel.textContent = `${learnPages.length} 页`;
+  // Page-image viewer removed from UI. Keep data internally, but render nothing.
+  learnBookPages.innerHTML = '';
+  learnPageLabel.textContent = '';
   learnPagePrev.classList.add('hidden');
   learnPageNext.classList.add('hidden');
-
-  learnBookPages.innerHTML = learnPages.map((p, i) => `
-    <div class="learn-page-wrap">
-      <img class="learn-page-img" src="${escapeHtml(p.image)}" alt="${escapeHtml(p.page)}" data-idx="${i}">
-      <div class="learn-page-meta">${escapeHtml(p.subsection || p.title || p.page)}</div>
-    </div>
-  `).join('');
-
-  // Lightbox on click
-  learnBookPages.querySelectorAll('.learn-page-img').forEach(img => {
-    img.addEventListener('click', () => {
-      lightboxImg.src = img.src;
-      lightbox.classList.remove('hidden');
-    });
-  });
 }
 
 function renderLearnWebSources(sources) {
@@ -616,7 +595,7 @@ async function openLearnMode(sectionId, sectionTitle, subsections = []) {
     hideSplash();
     if (learnIntroMeta && data.bookPages && data.bookPages.length) {
       learnIntroMeta.innerHTML = [
-        `<span class="learn-intro-badge">📚 ${data.bookPages.length} textbook page${data.bookPages.length !== 1 ? 's' : ''}</span>`,
+        `<span class="learn-intro-badge">📚 ${data.bookPages.length} key reference${data.bookPages.length !== 1 ? 's' : ''}</span>`,
         `<span class="learn-intro-badge">💡 ${sectionTitle}</span>`
       ].join('');
     }
@@ -1024,7 +1003,7 @@ function domainOf(url) {
 function renderBookSources(bookPages = []) {
   bookSourcesCount.textContent = String(bookPages.length || 0);
   if (!bookPages.length) {
-    bookSourcesRail.innerHTML = '<div class="source-empty">No book sources</div>';
+    bookSourcesRail.innerHTML = '<div class="source-empty">No content sources</div>';
     return;
   }
 
@@ -1153,7 +1132,7 @@ async function sendQuestion(rawPrompt) {
   renderBookSources([]);
   renderWebSources([]);
   sourcesSection.classList.add('hidden');
-  answerContent.innerHTML = '<p class="ghost">Preparing textbook retrieval and web research...</p>';
+  answerContent.innerHTML = '<p class="ghost">Preparing concepts, formulas, and references...</p>';
   answerScroll.scrollTop = 0;
 
   // Abort any in-flight request

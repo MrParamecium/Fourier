@@ -89,26 +89,16 @@
 
         <!-- Two Column Layout -->
         <div class="answer-cols">
-          <!-- Left: Book Panel -->
-          <div class="col-book">
-            <div class="col-title">
-              📖 Textbook Reference
-              <span class="col-count" id="bookPanelMeta"></span>
-            </div>
-            <div class="book-pages" id="bookPagesContainer">
-              <div class="col-empty"><p>No pages matched in this run.</p></div>
-            </div>
-          </div>
 
           <!-- Right: Explanation Panel -->
           <div class="col-explain">
             <div class="explain-scroll" id="answerScroll">
               <div class="explain-body" id="answerContent">
-                <p class="ghost">Preparing textbook retrieval and web research...</p>
+                <p class="ghost">Preparing concepts, formulas, and references...</p>
               </div>
               <div class="sources hidden" id="sourcesSection">
                 <div class="sources-group">
-                  <div class="sources-title">📚 Book Sources <span id="bookSourcesCount"></span></div>
+                  <div class="sources-title">📚 Content Sources <span id="bookSourcesCount"></span></div>
                   <div class="sources-rail" id="bookSourcesRail"></div>
                 </div>
                 <div class="sources-group">
@@ -157,7 +147,7 @@
           <div class="learn-splash-inner">
             <div class="learn-spinner"></div>
             <div class="learn-splash-stages" id="learnSplashStages">
-              <div class="lss-item" id="lss-1"><span class="lss-icon">📚</span><span class="lss-text">Retrieving textbook pages…</span></div>
+              <div class="lss-item" id="lss-1"><span class="lss-icon">📚</span><span class="lss-text">Retrieving concepts, formulas, and figures…</span></div>
               <div class="lss-item" id="lss-2"><span class="lss-icon">🧠</span><span class="lss-text">Agent A (Gemini) is planning the lesson structure…</span></div>
               <div class="lss-item" id="lss-3"><span class="lss-icon">✍️</span><span class="lss-text">Agent B (Claude) is writing the explanation…</span></div>
               <div class="lss-item" id="lss-4"><span class="lss-icon">📊</span><span class="lss-text">Rendering charts and images…</span></div>
@@ -175,23 +165,6 @@
           </div>
 
           <div class="learn-body-inner">
-            <!-- Left: Book Pages -->
-            <div class="learn-book-col">
-              <div class="learn-book-nav">
-                <button class="learn-page-btn" id="learnPagePrev" disabled>←</button>
-                <span class="learn-page-label" id="learnPageLabel">—</span>
-                <button class="learn-page-btn" id="learnPageNext" disabled>→</button>
-              </div>
-              <div class="learn-book-pages" id="learnBookPages">
-                <p class="learn-empty">No pages found for this section.</p>
-              </div>
-              <div class="learn-web-toggle hidden" id="learnWebToggle">
-                <button class="learn-web-btn" id="learnWebBtn">
-                  <span>🌐</span> Web sources <span id="learnWebCount"></span>
-                </button>
-                <div class="learn-web-sources hidden" id="learnWebSources"></div>
-              </div>
-            </div>
 
             <!-- Right: Explanation -->
             <div class="learn-explain-col">
