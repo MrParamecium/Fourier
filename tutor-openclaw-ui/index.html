@@ -6,33 +6,29 @@
   <title>Tutor Agent · Signal Processing & Linear Systems</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="app">
-    <!-- Sidebar -->
-    <aside class="sidebar">
+
+    <!-- ════════════════════ LEFT SIDEBAR (always visible) ════════════════════ -->
+    <aside class="sidebar" id="leftSidebar">
       <div class="sidebar-top">
         <div class="logo">
           <div class="logo-icon">📚</div>
           <div class="logo-text"></div>
         </div>
-        <nav class="sidebar-nav">
-          <button class="sidebar-link active" title="Study">📖</button>
-          <button class="sidebar-link" title="History">📝</button>
-          <button class="sidebar-link" title="Settings">⚙️</button>
-        </nav>
       </div>
-      
+
       <div class="syllabus-header"></div>
       <div class="syllabus" id="courseSyllabus"></div>
-      
+
       <div class="sidebar-footer">
         <div class="sidebar-footer-row">
           <div class="model-badge">
             <span class="model-dot"></span>
-            <span>Claude Sonnet 4.6</span>
+            <span>Claude Sonnet</span>
           </div>
           <button class="lang-toggle" id="langToggleBtn">
             <span id="langToggleLabel">🇬🇧 EN</span>
@@ -41,18 +37,31 @@
       </div>
     </aside>
 
-    <!-- Main Content -->
-    <main class="main">
-      <!-- Welcome Screen -->
+    <!-- ════════════════════ MAIN CONTENT (switches between modes) ════════════════════ -->
+    <main class="main" id="mainContent">
+
+      <!-- Breadcrumb bar (always visible in non-welcome states) -->
+      <div class="topbar hidden" id="topbar">
+        <div class="topbar-breadcrumb" id="topbarBreadcrumb"></div>
+        <div class="topbar-actions">
+          <button class="stop-btn hidden" id="stopBtn"><span>⏹</span> Stop</button>
+          <span class="status-chip idle" id="answerStatus"></span>
+          <button class="back-btn" id="backBtn">← Back</button>
+        </div>
+      </div>
+
+      <!-- ─── Welcome Screen ─── -->
       <div class="welcome" id="welcomeScreen">
         <div class="welcome-inner">
           <div class="welcome-tag"></div>
           <h1 class="welcome-h1"></h1>
           <p class="welcome-sub"></p>
-          
+
           <div class="search-box">
             <span class="search-icon">🔍</span>
-            <textarea class="search-input" id="userInput" placeholder="Ask me to explain a concept, solve a problem, or walk through a topic…" rows="1"></textarea>
+            <textarea class="search-input" id="userInput"
+              placeholder="Ask me to explain a concept, solve a problem, or walk through a topic…"
+              rows="1"></textarea>
             <button class="search-send" id="sendBtn" disabled>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="22" y1="2" x2="11" y2="13"></line>
@@ -60,44 +69,20 @@
               </svg>
             </button>
           </div>
-          
+
           <div class="chips" id="quickChips"></div>
         </div>
       </div>
 
-      <!-- Answer Screen -->
+      <!-- ─── Q&A Answer Screen ─── -->
       <div class="answer hidden" id="answerScreen">
-        <!-- Top Bar -->
-        <div class="answer-bar">
-          <div class="answer-bar-left">
-            <button class="back-btn" id="backBtn">←</button>
-            <span class="question-label" id="questionLabel"></span>
-          </div>
-          <div class="answer-bar-right">
-            <button class="stop-btn hidden" id="stopBtn">
-              <span>⏹</span> Stop
-            </button>
-            <span class="status-chip idle" id="answerStatus"></span>
-          </div>
-        </div>
-
         <!-- Progress Steps -->
         <div class="steps hidden" id="stepsBar">
-          <div class="step" id="step-1">
-            <span class="step-dot"></span>
-            <span class="step-label"></span>
-          </div>
-          <div class="step" id="step-2">
-            <span class="step-dot"></span>
-            <span class="step-label"></span>
-          </div>
-          <div class="step" id="step-3">
-            <span class="step-dot"></span>
-            <span class="step-label"></span>
-          </div>
+          <div class="step" id="step-1"><span class="step-dot"></span><span class="step-label"></span></div>
+          <div class="step" id="step-2"><span class="step-dot"></span><span class="step-label"></span></div>
+          <div class="step" id="step-3"><span class="step-dot"></span><span class="step-label"></span></div>
           <button class="web-sources-toggle hidden" id="webSourcesToggle">
-            <span>▾</span>
-            <span id="webSourcesToggleCount"></span>
+            <span>▾</span><span id="webSourcesToggleCount"></span>
           </button>
           <div class="web-sources-inline hidden" id="webSourcesInline"></div>
         </div>
@@ -111,9 +96,7 @@
               <span class="col-count" id="bookPanelMeta"></span>
             </div>
             <div class="book-pages" id="bookPagesContainer">
-              <div class="col-empty">
-                <p>No pages matched in this run.</p>
-              </div>
+              <div class="col-empty"><p>No pages matched in this run.</p></div>
             </div>
           </div>
 
@@ -123,19 +106,13 @@
               <div class="explain-body" id="answerContent">
                 <p class="ghost">Preparing textbook retrieval and web research...</p>
               </div>
-              
-              <!-- Sources Section -->
               <div class="sources hidden" id="sourcesSection">
                 <div class="sources-group">
-                  <div class="sources-title">
-                    📚 Book Sources <span id="bookSourcesCount"></span>
-                  </div>
+                  <div class="sources-title">📚 Book Sources <span id="bookSourcesCount"></span></div>
                   <div class="sources-rail" id="bookSourcesRail"></div>
                 </div>
                 <div class="sources-group">
-                  <div class="sources-title">
-                    🌐 Web Sources <span id="webSourcesCount"></span>
-                  </div>
+                  <div class="sources-title">🌐 Web Sources <span id="webSourcesCount"></span></div>
                   <div class="sources-rail" id="webSourcesRail"></div>
                 </div>
               </div>
@@ -154,100 +131,114 @@
           </div>
         </div>
       </div>
-    </main>
-  </div>
 
-  <!-- Learn Mode Overlay -->
-  <div class="learn-overlay hidden" id="learnOverlay">
-    <div class="learn-shell">
-      <!-- Header -->
-      <div class="learn-header">
-        <div class="learn-header-left">
-          <span class="learn-badge">Learning Mode</span>
-          <h2 class="learn-title" id="learnTitle">Section Title</h2>
-        </div>
-        <button class="learn-close" id="learnClose">✕</button>
-      </div>
-
-      <!-- Intro Card -->
-      <div class="learn-intro-card" id="learnIntroCard">
-        <div class="learn-intro-meta" id="learnIntroMeta"></div>
-        <p class="learn-intro-text" id="learnIntroText"></p>
-        <button class="learn-start-btn" id="learnStartBtn">
-          <span>▶</span> Start Learning This Section
-        </button>
-      </div>
-
-      <!-- Full-screen loading overlay inside learn -->
-      <div class="learn-splash hidden" id="learnSplash">
-        <div class="learn-splash-inner">
-          <div class="learn-spinner"></div>
-          <div class="learn-splash-stages" id="learnSplashStages">
-            <div class="lss-item" id="lss-1"><span class="lss-icon">📚</span><span class="lss-text">Retrieving textbook pages…</span></div>
-            <div class="lss-item" id="lss-2"><span class="lss-icon">🧠</span><span class="lss-text">Agent A (Gemini) is planning the lesson structure…</span></div>
-            <div class="lss-item" id="lss-3"><span class="lss-icon">✍️</span><span class="lss-text">Agent B (Claude) is writing the explanation…</span></div>
-            <div class="lss-item" id="lss-4"><span class="lss-icon">📊</span><span class="lss-text">Rendering charts and images…</span></div>
+      <!-- ─── Learn Mode (inline, not overlay) ─── -->
+      <div class="learn-view hidden" id="learnView">
+        <!-- Learn Topbar (section title + close) -->
+        <div class="learn-topbar">
+          <div class="learn-topbar-left">
+            <span class="learn-badge">Learning Mode</span>
+            <h2 class="learn-title" id="learnTitle">Section Title</h2>
           </div>
-          <p class="learn-splash-note" id="learnSplashNote">This takes 20-40 seconds…</p>
-        </div>
-      </div>
-
-      <!-- Learn Body (hidden initially) -->
-      <div class="learn-body hidden" id="learnBody">
-        <!-- Loading Bar -->
-        <div class="learn-loading-bar hidden" id="learnLoading">
-          <div class="learn-loading-bar-inner"></div>
-          <span class="learn-loading-bar-text" id="learnLoadingText">Loading...</span>
+          <button class="learn-close" id="learnClose">✕ Exit</button>
         </div>
 
-        <div class="learn-body">
-          <!-- Left: Book Pages -->
-          <div class="learn-book-col">
-            <div class="learn-book-nav">
-              <button class="learn-page-btn" id="learnPagePrev" disabled>←</button>
-              <span class="learn-page-label" id="learnPageLabel">—</span>
-              <button class="learn-page-btn" id="learnPageNext" disabled>→</button>
+        <!-- Intro Card -->
+        <div class="learn-intro-card" id="learnIntroCard">
+          <div class="learn-intro-meta" id="learnIntroMeta"></div>
+          <p class="learn-intro-text" id="learnIntroText"></p>
+          <button class="learn-start-btn" id="learnStartBtn">
+            <span>▶</span> Start Learning This Section
+          </button>
+        </div>
+
+        <!-- Splash Loading -->
+        <div class="learn-splash hidden" id="learnSplash">
+          <div class="learn-splash-inner">
+            <div class="learn-spinner"></div>
+            <div class="learn-splash-stages" id="learnSplashStages">
+              <div class="lss-item" id="lss-1"><span class="lss-icon">📚</span><span class="lss-text">Retrieving textbook pages…</span></div>
+              <div class="lss-item" id="lss-2"><span class="lss-icon">🧠</span><span class="lss-text">Agent A (Gemini) is planning the lesson structure…</span></div>
+              <div class="lss-item" id="lss-3"><span class="lss-icon">✍️</span><span class="lss-text">Agent B (Claude) is writing the explanation…</span></div>
+              <div class="lss-item" id="lss-4"><span class="lss-icon">📊</span><span class="lss-text">Rendering charts and images…</span></div>
             </div>
-            <div class="learn-book-pages" id="learnBookPages">
-              <p class="learn-empty">No pages found for this section.</p>
-            </div>
-            <div class="learn-web-toggle hidden" id="learnWebToggle">
-              <button class="learn-web-btn" id="learnWebBtn">
-                <span>🌐</span> Web sources <span id="learnWebCount"></span>
-              </button>
-              <div class="learn-web-sources hidden" id="learnWebSources"></div>
-            </div>
+            <p class="learn-splash-note" id="learnSplashNote">This takes 20–40 seconds…</p>
+          </div>
+        </div>
+
+        <!-- Learn Body -->
+        <div class="learn-body hidden" id="learnBody">
+          <!-- Loading Bar -->
+          <div class="learn-loading-bar hidden" id="learnLoading">
+            <div class="learn-loading-bar-inner"></div>
+            <span class="learn-loading-bar-text" id="learnLoadingText">Loading...</span>
           </div>
 
-          <!-- Right: Explanation -->
-          <div class="learn-explain-col">
-            <div class="learn-explain-scroll" id="learnExplainScroll">
-              <div class="learn-explain-body" id="learnExplainContent">
-                <p class="ghost">Lesson is being prepared...</p>
+          <div class="learn-body-inner">
+            <!-- Left: Book Pages -->
+            <div class="learn-book-col">
+              <div class="learn-book-nav">
+                <button class="learn-page-btn" id="learnPagePrev" disabled>←</button>
+                <span class="learn-page-label" id="learnPageLabel">—</span>
+                <button class="learn-page-btn" id="learnPageNext" disabled>→</button>
               </div>
-              <!-- Web sources section - shown by default after lesson loads -->
-              <div class="learn-web-section hidden" id="learnWebSection">
-                <div class="learn-web-section-title">
-                  <span>🌐</span> Web References
-                  <span class="learn-web-section-count" id="learnWebSectionCount"></span>
+              <div class="learn-book-pages" id="learnBookPages">
+                <p class="learn-empty">No pages found for this section.</p>
+              </div>
+              <div class="learn-web-toggle hidden" id="learnWebToggle">
+                <button class="learn-web-btn" id="learnWebBtn">
+                  <span>🌐</span> Web sources <span id="learnWebCount"></span>
+                </button>
+                <div class="learn-web-sources hidden" id="learnWebSources"></div>
+              </div>
+            </div>
+
+            <!-- Right: Explanation -->
+            <div class="learn-explain-col">
+              <div class="learn-explain-scroll" id="learnExplainScroll">
+                <div class="learn-explain-body" id="learnExplainContent">
+                  <p class="ghost">Lesson is being prepared...</p>
                 </div>
-                <div class="learn-web-cards" id="learnWebCards"></div>
+                <!-- Web sources section -->
+                <div class="learn-web-section hidden" id="learnWebSection">
+                  <div class="learn-web-section-title">
+                    <span>🌐</span> Web References
+                    <span class="learn-web-section-count" id="learnWebSectionCount"></span>
+                  </div>
+                  <div class="learn-web-cards" id="learnWebCards"></div>
+                </div>
               </div>
-            </div>
-            <div class="learn-followup-bar">
-              <textarea class="learn-followup-input" id="learnFollowupInput" placeholder="Have a question? Ask here…" rows="1"></textarea>
-              <button class="learn-followup-send" id="learnFollowupBtn" disabled>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="22" y1="2" x2="11" y2="13"></line>
-                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-                </svg>
-              </button>
+              <div class="learn-followup-bar">
+                <textarea class="learn-followup-input" id="learnFollowupInput"
+                  placeholder="Have a question? Ask here…" rows="1"></textarea>
+                <button class="learn-followup-send" id="learnFollowupBtn" disabled>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
+
+    </main>
+
+    <!-- ════════════════════ RIGHT TOC SIDEBAR (always visible) ════════════════════ -->
+    <aside class="toc-sidebar" id="tocSidebar">
+      <div class="toc-header" id="tocHeader">
+        <span class="toc-header-label">On This Page</span>
+      </div>
+      <nav class="toc-nav" id="tocNav">
+        <!-- Populated by JS -->
+        <div class="toc-empty">
+          <p>Select a section<br>from the syllabus<br>to begin.</p>
+        </div>
+      </nav>
+    </aside>
+
+  </div><!-- .app -->
 
   <!-- Lightbox -->
   <div class="lightbox hidden" id="lightbox">
@@ -255,7 +246,7 @@
     <img class="lightbox-img" id="lightboxImg" src="" alt="">
   </div>
 
-  <!-- MathJax for math rendering -->
+  <!-- MathJax -->
   <script>
     window.MathJax = {
       tex: {
@@ -264,36 +255,22 @@
         processEscapes: true,
         processEnvironments: true
       },
-      svg: {
-        fontCache: 'global'
-      },
+      svg: { fontCache: 'global' },
       startup: {
-        pageReady: () => {
-          return MathJax.startup.defaultPageReady().then(() => {
-            console.log('[MathJax] Ready');
-          });
-        }
+        pageReady: () => MathJax.startup.defaultPageReady().then(() => console.log('[MathJax] Ready'))
       }
     };
-    
-    // Helper to typeset dynamic content
     window.typesetMath = (element) => {
-      if (window.MathJax && MathJax.typesetPromise) {
+      if (window.MathJax && MathJax.typesetPromise)
         return MathJax.typesetPromise(element ? [element] : undefined);
-      }
       return Promise.resolve();
     };
-    
-    // Pre-process markdown to convert $...$ to \(...\)
     window.preprocessMath = (text) => {
       if (!text) return text;
-      // Convert single $...$ to \(...\) for inline math
-      // Be careful not to match $$...$$
       return text.replace(/(?<!\$)\$(?!\$)(.+?)(?<!\$)\$(?!\$)/g, '\\($1\\)');
     };
   </script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-  
   <script src="app.js"></script>
 </body>
 </html>

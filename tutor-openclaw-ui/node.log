@@ -13,3 +13,59 @@ Endpoints:
   - http://localhost:9000/health     (Health check)
 ================================================================
 [HTTP] GET /health
+[HTTP] GET /
+[HTTP] GET /style.css
+[HTTP] GET /app.js
+[HTTP] POST /api/ask
+[ASK] Question: 请详细讲解这个小节：B.4 Cramer's Rule mode= ask
+[HTTP] POST /api/section
+[SECTION] sectionId=B.4 Cramer's Rule mode=intro
+[HTTP] POST /api/ask
+[ASK] Question: 请详细讲解这个小节：B.4 Cramer's Rule mode= ask
+[HTTP] POST /api/section
+[SECTION] sectionId=B.4 Cramer's Rule mode=intro
+[HTTP] GET /pages/book-023.png
+[HTTP] GET /pages/book-049.png
+[HTTP] GET /pages/book-039.png
+[HTTP] GET /pages/book-024.png
+[HTTP] GET /pages/book-022.png
+[HTTP] POST /api/ask
+[ASK] Question: 请详细讲解这个小节：B.4 Cramer's Rule mode= ask
+[HTTP] POST /api/section
+[SECTION] sectionId=B.4 Cramer's Rule mode=intro
+[HTTP] POST /api/ask
+[ASK] Question: 请详细讲解这个小节：B.4 Cramer's Rule mode= ask
+[HTTP] POST /api/section
+[SECTION] sectionId=B.4 Cramer's Rule mode=intro
+[HTTP] GET /pages/book-049.png
+[HTTP] GET /pages/book-023.png
+[HTTP] GET /pages/book-039.png
+[HTTP] GET /pages/book-024.png
+[HTTP] GET /pages/book-022.png
+[HTTP] POST /api/ask
+[ASK] Question: 请详细讲解这个小节：B.4 Cramer's Rule mode= ask
+[HTTP] POST /api/section
+[SECTION] sectionId=B.4 Cramer's Rule mode=intro
+[HTTP] POST /api/section
+[SECTION] sectionId=B.4 Cramer's Rule mode=lesson
+[SECTION] Starting dual-agent pipeline for B.4 Cramer's Rule (lang=en)…
+[Agent A] Planning lesson for B.4 Cramer's Rule (lang=en)…
+[HTTP] GET /
+[HTTP] GET /style.css
+[HTTP] GET /app.js
+[HTTP] POST /api/ask
+[ASK] Question: 请详细讲解这个小节：B.4 Cramer's Rule mode= ask
+[HTTP] POST /api/section
+[SECTION] sectionId=B.4 Cramer's Rule mode=intro
+[Agent A] Blueprint ready — 10 blocks.
+[Agent B] Executing 10 blocks…
+[HTTP] GET /pages/book-049.png
+[HTTP] GET /pages/book-023.png
+[HTTP] GET /pages/book-022.png
+[HTTP] GET /pages/book-039.png
+[HTTP] GET /pages/book-024.png
+[HTTP] GET /pages/book-049.png
+[HTTP] GET /pages/book-023.png
+[HTTP] GET /pages/book-039.png
+[HTTP] GET /pages/book-024.png
+[HTTP] GET /pages/book-040.png

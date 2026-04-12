@@ -11,11 +11,11 @@ const LANG_CONFIG = {
     learnFollowupPlaceholder: 'Have a question? Ask here…',
     startBtn: 'Start Learning This Section',
     chips: [
-      { label: '\uD835\uDC8A\u00A0 Complex Numbers', prompt: 'What are complex numbers? Explain from a signal processing perspective' },
-      { label: 'e\u00A0 Euler\'s Formula', prompt: "Explain Euler's formula e^j\u03c9 and its meaning in signal processing" },
-      { label: '\u2217\u00A0 Convolution', prompt: 'What is convolution? Explain with an example' },
-      { label: '\u2112\u00A0 Laplace Transform', prompt: 'Explain the Laplace transform and its applications' },
-      { label: '\u223F\u00A0 Sine & Cosine', prompt: 'What is the relationship between sine and cosine waves?' },
+      { label: '🔢 Complex Numbers', prompt: 'What are complex numbers? Explain from a signal processing perspective' },
+      { label: '🌀 Euler\'s Formula', prompt: "Explain Euler's formula e^j\u03c9 and its meaning in signal processing" },
+      { label: '🔗 Convolution', prompt: 'What is convolution? Explain with an example' },
+      { label: '📐 Laplace Transform', prompt: 'Explain the Laplace transform and its applications' },
+      { label: '〰️ Sine & Cosine', prompt: 'What is the relationship between sine and cosine waves?' },
     ]
   },
   zh: {
@@ -25,11 +25,11 @@ const LANG_CONFIG = {
     learnFollowupPlaceholder: '有问题？直接问…',
     startBtn: '开始学习这一节',
     chips: [
-      { label: '\uD835\uDC8A\u00A0 什么是复数？', prompt: '什么是复数？请从信号处理的角度解释' },
-      { label: 'e\u00A0 欧拉公式', prompt: '解释欧拉公式 e^j\u03c9 在信号处理中的意义' },
-      { label: '\u2217\u00A0 什么是卷积？', prompt: '什么是卷积？请举例说明' },
-      { label: '\u2112\u00A0 拉普拉斯变换', prompt: '解释拉普拉斯变换及其应用' },
-      { label: '\u223F\u00A0 正弦与余弦', prompt: '正弦波与余弦波有什么关系？' },
+      { label: '🔢 什么是复数？', prompt: '什么是复数？请从信号处理的角度解释' },
+      { label: '🌀 欧拉公式', prompt: '解释欧拉公式 e^j\u03c9 在信号处理中的意义' },
+      { label: '🔗 什么是卷积？', prompt: '什么是卷积？请举例说明' },
+      { label: '📐 拉普拉斯变换', prompt: '解释拉普拉斯变换及其应用' },
+      { label: '〰️ 正弦与余弦', prompt: '正弦波与余弦波有什么关系？' },
     ]
   }
 };
@@ -76,12 +76,16 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 const welcomeScreen = document.getElementById('welcomeScreen');
-const answerScreen = document.getElementById('answerScreen');
+const answerScreen  = document.getElementById('answerScreen');
+const learnView     = document.getElementById('learnView');
+const topbar        = document.getElementById('topbar');
+const topbarBreadcrumb = document.getElementById('topbarBreadcrumb');
+const tocNav        = document.getElementById('tocNav');
 const userInput = document.getElementById('userInput');
 const sendBtn = document.getElementById('sendBtn');
 const quickChips = document.getElementById('quickChips');
 const backBtn = document.getElementById('backBtn');
-const questionLabel = document.getElementById('questionLabel');
+const questionLabel = document.getElementById('questionLabel') || { textContent: '' };
 const answerStatus = document.getElementById('answerStatus');
 
 const stepsBar = document.getElementById('stepsBar');
@@ -394,27 +398,13 @@ function renderSyllabus() {
     });
   });
 
-  // Section title click → ask question
-  courseSyllabus.querySelectorAll('.syllabus-section').forEach(btn => {
-    btn.addEventListener('click', () => {
+  // Section / subsection click → open Learn Mode
+  courseSyllabus.querySelectorAll('.syllabus-section, .syllabus-subsection').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
       const section = btn.getAttribute('data-section');
-      sendQuestion(`请详细讲解这个小节：${section}`);
-    });
-  });
-
-  // Section click → open learn mode
-  courseSyllabus.querySelectorAll('.syllabus-section').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const section = btn.getAttribute('data-section');
-      openLearnMode(section, section);
-    });
-  });
-
-  // Subsection click → open learn mode
-  courseSyllabus.querySelectorAll('.syllabus-subsection').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const section = btn.getAttribute('data-section');
-      openLearnMode(section, section);
+      const title   = btn.textContent.trim();
+      openLearnMode(section, title);
     });
   });
 }
@@ -422,7 +412,7 @@ function renderSyllabus() {
 // ============================================================
 // LEARN MODE
 // ============================================================
-const learnOverlay    = document.getElementById('learnOverlay');
+const learnOverlay    = null; // replaced by learnView inline mode
 const learnTitle      = document.getElementById('learnTitle');
 const learnClose      = document.getElementById('learnClose');
 const learnIntroCard  = document.getElementById('learnIntroCard');
@@ -590,9 +580,10 @@ async function openLearnMode(sectionId, sectionTitle) {
   learnBody.classList.add('hidden');
   learnIntroText.textContent = '';
   if (learnIntroMeta) learnIntroMeta.innerHTML = '';
-  learnOverlay.classList.remove('hidden');
-  document.body.style.overflow = 'hidden';
+  showLearnView();
   showSplash();
+  // Seed TOC with section title while loading
+  buildToc([{ title: sectionTitle, depth: 1, anchor: '' }]);
 
   if (learnAbort) learnAbort.abort();
   learnAbort = new AbortController();
@@ -658,7 +649,8 @@ async function startLesson() {
       if (window.MathJax && window.MathJax.typesetPromise) {
         window.MathJax.typesetPromise([learnExplainContent]).catch(() => {});
       }
-    }, 50);
+      buildTocFromContent(learnExplainContent);
+    }, 80);
     renderLearnWebSources(data.webSources || []);
     renderLearnWebSection(data.webSources || []);
     learnExplainScroll.scrollTop = 0;
@@ -673,8 +665,9 @@ async function startLesson() {
 
 function closeLearnMode() {
   if (learnAbort) learnAbort.abort();
-  learnOverlay.classList.add('hidden');
-  document.body.style.overflow = '';
+  hideSplash();
+  showWelcome();
+  clearToc();
 }
 
 // Learn mode events
@@ -772,7 +765,7 @@ learnFollowupBtn.addEventListener('click', () => {
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
     if (!lightbox.classList.contains('hidden')) lightbox.classList.add('hidden');
-    else if (!learnOverlay.classList.contains('hidden')) closeLearnMode();
+    else if (!learnView.classList.contains('hidden')) closeLearnMode();
   }
 });
 
@@ -864,15 +857,95 @@ function inlineFormat(text) {
   return s;
 }
 
+// ── View switcher ───────────────────────────────────────────────────────────
 function showWelcome() {
   welcomeScreen.classList.remove('hidden');
   answerScreen.classList.add('hidden');
+  learnView.classList.add('hidden');
+  if (topbar) topbar.classList.add('hidden');
+  clearToc();
 }
 
 function showAnswer(question) {
   welcomeScreen.classList.add('hidden');
   answerScreen.classList.remove('hidden');
-  questionLabel.textContent = question;
+  learnView.classList.add('hidden');
+  if (topbar) topbar.classList.remove('hidden');
+  if (topbarBreadcrumb) topbarBreadcrumb.textContent = question;
+}
+
+function showLearnView() {
+  welcomeScreen.classList.add('hidden');
+  answerScreen.classList.add('hidden');
+  learnView.classList.remove('hidden');
+  if (topbar) topbar.classList.add('hidden');
+}
+
+// ── Right TOC ───────────────────────────────────────────────────────────
+function buildToc(items) {
+  if (!tocNav) return;
+  if (!items || !items.length) { clearToc(); return; }
+  tocNav.innerHTML = items.map(item => {
+    const depthClass = `depth-${item.depth || 1}`;
+    return `<button class="toc-item ${depthClass}" data-anchor="${escapeHtml(item.anchor || '')}">${escapeHtml(item.title)}</button>`;
+  }).join('');
+  tocNav.querySelectorAll('.toc-item').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const anchor = btn.dataset.anchor;
+      if (anchor) {
+        const el = document.getElementById(anchor);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      tocNav.querySelectorAll('.toc-item').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+}
+
+function clearToc() {
+  if (!tocNav) return;
+  tocNav.innerHTML = '<div class="toc-empty"><p>Select a section<br>from the syllabus<br>to begin.</p></div>';
+}
+
+function buildTocFromSyllabus(chapterTitle, sections) {
+  const items = [];
+  if (chapterTitle) items.push({ title: chapterTitle, depth: 1, anchor: '' });
+  (sections || []).forEach(sec => {
+    items.push({ title: sec.sectionId + ' ' + (sec.title || sec.sectionTitle || ''), depth: 2, anchor: '' });
+    (sec.subsections || []).forEach(sub => {
+      items.push({ title: sub.sectionId + ' ' + (sub.title || sub.sectionTitle || ''), depth: 3, anchor: '' });
+    });
+  });
+  buildToc(items);
+}
+
+// Generate TOC from rendered lesson HTML headings
+function buildTocFromContent(containerEl) {
+  if (!containerEl || !tocNav) return;
+  const headings = containerEl.querySelectorAll('h1, h2, h3, h4');
+  if (!headings.length) return;
+  const items = [];
+  let counter = 0;
+  headings.forEach(h => {
+    const depth = parseInt(h.tagName[1], 10);
+    const title = h.textContent.trim();
+    const anchor = `toc-anchor-${counter++}`;
+    h.id = anchor;
+    items.push({ title, depth, anchor });
+  });
+  buildToc(items);
+  // Intersection observer to highlight active section
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        tocNav.querySelectorAll('.toc-item').forEach(b => {
+          b.classList.toggle('active', b.dataset.anchor === id);
+        });
+      }
+    });
+  }, { threshold: 0.4 });
+  headings.forEach(h => observer.observe(h));
 }
 
 function setStatus(text, type = 'idle') {
@@ -1004,6 +1077,7 @@ function renderExplanation(markdown) {
   if (window.MathJax && window.MathJax.typesetPromise) {
     window.MathJax.typesetPromise([answerContent]).catch(() => {});
   }
+  setTimeout(() => buildTocFromContent(answerContent), 80);
 }
 
 async function callAsk(prompt, signal, extra = {}) {
