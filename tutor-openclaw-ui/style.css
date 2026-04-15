@@ -612,11 +612,31 @@ html, body {
 
 /* Learn Explain Col replaces fixed width with flex:1 to split 50/50 */
 .learn-explain-col {
-  flex: 1; /* Automatically takes equal width as book col */
+  flex: 1.2; /* slightly wider for lecture text */
   display: flex;
   flex-direction: column;
   background: var(--bg-main);
   position: relative;
+}
+
+.learn-chat-col {
+  flex: 0.8; /* slightly narrower for chat */
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-body);
+  position: relative;
+}
+
+.learn-chat-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+.learn-chat-history {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 .welcome {
   position: absolute;

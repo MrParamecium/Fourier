@@ -433,6 +433,8 @@ const bookPageIndicator = document.getElementById('bookPageIndicator');
 const bookPrevBtn = document.getElementById('bookPrevBtn');
 const bookNextBtn = document.getElementById('bookNextBtn');
 const learnExplainContent = document.getElementById('learnExplainContent');
+const learnChatContent = document.getElementById('learnChatContent');
+const learnChatScroll  = document.getElementById('learnChatScroll');
 const learnExplainScroll  = document.getElementById('learnExplainScroll');
 const learnFollowupInput  = document.getElementById('learnFollowupInput');
 const learnFollowupBtn    = document.getElementById('learnFollowupBtn');
@@ -687,6 +689,7 @@ async function startLesson() {
       : [];
     renderLearnPages();
     learnExplainContent.innerHTML = markdownToHtml(data.lesson || 'No explanation available.');
+    if (learnChatContent) learnChatContent.innerHTML = ''; // Clear chat history on new section
     setTimeout(() => {
       if (window.MathJax && window.MathJax.typesetPromise) {
         window.MathJax.typesetPromise([learnExplainContent]).catch(() => {});
@@ -736,13 +739,13 @@ async function sendLearnFollowup(rawPrompt) {
   learnFollowupBtn.disabled = true;
 
   const answerId = `learn-followup-answer-${Date.now()}`;
-  learnExplainContent.insertAdjacentHTML('beforeend', `
+  learnChatContent.insertAdjacentHTML('beforeend', `
     <div class="followup-bubble" id="${answerId}">
       <div class="fub-q">${escapeHtml(prompt)}</div>
       <div class="fub-a ghost">Thinking with context from this section…</div>
     </div>
   `);
-  learnExplainScroll.scrollTop = learnExplainScroll.scrollHeight;
+  learnChatScroll.scrollTop = learnChatScroll.scrollHeight;
 
   if (learnAbort) learnAbort.abort();
   learnAbort = new AbortController();
@@ -779,7 +782,7 @@ async function sendLearnFollowup(rawPrompt) {
     tutorState.learnWebSources = data.webSources || tutorState.learnWebSources;
     renderLearnWebSources(tutorState.learnWebSources);
     renderLearnWebSection(tutorState.learnWebSources);
-    learnExplainScroll.scrollTop = learnExplainScroll.scrollHeight;
+    learnChatScroll.scrollTop = learnChatScroll.scrollHeight;
   } catch (err) {
     if (err.name === 'AbortError') return;
     const target = document.getElementById(answerId);
