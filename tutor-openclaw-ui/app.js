@@ -493,10 +493,6 @@ function setLearnLoading(show, text = 'Loading…') {
   if (show) learnLoadingText.textContent = text;
 }
 
-const learnBookPages = document.getElementById('learnBookPages');
-const bookPageIndicator = document.getElementById('bookPageIndicator');
-const bookPrevBtn = document.getElementById('bookPrevBtn');
-const bookNextBtn = document.getElementById('bookNextBtn');
 let currentBookPageIndex = 0;
 
 function renderLearnPages() {
