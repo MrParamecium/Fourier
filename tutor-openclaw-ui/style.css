@@ -2596,7 +2596,8 @@ button:focus, input:focus, textarea:focus {
   transform: translateY(-1px);
   box-shadow: 0 12px 20px -10px rgba(0,0,0,0.08);
 }
-.app.sidebar-collapsed .sidebar-float-toggle {
+.app.sidebar-collapsed .sidebar-float-toggle,
+.sidebar.collapsed ~ .main .sidebar-float-toggle {
   display: flex !important;
 }
 
