@@ -23,20 +23,25 @@ function showAuthOverlay() {
   if (o) o.style.display = 'flex';
 }
 
-async function waitForClerk(ms = 3000) {
+async function waitForClerk(ms = 10000) {
+  // First wait for window.Clerk to exist
   const t = Date.now();
   while (!window.Clerk) {
     if (Date.now() - t > ms) throw new Error('timeout');
     await new Promise(r => setTimeout(r, 150));
   }
+  // Then wait for it to be fully loaded (components ready)
+  if (!window.Clerk.loaded) {
+    await new Promise((resolve, reject) => {
+      const timer = setTimeout(() => reject(new Error('clerk:loaded timeout')), ms);
+      document.addEventListener('clerk:loaded', () => { clearTimeout(timer); resolve(); }, { once: true });
+    });
+  }
 }
 
 async function initClerk() {
-  // Load Clerk SDK
   try {
     await waitForClerk();
-    // With data-clerk-publishable-key on the script tag, Clerk auto-initializes
-    // window.Clerk is ready as a fully loaded instance
     clerkInstance = window.Clerk;
   } catch (e) {
     console.warn('[Clerk] failed:', e.message);
