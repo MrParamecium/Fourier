@@ -145,6 +145,95 @@ function loadSectionPageMap() {
 const SECTION_PAGE_MAP = loadSectionPageMap();
 console.log(`[Index] Section map loaded: ${Object.keys(SECTION_PAGE_MAP).length} sections`);
 
+// ─────────────────────────────────────────────────────────────────────────────
+// USER MEMORY
+// ─────────────────────────────────────────────────────────────────────────────
+const USERS_DIR = path.join(__dirname, 'users');
+try { if (!fs.existsSync(USERS_DIR)) fs.mkdirSync(USERS_DIR, { recursive: true }); } catch (_) {}
+
+function getUserMemoryPath(uid) {
+    const safe = String(uid || '').replace(/[^a-zA-Z0-9_\-]/g, '_').slice(0, 64);
+    if (!safe) return null;
+    return path.join(USERS_DIR, `${safe}.json`);
+}
+
+function readUserMemory(uid) {
+    const p = getUserMemoryPath(uid);
+    if (!p) return null;
+    try {
+        return JSON.parse(fs.readFileSync(p, 'utf8'));
+    } catch (_) {
+        return null;
+    }
+}
+
+function writeUserMemory(uid, data) {
+    const p = getUserMemoryPath(uid);
+    if (!p) return;
+    fs.writeFileSync(p, JSON.stringify(data, null, 2), 'utf8');
+}
+
+/**
+ * Build a concise prompt injection string from user memory.
+ * This gets prepended to system prompts for lesson/ask calls.
+ */
+function buildUserProfilePrompt(memory) {
+    if (!memory) return '';
+    const lines = [];
+    const quiz = memory.quiz || {};
+
+    const GOAL_MAP = {
+        just_pass:   'Student goal: just pass (C or above). Be concise and exam-focused.',
+        solid_b:     'Student goal: solid B/B+. Balance depth and exam prep.',
+        going_for_a: 'Student goal: A grade. Provide rigorous explanations with full derivations.',
+        getting_ahead: 'Student is previewing — assume zero prior exposure. Start from scratch.'
+    };
+    const MATH_MAP = {
+        all_solid:     'Math background: strong (calculus, ODEs, complex numbers). Use freely.',
+        calculus_ok:   'Math background: calculus OK but ODEs/complex numbers shaky. Briefly revisit before using.',
+        math_weak:     'Math background: weak. Avoid heavy derivations. Use intuition and diagrams first.'
+    };
+    const STYLE_MAP = {
+        example_first:  'Learning style: example first. Always lead with a concrete example before the general rule.',
+        principle_first:'Learning style: principle first. State concept clearly, then illustrate.',
+        visual:         'Learning style: visual. Prioritize diagrams, sketches, and visual analogies.',
+        step_by_step:   'Learning style: step-by-step. Never skip steps. Explain every line explicitly.'
+    };
+    const TIMELINE_MAP = {
+        midterm_week: 'PRIORITY MODE — midterm in < 1 week. Focus only on high-frequency exam topics. Be very concise.',
+        final_week:   'EXAM CRUNCH — final in < 1 week. Cover all testable material efficiently. No fluff.',
+        few_weeks:    'A few weeks until exam. Moderate pace. Cover key concepts with 1-2 practice problems.',
+        keeping_up:   'Keeping up with lectures. Normal pace. Full explanation with extensions.',
+        self_study:   'Self-studying with no exam pressure. Go deep, explore connections.'
+    };
+    const STRUGGLE_MAP = {
+        too_many_formulas: 'Historical struggle: too many formulas. Always explain where formulas come from — never just state them.',
+        too_abstract:      'Historical struggle: concepts feel abstract. Always connect to real-world application or physical meaning.',
+        cant_do_problems:  'Historical struggle: understands but cannot do problems. After each concept, show a fully worked example.',
+        mostly_lazy:       'Student is self-aware about motivation. Keep sections short and punchy. Show the payoff early.'
+    };
+
+    if (GOAL_MAP[quiz.goal])     lines.push(GOAL_MAP[quiz.goal]);
+    if (MATH_MAP[quiz.math])     lines.push(MATH_MAP[quiz.math]);
+    if (STYLE_MAP[quiz.style])   lines.push(STYLE_MAP[quiz.style]);
+    if (TIMELINE_MAP[quiz.timeline]) lines.push(TIMELINE_MAP[quiz.timeline]);
+    if (STRUGGLE_MAP[quiz.struggle]) lines.push(STRUGGLE_MAP[quiz.struggle]);
+
+    if (Array.isArray(memory.knownConcepts) && memory.knownConcepts.length) {
+        lines.push(`Already mastered: ${memory.knownConcepts.join(', ')}. Do not over-explain these.`);
+    }
+    if (Array.isArray(memory.weakConcepts) && memory.weakConcepts.length) {
+        lines.push(`Weak areas: ${memory.weakConcepts.join(', ')}. Spend extra time on these.`);
+    }
+    if (Array.isArray(memory.sessionSummaries) && memory.sessionSummaries.length) {
+        const recent = memory.sessionSummaries.slice(-3);
+        lines.push(`Recent sessions:\n${recent.map(s => `- ${s}`).join('\n')}`);
+    }
+
+    if (!lines.length) return '';
+    return `\n\n[Student Profile]\n${lines.join('\n')}`;
+}
+
 function serveStaticFile(res, filePath) {
     const ext = path.extname(filePath).toLowerCase();
     const contentType = MIME_TYPES[ext] || 'application/octet-stream';
@@ -608,6 +697,7 @@ async function generateExplanation(question, bookPages, webSources, options = {}
     const lessonContext = compactWhitespace(options.lessonContext || '');
     const language = options.language === 'zh' ? 'zh' : 'en';
     const mode = options.mode || 'ask';
+    const userProfilePrompt = options.userProfilePrompt || '';
 
     const historyText = history.length
         ? history.map((item, idx) => `[${idx + 1}] ${item.role === 'assistant' ? '老师' : '学生'}: ${compactWhitespace(item.content || '')}`).join('\n')
@@ -642,14 +732,14 @@ async function generateExplanation(question, bookPages, webSources, options = {}
     ].filter(Boolean).join('\n');
 
     return callOpenRouterChat({
-        model: 'anthropic/claude-opus-4.6',
+        model: 'anthropic/claude-sonnet-4.6',
         timeoutMs: 120000,
         temperature: 0.35,
         maxTokens: 3200,
         messages: [
             {
                 role: 'system',
-                content: '你是一位耐心、准确、会讲人话的理工科导师。请基于给定教材 OCR、网页摘要和已有对话上下文生成结构化讲解，不要编造未给出的参考文献。对于 follow-up 问题，必须延续上下文。'
+                content: '你是一位耐心、准确、会讲人话的理工科导师。请基于给定教材 OCR、网页摘要和已有对话上下文生成结构化讲解，不要编造未给出的参考文献。对于 follow-up 问题，必须延续上下文。' + userProfilePrompt
             },
             {
                 role: 'user',
@@ -758,7 +848,7 @@ const AGENT_B_MODEL = 'anthropic/claude-sonnet-4.6';
  * Agent A — Lesson Architect (Gemini 3.1 Pro Preview)
  * Reads OCR + existing page images, outputs a Rendering Blueprint JSON.
  */
-async function agentA_plan(sectionId, sectionTitle, bookPages, webSources, language = 'en') {
+async function agentA_plan(sectionId, sectionTitle, bookPages, webSources, language = 'en', userProfilePrompt = '') {
     const ocrPages = bookPages.map(p => ({
         pageId: p.page,
         text: readOCRText(p.textPath, 3000)
@@ -774,6 +864,7 @@ async function agentA_plan(sectionId, sectionTitle, bookPages, webSources, langu
         `section_id: ${sectionId}`,
         `section_title: ${sectionTitle}`,
         `language: ${language}`,
+        userProfilePrompt ? `student_profile: ${userProfilePrompt.trim()}` : '',
         '',
         'existing_page_images:',
         existingPageImages.join(', '),
@@ -994,11 +1085,11 @@ async function blueprintToMarkdown(blocks, pageImages) {
 /**
  * 生成小节完整讲解 — now powered by dual-agent pipeline
  */
-async function generateSectionLesson(sectionId, sectionTitle, bookPages, webSources, language = 'en') {
+async function generateSectionLesson(sectionId, sectionTitle, bookPages, webSources, language = 'en', userProfilePrompt = '') {
     // ── Agent A: Plan ──────────────────────────────────────────────────────────
     let blueprint = null;
     try {
-        const result = await agentA_plan(sectionId, sectionTitle, bookPages, webSources, language);
+        const result = await agentA_plan(sectionId, sectionTitle, bookPages, webSources, language, userProfilePrompt);
         blueprint = result.blueprint;
     } catch (err) {
         console.error('[Agent A] Error:', err.message);
@@ -1189,6 +1280,54 @@ const server = http.createServer(async (req, res) => {
     }
 
 
+    // ──────────────────────────────────────────────────
+    // GET /api/memory?uid=xxx  →  return user memory
+    // POST /api/memory          →  create or patch user memory
+    // ──────────────────────────────────────────────────
+    if (pathname === '/api/memory') {
+        if (req.method === 'GET') {
+            const uid = parsedUrl.query.uid;
+            if (!uid) { res.writeHead(400); res.end(JSON.stringify({ error: 'Missing uid' })); return; }
+            const mem = readUserMemory(uid);
+            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+            res.end(JSON.stringify(mem || {}));
+            return;
+        }
+        if (req.method === 'POST') {
+            try {
+                const data = await readJsonBody(req);
+                const uid = data.uid;
+                if (!uid) { res.writeHead(400); res.end(JSON.stringify({ error: 'Missing uid' })); return; }
+                const existing = readUserMemory(uid) || { uid, createdAt: new Date().toISOString() };
+                // Merge patch: quiz, knownConcepts, weakConcepts, sessionSummaries
+                if (data.quiz) existing.quiz = Object.assign({}, existing.quiz || {}, data.quiz);
+                if (Array.isArray(data.knownConcepts)) {
+                    const set = new Set([...(existing.knownConcepts || []), ...data.knownConcepts]);
+                    existing.knownConcepts = [...set];
+                }
+                if (Array.isArray(data.weakConcepts)) {
+                    const set = new Set([...(existing.weakConcepts || []), ...data.weakConcepts]);
+                    existing.weakConcepts = [...set];
+                }
+                if (typeof data.sessionSummary === 'string' && data.sessionSummary.trim()) {
+                    existing.sessionSummaries = existing.sessionSummaries || [];
+                    existing.sessionSummaries.push(
+                        `${new Date().toISOString().slice(0,10)}: ${data.sessionSummary.trim()}`
+                    );
+                    // Keep last 30 summaries
+                    if (existing.sessionSummaries.length > 30) existing.sessionSummaries = existing.sessionSummaries.slice(-30);
+                }
+                existing.lastUpdated = new Date().toISOString();
+                writeUserMemory(uid, existing);
+                res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+                res.end(JSON.stringify({ ok: true, memory: existing }));
+            } catch (err) {
+                res.writeHead(500); res.end(JSON.stringify({ error: err.message }));
+            }
+            return;
+        }
+    }
+
     if (pathname === '/api/section' && req.method === 'POST') {
         try {
             const data = await readJsonBody(req);
@@ -1196,6 +1335,9 @@ const server = http.createServer(async (req, res) => {
             const sectionTitle = compactWhitespace(data.sectionTitle || sectionId);
             const mode = data.mode || 'intro'; // 'intro' | 'lesson'
             const language = (data.language === 'zh') ? 'zh' : 'en'; // default EN
+            const uid = data.uid || null;
+            const userMemory = uid ? readUserMemory(uid) : null;
+            const userProfilePrompt = buildUserProfilePrompt(userMemory);
 
             if (!sectionId) {
                 res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
@@ -1228,8 +1370,8 @@ const server = http.createServer(async (req, res) => {
             } else if (mode === 'lesson') {
                 const searchAngles = [`${sectionTitle} signal processing explained`, `${sectionTitle} linear systems tutorial`];
                 const webSources = await collectWebSources(searchAngles);
-                console.log(`[SECTION] Starting dual-agent pipeline for ${sectionId} (lang=${language})…`);
-                const lesson = await generateSectionLesson(sectionId, sectionTitle, rawPages, webSources, language);
+                console.log(`[SECTION] Starting dual-agent pipeline for ${sectionId} (lang=${language}, uid=${uid})…`);
+                const lesson = await generateSectionLesson(sectionId, sectionTitle, rawPages, webSources, language, userProfilePrompt);
                 res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
                 res.end(JSON.stringify({
                     sectionId,
@@ -1266,6 +1408,9 @@ const server = http.createServer(async (req, res) => {
             const sectionTitle = compactWhitespace(data.sectionTitle || '');
             const lessonContext = compactWhitespace(data.lessonContext || '');
             const language = data.language === 'zh' ? 'zh' : 'en';
+            const uid = data.uid || null;
+            const userMemory = uid ? readUserMemory(uid) : null;
+            const userProfilePrompt = buildUserProfilePrompt(userMemory);
 
             if (!question) {
                 res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
@@ -1309,7 +1454,8 @@ const server = http.createServer(async (req, res) => {
                 sectionTitle: sectionTitle || sectionId,
                 lessonContext,
                 language,
-                mode
+                mode,
+                userProfilePrompt
             });
 
             res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });

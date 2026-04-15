@@ -1,277 +1,5 @@
 const API_BASE = window.location.hostname === 'localhost' ? 'http://localhost:9000' : '';
 
-// ════════════════════════════════════════════════════════════════
-// CLERK AUTH + USER MEMORY
-// ════════════════════════════════════════════════════════════════
-
-// ❗ Fill in your Clerk Publishable Key here after creating an app at https://clerk.com
-const CLERK_PUBLISHABLE_KEY = 'pk_test_REPLACE_WITH_YOUR_KEY';
-
-let currentUser = null;  // { uid, name, email, imageUrl }
-let userMemory  = {};    // loaded from backend after login
-
-async function initClerk() {
-  const clerkScript = document.getElementById('clerkScript');
-  if (!clerkScript) return;
-  clerkScript.setAttribute('data-clerk-publishable-key', CLERK_PUBLISHABLE_KEY);
-
-  await new Promise(resolve => {
-    if (window.Clerk) { resolve(); return; }
-    clerkScript.addEventListener('load', resolve);
-  });
-
-  await window.Clerk.load();
-
-  const user = window.Clerk.user;
-  if (user) {
-    await onUserSignedIn(user);
-  } else {
-    showAuthOverlay();
-    window.Clerk.addListener(({ user }) => {
-      if (user) {
-        hideAuthOverlay();
-        onUserSignedIn(user);
-      }
-    });
-  }
-}
-
-async function onUserSignedIn(user) {
-  currentUser = {
-    uid: user.id,
-    name: user.fullName || user.firstName || 'Student',
-    email: (user.emailAddresses[0] || {}).emailAddress || '',
-    imageUrl: user.imageUrl || ''
-  };
-  // Load memory from backend
-  try {
-    const res = await fetch(`${API_BASE}/api/memory?uid=${encodeURIComponent(currentUser.uid)}`);
-    userMemory = res.ok ? await res.json() : {};
-  } catch (_) { userMemory = {}; }
-
-  // Show quiz if not yet completed
-  if (!userMemory.quiz || Object.keys(userMemory.quiz).length < 5) {
-    showQuiz();
-  } else {
-    renderUserBadge();
-  }
-}
-
-function showAuthOverlay() {
-  const overlay = document.getElementById('authOverlay');
-  if (!overlay) return;
-  overlay.style.display = 'flex';
-  // Mount Clerk's hosted sign-in component
-  if (window.Clerk) {
-    window.Clerk.mountSignIn(document.getElementById('clerkSignInMount'));
-  }
-}
-
-function hideAuthOverlay() {
-  const overlay = document.getElementById('authOverlay');
-  if (overlay) overlay.style.display = 'none';
-}
-
-function renderUserBadge() {
-  if (!currentUser) return;
-  const footer = document.querySelector('.sidebar-footer-row');
-  if (!footer) return;
-  let badge = document.getElementById('userBadge');
-  if (!badge) {
-    badge = document.createElement('div');
-    badge.id = 'userBadge';
-    badge.style.cssText = 'display:flex;align-items:center;gap:8px;cursor:pointer;';
-    badge.title = 'Signed in as ' + currentUser.email;
-    footer.prepend(badge);
-  }
-  const img = currentUser.imageUrl
-    ? `<img src="${currentUser.imageUrl}" style="width:24px;height:24px;border-radius:50%;object-fit:cover;"/>`
-    : `<div style="width:24px;height:24px;border-radius:50%;background:#2563EB;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;">${(currentUser.name[0]||'?').toUpperCase()}</div>`;
-  badge.innerHTML = img + `<span style="font-size:12px;color:#334155;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${currentUser.name}</span>`;
-}
-
-// ──────────────────────────────
-// QUIZ
-// ──────────────────────────────
-const QUIZ_QUESTIONS = [
-  {
-    key: 'goal',
-    zh: '你对这门课的目标是？',
-    en: "What's your goal for this course?",
-    options: [
-      { value: 'just_pass',     zh: '考及格就行（C 及以上）😅', en: 'Just need to pass (C or above) 😅' },
-      { value: 'solid_b',      zh: '争取 B / B+ 就好',            en: 'Aiming for a solid B / B+' },
-      { value: 'going_for_a',  zh: '我要拿 A！真正弄懂它',         en: 'Going for an A — I want to really nail this' },
-      { value: 'getting_ahead',zh: '提前预习，还没正式开课',    en: 'Getting ahead — course hasn’t started yet' }
-    ]
-  },
-  {
-    key: 'math',
-    zh: '你的数学基础怎么样？',
-    en: 'How is your math background?',
-    options: [
-      { value: 'all_solid',    zh: '微积分、微分方程、复数都没问题',   en: 'Calculus, ODEs, and complex numbers — all solid' },
-      { value: 'calculus_ok', zh: '微积分还行，微分方程 / 复数有点虚', en: 'Calculus OK, but ODEs / complex numbers are shaky' },
-      { value: 'math_weak',   zh: '数学比较薄弱，公式能少用就少用',   en: 'Math is weak — fewer formulas, more intuition please' }
-    ]
-  },
-  {
-    key: 'style',
-    zh: '怎么学你最容易进入状态？',
-    en: 'How do you learn best?',
-    options: [
-      { value: 'example_first',   zh: '先给我一个具体例子，我看一遍就懂',   en: 'Example first — show me one and I’ll get it' },
-      { value: 'principle_first', zh: '先把原理讲清楚，再用例子说明',         en: 'Principle first, then examples' },
-      { value: 'visual',          zh: '图表和可视化对我帮助最大',              en: 'Visual learner — diagrams and sketches help me most' },
-      { value: 'step_by_step',    zh: '需要一步一步带着我走，跳步我就跟不上', en: 'Step-by-step — don’t skip anything, I fall behind' }
-    ]
-  },
-  {
-    key: 'timeline',
-    zh: '距下次考试 / 用到这门课还有多久？',
-    en: 'How much time do you have before your next exam or deadline?',
-    options: [
-      { value: 'midterm_week', zh: '期中考试在 1 周内（急救模式）',  en: 'Midterm in < 1 week — URGENT' },
-      { value: 'final_week',   zh: 'Final 在 1 周内（急救模式）',   en: 'Final in < 1 week — URGENT' },
-      { value: 'few_weeks',    zh: '还有几周',                    en: 'A few weeks away' },
-      { value: 'keeping_up',   zh: '我在跟课，还没到考试',       en: 'Just keeping up with lectures' },
-      { value: 'self_study',   zh: '纯自学，没有考试压力',         en: 'Self-studying — no exam pressure' }
-    ]
-  },
-  {
-    key: 'struggle',
-    zh: '在以往学理工课时，你最头疼的是？',
-    en: 'In previous STEM courses, what frustrated you most?',
-    options: [
-      { value: 'too_many_formulas', zh: '公式太多，记不住也搞不懂哪来的',   en: 'Too many formulas — I can’t remember them or where they come from' },
-      { value: 'too_abstract',      zh: '概念太抽象，不知道学这个干啊用',    en: 'Too abstract — I don’t know what any of this is for' },
-      { value: 'cant_do_problems',  zh: '课我能听懂，一做题就不会',             en: 'I understand in class but can’t do the problems' },
-      { value: 'mostly_lazy',       zh: '主要是懒，学起来其实还行',              en: 'Honestly, mostly laziness — I’m fine when I actually try' }
-    ]
-  }
-];
-
-let quizStep = 0;
-let quizAnswers = {};
-
-function showQuiz() {
-  quizStep = 0;
-  quizAnswers = {};
-  const overlay = document.getElementById('quizOverlay');
-  if (overlay) { overlay.style.display = 'flex'; }
-  renderQuizStep();
-}
-
-function renderQuizStep() {
-  const q = QUIZ_QUESTIONS[quizStep];
-  const lang = currentLang || 'en';
-  const container = document.getElementById('quizSteps');
-  const stepNum = document.getElementById('quizStepNum');
-  const nextBtn = document.getElementById('quizNextBtn');
-  if (!container || !q) return;
-  if (stepNum) stepNum.textContent = quizStep + 1;
-  if (nextBtn) {
-    nextBtn.disabled = true;
-    nextBtn.textContent = quizStep < QUIZ_QUESTIONS.length - 1 ? 'Next →' : 'Start Learning →';
-  }
-
-  container.innerHTML = `
-    <div style="font-size:16px;font-weight:600;color:#0F172A;margin-bottom:20px;line-height:1.5;">
-      ${lang === 'zh' ? q.zh : q.en}
-    </div>
-    <div style="display:flex;flex-direction:column;gap:10px;">
-      ${q.options.map(opt => `
-        <button class="quiz-option" data-value="${opt.value}"
-          style="text-align:left;padding:12px 18px;border:1.5px solid #E2E8F0;border-radius:12px;background:#fff;font-size:14px;color:#334155;cursor:pointer;transition:all 0.15s;font-family:inherit;">
-          ${lang === 'zh' ? opt.zh : opt.en}
-        </button>
-      `).join('')}
-    </div>
-  `;
-
-  container.querySelectorAll('.quiz-option').forEach(btn => {
-    btn.addEventListener('click', () => {
-      container.querySelectorAll('.quiz-option').forEach(b => {
-        b.style.borderColor = '#E2E8F0';
-        b.style.background = '#fff';
-        b.style.color = '#334155';
-      });
-      btn.style.borderColor = '#2563EB';
-      btn.style.background = 'rgba(37,99,235,0.06)';
-      btn.style.color = '#2563EB';
-      quizAnswers[q.key] = btn.dataset.value;
-      if (nextBtn) nextBtn.disabled = false;
-    });
-  });
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  const nextBtn = document.getElementById('quizNextBtn');
-  if (nextBtn) {
-    nextBtn.addEventListener('click', async () => {
-      quizStep++;
-      if (quizStep < QUIZ_QUESTIONS.length) {
-        renderQuizStep();
-      } else {
-        // Done: save quiz to backend
-        const overlay = document.getElementById('quizOverlay');
-        if (overlay) overlay.style.display = 'none';
-        if (currentUser) {
-          try {
-            const res = await fetch(`${API_BASE}/api/memory`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ uid: currentUser.uid, quiz: quizAnswers })
-            });
-            const data = await res.json();
-            userMemory = data.memory || userMemory;
-          } catch (_) {}
-        }
-        renderUserBadge();
-      }
-    });
-  }
-
-  // Init Clerk after DOM ready
-  if (CLERK_PUBLISHABLE_KEY && CLERK_PUBLISHABLE_KEY !== 'pk_test_REPLACE_WITH_YOUR_KEY') {
-    initClerk();
-  } else {
-    // Dev mode: no Clerk key, create a local uid
-    currentUser = {
-      uid: localStorage.getItem('tutorUid') || (() => {
-        const id = 'local_' + Math.random().toString(36).slice(2, 10);
-        localStorage.setItem('tutorUid', id);
-        return id;
-      })()
-    };
-    fetch(`${API_BASE}/api/memory?uid=${encodeURIComponent(currentUser.uid)}`)
-      .then(r => r.ok ? r.json() : {})
-      .then(mem => {
-        userMemory = mem || {};
-        if (!userMemory.quiz || Object.keys(userMemory.quiz).length < 5) showQuiz();
-      })
-      .catch(() => showQuiz());
-  }
-});
-
-// Helper: get current uid for API calls
-function getUid() {
-  return currentUser ? currentUser.uid : null;
-}
-
-// Save a session summary after lesson load
-async function saveSessionSummary(summary) {
-  const uid = getUid();
-  if (!uid || !summary) return;
-  try {
-    await fetch(`${API_BASE}/api/memory`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ uid, sessionSummary: summary })
-    });
-  } catch (_) {}
-}
-
 // ── Language Toggle ──────────────────────────────────────────────────────────
 let currentLang = localStorage.getItem('tutorLang') || 'en'; // 'en' | 'zh'
 
@@ -692,13 +420,11 @@ const learnSplashNote = document.getElementById('learnSplashNote');
 const learnWebSection  = document.getElementById('learnWebSection');
 const learnWebSectionCount = document.getElementById('learnWebSectionCount');
 const learnWebCards    = document.getElementById('learnWebCards');
-const learnBookPages = document.getElementById('learnBookPages');
-const bookPageIndicator = document.getElementById('bookPageIndicator');
-const bookPrevBtn = document.getElementById('bookPrevBtn');
-const bookNextBtn = document.getElementById('bookNextBtn');
+const learnBookPages  = document.getElementById('learnBookPages') || { innerHTML: '', querySelectorAll: () => [] };
+const learnPageLabel  = document.getElementById('learnPageLabel') || { textContent: '' };
+const learnPagePrev   = document.getElementById('learnPagePrev') || { classList: { add() {}, remove() {} }, addEventListener() {} };
+const learnPageNext   = document.getElementById('learnPageNext') || { classList: { add() {}, remove() {} }, addEventListener() {} };
 const learnExplainContent = document.getElementById('learnExplainContent');
-const learnChatContent = document.getElementById('learnChatContent');
-const learnChatScroll  = document.getElementById('learnChatScroll');
 const learnExplainScroll  = document.getElementById('learnExplainScroll');
 const learnFollowupInput  = document.getElementById('learnFollowupInput');
 const learnFollowupBtn    = document.getElementById('learnFollowupBtn');
@@ -759,50 +485,12 @@ function setLearnLoading(show, text = 'Loading…') {
   if (show) learnLoadingText.textContent = text;
 }
 
-let currentBookPageIndex = 0;
-
 function renderLearnPages() {
-  if (!learnBookPages) return;
-  const pages = tutorState.learnBookPages || [];
-  
-  if (pages.length === 0) {
-    learnBookPages.innerHTML = '<div class="ghost" style="margin:auto;">No book pages for this section.</div>';
-    if (bookPageIndicator) bookPageIndicator.textContent = 'Page 0 of 0';
-    if (bookPrevBtn) bookPrevBtn.disabled = true;
-    if (bookNextBtn) bookNextBtn.disabled = true;
-    return;
-  }
-  
-  if (currentBookPageIndex >= pages.length) currentBookPageIndex = pages.length - 1;
-  const currentPage = pages[currentBookPageIndex];
-  
-  learnBookPages.innerHTML = `
-    <div class="book-page-wrap">
-      <img src="${API_BASE}${currentPage.path}" alt="Book Page">
-    </div>
-  `;
-  
-  if (bookPageIndicator) bookPageIndicator.textContent = `Page ${currentBookPageIndex + 1} of ${pages.length}`;
-  if (bookPrevBtn) bookPrevBtn.disabled = currentBookPageIndex === 0;
-  if (bookNextBtn) bookNextBtn.disabled = currentBookPageIndex === pages.length - 1;
-}
-
-if (bookPrevBtn) {
-  bookPrevBtn.addEventListener('click', () => {
-    if (currentBookPageIndex > 0) {
-      currentBookPageIndex--;
-      renderLearnPages();
-    }
-  });
-}
-
-if (bookNextBtn) {
-  bookNextBtn.addEventListener('click', () => {
-    if (currentBookPageIndex < (tutorState.learnBookPages || []).length - 1) {
-      currentBookPageIndex++;
-      renderLearnPages();
-    }
-  });
+  // Page-image viewer removed from UI. Keep data internally, but render nothing.
+  learnBookPages.innerHTML = '';
+  learnPageLabel.textContent = '';
+  learnPagePrev.classList.add('hidden');
+  learnPageNext.classList.add('hidden');
 }
 
 function renderLearnWebSources(sources) {
@@ -863,14 +551,14 @@ async function openLearnMode(sectionId, sectionTitle, subsections = []) {
   learnPages = [];
   learnPageIndex = 0;
   learnWebData = [];
-  currentBookPageIndex = 0; // Fixed pagination resets to 0
 
   learnTitle.textContent = sectionTitle;
   learnIntroCard.classList.remove('hidden');
   learnBody.classList.add('hidden');
-  learnIntroText.textContent = 'Loading section preview...';
+  learnIntroText.textContent = '';
   if (learnIntroMeta) learnIntroMeta.innerHTML = '';
   showLearnView();
+  showSplash();
   // Build right TOC: section title + subsections (skip if null = preserve existing TOC)
   if (subsections !== null) {
     const tocItems = [{ title: sectionTitle, depth: 1, anchor: '' }];
@@ -899,7 +587,7 @@ async function openLearnMode(sectionId, sectionTitle, subsections = []) {
     const res = await fetch(`${API_BASE}/api/section`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sectionId, sectionTitle, mode: 'intro', language: window.tutorLang || 'en', uid: getUid() }),
+      body: JSON.stringify({ sectionId, sectionTitle, mode: 'intro', language: window.tutorLang || 'en' }),
       signal: learnAbort.signal
     });
     const data = await res.json();
@@ -933,7 +621,7 @@ async function startLesson() {
     const res = await fetch(`${API_BASE}/api/section`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sectionId: learnSectionId, sectionTitle: learnSectionTitle, mode: 'lesson', language: window.tutorLang || 'en', uid: getUid() }),
+      body: JSON.stringify({ sectionId: learnSectionId, sectionTitle: learnSectionTitle, mode: 'lesson', language: window.tutorLang || 'en' }),
       signal: learnAbort.signal
     });
     setSplashStage(4); // charts / rendering
@@ -952,7 +640,6 @@ async function startLesson() {
       : [];
     renderLearnPages();
     learnExplainContent.innerHTML = markdownToHtml(data.lesson || 'No explanation available.');
-    if (learnChatContent) learnChatContent.innerHTML = ''; // Clear chat history on new section
     setTimeout(() => {
       if (window.MathJax && window.MathJax.typesetPromise) {
         window.MathJax.typesetPromise([learnExplainContent]).catch(() => {});
@@ -963,8 +650,6 @@ async function startLesson() {
     renderLearnWebSection(data.webSources || []);
     learnExplainScroll.scrollTop = 0;
     setLearnLoading(false);
-    // Async: save session summary
-    saveSessionSummary(`Studied section "${learnSectionTitle}".`);
   } catch (err) {
     hideSplash();
     if (err.name === 'AbortError') return;
@@ -983,6 +668,8 @@ function closeLearnMode() {
 // Learn mode events
 learnClose.addEventListener('click', closeLearnMode);
 learnStartBtn.addEventListener('click', startLesson);
+learnPagePrev.addEventListener('click', () => {});
+learnPageNext.addEventListener('click', () => {});
 learnWebBtn.addEventListener('click', () => {
   const open = !learnWebSources.classList.contains('hidden');
   learnWebSources.classList.toggle('hidden', open);
@@ -1004,13 +691,13 @@ async function sendLearnFollowup(rawPrompt) {
   learnFollowupBtn.disabled = true;
 
   const answerId = `learn-followup-answer-${Date.now()}`;
-  learnChatContent.insertAdjacentHTML('beforeend', `
+  learnExplainContent.insertAdjacentHTML('beforeend', `
     <div class="followup-bubble" id="${answerId}">
       <div class="fub-q">${escapeHtml(prompt)}</div>
       <div class="fub-a ghost">Thinking with context from this section…</div>
     </div>
   `);
-  learnChatScroll.scrollTop = learnChatScroll.scrollHeight;
+  learnExplainScroll.scrollTop = learnExplainScroll.scrollHeight;
 
   if (learnAbort) learnAbort.abort();
   learnAbort = new AbortController();
@@ -1047,7 +734,7 @@ async function sendLearnFollowup(rawPrompt) {
     tutorState.learnWebSources = data.webSources || tutorState.learnWebSources;
     renderLearnWebSources(tutorState.learnWebSources);
     renderLearnWebSection(tutorState.learnWebSources);
-    learnChatScroll.scrollTop = learnChatScroll.scrollHeight;
+    learnExplainScroll.scrollTop = learnExplainScroll.scrollHeight;
   } catch (err) {
     if (err.name === 'AbortError') return;
     const target = document.getElementById(answerId);
@@ -1395,7 +1082,7 @@ async function callAsk(prompt, signal, extra = {}) {
   const res = await fetch(`${API_BASE}/api/ask`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ prompt, uid: getUid(), ...extra }),
+    body: JSON.stringify({ prompt, ...extra }),
     signal
   });
 
@@ -1557,25 +1244,3 @@ autoResize(followupInput);
 setSendState();
 showWelcome();
 setStatus('', 'idle');
-
-// --- Sidebar Toggle Logic ---
-setTimeout(() => {
-  const menuToggleBtn = document.getElementById('menuToggleBtn');
-  const floatToggleBtn = document.getElementById('floatToggleBtn');
-  const appContainer = document.querySelector('.app');
-
-  const leftSidebar = document.getElementById('leftSidebar');
-
-  if (menuToggleBtn && leftSidebar) {
-    menuToggleBtn.addEventListener('click', () => {
-      leftSidebar.classList.add('collapsed');
-      appContainer.classList.add('sidebar-collapsed');
-    });
-  }
-  if (floatToggleBtn && leftSidebar) {
-    floatToggleBtn.addEventListener('click', () => {
-      leftSidebar.classList.remove('collapsed');
-      appContainer.classList.remove('sidebar-collapsed');
-    });
-  }
-}, 500);
