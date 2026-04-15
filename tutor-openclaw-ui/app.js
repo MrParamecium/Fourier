@@ -35,8 +35,12 @@ async function initClerk() {
   // Load Clerk SDK
   try {
     await waitForClerk();
-    clerkInstance = new window.Clerk(CLERK_PUBLISHABLE_KEY);
-    await clerkInstance.load({ navigate: (to) => { window.location.href = to; } });
+    // v4 browser bundle exposes window.Clerk as a singleton instance, not a class
+    clerkInstance = window.Clerk;
+    await clerkInstance.load({
+      publishableKey: CLERK_PUBLISHABLE_KEY,
+      navigate: (to) => { window.location.href = to; }
+    });
   } catch (e) {
     console.warn('[Clerk] failed:', e.message);
     clerkInstance = null;
