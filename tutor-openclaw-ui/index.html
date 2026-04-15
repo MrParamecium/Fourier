@@ -13,9 +13,16 @@
   <div class="app">
 
     <!-- ════════════════════ LEFT SIDEBAR (always visible) ════════════════════ -->
-    <aside class="sidebar" id="leftSidebar">
+    <aside class="sidebar collapsed" id="leftSidebar">
       <div class="sidebar-top">
         <div class="logo">
+          <button class="menu-toggle" id="menuToggleBtn" title="Toggle Sidebar">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
           <div class="logo-icon" style="border:none;background:transparent;"></div>
           <div class="logo-text" style="font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:24px;font-weight:700;">Tutor</div>
         </div>
@@ -39,6 +46,13 @@
 
     <!-- ════════════════════ MAIN CONTENT (switches between modes) ════════════════════ -->
     <main class="main" id="mainContent">
+      <button class="sidebar-float-toggle" id="floatToggleBtn" title="Show Sidebar">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
 
       <!-- Breadcrumb bar (always visible in non-welcome states) -->
       <div class="topbar hidden" id="topbar">
@@ -165,7 +179,19 @@
 
           <div class="learn-body-inner">
 
-            <!-- Right: Explanation -->
+            <!-- Left: Book Content (Paginated) -->
+            <div class="learn-book-col" id="learnBookCol">
+              <div class="learn-book-pages carousel" id="learnBookPages">
+                 <!-- Pages injected here -->
+              </div>
+              <div class="learn-book-pagination">
+                <button id="bookPrevBtn" class="book-nav-btn">← Prev</button>
+                <span id="bookPageIndicator">Page 1 of X</span>
+                <button id="bookNextBtn" class="book-nav-btn">Next →</button>
+              </div>
+            </div>
+
+            <!-- Right: Explanation and Chat -->
             <div class="learn-explain-col">
               <div class="learn-explain-scroll" id="learnExplainScroll">
                 <div class="learn-explain-body" id="learnExplainContent">

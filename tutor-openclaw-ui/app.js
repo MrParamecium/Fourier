@@ -390,6 +390,14 @@ function renderSyllabus() {
       courseSyllabus.querySelectorAll('.syllabus-section').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
 
+      // Auto collapse left sidebar
+      const leftSidebar = document.getElementById('leftSidebar');
+      const appContainer = document.querySelector('.app');
+      if (leftSidebar && appContainer) {
+        leftSidebar.classList.add('collapsed');
+        appContainer.classList.add('sidebar-collapsed');
+      }
+
       // Parse subsections stored in data attribute
       let subs = [];
       try {
@@ -420,10 +428,10 @@ const learnSplashNote = document.getElementById('learnSplashNote');
 const learnWebSection  = document.getElementById('learnWebSection');
 const learnWebSectionCount = document.getElementById('learnWebSectionCount');
 const learnWebCards    = document.getElementById('learnWebCards');
-const learnBookPages  = document.getElementById('learnBookPages') || { innerHTML: '', querySelectorAll: () => [] };
-const learnPageLabel  = document.getElementById('learnPageLabel') || { textContent: '' };
-const learnPagePrev   = document.getElementById('learnPagePrev') || { classList: { add() {}, remove() {} }, addEventListener() {} };
-const learnPageNext   = document.getElementById('learnPageNext') || { classList: { add() {}, remove() {} }, addEventListener() {} };
+const learnBookPages = document.getElementById('learnBookPages');
+const bookPageIndicator = document.getElementById('bookPageIndicator');
+const bookPrevBtn = document.getElementById('bookPrevBtn');
+const bookNextBtn = document.getElementById('bookNextBtn');
 const learnExplainContent = document.getElementById('learnExplainContent');
 const learnExplainScroll  = document.getElementById('learnExplainScroll');
 const learnFollowupInput  = document.getElementById('learnFollowupInput');
@@ -485,12 +493,54 @@ function setLearnLoading(show, text = 'Loading…') {
   if (show) learnLoadingText.textContent = text;
 }
 
+const learnBookPages = document.getElementById('learnBookPages');
+const bookPageIndicator = document.getElementById('bookPageIndicator');
+const bookPrevBtn = document.getElementById('bookPrevBtn');
+const bookNextBtn = document.getElementById('bookNextBtn');
+let currentBookPageIndex = 0;
+
 function renderLearnPages() {
-  // Page-image viewer removed from UI. Keep data internally, but render nothing.
-  learnBookPages.innerHTML = '';
-  learnPageLabel.textContent = '';
-  learnPagePrev.classList.add('hidden');
-  learnPageNext.classList.add('hidden');
+  if (!learnBookPages) return;
+  const pages = tutorState.learnBookPages || [];
+  
+  if (pages.length === 0) {
+    learnBookPages.innerHTML = '<div class="ghost" style="margin:auto;">No book pages for this section.</div>';
+    if (bookPageIndicator) bookPageIndicator.textContent = 'Page 0 of 0';
+    if (bookPrevBtn) bookPrevBtn.disabled = true;
+    if (bookNextBtn) bookNextBtn.disabled = true;
+    return;
+  }
+  
+  if (currentBookPageIndex >= pages.length) currentBookPageIndex = pages.length - 1;
+  const currentPage = pages[currentBookPageIndex];
+  
+  learnBookPages.innerHTML = `
+    <div class="book-page-wrap">
+      <img src="${API_BASE}${currentPage.path}" alt="Book Page">
+    </div>
+  `;
+  
+  if (bookPageIndicator) bookPageIndicator.textContent = `Page ${currentBookPageIndex + 1} of ${pages.length}`;
+  if (bookPrevBtn) bookPrevBtn.disabled = currentBookPageIndex === 0;
+  if (bookNextBtn) bookNextBtn.disabled = currentBookPageIndex === pages.length - 1;
+}
+
+if (bookPrevBtn) {
+  bookPrevBtn.addEventListener('click', () => {
+    if (currentBookPageIndex > 0) {
+      currentBookPageIndex--;
+      renderLearnPages();
+    }
+  });
+}
+
+if (bookNextBtn) {
+  bookNextBtn.addEventListener('click', () => {
+    if (currentBookPageIndex < (tutorState.learnBookPages || []).length - 1) {
+      currentBookPageIndex++;
+      renderLearnPages();
+    }
+  });
 }
 
 function renderLearnWebSources(sources) {
@@ -551,6 +601,7 @@ async function openLearnMode(sectionId, sectionTitle, subsections = []) {
   learnPages = [];
   learnPageIndex = 0;
   learnWebData = [];
+  currentBookPageIndex = 0; // Fixed pagination resets to 0
 
   learnTitle.textContent = sectionTitle;
   learnIntroCard.classList.remove('hidden');
@@ -668,8 +719,6 @@ function closeLearnMode() {
 // Learn mode events
 learnClose.addEventListener('click', closeLearnMode);
 learnStartBtn.addEventListener('click', startLesson);
-learnPagePrev.addEventListener('click', () => {});
-learnPageNext.addEventListener('click', () => {});
 learnWebBtn.addEventListener('click', () => {
   const open = !learnWebSources.classList.contains('hidden');
   learnWebSources.classList.toggle('hidden', open);
@@ -1244,3 +1293,25 @@ autoResize(followupInput);
 setSendState();
 showWelcome();
 setStatus('', 'idle');
+
+// --- Sidebar Toggle Logic ---
+setTimeout(() => {
+  const menuToggleBtn = document.getElementById('menuToggleBtn');
+  const floatToggleBtn = document.getElementById('floatToggleBtn');
+  const appContainer = document.querySelector('.app');
+
+  const leftSidebar = document.getElementById('leftSidebar');
+
+  if (menuToggleBtn && leftSidebar) {
+    menuToggleBtn.addEventListener('click', () => {
+      leftSidebar.classList.add('collapsed');
+      appContainer.classList.add('sidebar-collapsed');
+    });
+  }
+  if (floatToggleBtn && leftSidebar) {
+    floatToggleBtn.addEventListener('click', () => {
+      leftSidebar.classList.remove('collapsed');
+      appContainer.classList.remove('sidebar-collapsed');
+    });
+  }
+}, 500);

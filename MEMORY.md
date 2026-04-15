@@ -1,26 +1,60 @@
 # MEMORY.md - 核心记忆库
 
 ## 约定与习惯 (Conventions & Habits)
-- **强制记忆规则**：主动记录每一次对话的核心内容或关键想法，确保在跨 Session 或模型切换间不丢失连续性。
-- （2026-03-16 记录）：之前关于 tutor agent demo 的对话意外丢失。从今开始更频繁地、更具体地进行记录。
-- （2026-03-18 新增用户偏好）：**只要是前端任务（页面/UI/样式改造），除非用户明确指定模型，否则默认切换到 `openrouter/google/gemini-3.1-pro-preview`（Gemini 3.1 Pro Preview）执行。**
+- (2026-04-09 新增用户偏好):**回复时多用表情符号**，让对话有人情味、像真人在聊天。Harrison 明确表达了这个偏好。
+
+- **强制记忆规则**:主动记录每一次对话的核心内容或关键想法,确保在跨 Session 或模型切换间不丢失连续性。
+- (2026-03-16 记录):之前关于 tutor agent demo 的对话意外丢失。从今开始更频繁地、更具体地进行记录。
+- (2026-03-23 新增用户硬性规则):**只要是前端任务(页面/UI/样式改造),必须使用 `openrouter/google/gemini-3.1-pro-preview`(Gemini 3.1 Pro Preview),无论当前模型是什么,都必须先切换到这个模型。只有用户明确说"用 XXX 模型做前端"时才用用户指定的模型。**
+- (2026-04-06 新增用户硬性规则，最重要)：**每次对话，无论什么话题，都必须先评估合理性并说明打算怎么做，但先不动，等 Harrison 命令再执行。每次都要！**
+- (2026-04-01 新增用户硬性规则):**每进行一次对话，必须立即总结本次对话的核心内容或关键想法，并写入当日的记忆文件 (`memory/YYYY-MM-DD.md`)。不能等到 session 结束或依靠系统自动保存，以防止跨 session 或突然中断时内容丢失。**
+- (2026-03-23 更新)汇报节奏:**5步之内没有完成任务**才做一次简短汇报,而不是每2分钟。
+
+## Tutor Agent 核心设计理念（2026-04-12 确认）
+
+**目标用户**：中学生，懒惰、想用最短时间学完、考高分驱动。
+
+**设计原则（所有改动必须符合）**：
+1. **进度可见** ⭐ — 让用户随时看到自己在知识地图上的位置，完成一节有打勾的快感（Harrison 特别强调）
+2. **极度精简** — 每次只给最核心的概念，不堆砌
+3. **考试导向** — 每个知识点直接对应「考试会怎么考」
+4. **即时测验** — 讲完出题，强化「我真的懂了」的感觉
+5. **时间承诺** — 「5分钟搞懂 X」，用具体时间降低启动阻力
+6. **最短路径** — 直接告知「期末最可能考这几道题，掌握这几个公式就够了」
 
 ## 项目 (Projects)
-- **Tutor Agent Demo**：
-  - **目标**：开发一个基于 OpenClaw 的 tutor agent demo。
-  - **核心功能**：根据用户 prompt，生成算法/原理图解或 AI 视频讲解。
-  - **当前切入点**：Graph algorithms (图算法) 和 Signal processing (信号处理) 的可视化 (Visualization)。
-  - **初始课题**：BFS (广度优先搜索)、DFS (深度优先搜索)、傅立叶变换 (Fourier Transform)、最短路径算法 (Shortest Path Algorithms)。
-  - **交付形态**：将其封装为一个标准的 OpenClaw **AgentSkill**（技能包），使得任何 OpenClaw 实例都能通过自然语言（如特定关键词）唤醒该技能。
-  - **部署与访问方式**：将加载了 `tutor-agent` 技能的 OpenClaw Core 部署在云服务器（VPS）上，对外提供 HTTP/API 接口，用户（前端/客户端应用）直接通过网络调用，无需本地安装和部署 OpenClaw。
-  - **Demo 演示方案**：先在本地 MacBook 环境运行 OpenClaw 作为“云服务器”，配合一个前端网页构成“高级版 Chatbot”向老师展示。
-  - **核心优势辩护 (相对于纯对话 LLM)**：OpenClaw Agent 具备**环境操作能力**（执行代码、生成真实文件如 .mp4/.png、调用外部引擎如 Manim/Python），而不仅仅是输出文本形式的代码或文字解释。它可以真正做到“我说画图，它就产出一个图表文件并渲染到前端”，这是纯文本的 Gemini/ChatGPT-Web 无法独立做到的无缝体验。
-  - **最终架构敲定 (2026-03-17)**：
-    - **两条平行的产品线 (完全分开)**：
-      1. **线一 (动画演示)**：Python 生成严谨的步骤推演动画 (Step-by-step Animation)。如用 NetworkX/Matplotlib 生成 `.gif`/`.mp4`。
-      2. **线二 (静态图片)**：调用文生图 API（明确为 OpenRouter 中的 `google/gemini-3.1-flash-image-preview`，即用户提及的 nano banana 2 模型）**仅生成概念图片**，不做画蛇添足的废话播客讲稿，只做正常的硬核知识原理解释。
-    - **当前任务**：技能重命名为 `image&animation generation` (目录名为 `image-animation-generation`)，已将其部署在用户的 `~/.agents/skills/image-animation-generation` 目录下。
-  - **当前进行阶段：单点突破 (2026-03-17 18:44)**
-    - 废除多轨并行的虚假繁荣，执行 **单功能全链路闭环 (MVP)**。
-    - **目标功能**：只针对“轨道 2 (AIGC 生成静态配图)” 进行端到端打通。
-    - **全链路流程**：用户在手机浏览器输入 Prompt (“请给我讲解 DFS 的原理”) -> 触发 AgentSkill `image-animation-generation` -> 提取用户的 Prompt -> **不经过任何润色**，直接通过 API 扔给 Nano Banana (`google/gemini-3.1-flash-image-preview`) -> Nano Banana 返回图片 URL 结果 -> Tutor Agent 组织语言 (讲解文字 + Markdown 图片链接) -> 原路返回显示在用户的手机网页上。
+
+### Tutor Agent（重大升级 2026-03-31）
+
+**核心目标（重大转变）**：
+- 打造一个真正能用于教学的 tutor agent，不是 demo，不是演示，是实际可用、能让学生得高分的工具。
+- 评判标准：教学效果好、节省时间、能拿高分。
+- 服务对象：从零开始、没有基础的人，循序渐进修完两章内容。
+- 课程名：**Signal Processing and Linear Systems**（信号与线性系统）。
+
+**目标章节（首批）**：
+1. Background（背景知识）
+2. Chapter 1: Introduction to Signals and Systems（信号与系统入门）
+
+**输入教材**：
+- Harrison 会提供这门课的**扫描版 PDF 教科书**，作为核心参考内容。
+
+**技术实现要点（持续更新）**：
+- 基于 OpenClaw AgentSkill 架构。
+- 核心能力：生成图解、动画、讲解文字，真正做到"我说画图，它就渲染出图表"。
+- 区别于纯对话 LLM 的关键：OpenClaw 可以执行代码、生成真实文件（.mp4/.png），不只是输出文字。
+
+**部署方式**：
+- OpenClaw Core 部署在云服务器（VPS），对外提供 HTTP/API 接口。
+- 前端通过公网 URL 访问。
+
+**当前状态（2026-04-07 更新）**：
+- ✅ OCR 完成：background-ocr-v3/ 共 104 书页（book-000~103），用 OpenRouter openai/gpt-5.4
+- ✅ Metadata 完成：每页对应 book-XXX.meta.json（subsection/summary/keywords）
+- ✅ 前端左侧目录已更新：Background 子节完整展开（B.1~B.7 含各子节）
+- 🔜 下一步：实现 RAG 检索 + 左书本截图/右 Claude Opus 4.6 讲解的呈现形式
+
+**关键技术决策**：
+- 讲解模型：**必须用 Claude Sonnet 4.6**（`openrouter/anthropic/claude-sonnet-4.6`，alias: sonnet）——这是 Harrison 明确为了控制成本并保持高推理能力的最新规定（原为 Opus，已废弃）。
+- 书本截图：直接裁剪 background-pages/ 的扫描 PNG 左/右半页
+- RAG 顺序：书本 RAG 优先，联网搜索作补充
