@@ -303,7 +303,10 @@
       <p style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:#94A3B8;margin:0 0 8px;">Signal Processing &amp; Linear Systems</p>
       <p style="font-size:15px;color:#475569;margin:0 0 36px;line-height:1.6;">Sign in to save your progress and get a personalized learning experience.</p>
 
-      <!-- Sign In button -->
+      <!-- Clerk component mounts here when Sign In clicked -->
+      <div id="clerkMount" style="display:none;margin-bottom:16px;"></div>
+
+      <!-- Sign In button (hidden after clerk mounts) -->
       <button id="clerkSignInBtn" style="display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px 24px;background:#2563EB;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.2s;margin-bottom:12px;font-family:inherit;">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         Sign in / Create account

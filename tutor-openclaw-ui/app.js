@@ -53,18 +53,18 @@ async function initClerk() {
   showAuthOverlay();
 
   // ─ Sign In / Create Account button ─
-  document.getElementById('clerkSignInBtn').onclick = async () => {
-    if (!clerkInstance) { fallbackLocalUid(); hideAuthOverlay(); return; }
-    // Use Clerk's popup/modal sign-in
-    await clerkInstance.openSignIn({
-      afterSignInUrl: window.location.href,
-      afterSignUpUrl: window.location.href
-    });
-    // Clerk redirects back; re-check user
-    if (clerkInstance.user) {
-      hideAuthOverlay();
-      await onUserSignedIn(clerkInstance.user);
+  document.getElementById('clerkSignInBtn').onclick = () => {
+    if (!clerkInstance) {
+      // Clerk failed to load — show error, don't silently skip
+      alert('Sign-in service failed to load. Please refresh the page and try again, or continue as Guest.');
+      return;
     }
+    // Hide the two buttons, show Clerk's embedded component
+    document.getElementById('clerkSignInBtn').style.display = 'none';
+    document.getElementById('guestModeBtn').style.display = 'none';
+    const mount = document.getElementById('clerkMount');
+    mount.style.display = 'block';
+    clerkInstance.mountSignIn(mount);
   };
 
   // ─ Guest Mode button ─
