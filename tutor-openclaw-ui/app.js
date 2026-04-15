@@ -35,12 +35,9 @@ async function initClerk() {
   // Load Clerk SDK
   try {
     await waitForClerk();
-    // v4 browser bundle exposes window.Clerk as a singleton instance, not a class
+    // With data-clerk-publishable-key on the script tag, Clerk auto-initializes
+    // window.Clerk is ready as a fully loaded instance
     clerkInstance = window.Clerk;
-    await clerkInstance.load({
-      publishableKey: CLERK_PUBLISHABLE_KEY,
-      navigate: (to) => { window.location.href = to; }
-    });
   } catch (e) {
     console.warn('[Clerk] failed:', e.message);
     clerkInstance = null;

@@ -280,7 +280,13 @@
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
   <!-- Clerk 登录系统 (Publishable Key 在下方 app.js 配置) -->
-  <script src="/clerk.browser.js" id="clerkScript"></script>
+  <script
+    async
+    crossorigin="anonymous"
+    data-clerk-publishable-key="pk_test_ZHJpdmVuLXRyb2xsLTI4LmNsZXJrLmFjY291bnRzLmRldiQ"
+    src="https://driven-troll-28.clerk.accounts.dev/npm/@clerk/clerk-js@4/dist/clerk.browser.js"
+    id="clerkScript">
+  </script>
 
   <!-- 用户画像问卷 弹窗 -->
   <div id="quizOverlay" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;">
