@@ -390,14 +390,6 @@ function renderSyllabus() {
       courseSyllabus.querySelectorAll('.syllabus-section').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
 
-      // Auto collapse left sidebar
-      const leftSidebar = document.getElementById('leftSidebar');
-      const appContainer = document.querySelector('.app');
-      if (leftSidebar && appContainer) {
-        leftSidebar.classList.add('collapsed');
-        appContainer.classList.add('sidebar-collapsed');
-      }
-
       // Parse subsections stored in data attribute
       let subs = [];
       try {
@@ -604,10 +596,9 @@ async function openLearnMode(sectionId, sectionTitle, subsections = []) {
   learnTitle.textContent = sectionTitle;
   learnIntroCard.classList.remove('hidden');
   learnBody.classList.add('hidden');
-  learnIntroText.textContent = '';
+  learnIntroText.textContent = 'Loading section preview...';
   if (learnIntroMeta) learnIntroMeta.innerHTML = '';
   showLearnView();
-  showSplash();
   // Build right TOC: section title + subsections (skip if null = preserve existing TOC)
   if (subsections !== null) {
     const tocItems = [{ title: sectionTitle, depth: 1, anchor: '' }];
