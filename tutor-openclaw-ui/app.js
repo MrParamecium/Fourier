@@ -36,7 +36,7 @@ async function initClerk() {
   try {
     await waitForClerk();
     clerkInstance = new window.Clerk(CLERK_PUBLISHABLE_KEY);
-    await clerkInstance.load();
+    await clerkInstance.load({ navigate: (to) => { window.location.href = to; } });
   } catch (e) {
     console.warn('[Clerk] failed:', e.message);
     clerkInstance = null;
