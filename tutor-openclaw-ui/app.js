@@ -10,25 +10,73 @@ const CLERK_PUBLISHABLE_KEY = 'pk_test_ZHJpdmVuLXRyb2xsLTI4LmNsZXJrLmFjY291bnRzL
 let currentUser = null;  // { uid, name, email, imageUrl }
 let userMemory  = {};    // loaded from backend after login
 
+let clerkInstance = null;
+
+// ─────────────────────────────────────────────────
+function hideAuthOverlay() {
+  const o = document.getElementById('authOverlay');
+  if (o) o.style.display = 'none';
+}
+
+function showAuthOverlay() {
+  const o = document.getElementById('authOverlay');
+  if (o) o.style.display = 'flex';
+}
+
+async function waitForClerk(ms = 12000) {
+  const t = Date.now();
+  while (!window.Clerk) {
+    if (Date.now() - t > ms) throw new Error('timeout');
+    await new Promise(r => setTimeout(r, 150));
+  }
+}
+
 async function initClerk() {
-  const clerkScript = document.getElementById('clerkScript');
-  if (!clerkScript) return;
-  clerkScript.setAttribute('data-clerk-publishable-key', CLERK_PUBLISHABLE_KEY);
+  // Load Clerk SDK
+  try {
+    await waitForClerk();
+    clerkInstance = new window.Clerk(CLERK_PUBLISHABLE_KEY);
+    await clerkInstance.load();
+  } catch (e) {
+    console.warn('[Clerk] failed:', e.message);
+    clerkInstance = null;
+  }
 
-  await new Promise(resolve => {
-    if (window.Clerk) { resolve(); return; }
-    clerkScript.addEventListener('load', resolve);
-  });
+  // Already signed in from a previous session?
+  if (clerkInstance && clerkInstance.user) {
+    hideAuthOverlay();
+    await onUserSignedIn(clerkInstance.user);
+    return;
+  }
 
-  await window.Clerk.load();
+  // Show the choice overlay
+  showAuthOverlay();
 
-  const user = window.Clerk.user;
-  if (user) {
-    await onUserSignedIn(user);
-  } else {
-    showAuthOverlay();
-    window.Clerk.addListener(({ user }) => {
-      if (user) {
+  // ─ Sign In / Create Account button ─
+  document.getElementById('clerkSignInBtn').onclick = async () => {
+    if (!clerkInstance) { fallbackLocalUid(); hideAuthOverlay(); return; }
+    // Use Clerk's popup/modal sign-in
+    await clerkInstance.openSignIn({
+      afterSignInUrl: window.location.href,
+      afterSignUpUrl: window.location.href
+    });
+    // Clerk redirects back; re-check user
+    if (clerkInstance.user) {
+      hideAuthOverlay();
+      await onUserSignedIn(clerkInstance.user);
+    }
+  };
+
+  // ─ Guest Mode button ─
+  document.getElementById('guestModeBtn').onclick = () => {
+    hideAuthOverlay();
+    startGuestMode();
+  };
+
+  // Also listen for sign-in completion (e.g., after OAuth redirect)
+  if (clerkInstance) {
+    clerkInstance.addListener(({ user }) => {
+      if (user && !currentUser) {
         hideAuthOverlay();
         onUserSignedIn(user);
       }
@@ -41,35 +89,35 @@ async function onUserSignedIn(user) {
     uid: user.id,
     name: user.fullName || user.firstName || 'Student',
     email: (user.emailAddresses[0] || {}).emailAddress || '',
-    imageUrl: user.imageUrl || ''
+    imageUrl: user.imageUrl || '',
+    isGuest: false
   };
-  // Load memory from backend
   try {
     const res = await fetch(`${API_BASE}/api/memory?uid=${encodeURIComponent(currentUser.uid)}`);
     userMemory = res.ok ? await res.json() : {};
   } catch (_) { userMemory = {}; }
 
-  // Show quiz if not yet completed
-  if (!userMemory.quiz || Object.keys(userMemory.quiz).length < 5) {
+  // New user = show quiz; returning user = go straight in
+  const quizDone = userMemory.quiz && Object.keys(userMemory.quiz).length >= 5;
+  if (!quizDone) {
     showQuiz();
   } else {
     renderUserBadge();
   }
 }
 
-function showAuthOverlay() {
-  const overlay = document.getElementById('authOverlay');
-  if (!overlay) return;
-  overlay.style.display = 'flex';
-  // Mount Clerk's hosted sign-in component
-  if (window.Clerk) {
-    window.Clerk.mountSignIn(document.getElementById('clerkSignInMount'));
+function startGuestMode() {
+  // Guest uid lives only in sessionStorage (cleared on tab close)
+  let gid = sessionStorage.getItem('guestUid');
+  if (!gid) {
+    gid = 'guest_' + Math.random().toString(36).slice(2, 10);
+    sessionStorage.setItem('guestUid', gid);
   }
-}
-
-function hideAuthOverlay() {
-  const overlay = document.getElementById('authOverlay');
-  if (overlay) overlay.style.display = 'none';
+  currentUser = { uid: gid, name: 'Guest', isGuest: true };
+  userMemory = {};
+  // Guests always see the quiz (fresh each tab)
+  showQuiz();
+  renderUserBadge();
 }
 
 function renderUserBadge() {
@@ -80,14 +128,22 @@ function renderUserBadge() {
   if (!badge) {
     badge = document.createElement('div');
     badge.id = 'userBadge';
-    badge.style.cssText = 'display:flex;align-items:center;gap:8px;cursor:pointer;';
-    badge.title = 'Signed in as ' + currentUser.email;
+    badge.style.cssText = 'display:flex;align-items:center;gap:8px;cursor:pointer;flex:1;min-width:0;';
     footer.prepend(badge);
   }
-  const img = currentUser.imageUrl
-    ? `<img src="${currentUser.imageUrl}" style="width:24px;height:24px;border-radius:50%;object-fit:cover;"/>`
-    : `<div style="width:24px;height:24px;border-radius:50%;background:#2563EB;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;">${(currentUser.name[0]||'?').toUpperCase()}</div>`;
-  badge.innerHTML = img + `<span style="font-size:12px;color:#334155;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${currentUser.name}</span>`;
+  if (currentUser.isGuest) {
+    badge.innerHTML = `
+      <div style="width:24px;height:24px;border-radius:50%;background:#94A3B8;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0">👤</div>
+      <span style="font-size:12px;color:#94A3B8;white-space:nowrap;">Guest</span>
+    `;
+    badge.title = 'Guest mode — progress will be lost on tab close';
+  } else {
+    const av = currentUser.imageUrl
+      ? `<img src="${currentUser.imageUrl}" style="width:24px;height:24px;border-radius:50%;object-fit:cover;flex-shrink:0"/>`
+      : `<div style="width:24px;height:24px;border-radius:50%;background:#2563EB;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">${(currentUser.name[0]||'?').toUpperCase()}</div>`;
+    badge.innerHTML = av + `<span style="font-size:12px;color:#334155;max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${currentUser.name}</span>`;
+    badge.title = currentUser.email || currentUser.name;
+  }
 }
 
 // ──────────────────────────────
@@ -232,27 +288,27 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Init Clerk after DOM ready
-  if (CLERK_PUBLISHABLE_KEY && CLERK_PUBLISHABLE_KEY !== 'pk_test_REPLACE_WITH_YOUR_KEY') {
-    initClerk();
-  } else {
-    // Dev mode: no Clerk key, create a local uid
-    currentUser = {
-      uid: localStorage.getItem('tutorUid') || (() => {
-        const id = 'local_' + Math.random().toString(36).slice(2, 10);
-        localStorage.setItem('tutorUid', id);
-        return id;
-      })()
-    };
-    fetch(`${API_BASE}/api/memory?uid=${encodeURIComponent(currentUser.uid)}`)
-      .then(r => r.ok ? r.json() : {})
-      .then(mem => {
-        userMemory = mem || {};
-        if (!userMemory.quiz || Object.keys(userMemory.quiz).length < 5) showQuiz();
-      })
-      .catch(() => showQuiz());
-  }
+  // Always try Clerk if key is set
+  initClerk();
 });
+
+function fallbackLocalUid() {
+  // No Clerk available — use persistent localStorage uid
+  const uid = localStorage.getItem('tutorUid') || (() => {
+    const id = 'local_' + Math.random().toString(36).slice(2, 10);
+    localStorage.setItem('tutorUid', id);
+    return id;
+  })();
+  currentUser = { uid, name: 'You', isGuest: false };
+  fetch(`${API_BASE}/api/memory?uid=${encodeURIComponent(uid)}`)
+    .then(r => r.ok ? r.json() : {})
+    .then(mem => {
+      userMemory = mem || {};
+      const quizDone = userMemory.quiz && Object.keys(userMemory.quiz).length >= 5;
+      if (!quizDone) showQuiz(); else renderUserBadge();
+    })
+    .catch(() => showQuiz());
+}
 
 // Helper: get current uid for API calls
 function getUid() {
