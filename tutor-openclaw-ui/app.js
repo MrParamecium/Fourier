@@ -2561,11 +2561,13 @@ async function sendLearnFollowup(rawPrompt) {
 
   if (learnAbort) learnAbort.abort();
   learnAbort = new AbortController();
+  const localLearnSignal = learnAbort.signal; // capture before any reassignment
 
   let learnStep = 1;
   const answerEl = document.getElementById(answerId);
-  const loadingTimerLearn = setInterval(() => {
-    if (!answerEl) return clearInterval(loadingTimerLearn);
+  if (window.loadingTimerLearn) clearInterval(window.loadingTimerLearn);
+  window.loadingTimerLearn = setInterval(() => {
+    if (!answerEl) return clearInterval(window.loadingTimerLearn);
     learnStep = Math.min(3, learnStep + 1);
     const steps = answerEl.querySelectorAll('.search-step');
     if (learnStep >= 1 && steps[0]) { const sp = steps[0].querySelector('.step-icon'); if (sp) { sp.className = 'step-icon step-done'; sp.textContent = '✓'; } }
@@ -2580,7 +2582,7 @@ async function sendLearnFollowup(rawPrompt) {
   }, 1200);
 
   try {
-    const data = await callAsk(prompt, learnAbort.signal, {
+    const data = await callAsk(prompt, localLearnSignal, {
       mode: 'followup',
       history: tutorState.learnHistory.slice(-8),
       sectionId: tutorState.learnSectionId,
@@ -2592,7 +2594,7 @@ async function sendLearnFollowup(rawPrompt) {
       attachments: attachments.map(a => ({ type: a.type, name: a.name, dataUrl: a.dataUrl, mimeType: a.mimeType }))
     });
 
-    clearInterval(loadingTimerLearn);
+    if (window.loadingTimerLearn) clearInterval(window.loadingTimerLearn);
 
     const target = document.getElementById(answerId);
     if (target) {
@@ -2609,7 +2611,11 @@ async function sendLearnFollowup(rawPrompt) {
       }
 
       // Render explanation + persistent sources block
-      answerDiv.innerHTML = markdownToHtml(data.explanation || 'No explanation available.') + sourceDom;
+      try {
+        answerDiv.innerHTML = markdownToHtml(data.explanation || 'No explanation available.') + sourceDom;
+      } catch (renderErr) {
+        answerDiv.innerHTML = `<p>${escapeHtml(data.explanation || 'No explanation available.')}</p>`;
+      }
       setTimeout(() => {
         if (window.MathJax && window.MathJax.typesetPromise) {
           window.MathJax.typesetPromise([answerDiv]).catch(() => {});
@@ -2627,11 +2633,14 @@ async function sendLearnFollowup(rawPrompt) {
     renderLearnWebSection(tutorState.learnWebSources);
     learnChatScroll.scrollTop = learnChatScroll.scrollHeight;
   } catch (err) {
-    clearInterval(loadingTimerLearn);
+    if (window.loadingTimerLearn) clearInterval(window.loadingTimerLearn);
     if (err.name === 'AbortError') return;
     const target = document.getElementById(answerId);
     if (target) {
-      target.innerHTML = `<div class="error-box"><strong>加载失败</strong><p>${escapeHtml(err.message)}</p></div>`;
+      // Clear loading state in the answer div first, then show error
+      const answerDiv = target.querySelector('.fub-a') || target;
+      answerDiv.className = 'fub-a';
+      answerDiv.innerHTML = `<div class="error-box"><strong>加载失败</strong><p>${escapeHtml(err.message)}</p></div>`;
     }
   }
 }
@@ -3202,6 +3211,7 @@ async function sendQuestion(rawPrompt) {
 
   let step = 1;
   renderStepState(step);
+  if (loadingTimer) clearInterval(loadingTimer);
   loadingTimer = setInterval(() => {
     step = Math.min(3, step + 1);
     renderStepState(step);
