@@ -2742,6 +2742,12 @@ function markdownToHtml(md) {
       continue;
     }
 
+    if (/^<\/?(details|summary)( [^>]*)?>/i.test(t)) {
+      flushList();
+      html += inlineFormat(t);
+      continue;
+    }
+
     flushList();
     html += `<p>${inlineFormat(t)}</p>`;
   }
@@ -2749,6 +2755,7 @@ function markdownToHtml(md) {
   flushList(); flushCode(); flushMath();
   // Restore raw HTML table placeholders
   html = html.replace(/\x00TABLE_(\d+)\x00/g, (_, idx) => htmlTablePlaceholders[Number(idx)] || '');
+  
   return html;
 }
 
@@ -2759,18 +2766,39 @@ function inlineFormat(text) {
     placeholders.push({ idx, orig: `\x00TABLE_${idx}\x00` });
     return `__TABLE_PLACEHOLDER_${idx}__`;
   });
-  s = escapeHtml(s);
-  // Restore placeholders after escaping
-  placeholders.forEach(({ idx }) => {
-    s = s.replace(`__TABLE_PLACEHOLDER_${idx}__`, `\x00TABLE_${idx}\x00`);
+  
+  // Protect safe html tags before escaping
+  s = s.replace(/<\/?(details|summary)( [^>]*)?>/gi, (match) => {
+    placeholders.push({ idx: placeholders.length, orig: match });
+    return `__SAFE_TAG_${placeholders.length - 1}__`;
   });
-  s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-  s = s.replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+  // Protect inline math from escaping or double-processing
+  s = s.replace(/\\\((.*?)\\\)/g, (match, mathContent) => {
+    placeholders.push({ idx: placeholders.length, orig: match });
+    return `__MATH_PLACEHOLDER_${placeholders.length - 1}__`;
+  });
+  
+  s = escapeHtml(s);
+
+  // Restore placeholders after escaping
+  placeholders.forEach(({ idx, orig }) => {
+    s = s.replace(`__TABLE_PLACEHOLDER_${idx}__`, orig);
+    s = s.replace(`__SAFE_TAG_${idx}__`, orig);
+    s = s.replace(`__MATH_PLACEHOLDER_${idx}__`, orig);
+  });
+
+  s = s.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  s = s.replace(/\*(.*?)\*/g, '<em>$1</em>');
+  
+  // Automatically fix inline math improperly wrapped in backticks (e.g. `e^{j\theta}`)
+  s = s.replace(/`([^`]*(?:\\|&#94;|&amp;)[^`]*)`/g, '\\($1\\)');
   s = s.replace(/`([^`]+)`/g, '<code>$1</code>');
   // Images (must come before links)
   s = s.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" class="lesson-img" loading="lazy">');
   // Links
   s = s.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+  
   return s;
 }
 
