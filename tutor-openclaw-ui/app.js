@@ -2545,13 +2545,32 @@ async function sendLearnFollowup(rawPrompt) {
   learnChatContent.insertAdjacentHTML('beforeend', `
     <div class="followup-bubble" id="${answerId}">
       <div class="fub-q">${escapeHtml(prompt)}</div>
-      <div class="fub-a ghost">Thinking with context from this section...</div>
+      <div class="fub-a ghost">
+        <details open class="search-progress">
+          <summary>Thinking with context from this section...</summary>
+          <div style="font-size: 0.9em; padding-top: 10px; color: #555;">
+            <div class="search-step">1. 📚 Reading Section Objectives...</div>
+            <div class="search-step" style="opacity: 0.5;">2. 🔍 Retrieving Relevant Explanations...</div>
+            <div class="search-step" style="opacity: 0.2;">3. 🧠 Reasoning Concept Connections...</div>
+          </div>
+        </details>
+      </div>
     </div>
   `);
   learnChatScroll.scrollTop = learnChatScroll.scrollHeight;
 
   if (learnAbort) learnAbort.abort();
   learnAbort = new AbortController();
+
+  let learnStep = 1;
+  const answerEl = document.getElementById(answerId);
+  const loadingTimerLearn = setInterval(() => {
+    if (!answerEl) return clearInterval(loadingTimerLearn);
+    learnStep = Math.min(3, learnStep + 1);
+    const steps = answerEl.querySelectorAll('.search-step');
+    if (learnStep >= 2 && steps[1]) steps[1].style.opacity = '1';
+    if (learnStep >= 3 && steps[2]) steps[2].style.opacity = '1';
+  }, 1500);
 
   try {
     const data = await callAsk(prompt, learnAbort.signal, {
@@ -2566,12 +2585,19 @@ async function sendLearnFollowup(rawPrompt) {
       attachments: attachments.map(a => ({ type: a.type, name: a.name, dataUrl: a.dataUrl, mimeType: a.mimeType }))
     });
 
+    clearInterval(loadingTimerLearn);
+
+    let sourceHtml = '';
+    if (data.webSources && data.webSources.length > 0) {
+      sourceHtml = `\n\n<details><summary>Searched Web Sources</summary><ul>` + data.webSources.map(w => `<li><a href="${escapeHtml(w.url)}" target="_blank">${escapeHtml(w.title)}</a></li>`).join('') + `</ul></details>`;
+    }
+
     const target = document.getElementById(answerId);
     if (target) {
       const answerDiv = target.querySelector('.fub-a') || target;
+      answerDiv.classList.remove('ghost');
       answerDiv.className = 'fub-a learn-explain-content';
-      answerDiv.innerHTML = markdownToHtml(data.explanation || 'No explanation available.');
-      // Fix: typeset the actual answer bubble, not the left-panel
+      answerDiv.innerHTML = markdownToHtml((data.explanation || 'No explanation available.') + sourceHtml);
       setTimeout(() => {
         if (window.MathJax && window.MathJax.typesetPromise) {
           window.MathJax.typesetPromise([answerDiv]).catch(() => {});
