@@ -1,6 +1,7 @@
 # MEMORY.md - 核心记忆库
 
 ## 约定与习惯 (Conventions & Habits)
+- ⚠️ **绝对禁止韩语**：无论任何情况，回复必须用中文（或英文），绝不能出现韩语。Harrison 多次强调过这一点。
 - (2026-04-09 新增用户偏好):**回复时多用表情符号**，让对话有人情味、像真人在聊天。Harrison 明确表达了这个偏好。
 
 - **强制记忆规则**:主动记录每一次对话的核心内容或关键想法,确保在跨 Session 或模型切换间不丢失连续性。
@@ -48,11 +49,23 @@
 - OpenClaw Core 部署在云服务器（VPS），对外提供 HTTP/API 接口。
 - 前端通过公网 URL 访问。
 
-**当前状态（2026-04-07 更新）**：
-- ✅ OCR 完成：background-ocr-v3/ 共 104 书页（book-000~103），用 OpenRouter openai/gpt-5.4
-- ✅ Metadata 完成：每页对应 book-XXX.meta.json（subsection/summary/keywords）
-- ✅ 前端左侧目录已更新：Background 子节完整展开（B.1~B.7 含各子节）
-- 🔜 下一步：实现 RAG 检索 + 左书本截图/右 Claude Opus 4.6 讲解的呈现形式
+**当前状态（2026-04-19 更新）**：
+- ✅ 双书切换按钮（2nd Ed / 3rd Ed），左下角📖按钮，状态存 localStorage
+- ✅ 新书（Lathi 3rd Ed 电子版）完整处理：149页文字提取+图片渲染(200DPI)+Claude生成metadata+section-page-map-new.json(77节)
+- ✅ 144个 section preview 生成并注入 app.js（SECTION_PREVIEWS_NEW），新书切换后直接走预缓存不再loading
+- ✅ 语言修复：generateSectionIntro 根据 language 参数切换 EN/ZH，不再强制中文
+- ✅ 后端 serveStaticFile 对 .js/.html 加 no-cache 头
+- ✅ 附件上传（图片/PDF，拖拽/粘贴/点击），主问答框和 follow-up 框都支持
+- ✅ 用户画像问卷优化（goal→math→timeline→style→outcome，多选支持）
+- ✅ IME 组合字回车误发送 bug 修复
+- ✅ Markdown 表格渲染修复（禁 ASCII art，parseMdTable 前处理）
+- ⚠️ 待确认：新书章节 preview loading 是否彻底修复（疑似浏览器缓存/key匹配问题）
+- ⏳ 待开发：讲解内容预生成缓存（等用户画像问卷定稿后实施）
+
+**以下为旧记录（2026-04-15）**：
+- ✅ 前端阅读器体验进行了颠覆性重构，改为"左栏讲义 / 右栏跟随问答"剥离的双面板左右对照独立滚动结构。
+- ✅ 取消了在查看 Syllabus 课程大纲时点击章节即强制启动运算弹遮罩并关闭大纲的粗暴行为，优化为仅展开"预备确认卡片"，真正确认后再生成教案。
+- ✅ 基础 UI 已完全实现书籍分页和对话输入框的纵排舒适化结构扩展。
 
 **关键技术决策**：
 - 讲解模型：**必须用 Claude Sonnet 4.6**（`openrouter/anthropic/claude-sonnet-4.6`，alias: sonnet）——这是 Harrison 明确为了控制成本并保持高推理能力的最新规定（原为 Opus，已废弃）。

@@ -21,8 +21,22 @@ const HTTP_PORT = 9000;
 const APP_NAME = 'Tutor Agent';
 const APP_URL = `http://localhost:${HTTP_PORT}`;
 
-const OCR_DIR = '/Users/chenghaoxiang/.openclaw/workspace/tutor-materials/background-ocr-v3';
-const PAGE_IMAGE_DIR = '/Users/chenghaoxiang/.openclaw/workspace/tutor-materials/background-pages-split';
+const OCR_DIR_OLD = '/Users/chenghaoxiang/.openclaw/workspace/tutor-materials/background-ocr-v3';
+const PAGE_IMAGE_DIR_OLD = '/Users/chenghaoxiang/.openclaw/workspace/tutor-materials/background-pages-split';
+const OCR_DIR_NEW = '/Users/chenghaoxiang/.openclaw/workspace/tutor-materials/new-book-ocr';
+const PAGE_IMAGE_DIR_NEW = '/Users/chenghaoxiang/.openclaw/workspace/tutor-materials/new-book-pages';
+
+// Helper: resolve dirs based on bookSource param
+function getBookDirs(bookSource) {
+    if (bookSource === 'new') {
+        return { ocrDir: OCR_DIR_NEW, pageImageDir: PAGE_IMAGE_DIR_NEW };
+    }
+    return { ocrDir: OCR_DIR_OLD, pageImageDir: PAGE_IMAGE_DIR_OLD };
+}
+
+// Default (backward compat)
+const OCR_DIR = OCR_DIR_OLD;
+const PAGE_IMAGE_DIR = PAGE_IMAGE_DIR_OLD;
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || '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';
 
@@ -133,23 +147,77 @@ function loadBookIndex() {
 let BOOK_INDEX = loadBookIndex();
 
 // section-page-map.json: 精确的小节->书页映射（由 OCR 文本扫描生成）
-function loadSectionPageMap() {
-    const mapPath = path.join(__dirname, 'section-page-map.json');
+function loadSectionPageMap(filename = 'section-page-map.json') {
+    const mapPath = path.join(__dirname, filename);
     try {
         return JSON.parse(fs.readFileSync(mapPath, 'utf8'));
     } catch (e) {
-        console.warn('[Index] section-page-map.json not found, falling back to metadata search');
+        console.warn(`[Index] ${filename} not found, falling back to metadata search`);
         return {};
     }
 }
-const SECTION_PAGE_MAP = loadSectionPageMap();
-console.log(`[Index] Section map loaded: ${Object.keys(SECTION_PAGE_MAP).length} sections`);
+const SECTION_PAGE_MAP = loadSectionPageMap('section-page-map.json');
+const SECTION_PAGE_MAP_NEW = loadSectionPageMap('section-page-map-new.json');
+console.log(`[Index] Section maps loaded: old=${Object.keys(SECTION_PAGE_MAP).length}, new=${Object.keys(SECTION_PAGE_MAP_NEW).length}`);
 
 // ─────────────────────────────────────────────────────────────────────────────
 // USER MEMORY
 // ─────────────────────────────────────────────────────────────────────────────
 const USERS_DIR = path.join(__dirname, 'users');
 try { if (!fs.existsSync(USERS_DIR)) fs.mkdirSync(USERS_DIR, { recursive: true }); } catch (_) {}
+
+const LESSON_CACHE_DIR = path.join(__dirname, '../tutor-materials/lesson-cache');
+try { if (!fs.existsSync(LESSON_CACHE_DIR)) fs.mkdirSync(LESSON_CACHE_DIR, { recursive: true }); } catch (_) {}
+
+/**
+ * Returns cached lesson markdown or null.
+ * Cache key = sectionId (dots→underscores) / <goal>|<math>|<timeline>.en.md
+ */
+/**
+ * Normalize sectionId to a consistent cache directory name.
+ * 'B.1-2 Algebra of Complex Numbers' → 'b_1-2'
+ * 'b.1-2' → 'b_1-2'
+ * '1.2-3 Time Reversal' → '1_2-3'
+ */
+function normalizeSectionId(raw) {
+    const m = String(raw || '').match(/^([A-Za-z]?[0-9]*(?:[.\-][0-9]+)*)/);
+    const code = m ? m[1] : raw;
+    return code.toLowerCase().replace(/\./g, '_');
+}
+
+function readLessonCache(sectionId, memory) {
+    if (!memory || !memory.quiz) return null;
+    const q = memory.quiz;
+    if (!q.goal || !q.math || !q.timeline) return null;
+    const key = `${q.goal}|${q.math}|${q.timeline}`;
+    const normId = normalizeSectionId(sectionId);
+    const dir = path.join(LESSON_CACHE_DIR, normId);
+    const file = path.join(dir, `${key}.en.md`);
+    console.log(`[LessonCache] lookup: ${sectionId} → ${normId} / ${key}`);
+    if (!fs.existsSync(file)) return null;
+    try {
+        const content = fs.readFileSync(file, 'utf8');
+        console.log(`[LessonCache] HIT: ${normId} / ${key}`);
+        return content;
+    } catch (_) { return null; }
+}
+
+function writeLessonCache(sectionId, memory, lesson) {
+    if (!memory || !memory.quiz) return;
+    const q = memory.quiz;
+    if (!q.goal || !q.math || !q.timeline) return;
+    const key = `${q.goal}|${q.math}|${q.timeline}`;
+    const normId = normalizeSectionId(sectionId);
+    const dir = path.join(LESSON_CACHE_DIR, normId);
+    try {
+        fs.mkdirSync(dir, { recursive: true });
+        const file = path.join(dir, `${key}.en.md`);
+        fs.writeFileSync(file, lesson, 'utf8');
+        console.log(`[LessonCache] SAVED: ${normId} / ${key}`);
+    } catch (e) {
+        console.error('[LessonCache] write error:', e.message);
+    }
+}
 
 function getUserMemoryPath(uid) {
     const safe = String(uid || '').replace(/[^a-zA-Z0-9_\-]/g, '_').slice(0, 64);
@@ -212,12 +280,27 @@ function buildUserProfilePrompt(memory) {
         cant_do_problems:  'Historical struggle: understands but cannot do problems. After each concept, show a fully worked example.',
         mostly_lazy:       'Student is self-aware about motivation. Keep sections short and punchy. Show the payoff early.'
     };
+    const OUTCOME_MAP = {
+        one_liner:      'End each section with a one-liner core takeaway summary.',
+        worked_example: 'Always include at least one fully worked example with complete step-by-step solution.',
+        exam_cheatsheet:'End each section with a bullet-point exam cheat-sheet: key facts and likely exam question types.',
+        formula_ref:    'Include a concise formula reference box at the end of each explanation.'
+    };
 
-    if (GOAL_MAP[quiz.goal])     lines.push(GOAL_MAP[quiz.goal]);
-    if (MATH_MAP[quiz.math])     lines.push(MATH_MAP[quiz.math]);
-    if (STYLE_MAP[quiz.style])   lines.push(STYLE_MAP[quiz.style]);
+    if (GOAL_MAP[quiz.goal])         lines.push(GOAL_MAP[quiz.goal]);
+    if (MATH_MAP[quiz.math])         lines.push(MATH_MAP[quiz.math]);
     if (TIMELINE_MAP[quiz.timeline]) lines.push(TIMELINE_MAP[quiz.timeline]);
     if (STRUGGLE_MAP[quiz.struggle]) lines.push(STRUGGLE_MAP[quiz.struggle]);
+
+    // style: may be a single string (old) or array (multi-select)
+    const styles = Array.isArray(quiz.style) ? quiz.style : (quiz.style ? [quiz.style] : []);
+    // also check dynamically inferred style updates stored in memory.inferredStyle
+    const allStyles = [...new Set([...styles, ...(Array.isArray(memory.inferredStyle) ? memory.inferredStyle : [])])];
+    allStyles.forEach(s => { if (STYLE_MAP[s]) lines.push(STYLE_MAP[s]); });
+
+    // outcome: may be array (multi-select)
+    const outcomes = Array.isArray(quiz.outcome) ? quiz.outcome : (quiz.outcome ? [quiz.outcome] : []);
+    outcomes.forEach(o => { if (OUTCOME_MAP[o]) lines.push(OUTCOME_MAP[o]); });
 
     if (Array.isArray(memory.knownConcepts) && memory.knownConcepts.length) {
         lines.push(`Already mastered: ${memory.knownConcepts.join(', ')}. Do not over-explain these.`);
@@ -234,9 +317,91 @@ function buildUserProfilePrompt(memory) {
     return `\n\n[Student Profile]\n${lines.join('\n')}`;
 }
 
+/**
+ * Fire-and-forget: analyse one Q&A turn and update user memory.
+ * Detects: weak/known concepts, inferred style signals.
+ */
+async function updateUserMemoryFromQA(uid, question, answer, sectionId) {
+    const prompt = [
+        'You are analysing a student\'s question and the tutor\'s answer to update the student\'s learning profile.',
+        '',
+        `Section: ${sectionId || 'unknown'}`,
+        `Student question: ${question}`,
+        `Tutor answer (first 600 chars): ${String(answer).slice(0, 600)}`,
+        '',
+        'Output ONLY valid JSON (no markdown, no explanation):',
+        '{',
+        '  "weakConcepts": [],      // concepts the student seems confused about (max 3, short labels)',
+        '  "knownConcepts": [],     // concepts student clearly already understands (max 3)',
+        '  "inferredStyle": [],     // inferred learning style signals: one or more of ["example_first","visual","step_by_step","principle_first"] — empty if no clear signal',
+        '  "note": ""               // one-line observation about this student (optional, empty string if nothing notable)',
+        '}',
+        '',
+        'Rules:',
+        '- weakConcepts: add ONLY if the question shows clear confusion (e.g. "I don\'t understand", "why does", asking same thing again)',
+        '- knownConcepts: add ONLY if student explicitly says they know it or question shows mastery',
+        '- inferredStyle: add ONLY if question wording strongly implies a style (e.g. "can you draw" → visual, "step by step" → step_by_step)',
+        '- Keep all arrays empty [] if no strong signal. Never guess.'
+    ].join('\n');
+
+    const raw = await callOpenRouterChat({
+        model: 'anthropic/claude-haiku-4.5',
+        timeoutMs: 15000,
+        temperature: 0.1,
+        maxTokens: 200,
+        messages: [{ role: 'user', content: prompt }]
+    });
+
+    let update;
+    try {
+        const s = raw.indexOf('{'), e = raw.lastIndexOf('}');
+        if (s === -1 || e === -1) return;
+        update = JSON.parse(raw.slice(s, e + 1));
+    } catch (_) { return; }
+
+    const mem = readUserMemory(uid) || { uid };
+
+    // Merge weakConcepts (cap at 20)
+    if (Array.isArray(update.weakConcepts) && update.weakConcepts.length) {
+        const existing = new Set(mem.weakConcepts || []);
+        update.weakConcepts.forEach(c => existing.add(c));
+        mem.weakConcepts = [...existing].slice(-20);
+    }
+    // Merge knownConcepts (cap at 30) — also remove from weak
+    if (Array.isArray(update.knownConcepts) && update.knownConcepts.length) {
+        const known = new Set(mem.knownConcepts || []);
+        update.knownConcepts.forEach(c => {
+            known.add(c);
+            // graduate from weak to known
+            if (Array.isArray(mem.weakConcepts)) {
+                mem.weakConcepts = mem.weakConcepts.filter(w => w !== c);
+            }
+        });
+        mem.knownConcepts = [...known].slice(-30);
+    }
+    // Merge inferredStyle (deduplicated)
+    if (Array.isArray(update.inferredStyle) && update.inferredStyle.length) {
+        const styleSet = new Set(mem.inferredStyle || []);
+        update.inferredStyle.forEach(s => styleSet.add(s));
+        mem.inferredStyle = [...styleSet];
+    }
+    // Append note to sessionSummaries
+    if (update.note && update.note.trim()) {
+        if (!Array.isArray(mem.sessionSummaries)) mem.sessionSummaries = [];
+        mem.sessionSummaries.push(`[${sectionId}] ${update.note.trim()}`);
+        mem.sessionSummaries = mem.sessionSummaries.slice(-20);
+    }
+
+    mem.lastUpdated = new Date().toISOString();
+    writeUserMemory(uid, mem);
+    console.log(`[MemoryUpdate] uid=${uid} weak=${JSON.stringify(mem.weakConcepts?.slice(-3))} known=${JSON.stringify(mem.knownConcepts?.slice(-3))}`);
+}
+
 function serveStaticFile(res, filePath) {
     const ext = path.extname(filePath).toLowerCase();
     const contentType = MIME_TYPES[ext] || 'application/octet-stream';
+    // No-cache for JS/HTML to ensure fresh code always loads
+    const noCache = ['.js', '.html'].includes(ext);
 
     fs.readFile(filePath, (err, data) => {
         if (err) {
@@ -245,7 +410,12 @@ function serveStaticFile(res, filePath) {
             return;
         }
 
-        res.writeHead(200, { 'Content-Type': contentType });
+        const headers = { 'Content-Type': contentType };
+        if (noCache) {
+            headers['Cache-Control'] = 'no-store, no-cache, must-revalidate';
+            headers['Pragma'] = 'no-cache';
+        }
+        res.writeHead(200, headers);
         res.end(data);
     });
 }
@@ -553,7 +723,7 @@ function scoreBookEntry(entry, keywords, question) {
     return score;
 }
 
-function selectRelevantBooks(question, keywords, minCount = 3, maxCount = 5) {
+function selectRelevantBooks(question, keywords, minCount = 3, maxCount = 5, ocrDir = OCR_DIR_OLD) {
     const ranked = BOOK_INDEX
         .map(entry => ({ entry, score: scoreBookEntry(entry, keywords, question) }))
         .sort((a, b) => b.score - a.score);
@@ -698,6 +868,7 @@ async function generateExplanation(question, bookPages, webSources, options = {}
     const language = options.language === 'zh' ? 'zh' : 'en';
     const mode = options.mode || 'ask';
     const userProfilePrompt = options.userProfilePrompt || '';
+    const attachments = Array.isArray(options.attachments) ? options.attachments : [];
 
     const historyText = history.length
         ? history.map((item, idx) => `[${idx + 1}] ${item.role === 'assistant' ? '老师' : '学生'}: ${compactWhitespace(item.content || '')}`).join('\n')
@@ -725,11 +896,37 @@ async function generateExplanation(question, bookPages, webSources, options = {}
         '3. 如果这是继续追问，必须优先承接上文，不要把它当成全新的陌生问题。',
         '4. 如果用户用了代词（比如“这个”“刚才那个”“q1”），优先根据历史对话和当前讲解内容解析指代。',
         '5. 引用时只使用 [书页N] / [来源N] 这样的标注。',
-        '6. 如果出现数学公式，使用 LaTeX，块级公式写成 $$...$$。',
-        '7. 优先结合教材，再补充联网资料。',
-        '8. 如果联网资料为空，也照常基于书页完成讲解。',
-        '9. 结尾加一个“来源列表”小节，列出所有实际引用到的来源。'
+        '6. 如果出现数学公式，使用 LaTeX，块级公式写成 $$...$$，行内公式写成 $...$。',
+        '7. 需要表格时必须用标准 Markdown 表格语法（| 列 | 列 | 换行 |---|---| 换行 | 值 | 值 |），禁止用 ASCII 字符堆砌，表格内数学符号用 $...$ 包裹。',
+        '8. 优先结合教材，再补充联网资料。',
+        '9. 如果联网资料为空，也照常基于书页完成讲解。',
+        '10. 结尾加一个“来源列表”小节，列出所有实际引用到的来源。'
     ].filter(Boolean).join('\n');
+
+    // Build user message content — supports multimodal (text + images)
+    let userContent;
+    const imageAttachments = attachments.filter(a => a.type === 'image' && a.dataUrl);
+    const pdfAttachments = attachments.filter(a => a.type === 'pdf' && a.dataUrl);
+
+    // Append PDF content as text
+    let pdfContext = '';
+    for (const pdf of pdfAttachments) {
+        const base64 = pdf.dataUrl.split(',')[1] || '';
+        pdfContext += `\n\n[Attached document: ${pdf.name}]\n(PDF content will be analyzed by the model)\n`;
+    }
+
+    if (imageAttachments.length > 0) {
+        // Multimodal message
+        userContent = [
+            { type: 'text', text: prompt + pdfContext || '(Please analyze the attached image(s))' },
+            ...imageAttachments.map(img => ({
+                type: 'image_url',
+                image_url: { url: img.dataUrl }
+            }))
+        ];
+    } else {
+        userContent = prompt + pdfContext;
+    }
 
     return callOpenRouterChat({
         model: 'anthropic/claude-sonnet-4.6',
@@ -739,11 +936,13 @@ async function generateExplanation(question, bookPages, webSources, options = {}
         messages: [
             {
                 role: 'system',
-                content: '你是一位耐心、准确、会讲人话的理工科导师。请基于给定教材 OCR、网页摘要和已有对话上下文生成结构化讲解，不要编造未给出的参考文献。对于 follow-up 问题，必须延续上下文。' + userProfilePrompt
+                content: language === 'zh'
+                    ? '你是一位耐心、准确、会讲人话的理工科导师。请基于给定教材 OCR、网页摘要和已有对话上下文生成结构化讲解，不要编造未给出的参考文献。对于 follow-up 问题，必须延续上下文。' + userProfilePrompt
+                    : 'You are a patient, accurate, and approachable STEM tutor. Generate structured explanations based on the given textbook OCR, web summaries, and conversation history. Do not fabricate references not provided. For follow-up questions, always continue from the existing context. Always respond in English.' + userProfilePrompt
             },
             {
                 role: 'user',
-                content: prompt
+                content: userContent
             }
         ]
     });
@@ -760,13 +959,54 @@ function extractSectionCode(sectionId) {
     return m ? m[1].toLowerCase() : compactWhitespace(sectionId || '').toLowerCase();
 }
 
-function getPagesForSection(sectionId) {
+function getPagesForSection(sectionId, ocrDir = OCR_DIR_OLD) {
     const code = extractSectionCode(sectionId);
     if (!code) return [];
 
-    // 优先用 section-page-map.json（由 OCR 文本扫描生成，最准确）
+    const isNewBook = ocrDir === OCR_DIR_NEW;
+    const activeMap = isNewBook ? SECTION_PAGE_MAP_NEW : SECTION_PAGE_MAP;
+
+    // For new book: build pages from OCR dir directly
+    if (isNewBook) {
+        const codeUpper = code.toUpperCase().replace(/^([a-z])/, c => c.toUpperCase());
+        const mapKey = Object.keys(activeMap).find(
+            k => k.toLowerCase() === code.toLowerCase() || k.toLowerCase() === codeUpper.toLowerCase()
+        );
+        if (mapKey) {
+            const pageNames = activeMap[mapKey];
+            return pageNames.slice(0, 6).map(pn => ({
+                page: pn,
+                pageImage: pn + '.png',
+                image: `/pages/${pn}.png`,
+                textPath: path.join(OCR_DIR_NEW, `${pn}.txt`),
+                subsection: code,
+                title: sectionId,
+                summary: '',
+                keywords: []
+            }));
+        }
+        // parent fallback
+        const parentCode = code.replace(/-\d+$/, '');
+        if (parentCode !== code) {
+            const parentKey = Object.keys(activeMap).find(k => k.toLowerCase() === parentCode.toLowerCase());
+            if (parentKey) {
+                return activeMap[parentKey].slice(0, 6).map(pn => ({
+                    page: pn,
+                    pageImage: pn + '.png',
+                    image: `/pages/${pn}.png`,
+                    textPath: path.join(OCR_DIR_NEW, `${pn}.txt`),
+                    subsection: parentCode,
+                    title: sectionId,
+                    summary: '',
+                    keywords: []
+                }));
+            }
+        }
+        return [];
+    }
+
+    // Old book: existing logic
     const codeUpper = code.toUpperCase().replace(/^([a-z])/, c => c.toUpperCase());
-    // 尝试小写和大写
     const mapKey = Object.keys(SECTION_PAGE_MAP).find(
         k => k.toLowerCase() === code || k.toLowerCase() === codeUpper.toLowerCase()
     );
@@ -776,7 +1016,6 @@ function getPagesForSection(sectionId) {
         if (pages.length > 0) return pages;
     }
 
-    // 回退父节：1.2-2 → 1.2
     const parentCode = code.replace(/-\d+$/, '');
     if (parentCode !== code) {
         const parentKey = Object.keys(SECTION_PAGE_MAP).find(
@@ -789,7 +1028,6 @@ function getPagesForSection(sectionId) {
         }
     }
 
-    // 最后回退：用旧的 metadata 匹配逻辑
     const exact = BOOK_INDEX.filter(entry => {
         const sub = extractSectionCode(entry.subsection);
         return sub === code || sub.startsWith(code + '-');
@@ -803,13 +1041,14 @@ function getPagesForSection(sectionId) {
 /**
  * 生成小节导读（2-3 句话）
  */
-async function generateSectionIntro(sectionId, sectionTitle, bookPages) {
+async function generateSectionIntro(sectionId, sectionTitle, bookPages, language = 'en') {
     const ocrSnippets = bookPages.slice(0, 3).map((p, i) => {
         const txt = readOCRText(p.textPath, 1200);
-        return `[书页${i+1}]\n${txt}`;
+        return `[Page ${i+1}]\n${txt}`;
     }).join('\n\n');
 
-    const prompt = [
+    const isZh = language === 'zh';
+    const prompt = isZh ? [
         `小节：${sectionTitle || sectionId}`,
         '',
         '以下是教材原文节选：',
@@ -821,7 +1060,23 @@ async function generateSectionIntro(sectionId, sectionTitle, bookPages) {
         '3. 学完你能做什么？',
         '',
         '直接输出三句话，不要标题、不要编号、不要多余内容。'
+    ].join('\n') : [
+        `Section: ${sectionTitle || sectionId}`,
+        '',
+        'Textbook excerpt:',
+        ocrSnippets,
+        '',
+        'In 2-3 sentences for a beginner student, answer:',
+        '1. What does this section cover?',
+        '2. Why does it matter?',
+        '3. What will you be able to do after learning it?',
+        '',
+        'Output the sentences directly, no headers, no numbering, no extra content.'
     ].join('\n');
+
+    const systemPrompt = isZh
+        ? '你是一位理工科教师，擅长用简单语言介绍知识点。'
+        : 'You are an engineering tutor who explains topics clearly and concisely for beginners. Always respond in English.';
 
     return callOpenRouterChat({
         model: 'anthropic/claude-sonnet-4.6',
@@ -829,7 +1084,7 @@ async function generateSectionIntro(sectionId, sectionTitle, bookPages) {
         temperature: 0.3,
         maxTokens: 200,
         messages: [
-            { role: 'system', content: '你是一位理工科教师，擅长用简单语言介绍知识点。' },
+            { role: 'system', content: systemPrompt },
             { role: 'user', content: prompt }
         ]
     });
@@ -1337,7 +1592,11 @@ const server = http.createServer(async (req, res) => {
             const language = (data.language === 'zh') ? 'zh' : 'en'; // default EN
             const uid = data.uid || null;
             const userMemory = uid ? readUserMemory(uid) : null;
-            const userProfilePrompt = buildUserProfilePrompt(userMemory);
+            // profileMemory: prefer uid-based memory; fall back to inline profileOverride
+            const profileMemory = userMemory
+                || (data.profileOverride ? { quiz: data.profileOverride } : null);
+            const userProfilePrompt = buildUserProfilePrompt(profileMemory);
+            const { ocrDir: secOcrDir } = getBookDirs(data.bookSource);
 
             if (!sectionId) {
                 res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
@@ -1345,15 +1604,15 @@ const server = http.createServer(async (req, res) => {
                 return;
             }
 
-            console.log(`[SECTION] sectionId=${sectionId} mode=${mode}`);
-            const rawPages = getPagesForSection(sectionId);
+            console.log(`[SECTION] sectionId=${sectionId} mode=${mode} book=${data.bookSource||'old'}`);
+            const rawPages = getPagesForSection(sectionId, secOcrDir);
             const bookPages = rawPages.map(item => ({
                 ...item,
                 image: `/pages/${item.pageImage}`
             }));
 
             if (mode === 'intro') {
-                const intro = await generateSectionIntro(sectionId, sectionTitle, rawPages);
+                const intro = await generateSectionIntro(sectionId, sectionTitle, rawPages, language);
                 res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
                 res.end(JSON.stringify({
                     sectionId,
@@ -1368,10 +1627,38 @@ const server = http.createServer(async (req, res) => {
                     }))
                 }));
             } else if (mode === 'lesson') {
-                const searchAngles = [`${sectionTitle} signal processing explained`, `${sectionTitle} linear systems tutorial`];
-                const webSources = await collectWebSources(searchAngles);
+                // ── Check lesson cache first ──────────────────────────────
+                const cachedLesson = readLessonCache(sectionId, profileMemory);
+                if (cachedLesson) {
+                    console.log(`[SECTION] Cache hit for ${sectionId}, skipping pipeline.`);
+                    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+                    res.end(JSON.stringify({
+                        sectionId, sectionTitle,
+                        lesson: cachedLesson,
+                        cached: true,
+                        bookPages: bookPages.map(p => ({
+                            page: p.page, image: p.image,
+                            subsection: p.subsection, title: p.title, summary: p.summary
+                        })),
+                        webSources: []
+                    }));
+                    return;
+                }
+
+                // Allow caller to pass webSources directly (empty = skip search, e.g. pre-generation)
+                let webSources;
+                if (Array.isArray(data.webSources)) {
+                    webSources = data.webSources;  // use as-is (can be [])
+                } else {
+                    const searchAngles = [`${sectionTitle} signal processing explained`, `${sectionTitle} linear systems tutorial`];
+                    webSources = await collectWebSources(searchAngles);
+                }
                 console.log(`[SECTION] Starting dual-agent pipeline for ${sectionId} (lang=${language}, uid=${uid})…`);
                 const lesson = await generateSectionLesson(sectionId, sectionTitle, rawPages, webSources, language, userProfilePrompt);
+                // ── Auto-save to lesson cache ───────────────────────────────
+                if (lesson && profileMemory) {
+                    writeLessonCache(sectionId, profileMemory, lesson);
+                }
                 res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
                 res.end(JSON.stringify({
                     sectionId,
@@ -1411,6 +1698,8 @@ const server = http.createServer(async (req, res) => {
             const uid = data.uid || null;
             const userMemory = uid ? readUserMemory(uid) : null;
             const userProfilePrompt = buildUserProfilePrompt(userMemory);
+            const attachments = Array.isArray(data.attachments) ? data.attachments : [];
+            const { ocrDir, pageImageDir } = getBookDirs(data.bookSource);
 
             if (!question) {
                 res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
@@ -1424,17 +1713,17 @@ const server = http.createServer(async (req, res) => {
                 relatedBooks = data.bookPages.map(item => ({
                     ...item,
                     pageImage: item.pageImage || `${item.page}.png`,
-                    textPath: path.join(OCR_DIR, `${item.page}.txt`),
-                    ocrText: readOCRText(path.join(OCR_DIR, `${item.page}.txt`), 5500)
+                    textPath: path.join(ocrDir, `${item.page}.txt`),
+                    ocrText: readOCRText(path.join(ocrDir, `${item.page}.txt`), 5500)
                 }));
             } else if (sectionId || sectionTitle) {
-                relatedBooks = getPagesForSection(sectionId || sectionTitle).slice(0, 5).map(item => ({
+                relatedBooks = getPagesForSection(sectionId || sectionTitle, ocrDir).slice(0, 5).map(item => ({
                     ...item,
                     ocrText: readOCRText(item.textPath, 5500)
                 }));
             } else {
                 const keywords = await extractKeywords(question);
-                relatedBooks = selectRelevantBooks(question, keywords, 3, 5).map(item => ({
+                relatedBooks = selectRelevantBooks(question, keywords, 3, 5, ocrDir).map(item => ({
                     ...item,
                     ocrText: readOCRText(item.textPath, 5500)
                 }));
@@ -1455,7 +1744,8 @@ const server = http.createServer(async (req, res) => {
                 lessonContext,
                 language,
                 mode,
-                userProfilePrompt
+                userProfilePrompt,
+                attachments
             });
 
             res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
@@ -1482,6 +1772,15 @@ const server = http.createServer(async (req, res) => {
                     sectionTitle: sectionTitle || sectionId
                 }
             }));
+
+            // ── Async: update user memory based on this Q&A turn ─────────────
+            // Fire-and-forget: does NOT block the response
+            if (uid) {
+                updateUserMemoryFromQA(uid, question, explanation, sectionId).catch(e =>
+                    console.warn('[MemoryUpdate] failed:', e.message)
+                );
+            }
+            return;
         } catch (err) {
             console.error('[API /api/ask] Error:', err);
             res.writeHead(500, { 'Content-Type': 'application/json; charset=utf-8' });
@@ -1505,7 +1804,14 @@ const server = http.createServer(async (req, res) => {
 
     if (pathname.startsWith('/pages/')) {
         const filename = pathname.replace(/^\/pages\//, '');
-        serveStaticFromDir(res, PAGE_IMAGE_DIR, filename);
+        // Try old pages dir first, then new
+        const oldPath = path.join(PAGE_IMAGE_DIR_OLD, filename);
+        const newPath = path.join(PAGE_IMAGE_DIR_NEW, filename);
+        if (fs.existsSync(oldPath)) {
+            serveStaticFromDir(res, PAGE_IMAGE_DIR_OLD, filename);
+        } else {
+            serveStaticFromDir(res, PAGE_IMAGE_DIR_NEW, filename);
+        }
         return;
     }
 

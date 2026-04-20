@@ -213,6 +213,13 @@ When outputting `text_explanation` and `analogy` content blocks, you must format
 6. **Use `---`** (horizontal rule) to visually separate major sections.
 7. **Never use emoji** in headings or labels — this is an academic document.
 8. **Heading language rule**: If the lesson is in Chinese (`"language": "zh"`), ALL headings including H3 labels should be in Chinese (e.g. "### 考试重点" not "### EXAM TIP"). If English, use English ALL CAPS for H3.
+9. **Tables MUST use standard Markdown pipe syntax** — NEVER output raw HTML tags like `<table>`, `<tr>`, `<td>`, etc. Always use:
+   ```
+   | Column A | Column B |
+   |----------|----------|
+   | value    | value    |
+   ```
+   The frontend parser handles Markdown tables only. Raw HTML table tags will be displayed as broken text.
 
 ### Concrete Example of a Well-Formatted `text_explanation` Block
 

@@ -1,71 +1,27 @@
-[Index] Section map loaded: 61 sections
-================================================================
-Tutor Agent Bridge
-================================================================
-HTTP Server : http://localhost:9000
-Indexed OCR : 104 pages
-Skill Script: /Users/chenghaoxiang/.agents/skills/image-animation-generation/scripts/gen_image.py
+[Index] Section maps loaded: old=61, new=77
+node:events:485
+      throw er; // Unhandled 'error' event
+      ^
 
-Endpoints:
-  - http://localhost:9000/           (Web UI)
-  - http://localhost:9000/api/ask    (RAG + Web + Claude Opus)
-  - http://localhost:9000/api/tutor  (Legacy API preserved)
-  - http://localhost:9000/health     (Health check)
-================================================================
-[HTTP] GET /health
-[HTTP] GET /
-[HTTP] GET /style.css
-[HTTP] GET /app.js
-[HTTP] POST /api/ask
-[ASK] Question: 请详细讲解这个小节：B.4 Cramer's Rule mode= ask
-[HTTP] POST /api/section
-[SECTION] sectionId=B.4 Cramer's Rule mode=intro
-[HTTP] POST /api/ask
-[ASK] Question: 请详细讲解这个小节：B.4 Cramer's Rule mode= ask
-[HTTP] POST /api/section
-[SECTION] sectionId=B.4 Cramer's Rule mode=intro
-[HTTP] GET /pages/book-023.png
-[HTTP] GET /pages/book-049.png
-[HTTP] GET /pages/book-039.png
-[HTTP] GET /pages/book-024.png
-[HTTP] GET /pages/book-022.png
-[HTTP] POST /api/ask
-[ASK] Question: 请详细讲解这个小节：B.4 Cramer's Rule mode= ask
-[HTTP] POST /api/section
-[SECTION] sectionId=B.4 Cramer's Rule mode=intro
-[HTTP] POST /api/ask
-[ASK] Question: 请详细讲解这个小节：B.4 Cramer's Rule mode= ask
-[HTTP] POST /api/section
-[SECTION] sectionId=B.4 Cramer's Rule mode=intro
-[HTTP] GET /pages/book-049.png
-[HTTP] GET /pages/book-023.png
-[HTTP] GET /pages/book-039.png
-[HTTP] GET /pages/book-024.png
-[HTTP] GET /pages/book-022.png
-[HTTP] POST /api/ask
-[ASK] Question: 请详细讲解这个小节：B.4 Cramer's Rule mode= ask
-[HTTP] POST /api/section
-[SECTION] sectionId=B.4 Cramer's Rule mode=intro
-[HTTP] POST /api/section
-[SECTION] sectionId=B.4 Cramer's Rule mode=lesson
-[SECTION] Starting dual-agent pipeline for B.4 Cramer's Rule (lang=en)…
-[Agent A] Planning lesson for B.4 Cramer's Rule (lang=en)…
-[HTTP] GET /
-[HTTP] GET /style.css
-[HTTP] GET /app.js
-[HTTP] POST /api/ask
-[ASK] Question: 请详细讲解这个小节：B.4 Cramer's Rule mode= ask
-[HTTP] POST /api/section
-[SECTION] sectionId=B.4 Cramer's Rule mode=intro
-[Agent A] Blueprint ready — 10 blocks.
-[Agent B] Executing 10 blocks…
-[HTTP] GET /pages/book-049.png
-[HTTP] GET /pages/book-023.png
-[HTTP] GET /pages/book-022.png
-[HTTP] GET /pages/book-039.png
-[HTTP] GET /pages/book-024.png
-[HTTP] GET /pages/book-049.png
-[HTTP] GET /pages/book-023.png
-[HTTP] GET /pages/book-039.png
-[HTTP] GET /pages/book-024.png
-[HTTP] GET /pages/book-040.png
+Error: listen EADDRINUSE: address already in use :::9000
+    at Server.setupListenHandle [as _listen2] (node:net:1939:16)
+    at listenInCluster (node:net:1996:12)
+    at Server.listen (node:net:2101:7)
+    at Object.<anonymous> (/Users/chenghaoxiang/.openclaw/workspace/tutor-openclaw-ui/ws-bridge.js:1680:8)
+    at Module._compile (node:internal/modules/cjs/loader:1734:14)
+    at Object..js (node:internal/modules/cjs/loader:1899:10)
+    at Module.load (node:internal/modules/cjs/loader:1469:32)
+    at Function._load (node:internal/modules/cjs/loader:1286:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:235:24)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1975:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 9000
+}
+
+Node.js v23.11.0
