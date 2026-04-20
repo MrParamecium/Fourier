@@ -53,6 +53,8 @@ Use a figure from the textbook. The input JSON now includes `available_figures` 
 
 **IMPORTANT**: Always include `source_page` and `fig_id` so the backend can serve a precision-cropped image. Only use `file_path` as a last resort when no `fig_id` is available.
 
+**Default policy**: when the Blueprint includes a `book_image` block for a concept-defining textbook figure, treat that figure as mandatory, not optional. Prefer the most explanatory textbook figure available (axes, geometry, signal sketch, system diagram, canonical representation) and return the exact `fig_id` whenever possible.
+
 **Output (preferred — precision crop):**
 ```json
 {

@@ -1109,6 +1109,16 @@ async function agentA_plan(sectionId, sectionTitle, bookPages, webSources, langu
         text: readOCRText(p.textPath, 3000)
     }));
     const existingPageImages = bookPages.map(p => p.page);
+    const availableFigures = {};
+    for (const p of bookPages) {
+        const metaPath = path.join(OCR_DIR, `${p.page}.meta.json`);
+        if (fs.existsSync(metaPath)) {
+            const meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
+            if (meta.figures && meta.figures.length) {
+                availableFigures[p.page] = meta.figures.map(f => ({ fig_id: f.fig_id, caption: f.caption }));
+            }
+        }
+    }
 
     const systemPrompt = fs.readFileSync(
         path.join(__dirname, '../tutor-materials/prompts/agent-a-planner.md'),
@@ -1123,6 +1133,9 @@ async function agentA_plan(sectionId, sectionTitle, bookPages, webSources, langu
         '',
         'existing_page_images:',
         existingPageImages.join(', '),
+        '',
+        'available_figures:',
+        JSON.stringify(availableFigures, null, 2),
         '',
         'web_sources_available:',
         webSources.slice(0, 6).map((w, i) => `[${i+1}] ${w.title} — ${w.url}`).join('\n') || 'none',
@@ -1148,6 +1161,26 @@ async function agentA_plan(sectionId, sectionTitle, bookPages, webSources, langu
     if (!blueprint || !Array.isArray(blueprint.blocks)) {
         console.warn('[Agent A] Failed to parse blueprint JSON, falling back to raw text.');
         return { raw, blueprint: null };
+    }
+
+    // Post-process: enforce at least one canonical textbook figure when available.
+    const hasBookImage = blueprint.blocks.some(b => b && b.type === 'book_image');
+    if (!hasBookImage) {
+        const candidatePages = Object.keys(availableFigures);
+        for (const page of candidatePages) {
+            const figs = availableFigures[page] || [];
+            const canonical = figs.find(f => /complex plane|real axis|imaginary axis|signal|system|block diagram|unit step|impulse|phasor|polar/i.test(`${f.fig_id || ''} ${f.caption || ''}`)) || figs[0];
+            if (canonical) {
+                blueprint.blocks.splice(Math.min(2, blueprint.blocks.length), 0, {
+                    type: 'book_image',
+                    source_page: page,
+                    crop_hint: 'full',
+                    caption_instruction: 'Add a one-sentence caption explaining what this textbook figure shows and why it matters for the core concept of this section.'
+                });
+                console.log(`[Agent A] Injected canonical book_image for ${sectionId}: ${page} / ${canonical.fig_id}`);
+                break;
+            }
+        }
     }
 
     console.log(`[Agent A] Blueprint ready — ${blueprint.blocks.length} blocks.`);

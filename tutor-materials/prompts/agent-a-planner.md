@@ -165,14 +165,16 @@ Always end each section with this block.
 
 1. **Every block must be actionable.** Vague instructions like "explain this concept" are forbidden. Tell Agent B exactly *what angle* to explain from, *what words* to use or avoid, *what length* to aim for.
 2. **Book images take priority** over generated/web images. Only escalate to web search or generation if no suitable book page exists.
-3. **Math formulas** found in the OCR must be extracted as `math_block` entries — never buried inside `text_explanation`.
-4. **knowledge_check** must appear at least once per section, ideally after the core concept is introduced.
-5. **section_summary** must always be the last block.
-6. **Do not fabricate page numbers.** Only reference pages listed in `existing_page_images`.
-7. The total number of blocks should be between **6 and 15** depending on section length.
-8. **Language:** Write all `instruction` fields, explanations, captions, analogies, questions, summaries, and any student-facing content in **English** by default. The target audience is native English speakers. Exception: if the request explicitly includes `"language": "zh"`, switch all student-facing content to **Chinese**. Never mix languages within a single lesson.
-9. **Image tool selection is mandatory.** Every `generate_image` block MUST include a `tool` field (`python_matplotlib` or `nano_banana2`) AND a `reason` field explaining why that tool was chosen. Omitting either field is an error.
-10. **Decision rule summary:** precision/data/math → `python_matplotlib`; beauty/metaphor/concept → `nano_banana2`.
+3. **Canonical concept figures are mandatory by default.** If the OCR/pages clearly contain a textbook figure that directly explains the section's core concept, representation, geometry, axes, signal shape, system behavior, or a key exam idea, you MUST include at least one `book_image` block for that figure. Do not rely on text alone when the textbook already has a high-value explanatory figure.
+4. **When a page has extracted figures, prefer the actual figure over the whole page.** If a figure is clearly the teaching centerpiece, specify the page and write the block so Agent B can resolve the precise figure crop.
+5. **Math formulas** found in the OCR must be extracted as `math_block` entries — never buried inside `text_explanation`.
+6. **knowledge_check** must appear at least once per section, ideally after the core concept is introduced.
+7. **section_summary** must always be the last block.
+8. **Do not fabricate page numbers.** Only reference pages listed in `existing_page_images`.
+9. The total number of blocks should be between **6 and 15** depending on section length.
+10. **Language:** Write all `instruction` fields, explanations, captions, analogies, questions, summaries, and any student-facing content in **English** by default. The target audience is native English speakers. Exception: if the request explicitly includes `"language": "zh"`, switch all student-facing content to **Chinese**. Never mix languages within a single lesson.
+11. **Image tool selection is mandatory.** Every `generate_image` block MUST include a `tool` field (`python_matplotlib` or `nano_banana2`) AND a `reason` field explaining why that tool was chosen. Omitting either field is an error.
+12. **Decision rule summary:** precision/data/math → `python_matplotlib`; beauty/metaphor/concept → `nano_banana2`.
 
 ---
 

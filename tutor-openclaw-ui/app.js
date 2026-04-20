@@ -2625,8 +2625,21 @@ function parseMdTable(block) {
   const sepRow = rows[1];
   if (!isSep(sepRow)) return null;
   const bodyRows = rows.slice(2);
+  
+  // Format the cell using a modified inline format that ensures $...$ becomes \(...\) for MathJax.
+  const formatCell = (text) => {
+    let c = text.trim();
+    if (window.preprocessMath) {
+      c = window.preprocessMath(c);
+    } else {
+      c = c.replace(/(?<!\$)\$(?!\$)(.+?)(?<!\$)\$(?!\$)/g, '\\($1\\)');
+    }
+    return inlineFormat(c);
+  };
+
   const parseCells = (r, tag) =>
-    r.split('|').slice(1,-1).map(c => `<${tag}>${inlineFormat(c.trim())}</${tag}>`).join('');
+    r.split('|').slice(1,-1).map(c => `<${tag}>${formatCell(c)}</${tag}>`).join('');
+    
   let html = '<table class="md-table">';
   html += `<thead><tr>${parseCells(headerRow,'th')}</tr></thead>`;
   if (bodyRows.length) {
@@ -2640,17 +2653,21 @@ function markdownToHtml(md) {
   if (!md) return '<p>暂无内容</p>';
   // Pre-process: convert markdown tables to HTML before line-by-line parsing
   let text = String(md);
-  // Pre-process: protect raw HTML <table>...</table> blocks from escaping
-  const htmlTablePlaceholders = [];
-  text = text.replace(/<table[\s\S]*?<\/table>/gi, (match) => {
-    const idx = htmlTablePlaceholders.length;
-    htmlTablePlaceholders.push(match);
-    return `\x00TABLE_${idx}\x00`;
-  });
+  
+  // First, convert any Markdown tables to HTML tables
   text = text.replace(/((?:^|\n)(\|[^\n]+\|[ \t]*\n){2,})/g, (match) => {
     const parsed = parseMdTable(match);
     return parsed ? '\n' + parsed + '\n' : match;
   });
+
+  // Then, protect all HTML <table>...</table> blocks (both AI-generated and parseMdTable-generated) from escaping
+  const htmlTablePlaceholders = [];
+  text = text.replace(/<table[\s\S]*?<\/table>/gi, (match) => {
+    const idx = htmlTablePlaceholders.length;
+    htmlTablePlaceholders.push(match);
+    return `\n\x00TABLE_${idx}\x00\n`;
+  });
+
   // Pre-process: convert $...$ to \(...\) for MathJax
   if (window.preprocessMath) {
     text = window.preprocessMath(text);
@@ -2710,6 +2727,12 @@ function markdownToHtml(md) {
       const lv = Math.min((t.match(/^#+/) || ['#'])[0].length, 6);
       const txt = t.replace(/^#{1,6}\s+/, '');
       html += `<h${lv}>${inlineFormat(txt)}</h${lv}>`;
+      continue;
+    }
+
+    if (/^\x00TABLE_\d+\x00$/.test(t)) {
+      flushList();
+      html += t;
       continue;
     }
 
