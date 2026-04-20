@@ -3076,6 +3076,11 @@ function renderExplanation(markdown) {
 }
 
 
+function detectLang(text) {
+  const t = String(text || '');
+  return /[\u4e00-\u9fa5]/.test(t) ? 'zh' : 'en';
+}
+
 async function callAsk(prompt, signal, extra = {}) {
   const res = await fetch(`${API_BASE}/api/ask`, {
     method: 'POST',
