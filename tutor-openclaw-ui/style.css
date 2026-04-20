@@ -1658,11 +1658,19 @@ html, body {
   font-size: 0.9em;
 }
 .learn-explain-body pre {
-  background: var(--bg-hover);
+  background: #F8FAFC;
+  border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: 14px 18px;
   overflow-x: auto;
   margin: 0 0 1em;
+}
+.learn-explain-body pre code {
+  background: none;
+  color: #1E293B;
+  padding: 0;
+  font-size: 13px;
+  line-height: 1.6;
 }
 
 /* Follow-up bar */
@@ -2081,12 +2089,21 @@ html, body {
   border-radius: 4px;
 }
 .followup-bubble .fub-a pre {
-  background: var(--bg-sidebar);
+  background: #F8FAFC;
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 14px 16px;
   overflow-x: auto;
   margin: 10px 0;
+}
+.followup-bubble .fub-a pre code {
+  display: block;
+  background: none;
+  color: #1E293B;
+  padding: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
 }
 .followup-bubble .fub-a table {
   border-collapse: collapse;
