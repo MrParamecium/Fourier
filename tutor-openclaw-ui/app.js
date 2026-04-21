@@ -2086,7 +2086,9 @@ function setBook(book) {
   }
   // Re-render syllabus and reset state
   renderSyllabus();
+updateRecentConversationsUI();
   tutorState.learnSectionId = null;
+    tutorState.sessionStartTime = Date.now();
   tutorState.learnSectionTitle = null;
   showWelcome();
   console.log(`[Book] Switched to ${book === 'new' ? '3rd Ed (new)' : '2nd Ed (old)'}`);
@@ -2586,6 +2588,7 @@ async function startLesson() {
     learnBody.classList.remove('hidden');
     learnPages = data.bookPages || learnPages;
     tutorState.learnSectionId = learnSectionId;
+    tutorState.sessionStartTime = Date.now();
     tutorState.learnSectionTitle = learnSectionTitle;
     tutorState.learnLessonMarkdown = data.lesson || '';
     tutorState.learnBookPages = data.bookPages || [];
@@ -3507,6 +3510,7 @@ quickChips.querySelectorAll('.chip').forEach(btn => {
 });
 
 renderSyllabus();
+updateRecentConversationsUI();
 autoResize(userInput);
 autoResize(followupInput);
 setSendState();
@@ -3618,39 +3622,162 @@ function updateSidebarNav(title) {
   if (t) t.textContent = title ? title : 'Table of Contents';
 }
 
-function updateRecentConversations() {
+
+
+
+
+
+// Persistent Recent Conversations replacing transient one
+function loadRecentConversations() {
+  const saved = localStorage.getItem('tutorRecentSessions');
+  if (saved) {
+    try { return JSON.parse(saved) || []; } catch(e) {}
+  }
+  return [];
+}
+
+function saveCurrentLearnSession() {
+  if (!tutorState.learnHistory || tutorState.learnHistory.length < 2) return;
+  
+  const firstUserMsg = tutorState.learnHistory.find(m => m.role === 'user');
+  if (!firstUserMsg) return;
+  
+  let sessions = loadRecentConversations();
+  
+  // if current session already exists in top, replace it to update history
+  const sessionId = tutorState.learnSectionId + '-' + (tutorState.sessionStartTime || Date.now());
+  const existingIdx = sessions.findIndex(s => s.id === sessionId);
+  
+  const currentSession = {
+    id: sessionId,
+    title: firstUserMsg.content,
+    timestamp: tutorState.sessionStartTime || Date.now(),
+    sectionId: tutorState.learnSectionId,
+    sectionTitle: tutorState.learnSectionTitle,
+    lessonMarkdown: tutorState.learnLessonMarkdown,
+    bookPages: tutorState.learnBookPages,
+    webSources: tutorState.learnWebSources,
+    history: JSON.parse(JSON.stringify(tutorState.learnHistory))
+  };
+  
+  if (existingIdx !== -1) {
+    sessions[existingIdx] = currentSession;
+  } else {
+    sessions.unshift(currentSession);
+    tutorState.sessionStartTime = currentSession.timestamp;
+  }
+  
+  sessions = sessions.slice(0, 30); // max 30
+  localStorage.setItem('tutorRecentSessions', JSON.stringify(sessions));
+  updateRecentConversationsUI();
+}
+
+window.loadHistoricalSession = function(timestamp) {
+  const sessions = loadRecentConversations();
+  const session = sessions.find(s => s.timestamp === timestamp);
+  if (!session) return;
+  
+  // Stop ongoing flows and save current before switching
+  saveCurrentLearnSession();
+  if (window.loadingTimerLearn) clearInterval(window.loadingTimerLearn);
+  
+  tutorState.learnSectionId = session.sectionId;
+  tutorState.learnSectionTitle = session.sectionTitle;
+  tutorState.learnLessonMarkdown = session.lessonMarkdown;
+  tutorState.learnBookPages = session.bookPages || [];
+  tutorState.learnWebSources = session.webSources || [];
+  tutorState.learnHistory = JSON.parse(JSON.stringify(session.history || []));
+  tutorState.sessionStartTime = session.timestamp;
+  
+  showLearnMode();
+  
+  const titleEl = document.getElementById('learnSectionTitle');
+  if (titleEl) titleEl.textContent = session.sectionTitle || 'Session';
+  updateSidebarNav(session.sectionTitle || 'Saved Conversation');
+  
+  const contentEl = document.getElementById('learnLessonContent');
+  if (contentEl) {
+    contentEl.innerHTML = marked.parse(session.lessonMarkdown || '');
+    renderMathInElement(contentEl);
+  }
+  
+  renderLearnBookPages(tutorState.learnBookPages);
+  renderLearnWebSources(tutorState.learnWebSources);
+  renderLearnWebSection(tutorState.learnWebSources);
+  
+  const chatScroll = document.getElementById('learnChatScroll');
+  if (chatScroll) {
+    chatScroll.innerHTML = '';
+    tutorState.learnHistory.forEach(msg => {
+      const b = document.createElement('div');
+      if (msg.role === 'user') {
+        b.className = 'fub-user';
+        b.textContent = msg.content;
+      } else {
+        b.className = 'fub-a';
+        b.innerHTML = marked.parse(msg.content);
+        // find images and ensure they resize
+        b.querySelectorAll('img').forEach(img => {
+          img.className = 'lesson-img zoom-img';
+          img.onclick = () => showImageOverlay(img.src);
+        });
+      }
+      chatScroll.appendChild(b);
+    });
+    renderMathInElement(chatScroll);
+    setTimeout(() => chatScroll.scrollTop = chatScroll.scrollHeight, 100);
+  }
+};
+
+function updateRecentConversationsUI() {
   const container = document.getElementById('recentConversationsNav');
   if (!container) return;
-  // Get history — learn mode uses learnHistory, fallback to chatHistory
-  const history = (tutorState.learnHistory && tutorState.learnHistory.length)
-    ? tutorState.learnHistory
-    : (tutorState.chatHistory || []);
-  const userMessages = history.filter(msg => msg.role === 'user');
   
-  if (!userMessages.length) {
-    container.innerHTML = '<div style="opacity: 0.5; font-style: italic;">No recent queries yet.</div>';
+  const sessions = loadRecentConversations();
+  if (!sessions.length) {
+    container.innerHTML = '<div style="opacity: 0.5; font-style: italic;">No saved conversations yet.</div>';
     return;
   }
   
-  const itemsHtml = userMessages.slice(-8).reverse().map(msg => {
-    let truncated = msg.content;
+  const itemsHtml = sessions.map(session => {
+    let truncated = session.title;
     if (truncated.length > 35) truncated = truncated.slice(0, 35) + '...';
+    // Format timestamp nicely
+    const dt = new Date(session.timestamp);
+    const dateStr = dt.getMonth()+1 + '/' + dt.getDate() + ' ' + dt.getHours() + ':' + String(dt.getMinutes()).padStart(2, '0');
+    
     return `<div style="
         background: rgba(255,255,255,0.05); 
-        padding: 8px 12px; 
-        border-radius: 4px; 
+        padding: 10px 12px; 
+        border-radius: 6px; 
         margin-bottom: 8px; 
         color: #E2E8F0;
         cursor: pointer;
-        transition: background 0.15s;
+        transition: background 0.15s, transform 0.1s;
         box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
       "
-      onmouseover="this.style.background='rgba(255,255,255,0.08)'"
+      onmouseover="this.style.background='rgba(255,255,255,0.1)'"
       onmouseout="this.style.background='rgba(255,255,255,0.05)'"
-      onclick="document.getElementById('learnChatScroll')?.lastElementChild?.scrollIntoView({behavior:'smooth'})"
-      >${escapeHtml(truncated)}</div>`;
+      onmousedown="this.style.transform='scale(0.98)'"
+      onmouseup="this.style.transform='scale(1)'"
+      onclick="window.loadHistoricalSession(${session.timestamp})"
+      >
+        <div style="font-weight: 500; font-size: 13px; color: #F8FAFC;">${escapeHtml(truncated)}</div>
+        <div style="font-size: 10px; color: #94A3B8; display: flex; justify-content: space-between;">
+           <span>${escapeHtml(session.sectionTitle || 'General')}</span>
+           <span>${dateStr}</span>
+        </div>
+      </div>`;
   }).join('');
   
   container.innerHTML = itemsHtml;
 }
 
+// Hook it into existing updateRecentConversations calls smoothly
+function updateRecentConversations() {
+  saveCurrentLearnSession();
+  updateRecentConversationsUI();
+}
