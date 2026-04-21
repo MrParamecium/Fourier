@@ -2666,6 +2666,7 @@ async function sendLearnFollowup(rawPrompt) {
       lessonContext: tutorState.learnLessonMarkdown,
       bookPages: tutorState.learnBookPages,
       webSources: tutorState.learnWebSources,
+      useWebSearch: document.getElementById('webSearchToggleFollowup')?.checked,
       language: detectLang(prompt),
       attachments: attachments.map(a => ({ type: a.type, name: a.name, dataUrl: a.dataUrl, mimeType: a.mimeType }))
     });
@@ -3270,6 +3271,11 @@ async function sendQuestion(rawPrompt) {
   const isFollowup = document.activeElement === followupInput || !!followupInput.value.trim();
   const attachments = isFollowup ? [...attachmentsFollowup] : [...attachmentsMain];
 
+  const webSearchToggle = document.getElementById('webSearchToggle')?.checked;
+  const webSearchToggleFollowup = document.getElementById('webSearchToggleFollowup')?.checked;
+  const useWebSearch = isFollowup ? webSearchToggleFollowup : webSearchToggle;
+
+
   userInput.value = prompt;
   followupInput.value = '';
   autoResize(userInput);
@@ -3322,6 +3328,7 @@ async function sendQuestion(rawPrompt) {
       history: tutorState.chatHistory.slice(-8),
       bookPages: tutorState.currentBookPages,
       webSources: tutorState.currentWebSources,
+      useWebSearch: useWebSearch,
       language: detectLang(prompt),
       attachments: attachments.map(a => ({ type: a.type, name: a.name, dataUrl: a.dataUrl, mimeType: a.mimeType }))
     });

@@ -1010,12 +1010,10 @@ async function generateExplanation(question, bookPages, webSources, options = {}
     // Append PDF content as text
     let pdfContext = '';
     for (const pdf of pdfAttachments) {
-        const base64 = pdf.dataUrl.split(',')[1] || '';
         pdfContext += `\n\n[Attached document: ${pdf.name}]\n(PDF content will be analyzed by the model)\n`;
     }
 
     if (imageAttachments.length > 0) {
-        // Multimodal message
         userContent = [
             { type: 'text', text: prompt + pdfContext || '(Please analyze the attached image(s))' },
             ...imageAttachments.map(img => ({
@@ -1027,6 +1025,38 @@ async function generateExplanation(question, bookPages, webSources, options = {}
         userContent = prompt + pdfContext;
     }
 
+    console.log('[ASK] Pipeline Step 1/2: Generating teaching plan with Gemini...');
+    let teachingPlan = '';
+    try {
+        const planFormat = language === 'zh' 
+            ? '请你作为课程策划，基于上述用户的提问、教材上下文、历史对话，设计一份分步骤的讲解指导计划。这份计划将交给另一个大模型将其展开成正式回复。不要直接给出给学生的回答，只输出【解答策略】和【逻辑提纲】。' 
+            : 'As an educational planner, read the user question, textbook context, and history, then create a step-by-step teaching blueprint. This will be passed to another model for the final generation. Do NOT output the final answer to the user. Output ONLY the [Response Strategy] and [Logical Outline].';
+        
+        let planPrompt = typeof userContent === 'string' ? userContent + `\n\n【Planner Instructions】\n${planFormat}` : [{ type: 'text', text: `【Planner Instructions】\n${planFormat}\n\n` }].concat(userContent);
+        
+        teachingPlan = await callOpenRouterChat({
+            model: 'google/gemini-3.1-flash',
+            timeoutMs: 60000,
+            temperature: 0.3,
+            maxTokens: 1000,
+            messages: [{ role: 'user', content: planPrompt }]
+        });
+        console.log('[ASK] Plan generated successfully.');
+    } catch (err) {
+        console.warn('[ASK] Plan generation failed, falling back to direct generation.', err.message);
+    }
+
+    let finalPrompt = userContent;
+    if (teachingPlan) {
+        const planInsert = `\n\n【Tutor Blueprint (Follow this plan strictly)】\n${teachingPlan}\n\n`;
+        if (typeof finalPrompt === 'string') {
+            finalPrompt += planInsert;
+        } else {
+            finalPrompt[0].text += planInsert;
+        }
+    }
+
+    console.log('[ASK] Pipeline Step 2/2: Generating final explanation with Sonnet...');
     return callOpenRouterChat({
         model: 'anthropic/claude-sonnet-4.6',
         timeoutMs: 120000,
@@ -1041,7 +1071,7 @@ async function generateExplanation(question, bookPages, webSources, options = {}
             },
             {
                 role: 'user',
-                content: userContent
+                content: finalPrompt
             }
         ]
     });
@@ -1888,8 +1918,11 @@ const server = http.createServer(async (req, res) => {
                 : [];
             let searchAngles = [];
             let liveSearchEvents = [];
-            // Remove the stringent mode !== 'followup' limitation so that followups can also search new angles if helpful
-            if (!webSources.length || mode === 'followup') {
+            
+            // Check if web search is enabled from UI
+            const useWebSearch = data.useWebSearch !== false; // Default to true if not provided
+
+            if (useWebSearch && (!webSources.length || mode === 'followup')) {
                 searchAngles = await generateSearchAngles(question);
                 const newWebSources = await collectWebSources(searchAngles, {
                     question,
@@ -1906,6 +1939,9 @@ const server = http.createServer(async (req, res) => {
                     }
                 }
                 webSources = sortSourcesByType(webSources);
+            } else if (!useWebSearch) {
+                console.log('[ASK] Web search bypassed due to useWebSearch=false');
+                liveSearchEvents.push({ type: 'status', message: 'Web search bypassed via toggle' });
             }
 
             let explanation = await generateExplanation(question, relatedBooks, webSources, {
