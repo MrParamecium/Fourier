@@ -3596,19 +3596,20 @@ if (webSearchBtnLearn) {
 
 
 // Add event listener for top half (TOC) collapse
-const tocHeader = document.getElementById('tocHeader');
-const tocNav = document.getElementById('tocNav');
-const tocHeaderChevron = document.getElementById('tocHeaderChevron');
-
-if (tocHeader && tocNav) {
-  tocHeader.addEventListener('click', () => {
-    const isHidden = tocNav.style.display === 'none';
-    tocNav.style.display = isHidden ? 'block' : 'none';
-    if (tocHeaderChevron) {
-      tocHeaderChevron.style.transform = isHidden ? 'rotate(0deg)' : 'rotate(-90deg)';
-    }
-  });
+// tocHeader, tocNav, tocHeaderChevron already declared above
+function initTocCollapse() {
+  const hdr = document.getElementById('tocHeader');
+  const nav = document.getElementById('tocNav');
+  const chevron = document.getElementById('tocHeaderChevron');
+  if (hdr && nav) {
+    hdr.addEventListener('click', () => {
+      const isHidden = nav.style.display === 'none';
+      nav.style.display = isHidden ? 'block' : 'none';
+      if (chevron) chevron.style.transform = isHidden ? 'rotate(0deg)' : 'rotate(-90deg)';
+    });
+  }
 }
+initTocCollapse();
 
 // Update tocHeaderTitle on section change
 // Inside startLesson or when rendering a specific section's outline
