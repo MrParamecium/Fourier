@@ -58,7 +58,15 @@ async function processEmbeddedPython(markdown, genDir) {
             }
         } catch (err) {
             console.error('[Python Execution Failed]', err.message);
-            resultMarkdown = resultMarkdown.replace(m.full, `\n> *⚠️ Diagram generation failed.*\n\n` + m.full);
+            // Show a concise error message instead of re-displaying the broken code block
+            const isSyntax = /SyntaxError|unterminated|invalid syntax/i.test(err.message);
+            const errType = isSyntax ? 'Syntax error in generated code' : 'Runtime error';
+            const shortMsg = err.message.split('\n').slice(0, 3).join(' | ').substring(0, 200);
+            resultMarkdown = resultMarkdown.replace(
+                m.full,
+                `\n> *⚠️ Diagram generation failed (${errType}): ${shortMsg}*\n\n` +
+                `<details><summary>View Code</summary>\n\n\`\`\`python\n${m.code}\n\`\`\`\n</details>\n`
+            );
         }
         // cleanup script
         if (fs.existsSync(scriptFile)) fs.unlinkSync(scriptFile);
