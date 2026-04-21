@@ -3676,56 +3676,79 @@ window.loadHistoricalSession = function(timestamp) {
   const sessions = loadRecentConversations();
   const session = sessions.find(s => s.timestamp === timestamp);
   if (!session) return;
-  
-  // Stop ongoing flows and save current before switching
-  saveCurrentLearnSession();
-  if (window.loadingTimerLearn) clearInterval(window.loadingTimerLearn);
-  
-  tutorState.learnSectionId = session.sectionId;
-  tutorState.learnSectionTitle = session.sectionTitle;
-  tutorState.learnLessonMarkdown = session.lessonMarkdown;
-  tutorState.learnBookPages = session.bookPages || [];
-  tutorState.learnWebSources = session.webSources || [];
-  tutorState.learnHistory = JSON.parse(JSON.stringify(session.history || []));
-  tutorState.sessionStartTime = session.timestamp;
-  
-  showLearnMode();
-  
-  const titleEl = document.getElementById('learnSectionTitle');
-  if (titleEl) titleEl.textContent = session.sectionTitle || 'Session';
-  updateSidebarNav(session.sectionTitle || 'Saved Conversation');
-  
-  const contentEl = document.getElementById('learnLessonContent');
-  if (contentEl) {
-    contentEl.innerHTML = marked.parse(session.lessonMarkdown || '');
-    renderMathInElement(contentEl);
-  }
-  
-  renderLearnBookPages(tutorState.learnBookPages);
-  renderLearnWebSources(tutorState.learnWebSources);
-  renderLearnWebSection(tutorState.learnWebSources);
-  
-  const chatScroll = document.getElementById('learnChatScroll');
-  if (chatScroll) {
-    chatScroll.innerHTML = '';
-    tutorState.learnHistory.forEach(msg => {
-      const b = document.createElement('div');
-      if (msg.role === 'user') {
-        b.className = 'fub-user';
-        b.textContent = msg.content;
-      } else {
-        b.className = 'fub-a';
-        b.innerHTML = marked.parse(msg.content);
-        // find images and ensure they resize
-        b.querySelectorAll('img').forEach(img => {
-          img.className = 'lesson-img zoom-img';
-          img.onclick = () => showImageOverlay(img.src);
-        });
+
+  try {
+    // Stop ongoing flows and save current before switching
+    saveCurrentLearnSession();
+    if (window.loadingTimerLearn) clearInterval(window.loadingTimerLearn);
+    if (learnAbort) learnAbort.abort();
+
+    tutorState.learnSectionId = session.sectionId || '';
+    tutorState.learnSectionTitle = session.sectionTitle || 'Saved Conversation';
+    tutorState.learnLessonMarkdown = session.lessonMarkdown || '';
+    tutorState.learnBookPages = Array.isArray(session.bookPages) ? session.bookPages : [];
+    tutorState.learnWebSources = Array.isArray(session.webSources) ? session.webSources : [];
+    tutorState.learnHistory = JSON.parse(JSON.stringify(session.history || []));
+    tutorState.sessionStartTime = session.timestamp;
+    currentBookPageIndex = 0;
+
+    showLearnView();
+    if (learnIntroCard) learnIntroCard.classList.add('hidden');
+    if (learnBody) learnBody.classList.remove('hidden');
+    hideSplash();
+    setLearnLoading(false);
+
+    const titleEl = document.getElementById('learnSectionTitle');
+    if (titleEl) titleEl.textContent = tutorState.learnSectionTitle;
+    updateSidebarNav(tutorState.learnSectionTitle);
+
+    const contentEl = document.getElementById('learnExplainContent');
+    if (contentEl) {
+      try {
+        contentEl.innerHTML = markdownToHtml(tutorState.learnLessonMarkdown || 'No explanation available.');
+      } catch (renderErr) {
+        console.warn('[loadHistoricalSession] lesson render failed:', renderErr);
+        contentEl.innerHTML = `<div class="error-box"><strong>Failed to render saved lesson</strong><p>${escapeHtml(renderErr.message || String(renderErr))}</p></div>`;
       }
-      chatScroll.appendChild(b);
-    });
-    renderMathInElement(chatScroll);
-    setTimeout(() => chatScroll.scrollTop = chatScroll.scrollHeight, 100);
+      bindExpandableLessonImages(contentEl);
+    }
+
+    renderLearnPages();
+    renderLearnWebSources(tutorState.learnWebSources);
+    renderLearnWebSection(tutorState.learnWebSources);
+
+    const chatScroll = document.getElementById('learnChatScroll');
+    if (chatScroll) {
+      chatScroll.innerHTML = '';
+      tutorState.learnHistory.forEach(msg => {
+        const b = document.createElement('div');
+        if (msg.role === 'user') {
+          b.className = 'fub-user';
+          b.textContent = msg.content || '';
+        } else {
+          b.className = 'fub-a learn-explain-content';
+          try {
+            b.innerHTML = markdownToHtml(msg.content || '');
+          } catch (renderErr) {
+            b.innerHTML = `<p>${escapeHtml(msg.content || '')}</p>`;
+          }
+          bindExpandableLessonImages(b);
+        }
+        chatScroll.appendChild(b);
+      });
+
+      setTimeout(() => {
+        if (window.MathJax && window.MathJax.typesetPromise) {
+          const targets = [contentEl, chatScroll].filter(Boolean);
+          window.MathJax.typesetPromise(targets).catch(() => {});
+        }
+        buildTocFromContent(contentEl);
+        chatScroll.scrollTop = chatScroll.scrollHeight;
+      }, 80);
+    }
+  } catch (err) {
+    console.error('[loadHistoricalSession] failed:', err);
+    alert(`Failed to restore this conversation: ${err.message || err}`);
   }
 };
 
