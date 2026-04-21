@@ -35,13 +35,23 @@ async function processEmbeddedPython(markdown, genDir) {
     
     for (const m of matches) {
         let scriptContent = m.code;
+
+        // Strip any existing matplotlib.use() calls to avoid duplicate backend warnings
+        scriptContent = scriptContent.replace(/matplotlib\.use\(['"][^'"]*['"]\)/g, '');
+        // Strip any bare 'import matplotlib' lines (we'll add it back safely at top)
+        scriptContent = scriptContent.replace(/^import matplotlib\s*$/gm, '');
+        // Ensure pyplot import exists
+        if (!scriptContent.includes('import matplotlib.pyplot')) {
+            scriptContent = 'import matplotlib.pyplot as plt\n' + scriptContent;
+        }
+        // Inject Agg backend at very top
+        scriptContent = `import matplotlib\nmatplotlib.use('Agg')\n` + scriptContent;
         
         const figId = `fig-${Date.now()}-${crypto.randomBytes(4).toString('hex')}.png`;
         const localPath = path.join(genDir, figId);
         
-        scriptContent = `import matplotlib\nmatplotlib.use('Agg')\n\n` + scriptContent;
         if (!scriptContent.includes('plt.savefig')) {
-            scriptContent += `\nimport matplotlib.pyplot as plt\nplt.savefig(r"${localPath}", dpi=150, bbox_inches="tight")\n`;
+            scriptContent += `\nplt.tight_layout()\nplt.savefig(r"${localPath}", dpi=150, bbox_inches="tight")\n`;
         } else {
             scriptContent = scriptContent.replace(/plt\.savefig\([^)]+\)/g, `plt.savefig(r"${localPath}", dpi=150, bbox_inches="tight")`);
         }
@@ -68,8 +78,11 @@ async function processEmbeddedPython(markdown, genDir) {
                 `<details><summary>View Code</summary>\n\n\`\`\`python\n${m.code}\n\`\`\`\n</details>\n`
             );
         }
-        // cleanup script
-        if (fs.existsSync(scriptFile)) fs.unlinkSync(scriptFile);
+        // keep failed scripts for debugging, clean up successful ones
+        if (fs.existsSync(scriptFile)) {
+            // always keep for debugging — can be cleaned manually
+            // fs.unlinkSync(scriptFile);
+        }
     }
     return resultMarkdown;
 }
