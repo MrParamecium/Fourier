@@ -3733,9 +3733,10 @@ window.loadHistoricalSession = function(timestamp) {
     renderLearnWebSources(tutorState.learnWebSources);
     renderLearnWebSection(tutorState.learnWebSources);
 
+    const chatContent = document.getElementById('learnChatContent');
     const chatScroll = document.getElementById('learnChatScroll');
-    if (chatScroll) {
-      chatScroll.innerHTML = '';
+    if (chatContent && chatScroll) {
+      chatContent.innerHTML = '';
       tutorState.learnHistory.forEach(msg => {
         const b = document.createElement('div');
         if (msg.role === 'user') {
@@ -3750,12 +3751,12 @@ window.loadHistoricalSession = function(timestamp) {
           }
           bindExpandableLessonImages(b);
         }
-        chatScroll.appendChild(b);
+        chatContent.appendChild(b);
       });
 
       setTimeout(() => {
         if (window.MathJax && window.MathJax.typesetPromise) {
-          const targets = [contentEl, chatScroll].filter(Boolean);
+          const targets = [contentEl, chatContent].filter(Boolean);
           window.MathJax.typesetPromise(targets).catch(() => {});
         }
         buildTocFromContent(contentEl);
