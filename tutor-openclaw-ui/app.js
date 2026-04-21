@@ -3621,8 +3621,10 @@ function updateSidebarNav(title) {
 function updateRecentConversations() {
   const container = document.getElementById('recentConversationsNav');
   if (!container) return;
-  // Get history
-  const history = tutorState.chatHistory || [];
+  // Get history — learn mode uses learnHistory, fallback to chatHistory
+  const history = (tutorState.learnHistory && tutorState.learnHistory.length)
+    ? tutorState.learnHistory
+    : (tutorState.chatHistory || []);
   const userMessages = history.filter(msg => msg.role === 'user');
   
   if (!userMessages.length) {
