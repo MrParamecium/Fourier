@@ -1096,7 +1096,7 @@ async function generateExplanation(question, bookPages, webSources, options = {}
         ].join('\n');
 
         const diagramCode = await callOpenRouterChat({
-            model: 'capi/gpt-5.3-codex',
+            model: 'openai/gpt-5.3-codex',
             timeoutMs: 90000,
             temperature: 0.1,
             maxTokens: 1400,
