@@ -2447,6 +2447,7 @@ let lightboxDragStartY = 0;
 let learnKnowledgePoints = [];
 let currentKnowledgePointIndex = 0;
 let currentFullLessonHtml = '';
+let currentLessonTrailingHtml = '';
 
 function applyLightboxTransform() {
   if (!lightboxImg) return;
@@ -2489,45 +2490,72 @@ function resetLearnKnowledgePointState() {
   learnKnowledgePoints = [];
   currentKnowledgePointIndex = 0;
   currentFullLessonHtml = '';
+  currentLessonTrailingHtml = '';
   if (learnKpTitle) learnKpTitle.textContent = 'Preparing lesson...';
   if (learnKpPrevBtn) learnKpPrevBtn.disabled = true;
   if (learnKpNextBtn) learnKpNextBtn.disabled = true;
 }
 
-function splitLessonIntoKnowledgePoints(html) {
+function parseLessonKnowledgePoints(html) {
   const source = String(html || '').trim();
-  if (!source) return [];
+  if (!source) return { points: [], trailingHtml: '' };
+
   const wrapper = document.createElement('div');
   wrapper.innerHTML = source;
   const nodes = Array.from(wrapper.childNodes);
-  const blocks = [];
+  const points = [];
+  const trailingParts = [];
   let current = null;
+
+  const isHeadingNode = (node) => {
+    return node && node.nodeType === Node.ELEMENT_NODE && /^H[1-3]$/.test(node.tagName);
+  };
+
+  const isTrailingNode = (node) => {
+    return node
+      && node.nodeType === Node.ELEMENT_NODE
+      && (
+        node.classList.contains('lesson-test-banner')
+        || node.classList.contains('kc-quiz-plan')
+      );
+  };
+
+  const toHtml = (node) => node.outerHTML || node.textContent || '';
 
   const pushCurrent = () => {
     if (!current) return;
     const content = current.parts.join('').trim();
-    if (content && content.replace(/<[^>]+>/g, '').trim()) {
-      blocks.push({ title: current.title, html: content });
-    }
+    const plain = content.replace(/<[^>]+>/g, '').trim();
+    if (content && plain) points.push({ title: current.title, html: content });
     current = null;
   };
 
   nodes.forEach((node) => {
-    if (node.nodeType === Node.ELEMENT_NODE && /^H[1-3]$/.test(node.tagName)) {
+    if (isTrailingNode(node)) {
+      pushCurrent();
+      trailingParts.push(toHtml(node));
+      return;
+    }
+
+    if (isHeadingNode(node)) {
       pushCurrent();
       current = {
         title: (node.textContent || '').trim() || 'Knowledge Point',
-        parts: [node.outerHTML]
+        parts: [toHtml(node)]
       };
       return;
     }
 
     if (!current) current = { title: 'Overview', parts: [] };
-    current.parts.push(node.outerHTML || node.textContent || '');
+    current.parts.push(toHtml(node));
   });
 
   pushCurrent();
-  return blocks;
+
+  return {
+    points,
+    trailingHtml: trailingParts.join('').trim()
+  };
 }
 
 function renderCurrentKnowledgePoint() {
@@ -2543,7 +2571,8 @@ function renderCurrentKnowledgePoint() {
 
   currentKnowledgePointIndex = Math.max(0, Math.min(currentKnowledgePointIndex, learnKnowledgePoints.length - 1));
   const block = learnKnowledgePoints[currentKnowledgePointIndex];
-  learnExplainContent.innerHTML = block.html;
+  const isLastPoint = currentKnowledgePointIndex === learnKnowledgePoints.length - 1;
+  learnExplainContent.innerHTML = block.html + (isLastPoint && currentLessonTrailingHtml ? currentLessonTrailingHtml : '');
   bindExpandableLessonImages(learnExplainContent);
   if (learnKpTitle) learnKpTitle.textContent = `${currentKnowledgePointIndex + 1}/${learnKnowledgePoints.length} · ${block.title}`;
   if (learnKpPrevBtn) learnKpPrevBtn.disabled = currentKnowledgePointIndex === 0;
@@ -2560,7 +2589,9 @@ function renderCurrentKnowledgePoint() {
 
 function setLearnLessonContent(fullHtml, options = {}) {
   currentFullLessonHtml = String(fullHtml || '');
-  learnKnowledgePoints = splitLessonIntoKnowledgePoints(currentFullLessonHtml);
+  const parsed = parseLessonKnowledgePoints(currentFullLessonHtml);
+  learnKnowledgePoints = parsed.points;
+  currentLessonTrailingHtml = parsed.trailingHtml;
   currentKnowledgePointIndex = Math.max(0, Math.min(options.index || 0, Math.max(learnKnowledgePoints.length - 1, 0)));
   renderCurrentKnowledgePoint();
 }
@@ -5355,15 +5386,12 @@ window.loadHistoricalSession = function(timestamp) {
     const contentEl = document.getElementById('learnExplainContent');
     if (contentEl) {
       try {
-        contentEl.innerHTML = markdownToHtml(tutorState.learnLessonMarkdown || 'No explanation available.');
+        setLearnLessonContent(markdownToHtml(tutorState.learnLessonMarkdown || 'No explanation available.'));
       } catch (renderErr) {
         console.warn('[loadHistoricalSession] lesson render failed:', renderErr);
         contentEl.innerHTML = `<div class="error-box"><strong>Failed to render saved lesson</strong><p>${escapeHtml(renderErr.message || String(renderErr))}</p></div>`;
       }
-      bindExpandableLessonImages(contentEl);
     }
-
-    setLearnLessonContent(markdownToHtml(tutorState.learnLessonMarkdown || 'No explanation available.'));
     renderLearnPages();
     renderLearnWebSources(tutorState.learnWebSources);
     renderLearnWebSection(tutorState.learnWebSources);
