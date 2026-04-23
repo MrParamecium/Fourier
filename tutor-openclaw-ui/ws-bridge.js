@@ -190,7 +190,7 @@ const USERS_DIR = path.join(__dirname, 'users');
 try { if (!fs.existsSync(USERS_DIR)) fs.mkdirSync(USERS_DIR, { recursive: true }); } catch (_) {}
 
 const LESSON_CACHE_DIR = path.join(__dirname, '../tutor-materials/lesson-cache');
-const LESSON_CACHE_VERSION = 'v6'; // bumped: page-aware lesson planning order (overview -> knowledge points -> recap -> quiz)
+const LESSON_CACHE_VERSION = 'v7'; // bumped: page-aware planning + cache isolation by bookSource (old/new editions)
 try { if (!fs.existsSync(LESSON_CACHE_DIR)) fs.mkdirSync(LESSON_CACHE_DIR, { recursive: true }); } catch (_) {}
 
 /**
@@ -209,11 +209,12 @@ function normalizeSectionId(raw) {
     return code.toLowerCase().replace(/\./g, '_');
 }
 
-function readLessonCache(sectionId, memory) {
+function readLessonCache(sectionId, memory, bookSource = 'old') {
     if (!memory || !memory.quiz) return null;
     const q = memory.quiz;
     if (!q.goal || !q.math || !q.timeline) return null;
-    const key = `${q.goal}|${q.math}|${q.timeline}`;
+    const sourceKey = bookSource === 'new' ? 'new' : 'old';
+    const key = `${sourceKey}__${q.goal}|${q.math}|${q.timeline}`;
     const normId = normalizeSectionId(sectionId);
     const dir = path.join(LESSON_CACHE_DIR, normId);
     const file = path.join(dir, `${key}.${LESSON_CACHE_VERSION}.en.md`);
@@ -226,11 +227,12 @@ function readLessonCache(sectionId, memory) {
     } catch (_) { return null; }
 }
 
-function writeLessonCache(sectionId, memory, lesson) {
+function writeLessonCache(sectionId, memory, lesson, bookSource = 'old') {
     if (!memory || !memory.quiz) return;
     const q = memory.quiz;
     if (!q.goal || !q.math || !q.timeline) return;
-    const key = `${q.goal}|${q.math}|${q.timeline}`;
+    const sourceKey = bookSource === 'new' ? 'new' : 'old';
+    const key = `${sourceKey}__${q.goal}|${q.math}|${q.timeline}`;
     const normId = normalizeSectionId(sectionId);
     const dir = path.join(LESSON_CACHE_DIR, normId);
     try {
@@ -2067,12 +2069,12 @@ const server = http.createServer(async (req, res) => {
                 }));
             } else if (mode === 'lesson') {
                 // ── Check lesson cache first ──────────────────────────────
-                const cachedLesson = readLessonCache(sectionId, profileMemory);
+                const cachedLesson = readLessonCache(sectionId, profileMemory, data.bookSource);
                 if (cachedLesson) {
                     console.log(`[SECTION] Cache hit for ${sectionId}, skipping pipeline.`);
                     const normalizedCachedLesson = convertLegacyQuickCheckToKcBlocks(cachedLesson);
                     if (normalizedCachedLesson !== cachedLesson && profileMemory) {
-                        writeLessonCache(sectionId, profileMemory, normalizedCachedLesson);
+                        writeLessonCache(sectionId, profileMemory, normalizedCachedLesson, data.bookSource);
                     }
                     res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
                     res.end(JSON.stringify({
@@ -2101,7 +2103,7 @@ const server = http.createServer(async (req, res) => {
                 lesson = convertLegacyQuickCheckToKcBlocks(lesson);
                 // ── Auto-save to lesson cache ───────────────────────────────
                 if (lesson && profileMemory) {
-                    writeLessonCache(sectionId, profileMemory, lesson);
+                    writeLessonCache(sectionId, profileMemory, lesson, data.bookSource);
                 }
                 res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
                 res.end(JSON.stringify({
