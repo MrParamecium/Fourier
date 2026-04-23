@@ -4812,7 +4812,7 @@ function updateRecentConversationsUI() {
   
   const sessions = loadRecentConversations();
   if (!sessions.length) {
-    container.innerHTML = '<div style="opacity: 0.5; font-style: italic;">No saved conversations yet.</div>';
+    container.innerHTML = '<div style="opacity: 0.55; font-style: italic; color:#222; font-size:12px;">No saved conversations yet.</div>';
     return;
   }
   
@@ -4824,26 +4824,26 @@ function updateRecentConversationsUI() {
     const dateStr = dt.getMonth()+1 + '/' + dt.getDate() + ' ' + dt.getHours() + ':' + String(dt.getMinutes()).padStart(2, '0');
     
     return `<div style="
-        background: rgba(255,255,255,0.05); 
-        padding: 10px 12px; 
+        background: #FFFFFF; 
+        padding: 8px 10px; 
         border-radius: 6px; 
-        margin-bottom: 8px; 
-        color: #E2E8F0;
+        margin-bottom: 6px; 
+        color: #111111;
         cursor: pointer;
         transition: background 0.15s, transform 0.1s;
-        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+        box-shadow: inset 0 0 0 1px #DBEAFE;
         display: flex;
         flex-direction: column;
-        gap: 4px;
+        gap: 3px;
       "
-      onmouseover="this.style.background='rgba(255,255,255,0.1)'"
-      onmouseout="this.style.background='rgba(255,255,255,0.05)'"
+      onmouseover="this.style.background='#EFF6FF'"
+      onmouseout="this.style.background='#FFFFFF'"
       onmousedown="this.style.transform='scale(0.98)'"
       onmouseup="this.style.transform='scale(1)'"
       onclick="window.loadHistoricalSession(${session.timestamp})"
       >
-        <div style="font-weight: 500; font-size: 13px; color: #F8FAFC;">${escapeHtml(truncated)}</div>
-        <div style="font-size: 10px; color: #94A3B8; display: flex; justify-content: space-between;">
+        <div style="font-weight: 600; font-size: 12px; color: #000; line-height:1.35;">${escapeHtml(truncated)}</div>
+        <div style="font-size: 10px; color: #222; display: flex; justify-content: space-between; gap:8px; opacity:0.72;">
            <span>${escapeHtml(session.sectionTitle || 'General')}</span>
            <span>${dateStr}</span>
         </div>

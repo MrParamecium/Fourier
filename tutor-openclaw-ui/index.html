@@ -14,7 +14,7 @@
 
     <!-- ════════════════════ LEFT SIDEBAR (always visible) ════════════════════ -->
     <aside class="sidebar" id="leftSidebar" style="display:flex; flex-direction:column; min-height:0;">
-      <div style="flex: 0 0 60%; min-height: 0; display:flex; flex-direction:column; border-bottom: 1px solid rgba(255,255,255,0.06);">
+      <div style="flex: 0 0 60%; min-height: 0; display:flex; flex-direction:column; border-bottom: 1px solid #DBEAFE;">
         <div class="sidebar-top">
           <div class="logo">
             <button class="menu-toggle" id="menuToggleBtn" title="Toggle Sidebar">
@@ -47,11 +47,11 @@
       </div>
 
       <div style="flex: 0 0 40%; min-height: 0; overflow-y: auto; display:flex; flex-direction:column; background: #F8FBFF;">
-        <div class="toc-header" style="padding: 16px; border-bottom: none; flex-shrink:0;">
-          <span class="toc-header-label" style="text-transform: none; letter-spacing: normal; font-weight: 600; font-size: 14px; color: #E2E8F0;">Recent Conversations</span>
+        <div class="toc-header" style="padding: 10px 12px 6px; border-bottom: none; flex-shrink:0;">
+          <span class="toc-header-label" style="text-transform: none; letter-spacing: normal; font-weight: 600; font-size: 13px; color: #000;">Recent Conversations</span>
         </div>
-        <div id="recentConversationsNav" style="padding: 0 16px 16px; color: #94A3B8; font-size: 13px;">
-          <div style="opacity: 0.5; font-style: italic;">No recent queries yet.</div>
+        <div id="recentConversationsNav" style="padding: 0 10px 10px; color: #111; font-size: 12px;">
+          <div style="opacity: 0.55; font-style: italic; color:#222;">No recent queries yet.</div>
         </div>
       </div>
     </aside>
@@ -295,7 +295,7 @@
       <!-- Upper Section: TOC (60%) -->
       <div style="flex: 0 0 60%; overflow-y: auto; display: flex; flex-direction: column; border-bottom: 1px solid #DBEAFE; min-height: 0;">
         <div class="toc-header" id="tocHeader" style="cursor: pointer; display: flex; align-items: center; justify-content: space-between; padding: 16px; border-bottom: none; user-select: none;">
-          <span class="toc-header-label" style="text-transform: none; letter-spacing: normal; font-weight: 600; font-size: 14px; color: #E2E8F0;" id="tocHeaderTitle">Table of Contents</span>
+          <span class="toc-header-label" style="text-transform: none; letter-spacing: normal; font-weight: 600; font-size: 13px; color: #000;" id="tocHeaderTitle">Table of Contents</span>
           <svg id="tocHeaderChevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.2s; color: #94A3B8;"><polyline points="6 9 12 15 18 9"></polyline></svg>
         </div>
         <nav class="toc-nav" id="tocNav" style="flex: 1; padding-top: 0;">
