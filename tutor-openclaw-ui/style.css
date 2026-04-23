@@ -2777,8 +2777,8 @@ html, body {
 .learn-explain-content .lesson-img,
 .learn-focus-content .lesson-img {
   display: block;
-  width: min(160px, 18vw) !important;
-  max-width: min(160px, 18vw) !important;
+  width: min(320px, 36vw) !important;
+  max-width: min(320px, 36vw) !important;
   height: auto !important;
   margin: 16px auto;
   border-radius: var(--radius-lg);
@@ -3245,8 +3245,8 @@ button:focus, input:focus, textarea:focus {
 .learn-explain-body img:not(.lesson-img),
 .learn-explain-content img:not(.lesson-img),
 .learn-focus-content img:not(.lesson-img) {
-  width: min(160px, 18vw) !important;
-  max-width: min(160px, 18vw) !important;
+  width: min(320px, 36vw) !important;
+  max-width: min(320px, 36vw) !important;
   height: auto !important;
   margin-left: auto;
   margin-right: auto;
