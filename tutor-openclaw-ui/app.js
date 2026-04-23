@@ -448,12 +448,14 @@ async function saveSessionSummary(summary) {
 }
 
 let recentConversationMenuState = null;
+let recentConversationMenuTargetTimestamp = null;
 const deletedRecentConversationTimestamps = new Set();
 
 function closeRecentConversationMenu() {
   const menu = document.getElementById('recentConversationContextMenu');
   if (menu) menu.remove();
   recentConversationMenuState = null;
+  recentConversationMenuTargetTimestamp = null;
 }
 
 window.resolveRecentConversationConfirm = null;
@@ -513,6 +515,7 @@ function showDeleteConversationConfirm() {
 window.openRecentConversationMenu = function(timestamp, anchorEl) {
   closeRecentConversationMenu();
   recentConversationMenuState = { timestamp };
+  recentConversationMenuTargetTimestamp = timestamp;
 
   const sessions = loadRecentConversations();
   const session = sessions.find(s => s.timestamp === timestamp) || null;
@@ -536,9 +539,9 @@ window.openRecentConversationMenu = function(timestamp, anchorEl) {
 
   const actionStyle = 'border:none;background:transparent;text-align:left;padding:9px 10px;border-radius:8px;font-size:12px;font-weight:600;color:#0F172A;cursor:pointer;display:flex;align-items:center;gap:8px;';
   menu.innerHTML = `
-    <button type="button" data-action="star" style="${actionStyle}">${isStarred ? '★' : '☆'} <span>${isStarred ? 'Unstar' : 'Star'}</span></button>
-    <button type="button" data-action="rename" style="${actionStyle}">✎ <span>Rename</span></button>
-    <button type="button" data-action="delete" style="${actionStyle} color:#B91C1C;">🗑 <span>Delete</span></button>
+    <button type="button" onclick="event.stopPropagation(); window.handleRecentConversationMenuAction('star')" style="${actionStyle}" onmouseover="this.style.background='#EFF6FF'" onmouseout="this.style.background='transparent'">${isStarred ? '★' : '☆'} <span>${isStarred ? 'Unstar' : 'Star'}</span></button>
+    <button type="button" onclick="event.stopPropagation(); window.handleRecentConversationMenuAction('rename')" style="${actionStyle}" onmouseover="this.style.background='#EFF6FF'" onmouseout="this.style.background='transparent'">✎ <span>Rename</span></button>
+    <button type="button" onclick="event.stopPropagation(); window.handleRecentConversationMenuAction('delete')" style="${actionStyle} color:#B91C1C;" onmouseover="this.style.background='#FEF2F2'" onmouseout="this.style.background='transparent'">🗑 <span>Delete</span></button>
   `;
 
   document.body.appendChild(menu);
@@ -547,28 +550,18 @@ window.openRecentConversationMenu = function(timestamp, anchorEl) {
   menu.style.left = `${Math.max(8, anchorRect.right - menu.offsetWidth)}px`;
   menu.style.top = `${Math.min(window.innerHeight - menu.offsetHeight - 8, anchorRect.bottom + 6)}px`;
 
-  Array.from(menu.querySelectorAll('button')).forEach((btn) => {
-    btn.addEventListener('mouseenter', () => {
-      btn.style.background = btn.dataset.action === 'delete' ? '#FEF2F2' : '#EFF6FF';
-    });
-    btn.addEventListener('mouseleave', () => {
-      btn.style.background = 'transparent';
-    });
-    btn.addEventListener('click', async (event) => {
-      event.stopPropagation(); console.log("MENU CLICK", btn.dataset.action, recentConversationMenuState?.timestamp);
-      const targetTs = recentConversationMenuState?.timestamp;
-      const action = btn.dataset.action;
-      closeRecentConversationMenu();
-      if (!targetTs || !action) return;
-      if (action === 'delete') return window.deleteRecentConversation(targetTs);
-      if (action === 'rename') return window.renameRecentConversation(targetTs);
-      if (action === 'star') return window.toggleRecentConversationStar(targetTs);
-    });
-  });
-
   setTimeout(() => {
     document.addEventListener('click', closeRecentConversationMenu, { once: true });
   }, 0);
+}
+
+window.handleRecentConversationMenuAction = function(action) {
+  const targetTs = recentConversationMenuTargetTimestamp;
+  closeRecentConversationMenu();
+  if (!targetTs || !action) return;
+  if (action === 'delete') return window.deleteRecentConversation(targetTs);
+  if (action === 'rename') return window.renameRecentConversation(targetTs);
+  if (action === 'star') return window.toggleRecentConversationStar(targetTs);
 }
 
 // ── Language Toggle ──────────────────────────────────────────────────────────
