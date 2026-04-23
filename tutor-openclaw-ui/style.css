@@ -2772,11 +2772,14 @@ html, body {
   background: var(--bg-hover);
 }
 
-.lesson-img {
+.lesson-img,
+.learn-explain-body .lesson-img,
+.learn-explain-content .lesson-img,
+.learn-focus-content .lesson-img {
   display: block;
-  max-width: min(240px, 22%, 240px);
-  width: auto;
-  height: auto;
+  width: min(160px, 18vw) !important;
+  max-width: min(160px, 18vw) !important;
+  height: auto !important;
   margin: 16px auto;
   border-radius: var(--radius-lg);
   box-shadow: 0 4px 20px rgba(0,0,0,0.10);
@@ -3239,10 +3242,12 @@ button:focus, input:focus, textarea:focus {
   box-shadow: 0 4px 12px rgba(0,0,0,0.05); /* Slight elevation */
 }
 
-.learn-explain-body img:not(.lesson-img) {
-  max-width: min(240px, 22%, 240px);
-  width: auto;
-  height: auto;
+.learn-explain-body img:not(.lesson-img),
+.learn-explain-content img:not(.lesson-img),
+.learn-focus-content img:not(.lesson-img) {
+  width: min(160px, 18vw) !important;
+  max-width: min(160px, 18vw) !important;
+  height: auto !important;
   margin-left: auto;
   margin-right: auto;
 }
