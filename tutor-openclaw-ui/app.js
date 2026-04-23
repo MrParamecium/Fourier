@@ -3192,6 +3192,67 @@ function inlineFormat(text) {
   let kcPointStates = {};
   let isMaximized = false;
   let isMinimized = false;
+  const KC_PROGRESS_STORAGE_KEY = 'kcQuizProgress_v1';
+
+  function getQuizProgressSnapshot() {
+    if (!kcSectionId || !kcQuizPlan || !kcFlatQuestions.length) return null;
+    return {
+      sectionId: kcSectionId,
+      sectionTitle: kcSectionTitle,
+      quizPlan: kcQuizPlan,
+      flatQuestions: kcFlatQuestions,
+      currentIndex: kcCurrentIndex,
+      currentPointId: kcCurrentPointId,
+      currentPointLabel: kcCurrentPointLabel,
+      pointStates: kcPointStates,
+      history: kcHistory,
+      isMaximized,
+      isMinimized,
+      savedAt: Date.now()
+    };
+  }
+
+  function saveQuizProgress() {
+    try {
+      const snapshot = getQuizProgressSnapshot();
+      if (!snapshot) return;
+      sessionStorage.setItem(KC_PROGRESS_STORAGE_KEY, JSON.stringify(snapshot));
+    } catch (_) {}
+  }
+
+  function clearQuizProgress() {
+    try { sessionStorage.removeItem(KC_PROGRESS_STORAGE_KEY); } catch (_) {}
+  }
+
+  function loadQuizProgress(sectionId) {
+    try {
+      const raw = sessionStorage.getItem(KC_PROGRESS_STORAGE_KEY);
+      if (!raw) return null;
+      const snapshot = JSON.parse(raw);
+      if (!snapshot || !snapshot.sectionId) return null;
+      if (sectionId && snapshot.sectionId !== sectionId) return null;
+      return snapshot;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  function applyQuizProgressSnapshot(snapshot) {
+    if (!snapshot) return false;
+    kcSectionId = snapshot.sectionId || kcSectionId;
+    kcSectionTitle = snapshot.sectionTitle || kcSectionTitle;
+    kcQuizPlan = snapshot.quizPlan || kcQuizPlan;
+    kcFlatQuestions = Array.isArray(snapshot.flatQuestions) ? snapshot.flatQuestions : [];
+    kcCurrentIndex = Math.max(0, Math.min(Number(snapshot.currentIndex || 0), Math.max(0, kcFlatQuestions.length - 1)));
+    kcCurrentQuestion = kcFlatQuestions[kcCurrentIndex] || null;
+    kcCurrentPointId = snapshot.currentPointId || kcCurrentQuestion?.pointId || '';
+    kcCurrentPointLabel = snapshot.currentPointLabel || kcCurrentQuestion?.pointLabel || '';
+    kcPointStates = snapshot.pointStates || {};
+    kcHistory = Array.isArray(snapshot.history) ? snapshot.history : [];
+    isMaximized = !!snapshot.isMaximized;
+    isMinimized = !!snapshot.isMinimized;
+    return true;
+  }
 
   function ensureQuizChrome() {
 
@@ -3218,7 +3279,8 @@ function inlineFormat(text) {
       .replace(/>/g, '&gt;');
   }
 
-  function resetQuizState() {
+  function resetQuizState(options = {}) {
+    const { preserveStoredProgress = false } = options;
     kcHistory = [];
     kcQuizPlan = null;
     kcFlatQuestions = [];
@@ -3230,6 +3292,7 @@ function inlineFormat(text) {
 
     isMaximized = false;
     isMinimized = false;
+    if (!preserveStoredProgress) clearQuizProgress();
     const modalEl = document.getElementById('kcModal');
     const wrapper = document.getElementById('kcModalWrapper');
     const minBtn = document.getElementById('kcModalMinBtn');
@@ -3285,13 +3348,13 @@ function inlineFormat(text) {
     if (!pbWrap && headerEl) {
       pbWrap = document.createElement('div');
       pbWrap.id = 'kcProgressWrap';
-      pbWrap.style.cssText = 'position:absolute; bottom:0; left:0; width:100%; height:4px; background:rgba(0,0,0,0.15); border-radius:0 0 0 0; overflow:hidden;';
+      pbWrap.style.cssText = 'position:absolute; left:20px; right:20px; bottom:14px; height:10px; background:rgba(255,255,255,0.22); border:1px solid rgba(255,255,255,0.16); border-radius:999px; overflow:hidden; box-shadow:inset 0 1px 2px rgba(0,0,0,0.12);';
       const pbFill = document.createElement('div');
       pbFill.id = 'kcProgressFill';
-      pbFill.style.cssText = 'height:100%; background:#10B981; width:0%; transition:width 0.3s ease-out; box-shadow:0 0 4px #10B981;';
+      pbFill.style.cssText = 'height:100%; background:linear-gradient(90deg, #22C55E 0%, #10B981 55%, #059669 100%); width:0%; transition:width 0.35s ease-out; box-shadow:0 0 14px rgba(16,185,129,0.45); border-radius:999px;';
       pbWrap.appendChild(pbFill);
-      // Need header to be relative relative
       headerEl.style.position = 'relative';
+      headerEl.style.paddingBottom = '30px';
       headerEl.appendChild(pbWrap);
     }
     
@@ -3299,42 +3362,37 @@ function inlineFormat(text) {
     if (!textEl) {
       textEl = document.createElement('div');
       textEl.id = 'kcProgressText';
-      textEl.style.cssText = 'font-size:12px; color:#DBEAFE; font-weight:500; font-family:-apple-system, system-ui, sans-serif;';
+      textEl.style.cssText = 'font-size:12px; color:#ECFDF5; font-weight:600; font-family:-apple-system, system-ui, sans-serif; margin-top:6px; opacity:0.98;';
       const spanTitle = headerEl.querySelector('span');
       if (spanTitle) spanTitle.appendChild(textEl);
     }
 
     if (!kcQuizPlan || !kcFlatQuestions.length || !kcCurrentQuestion) {
-      if(textEl) textEl.textContent = '';
+      if (textEl) textEl.textContent = '';
       return;
     }
     
-    // Calculate progress as completed knowledge points out of total
     const points = Array.isArray(kcQuizPlan.knowledge_points) ? kcQuizPlan.knowledge_points : [];
     const totalPoints = points.length;
     let completedPoints = 0;
-    
-    // Current point index (1-based for display)
     const currentPointIndex = kcCurrentQuestion.pointIndex + 1;
     
-    points.forEach(pt => {
-      const state = kcPointStates[pt.id];
+    points.forEach((pt, idx) => {
+      const pointId = pt.id || `kp_${idx + 1}`;
+      const state = kcPointStates[pointId];
       if (state && state.passed) completedPoints++;
     });
     
-    // Fill calculated by ratio of completion
-    const percent = totalPoints > 0 ? (completedPoints / totalPoints) * 100 : 0;
+    const percent = totalPoints > 0 ? Math.round((completedPoints / totalPoints) * 100) : 0;
     const pbFill = document.getElementById('kcProgressFill');
     if (pbFill) pbFill.style.width = `${percent}%`;
 
     const state = kcPointStates[kcCurrentPointId] || { correctStreak: 0, required: 1 };
+    textEl.innerHTML = `✅ <b>${percent}%</b> completed <span style="opacity:0.8; margin:0 6px;">•</span> Topic <b>${currentPointIndex}</b> / ${totalPoints} <span style="opacity:0.8; margin:0 6px;">•</span> Current streak <b>${state.correctStreak}/${state.required}</b>`;
     
-    // Instead of raw question count, make it semantic and clear.
-    textEl.innerHTML = `<span style="opacity:0.8; margin:0 6px;">|</span> Topic <b>${currentPointIndex}</b> of ${totalPoints} <span style="opacity:0.8; margin:0 6px;">|</span> 🏆 Goal: <b>${state.correctStreak} / ${state.required}</b> streak`;
-    
-    // Also remove the old kcProgress if it was accidentally injected
     const oldProgress = document.getElementById('kcProgress');
     if (oldProgress) oldProgress.remove();
+    saveQuizProgress();
   }
 
   function renderCurrentQuestion() {
@@ -3420,6 +3478,7 @@ function inlineFormat(text) {
       feedbackEl.innerHTML = '<div style="padding:12px;background:#ECFDF5;border:1px solid #A7F3D0;border-radius:10px;">Nice. The quiz engine thinks you have passed the current section\'s major knowledge points. You can still use Haiku below to ask about any item.</div>';
       if(document.getElementById('kcAskWrap')) document.getElementById('kcAskWrap').style.display = 'flex';
       renderProgress();
+      clearQuizProgress();
       return;
     }
     kcCurrentIndex = nextIndex;
@@ -3632,7 +3691,13 @@ function inlineFormat(text) {
   }
 
   function openLegacy(question, answer, hint, sectionId, sectionTitle) {
-    resetQuizState();
+    const saved = loadQuizProgress(sectionId);
+    if (saved && applyQuizProgressSnapshot(saved)) {
+      modal.style.display = 'flex';
+      renderCurrentQuestion();
+      return;
+    }
+    resetQuizState({ preserveStoredProgress: true });
     kcQuestion = question;
     kcAnswer = answer;
     kcHint = hint || '';
@@ -3643,7 +3708,13 @@ function inlineFormat(text) {
   }
 
   function openQuizPlan(plan, sectionId, sectionTitle) {
-    resetQuizState();
+    const saved = loadQuizProgress(sectionId);
+    if (saved && applyQuizProgressSnapshot(saved)) {
+      modal.style.display = 'flex';
+      renderCurrentQuestion();
+      return;
+    }
+    resetQuizState({ preserveStoredProgress: true });
     kcSectionId = sectionId;
     kcSectionTitle = sectionTitle;
     kcQuizPlan = plan;
@@ -3734,7 +3805,10 @@ function inlineFormat(text) {
     resizer.addEventListener('mouseleave', () => { if (!isResizing) resizer.style.background = '#E2E8F0'; });
   }
   
-  closeBtn.addEventListener('click', () => { modal.style.display = 'none'; });
+  closeBtn.addEventListener('click', () => {
+    saveQuizProgress();
+    modal.style.display = 'none';
+  });
   
   if (maxBtn) {
     maxBtn.addEventListener('click', () => {
