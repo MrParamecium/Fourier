@@ -448,6 +448,7 @@ async function saveSessionSummary(summary) {
 }
 
 let recentConversationMenuState = null;
+let deletedRecentConversationIds = new Set();
 
 function closeRecentConversationMenu() {
   const menu = document.getElementById('recentConversationContextMenu');
@@ -492,7 +493,10 @@ function showDeleteConversationConfirm() {
 
     document.body.appendChild(overlay);
 
+    let settled = false;
     const cleanup = (value) => {
+      if (settled) return;
+      settled = true;
       overlay.remove();
       document.removeEventListener('keydown', onKeydown);
       resolve(value);
@@ -502,13 +506,23 @@ function showDeleteConversationConfirm() {
       if (event.key === 'Escape') cleanup(false);
     };
 
+    const cancelBtn = overlay.querySelector('#recentConversationCancelBtn');
+    const confirmBtn = overlay.querySelector('#recentConversationConfirmBtn');
+
     document.addEventListener('keydown', onKeydown);
     overlay.addEventListener('click', (event) => {
       if (event.target === overlay) cleanup(false);
     });
-    overlay.querySelector('#recentConversationCancelBtn')?.addEventListener('click', () => cleanup(false));
-    overlay.querySelector('#recentConversationConfirmBtn')?.addEventListener('click', () => cleanup(true));
-    overlay.querySelector('#recentConversationConfirmBtn')?.focus();
+    cancelBtn?.addEventListener('click', () => cleanup(false));
+    confirmBtn?.addEventListener('click', async () => {
+      if (confirmBtn.disabled) return;
+      confirmBtn.disabled = true;
+      if (cancelBtn) cancelBtn.disabled = true;
+      confirmBtn.textContent = 'Deleting…';
+      confirmBtn.style.opacity = '0.8';
+      cleanup(true);
+    });
+    confirmBtn?.focus();
   });
 }
 
@@ -4893,7 +4907,21 @@ function summarizeRecentConversation(history = [], sectionTitle = '') {
 }
 
 async function deleteRecentConversation(timestamp) {
-  const sessions = loadRecentConversations().filter(s => s.timestamp !== timestamp);
+  const sessionsBefore = loadRecentConversations();
+  const deletedSession = sessionsBefore.find(s => s.timestamp === timestamp);
+  const sessions = sessionsBefore.filter(s => s.timestamp !== timestamp);
+  if (deletedSession?.id) deletedRecentConversationIds.add(deletedSession.id);
+
+  if ((tutorState.sessionStartTime || 0) === timestamp) {
+    tutorState.sessionStartTime = null;
+    tutorState.learnHistory = [];
+    tutorState.learnSectionId = '';
+    tutorState.learnSectionTitle = '';
+    tutorState.learnLessonMarkdown = '';
+    tutorState.learnBookPages = [];
+    tutorState.learnWebSources = [];
+  }
+
   saveRecentConversations(sessions);
   updateRecentConversationsUI();
   await rebuildUserMemoryFromRemainingSessions(sessions);
@@ -4940,6 +4968,8 @@ function saveCurrentLearnSession() {
   // if current session already exists in top, replace it to update history
   const sessionId = tutorState.learnSectionId + '-' + (tutorState.sessionStartTime || Date.now());
   const existingIdx = sessions.findIndex(s => s.id === sessionId);
+  if (deletedRecentConversationIds.has(sessionId)) return;
+
   const generatedTitle = summarizeRecentConversation(tutorState.learnHistory, tutorState.learnSectionTitle);
   const existingSession = existingIdx !== -1 ? sessions[existingIdx] : null;
   const displayTitle = existingSession && existingSession.customTitle ? existingSession.customTitle : generatedTitle;
