@@ -512,54 +512,61 @@ function showDeleteConversationConfirm() {
   });
 }
 
-window.openRecentConversationMenu = function(timestamp, x, y) {
+window.openRecentConversationMenu = function(timestamp, anchorEl) {
   closeRecentConversationMenu();
   recentConversationMenuState = { timestamp };
+
+  const sessions = loadRecentConversations();
+  const session = sessions.find(s => s.timestamp === timestamp) || null;
+  const isStarred = !!(session && session.starred);
 
   const menu = document.createElement('div');
   menu.id = 'recentConversationContextMenu';
   menu.style.cssText = [
     'position: fixed',
-    `left: ${x}px`,
-    `top: ${y}px`,
     'z-index: 9999',
-    'min-width: 148px',
+    'min-width: 168px',
     'background: #FFFFFF',
     'border: 1px solid #DBEAFE',
-    'border-radius: 10px',
-    'box-shadow: 0 14px 34px rgba(15, 23, 42, 0.18)',
+    'border-radius: 12px',
+    'box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18)',
     'padding: 6px',
     'display: flex',
     'flex-direction: column',
     'gap: 4px'
   ].join(';');
 
+  const actionStyle = 'border:none;background:transparent;text-align:left;padding:9px 10px;border-radius:8px;font-size:12px;font-weight:600;color:#0F172A;cursor:pointer;display:flex;align-items:center;gap:8px;';
   menu.innerHTML = `
-    <button type="button" id="recentConversationDeleteAction" style="border:none;background:transparent;text-align:left;padding:8px 10px;border-radius:8px;font-size:12px;font-weight:600;color:#B91C1C;cursor:pointer;">Delete conversation</button>
+    <button type="button" data-action="star" style="${actionStyle}">${isStarred ? '★' : '☆'} <span>${isStarred ? 'Unstar' : 'Star'}</span></button>
+    <button type="button" data-action="rename" style="${actionStyle}">✎ <span>Rename</span></button>
+    <button type="button" data-action="delete" style="${actionStyle} color:#B91C1C;">🗑 <span>Delete</span></button>
   `;
 
   document.body.appendChild(menu);
 
-  const rect = menu.getBoundingClientRect();
-  if (rect.right > window.innerWidth - 8) menu.style.left = `${Math.max(8, window.innerWidth - rect.width - 8)}px`;
-  if (rect.bottom > window.innerHeight - 8) menu.style.top = `${Math.max(8, window.innerHeight - rect.height - 8)}px`;
+  const anchorRect = anchorEl ? anchorEl.getBoundingClientRect() : { right: window.innerWidth / 2, bottom: window.innerHeight / 2 };
+  menu.style.left = `${Math.max(8, anchorRect.right - menu.offsetWidth)}px`;
+  menu.style.top = `${Math.min(window.innerHeight - menu.offsetHeight - 8, anchorRect.bottom + 6)}px`;
 
-  const deleteBtn = document.getElementById('recentConversationDeleteAction');
-  if (deleteBtn) {
-    deleteBtn.addEventListener('mouseenter', () => {
-      deleteBtn.style.background = '#FEF2F2';
+  Array.from(menu.querySelectorAll('button')).forEach((btn) => {
+    btn.addEventListener('mouseenter', () => {
+      btn.style.background = btn.dataset.action === 'delete' ? '#FEF2F2' : '#EFF6FF';
     });
-    deleteBtn.addEventListener('mouseleave', () => {
-      deleteBtn.style.background = 'transparent';
+    btn.addEventListener('mouseleave', () => {
+      btn.style.background = 'transparent';
     });
-    deleteBtn.addEventListener('click', async (event) => {
+    btn.addEventListener('click', async (event) => {
       event.stopPropagation();
       const targetTs = recentConversationMenuState?.timestamp;
+      const action = btn.dataset.action;
       closeRecentConversationMenu();
-      if (!targetTs) return;
-      await window.deleteRecentConversation(targetTs);
+      if (!targetTs || !action) return;
+      if (action === 'delete') return window.deleteRecentConversation(targetTs);
+      if (action === 'rename') return window.renameRecentConversation(targetTs);
+      if (action === 'star') return window.toggleRecentConversationStar(targetTs);
     });
-  }
+  });
 
   setTimeout(() => {
     document.addEventListener('click', closeRecentConversationMenu, { once: true });
@@ -4892,6 +4899,33 @@ async function deleteRecentConversation(timestamp) {
   await rebuildUserMemoryFromRemainingSessions(sessions);
 }
 
+window.toggleRecentConversationStar = function(timestamp) {
+  const sessions = loadRecentConversations();
+  const next = sessions.map(session => session.timestamp === timestamp ? { ...session, starred: !session.starred } : session);
+  next.sort((a, b) => {
+    if (!!b.starred !== !!a.starred) return Number(!!b.starred) - Number(!!a.starred);
+    return (b.timestamp || 0) - (a.timestamp || 0);
+  });
+  saveRecentConversations(next);
+  updateRecentConversationsUI();
+};
+
+window.renameRecentConversation = function(timestamp) {
+  const sessions = loadRecentConversations();
+  const session = sessions.find(s => s.timestamp === timestamp);
+  if (!session) return;
+  const currentTitle = session.customTitle || session.summaryTitle || session.title || '';
+  const renamed = window.prompt('Rename this conversation', currentTitle);
+  if (renamed == null) return;
+  const cleanTitle = String(renamed).trim();
+  const next = sessions.map(s => s.timestamp === timestamp
+    ? { ...s, customTitle: cleanTitle || '', summaryTitle: cleanTitle || summarizeRecentConversation(s.history || [], s.sectionTitle || ''), title: cleanTitle || summarizeRecentConversation(s.history || [], s.sectionTitle || '') }
+    : s
+  );
+  saveRecentConversations(next);
+  updateRecentConversationsUI();
+};
+
 window.deleteRecentConversation = async function(timestamp) {
   const confirmed = await showDeleteConversationConfirm();
   if (!confirmed) return;
@@ -4907,11 +4941,15 @@ function saveCurrentLearnSession() {
   const sessionId = tutorState.learnSectionId + '-' + (tutorState.sessionStartTime || Date.now());
   const existingIdx = sessions.findIndex(s => s.id === sessionId);
   const generatedTitle = summarizeRecentConversation(tutorState.learnHistory, tutorState.learnSectionTitle);
+  const existingSession = existingIdx !== -1 ? sessions[existingIdx] : null;
+  const displayTitle = existingSession && existingSession.customTitle ? existingSession.customTitle : generatedTitle;
   
   const currentSession = {
     id: sessionId,
-    title: generatedTitle,
-    summaryTitle: generatedTitle,
+    title: displayTitle,
+    summaryTitle: displayTitle,
+    customTitle: existingSession?.customTitle || '',
+    starred: !!existingSession?.starred,
     timestamp: tutorState.sessionStartTime || Date.now(),
     sectionId: tutorState.learnSectionId,
     sectionTitle: tutorState.learnSectionTitle,
@@ -5021,12 +5059,16 @@ function updateRecentConversationsUI() {
   let sessions = loadRecentConversations();
   let changed = false;
   sessions = sessions.map(session => {
-    const computedTitle = summarizeRecentConversation(session.history || [], session.sectionTitle || '');
+    const computedTitle = session.customTitle || summarizeRecentConversation(session.history || [], session.sectionTitle || '');
     if (session.summaryTitle !== computedTitle || session.title !== computedTitle) {
       changed = true;
       return { ...session, title: computedTitle, summaryTitle: computedTitle };
     }
     return session;
+  });
+  sessions.sort((a, b) => {
+    if (!!b.starred !== !!a.starred) return Number(!!b.starred) - Number(!!a.starred);
+    return (b.timestamp || 0) - (a.timestamp || 0);
   });
   if (changed) saveRecentConversations(sessions);
 
@@ -5060,12 +5102,19 @@ function updateRecentConversationsUI() {
       onmousedown="this.style.transform='scale(0.98)'"
       onmouseup="this.style.transform='scale(1)'"
       onclick="window.loadHistoricalSession(${session.timestamp})"
-      oncontextmenu="event.preventDefault(); event.stopPropagation(); window.openRecentConversationMenu(${session.timestamp}, event.clientX, event.clientY)"
-      title="Right-click for more actions"
+      title="Open conversation"
       >
         <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:8px;">
-          <div style="font-weight: 600; font-size: 12px; color: #000; line-height:1.35; flex:1; min-width:0;">${escapeHtml(truncated)}</div>
-          <div style="font-size:10px; color:#94A3B8; flex:0 0 auto; user-select:none;">⋯</div>
+          <div style="font-weight: 600; font-size: 12px; color: #000; line-height:1.35; flex:1; min-width:0;">${session.starred ? '★ ' : ''}${escapeHtml(truncated)}</div>
+          <button
+            type="button"
+            aria-label="Conversation actions"
+            title="Conversation actions"
+            onclick="event.stopPropagation(); window.openRecentConversationMenu(${session.timestamp}, this)"
+            style="border:none; background:transparent; color:#94A3B8; cursor:pointer; width:20px; height:20px; border-radius:6px; flex:0 0 auto; font-size:14px; line-height:20px; padding:0;"
+            onmouseover="this.style.background='#E2E8F0'; this.style.color='#334155'"
+            onmouseout="this.style.background='transparent'; this.style.color='#94A3B8'"
+          >⋯</button>
         </div>
         <div style="font-size: 10px; color: #222; display: flex; justify-content: space-between; gap:8px; opacity:0.72;">
            <span>${escapeHtml(session.sectionTitle || 'General')}</span>
