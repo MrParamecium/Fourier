@@ -452,6 +452,20 @@ let recentConversationMenuTargetTimestamp = null;
 let pendingDeleteRecentConversationTimestamp = null;
 let recentConversationDeleteOverlay = null;
 const deletedRecentConversationTimestamps = new Set();
+window.__recentConversationDebug = window.__recentConversationDebug || [];
+
+function pushRecentConversationDebug(stage, detail = {}) {
+  const entry = {
+    time: new Date().toISOString(),
+    stage,
+    detail
+  };
+  window.__recentConversationDebug.push(entry);
+  if (window.__recentConversationDebug.length > 200) {
+    window.__recentConversationDebug.splice(0, window.__recentConversationDebug.length - 200);
+  }
+  console.log(`[RECENT_DEBUG] ${stage}`, detail);
+}
 
 function closeRecentConversationMenu() {
   const menu = document.getElementById('recentConversationContextMenu');
@@ -469,6 +483,7 @@ function closeDeleteConversationConfirm() {
 }
 
 function showDeleteConversationConfirm(timestamp) {
+  pushRecentConversationDebug('modal:open', { timestamp });
   pendingDeleteRecentConversationTimestamp = timestamp;
   closeDeleteConversationConfirm();
   pendingDeleteRecentConversationTimestamp = timestamp;
@@ -522,6 +537,7 @@ function showDeleteConversationConfirm(timestamp) {
   cancelBtn.addEventListener('click', (event) => {
     event.preventDefault();
     event.stopPropagation();
+    pushRecentConversationDebug('modal:cancel-click', { timestamp: pendingDeleteRecentConversationTimestamp });
     closeDeleteConversationConfirm();
   });
 
@@ -529,6 +545,7 @@ function showDeleteConversationConfirm(timestamp) {
     event.preventDefault();
     event.stopPropagation();
     const targetTs = pendingDeleteRecentConversationTimestamp;
+    pushRecentConversationDebug('modal:confirm-click', { targetTs });
     if (!targetTs) return;
     confirmBtn.disabled = true;
     cancelBtn.disabled = true;
@@ -565,6 +582,7 @@ window.openRecentConversationMenu = function(timestamp, anchorEl) {
   closeRecentConversationMenu();
   recentConversationMenuState = { timestamp };
   recentConversationMenuTargetTimestamp = timestamp;
+  pushRecentConversationDebug('menu:open', { timestamp });
 
   const sessions = loadRecentConversations();
   const session = sessions.find(s => s.timestamp === timestamp) || null;
@@ -600,6 +618,7 @@ window.openRecentConversationMenu = function(timestamp, anchorEl) {
     btn.addEventListener('click', (event) => {
       event.preventDefault();
       event.stopPropagation();
+      pushRecentConversationDebug('menu:action-click', { action, timestamp });
       closeRecentConversationMenu();
       if (action === 'delete') return window.deleteRecentConversation(timestamp);
       if (action === 'rename') return window.renameRecentConversation(timestamp);
@@ -3079,7 +3098,7 @@ async function sendLearnFollowup(rawPrompt) {
     tutorState.learnWebSources = data.webSources || tutorState.learnWebSources;
     renderLearnWebSources(tutorState.learnWebSources);
     renderLearnWebSection(tutorState.learnWebSources);
-    updateRecentConversations();
+    updateRecentConversations('learn:stream-finished');
     learnChatScroll.scrollTop = learnChatScroll.scrollHeight;
   } catch (err) {
     if (window.loadingTimerLearn) clearInterval(window.loadingTimerLearn);
@@ -4660,7 +4679,7 @@ async function sendQuestion(rawPrompt) {
       { role: 'user', content: prompt },
       { role: 'assistant', content: data.explanation || '' }
     );
-    updateRecentConversations();
+    updateRecentConversations('answer:stream-finished');
     tutorState.currentBookPages = data.bookPages || [];
     tutorState.currentWebSources = data.webSources || [];
 
@@ -4957,27 +4976,42 @@ function summarizeRecentConversation(history = [], sectionTitle = '') {
 
 async function deleteRecentConversation(timestamp) {
   const normalizedTs = normalizeRecentConversationTimestamp(timestamp);
-  console.log('[DELETE] target normalizedTs:', normalizedTs, typeof normalizedTs);
+  pushRecentConversationDebug('delete:start', {
+    normalizedTs,
+    type: typeof normalizedTs,
+    currentSessionStartTime: normalizeRecentConversationTimestamp(tutorState.sessionStartTime || 0)
+  });
   deletedRecentConversationTimestamps.add(normalizedTs);
 
   const allSessions = loadRecentConversations();
-  console.log('[DELETE] sessions before:', allSessions.length, 'timestamps:', allSessions.map(s => normalizeRecentConversationTimestamp(s.timestamp)));
+  pushRecentConversationDebug('delete:before-filter', {
+    count: allSessions.length,
+    timestamps: allSessions.map(s => normalizeRecentConversationTimestamp(s.timestamp))
+  });
 
   const sessions = allSessions.filter(s => normalizeRecentConversationTimestamp(s.timestamp) !== normalizedTs);
-  console.log('[DELETE] sessions after filter:', sessions.length);
+  pushRecentConversationDebug('delete:after-filter', {
+    count: sessions.length,
+    timestamps: sessions.map(s => normalizeRecentConversationTimestamp(s.timestamp))
+  });
 
   if (normalizeRecentConversationTimestamp(tutorState.sessionStartTime || 0) === normalizedTs) {
-    console.log('[DELETE] clearing current session history');
+    pushRecentConversationDebug('delete:clear-current-session', { normalizedTs });
     tutorState.learnHistory = [];
     tutorState.sessionStartTime = normalizedTs;
   }
 
   saveRecentConversations(sessions);
-  console.log('[DELETE] saved to localStorage, now has:', loadRecentConversations().length, 'sessions');
+  pushRecentConversationDebug('delete:after-save', {
+    count: loadRecentConversations().length,
+    deletedSet: Array.from(deletedRecentConversationTimestamps)
+  });
   updateRecentConversationsUI();
-  console.log('[DELETE] UI updated');
+  pushRecentConversationDebug('delete:after-ui-update', {});
   await rebuildUserMemoryFromRemainingSessions(sessions);
-  console.log('[DELETE] memory rebuilt, final localStorage count:', loadRecentConversations().length);
+  pushRecentConversationDebug('delete:after-memory-rebuild', {
+    count: loadRecentConversations().length
+  });
 }
 
 window.toggleRecentConversationStar = function(timestamp) {
@@ -5013,8 +5047,14 @@ window.deleteRecentConversation = function(timestamp) {
   showDeleteConversationConfirm(timestamp);
 };
 
-function saveCurrentLearnSession() {
-  if (!tutorState.learnHistory || tutorState.learnHistory.length < 2) return;
+function saveCurrentLearnSession(source = 'unknown') {
+  if (!tutorState.learnHistory || tutorState.learnHistory.length < 2) {
+    pushRecentConversationDebug('save:skipped-history-too-short', {
+      source,
+      historyLength: tutorState.learnHistory ? tutorState.learnHistory.length : 0
+    });
+    return;
+  }
   
   let sessions = loadRecentConversations();
   
@@ -5023,10 +5063,20 @@ function saveCurrentLearnSession() {
   const sessionId = tutorState.learnSectionId + '-' + normalizedSessionTs;
   const existingIdx = sessions.findIndex(s => normalizeRecentConversationTimestamp(s.timestamp) === normalizedSessionTs || s.id === sessionId);
   if (deletedRecentConversationTimestamps.has(normalizedSessionTs)) {
-    console.log('[SAVE] BLOCKED by deletedSet, ts:', normalizedSessionTs);
+    pushRecentConversationDebug('save:blocked-by-deleted-set', {
+      source,
+      normalizedSessionTs,
+      deletedSet: Array.from(deletedRecentConversationTimestamps)
+    });
     return;
   }
-  console.log('[SAVE] saving session ts:', normalizedSessionTs, 'history len:', tutorState.learnHistory.length);
+  pushRecentConversationDebug('save:proceed', {
+    source,
+    normalizedSessionTs,
+    historyLength: tutorState.learnHistory.length,
+    existingIdx,
+    sessionId
+  });
 
   const generatedTitle = summarizeRecentConversation(tutorState.learnHistory, tutorState.learnSectionTitle);
   const existingSession = existingIdx !== -1 ? sessions[existingIdx] : null;
@@ -5067,7 +5117,7 @@ window.loadHistoricalSession = function(timestamp) {
 
   try {
     // Stop ongoing flows and save current before switching
-    saveCurrentLearnSession();
+    saveCurrentLearnSession('loadHistoricalSession:before-switch');
     if (window.loadingTimerLearn) clearInterval(window.loadingTimerLearn);
     if (learnAbort) learnAbort.abort();
 
@@ -5261,7 +5311,8 @@ function updateRecentConversationsUI() {
 }
 
 // Hook it into existing updateRecentConversations calls smoothly
-function updateRecentConversations() {
-  saveCurrentLearnSession();
+function updateRecentConversations(source = 'unknown') {
+  pushRecentConversationDebug('updateRecentConversations:called', { source });
+  saveCurrentLearnSession(source);
   updateRecentConversationsUI();
 }
