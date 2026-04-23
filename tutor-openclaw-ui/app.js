@@ -5113,7 +5113,7 @@ function updateRecentConversationsUI() {
             type="button"
             aria-label="Conversation actions"
             title="Conversation actions"
-            onclick="event.stopPropagation(); console.log("MENU CLICK", btn.dataset.action, recentConversationMenuState?.timestamp); window.openRecentConversationMenu(${session.timestamp}, this)"
+            onclick="event.stopPropagation(); window.openRecentConversationMenu(${session.timestamp}, this)"
             style="border:none; background:transparent; color:#94A3B8; cursor:pointer; width:20px; height:20px; border-radius:6px; flex:0 0 auto; font-size:14px; line-height:20px; padding:0;"
             onmouseover="this.style.background='#E2E8F0'; this.style.color='#334155'"
             onmouseout="this.style.background='transparent'; this.style.color='#94A3B8'"
