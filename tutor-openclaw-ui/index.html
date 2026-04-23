@@ -13,34 +13,45 @@
   <div class="app">
 
     <!-- ════════════════════ LEFT SIDEBAR (always visible) ════════════════════ -->
-    <aside class="sidebar" id="leftSidebar">
-      <div class="sidebar-top">
-        <div class="logo">
-          <button class="menu-toggle" id="menuToggleBtn" title="Toggle Sidebar">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="3" y1="12" x2="21" y2="12"></line>
-              <line x1="3" y1="6" x2="21" y2="6"></line>
-              <line x1="3" y1="18" x2="21" y2="18"></line>
-            </svg>
-          </button>
-          <div class="logo-icon" style="border:none;background:transparent;"></div>
-          <div class="logo-text" style="font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:24px;font-weight:700;">Tutor</div>
+    <aside class="sidebar" id="leftSidebar" style="display:flex; flex-direction:column; min-height:0;">
+      <div style="flex: 0 0 60%; min-height: 0; display:flex; flex-direction:column; border-bottom: 1px solid rgba(255,255,255,0.06);">
+        <div class="sidebar-top">
+          <div class="logo">
+            <button class="menu-toggle" id="menuToggleBtn" title="Toggle Sidebar">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            </button>
+            <div class="logo-icon" style="border:none;background:transparent;"></div>
+            <div class="logo-text" style="font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:24px;font-weight:700;">Tutor</div>
+          </div>
+        </div>
+
+        <div class="syllabus-header"></div>
+        <div class="syllabus" id="courseSyllabus" style="flex:1; min-height:0;"></div>
+
+        <div class="sidebar-footer">
+          <div class="sidebar-footer-row">
+            <div class="model-badge">
+              <span class="model-dot"></span>
+              <span>Claude Sonnet</span>
+            </div>
+            <button class="book-toggle" id="bookToggleBtn" title="Switch textbook edition">
+              <span id="bookToggleIcon">📖</span>
+              <span id="bookToggleLabel">3rd Ed</span>
+            </button>
+          </div>
         </div>
       </div>
 
-      <div class="syllabus-header"></div>
-      <div class="syllabus" id="courseSyllabus"></div>
-
-      <div class="sidebar-footer">
-        <div class="sidebar-footer-row">
-          <div class="model-badge">
-            <span class="model-dot"></span>
-            <span>Claude Sonnet</span>
-          </div>
-          <button class="book-toggle" id="bookToggleBtn" title="Switch textbook edition">
-            <span id="bookToggleIcon">📖</span>
-            <span id="bookToggleLabel">3rd Ed</span>
-          </button>
+      <div style="flex: 0 0 40%; min-height: 0; overflow-y: auto; display:flex; flex-direction:column; background: rgba(0,0,0,0.14);">
+        <div class="toc-header" style="padding: 16px; border-bottom: none; flex-shrink:0;">
+          <span class="toc-header-label" style="text-transform: none; letter-spacing: normal; font-weight: 600; font-size: 14px; color: #E2E8F0;">Recent Conversations</span>
+        </div>
+        <div id="recentConversationsNav" style="padding: 0 16px 16px; color: #94A3B8; font-size: 13px;">
+          <div style="opacity: 0.5; font-style: italic;">No recent queries yet.</div>
         </div>
       </div>
     </aside>
@@ -292,16 +303,6 @@
         </nav>
       </div>
 
-      <!-- Lower Section: Recent Conversations (40%) -->
-      <div style="flex: 0 0 40%; overflow-y: auto; display: flex; flex-direction: column; background: rgba(0,0,0,0.15); min-height: 0;">
-        <div class="toc-header" style="padding: 16px; border-bottom: none;">
-          <span class="toc-header-label" style="text-transform: none; letter-spacing: normal; font-weight: 600; font-size: 14px; color: #E2E8F0;">Recent Conversations</span>
-        </div>
-        <div id="recentConversationsNav" style="padding: 0 16px 16px; color: #94A3B8; font-size: 13px;">
-          <!-- Items will go here -->
-          <div style="opacity: 0.5; font-style: italic;">No recent queries yet.</div>
-        </div>
-      </div>
     </aside>
 
   </div><!-- .app -->
