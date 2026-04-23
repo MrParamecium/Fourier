@@ -649,14 +649,7 @@ window.openRecentConversationMenu = function(timestamp, anchorEl) {
 let currentBook = 'new'; // always 3rd Ed
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Book toggle
-  const bookBtn = document.getElementById('bookToggleBtn');
-  if (bookBtn) {
-    bookBtn.addEventListener('click', () => {
-      setBook(currentBook === 'new' ? 'old' : 'new');
-    });
-  }
-  setBook(currentBook); // init button state
+  setBook(currentBook); // init book state even without visible toggle
 });
 
 const welcomeScreen = document.getElementById('welcomeScreen');
