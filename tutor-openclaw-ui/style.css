@@ -1686,19 +1686,26 @@ html, body {
 
 /* Right: explanation */
 .learn-explain-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 12;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
   padding: 14px 18px;
   border-bottom: 1px solid var(--border);
-  background: linear-gradient(180deg, #FFFFFF 0%, #F8FBFF 100%);
+  background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(248,251,255,0.98) 100%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   flex-shrink: 0;
 }
 
 .learn-kp-nav {
   min-width: 0;
-  display: flex;
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) 34px;
   align-items: center;
   gap: 12px;
 }
@@ -1727,6 +1734,7 @@ html, body {
 
 .learn-kp-meta {
   min-width: 0;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -1745,7 +1753,7 @@ html, body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 520px;
+  max-width: none;
 }
 
 .learn-focus-btn {
@@ -1975,6 +1983,7 @@ html, body {
 
   .learn-kp-nav {
     width: 100%;
+    grid-template-columns: 34px minmax(0, 1fr) 34px;
   }
 
   .learn-kp-title {

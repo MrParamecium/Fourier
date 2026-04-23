@@ -2499,17 +2499,21 @@ function parseLessonKnowledgePoints(html) {
   wrapper.innerHTML = source;
   const nodes = Array.from(wrapper.childNodes);
   const points = [];
-  const trailingParts = [];
   let current = null;
+  let summaryPage = null;
+  const quizParts = [];
+
+  const toHtml = (node) => node.outerHTML || node.textContent || '';
+  const getNodeText = (node) => compactWhitespace(node?.textContent || '').trim();
 
   const isPrimaryKnowledgeHeading = (node) => {
     if (!node || node.nodeType !== Node.ELEMENT_NODE) return false;
     if (!/^H[1-2]$/.test(node.tagName)) return false;
-    const text = (node.textContent || '').trim();
+    const text = getNodeText(node);
     return /^\d+[.)]\s+/.test(text) || /^[A-Z]\d+(?:[-.]\d+)*\s+/.test(text);
   };
 
-  const isTrailingNode = (node) => {
+  const isQuizNode = (node) => {
     return node
       && node.nodeType === Node.ELEMENT_NODE
       && (
@@ -2518,41 +2522,79 @@ function parseLessonKnowledgePoints(html) {
       );
   };
 
-  const toHtml = (node) => node.outerHTML || node.textContent || '';
+  const isSummaryStart = (node) => {
+    if (!node || node.nodeType !== Node.ELEMENT_NODE) return false;
+    const text = getNodeText(node);
+    return /^📌\s*Key Takeaways$/i.test(text) || /^Key Takeaways$/i.test(text);
+  };
 
   const pushCurrent = () => {
     if (!current) return;
     const content = current.parts.join('').trim();
     const plain = content.replace(/<[^>]+>/g, '').trim();
-    if (content && plain) points.push({ title: current.title, html: content });
+    if (content && plain) points.push({ type: current.type || 'knowledge', label: current.label || 'Knowledge Point', title: current.title, html: content });
     current = null;
   };
 
+  const ensureSummaryPage = () => {
+    if (!summaryPage) {
+      summaryPage = { type: 'summary', label: 'Summary', title: '📌 Key Takeaways', parts: [] };
+    }
+    return summaryPage;
+  };
+
   nodes.forEach((node) => {
-    if (isTrailingNode(node)) {
+    if (isQuizNode(node)) {
       pushCurrent();
-      trailingParts.push(toHtml(node));
+      quizParts.push(toHtml(node));
+      return;
+    }
+
+    if (isSummaryStart(node)) {
+      pushCurrent();
+      ensureSummaryPage().parts.push(toHtml(node));
+      current = ensureSummaryPage();
       return;
     }
 
     if (isPrimaryKnowledgeHeading(node)) {
       pushCurrent();
       current = {
-        title: (node.textContent || '').trim() || 'Knowledge Point',
+        type: points.length === 0 ? 'overview' : 'knowledge',
+        label: points.length === 0 ? 'Overview' : 'Knowledge Point',
+        title: getNodeText(node) || 'Knowledge Point',
         parts: [toHtml(node)]
       };
       return;
     }
 
-    if (!current) current = { title: 'Overview', parts: [] };
+    if (!current) {
+      current = {
+        type: 'overview',
+        label: 'Overview',
+        title: 'Section Overview',
+        parts: []
+      };
+    }
     current.parts.push(toHtml(node));
   });
 
   pushCurrent();
 
+  const summaryHtml = summaryPage ? summaryPage.parts.join('').trim() : '';
+  if (summaryHtml) {
+    const plain = summaryHtml.replace(/<[^>]+>/g, '').trim();
+    if (plain) points.push({ type: 'summary', label: 'Summary', title: '📌 Key Takeaways', html: summaryHtml });
+  }
+
+  const quizHtml = quizParts.join('').trim();
+  if (quizHtml) {
+    points.push({ type: 'quiz', label: 'Quiz', title: 'Knowledge Check', html: quizHtml });
+  }
+
   return {
     points,
-    trailingHtml: trailingParts.join('').trim()
+    trailingHtml: ''
   };
 }
 
@@ -2569,10 +2611,11 @@ function renderCurrentKnowledgePoint() {
 
   currentKnowledgePointIndex = Math.max(0, Math.min(currentKnowledgePointIndex, learnKnowledgePoints.length - 1));
   const block = learnKnowledgePoints[currentKnowledgePointIndex];
-  const isLastPoint = currentKnowledgePointIndex === learnKnowledgePoints.length - 1;
-  learnExplainContent.innerHTML = block.html + (isLastPoint && currentLessonTrailingHtml ? currentLessonTrailingHtml : '');
+  learnExplainContent.innerHTML = block.html || '<p class="ghost">No explanation available.</p>';
   bindExpandableLessonImages(learnExplainContent);
   if (learnKpTitle) learnKpTitle.textContent = `${currentKnowledgePointIndex + 1}/${learnKnowledgePoints.length} · ${block.title}`;
+  const labelEl = document.querySelector('.learn-kp-label');
+  if (labelEl) labelEl.textContent = block.label || 'Knowledge Point';
   if (learnKpPrevBtn) learnKpPrevBtn.disabled = currentKnowledgePointIndex === 0;
   if (learnKpNextBtn) learnKpNextBtn.disabled = currentKnowledgePointIndex === learnKnowledgePoints.length - 1;
   if (learnExplainScroll) learnExplainScroll.scrollTop = 0;
@@ -2598,8 +2641,7 @@ function setLearnLessonContent(fullHtml, options = {}) {
 function syncFocusModeContent() {
   if (!learnFocusModal || learnFocusModal.classList.contains('hidden') || !learnFocusContent) return;
   const activeBlock = learnKnowledgePoints[currentKnowledgePointIndex];
-  const isLastPoint = currentKnowledgePointIndex === learnKnowledgePoints.length - 1;
-  learnFocusContent.innerHTML = (activeBlock?.html || learnExplainContent?.innerHTML || '') + (isLastPoint && currentLessonTrailingHtml ? currentLessonTrailingHtml : '');
+  learnFocusContent.innerHTML = activeBlock?.html || learnExplainContent?.innerHTML || '';
   if (learnFocusTitle) learnFocusTitle.textContent = activeBlock?.title || learnKpTitle?.textContent || 'Knowledge Point';
   bindExpandableLessonImages(learnFocusContent);
   if (learnFocusPrevBtn) learnFocusPrevBtn.disabled = currentKnowledgePointIndex === 0;
@@ -2987,14 +3029,21 @@ async function startLesson() {
       </div>
     `;
     setLearnLessonContent(lessonHtml + testSectionHtml);
+    const parsedPages = parseLessonKnowledgePoints(lessonHtml + testSectionHtml);
+    const quizPage = parsedPages.points.find(p => p.type === 'quiz');
+    const quizPageHtml = quizPage?.html || '';
+    const quizTemp = document.createElement('div');
+    quizTemp.innerHTML = quizPageHtml;
+    const quizPlanNodeGlobal = quizTemp.querySelector('.kc-quiz-plan');
+    const pregenCardsGlobal = quizTemp.querySelectorAll('.kc-container');
     if (learnChatContent) learnChatContent.innerHTML = ''; // Clear chat history on new section
 
     // Bind the test button
     setTimeout(() => {
       const startTestBtn = document.getElementById('startTestBtn');
       const testBannerCard = document.getElementById('testBannerCard');
-      const quizPlanNode = learnExplainContent.querySelector('.kc-quiz-plan');
-      const pregenCards = learnExplainContent.querySelectorAll('.kc-container');
+      const quizPlanNode = quizPlanNodeGlobal || document.querySelector('.kc-quiz-plan');
+      const pregenCards = pregenCardsGlobal?.length ? pregenCardsGlobal : document.querySelectorAll('.kc-container');
 
       if (startTestBtn) {
         startTestBtn.addEventListener('click', () => {
