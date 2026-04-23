@@ -2429,6 +2429,8 @@ const learnFocusBtn       = document.getElementById('learnFocusBtn');
 const learnFocusModal     = document.getElementById('learnFocusModal');
 const learnFocusBackdrop  = document.getElementById('learnFocusBackdrop');
 const learnFocusClose     = document.getElementById('learnFocusClose');
+const learnFocusPrevBtn   = document.getElementById('learnFocusPrevBtn');
+const learnFocusNextBtn   = document.getElementById('learnFocusNextBtn');
 const learnFocusTitle     = document.getElementById('learnFocusTitle');
 const learnFocusContent   = document.getElementById('learnFocusContent');
 const learnWebToggle  = document.getElementById('learnWebToggle') || { classList: { add() {}, remove() {}, toggle() {} } };
@@ -2507,8 +2509,11 @@ function parseLessonKnowledgePoints(html) {
   const trailingParts = [];
   let current = null;
 
-  const isHeadingNode = (node) => {
-    return node && node.nodeType === Node.ELEMENT_NODE && /^H[1-3]$/.test(node.tagName);
+  const isPrimaryKnowledgeHeading = (node) => {
+    if (!node || node.nodeType !== Node.ELEMENT_NODE) return false;
+    if (!/^H[1-2]$/.test(node.tagName)) return false;
+    const text = (node.textContent || '').trim();
+    return /^\d+[.)]\s+/.test(text) || /^[A-Z]\d+(?:[-.]\d+)*\s+/.test(text);
   };
 
   const isTrailingNode = (node) => {
@@ -2537,7 +2542,7 @@ function parseLessonKnowledgePoints(html) {
       return;
     }
 
-    if (isHeadingNode(node)) {
+    if (isPrimaryKnowledgeHeading(node)) {
       pushCurrent();
       current = {
         title: (node.textContent || '').trim() || 'Knowledge Point',
@@ -2578,6 +2583,7 @@ function renderCurrentKnowledgePoint() {
   if (learnKpPrevBtn) learnKpPrevBtn.disabled = currentKnowledgePointIndex === 0;
   if (learnKpNextBtn) learnKpNextBtn.disabled = currentKnowledgePointIndex === learnKnowledgePoints.length - 1;
   if (learnExplainScroll) learnExplainScroll.scrollTop = 0;
+  syncFocusModeContent();
 
   setTimeout(() => {
     if (window.MathJax && window.MathJax.typesetPromise) {
@@ -2596,19 +2602,27 @@ function setLearnLessonContent(fullHtml, options = {}) {
   renderCurrentKnowledgePoint();
 }
 
-function openLearnFocusMode() {
-  if (!learnFocusModal || !learnFocusContent) return;
+function syncFocusModeContent() {
+  if (!learnFocusModal || learnFocusModal.classList.contains('hidden') || !learnFocusContent) return;
   const activeBlock = learnKnowledgePoints[currentKnowledgePointIndex];
-  learnFocusContent.innerHTML = activeBlock?.html || learnExplainContent?.innerHTML || '';
+  const isLastPoint = currentKnowledgePointIndex === learnKnowledgePoints.length - 1;
+  learnFocusContent.innerHTML = (activeBlock?.html || learnExplainContent?.innerHTML || '') + (isLastPoint && currentLessonTrailingHtml ? currentLessonTrailingHtml : '');
   if (learnFocusTitle) learnFocusTitle.textContent = activeBlock?.title || learnKpTitle?.textContent || 'Knowledge Point';
   bindExpandableLessonImages(learnFocusContent);
-  learnFocusModal.classList.remove('hidden');
-  document.body.style.overflow = 'hidden';
+  if (learnFocusPrevBtn) learnFocusPrevBtn.disabled = currentKnowledgePointIndex === 0;
+  if (learnFocusNextBtn) learnFocusNextBtn.disabled = currentKnowledgePointIndex >= learnKnowledgePoints.length - 1;
   setTimeout(() => {
     if (window.MathJax && window.MathJax.typesetPromise) {
       window.MathJax.typesetPromise([learnFocusContent]).catch(() => {});
     }
   }, 40);
+}
+
+function openLearnFocusMode() {
+  if (!learnFocusModal || !learnFocusContent) return;
+  learnFocusModal.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  syncFocusModeContent();
 }
 
 function closeLearnFocusMode() {
@@ -3102,10 +3116,38 @@ if (learnKpNextBtn) {
 if (learnFocusBtn) learnFocusBtn.addEventListener('click', openLearnFocusMode);
 if (learnFocusClose) learnFocusClose.addEventListener('click', closeLearnFocusMode);
 if (learnFocusBackdrop) learnFocusBackdrop.addEventListener('click', closeLearnFocusMode);
+if (learnFocusPrevBtn) {
+  learnFocusPrevBtn.addEventListener('click', () => {
+    if (currentKnowledgePointIndex > 0) {
+      currentKnowledgePointIndex -= 1;
+      renderCurrentKnowledgePoint();
+    }
+  });
+}
+if (learnFocusNextBtn) {
+  learnFocusNextBtn.addEventListener('click', () => {
+    if (currentKnowledgePointIndex < learnKnowledgePoints.length - 1) {
+      currentKnowledgePointIndex += 1;
+      renderCurrentKnowledgePoint();
+    }
+  });
+}
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && learnFocusModal && !learnFocusModal.classList.contains('hidden')) {
-    closeLearnFocusMode();
-    return;
+  if (learnFocusModal && !learnFocusModal.classList.contains('hidden')) {
+    if (e.key === 'Escape') {
+      closeLearnFocusMode();
+      return;
+    }
+    if (e.key === 'ArrowLeft' && currentKnowledgePointIndex > 0) {
+      currentKnowledgePointIndex -= 1;
+      renderCurrentKnowledgePoint();
+      return;
+    }
+    if (e.key === 'ArrowRight' && currentKnowledgePointIndex < learnKnowledgePoints.length - 1) {
+      currentKnowledgePointIndex += 1;
+      renderCurrentKnowledgePoint();
+      return;
+    }
   }
   if (e.key === 'Escape' && lightbox && !lightbox.classList.contains('hidden')) closeLightbox();
 });

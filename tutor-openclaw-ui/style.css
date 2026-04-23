@@ -1935,6 +1935,12 @@ html, body {
   color: #0F172A;
   margin-top: 2px;
 }
+.learn-focus-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.learn-focus-nav-btn,
 .learn-focus-close {
   width: 36px;
   height: 36px;
@@ -1943,6 +1949,10 @@ html, body {
   background: #FFFFFF;
   color: #334155;
   cursor: pointer;
+}
+.learn-focus-nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 .learn-focus-content {
   overflow-y: auto;
@@ -1981,6 +1991,14 @@ html, body {
     width: min(100vw - 24px, 920px);
     max-height: calc(100vh - 24px);
     border-radius: 18px;
+  }
+
+  .learn-focus-header {
+    align-items: flex-start;
+  }
+
+  .learn-focus-actions {
+    flex-shrink: 0;
   }
 
   .learn-focus-content {
