@@ -2256,8 +2256,14 @@ html, body {
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   transition: all 0.2s ease;
 }
+.sidebar .syllabus-section-row:hover .syllabus-section,
 .sidebar .syllabus-section:hover, .syllabus-section:hover {
   background: var(--sidebar-hover) !important;
+  color: var(--sidebar-text-primary) !important;
+  border-left-color: #93C5FD !important;
+}
+.sidebar .syllabus-section-row:hover .syllabus-section-caret,
+.sidebar .syllabus-section-row:hover .syllabus-section-caret-placeholder {
   color: var(--sidebar-text-primary) !important;
 }
 .sidebar .syllabus-section.active, .syllabus-section.active {
