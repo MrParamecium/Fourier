@@ -190,7 +190,7 @@ const USERS_DIR = path.join(__dirname, 'users');
 try { if (!fs.existsSync(USERS_DIR)) fs.mkdirSync(USERS_DIR, { recursive: true }); } catch (_) {}
 
 const LESSON_CACHE_DIR = path.join(__dirname, '../tutor-materials/lesson-cache');
-const LESSON_CACHE_VERSION = 'v3'; // bumped: kc-container placeholder support
+const LESSON_CACHE_VERSION = 'v5'; // bumped: b64 quiz encoding
 try { if (!fs.existsSync(LESSON_CACHE_DIR)) fs.mkdirSync(LESSON_CACHE_DIR, { recursive: true }); } catch (_) {}
 
 /**
@@ -263,6 +263,54 @@ function writeUserMemory(uid, data) {
     const p = getUserMemoryPath(uid);
     if (!p) return;
     fs.writeFileSync(p, JSON.stringify(data, null, 2), 'utf8');
+}
+
+function deriveMemoryFromSessions(uid, sessions, existing = {}) {
+    const next = {
+        uid,
+        createdAt: existing.createdAt || new Date().toISOString(),
+        quiz: existing.quiz || {},
+        knownConcepts: [],
+        weakConcepts: [],
+        inferredStyle: [],
+        sessionSummaries: []
+    };
+
+    const knownSet = new Set();
+    const weakSet = new Set();
+    const styleSet = new Set(Array.isArray(existing.inferredStyle) ? existing.inferredStyle : []);
+    const summarySet = new Set();
+
+    (Array.isArray(sessions) ? sessions : []).forEach(session => {
+        if (!session || !Array.isArray(session.history)) return;
+        const sectionTitle = compactWhitespace(session.sectionTitle || session.sectionId || '');
+        const historyText = session.history
+            .map(msg => compactWhitespace(msg && msg.content ? msg.content : ''))
+            .filter(Boolean)
+            .join(' \n ')
+            .toLowerCase();
+
+        if (sectionTitle) {
+            summarySet.add(`${new Date(session.timestamp || Date.now()).toISOString().slice(0,10)}: Studied section "${sectionTitle}".`);
+        }
+
+        if (/step by step|step-by-step/.test(historyText)) styleSet.add('step_by_step');
+        if (/example/.test(historyText)) styleSet.add('example_first');
+        if (/draw|diagram|visual|plot|graph/.test(historyText)) styleSet.add('visual');
+        if (/principle|intuition|why /.test(historyText)) styleSet.add('principle_first');
+
+        if (/magnitude/.test(historyText)) weakSet.add('magnitude calculation');
+        if (/polar/.test(historyText)) weakSet.add('polar form conversion');
+        if (/real and imaginary|imaginary part|real part/.test(historyText)) weakSet.add('real and imaginary parts');
+        if (/complex plane|a\+jb|a \+ jb|a\+bi|a \+ bi/.test(historyText)) knownSet.add('complex number representation');
+    });
+
+    next.knownConcepts = [...knownSet].slice(-30);
+    next.weakConcepts = [...weakSet].filter(c => !knownSet.has(c)).slice(-20);
+    next.inferredStyle = [...styleSet];
+    next.sessionSummaries = [...summarySet].slice(-30);
+    next.lastUpdated = new Date().toISOString();
+    return next;
 }
 
 /**
@@ -1687,12 +1735,8 @@ async function blueprintToMarkdown(blocks, pageImages) {
             }
 
             case 'quiz_plan': {
-                const safeJson = JSON.stringify(block || {})
-                    .replace(/&/g, '&amp;')
-                    .replace(/"/g, '&quot;')
-                    .replace(/</g, '&lt;')
-                    .replace(/>/g, '&gt;');
-                const quizHtml = `<div class="kc-quiz-plan" data-quiz="${safeJson}" style="display:none;"></div>`;
+                const b64Json = Buffer.from(JSON.stringify(block || {})).toString('base64');
+                const quizHtml = `<div class="kc-quiz-plan" data-quiz-b64="${b64Json}" style="display:none;"></div>`;
                 parts.push(`%%KC_BLOCK%%${quizHtml}%%KC_END%%`);
                 break;
             }
@@ -1959,6 +2003,22 @@ const server = http.createServer(async (req, res) => {
             }
             return;
         }
+    }
+
+    if (pathname === '/api/memory/rebuild' && req.method === 'POST') {
+        try {
+            const data = await readJsonBody(req);
+            const uid = data.uid;
+            if (!uid) { res.writeHead(400); res.end(JSON.stringify({ error: 'Missing uid' })); return; }
+            const existing = readUserMemory(uid) || { uid, createdAt: new Date().toISOString() };
+            const rebuilt = deriveMemoryFromSessions(uid, data.sessions, existing);
+            writeUserMemory(uid, rebuilt);
+            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+            res.end(JSON.stringify({ ok: true, memory: rebuilt }));
+        } catch (err) {
+            res.writeHead(500); res.end(JSON.stringify({ error: err.message }));
+        }
+        return;
     }
 
     if (pathname === '/api/section' && req.method === 'POST') {

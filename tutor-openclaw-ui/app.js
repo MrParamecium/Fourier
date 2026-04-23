@@ -447,6 +447,68 @@ async function saveSessionSummary(summary) {
   } catch (_) {}
 }
 
+let recentConversationMenuState = null;
+
+function closeRecentConversationMenu() {
+  const menu = document.getElementById('recentConversationContextMenu');
+  if (menu) menu.remove();
+  recentConversationMenuState = null;
+}
+
+window.openRecentConversationMenu = function(timestamp, x, y) {
+  closeRecentConversationMenu();
+  recentConversationMenuState = { timestamp };
+
+  const menu = document.createElement('div');
+  menu.id = 'recentConversationContextMenu';
+  menu.style.cssText = [
+    'position: fixed',
+    `left: ${x}px`,
+    `top: ${y}px`,
+    'z-index: 9999',
+    'min-width: 148px',
+    'background: #FFFFFF',
+    'border: 1px solid #DBEAFE',
+    'border-radius: 10px',
+    'box-shadow: 0 14px 34px rgba(15, 23, 42, 0.18)',
+    'padding: 6px',
+    'display: flex',
+    'flex-direction: column',
+    'gap: 4px'
+  ].join(';');
+
+  menu.innerHTML = `
+    <button type="button" id="recentConversationDeleteAction" style="border:none;background:transparent;text-align:left;padding:8px 10px;border-radius:8px;font-size:12px;font-weight:600;color:#B91C1C;cursor:pointer;">Delete conversation</button>
+  `;
+
+  document.body.appendChild(menu);
+
+  const rect = menu.getBoundingClientRect();
+  if (rect.right > window.innerWidth - 8) menu.style.left = `${Math.max(8, window.innerWidth - rect.width - 8)}px`;
+  if (rect.bottom > window.innerHeight - 8) menu.style.top = `${Math.max(8, window.innerHeight - rect.height - 8)}px`;
+
+  const deleteBtn = document.getElementById('recentConversationDeleteAction');
+  if (deleteBtn) {
+    deleteBtn.addEventListener('mouseenter', () => {
+      deleteBtn.style.background = '#FEF2F2';
+    });
+    deleteBtn.addEventListener('mouseleave', () => {
+      deleteBtn.style.background = 'transparent';
+    });
+    deleteBtn.addEventListener('click', async (event) => {
+      event.stopPropagation();
+      const targetTs = recentConversationMenuState?.timestamp;
+      closeRecentConversationMenu();
+      if (!targetTs) return;
+      await window.deleteRecentConversation(targetTs);
+    });
+  }
+
+  setTimeout(() => {
+    document.addEventListener('click', closeRecentConversationMenu, { once: true });
+  }, 0);
+}
+
 // ── Language Toggle ──────────────────────────────────────────────────────────
 let currentBook = 'new'; // always 3rd Ed
 
@@ -4693,6 +4755,28 @@ function saveRecentConversations(sessions) {
   localStorage.setItem('tutorRecentSessions', JSON.stringify(Array.isArray(sessions) ? sessions : []));
 }
 
+async function rebuildUserMemoryFromRemainingSessions(sessions) {
+  const uid = getUid();
+  if (!uid) return;
+  try {
+    const res = await fetch(`${API_BASE}/api/memory/rebuild`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ uid, sessions })
+    });
+    const data = await res.json();
+    if (res.ok && data && data.memory) {
+      userMemory = data.memory;
+      if (userMemory && userMemory.quiz) {
+        localStorage.setItem('tutorQuiz', JSON.stringify(userMemory.quiz));
+      }
+      renderUserBadge();
+    }
+  } catch (err) {
+    console.warn('[recentConversations] failed to rebuild user memory:', err);
+  }
+}
+
 function summarizeRecentConversation(history = [], sectionTitle = '') {
   const cleaned = (history || [])
     .filter(m => m && typeof m.content === 'string' && m.content.trim())
@@ -4744,15 +4828,16 @@ function summarizeRecentConversation(history = [], sectionTitle = '') {
   return compact(sectionPrefix + 'Saved conversation', 64) || 'Saved conversation';
 }
 
-function deleteRecentConversation(timestamp) {
+async function deleteRecentConversation(timestamp) {
   const sessions = loadRecentConversations().filter(s => s.timestamp !== timestamp);
   saveRecentConversations(sessions);
   updateRecentConversationsUI();
+  await rebuildUserMemoryFromRemainingSessions(sessions);
 }
 
-window.deleteRecentConversation = function(timestamp) {
-  if (!window.confirm('Delete this saved conversation?')) return;
-  deleteRecentConversation(timestamp);
+window.deleteRecentConversation = async function(timestamp) {
+  if (!window.confirm('Delete this conversation permanently? This will also remove its impact from the user profile and memory.')) return;
+  await deleteRecentConversation(timestamp);
 };
 
 function saveCurrentLearnSession() {
@@ -4917,18 +5002,12 @@ function updateRecentConversationsUI() {
       onmousedown="this.style.transform='scale(0.98)'"
       onmouseup="this.style.transform='scale(1)'"
       onclick="window.loadHistoricalSession(${session.timestamp})"
+      oncontextmenu="event.preventDefault(); event.stopPropagation(); window.openRecentConversationMenu(${session.timestamp}, event.clientX, event.clientY)"
+      title="Right-click for more actions"
       >
         <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:8px;">
           <div style="font-weight: 600; font-size: 12px; color: #000; line-height:1.35; flex:1; min-width:0;">${escapeHtml(truncated)}</div>
-          <button
-            type="button"
-            title="Delete conversation"
-            aria-label="Delete conversation"
-            onclick="event.stopPropagation(); window.deleteRecentConversation(${session.timestamp})"
-            style="border:none; background:transparent; color:#64748B; cursor:pointer; padding:0; width:18px; height:18px; line-height:18px; font-size:14px; border-radius:4px; flex:0 0 auto;"
-            onmouseover="this.style.background='#DBEAFE'; this.style.color='#1D4ED8'"
-            onmouseout="this.style.background='transparent'; this.style.color='#64748B'"
-          >×</button>
+          <div style="font-size:10px; color:#94A3B8; flex:0 0 auto; user-select:none;">⋯</div>
         </div>
         <div style="font-size: 10px; color: #222; display: flex; justify-content: space-between; gap:8px; opacity:0.72;">
            <span>${escapeHtml(session.sectionTitle || 'General')}</span>
