@@ -2489,6 +2489,10 @@ function resetLearnKnowledgePointState() {
   if (learnKpNextBtn) learnKpNextBtn.disabled = true;
 }
 
+function compactWhitespace(value) {
+  return String(value || '').replace(/\s+/g, ' ').trim();
+}
+
 function parseLessonKnowledgePoints(html) {
   const source = String(html || '').trim();
   if (!source) return { points: [], trailingHtml: '' };
