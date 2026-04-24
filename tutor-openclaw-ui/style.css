@@ -1703,15 +1703,16 @@ html, body {
 
 .learn-kp-nav {
   position: relative;
-  flex: 1; /* Takes all remaining space minus gap and focus button */
+  flex: 1;
   min-width: 0;
   height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
 }
 
 .learn-kp-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
   width: 34px;
   height: 34px;
   border-radius: 999px;
@@ -1722,19 +1723,15 @@ html, body {
   cursor: pointer;
   transition: all 0.18s ease;
   flex-shrink: 0;
-  z-index: 2;
-}
-#learnKpPrevBtn {
-  left: 0;
-}
-#learnKpNextBtn {
-  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .learn-kp-btn:hover:not(:disabled) {
   background: #EFF6FF;
   border-color: #93C5FD;
-  transform: translateY(-50%) scale(1.05); /* maintain -50% Y */
+  transform: translateY(-1px);
 }
 .learn-kp-btn:disabled {
   opacity: 0.4;
@@ -1742,17 +1739,15 @@ html, body {
 }
 
 .learn-kp-meta {
-  position: absolute;
-  left: 54px; /* safe gap from left arrow */
-  right: 54px; /* safe gap from right arrow */
-  top: 50%;
-  transform: translateY(-50%);
+  flex: 1;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 2px;
+  min-width: 0;
+  overflow: hidden;
 }
 .learn-kp-label {
   font-size: 11px;
