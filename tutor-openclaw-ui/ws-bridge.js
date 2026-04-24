@@ -272,6 +272,67 @@ function writeLessonCache(sectionId, memory, lesson, bookSource = 'old') {
     }
 }
 
+function scoreLegacyLessonCacheFile(fileName, memory, bookSource = 'old') {
+    if (!fileName || !fileName.endsWith('.en.md')) return -Infinity;
+    if (fileName.includes(`.${LESSON_CACHE_VERSION}.`)) return -Infinity;
+
+    const q = normalizeQuizProfile((memory && memory.quiz) ? memory.quiz : {});
+    const sourceKey = bookSource === 'new' ? 'new' : 'old';
+    if (!fileName.startsWith(`${sourceKey}__`)) return -Infinity;
+
+    let score = 0;
+    if (q.math && fileName.includes(`|${q.math}|`)) score += 40;
+    if (q.timeline && fileName.includes(`|${q.timeline}`)) score += 10;
+
+    const track = q.track || 'standard';
+    if (track === 'cram') {
+        if (fileName.includes('__solid_b|')) score += 60;
+        if (fileName.includes('o:one_liner')) score += 35;
+        if (fileName.includes('o:exam_cheatsheet')) score += 20;
+        if (!fileName.includes('s:step_by_step')) score += 5;
+    } else if (track === 'foundation') {
+        if (fileName.includes('__going_for_a|')) score += 60;
+        if (fileName.includes('s:step_by_step')) score += 35;
+        if (fileName.includes('o:worked_example')) score += 25;
+        if (fileName.includes('s:principle_first')) score += 15;
+        if (fileName.includes('s:visual')) score += 10;
+    } else {
+        if (fileName.includes('__solid_b|')) score += 55;
+        if (fileName.includes('o:worked_example')) score += 30;
+        if (fileName.includes('s:example_first')) score += 10;
+        if (fileName.includes('o:one_liner')) score += 5;
+    }
+
+    if (fileName.includes('__going_for_a|') && track !== 'foundation') score -= 10;
+    if (fileName.includes('__solid_b|') && track === 'foundation') score -= 5;
+    return score;
+}
+
+function readLegacyLessonCacheFallback(sectionId, memory, bookSource = 'old') {
+    if (!memory || !memory.quiz) return null;
+    const normId = normalizeSectionId(sectionId);
+    const dir = path.join(LESSON_CACHE_DIR, normId);
+    if (!fs.existsSync(dir)) return null;
+
+    let best = null;
+    for (const fileName of fs.readdirSync(dir)) {
+        const score = scoreLegacyLessonCacheFile(fileName, memory, bookSource);
+        if (!Number.isFinite(score)) continue;
+        if (!best || score > best.score) best = { fileName, score };
+    }
+    if (!best || best.score < 0) return null;
+
+    try {
+        const targetKey = buildLessonCacheKey(memory, bookSource) || 'unknown';
+        const content = fs.readFileSync(path.join(dir, best.fileName), 'utf8');
+        console.warn(`[LessonCache] LEGACY FALLBACK: ${normId} / ${best.fileName} -> ${targetKey}`);
+        return content;
+    } catch (e) {
+        console.warn(`[LessonCache] LEGACY FALLBACK READ FAILED: ${normId} / ${best.fileName}: ${e.message}`);
+        return null;
+    }
+}
+
 function getUserMemoryPath(uid) {
     const safe = String(uid || '').replace(/[^a-zA-Z0-9_\-]/g, '_').slice(0, 64);
     if (!safe) return null;
@@ -2198,6 +2259,34 @@ const server = http.createServer(async (req, res) => {
                             subsection: p.subsection, title: p.title, summary: p.summary
                         })),
                         webSources: []
+                    }));
+                    return;
+                }
+
+                const legacyFallbackLesson = readLegacyLessonCacheFallback(sectionId, profileMemory, data.bookSource);
+                if (legacyFallbackLesson) {
+                    const normalizedLegacyLesson = convertLegacyQuickCheckToKcBlocks(legacyFallbackLesson);
+                    if (profileMemory) {
+                        writeLessonCache(sectionId, profileMemory, normalizedLegacyLesson, data.bookSource);
+                    }
+                    console.log(`[SECTION] Legacy fallback cache used for ${sectionId}.`);
+                    const prewarm = await prewarmLessonVariants(sectionId, sectionTitle, rawPages, profileMemory, data.bookSource === 'new' ? 'new' : 'old', language);
+                    res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+                    res.end(JSON.stringify({
+                        sectionId,
+                        sectionTitle,
+                        lesson: normalizedLegacyLesson,
+                        cached: true,
+                        fallback: 'legacy-cache',
+                        bookPages: bookPages.map(p => ({
+                            page: p.page,
+                            image: p.image,
+                            subsection: p.subsection,
+                            title: p.title,
+                            summary: p.summary
+                        })),
+                        webSources: [],
+                        prewarm
                     }));
                     return;
                 }
