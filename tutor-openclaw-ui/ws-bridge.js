@@ -590,8 +590,8 @@ async function updateUserMemoryFromQA(uid, question, answer, sectionId) {
 function serveStaticFile(res, filePath) {
     const ext = path.extname(filePath).toLowerCase();
     const contentType = MIME_TYPES[ext] || 'application/octet-stream';
-    // No-cache for JS/HTML to ensure fresh code always loads
-    const noCache = ['.js', '.html'].includes(ext);
+    // No-cache for JS/HTML/CSS to ensure fresh code always loads
+    const noCache = ['.js', '.html', '.css'].includes(ext);
 
     fs.readFile(filePath, (err, data) => {
         if (err) {
