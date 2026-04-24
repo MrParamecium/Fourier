@@ -282,7 +282,9 @@ function readUserMemory(uid) {
     const p = getUserMemoryPath(uid);
     if (!p) return null;
     try {
-        return JSON.parse(fs.readFileSync(p, 'utf8'));
+        const parsed = JSON.parse(fs.readFileSync(p, 'utf8'));
+        if (parsed && parsed.quiz) parsed.quiz = normalizeQuizProfile(parsed.quiz);
+        return parsed;
     } catch (_) {
         return null;
     }
@@ -352,9 +354,53 @@ function buildUserProfilePrompt(memory) {
     const quiz = normalizeQuizProfile(memory.quiz || {});
 
     const TRACK_MAP = {
-        cram: 'Content track: cram mode. Prioritize exam-likely points, must-know formulas, common traps, and the shortest path to scoring.',
-        standard: 'Content track: standard mode. Teach the core concept clearly, include one representative example, and add a quick check.',
-        foundation: 'Content track: foundation mode. Patch prerequisites first, use ultra-simple explanations, and move in very small steps.'
+        cram: [
+            'TRACK = CRAM.',
+            'This lesson must feel like a fast exam sprint, not a full lecture.',
+            'Open with: what gets tested, what to memorize, and what pattern to recognize.',
+            'Cut historical/background explanation unless it directly improves score on likely exam questions.',
+            'Prefer shortest-solution patterns, parameter-reading tricks, and common traps.',
+            'Keep derivations minimal; if a derivation is not needed for solving standard problems, compress it hard.'
+        ].join(' '),
+        standard: [
+            'TRACK = STANDARD.',
+            'This lesson should be the default balanced teaching version.',
+            'Structure each major idea as: concept -> one representative example -> quick check / exam note.',
+            'Explain enough to understand, but do not over-teach edge cases.',
+            'Keep the pace moderate and the structure clean.'
+        ].join(' '),
+        foundation: [
+            'TRACK = FOUNDATION.',
+            'This lesson must feel noticeably slower, safer, and more beginner-protective than standard.',
+            'Assume the student may be shaky on prerequisites and notation.',
+            'Before using a prerequisite idea (phase shift, complex-number angle, trig relation, etc.), briefly patch it first.',
+            'Use smaller steps, more explicit intermediate wording, and simpler sentences.',
+            'Do not sound like an advanced student should already know the setup.'
+        ].join(' ')
+    };
+    const TRACK_RULES = {
+        cram: [
+            'STRICT DIFFERENTIATION RULES FOR CRAM:',
+            '- The first page must foreground exam payoff and high-frequency question types.',
+            '- Prefer fewer knowledge-point pages and tighter summaries.',
+            '- Include explicit exam traps / fastest recognition rules.',
+            '- Avoid long intuition-building analogies unless they directly help answer exam questions faster.'
+        ].join('\n'),
+        standard: [
+            'STRICT DIFFERENTIATION RULES FOR STANDARD:',
+            '- Maintain the normal overview -> concept pages -> recap -> quiz flow.',
+            '- Include one representative worked example for the main idea.',
+            '- Keep explanation and exam utility balanced.',
+            '- This is the baseline version; neither rushed nor overly remedial.'
+        ].join('\n'),
+        foundation: [
+            'STRICT DIFFERENTIATION RULES FOR FOUNDATION:',
+            '- Add prerequisite patching before the main explanation when needed.',
+            '- Use more step-by-step unpacking than standard.',
+            '- Explicitly name what each symbol means before manipulating formulas.',
+            '- Prefer one tiny win at a time over dense compression.',
+            '- If standard would assume a leap, foundation must spell it out.'
+        ].join('\n')
     };
     const MATH_MAP = {
         all_solid: 'Math background: strong. You may use calculus, ODEs, and complex numbers normally.',
@@ -362,19 +408,20 @@ function buildUserProfilePrompt(memory) {
         math_weak: 'Math background: weak. Prefer intuition first, lighter algebra, and explicit intermediate steps.'
     };
     const STYLE_MAP = {
-        example_first: 'Presentation preference only: open with a concrete example before the abstraction when natural.',
-        principle_first: 'Presentation preference only: state the idea cleanly before giving examples.',
+        example_first: 'Presentation preference only: if possible, lead with a concrete example before abstraction.',
+        principle_first: 'Presentation preference only: state the clean rule first, then illustrate it.',
         visual: 'Presentation preference only: add visual cues, diagrams, or plotting suggestions when useful.',
-        step_by_step: 'Presentation preference only: break multi-step derivations into smaller visible steps.'
+        step_by_step: 'Presentation preference only: visibly show intermediate steps instead of skipping them.'
     };
     const OUTCOME_MAP = {
-        one_liner: 'Lightweight ending preference: include a one-line takeaway when natural.',
-        worked_example: 'Lightweight ending preference: surface a worked example if one already fits the lesson.',
-        exam_cheatsheet: 'Lightweight ending preference: end with a short exam-oriented reminder list when useful.',
-        formula_ref: 'Lightweight ending preference: include a concise formula reference box when relevant.'
+        one_liner: 'Lightweight ending preference only: include a one-line takeaway when natural.',
+        worked_example: 'Lightweight ending preference only: surface a worked example if one already fits the planned lesson.',
+        exam_cheatsheet: 'Lightweight ending preference only: end with a short exam-oriented reminder list when useful.',
+        formula_ref: 'Lightweight ending preference only: include a concise formula reference box when relevant.'
     };
 
     if (TRACK_MAP[quiz.track]) lines.push(TRACK_MAP[quiz.track]);
+    if (TRACK_RULES[quiz.track]) lines.push(TRACK_RULES[quiz.track]);
     if (MATH_MAP[quiz.math]) lines.push(MATH_MAP[quiz.math]);
 
     const styles = Array.isArray(quiz.style) ? quiz.style : (quiz.style ? [quiz.style] : []);
@@ -396,7 +443,7 @@ function buildUserProfilePrompt(memory) {
     }
 
     if (!lines.length) return '';
-    return `\n\n[Student Profile]\n${lines.join('\n')}`;
+    return `\n\n[Student Profile]\n${lines.join('\n\n')}`;
 }
 
 /**
@@ -2097,10 +2144,10 @@ const server = http.createServer(async (req, res) => {
             const language = (data.language === 'zh') ? 'zh' : 'en'; // default EN
             const uid = data.uid || null;
             const userMemory = uid ? readUserMemory(uid) : null;
-            // profileMemory: prefer uid-based memory; fall back to inline profileOverride
-            const profileMemory = userMemory
-                ? { ...userMemory, quiz: normalizeQuizProfile(userMemory.quiz || {}) }
-                : (data.profileOverride ? { quiz: normalizeQuizProfile(data.profileOverride) } : null);
+            const requestProfileMemory = data.profileOverride ? { quiz: normalizeQuizProfile(data.profileOverride) } : null;
+            // profileMemory: explicit override wins; otherwise fall back to persisted uid-based memory
+            const profileMemory = requestProfileMemory
+                || (userMemory ? { ...userMemory, quiz: normalizeQuizProfile(userMemory.quiz || {}) } : null);
             const userProfilePrompt = buildUserProfilePrompt(profileMemory);
             const { ocrDir: secOcrDir } = getBookDirs(data.bookSource);
 
