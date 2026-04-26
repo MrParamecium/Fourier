@@ -6366,7 +6366,13 @@ const learnExplainCol = learnExplainColEl || document.querySelector('.learn-expl
 const learnChatCol = document.getElementById('learnChatCol');
 let isResizing = false;
 
-if (learnResizer) {
+if (learnResizer && learnExplainCol && learnChatCol) {
+  const DEFAULT_CHAT_WIDTH = 420;
+  learnChatCol.style.flex = `0 0 ${DEFAULT_CHAT_WIDTH}px`;
+  learnChatCol.style.width = `${DEFAULT_CHAT_WIDTH}px`;
+  learnChatCol.style.minWidth = `${DEFAULT_CHAT_WIDTH}px`;
+  learnChatCol.style.maxWidth = `${DEFAULT_CHAT_WIDTH}px`;
+
   learnResizer.addEventListener('mousedown', (e) => {
     isResizing = true;
     document.body.style.cursor = 'col-resize';
@@ -6377,16 +6383,16 @@ if (learnResizer) {
     if (!isResizing) return;
     const containerWidth = learnExplainCol.parentElement.offsetWidth;
     let newWidth = e.clientX - learnExplainCol.getBoundingClientRect().left;
-    if (newWidth < 300) newWidth = 300;
-    if (newWidth > containerWidth - 300) newWidth = containerWidth - 300;
+    if (newWidth < 360) newWidth = 360;
+    if (newWidth > containerWidth - 360) newWidth = containerWidth - 360;
 
-    // Switch from flex-grow to fixed pixel widths for precision drag
     learnExplainCol.style.flex = 'none';
     learnExplainCol.style.width = newWidth + 'px';
     learnChatCol.style.flex = '1';
     learnChatCol.style.width = 'auto';
+    learnChatCol.style.minWidth = '360px';
+    learnChatCol.style.maxWidth = '';
 
-    // Automatically trigger resize/reflow for contained panels
     learnFollowupInput.style.width = '100%';
     autoResize(document.getElementById('learnFollowupInput'));
   });
