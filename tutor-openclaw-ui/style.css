@@ -4351,3 +4351,29 @@ body,
 .web-expand-btn:hover {
   color: #0F172A;
 }
+
+/* --- Fix white space around intro landing --- */
+#introLanding.intro-landing {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: #020617 !important;
+  z-index: 12000 !important;
+  overflow: hidden !important; 
+}
+#introWebglContainer {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
