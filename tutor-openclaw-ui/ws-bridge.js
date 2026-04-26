@@ -17,7 +17,7 @@ const path = require('path');
 const os = require('os');
 const { spawn } = require('child_process');
 
-const HTTP_PORT = 9000;
+const HTTP_PORT = process.env.PORT || 9000;
 const APP_NAME = 'Tutor Agent';
 const APP_URL = `http://localhost:${HTTP_PORT}`;
 
