@@ -2370,6 +2370,7 @@ html, body {
 }
 
 .learn-explain-bottom-rail {
+  position: absolute;
   position: static;
   height: 0;
   z-index: 17;
@@ -2377,9 +2378,10 @@ html, body {
 }
 
 .learn-lecture-page-indicator {
-  position: fixed;
-  right: 42.4%;
-  bottom: 14px;
+  position: absolute;
+  right: 20px;
+  top: 100%;
+  margin-top: -40px;
   padding: 7px 12px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.52);
@@ -2391,7 +2393,6 @@ html, body {
   line-height: 1;
   box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
   backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
 }
 
 .learn-focus-page-indicator {
@@ -2441,6 +2442,7 @@ html, body {
 }
 
 .learn-explain-scroll.textbook-mode .learn-explain-bottom-rail {
+  position: absolute;
   display: none !important;
 }
 
@@ -3951,10 +3953,11 @@ button:focus, input:focus, textarea:focus {
 
 /* Fix for chat column width and wrapping */
 .learn-chat-col {
-  flex: 0 0 420px;
-  width: 420px;
-  min-width: 420px;
-  max-width: 420px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-body);
+  position: relative;
   overflow: hidden;
 }
 .learn-explain-col {
@@ -4400,4 +4403,29 @@ body,
   margin: 0 !important;
   padding: 0 !important;
   box-sizing: border-box !important;
+}
+
+.learn-explain-bottom-rail {
+  position: relative;
+  height: auto;
+  z-index: 17;
+  pointer-events: none;
+  padding: 40px 0;
+  display: flex;
+  justify-content: flex-end;
+}
+.learn-lecture-page-indicator {
+  position: relative;
+  display: inline-block;
+  padding: 7px 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(219, 234, 254, 0.74);
+  color: #2563EB;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.04);
+  pointer-events: auto;
 }

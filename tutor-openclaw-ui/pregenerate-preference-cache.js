@@ -8,15 +8,16 @@ const http = require('http');
 const API_BASE = 'http://localhost:9000';
 const MAP_PATH = path.join(__dirname, 'section-page-map-new.json');
 
-const TRACKS = String(process.env.PREGEN_TRACKS || 'cram,standard,foundation')
+const TRACKS = String(process.env.PREGEN_TRACKS || 'cram,standard,top_score')
   .split(',')
   .map(s => s.trim())
   .filter(Boolean);
 const MATH = process.env.PREGEN_MATH || 'calculus_ok';
 const LIMIT = Number(process.env.PREGEN_LIMIT || 6);
 const SECTION_FILTER = String(process.env.PREGEN_SECTION_FILTER || '');
+const REQUEST_TIMEOUT_MS = Number(process.env.PREGEN_TIMEOUT_MS || 600000);
 
-function post(urlPath, body, timeoutMs = 240000) {
+function post(urlPath, body, timeoutMs = REQUEST_TIMEOUT_MS) {
   return new Promise((resolve, reject) => {
     const data = JSON.stringify(body);
     const req = http.request({
