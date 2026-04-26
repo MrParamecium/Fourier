@@ -1,0 +1,47 @@
+.hyperknow-links-container {
+    padding: 10px 16px;
+    background: #f7f9fa;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #eaeaea;
+}
+.hyperknow-links-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.hyperknow-source-pill {
+    display: inline-flex;
+    align-items: center;
+    background: white;
+    border: 1px solid #dcdcdc;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-size: 13px;
+    color: #444;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+.hyperknow-source-pill:hover {
+    background: #f0f0f0;
+    border-color: #ccc;
+}
+.hyperknow-favicon {
+    width: 14px;
+    height: 14px;
+    margin-right: 6px;
+    border-radius: 2px;
+}
+.hyperknow-title {
+    max-width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 500;
+}
+.hyperknow-domain {
+    color: #999;
+    margin-left: 6px;
+    font-size: 12px;
+}

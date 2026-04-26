@@ -7,15 +7,213 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,400;1,700&family=DM+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=177">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Space Grotesk"', '"Noto Sans SC"', 'sans-serif'],
+          },
+          colors: {
+            'ice-blue': '#38BDF8',
+            'twilight-purple': '#818CF8',
+            'star-silver': '#E2E8F0',
+            'deep-space': '#020617',
+            'nebula-dark': '#0F172A',
+          },
+          backgroundImage: {
+            'cosmic-gradient': 'linear-gradient(to right bottom, rgba(15,23,42,0.8), rgba(2,6,23,0.95))',
+            'text-aurora': 'linear-gradient(to right, #38BDF8, #818CF8, #E2E8F0)',
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="style.css?v=178">
   <link rel="icon" type="image/png" href="favicon.png">
 </head>
 <body>
+  <div id="introLanding" class="intro-landing">
+    <div id="introWebglContainer" aria-hidden="true"></div>
+
+    <nav class="fixed w-full z-50 glass-panel border-b-0 transition-all duration-300" id="introNavbar">
+      <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-3 cursor-pointer group">
+          <svg width="40" height="40" viewBox="0 0 100 100" class="aquarius-glow transition-transform duration-500 group-hover:rotate-12">
+            <defs>
+              <linearGradient id="introAquaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#38BDF8" />
+                <stop offset="50%" stop-color="#818CF8" />
+                <stop offset="100%" stop-color="#E2E8F0" />
+              </linearGradient>
+            </defs>
+            <path d="M15 45 L30 25 L50 45 L70 25 L85 45" fill="none" stroke="url(#introAquaGrad)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15 65 L30 45 L50 65 L70 45 L85 65" fill="none" stroke="url(#introAquaGrad)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="text-xl font-bold tracking-widest text-star-silver">AQUA<span class="text-ice-blue">RIUS</span></span>
+        </div>
+      </div>
+    </nav>
+
+    <main class="relative z-10">
+      <section class="min-h-screen flex items-center justify-center px-6 pt-20" id="introHero">
+        <div class="text-center max-w-4xl mx-auto relative">
+          <svg width="300" height="300" viewBox="0 0 100 100" class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 opacity-5 pointer-events-none">
+            <path d="M10 40 L30 20 L50 40 L70 20 L90 40" fill="none" stroke="#E2E8F0" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M10 60 L30 40 L50 60 L70 40 L90 60" fill="none" stroke="#E2E8F0" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+
+          <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 tracking-tight leading-tight mt-8">
+            <span class="text-gradient-aurora">Aquarius</span><br/>
+            <span class="text-3xl md:text-5xl text-star-silver font-light">Multimodal Intelligent Tutoring</span>
+          </h1>
+          <p class="text-lg md:text-xl text-star-silver/60 max-w-3xl mx-auto mb-10 font-light leading-relaxed">
+            Symbolizing original innovation and forward-thinking wisdom, Aquarius transcends the limitations of traditional tutoring. We use cutting-edge AI to inspire rational, independent cognition and break rigid educational boundaries.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <button id="introGetStartedBtn" onclick="document.getElementById('introLanding').style.display='none';" class="w-48 py-4 rounded-lg bg-gradient-to-r from-ice-blue/80 to-twilight-purple/80 text-white font-bold tracking-widest hover:shadow-[0_0_30px_rgba(129,140,248,0.5)] transition-shadow duration-300">
+              Get Started
+            </button>
+          </div>
+        </div>
+
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center opacity-50 animate-bounce">
+          <span class="text-xs tracking-widest mb-2 text-ice-blue">Scroll Down</span>
+          <div class="w-[1px] h-12 bg-gradient-to-b from-ice-blue to-transparent"></div>
+        </div>
+      </section>
+
+      <section class="w-full py-16 relative z-10 flex justify-center items-center px-6">
+        <div class="max-w-4xl mx-auto text-center relative group">
+          <div class="absolute -inset-4 bg-gradient-to-r from-ice-blue/10 via-twilight-purple/10 to-transparent blur-2xl opacity-50 group-hover:opacity-100 transition-opacity duration-700"></div>
+          <div class="h-px w-32 bg-gradient-to-r from-transparent via-ice-blue/50 to-transparent mx-auto mb-10"></div>
+          <p class="text-xl md:text-2xl text-star-silver/90 font-light italic leading-relaxed tracking-wide">
+            "Just like the boundless starry sky stretching infinitely, we deliver open, innovative, and progressive knowledge empowerment. Breaking rigid frameworks to inspire ultimate independent thinking."
+          </p>
+          <div class="h-px w-32 bg-gradient-to-r from-transparent via-twilight-purple/50 to-transparent mx-auto mt-10"></div>
+        </div>
+      </section>
+
+      <section class="min-h-screen flex items-center px-6 relative py-20" id="introPerception">
+        <div class="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div class="order-2 lg:order-1 relative">
+            <div class="glass-panel p-8 rounded-2xl relative overflow-hidden group">
+              <div class="absolute inset-0 bg-gradient-to-br from-ice-blue/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+              <div class="flex items-center gap-4 mb-6">
+                <div class="w-12 h-12 rounded-full bg-ice-blue/20 flex items-center justify-center border border-ice-blue/50">
+                  <span class="text-ice-blue font-bold">01</span>
+                </div>
+                <h3 class="text-2xl font-bold text-star-silver tracking-wider">Contextual Book Tracking</h3>
+              </div>
+              <div class="space-y-4">
+                <div class="h-2 w-full bg-deep-space rounded-full overflow-hidden">
+                  <div class="h-full bg-ice-blue w-3/4 rounded-full relative"><div class="absolute inset-0 bg-white/30 animate-pulse"></div></div>
+                </div>
+                <div class="flex justify-between text-xs text-star-silver/50 tracking-widest">
+                  <span>Contextual Analysis</span>
+                  <span class="text-ice-blue">99.8% Match</span>
+                </div>
+              </div>
+              <p class="mt-8 text-star-silver/70 font-light leading-relaxed">
+                Aquarius ingests the full textbook structure. It pinpoints your exact location within the syllabus and retrieves highly relevant concepts, formulas, and exact diagrams directly from the source material over 99.8% precision.
+              </p>
+            </div>
+          </div>
+          <div class="order-1 lg:order-2 text-right">
+            <h2 class="text-4xl md:text-5xl font-bold mb-4 text-gradient-aurora">Stage 1: Deep Textbook RAG</h2>
+            <p class="text-xl text-star-silver/80 font-light">Full-dimensional sensory input, making every session start with true understanding.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="min-h-screen flex items-center px-6 relative py-20" id="introGraph">
+        <div class="max-w-6xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+          <div class="text-left">
+            <h2 class="text-4xl md:text-5xl font-bold mb-4 text-gradient-aurora">Stage 2: Dual Cognitive Engine</h2>
+            <p class="text-xl text-star-silver/80 font-light">Constructing deep graph structures to locate coordinates in the vast sea of concepts.</p>
+          </div>
+          <div class="relative">
+            <div class="glass-panel p-8 rounded-2xl border-twilight-purple/20 relative group overflow-hidden">
+              <div class="absolute inset-0 bg-gradient-to-bl from-twilight-purple/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+              <div class="flex items-center gap-4 mb-6">
+                <div class="w-12 h-12 rounded-full bg-twilight-purple/20 flex items-center justify-center border border-twilight-purple/50">
+                  <span class="text-twilight-purple font-bold">02</span>
+                </div>
+                <h3 class="text-2xl font-bold text-star-silver tracking-wider">Gemini + Claude Collaboration</h3>
+              </div>
+              <ul class="space-y-4 mb-8 text-sm font-light text-star-silver/70">
+                <li class="flex items-center gap-3"><div class="w-1.5 h-1.5 rounded-full bg-twilight-purple shadow-[0_0_10px_#818CF8]"></div>Personalized micro-knowledge tracking</li>
+                <li class="flex items-center gap-3"><div class="w-1.5 h-1.5 rounded-full bg-twilight-purple shadow-[0_0_10px_#818CF8]"></div>Cross-disciplinary logical deduction</li>
+                <li class="flex items-center gap-3"><div class="w-1.5 h-1.5 rounded-full bg-twilight-purple shadow-[0_0_10px_#818CF8]"></div>Automated mapping of cognitive blind spots</li>
+              </ul>
+              <p class="text-star-silver/70 font-light leading-relaxed">
+                Two superior agents work in tandem: Agent A (Gemini) first plans the pedagogical blueprint and visual flow, while Agent B (Claude) executes the technical explanation and Python-generated visualizations, ensuring flawless logic.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="min-h-screen flex items-center px-6 relative py-20" id="introEngine">
+        <div class="max-w-6xl mx-auto w-full flex flex-col items-center text-center">
+          <div class="mb-16">
+            <h2 class="text-4xl md:text-6xl font-bold mb-6 text-gradient-aurora">Stage 3: Generative Visual Learning</h2>
+            <p class="text-xl text-star-silver/80 font-light max-w-2xl mx-auto">
+              We don't just throw walls of text at you. Aquarius constructs on-the-fly Python diagrams, dynamic visuals, and side-by-side textbook comparisons to guide your thoughts visually.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
+            <div class="glass-panel p-8 rounded-2xl hover:translate-y-[-10px] transition-transform duration-500">
+              <div class="mb-6 flex justify-center">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h4l3-9 5 18 3-9h5"/></svg>
+              </div>
+              <h4 class="text-lg font-bold text-ice-blue mb-3">Cram & Top-Score Tracks</h4>
+              <p class="text-sm text-star-silver/60 font-light">Whether you have two weeks to cram or aim for a perfect score, the system adapts syllabus delivery perfectly to your timeframe.</p>
+            </div>
+            <div class="glass-panel p-8 rounded-2xl hover:translate-y-[-10px] transition-transform duration-500 relative overflow-hidden">
+              <div class="absolute -top-10 -right-10 w-32 h-32 bg-twilight-purple/20 blur-3xl rounded-full pointer-events-none"></div>
+              <div class="mb-6 flex justify-center">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#818CF8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+              </div>
+              <h4 class="text-lg font-bold text-twilight-purple mb-3">Direct Math Visualization</h4>
+              <p class="text-sm text-star-silver/60 font-light">Complex equations and transforms are backed by instant visual rendering, grounding abstract mathematics in intuitive graphics.</p>
+            </div>
+            <div class="glass-panel p-8 rounded-2xl hover:translate-y-[-10px] transition-transform duration-500">
+              <div class="mb-6 flex justify-center">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#E2E8F0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              </div>
+              <h4 class="text-lg font-bold text-star-silver mb-3">Session Memory Continuity</h4>
+              <p class="text-sm text-star-silver/60 font-light">Continuous tracking of your weak spots. The tutor remembers what you struggled with yesterday and organically weaves reviews into today's lesson.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="border-t border-white/5 py-12 relative z-10 bg-deep-space/50 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+          <div class="flex items-center gap-2">
+            <svg width="24" height="24" viewBox="0 0 100 100">
+              <path d="M15 45 L30 25 L50 45 L70 25 L85 45" fill="none" stroke="#E2E8F0" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M15 65 L30 45 L50 65 L70 45 L85 65" fill="none" stroke="#E2E8F0" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="text-star-silver/60 text-sm tracking-widest font-bold">AQUARIUS</span>
+          </div>
+          <div class="text-star-silver/40 text-xs font-light tracking-wider">
+            &copy; 2026 Aquarius AI Lab. All Rights Reserved.
+            <br class="md:hidden"> Powered by Multi-Modal LLM.
+          </div>
+        </div>
+      </footer>
+    </main>
+  </div>
   <div class="app">
 
     <!-- ════════════════════ LEFT SIDEBAR (always visible) ════════════════════ -->
     <aside class="sidebar" id="leftSidebar" style="display:flex; flex-direction:column; min-height:0;">
-      <div style="flex: 0 0 60%; min-height: 0; display:flex; flex-direction:column; border-bottom: 1px solid #DBEAFE;">
+      <div style="flex: 0 0 60%; min-height: 0; display:flex; flex-direction:column; border-bottom: 1px solid var(--border);">
         <div class="sidebar-top">
           <div class="logo">
             <button class="menu-toggle" id="menuToggleBtn" title="Toggle Sidebar">
@@ -35,12 +233,12 @@
 
       </div>
 
-      <div style="flex: 0 0 40%; min-height: 0; overflow-y: auto; display:flex; flex-direction:column; background: #F8FBFF;">
+      <div style="flex: 0 0 40%; min-height: 0; overflow-y: auto; display:flex; flex-direction:column; background: transparent;">
         <div class="toc-header" style="padding: 10px 12px 6px; border-bottom: none; flex-shrink:0;">
-          <span class="toc-header-label" style="text-transform: none; letter-spacing: normal; font-weight: 600; font-size: 13px; color: #000;">Recent Conversations</span>
+          <span class="toc-header-label" style="text-transform: none; letter-spacing: normal; font-weight: 600; font-size: 13px; ">Recent Conversations</span>
         </div>
         <div id="recentConversationsNav" style="padding: 0 10px 10px; color: #111; font-size: 12px;">
-          <div style="opacity: 0.55; font-style: italic; color:#222;">No recent queries yet.</div>
+          <div style="opacity: 0.55; font-style: italic; ">No recent queries yet.</div>
         </div>
       </div>
     </aside>
@@ -67,12 +265,37 @@
 
       
       <div class="welcome" id="welcomeScreen">
-        <div class="welcome-inner">
-          <div class="welcome-tag"></div>
-          <h1 class="welcome-h1"></h1>
-          <p class="welcome-sub"></p>
+        <!-- Aura background effects -->
+        <div style="position:absolute; top:-20%; left:20%; width:60vw; height:60vh; background:radial-gradient(circle, rgba(56,189,248,0.15) 0%, rgba(2,6,23,0) 70%); filter:blur(40px); pointer-events:none;"></div>
+        <div style="position:absolute; bottom:-10%; right:10%; width:50vw; height:50vh; background:radial-gradient(circle, rgba(129,140,248,0.15) 0%, rgba(2,6,23,0) 70%); filter:blur(60px); pointer-events:none;"></div>
+        
+        <div class="welcome-inner" style="position:relative; z-index:10; max-width:1100px; width:100%; display:flex; flex-direction:row; align-items:center; justify-content:center; gap:64px; padding:40px;">
+          <!-- Left: Book Cover -->
+          <div style="flex:0 0 350px; display:flex; justify-content:center; perspective:1000px;">
+            <div style="background:var(--border); width:100%; aspect-ratio:3/4; border-radius:8px; box-shadow:0 20px 40px rgba(15,23,42,0.1), 0 0 0 1px rgba(15,23,42,0.05); overflow:hidden; position:relative; transform:rotateY(5deg) scale(0.95); transition:transform 0.4s ease;">
+              <!-- Book Image Placeholder - Will map to the actual covers -->
+              <img src="latest_cover.png" style="width:100%; height:100%; object-fit:cover; display:block;" onerror="this.src='')" />
+              <!-- Book Spine effect -->
+              <div style="position:absolute; top:0; left:0; bottom:0; width:12px; background:linear-gradient(to right, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 100%);"></div>
+            </div>
+          </div>
+          
+          <!-- Right: Text & Search Box -->
+          <div style="flex:1; display:flex; flex-direction:column; align-items:flex-start; text-align:left;">
+          
+            <h1 style="font-family:'Inter', sans-serif; font-size:42px; font-weight:700; color:var(--text-primary); letter-spacing:-1px; margin:0 0 16px; line-height:1.2;">
+              Linear Systems & Signals
+            </h1>
+            
+            <p style="font-size:16px; color:var(--text-secondary); max-width:500px; margin:0 0 24px; line-height:1.6; font-weight:500;">
+              Interactive deep learning book with generative visualizations, code, and dynamic math math.
+            </p>
+            
+            <div style="display:flex; align-items:center; gap:16px; margin-bottom:48px;">
+               <span style="font-size:13px; font-weight:600; color:var(--text-secondary); background:var(--border); padding:6px 12px; border-radius:6px; letter-spacing:0.5px;">B.P. LATHI • 3RD EDITION</span>
+            </div>
 
-          <div class="search-box" id="searchBox">
+          <div class="search-box" id="searchBox" style="margin:0 !important; max-width:600px !important;">
             <div class="attach-preview" id="attachPreviewMain"></div>
             <div class="search-box-row">
               <button class="attach-btn" id="attachBtnMain" title="Attach image (jpg/png/gif/webp) or PDF — max 20MB">
@@ -94,9 +317,10 @@
           </div>
           <input type="file" id="fileInputMain" accept="image/*,.pdf" style="display:none">
 
-          <div class="chips" id="quickChips"></div>
-        </div>
-      </div>
+          <div class="chips" id="quickChips" style="margin-top: 16px;"></div>
+          </div> <!-- Close Text & Search Box column -->
+        </div> <!-- Close welcome-inner -->
+      </div> <!-- Close welcomeScreen -->
 
       
       <div class="answer hidden" id="answerScreen">
@@ -159,7 +383,7 @@
         <!-- Learn Topbar (section title + close) -->
         <div class="learn-topbar">
           <div class="learn-topbar-left">
-            <span class="learn-badge">Learning Mode</span>
+            <span class="learn-badge" id="learnModeBadge">LEARNING MODE</span>
             <h2 class="learn-title" id="learnTitle">Section Title</h2>
           </div>
           <button class="learn-close" id="learnClose">✕ Exit</button>
@@ -167,7 +391,7 @@
 
         <!-- Intro Card -->
         <div class="learn-intro-card" id="learnIntroCard">
-          <div class="learn-intro-img-wrap" id="learnIntroImgWrap" style="width:100%;max-width:340px;margin:0 auto 18px;border-radius:14px;overflow:hidden;background:#F1F5F9;height:160px;display:flex;align-items:center;justify-content:center;font-size:80px;"></div>
+          <div class="learn-intro-img-wrap" id="learnIntroImgWrap" style="width:100%;max-width:340px;margin:0 auto 18px;border-radius:14px;overflow:hidden;background: transparent;height:160px;display:flex;align-items:center;justify-content:center;font-size:80px;"></div>
           <div class="learn-intro-meta" id="learnIntroMeta"></div>
           <p class="learn-intro-text" id="learnIntroText"></p>
           <button class="learn-start-btn" id="learnStartBtn">
@@ -214,6 +438,11 @@
             <!-- Left: Explanation (The Lesson) -->
             <div class="learn-explain-col" id="learnExplainCol" style="border-right: 1px solid var(--border);">
               <div class="learn-explain-toolbar" id="learnExplainToolbar">
+                <div class="learn-view-selector" id="learnViewSelector" style="display:flex; background: rgba(255,255,255,0.05); padding:2px; border-radius:6px; margin-right:12px; gap:2px;">
+                  <button class="learn-view-btn active" id="btnLectureView" style="padding:4px 10px; border:none; border-radius:4px; font-size:12px; font-weight:600; cursor:pointer; background: transparent;  box-shadow:0 1px 2px rgba(0,0,0,0.05);">Lecture</button>
+                  <button class="learn-view-btn" id="btnTextbookView" style="padding:4px 10px; border:none; border-radius:4px; font-size:12px; font-weight:600; cursor:pointer; background:transparent; color:#64748B;">Textbook</button>
+                </div>
+
                 <div class="learn-kp-nav">
                   <button class="learn-kp-btn" id="learnKpPrevBtn" title="Previous knowledge point">←</button>
                   <div class="learn-kp-meta">
@@ -227,9 +456,24 @@
                   <span>Focus</span>
                 </button>
               </div>
-              <div class="learn-explain-scroll" id="learnExplainScroll">
+              <div class="learn-explain-scroll" id="learnExplainScroll" style="position:relative;">
+                <div class="learn-explain-overlay-rail" id="learnExplainOverlayRail">
+                  <button class="lecture-overlay-btn lecture-overlay-btn-left" id="lecturePrevOverlayBtn" title="Previous knowledge point">←</button>
+                  <button class="lecture-overlay-btn lecture-overlay-btn-right" id="lectureNextOverlayBtn" title="Next knowledge point">→</button>
+                  <button class="lecture-focus-overlay-btn" id="lectureFocusOverlayBtn" title="Focus mode">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M16 3h3a2 2 0 0 1 2 2v3"/><path d="M8 21H5a2 2 0 0 1-2-2v-3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+                  </button>
+                </div>
+                <div class="learn-explain-bottom-rail" id="learnExplainBottomRail">
+                  <div class="learn-lecture-page-indicator" id="learnLecturePageIndicator">1 / 1</div>
+                </div>
                 <div class="learn-explain-body" id="learnExplainContent">
                   <p class="ghost">Lesson is being prepared...</p>
+                </div>
+                <!-- Textbook overlay (hidden by default) -->
+                <div class="learn-book-pages carousel hidden" id="learnBookOverlay" style="position:absolute; top:0; left:0; right:0; bottom:0; background: transparent; z-index:10; overflow-y:auto; flex-direction:column; align-items:center;">
+                    <!-- Pages will be injected here -->
+                    <div style="padding:40px; text-align:center; color:#64748B;">Textbook page loading...</div>
                 </div>
                 <!-- Web sources section -->
                 <div class="learn-web-section hidden" id="learnWebSection">
@@ -261,7 +505,7 @@
                   <textarea class="learn-followup-input" id="learnFollowupInput"
                     placeholder="Have a question? Ask here…" rows="1"></textarea>
                   
-                  <select id="answerLengthToggleLearn" class="select-css" title="Explanation Style" style="background: transparent; border: 1px solid transparent; font-size: 12px; font-weight: 500; font-family: 'Inter', sans-serif; color: var(--text-secondary); cursor: pointer; outline: none; appearance: none; -webkit-appearance: none; padding: 4px 6px; border-radius: 4px;">
+                  <select id="answerLengthToggleLearn" class="select-css" title="Explanation Style" style="background: transparent; border: 1px solid transparent; font-size: 12px; font-weight: 500; font-family: 'Inter', sans-serif;  cursor: pointer; outline: none; appearance: none; -webkit-appearance: none; padding: 4px 6px; border-radius: 4px;">
                     <option value="fast">Fast</option>
                     <option value="balanced" selected>Balanced</option>
                     <option value="detailed">Detailed</option>
@@ -291,14 +535,14 @@
     </main>
 
     <!-- ════════════════════ RIGHT TOC SIDEBAR (always visible) ════════════════════ -->
-    <aside class="toc-sidebar" id="tocSidebar" style="display: flex; flex-direction: column; background:#FFFFFF;">
+    <aside class="toc-sidebar" id="tocSidebar" style="display: flex; flex-direction: column; background: transparent;">
       <!-- Top: User info -->
-      <div id="userBadgeContainer" style="padding:12px 12px 8px; border-bottom: 1px solid #DBEAFE; flex-shrink: 0;"></div>
+      <div id="userBadgeContainer" style="padding:12px 12px 8px; border-bottom: 1px solid var(--border); flex-shrink: 0;"></div>
       
       <!-- Upper Section: TOC (60%) -->
-      <div style="flex: 0 0 60%; overflow-y: auto; display: flex; flex-direction: column; border-bottom: 1px solid #DBEAFE; min-height: 0;">
+      <div style="flex: 0 0 60%; overflow-y: auto; display: flex; flex-direction: column; border-bottom: 1px solid var(--border); min-height: 0;">
         <div class="toc-header" id="tocHeader" style="cursor: pointer; display: flex; align-items: center; justify-content: space-between; padding: 16px; border-bottom: none; user-select: none;">
-          <span class="toc-header-label" style="text-transform: none; letter-spacing: normal; font-weight: 600; font-size: 13px; color: #000;" id="tocHeaderTitle">Table of Contents</span>
+          <span class="toc-header-label" style="text-transform: none; letter-spacing: normal; font-weight: 600; font-size: 13px; " id="tocHeaderTitle">Table of Contents</span>
           <svg id="tocHeaderChevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.2s; color: #94A3B8;"><polyline points="6 9 12 15 18 9"></polyline></svg>
         </div>
         <nav class="toc-nav" id="tocNav" style="flex: 1; padding-top: 0;">
@@ -332,6 +576,27 @@
         </div>
       </div>
       <div class="learn-focus-content learn-explain-body" id="learnFocusContent"></div>
+      <div class="learn-focus-page-indicator" id="learnFocusPageIndicator">1 / 1</div>
+    </div>
+  </div>
+
+  <div class="learn-focus-modal hidden" id="textbookFocusModal">
+    <div class="learn-focus-backdrop" id="textbookFocusBackdrop"></div>
+    <div class="learn-focus-dialog textbook-focus-dialog" id="textbookFocusDialog">
+      <div class="learn-focus-header textbook-focus-header">
+        <div class="learn-focus-headings">
+          <div class="learn-focus-eyebrow">Textbook</div>
+          <div class="learn-focus-title" id="textbookFocusTitle">Original Pages</div>
+        </div>
+        <div class="learn-focus-actions">
+          <button class="learn-focus-close" id="textbookFocusClose" aria-label="Close textbook focus">✕</button>
+          <button class="learn-focus-nav-btn" id="textbookFocusZoomInBtn" title="Zoom in">＋</button>
+          <button class="learn-focus-nav-btn" id="textbookFocusZoomResetBtn" title="Reset zoom">1.5×</button>
+          <button class="learn-focus-nav-btn" id="textbookFocusZoomOutBtn" title="Zoom out">－</button>
+        </div>
+      </div>
+      <div class="learn-focus-content textbook-focus-content" id="textbookFocusContent"></div>
+      <div class="learn-focus-page-indicator textbook-focus-page-indicator" id="textbookFocusPageIndicator">1 / 1</div>
     </div>
   </div>
 
@@ -356,7 +621,14 @@
     };
     window.preprocessMath = (text) => {
       if (!text) return text;
-      return text.replace(/(?<!\$)\$(?!\$)(.+?)(?<!\$)\$(?!\$)/g, '\\($1\\)');
+      return String(text)
+        // Normalize double-escaped MathJax delimiters from JSON/model output.
+        .replace(/\\\\\(/g, '\\(')
+        .replace(/\\\\\)/g, '\\)')
+        .replace(/\\\\\[/g, '\\[')
+        .replace(/\\\\\]/g, '\\]')
+        // Convert inline $...$ into MathJax-friendly \(...\)
+        .replace(/(?<!\$)\$(?!\$)(.+?)(?<!\$)\$(?!\$)/g, '\\($1\\)');
     };
   </script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -372,7 +644,7 @@
 
   <!-- 用户画像问卷 弹窗 -->
   <div id="quizOverlay" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(15,23,42,0.6);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;">
-    <div id="quizCard" style="background:#fff;border-radius:20px;padding:40px 48px;max-width:560px;width:90%;box-shadow:0 24px 60px rgba(15,23,42,0.18);position:relative;">
+    <div id="quizCard" style="background: transparent;border-radius:20px;padding:40px 48px;max-width:560px;width:90%;box-shadow:0 24px 60px rgba(15,23,42,0.18);position:relative;">
       <div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#94A3B8;margin-bottom:8px;">Quick Setup • 30 seconds</div>
       <h2 style="font-size:22px;font-weight:700;color:#0F172A;margin:0 0 6px;">Let's personalize your experience</h2>
       <p style="font-size:14px;color:#64748B;margin:0 0 32px;">Your answers help the AI tutor explain things exactly how you learn best.</p>
@@ -386,7 +658,7 @@
 
   <!-- 登录弹窗 -->
   <div id="authOverlay" style="display:none;position:fixed;inset:0;z-index:10000;background:rgba(15,23,42,0.75);backdrop-filter:blur(8px);align-items:center;justify-content:center;">
-    <div style="background:#fff;border-radius:24px;padding:44px 48px;max-width:440px;width:92%;box-shadow:0 32px 80px rgba(15,23,42,0.22);text-align:center;">
+    <div style="background: transparent;border-radius:24px;padding:44px 48px;max-width:440px;width:92%;box-shadow:0 32px 80px rgba(15,23,42,0.22);text-align:center;">
       <div style="font-size:30px;font-family:'Playfair Display',serif;font-weight:700;font-style:italic;color:#0F172A;margin-bottom:6px;">Aquarius</div>
       <p style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:#94A3B8;margin:0 0 8px;">Signal Processing &amp; Linear Systems</p>
       <p style="font-size:15px;color:#475569;margin:0 0 36px;line-height:1.6;">Sign in to save your progress and continue learning with Aquarius.</p>
@@ -447,13 +719,13 @@
   <div id="kcModalWrapper" style="flex:1 1 auto; display:flex; flex-direction:row; overflow:hidden;">
     
     <!-- Left Column (Question & Answer) -->
-    <div id="kcLeftCol" style="flex:1; width:60%; display:flex; flex-direction:column; overflow:hidden; background:#fff;">
+    <div id="kcLeftCol" style="flex:1; width:60%; display:flex; flex-direction:column; overflow:hidden; background: transparent;">
       <div id="kcModalBody" style="flex:1; overflow-y:auto; padding:24px 22px 24px;">
         <!-- Question -->
         <p id="kcQuestion" style="font-size:15px; color:#1E293B; line-height:1.7; margin:0 0 20px;"></p>
         <!-- Answer reveal -->
         <button id="kcRevealBtn" style="
-          background:#fff; border:1px solid #CBD5E1; padding:9px 18px;
+          background: transparent; border:1px solid #CBD5E1; padding:9px 18px;
           border-radius:7px; font-weight:600; color:#475569; cursor:pointer;
           font-size:14px; transition:all 0.2s;
         ">Show Answer & Hint</button>
@@ -484,7 +756,7 @@
     </div> <!-- End Left Column -->
 
   <!-- Resizer Handler -->
-  <div id="kcResizer" style="width:6px; background:#E2E8F0; cursor:col-resize; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:background 0.2s;">
+  <div id="kcResizer" style="width:6px; background: rgba(255,255,255,0.05); cursor:col-resize; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:background 0.2s;">
     <div style="height:20px; width:2px; background:#CBD5E1; border-radius:1px;"></div>
   </div>
 
@@ -495,7 +767,7 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         ASK HAIKU ABOUT THIS ITEM
       </div>
-      <div id="kcAskReply" style="display:none; margin-bottom:16px; font-size:14px; color:#334155; line-height:1.7; background:#fff; padding:16px; border-radius:10px; border:1px solid #E2E8F0; box-shadow:0 1px 3px rgba(0,0,0,0.02);"></div>
+      <div id="kcAskReply" style="display:none; margin-bottom:16px; font-size:14px; color:#334155; line-height:1.7; background: transparent; padding:16px; border-radius:10px; border:1px solid #E2E8F0; box-shadow:0 1px 3px rgba(0,0,0,0.02);"></div>
       <div id="kcAskLoading" style="display:none; margin-bottom:16px; font-size:13px; color:#64748B; text-align:center; padding:12px; background:rgba(255,255,255,0.5); border-radius:8px; border:1px dashed #CBD5E1;">Haiku is analyzing the question...</div>
       
       <div style="margin-top:auto; padding-top:16px;">
@@ -511,6 +783,9 @@
   </div> <!-- End Wrapper -->
 </div>
 
-  <script src="app.js?v=20260424-11"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="app.js?v=20260426-landing-1"></script>
 </body>
 </html>

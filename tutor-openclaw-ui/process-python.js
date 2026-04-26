@@ -3,15 +3,17 @@ const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
 
+const PYTHON_BIN = process.env.TUTOR_PYTHON_BIN || '/Library/Frameworks/Python.framework/Versions/3.12/bin/python3';
+
 function runPython3(scriptPath, arg, timeoutMs = 30000) {
     return new Promise((resolve, reject) => {
-        const child = spawn('python3', [scriptPath, arg], {
-            env: process.env,
+        const child = spawn(PYTHON_BIN, [scriptPath, arg], {
+            env: { ...process.env, MPLBACKEND: 'Agg' },
             stdio: ['ignore', 'pipe', 'pipe']
         });
         let stdout = '';
         let stderr = '';
-        const timer = setTimeout(() => { child.kill('SIGKILL'); reject(new Error('python3 timeout')); }, timeoutMs);
+        const timer = setTimeout(() => { child.kill('SIGKILL'); reject(new Error(`${PYTHON_BIN} timeout`)); }, timeoutMs);
         child.stdout.on('data', d => { stdout += d.toString('utf8'); });
         child.stderr.on('data', d => { stderr += d.toString('utf8'); });
         child.on('error', e => { clearTimeout(timer); reject(e); });
@@ -115,4 +117,4 @@ async function processEmbeddedPython(markdown, genDir) {
     return resultMarkdown;
 }
 
-module.exports = { processEmbeddedPython };
+module.exports = { processEmbeddedPython, normalizePythonCode };
