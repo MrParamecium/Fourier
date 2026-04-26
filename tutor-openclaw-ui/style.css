@@ -4374,7 +4374,8 @@ body,
   padding: 0 !important;
   background: #020617 !important;
   z-index: 12000 !important;
-  overflow: hidden !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
 }
 #introWebglContainer {
   position: absolute !important;
