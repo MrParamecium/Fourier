@@ -6343,18 +6343,20 @@ setTimeout(() => {
   const menuToggleBtn = document.getElementById('menuToggleBtn');
   const floatToggleBtn = document.getElementById('floatToggleBtn');
   const appContainer = document.querySelector('.app');
-
   const leftSidebar = document.getElementById('leftSidebar');
+  const tocSidebar = document.getElementById('tocSidebar');
 
   if (menuToggleBtn && leftSidebar) {
     menuToggleBtn.addEventListener('click', () => {
       leftSidebar.classList.add('collapsed');
+      if (tocSidebar) tocSidebar.classList.add('collapsed');
       appContainer.classList.add('sidebar-collapsed');
     });
   }
   if (floatToggleBtn && leftSidebar) {
     floatToggleBtn.addEventListener('click', () => {
       leftSidebar.classList.remove('collapsed');
+      if (tocSidebar) tocSidebar.classList.remove('collapsed');
       appContainer.classList.remove('sidebar-collapsed');
     });
   }
