@@ -16,9 +16,6 @@ function hideIntroLanding(persist = true) {
 }
 
 function shouldShowIntroLanding() {
-  try {
-    if (localStorage.getItem(INTRO_LANDING_SEEN_KEY) === '1') return false;
-  } catch (e) {}
   return true;
 }
 
