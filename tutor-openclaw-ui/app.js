@@ -5,7 +5,10 @@ let introScene = null;
 
 function hideIntroLanding(persist = true) {
   const intro = document.getElementById('introLanding');
-  if (intro) intro.classList.add('hidden');
+  if (intro) {
+    intro.classList.add('hidden');
+    intro.style.display = '';
+  }
   if (persist) {
     try { localStorage.setItem(INTRO_LANDING_SEEN_KEY, '1'); } catch (_) {}
   }
@@ -29,6 +32,7 @@ function initIntroLanding() {
     return;
   }
 
+  intro.style.display = '';
   intro.classList.remove('hidden');
   button.addEventListener('click', () => {
     hideIntroLanding(true);

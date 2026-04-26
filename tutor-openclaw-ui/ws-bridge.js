@@ -17,6 +17,31 @@ const path = require('path');
 const os = require('os');
 const { spawn } = require('child_process');
 
+function loadLocalEnvFile() {
+    try {
+        const envPath = path.join(__dirname, '.env');
+        if (!fs.existsSync(envPath)) return;
+        const raw = fs.readFileSync(envPath, 'utf8');
+        raw.split(/\r?\n/).forEach((line) => {
+            const trimmed = line.trim();
+            if (!trimmed || trimmed.startsWith('#')) return;
+            const eqIndex = trimmed.indexOf('=');
+            if (eqIndex === -1) return;
+            const key = trimmed.slice(0, eqIndex).trim();
+            if (!key || process.env[key]) return;
+            let value = trimmed.slice(eqIndex + 1).trim();
+            if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+                value = value.slice(1, -1);
+            }
+            process.env[key] = value;
+        });
+    } catch (err) {
+        console.warn('[env] failed to load local .env:', err.message);
+    }
+}
+
+loadLocalEnvFile();
+
 const HTTP_PORT = process.env.PORT || 9000;
 const APP_NAME = 'Tutor Agent';
 const APP_URL = `http://localhost:${HTTP_PORT}`;
