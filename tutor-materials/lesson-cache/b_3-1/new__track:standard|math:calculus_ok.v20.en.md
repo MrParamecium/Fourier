@@ -3,29 +3,29 @@
 
 > **Section Objective:** Recognize and sketch monotonic exponentials quickly using the time constant, without plotting many points.
 
-Consider \ (x(t) = e^{-2t}\). At \ (t = 0\) the value is exactly 1. At \ (t = 0.5\) it has already fallen to about 0.37. At \ (t = 1\) it falls again to about 0.135. Three points, and the shape is already clear.
+Consider \(x(t) = e^{-2t}\). At \(t = 0\) the value is exactly 1. At \(t = 0.5\) it has already fallen to about 0.37. At \(t = 1\) it falls again to about 0.135. Three points, and the shape is already clear.
 
 This section teaches you to read that pattern instantly. The key tool is the **time constant**: a single number that tells you how fast the curve drops or rises. Once you know the initial value and the time constant, you can sketch any monotonic exponential in seconds — no calculator needed. On exams, that speed matters. The goal here is to build that reflex.
 
 ## 1. Decay vs Growth
 
-For any \ (a > 0\), the sign in the exponent decides everything:
+For any \(a > 0\), the sign in the exponent decides everything:
 
-- \ (e^{-at}\): as \ (t\) increases, the exponent becomes more negative, so the value **decreases**.
-- \ (e^{at}\): as \ (t\) increases, the exponent becomes more positive, so the value **increases**.
+- \(e^{-at}\): as \(t\) increases, the exponent becomes more negative, so the value **decreases**.
+- \(e^{at}\): as \(t\) increases, the exponent becomes more positive, so the value **increases**.
 
-Both signals start at exactly 1 when \ (t = 0\), because \ (e^0 = 1\) in both cases. After that, they move in opposite directions.
+Both signals start at exactly 1 when \(t = 0\), because \(e^0 = 1\) in both cases. After that, they move in opposite directions.
 
-**Mini-example:** Compare \ (e^{-2t}\) and \ (e^{2t}\) at two moments:
+**Mini-example:** Compare \(e^{-2t}\) and \(e^{2t}\) at two moments:
 
-| \ (t\) | \ (e^{-2t}\) | \ (e^{2t}\) |
+| \(t\) | \(e^{-2t}\) | \(e^{2t}\) |
 |--------|-------------|------------|
 | 0 | 1 | 1 |
-| 0.5 | \ (\approx 0.37\) | \ (\approx 2.72\) |
+| 0.5 | \(\approx 0.37\) | \(\approx 2.72\) |
 
 ### COMMON MISTAKE
 
-Do not confuse a **negative exponent** with a **negative signal**. \ (e^{-at}\) is always strictly positive — it never crosses zero or goes negative. The word "decay" means the value shrinks toward zero, not that it becomes negative.
+Do not confuse a **negative exponent** with a **negative signal**. \(e^{-at}\) is always strictly positive — it never crosses zero or goes negative. The word "decay" means the value shrinks toward zero, not that it becomes negative.
 
 %%KC_BLOCK%%<div class="kc-visual-meta" data-visual-kind="generate_image" data-teaching-role="comparison_anchor" data-visual-use-b64="eyJjcmFtIjoiVXNlIHRoaXMgdmlzdWFsIHRvIGxvY2sgaW4gdGhlIGZhc3QgcmVjb2duaXRpb24gcGF0dGVybjogZV57LWF0fSBnb2VzIGRvd24sIGVee2F0fSBnb2VzIHVwLiIsInN0YW5kYXJkIjoiVXNlIHRoaXMgdmlzdWFsIHRvIGNvbXBhcmUgdGhlIHR3byBzaGFwZXMgYW5kIGNvbm5lY3QgZWFjaCB0byB0aGUgc2lnbiBpbiB0aGUgZXhwb25lbnQuIiwidG9wX3Njb3JlIjoiVXNlIHRoaXMgdmlzdWFsIHRvIHN0cmVzcyB0aGF0IHRoZSBzYW1lIHBhcmFtZXRlciBhIGNvbnRyb2xzIHRoZSByYXRlLCB3aGlsZSB0aGUgc2lnbiBjb250cm9scyBkZWNheSB2ZXJzdXMgZ3Jvd3RoLiJ9" style="display:none;"></div>%%KC_END%%
 *🎨 Side-by-side comparison: the sign in the exponent is the only difference, yet it completely determines whether the signal decays or grows.*
@@ -36,32 +36,32 @@ Do not confuse a **negative exponent** with a **negative signal**. \ (e^{-at}\) 
 *This figure shows how a decaying exponential drops by the same factor \(1/e\) over each time interval of length \(1/a\), which is why the time constant makes sketching fast.*
 
 $$\tau = \frac{1}{a}, \qquad \frac{e^{-a t_2}}{e^{-a t_1}} = e^{-a(t_2-t_1)} = \frac{1}{e}\ \text{when}\ t_2-t_1=\frac{1}{a}$$
-*The time constant is \ (\tau = 1/a\). Every time \ (t\) advances by one time constant \ (1/a\), a decaying exponential is multiplied by \ (1/e \approx 0.368\) — it drops to about 37% of whatever value it had at the start of that interval.*
+*The time constant is \(\tau = 1/a\). Every time \(t\) advances by one time constant \(1/a\), a decaying exponential is multiplied by \(1/e \approx 0.368\) — it drops to about 37% of whatever value it had at the start of that interval.*
 
 ## 2. The Time Constant and Quick Sketching
 
-The **time constant** \ (\tau = 1/a\) is the single most useful shortcut in this section. It tells you the natural time scale of the exponential.
+The **time constant** \(\tau = 1/a\) is the single most useful shortcut in this section. It tells you the natural time scale of the exponential.
 
-**The rule:** After every interval of length \ (\tau\), the signal is multiplied by \ (1/e \approx 0.37\).
+**The rule:** After every interval of length \(\tau\), the signal is multiplied by \(1/e \approx 0.37\).
 
 ### SKETCHING RECIPE
 
-Apply this to \ (x(t) = e^{-2t}\):
+Apply this to \(x(t) = e^{-2t}\):
 
-1. **Time constant:** \ (\tau = 1/2 = 0.5\)
-2. **Start:** \ (x(0) = 1\)
-3. **One time constant later:** \ (x(0.5) = e^{-1} = 1/e \approx 0.37\)
-4. **Two time constants later:** \ (x(1) = e^{-2} = 1/e^2 \approx 0.135\)
+1. **Time constant:** \(\tau = 1/2 = 0.5\)
+2. **Start:** \(x(0) = 1\)
+3. **One time constant later:** \(x(0.5) = e^{-1} = 1/e \approx 0.37\)
+4. **Two time constants later:** \(x(1) = e^{-2} = 1/e^2 \approx 0.135\)
 5. **Draw:** Plot these three anchor points, then draw a smooth decreasing curve through them.
 
 That is the entire sketch. No calculator, no table of values.
 
 ### EXAM TIP
 
-A **larger** \ (a\) means a **faster** decay, because \ (\tau = 1/a\) is smaller — the signal reaches 37% sooner. If you see \ (e^{-10t}\) versus \ (e^{-t}\), the first one collapses to near zero much faster.
+A **larger** \(a\) means a **faster** decay, because \(\tau = 1/a\) is smaller — the signal reaches 37% sooner. If you see \(e^{-10t}\) versus \(e^{-t}\), the first one collapses to near zero much faster.
 
 $$x(t)=e^{-2t}, \qquad \tau=\frac{1}{2}=0.5, \qquad x(0)=1,\ x(0.5)=\frac{1}{e},\ x(1)=\frac{1}{e^2}$$
-*This example turns the general time-constant rule into a concrete sketching plan: mark equally spaced points at \ (t = 0, 0.5, 1\) with values \ (1, 1/e, 1/e^2\), then connect them with a smooth decreasing curve.*
+*This example turns the general time-constant rule into a concrete sketching plan: mark equally spaced points at \(t = 0, 0.5, 1\) with values \(1, 1/e, 1/e^2\), then connect them with a smooth decreasing curve.*
 
 ---
 **📌 Key Takeaways**
