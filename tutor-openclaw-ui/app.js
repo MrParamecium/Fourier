@@ -299,7 +299,7 @@ async function startOAuthRedirect(provider) {
     if (status === 429) {
       setLoginStatus('Google / GitHub login is temporarily rate-limited by Clerk. Please wait 20-30 seconds and try again.', 'error');
     } else if (status === 400) {
-      setLoginStatus('This browser already has a sign-in session. Refresh once, then use Open Workspace again.', 'error');
+      setLoginStatus('This browser already has a sign-in session. Refresh once, then use Sign In or continue as Guest.', 'error');
     } else {
       setLoginStatus(`Could not start ${provider === 'github' ? 'GitHub' : 'Google'} login. Please try again or use Sign In below.`, 'error');
     }
