@@ -1,0 +1,102 @@
+%%KC_BLOCK%%<div class="kc-visual-plan" data-visual-plan-b64="eyJwcmltYXJ5X2FuY2hvciI6Indpa2lfcmVmZXJlbmNlIiwicmF0aW9uYWxlIjoiVGhpcyBzZWN0aW9uIGlzIGhpc3RvcmljYWwgYW5kIGNvbmNlcHR1YWwsIHNvIHRoZSBzdHJvbmdlc3QgdmlzdWFsIGlzIGEgY2xlYW4gbnVtYmVyLXN5c3RlbSBoaWVyYXJjaHkgc2hvd2luZyBzdWNjZXNzaXZlIGJyb2FkZW5pbmc6IG5hdHVyYWwgbnVtYmVycywgcmF0aW9uYWwgbnVtYmVycywgcmVhbCBudW1iZXJzLCBhbmQgY29tcGxleCBudW1iZXJzLiBVc2UgTGFUZVggZm9yIHRoZSBlcXVhdGlvbiBiYXJyaWVycyB0aGF0IGZvcmNlZCBlYWNoIGV4cGFuc2lvbi4gRG8gbm90IHVzZSBHUFRJbWFnZTIgYmVjYXVzZSB0aGUga2V5IGlkZWFzIGFyZSBiZXR0ZXIgaGFuZGxlZCBieSBhIHN0YW5kYXJkIHJlZmVyZW5jZSBkaWFncmFtIHBsdXMgZXhhY3QgZm9ybXVsYXMuIiwiY3JhbSI6IlVzZSB0aGUgaGllcmFyY2h5IHZpc3VhbCB0byByZW1lbWJlciB0aGUgZXhwYW5zaW9uIG9yZGVyIHF1aWNrbHkuIiwic3RhbmRhcmQiOiJVc2UgdGhlIGhpZXJhcmNoeSB2aXN1YWwgYW5kIGVxdWF0aW9uIGV4YW1wbGVzIHRvZ2V0aGVyOiBlYWNoIG5ldyBudW1iZXIgdHlwZSBzb2x2ZXMgYSBwcm9ibGVtIHRoZSBwcmV2aW91cyB0eXBlIGNvdWxkIG5vdC4iLCJ0b3Bfc2NvcmUiOiJVc2UgdGhlIHZpc3VhbCB0byBkaXN0aW5ndWlzaCBoaXN0b3JpY2FsIGFjY2VwdGFuY2UgZnJvbSBsYXRlciBhbGdlYnJhaWMgdGVjaG5pcXVlcy4ifQ==" style="display:none;"></div>%%KC_END%%
+# B.1-1 A Historical Note
+
+> **Section Objective:** Understand why complex numbers were introduced as part of a long expansion of the number system.
+
+---
+
+**Concepts In This Section**
+
+- Natural numbers
+- Fractions
+- Irrational numbers
+- Negative numbers
+- Imaginary numbers
+- Complex numbers
+- Cardano
+- Bombelli
+- Gauss
+
+%%KC_BLOCK%%<div class="kc-visual-meta" data-visual-kind="web_reference_image" data-teaching-role="concept_anchor" data-visual-use-b64="eyJjcmFtIjoiVXNlIHRoZSBkaWFncmFtIGFzIGEgbWVtb3JpemF0aW9uIG1hcCBmb3IgdGhlIGV4cGFuc2lvbiBvcmRlci4iLCJzdGFuZGFyZCI6IkNvbm5lY3QgZWFjaCBsYXllciBvZiB0aGUgZGlhZ3JhbSB0byBvbmUgaGlzdG9yaWNhbCBuZWVkIG9yIGVxdWF0aW9uIGJhcnJpZXIuIiwidG9wX3Njb3JlIjoiRW1waGFzaXplIHRoYXQgcmVhbCBudW1iZXJzIGFyZSBhIHNwZWNpYWwgY2FzZSBpbnNpZGUgdGhlIGJyb2FkZXIgY29tcGxleC1udW1iZXIgc3lzdGVtLiJ9" style="display:none;"></div>%%KC_END%%
+![File:Venn Diagram of Numbers-it.svg](https://upload.wikimedia.org/wikipedia/commons/9/90/Venn_Diagram_of_Numbers-it.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original)
+*The nested structure of number systems: natural numbers sit inside integers, which sit inside rationals, which sit inside reals, which sit inside the complex numbers. Each outer layer was introduced when the inner layer could not solve a new class of problems.*
+<div class="kc-reference-source"><a href="https://upload.wikimedia.org/wikipedia/commons/9/90/Venn_Diagram_of_Numbers-it.svg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original" target="_blank" rel="noopener noreferrer">Reference image from Wikimedia Commons</a></div>
+
+$$\mathbb{N} \;\to\; \text{fractions} \;\to\; \text{irrational numbers} \;\to\; \text{negative numbers} \;\to\; \mathbb{C}$$
+## 1. The Number System Expanded When Old Numbers Were Not Enough
+
+This chain is not a calculation formula. It is the historical pattern of broadening the number system each time an older system proved insufficient for a new kind of problem. Here \(\mathbb{N}\) denotes the natural numbers — the counting numbers \(1, 2, 3, \ldots\) — and \(\mathbb{C}\) denotes the complex numbers, the most general system in this chain.
+
+Each arrow marks a moment when mathematicians or practitioners encountered a problem that the existing numbers simply could not handle. The response, each time, was not to declare the old numbers wrong but to extend the system.
+
+**When to use this idea:** When an exam question asks why a new class of numbers was accepted, trace the chain and identify which problem forced the next step.
+
+> **Exam Trigger:** A question asks what problem an older number system could not solve — trace the chain above and name the specific gap.
+
+#### Common Misuse
+Do not say earlier number systems were *wrong*. They were useful but incomplete for newer problems.
+
+## 2. Equations Forced the Next Expansion
+
+Natural numbers arose from the most basic human need: counting cattle, people, or objects. Fractions followed when counting was not precise enough — measuring the length of a field or the weight of butter required parts of a whole. Irrational numbers appeared when geometry demanded them: the diagonal of a unit square has length \(\sqrt{2}\), a number that cannot be written as any fraction. Negative numbers made sense once commerce and accounting required a way to record debts or a bank balance that had gone below zero. Each expansion was driven by a real, practical, or geometric need — not by abstract curiosity alone.
+
+If a problem cannot even be stated or solved inside the current number system, history usually responds by expanding the system.
+
+## 3. From Algebraic Fiction to Accepted Tool
+
+$$\begin{aligned}x+5&=0 \Rightarrow x=-5 \\ x^2+1&=0 \Rightarrow x^2=-1 \\ j^2&=-1,\qquad \sqrt{-4}=\pm 2j\end{aligned}$$
+*The equation \(x+5=0\) has the solution \(x=-5\). That single step required negative numbers — a system that did not exist in early arithmetic. The equation \(x^2+1=0\) goes further: it requires \(x^2=-1\), and no real number satisfies that condition, because squaring any real number always produces a non-negative result.
+
+To solve this, mathematicians introduced a new unit. In electrical engineering the symbol \(j\) is used instead of the mathematician's \(i\), specifically to avoid confusion with \(i\) for electrical current. The definition is \(j^2=-1\): squaring \(j\) gives \(-1\). From this, the square roots of any negative number follow directly — for example, \(\sqrt{-4}=\pm 2j\), because \((\pm 2j)^2 = 4j^2 = 4(-1) = -4\).
+
+> **Exam Trigger:** A question asks which equation requires complex numbers — look for \(x^2 = \text{(negative number)}\).
+
+#### Common Misuse
+Do not write \(j=-1\). The correct definition is \(j^2=-1\). If \(j\) were simply \(-1\), then \(j^2\) would equal \(+1\), not \(-1\).*
+
+## 4. Why Use Complex Numbers If the Final Answer Is Real?
+
+### REPRESENTATIVE EXAMPLE
+
+Consider the equation \(x^2+1=0\).
+
+**Step 1:** Subtract \(1\) from both sides to obtain \(x^2=-1\).
+
+**Step 2:** Recognize that no real number squared gives \(-1\). For any real \(x\), the value \(x^2 \geq 0\), so \(x^2=-1\) has no real solution.
+
+**Step 3:** Introduce the imaginary unit \(j\) defined by \(j^2=-1\). The solutions are \(x=\pm j\).
+
+---
+
+**Quick check:** Which earlier expansion solved \(x+5=0\), and which expansion solved \(x^2+1=0\)?
+
+*Answer:* Negative numbers solved \(x+5=0\); imaginary (complex) numbers solved \(x^2+1=0\).
+
+For a long time, expressions involving square roots of negative numbers were treated as suspicious or meaningless. Three figures changed that.
+
+**Cardano** (16th century) published a formula for solving cubic equations. His formula sometimes produced intermediate expressions containing square roots of negative numbers — even when the final answer was a perfectly ordinary real number. This was unsettling: the calculation passed through something that seemed impossible, yet arrived at a correct result.
+
+**Bombelli** took the next step by working out consistent rules for manipulating these strange quantities. He showed that if you treat them carefully and systematically, the algebra works out correctly every time.
+
+**Gauss** brought full mathematical respectability. He proved the fundamental theorem of algebra — that every polynomial equation has a solution if complex numbers are allowed — and interpreted complex numbers geometrically, giving them a clear and systematic foundation.
+
+The historical point is not that complex numbers are mysterious; it is that they made algebra more complete and efficient.
+
+%%KC_BLOCK%%<div class="kc-visual-meta" data-visual-kind="book_image" data-teaching-role="concept_anchor" data-visual-use-b64="eyJjcmFtIjoiVXNlIHRoaXMgdmlzdWFsIGZvciBmYXN0IHJlY29nbml0aW9uIG9mIHRoZSBjb3VudHJ5LXJvdXRlIHNob3J0Y3V0IGlkZWEuIiwic3RhbmRhcmQiOiJVc2UgdGhpcyB2aXN1YWwgdG8gY2xhcmlmeSB3aHkgY29tcGxleCBudW1iZXJzIGFwcGVhciBpbiByZWFsLXZhbHVlZCBwcm9ibGVtcy4iLCJ0b3Bfc2NvcmUiOiJVc2UgdGhpcyB2aXN1YWwgdG8gc3VyZmFjZSB0aGUgc3VidGxlIHBvaW50IHRoYXQgdGhlIGZpbmFsIGFuc3dlciBiZWluZyByZWFsIGRvZXMgbm90IG1lYW4gY29tcGxleCBudW1iZXJzIHdlcmUgdW5uZWNlc3NhcnkuIn0=" style="display:none;"></div>%%KC_END%%
+![unknown](/figures/page-004-unknown-1.png)
+*Two routes between points \(a\) and \(b\) illustrate how a path that starts and ends in the real-number world (Country X) may take a shorter detour through the complex-number world (Country Y) — motivating why complex numbers are useful even when the final answer is real.*
+
+Imagine two neighboring countries: Country X represents the real numbers, and Country Y represents the complex numbers.
+
+---
+**📌 Key Takeaways**
+- Number systems expanded when older systems could not solve new problems.
+- \(x^2+1=0\) motivates defining \(j^2=-1\), with \(\sqrt{-4}=\pm 2j\).
+- Complex numbers can simplify work even when final answers are real.
+
+- \(j^2 = -1\) defines the imaginary unit used in engineering notation.
+- \(\sqrt{-1} = \pm j\), so the square root of a negative number has two imaginary values.
+- Minimal example: \(\sqrt{-4} = \pm 2j\).
+*In the next section we will start using complex numbers algebraically.*
+
+%%KC_BLOCK%%<div class="kc-quiz-plan" data-quiz-b64="eyJ0eXBlIjoicXVpel9wbGFuIiwidGFyZ2V0X3F1ZXN0aW9ucyI6NywicXVlc3Rpb25fcmFuZ2UiOnsibWluIjo2LCJtYXgiOjh9LCJrbm93bGVkZ2VfcG9pbnRzIjpbeyJpZCI6Im51bWJlcl9zeXN0ZW1fZXhwYW5zaW9uX29yZGVyIiwibGFiZWwiOiJIaXN0b3JpY2FsIGV4cGFuc2lvbiBvZiBudW1iZXIgc3lzdGVtcyIsImltcG9ydGFuY2UiOiJoaWdoIiwiZXhhbV93ZWlnaHQiOiJtZWRpdW0iLCJtYXN0ZXJ5X3J1bGUiOnsiY29ycmVjdF9zdHJlYWtfcmVxdWlyZWQiOjF9LCJxdWVzdGlvbnMiOlt7ImlkIjoia3AxX3ExIiwidHlwZSI6Im11bHRpcGxlX2Nob2ljZSIsInN0ZW0iOiJXaGljaCBzZXF1ZW5jZSBiZXN0IG1hdGNoZXMgdGhlIGhpc3RvcmljYWwgYnJvYWRlbmluZyBlbXBoYXNpemVkIGluIHRoaXMgc2VjdGlvbj8iLCJvcHRpb25zIjpbIkEuIENvbXBsZXggbnVtYmVycywgbmVnYXRpdmUgbnVtYmVycywgZnJhY3Rpb25zLCBuYXR1cmFsIG51bWJlcnMiLCJCLiBOYXR1cmFsIG51bWJlcnMsIGZyYWN0aW9ucywgaXJyYXRpb25hbCBudW1iZXJzLCBuZWdhdGl2ZSBudW1iZXJzLCBjb21wbGV4IG51bWJlcnMiLCJDLiBGcmFjdGlvbnMsIGNvbXBsZXggbnVtYmVycywgbmF0dXJhbCBudW1iZXJzLCBuZWdhdGl2ZSBudW1iZXJzIiwiRC4gTmVnYXRpdmUgbnVtYmVycywgbmF0dXJhbCBudW1iZXJzLCBpcnJhdGlvbmFsIG51bWJlcnMsIGNvbXBsZXggbnVtYmVycyJdLCJjb3JyZWN0X29wdGlvbiI6IkIiLCJleHBsYW5hdGlvbiI6IlRoZSBzZWN0aW9uIHByZXNlbnRzIG51bWJlciBzeXN0ZW1zIGFzIGV4cGFuZGluZyB3aGVuIG9sZGVyIHN5c3RlbXMgY291bGQgbm90IGhhbmRsZSBuZXcgbmVlZHM6IGNvdW50aW5nLCBtZWFzdXJpbmcsIGlycmF0aW9uYWwgbGVuZ3RocywgZGVidHMgb3IgZGVmaWNpdHMsIGFuZCBmaW5hbGx5IGVxdWF0aW9ucyBpbnZvbHZpbmcgc3F1YXJlIHJvb3RzIG9mIG5lZ2F0aXZlIG51bWJlcnMuIiwid3Jvbmdfb3B0aW9uX2V4cGxhbmF0aW9ucyI6eyJBIjoiVGhpcyByZXZlcnNlcyB0aGUgaGlzdG9yaWNhbCBkaXJlY3Rpb24uIiwiQyI6Ik5hdHVyYWwgbnVtYmVycyBjYW1lIGJlZm9yZSBmcmFjdGlvbnMsIGFuZCBjb21wbGV4IG51bWJlcnMgY2FtZSBtdWNoIGxhdGVyLiIsIkQiOiJOZWdhdGl2ZSBudW1iZXJzIHdlcmUgbm90IHRoZSBzdGFydGluZyBwb2ludCBpbiB0aGlzIGhpc3RvcmljYWwgc3RvcnkuIn0sImhpbnQiOiJTdGFydCB3aXRoIHdoYXQgZWFybHkgcGVvcGxlIG5lZWRlZCBmb3IgY291bnRpbmcuIiwibmVlZHNfdmlzdWFsIjpmYWxzZSwic2FtZV9wb2ludF92YXJpYW50IjpmYWxzZX0seyJpZCI6ImtwMV9xMiIsInR5cGUiOiJtdWx0aXBsZV9jaG9pY2UiLCJzdGVtIjoiT2JzZXJ2ZSBhIG5lc3RlZCBudW1iZXItc3lzdGVtIGRpYWdyYW0gd2l0aCBuYXR1cmFsIG51bWJlcnMgaW5zaWRlIGJyb2FkZXIgc3lzdGVtcyBlbmRpbmcgaW4gY29tcGxleCBudW1iZXJzLiBXaGF0IGlzIHRoZSBiZXN0IGNvbmNsdXNpb24/Iiwib3B0aW9ucyI6WyJBLiBDb21wbGV4IG51bWJlcnMgcmVwbGFjZWQgcmVhbCBudW1iZXJzIGJlY2F1c2UgcmVhbCBudW1iZXJzIGJlY2FtZSB1c2VsZXNzLiIsIkIuIFJlYWwgbnVtYmVycyBhcmUgaW5jbHVkZWQgd2l0aGluIGEgYnJvYWRlciBjb21wbGV4LW51bWJlciBzeXN0ZW0uIiwiQy4gRnJhY3Rpb25zIGFuZCBuZWdhdGl2ZSBudW1iZXJzIGFyZSB1bnJlbGF0ZWQgdG8gdGhlIGhpc3Rvcnkgb2YgY29tcGxleCBudW1iZXJzLiIsIkQuIE5hdHVyYWwgbnVtYmVycyBhcmUgbW9yZSBnZW5lcmFsIHRoYW4gY29tcGxleCBudW1iZXJzLiJdLCJjb3JyZWN0X29wdGlvbiI6IkIiLCJleHBsYW5hdGlvbiI6IlRoZSBoaXN0b3JpY2FsIG1lc3NhZ2UgaXMgYnJvYWRlbmluZywgbm90IHJlcGxhY2VtZW50LiBSZWFsIG51bWJlcnMgcmVtYWluIHVzZWZ1bCwgYnV0IGNvbXBsZXggbnVtYmVycyBmb3JtIGEgbGFyZ2VyIHN5c3RlbSB0aGF0IGluY2x1ZGVzIHRoZW0gYXMgYSBzcGVjaWFsIGNhc2UuIiwid3Jvbmdfb3B0aW9uX2V4cGxhbmF0aW9ucyI6eyJBIjoiT2xkZXIgc3lzdGVtcyB3ZXJlIG5vdCBkaXNjYXJkZWQ7IHRoZXkgd2VyZSBleHRlbmRlZC4iLCJDIjoiVGhlIHNlY3Rpb24gZXhwbGljaXRseSBidWlsZHMgdGhlIHN0b3J5IHRocm91Z2ggZWFybGllciBleHBhbnNpb25zLiIsIkQiOiJOYXR1cmFsIG51bWJlcnMgYXJlIGxlc3MgZ2VuZXJhbCwgbm90IG1vcmUgZ2VuZXJhbC4ifSwiaGludCI6IkEgbGFyZ2VyIG51bWJlciBzeXN0ZW0gY29udGFpbnMgdGhlIG9sZGVyIG9uZTsgaXQgZG9lcyBub3QgZXJhc2UgaXQuIiwibmVlZHNfdmlzdWFsIjp0cnVlLCJ2aXN1YWxfdHlwZSI6Indpa2lfZmlndXJlX251bWJlcl9zeXN0ZW1faGllcmFyY2h5Iiwic2FtZV9wb2ludF92YXJpYW50Ijp0cnVlfV19LHsiaWQiOiJlcXVhdGlvbnNfdGhhdF9mb3JjZV9leHBhbnNpb24iLCJsYWJlbCI6IkVxdWF0aW9ucyB0aGF0IG9sZGVyIHN5c3RlbXMgY291bGQgbm90IHNvbHZlIiwiaW1wb3J0YW5jZSI6ImhpZ2giLCJleGFtX3dlaWdodCI6ImhpZ2giLCJtYXN0ZXJ5X3J1bGUiOnsiY29ycmVjdF9zdHJlYWtfcmVxdWlyZWQiOjJ9LCJxdWVzdGlvbnMiOlt7ImlkIjoia3AyX3ExIiwidHlwZSI6Im11bHRpcGxlX2Nob2ljZSIsInN0ZW0iOiJXaGljaCBlcXVhdGlvbiBpcyB0aGUgY2xlYXJlc3QgdHJpZ2dlciBmb3IgaW50cm9kdWNpbmcgbmVnYXRpdmUgbnVtYmVycyBpbiB0aGlzIHNlY3Rpb24/Iiwib3B0aW9ucyI6WyJBLiBcXCh4KzU9MFxcKSIsIkIuIFxcKHheMisxPTBcXCkiLCJDLiBcXChqXjI9LTFcXCkiLCJELiBcXChcXHNxcnR7LTR9PVxccG0yalxcKSJdLCJjb3JyZWN0X29wdGlvbiI6IkEiLCJleHBsYW5hdGlvbiI6IlxcKHgrNT0wXFwpIGdpdmVzIFxcKHg9LTVcXCksIHdoaWNoIHJlcXVpcmVzIG5lZ2F0aXZlIG51bWJlcnMgYnV0IG5vdCBjb21wbGV4IG51bWJlcnMuIiwid3Jvbmdfb3B0aW9uX2V4cGxhbmF0aW9ucyI6eyJCIjoiVGhpcyBlcXVhdGlvbiBtb3RpdmF0ZXMgaW1hZ2luYXJ5IG9yIGNvbXBsZXggbnVtYmVycywgbm90IG1lcmVseSBuZWdhdGl2ZSBudW1iZXJzLiIsIkMiOiJUaGlzIGRlZmluZXMgdGhlIGltYWdpbmFyeSB1bml0IHVzZWQgYWZ0ZXIgY29tcGxleCBudW1iZXJzIGFyZSBpbnRyb2R1Y2VkLiIsIkQiOiJUaGlzIHVzZXMgY29tcGxleC1udW1iZXIgbm90YXRpb24gYWxyZWFkeS4ifSwiaGludCI6IlNvbHZlIGVhY2ggZXF1YXRpb24gbWVudGFsbHkgYW5kIGFzayB3aGF0IGtpbmQgb2YgbnVtYmVyIHRoZSBhbnN3ZXIgcmVxdWlyZXMuIiwibmVlZHNfdmlzdWFsIjpmYWxzZSwic2FtZV9wb2ludF92YXJpYW50IjpmYWxzZX0seyJpZCI6ImtwMl9xMiIsInR5cGUiOiJtdWx0aXBsZV9jaG9pY2UiLCJzdGVtIjoiV2hpY2ggZXF1YXRpb24gY2Fubm90IGJlIHNvbHZlZCB1c2luZyByZWFsIG51bWJlcnMgYWxvbmU/Iiwib3B0aW9ucyI6WyJBLiBcXCh4KzU9MFxcKSIsIkIuIFxcKHg9Ny01XFwpIiwiQy4gXFwoeF4yKzE9MFxcKSIsIkQuIFxcKDJ4PTEwXFwpIl0sImNvcnJlY3Rfb3B0aW9uIjoiQyIsImV4cGxhbmF0aW9uIjoiXFwoeF4yKzE9MFxcKSByZXF1aXJlcyBcXCh4XjI9LTFcXCkuIE5vIHJlYWwgbnVtYmVyIHNxdWFyZWQgZXF1YWxzIFxcKC0xXFwpLCBzbyB0aGUgZXF1YXRpb24gbW90aXZhdGVzIGltYWdpbmFyeSBvciBjb21wbGV4IG51bWJlcnMuIiwid3Jvbmdfb3B0aW9uX2V4cGxhbmF0aW9ucyI6eyJBIjoiVGhpcyBoYXMgdGhlIHJlYWwgc29sdXRpb24gXFwoLTVcXCkuIiwiQiI6IlRoaXMgaGFzIHRoZSByZWFsIHNvbHV0aW9uIFxcKDJcXCkuIiwiRCI6IlRoaXMgaGFzIHRoZSByZWFsIHNvbHV0aW9uIFxcKDVcXCkuIn0sImhpbnQiOiJBIHNxdWFyZSBvZiBhIHJlYWwgbnVtYmVyIGNhbm5vdCBiZSBuZWdhdGl2ZS4iLCJuZWVkc192aXN1YWwiOmZhbHNlLCJzYW1lX3BvaW50X3ZhcmlhbnQiOnRydWV9XX0seyJpZCI6Impfbm90YXRpb24iLCJsYWJlbCI6Ik1lYW5pbmcgb2YgXFwoal4yPS0xXFwpIiwiaW1wb3J0YW5jZSI6ImhpZ2giLCJleGFtX3dlaWdodCI6Im1lZGl1bSIsIm1hc3RlcnlfcnVsZSI6eyJjb3JyZWN0X3N0cmVha19yZXF1aXJlZCI6Mn0sInF1ZXN0aW9ucyI6W3siaWQiOiJrcDNfcTEiLCJ0eXBlIjoibXVsdGlwbGVfY2hvaWNlIiwic3RlbSI6IkluIGVsZWN0cmljYWwgZW5naW5lZXJpbmcgbm90YXRpb24sIHdoYXQgZG9lcyBcXChqXjI9LTFcXCkgbWVhbj8iLCJvcHRpb25zIjpbIkEuIFxcKGpcXCkgZXF1YWxzIFxcKC0xXFwpIiwiQi4gU3F1YXJpbmcgXFwoalxcKSBnaXZlcyBcXCgtMVxcKSIsIkMuIFxcKGpcXCkgaXMgYSBwb3NpdGl2ZSByZWFsIG51bWJlciIsIkQuIFxcKGpcXCkgbWVhbnMgZWxlY3RyaWNhbCBjdXJyZW50Il0sImNvcnJlY3Rfb3B0aW9uIjoiQiIsImV4cGxhbmF0aW9uIjoiXFwoalxcKSBpcyBkZWZpbmVkIHNvIHRoYXQgaXRzIHNxdWFyZSBpcyBcXCgtMVxcKS4gVGhpcyBpcyBub3QgdGhlIHNhbWUgYXMgc2F5aW5nIFxcKGo9LTFcXCkuIiwid3Jvbmdfb3B0aW9uX2V4cGxhbmF0aW9ucyI6eyJBIjoiSWYgXFwoaj0tMVxcKSwgdGhlbiBcXChqXjI9MVxcKSwgbm90IFxcKC0xXFwpLiIsIkMiOiJObyBwb3NpdGl2ZSByZWFsIG51bWJlciBzcXVhcmVzIHRvIFxcKC0xXFwpLiIsIkQiOiJFbmdpbmVlcnMgdXNlIFxcKGpcXCkgaW5zdGVhZCBvZiBcXChpXFwpIGJlY2F1c2UgXFwoaVxcKSBpcyBvZnRlbiB1c2VkIGZvciBjdXJyZW50LiJ9LCJoaW50IjoiRm9jdXMgb24gdGhlIHNxdWFyZTogXFwoal4yXFwpLCBub3QgXFwoalxcKSBhbG9uZS4iLCJuZWVkc192aXN1YWwiOmZhbHNlLCJzYW1lX3BvaW50X3ZhcmlhbnQiOmZhbHNlfSx7ImlkIjoia3AzX3EyIiwidHlwZSI6InNob3J0X2Fuc3dlciIsInN0ZW0iOiJBIGNsYXNzbWF0ZSBzYXlzLCAnXFwoaj0tMVxcKSwgc28gXFwoXFxzcXJ0ey00fT0tMlxcKS4nIEV4cGxhaW4gd2hhdCBpcyB3cm9uZy4iLCJpZGVhbF9hbnN3ZXIiOiJcXChqXFwpIGlzIG5vdCBlcXVhbCB0byBcXCgtMVxcKTsgaXQgaXMgZGVmaW5lZCBieSBcXChqXjI9LTFcXCkuIFRoZXJlZm9yZSB0aGUgc3F1YXJlIHJvb3RzIG9mIFxcKC00XFwpIGFyZSB3cml0dGVuIGFzIFxcKFxccG0yalxcKSwgbm90IFxcKC0yXFwpLiIsImdyYWRpbmdfcnVicmljIjpbIk11c3Qgc3RhdGUgdGhhdCBcXChqXFxuZXEgLTFcXCkiLCJNdXN0IG1lbnRpb24gXFwoal4yPS0xXFwpIiwiTXVzdCBjb3JyZWN0bHkgaWRlbnRpZnkgXFwoXFxzcXJ0ey00fVxcKSBhcyBpbnZvbHZpbmcgXFwoXFxwbTJqXFwpIl0sImV4cGxhbmF0aW9uIjoiVGhpcyBjaGVja3Mgd2hldGhlciB0aGUgc3R1ZGVudCB1bmRlcnN0YW5kcyB0aGUgZGVmaW5pdGlvbiBvZiBcXChqXFwpLCBub3QganVzdCB0aGUgc3ltYm9sLiIsImhpbnQiOiJUZXN0IHRoZSBjbGFpbSBieSBzcXVhcmluZyBcXCgtMVxcKS4iLCJuZWVkc192aXN1YWwiOmZhbHNlLCJzYW1lX3BvaW50X3ZhcmlhbnQiOnRydWV9XX0seyJpZCI6Imhpc3RvcmljYWxfcm9sZXMiLCJsYWJlbCI6IkNhcmRhbm8sIEJvbWJlbGxpLCBhbmQgR2F1c3MiLCJpbXBvcnRhbmNlIjoibWVkaXVtIiwiZXhhbV93ZWlnaHQiOiJtZWRpdW0iLCJtYXN0ZXJ5X3J1bGUiOnsiY29ycmVjdF9zdHJlYWtfcmVxdWlyZWQiOjF9LCJxdWVzdGlvbnMiOlt7ImlkIjoia3A0X3ExIiwidHlwZSI6Im11bHRpcGxlX2Nob2ljZSIsInN0ZW0iOiJXaGljaCBtYXRjaGluZyBiZXN0IGZpdHMgdGhlIGhpc3RvcmljYWwgc3RvcnlsaW5lIGluIHRoaXMgc2VjdGlvbj8iLCJvcHRpb25zIjpbIkEuIENhcmRhbm86IGN1YmljIGZvcm11bGFzIGV4cG9zZWQgc3RyYW5nZSByb290czsgQm9tYmVsbGk6IG1hbmlwdWxhdGlvbiBydWxlczsgR2F1c3M6IHN5c3RlbWF0aWMgYWNjZXB0YW5jZSBhbmQgZnVuZGFtZW50YWwgdGhlb3JlbSBvZiBhbGdlYnJhIiwiQi4gQ2FyZGFubzogaW52ZW50ZWQgZWxlY3RyaWNhbCBjdXJyZW50OyBCb21iZWxsaTogcHJvdmVkIGFsbCBlcXVhdGlvbnMgaGF2ZSByZWFsIHJvb3RzOyBHYXVzczogcmVqZWN0ZWQgY29tcGxleCBudW1iZXJzIiwiQy4gQ2FyZGFubzogaW52ZW50ZWQgZnJhY3Rpb25zOyBCb21iZWxsaTogaW52ZW50ZWQgbmF0dXJhbCBudW1iZXJzOyBHYXVzczogaW52ZW50ZWQgbmVnYXRpdmUgbnVtYmVycyIsIkQuIENhcmRhbm86IGNyZWF0ZWQgcG9sYXIgZm9ybTsgQm9tYmVsbGk6IGNyZWF0ZWQgRXVsZXIncyBmb3JtdWxhOyBHYXVzczogY3JlYXRlZCBjaXJjdWl0IG5vdGF0aW9uIl0sImNvcnJlY3Rfb3B0aW9uIjoiQSIsImV4cGxhbmF0aW9uIjoiVGhlIHNlY3Rpb24gdXNlcyB0aGVzZSBmaWd1cmVzIHRvIHNob3cgaG93IGNvbXBsZXggbnVtYmVycyBtb3ZlZCBmcm9tIHN1c3BpY2lvdXMgYWxnZWJyYWljIG9iamVjdHMgdG8gYWNjZXB0ZWQgbWF0aGVtYXRpY2FsIHRvb2xzLiIsIndyb25nX29wdGlvbl9leHBsYW5hdGlvbnMiOnsiQiI6IlRoZXNlIGNsYWltcyBkbyBub3QgbWF0Y2ggdGhlIGhpc3RvcmljYWwgcm9sZXMgZGVzY3JpYmVkLiIsIkMiOiJUaG9zZSBudW1iZXIgc3lzdGVtcyBwcmVkYXRlIHRoZXNlIGZpZ3VyZXMgaW4gdGhlIHNlY3Rpb24ncyBzdG9yeWxpbmUuIiwiRCI6IlRob3NlIGxhdGVyIG9wZXJhdGlvbmFsIHRvb2xzIGFyZSBub3QgdGhlIGZvY3VzIG9mIHRoaXMgaGlzdG9yaWNhbCBub3RlLiJ9LCJoaW50IjoiVGhpbms6IGN1YmljIGZvcm11bGFzLCBydWxlcywgYWNjZXB0YW5jZS4iLCJuZWVkc192aXN1YWwiOmZhbHNlLCJzYW1lX3BvaW50X3ZhcmlhbnQiOmZhbHNlfV19LHsiaWQiOiJjb21wbGV4X251bWJlcnNfYXNfc2hvcnRjdXQiLCJsYWJlbCI6IkNvbXBsZXggbnVtYmVycyBhcyBhIHVzZWZ1bCBkZXRvdXIiLCJpbXBvcnRhbmNlIjoibWVkaXVtIiwiZXhhbV93ZWlnaHQiOiJtZWRpdW0iLCJtYXN0ZXJ5X3J1bGUiOnsiY29ycmVjdF9zdHJlYWtfcmVxdWlyZWQiOjF9LCJxdWVzdGlvbnMiOlt7ImlkIjoia3A1X3ExIiwidHlwZSI6Im11bHRpcGxlX2Nob2ljZSIsInN0ZW0iOiJJbiB0aGUgdGV4dGJvb2sncyBjb3VudHJ5LXJvdXRlIGFuYWxvZ3ksIHdoYXQgZG9lcyBwYXNzaW5nIHRocm91Z2ggQ291bnRyeSBZIHJlcHJlc2VudD8iLCJvcHRpb25zIjpbIkEuIEF2b2lkaW5nIG1hdGhlbWF0aWNzIGNvbXBsZXRlbHkiLCJCLiBVc2luZyBjb21wbGV4IG51bWJlcnMgYXMgYW4gaW50ZXJtZWRpYXRlIHRvb2wgZXZlbiB3aGVuIHRoZSBwcm9ibGVtIHN0YXJ0cyBhbmQgZW5kcyB3aXRoIHJlYWwgcXVhbnRpdGllcyIsIkMuIFJlcGxhY2luZyBldmVyeSByZWFsIGFuc3dlciB3aXRoIGEgY29tcGxleCBhbnN3ZXIiLCJELiBNYWtpbmcgdGhlIHNvbHV0aW9uIGxvbmdlciBvbiBwdXJwb3NlIl0sImNvcnJlY3Rfb3B0aW9uIjoiQiIsImV4cGxhbmF0aW9uIjoiVGhlIGFuYWxvZ3kgc2F5cyB0aGF0IGEgcm91dGUgbWF5IHN0YXJ0IGFuZCBlbmQgaW4gdGhlIHJlYWwtbnVtYmVyIHdvcmxkIHdoaWxlIGJlY29taW5nIHNob3J0ZXIgYnkgcGFzc2luZyB0aHJvdWdoIHRoZSBjb21wbGV4LW51bWJlciB3b3JsZC4iLCJ3cm9uZ19vcHRpb25fZXhwbGFuYXRpb25zIjp7IkEiOiJUaGUgYW5hbG9neSBpcyBhYm91dCBhIG1hdGhlbWF0aWNhbCBzaG9ydGN1dCwgbm90IGF2b2lkaW5nIG1hdGguIiwiQyI6IlRoZSBmaW5hbCBhbnN3ZXIgbWF5IHN0aWxsIGJlIHJlYWwuIiwiRCI6IlRoZSBwb2ludCBpcyB0byByZWR1Y2Ugd29yaywgbm90IGluY3JlYXNlIGl0LiJ9LCJoaW50IjoiQ291bnRyeSBYIGlzIHJlYWwgbnVtYmVyczsgQ291bnRyeSBZIGlzIGNvbXBsZXggbnVtYmVycy4iLCJuZWVkc192aXN1YWwiOnRydWUsInZpc3VhbF90eXBlIjoidGV4dGJvb2tfZmlndXJlX3JvdXRlX2FuYWxvZ3lfaWZfYXZhaWxhYmxlIiwic2FtZV9wb2ludF92YXJpYW50IjpmYWxzZX1dfV19" style="display:none;"></div>%%KC_END%%

@@ -1,0 +1,146 @@
+%%KC_BLOCK%%<div class="kc-visual-plan" data-visual-plan-b64="eyJwcmltYXJ5X2FuY2hvciI6InJlYWN0X2RlbW8iLCJyYXRpb25hbGUiOiJUaGUgY29yZSBpZGVhIGlzIHBhcmFtZXRlci1zZW5zaXRpdmU6IGNoYW5naW5nIGEgY2hhbmdlcyBob3cgZmFzdCBlXnstYXR9IGRlY2F5cyBvciBlXnthdH0gZ3Jvd3MsIHdoaWxlIHRoZSB0aW1lLWNvbnN0YW50IHJ1bGUgc3RheXMgaW52YXJpYW50LiBVc2UgdGhlIGF2YWlsYWJsZSB0ZXh0Ym9vayBGaWcuIEIuMTAgYXMgdGhlIGNhbm9uaWNhbCBza2V0Y2hpbmcgcmVmZXJlbmNlLCBhbmQgdXNlIGEgUmVhY3QgKyBDYW52YXMgZGVtbyBzbyBzdHVkZW50cyBjYW4gbW92ZSBhIGFuZCBzZWUgdGhlIGRlY2F5IHJhdGUgYW5kIHRpbWUgY29uc3RhbnQgdXBkYXRlIGltbWVkaWF0ZWx5LiIsImNyYW0iOiJVc2UgdmlzdWFscyB0byBtZW1vcml6ZSB0aGUgZXhhbSB0cmlnZ2VyOiBvbmUgdGltZSBjb25zdGFudCBtZWFucyAzNyUsIHR3byB0aW1lIGNvbnN0YW50cyBtZWFucyAxMy41JS4iLCJzdGFuZGFyZCI6IlVzZSB0aGUgdGV4dGJvb2sgZmlndXJlIGFuZCBkZW1vIHRvZ2V0aGVyOiBmaXJzdCByZWFkIHRoZSBjYW5vbmljYWwgc2tldGNoLCB0aGVuIHZhcnkgYSB0byB1bmRlcnN0YW5kIG9uZSByZXByZXNlbnRhdGl2ZSBleGFtcGxlLiIsInRvcF9zY29yZSI6IlVzZSB0aGUgZGVtbyB0byBzdHJlc3Mgc3VidGxlIGludmFyaWFudHM6IHRoZSBhYnNvbHV0ZSB0aW1lIGNoYW5nZXMgd2l0aCBhLCBidXQgZXZlcnkgaW50ZXJ2YWwgb2YgbGVuZ3RoIDEvYSBtdWx0aXBsaWVzIGEgZGVjYXlpbmcgZXhwb25lbnRpYWwgYnkgMS9lLiJ9" style="display:none;"></div>%%KC_END%%
+# B.3-1 Monotonic Exponentials
+
+> **Section Objective:** Learn how to sketch monotonic exponential signals quickly using the time constant.
+
+---
+
+## Concepts In This Section
+
+- decaying exponential
+- growing exponential
+- time constant
+- quick sketching values
+
+## 1. Decay versus Growth
+
+For a positive constant \(a\), the signal \(e^{-at}\) **decreases** as \(t\) increases, while \(e^{at}\) **increases** as \(t\) increases. The word *monotonic* means the signal keeps moving in one direction without reversing: downward for decay, upward for growth.
+
+For example, if \(a = 2\), then \(e^{-2t}\) decays faster than \(e^{-t}\) because the exponent becomes more negative more quickly.
+
+### EXAM TIP
+
+When you see a positive \(a\) multiplying \(t\) in the exponent, **first check the sign** before deciding growth or decay.
+
+## 2. Time constant
+
+This signal starts at 1 when \(t = 0\) and falls toward zero as \(t\) increases.
+
+- **\(a\)**: positive rate parameter — larger \(a\) means faster decay.
+- **\(t\)**: time variable.
+- **Use when**: the exponent carries a negative sign, e.g. \(e^{-3t}\) or \(e^{-at}\).
+
+#### Common Misuse
+Students often say the time constant equals \(a\). It does not — the time constant is \(1/a\).
+
+$$e^{-at} \quad \text{decays for } a > 0$$
+
+## 3. Representative sketch: x(t)=e^{-2t}
+
+This signal starts at 1 when \(t = 0\) and increases without bound as \(t\) increases.
+
+- **\(a\)**: positive rate parameter — larger \(a\) means faster growth.
+- **\(t\)**: time variable.
+- **Use when**: the exponent carries a positive sign, e.g. \(e^{4t}\) or \(e^{at}\).
+
+#### Common Misuse
+Do not apply the 37% decay rule to a growing exponential — that rule is specific to \(e^{-at}\).
+
+$$e^{at} \quad \text{grows for } a > 0$$
+
+%%KC_BLOCK%%<div class="kc-visual-meta" data-visual-kind="interactive_demo" data-teaching-role="concept_anchor" data-visual-use-b64="eyJjcmFtIjoiRHJhZyBhIHVwd2FyZCBhbmQgaW5zdGFudGx5IHNlZSB0aGF0IGxhcmdlciBhIG1lYW5zIGZhc3RlciBjaGFuZ2UuIiwic3RhbmRhcmQiOiJVc2UgdGhlIHNsaWRlciB0byBjb25uZWN0IHRoZSBzaWduIG9mIHRoZSBleHBvbmVudCBhbmQgdGhlIHZhbHVlIG9mIGEgdG8gdGhlIHBsb3R0ZWQgY3VydmUuIiwidG9wX3Njb3JlIjoiVXNlIHRoZSBvdmVybGF5IHRvIGNvbXBhcmUgZV57LWF0fSBhbmQgZV57YXR9IGFuZCBpZGVudGlmeSB3aGF0IGNoYW5nZXMgdmVyc3VzIHdoYXQgc3RheXMgc3RydWN0dXJhbGx5IHNpbWlsYXIuIn0=" style="display:none;"></div><div class="kc-interactive-demo" data-demo-b64="eyJ0eXBlIjoiaW50ZXJhY3RpdmVfZGVtbyIsInRlYWNoaW5nX3JvbGUiOiJjb25jZXB0X2FuY2hvciIsIm1vZGVfc3BlY2lmaWNfdmlzdWFsX3VzZSI6eyJjcmFtIjoiRHJhZyBhIHVwd2FyZCBhbmQgaW5zdGFudGx5IHNlZSB0aGF0IGxhcmdlciBhIG1lYW5zIGZhc3RlciBjaGFuZ2UuIiwic3RhbmRhcmQiOiJVc2UgdGhlIHNsaWRlciB0byBjb25uZWN0IHRoZSBzaWduIG9mIHRoZSBleHBvbmVudCBhbmQgdGhlIHZhbHVlIG9mIGEgdG8gdGhlIHBsb3R0ZWQgY3VydmUuIiwidG9wX3Njb3JlIjoiVXNlIHRoZSBvdmVybGF5IHRvIGNvbXBhcmUgZV57LWF0fSBhbmQgZV57YXR9IGFuZCBpZGVudGlmeSB3aGF0IGNoYW5nZXMgdmVyc3VzIHdoYXQgc3RheXMgc3RydWN0dXJhbGx5IHNpbWlsYXIuIn0sImRlbW9fc3BlYyI6eyJ0aXRsZSI6IkRlY2F5IGFuZCBHcm93dGggQ29udHJvbGxlZCBieSBhIiwicmVuZGVyaW5nIjoiUmVhY3QgKyBDYW52YXMgaW50ZXJhY3RpdmUgcGxvdCB3aXRoIGEgd2hpdGUgYmFja2dyb3VuZCBhbmQgY2xlYW4gbGVjdHVyZS1ub3RlIHN0eWxpbmcuIiwiY29udHJvbHMiOlt7Im5hbWUiOiJhIiwidHlwZSI6InNsaWRlciIsIm1pbiI6MC4yNSwibWF4Ijo1LCJzdGVwIjowLjI1LCJkZWZhdWx0IjoxfSx7Im5hbWUiOiJtb2RlIiwidHlwZSI6InRvZ2dsZSIsIm9wdGlvbnMiOlsiZGVjYXk6IGVeey1hdH0iLCJncm93dGg6IGVee2F0fSJdLCJkZWZhdWx0IjoiZGVjYXk6IGVeey1hdH0ifV0sInBsb3RfaW5zdHJ1Y3Rpb24iOiJQbG90IHQgb24gdGhlIGhvcml6b250YWwgYXhpcyBmcm9tIDAgdG8gNSBhbmQgYW1wbGl0dWRlIG9uIHRoZSB2ZXJ0aWNhbCBheGlzLiBGb3IgZGVjYXkgbW9kZSwgc2hvdyB5ID0gZV57LWF0fSBkZWNyZWFzaW5nIHRvd2FyZCAwLiBGb3IgZ3Jvd3RoIG1vZGUsIHNob3cgeSA9IGVee2F0fSBpbmNyZWFzaW5nOyBjYXAgdGhlIHZlcnRpY2FsIGRpc3BsYXkgZ3JhY2VmdWxseSBpZiB2YWx1ZXMgYmVjb21lIGxhcmdlLiBNYXJrIHQgPSAxL2Egd2l0aCBhIHZlcnRpY2FsIGRhc2hlZCBsaW5lIGluIG11dGVkIHRlYWwuIEluIGRlY2F5IG1vZGUsIGFsc28gbWFyayB5ID0gMS9lIHdpdGggYSBob3Jpem9udGFsIGRhc2hlZCBsaW5lLiIsInN0dWRlbnRfcHJvbXB0IjoiRHJhZyBhIHVwd2FyZCBhbmQgbm90aWNlIHRoYXQgdGhlIGN1cnZlIGNoYW5nZXMgZmFzdGVyLCB3aGlsZSB0aGUgb25lLXRpbWUtY29uc3RhbnQgZGVjYXkgdmFsdWUgcmVtYWlucyAxL2UuIn0sInJlYWN0X2NvZGUiOiJpbXBvcnQgUmVhY3QsIHsgdXNlU3RhdGUsIHVzZVJlZiwgdXNlRWZmZWN0IH0gZnJvbSAncmVhY3QnO1xuXG5leHBvcnQgZGVmYXVsdCBmdW5jdGlvbiBFeHBvbmVudGlhbERlbW8oKSB7XG4gIGNvbnN0IFthLCBzZXRBXSA9IHVzZVN0YXRlKDEpO1xuICBjb25zdCBbbW9kZSwgc2V0TW9kZV0gPSB1c2VTdGF0ZSgnZGVjYXknKTtcbiAgY29uc3QgY2FudmFzUmVmID0gdXNlUmVmKG51bGwpO1xuXG4gIHVzZUVmZmVjdCgoKSA9PiB7XG4gICAgY29uc3QgY2FudmFzID0gY2FudmFzUmVmLmN1cnJlbnQ7XG4gICAgaWYgKCFjYW52YXMpIHJldHVybjtcbiAgICBjb25zdCBjdHggPSBjYW52YXMuZ2V0Q29udGV4dCgnMmQnKTtcbiAgICBjb25zdCBXID0gY2FudmFzLndpZHRoO1xuICAgIGNvbnN0IEggPSBjYW52YXMuaGVpZ2h0O1xuICAgIGNvbnN0IHBhZEwgPSA1NSwgcGFkUiA9IDIwLCBwYWRUID0gMjAsIHBhZEIgPSA0NTtcbiAgICBjb25zdCBwbG90VyA9IFcgLSBwYWRMIC0gcGFkUjtcbiAgICBjb25zdCBwbG90SCA9IEggLSBwYWRUIC0gcGFkQjtcblxuICAgIGN0eC5jbGVhclJlY3QoMCwgMCwgVywgSCk7XG4gICAgY3R4LmZpbGxTdHlsZSA9ICcjZmZmZmZmJztcbiAgICBjdHguZmlsbFJlY3QoMCwgMCwgVywgSCk7XG5cbiAgICBjb25zdCB0TWF4ID0gNTtcbiAgICBjb25zdCB5TWF4ID0gbW9kZSA9PT0gJ2RlY2F5JyA/IDEuMSA6IE1hdGgubWluKE1hdGguZXhwKGEgKiB0TWF4KSwgMjApO1xuICAgIGNvbnN0IHlNaW4gPSAwO1xuXG4gICAgY29uc3QgdG9YID0gdCA9PiBwYWRMICsgKHQgLyB0TWF4KSAqIHBsb3RXO1xuICAgIGNvbnN0IHRvWSA9IHkgPT4gcGFkVCArIHBsb3RIIC0gKCh5IC0geU1pbikgLyAoeU1heCAtIHlNaW4pKSAqIHBsb3RIO1xuXG4gICAgLy8gR3JpZFxuICAgIGN0eC5zdHJva2VTdHlsZSA9ICcjZThlOGU4JztcbiAgICBjdHgubGluZVdpZHRoID0gMTtcbiAgICBmb3IgKGxldCBpID0gMDsgaSA8PSA1OyBpKyspIHtcbiAgICAgIGNvbnN0IHggPSB0b1goaSk7XG4gICAgICBjdHguYmVnaW5QYXRoKCk7IGN0eC5tb3ZlVG8oeCwgcGFkVCk7IGN0eC5saW5lVG8oeCwgcGFkVCArIHBsb3RIKTsgY3R4LnN0cm9rZSgpO1xuICAgIH1cbiAgICBmb3IgKGxldCBpID0gMDsgaSA8PSA0OyBpKyspIHtcbiAgICAgIGNvbnN0IHkgPSB0b1koeU1pbiArIGkgKiAoeU1heCAtIHlNaW4pIC8gNCk7XG4gICAgICBjdHguYmVnaW5QYXRoKCk7IGN0eC5tb3ZlVG8ocGFkTCwgeSk7IGN0eC5saW5lVG8ocGFkTCArIHBsb3RXLCB5KTsgY3R4LnN0cm9rZSgpO1xuICAgIH1cblxuICAgIC8vIEF4ZXNcbiAgICBjdHguc3Ryb2tlU3R5bGUgPSAnIzMzMyc7XG4gICAgY3R4LmxpbmVXaWR0aCA9IDEuNTtcbiAgICBjdHguYmVnaW5QYXRoKCk7IGN0eC5tb3ZlVG8ocGFkTCwgcGFkVCk7IGN0eC5saW5lVG8ocGFkTCwgcGFkVCArIHBsb3RIKTsgY3R4LnN0cm9rZSgpO1xuICAgIGN0eC5iZWdpblBhdGgoKTsgY3R4Lm1vdmVUbyhwYWRMLCBwYWRUICsgcGxvdEgpOyBjdHgubGluZVRvKHBhZEwgKyBwbG90VywgcGFkVCArIHBsb3RIKTsgY3R4LnN0cm9rZSgpO1xuXG4gICAgLy8gQXhpcyBsYWJlbHNcbiAgICBjdHguZmlsbFN0eWxlID0gJyMzMzMnO1xuICAgIGN0eC5mb250ID0gJzEzcHggc2VyaWYnO1xuICAgIGN0eC50ZXh0QWxpZ24gPSAnY2VudGVyJztcbiAgICBjdHguZmlsbFRleHQoJ3QnLCBwYWRMICsgcGxvdFcgKyAxMCwgcGFkVCArIHBsb3RIICsgNSk7XG4gICAgY3R4LnRleHRBbGlnbiA9ICdyaWdodCc7XG4gICAgY3R4LmZpbGxUZXh0KCcwJywgcGFkTCAtIDYsIHBhZFQgKyBwbG90SCArIDQpO1xuICAgIGZvciAobGV0IGkgPSAxOyBpIDw9IDU7IGkrKykge1xuICAgICAgY3R4LmZpbGxUZXh0KFN0cmluZyhpKSwgdG9YKGkpLCBwYWRUICsgcGxvdEggKyAxNik7XG4gICAgfVxuICAgIGN0eC50ZXh0QWxpZ24gPSAncmlnaHQnO1xuICAgIGNvbnN0IHlTdGVwcyA9IDQ7XG4gICAgZm9yIChsZXQgaSA9IDA7IGkgPD0geVN0ZXBzOyBpKyspIHtcbiAgICAgIGNvbnN0IHZhbCA9IHlNaW4gKyBpICogKHlNYXggLSB5TWluKSAvIHlTdGVwcztcbiAgICAgIGN0eC5maWxsVGV4dCh2YWwudG9GaXhlZCh2YWwgPCAxID8gMiA6IDEpLCBwYWRMIC0gNiwgdG9ZKHZhbCkgKyA0KTtcbiAgICB9XG5cbiAgICAvLyBUaW1lIGNvbnN0YW50IGRhc2hlZCBsaW5lXG4gICAgY29uc3QgdGMgPSAxIC8gYTtcbiAgICBpZiAodGMgPD0gdE1heCkge1xuICAgICAgY3R4LnN0cm9rZVN0eWxlID0gJyMyYTlkOGYnO1xuICAgICAgY3R4LmxpbmVXaWR0aCA9IDEuNTtcbiAgICAgIGN0eC5zZXRMaW5lRGFzaChbNiwgNF0pO1xuICAgICAgY3R4LmJlZ2luUGF0aCgpOyBjdHgubW92ZVRvKHRvWCh0YyksIHBhZFQpOyBjdHgubGluZVRvKHRvWCh0YyksIHBhZFQgKyBwbG90SCk7IGN0eC5zdHJva2UoKTtcbiAgICAgIGN0eC5zZXRMaW5lRGFzaChbXSk7XG4gICAgICBjdHguZmlsbFN0eWxlID0gJyMyYTlkOGYnO1xuICAgICAgY3R4LmZvbnQgPSAnMTJweCBzYW5zLXNlcmlmJztcbiAgICAgIGN0eC50ZXh0QWxpZ24gPSAnY2VudGVyJztcbiAgICAgIGN0eC5maWxsVGV4dCgnVD0xL2EnLCB0b1godGMpLCBwYWRUIC0gNik7XG4gICAgfVxuXG4gICAgLy8gMS9lIGhvcml6b250YWwgZGFzaGVkIGxpbmUgKGRlY2F5IG9ubHkpXG4gICAgaWYgKG1vZGUgPT09ICdkZWNheScpIHtcbiAgICAgIGNvbnN0IG9uZU92ZXJFID0gMSAvIE1hdGguRTtcbiAgICAgIGlmIChvbmVPdmVyRSA+PSB5TWluICYmIG9uZU92ZXJFIDw9IHlNYXgpIHtcbiAgICAgICAgY3R4LnN0cm9rZVN0eWxlID0gJyNlNzZmNTEnO1xuICAgICAgICBjdHgubGluZVdpZHRoID0gMS4yO1xuICAgICAgICBjdHguc2V0TGluZURhc2goWzUsIDRdKTtcbiAgICAgICAgY3R4LmJlZ2luUGF0aCgpOyBjdHgubW92ZVRvKHBhZEwsIHRvWShvbmVPdmVyRSkpOyBjdHgubGluZVRvKHBhZEwgKyBwbG90VywgdG9ZKG9uZU92ZXJFKSk7IGN0eC5zdHJva2UoKTtcbiAgICAgICAgY3R4LnNldExpbmVEYXNoKFtdKTtcbiAgICAgICAgY3R4LmZpbGxTdHlsZSA9ICcjZTc2ZjUxJztcbiAgICAgICAgY3R4LmZvbnQgPSAnMTJweCBzYW5zLXNlcmlmJztcbiAgICAgICAgY3R4LnRleHRBbGlnbiA9ICdsZWZ0JztcbiAgICAgICAgY3R4LmZpbGxUZXh0KCcxL2Ug4omIIDAuMzcnLCBwYWRMICsgNCwgdG9ZKG9uZU92ZXJFKSAtIDQpO1xuICAgICAgfVxuICAgIH1cblxuICAgIC8vIEN1cnZlXG4gICAgY3R4LnN0cm9rZVN0eWxlID0gJyMxYTNhNmInO1xuICAgIGN0eC5saW5lV2lkdGggPSAyLjU7XG4gICAgY3R4LmJlZ2luUGF0aCgpO1xuICAgIGxldCBzdGFydGVkID0gZmFsc2U7XG4gICAgZm9yIChsZXQgcHggPSAwOyBweCA8PSBwbG90VzsgcHgrKykge1xuICAgICAgY29uc3QgdCA9IChweCAvIHBsb3RXKSAqIHRNYXg7XG4gICAgICBjb25zdCB5ID0gbW9kZSA9PT0gJ2RlY2F5JyA/IE1hdGguZXhwKC1hICogdCkgOiBNYXRoLmV4cChhICogdCk7XG4gICAgICBpZiAoeSA8IHlNaW4gfHwgeSA+IHlNYXggKiAxLjA1KSB7IHN0YXJ0ZWQgPSBmYWxzZTsgY29udGludWU7IH1cbiAgICAgIGNvbnN0IGN4MiA9IHBhZEwgKyBweDtcbiAgICAgIGNvbnN0IGN5ID0gdG9ZKE1hdGgubWluKHksIHlNYXgpKTtcbiAgICAgIGlmICghc3RhcnRlZCkgeyBjdHgubW92ZVRvKGN4MiwgY3kpOyBzdGFydGVkID0gdHJ1ZTsgfSBlbHNlIHsgY3R4LmxpbmVUbyhjeDIsIGN5KTsgfVxuICAgIH1cbiAgICBjdHguc3Ryb2tlKCk7XG5cbiAgICAvLyBEb3QgYXQgdD10Y1xuICAgIGlmICh0YyA8PSB0TWF4KSB7XG4gICAgICBjb25zdCB5QXRUYyA9IG1vZGUgPT09ICdkZWNheScgPyBNYXRoLmV4cCgtYSAqIHRjKSA6IE1hdGguZXhwKGEgKiB0Yyk7XG4gICAgICBpZiAoeUF0VGMgPj0geU1pbiAmJiB5QXRUYyA8PSB5TWF4KSB7XG4gICAgICAgIGN0eC5maWxsU3R5bGUgPSAnIzJhOWQ4Zic7XG4gICAgICAgIGN0eC5iZWdpblBhdGgoKTtcbiAgICAgICAgY3R4LmFyYyh0b1godGMpLCB0b1koeUF0VGMpLCA1LCAwLCAyICogTWF0aC5QSSk7XG4gICAgICAgIGN0eC5maWxsKCk7XG4gICAgICB9XG4gICAgfVxuICB9LCBbYSwgbW9kZV0pO1xuXG4gIHJldHVybiAoXG4gICAgPGRpdiBzdHlsZT17eyBmb250RmFtaWx5OiAnc2VyaWYnLCBiYWNrZ3JvdW5kOiAnI2ZmZicsIHBhZGRpbmc6ICcxNnB4JywgbWF4V2lkdGg6ICc1NjBweCcsIG1hcmdpbjogJzAgYXV0bycsIGJvcmRlcjogJzFweCBzb2xpZCAjZGRkJywgYm9yZGVyUmFkaXVzOiAnNnB4JyB9fT5cbiAgICAgIDxkaXYgc3R5bGU9e3sgZm9udFdlaWdodDogJ2JvbGQnLCBmb250U2l6ZTogJzE1cHgnLCBtYXJnaW5Cb3R0b206ICcxMHB4JywgY29sb3I6ICcjMWEzYTZiJyB9fT5EZWNheSBhbmQgR3Jvd3RoIENvbnRyb2xsZWQgYnkgYTwvZGl2PlxuICAgICAgPGNhbnZhcyByZWY9e2NhbnZhc1JlZn0gd2lkdGg9ezUyMH0gaGVpZ2h0PXszMDB9IHN0eWxlPXt7IGRpc3BsYXk6ICdibG9jaycsIG1hcmdpbjogJzAgYXV0bycgfX0gLz5cbiAgICAgIDxkaXYgc3R5bGU9e3sgbWFyZ2luVG9wOiAnMTRweCcsIGRpc3BsYXk6ICdmbGV4JywgZmxleERpcmVjdGlvbjogJ2NvbHVtbicsIGdhcDogJzEwcHgnIH19PlxuICAgICAgICA8bGFiZWwgc3R5bGU9e3sgZm9udFNpemU6ICcxNHB4JywgY29sb3I6ICcjMzMzJyB9fT5cbiAgICAgICAgICA8c3Ryb25nPmEgPSB7YS50b0ZpeGVkKDIpfTwvc3Ryb25nPiAmbmJzcDsgKHRpbWUgY29uc3RhbnQgVCA9IHsoMS9hKS50b0ZpeGVkKDMpfSBzKVxuICAgICAgICAgIDxpbnB1dCB0eXBlPSdyYW5nZScgbWluPXswLjI1fSBtYXg9ezV9IHN0ZXA9ezAuMjV9IHZhbHVlPXthfVxuICAgICAgICAgICAgb25DaGFuZ2U9e2UgPT4gc2V0QShwYXJzZUZsb2F0KGUudGFyZ2V0LnZhbHVlKSl9XG4gICAgICAgICAgICBzdHlsZT17eyB3aWR0aDogJzEwMCUnLCBtYXJnaW5Ub3A6ICc0cHgnIH19IC8+XG4gICAgICAgIDwvbGFiZWw+XG4gICAgICAgIDxkaXYgc3R5bGU9e3sgZGlzcGxheTogJ2ZsZXgnLCBnYXA6ICcxMHB4JyB9fT5cbiAgICAgICAgICA8YnV0dG9uIG9uQ2xpY2s9eygpID0+IHNldE1vZGUoJ2RlY2F5Jyl9XG4gICAgICAgICAgICBzdHlsZT17eyBmbGV4OiAxLCBwYWRkaW5nOiAnN3B4JywgYmFja2dyb3VuZDogbW9kZSA9PT0gJ2RlY2F5JyA/ICcjMWEzYTZiJyA6ICcjZWVlJywgY29sb3I6IG1vZGUgPT09ICdkZWNheScgPyAnI2ZmZicgOiAnIzMzMycsIGJvcmRlcjogJ25vbmUnLCBib3JkZXJSYWRpdXM6ICc0cHgnLCBjdXJzb3I6ICdwb2ludGVyJywgZm9udFNpemU6ICcxM3B4JyB9fT5cbiAgICAgICAgICAgIERlY2F5OiBlXijiiJJhdClcbiAgICAgICAgICA8L2J1dHRvbj5cbiAgICAgICAgICA8YnV0dG9uIG9uQ2xpY2s9eygpID0+IHNldE1vZGUoJ2dyb3d0aCcpfVxuICAgICAgICAgICAgc3R5bGU9e3sgZmxleDogMSwgcGFkZGluZzogJzdweCcsIGJhY2tncm91bmQ6IG1vZGUgPT09ICdncm93dGgnID8gJyMxYTNhNmInIDogJyNlZWUnLCBjb2xvcjogbW9kZSA9PT0gJ2dyb3d0aCcgPyAnI2ZmZicgOiAnIzMzMycsIGJvcmRlcjogJ25vbmUnLCBib3JkZXJSYWRpdXM6ICc0cHgnLCBjdXJzb3I6ICdwb2ludGVyJywgZm9udFNpemU6ICcxM3B4JyB9fT5cbiAgICAgICAgICAgIEdyb3d0aDogZV4oYXQpXG4gICAgICAgICAgPC9idXR0b24+XG4gICAgICAgIDwvZGl2PlxuICAgICAgPC9kaXY+XG4gICAgICA8cCBzdHlsZT17eyBmb250U2l6ZTogJzEzcHgnLCBjb2xvcjogJyM1NTUnLCBtYXJnaW5Ub3A6ICcxMHB4JywgbGluZUhlaWdodDogJzEuNScgfX0+XG4gICAgICAgIERyYWcgPHN0cm9uZz5hPC9zdHJvbmc+IHVwd2FyZCBhbmQgbm90aWNlIHRoZSBjdXJ2ZSBjaGFuZ2VzIGZhc3Rlciwgd2hpbGUgdGhlIG9uZS10aW1lLWNvbnN0YW50IGRlY2F5IHZhbHVlIHJlbWFpbnMgMS9lIOKJiCAwLjM3LlxuICAgICAgPC9wPlxuICAgIDwvZGl2PlxuICApO1xufSJ9"></div>%%KC_END%%
+
+## 2. Time Constant
+
+The **time constant** is the time required for a decaying exponential \(e^{-at}\) to drop by a factor of \(e\) — meaning it reaches about **37%** of its previous value. The time constant is not \(a\); it is \(\frac{1}{a}\).
+
+For example, if \(a = 4\), the time constant is \(\frac{1}{4} = 0.25\) second, so the signal reaches about 37% of its starting value after just 0.25 seconds.
+
+### COMMON MISTAKE
+
+Do not copy the coefficient \(a\) as the time constant. Always take its **reciprocal**: \(T = \frac{1}{a}\).
+
+#### Quick Check
+
+If \(a\) doubles, should the time constant double or halve? (Answer: it halves, because \(T = 1/a\).)
+
+$$T = \frac{1}{a}$$
+*\(T\) is the time constant of \(e^{-at}\).
+
+- **\(a\)**: positive exponential rate (units: \(\text{s}^{-1}\) when \(t\) is in seconds).
+- **\(T\)**: measured in seconds when \(t\) is in seconds.
+- **Use when**: sketching or estimating how fast \(e^{-at}\) decays.
+- **Exam trigger**: any decaying exponential in the form \(e^{-at}\).
+
+#### Common Misuse
+Using \(T = a\) reverses the relationship — larger \(a\) would incorrectly suggest a slower decay.*
+
+$$e^{-aT} = e^{-1} \approx 0.37$$
+*After **one time constant** \(T = 1/a\), the decaying exponential is about **37%** of its value at the start of that interval.
+
+- **Use when**: placing the first key point on a sketch of \(e^{-at}\).
+- **Exam trigger**: any question asking you to sketch \(e^{-at}\) without computing many points.
+
+#### Common Misuse
+0.37 is the **amount remaining**, not the amount lost. The signal has dropped to 37%, not by 37%.*
+
+%%KC_BLOCK%%<div class="kc-visual-meta" data-visual-kind="book_image" data-teaching-role="example_support" data-visual-use-b64="eyJjcmFtIjoiVXNlIHRoZSBsYWJlbGVkIDAuMzcgYW5kIDAuMTM1IHBvaW50cyBhcyB0aGUgZmFzdCBza2V0Y2hpbmcgdGVtcGxhdGUuIiwic3RhbmRhcmQiOiJVc2UgdGhlIGZpZ3VyZSB0byBjb25uZWN0IFQ9MS9hIHdpdGggYWN0dWFsIHBsb3R0ZWQgcG9pbnRzIGZvciBlXnstYXR9IGFuZCBlXnstMnR9LiIsInRvcF9zY29yZSI6IlVzZSB0aGUgdHdvIHN1YnBsb3RzIHRvIGNvbXBhcmUgdGhlIGdlbmVyYWwgY2FzZSB3aXRoIHRoZSBzcGVjaWZpYyBhPTIgY2FzZS4ifQ==" style="display:none;"></div>%%KC_END%%
+![Fig. B.10](/figures/page-021-fig__b_10-1.png)
+*Fig. B.10 shows how a decaying exponential reaches about 0.37 after one time constant and about 0.135 after two time constants.*
+<div class="lesson-figure-description">The figure contains two coordinate plots, both with horizontal axis t and vertical amplitude axis. The left plot sketches \(e^{-at}u(t)\): the curve starts at 1 at \(t=0\) and decreases monotonically toward 0, with labeled reference points at \(t = 1/a\) (amplitude \(1/e \approx 0.37\)) and \(t = 2/a\) (amplitude \(1/e^2 \approx 0.135\)). The right plot shows the specific case \(e^{-2t}u(t)\) with \(a=2\): the same amplitudes 0.37 and 0.135 now occur at \(t = 0.5\) and \(t = 1\) respectively. Students should notice that the curve drops by the same multiplicative factor \(1/e\) over every interval of length \(1/a\), regardless of where that interval starts.</div>
+
+## 3. Representative Sketch: \(x(t) = e^{-2t}\)
+
+Here \(a = 2\), so the time constant is \(T = \frac{1}{2} = 0.5\) second.
+
+**Key sketch points using the time-constant method:**
+
+- \(t = 0\): \(x(0) = 1\)
+- \(t = 0.5\) (one \(T\)): \(x(0.5) = 1/e \approx 0.37\)
+- \(t = 1\) (two \(T\)): \(x(1) = 1/e^2 \approx 0.135\)
+- \(t = 1.5\) (three \(T\)): \(x(1.5) = 1/e^3 \approx 0.05\)
+
+These four points are enough to draw a smooth, accurate decreasing curve.
+
+### EXAM TIP
+
+For sketches, do not waste time computing random points — mark time-constant points only.
+
+$$\frac{e^{-a t_2}}{e^{-a t_1}} = e^{-a(t_2 - t_1)}$$
+*This ratio compares the exponential value at two different times \(t_1\) and \(t_2\).
+
+- **\(t_1, t_2\)**: any two time instants with \(t_2 > t_1\).
+- **Use when**: proving or checking how much the signal changes over a time interval.
+- **Exam trigger**: wording like 'over any interval of length \(1/a\)'.
+
+#### Common Misuse
+Thinking the 37% drop applies only from \(t = 0\). In fact, the ratio \(e^{-a(t_2 - t_1)}\) depends only on the **length** of the interval, not its starting point.*
+
+$$t_2 - t_1 = \frac{1}{a}$$
+*This condition means the two time instants are separated by exactly **one time constant**.
+
+- **Use together with** the ratio formula \(e^{-a(t_2 - t_1)}\) to show the signal is multiplied by \(1/e\).
+
+#### Common Misuse
+Thinking the 37% rule applies only at the very first time constant \(t = 1/a\). The rule holds for **every** interval of this same duration, starting anywhere.*
+
+$$\frac{e^{-a t_2}}{e^{-a t_1}} = \frac{1}{e} \approx 0.37$$
+*Whenever \(t_2 - t_1 = 1/a\), the later value is **37%** of the earlier value.
+
+- **Use for**: rapid sketching and interval comparisons.
+- **Exam trigger**: questions asking how the exponential changes after one time constant.
+
+#### Common Misuse
+Subtracting 0.37 from the old value instead of **multiplying** by 0.37. The operation is multiplication: \(x(t_2) = 0.37 \times x(t_1)\).*
+
+---
+**📌 Key Takeaways**
+- \(e^{-at}\) decays for \(a > 0\); \(e^{at}\) grows for \(a > 0\) — check the sign first.
+- Time constant \(T = \frac{1}{a}\); do not confuse \(T\) with \(a\) — they are reciprocals.
+- After one time constant: \(e^{-aT} = e^{-1} \approx 0.37\) (37% remains, not 37% lost).
+- After two time constants: value is \(1/e^2 \approx 0.135\); use \(t = 0, T, 2T, 3T\) to sketch.
+- Over any interval of length \(1/a\): \(\dfrac{e^{-at_2}}{e^{-at_1}} = \dfrac{1}{e} \approx 0.37\) — the rule is universal, not just at \(t = 0\).
+
+*Next, we use exponential envelopes to sketch more complicated signals.*
+
+%%KC_BLOCK%%<div class="kc-quiz-plan" data-quiz-b64="eyJ0eXBlIjoicXVpel9wbGFuIiwidGFyZ2V0X3F1ZXN0aW9ucyI6NywicXVlc3Rpb25fcmFuZ2UiOnsibWluIjo2LCJtYXgiOjh9LCJrbm93bGVkZ2VfcG9pbnRzIjpbeyJpZCI6ImRlY2F5X3ZzX2dyb3d0aCIsImxhYmVsIjoiUmVjb2duaXppbmcgbW9ub3RvbmljIGRlY2F5IGFuZCBncm93dGgiLCJpbXBvcnRhbmNlIjoiaGlnaCIsImV4YW1fd2VpZ2h0IjoiaGlnaCIsIm1hc3RlcnlfcnVsZSI6eyJjb3JyZWN0X3N0cmVha19yZXF1aXJlZCI6MX0sInF1ZXN0aW9ucyI6W3siaWQiOiJrcDFfcTEiLCJ0eXBlIjoibXVsdGlwbGVfY2hvaWNlIiwic3RlbSI6IkFzc3VtZSBcXChhID4gMFxcKS4gV2hpY2ggc2lnbmFsIGlzIG1vbm90b25pY2FsbHkgZGVjYXlpbmcgYXMgXFwodFxcKSBpbmNyZWFzZXM/Iiwib3B0aW9ucyI6WyJBLiBcXChlXnthdH1cXCkiLCJCLiBcXChlXnstYXR9XFwpIiwiQy4gXFwoZV57YS90fVxcKSIsIkQuIFxcKC1lXnthdH1cXCkiXSwiY29ycmVjdF9vcHRpb24iOiJCIiwiZXhwbGFuYXRpb24iOiJGb3IgXFwoYSA+IDBcXCksIHRoZSBuZWdhdGl2ZSBleHBvbmVudCBcXCgtYXRcXCkgYmVjb21lcyBtb3JlIG5lZ2F0aXZlIGFzIFxcKHRcXCkgaW5jcmVhc2VzLCBzbyBcXChlXnstYXR9XFwpIGRlY3JlYXNlcyB0b3dhcmQgemVyby4iLCJ3cm9uZ19vcHRpb25fZXhwbGFuYXRpb25zIjp7IkEiOiJcXChlXnthdH1cXCkgZ3Jvd3MgYmVjYXVzZSB0aGUgZXhwb25lbnQgaW5jcmVhc2VzIHdpdGggXFwodFxcKS4iLCJDIjoiXFwoZV57YS90fVxcKSBpcyBub3QgdGhlIHN0YW5kYXJkIG1vbm90b25pYyBleHBvbmVudGlhbCBmb3JtIHVzZWQgaW4gdGhpcyBzZWN0aW9uLiIsIkQiOiJcXCgtZV57YXR9XFwpIGJlY29tZXMgbW9yZSBuZWdhdGl2ZTsgaXQgaXMgbm90IHRoZSBwb3NpdGl2ZSBkZWNheWluZyBleHBvbmVudGlhbCBzaGFwZSBkaXNjdXNzZWQgaGVyZS4ifSwiaGludCI6IkNoZWNrIHRoZSBzaWduIG11bHRpcGx5aW5nIFxcKGF0XFwpIGluIHRoZSBleHBvbmVudC4iLCJuZWVkc192aXN1YWwiOmZhbHNlLCJzYW1lX3BvaW50X3ZhcmlhbnQiOmZhbHNlfSx7ImlkIjoia3AxX3EyIiwidHlwZSI6Im11bHRpcGxlX2Nob2ljZSIsInN0ZW0iOiJJbiB0aGUgaW50ZXJhY3RpdmUgcGxvdCwgd2hlbiBcXChhXFwpIGlzIGluY3JlYXNlZCBmb3IgXFwoZV57LWF0fVxcKSwgd2hhdCBzaG91bGQgaGFwcGVuIHRvIHRoZSBjdXJ2ZT8iLCJvcHRpb25zIjpbIkEuIEl0IGRlY2F5cyBtb3JlIHNsb3dseSBhbmQgdGhlIHRpbWUgY29uc3RhbnQgaW5jcmVhc2VzLiIsIkIuIEl0IGRlY2F5cyBmYXN0ZXIgYW5kIHRoZSB0aW1lIGNvbnN0YW50IGRlY3JlYXNlcy4iLCJDLiBJdCBiZWNvbWVzIGEgZ3Jvd2luZyBleHBvbmVudGlhbC4iLCJELiBJdCBzdGF5cyB1bmNoYW5nZWQgYmVjYXVzZSB0aGUgaW5pdGlhbCB2YWx1ZSBpcyBzdGlsbCAxLiJdLCJjb3JyZWN0X29wdGlvbiI6IkIiLCJleHBsYW5hdGlvbiI6IkZvciBcXChlXnstYXR9XFwpLCBsYXJnZXIgXFwoYVxcKSBtZWFucyBmYXN0ZXIgZGVjYXksIGFuZCBzaW5jZSBcXChUID0gMS9hXFwpLCB0aGUgdGltZSBjb25zdGFudCBiZWNvbWVzIHNtYWxsZXIuIiwid3Jvbmdfb3B0aW9uX2V4cGxhbmF0aW9ucyI6eyJBIjoiVGhpcyByZXZlcnNlcyB0aGUgcmVsYXRpb25zaGlwOyBsYXJnZXIgXFwoYVxcKSBtYWtlcyBcXChUXFwpIHNtYWxsZXIsIG5vdCBsYXJnZXIuIiwiQyI6IkNoYW5naW5nIFxcKGFcXCkgZG9lcyBub3QgY2hhbmdlIHRoZSBuZWdhdGl2ZSBzaWduIGluIFxcKGVeey1hdH1cXCkuIiwiRCI6IlRoZSBpbml0aWFsIHZhbHVlIHJlbWFpbnMgMSwgYnV0IHRoZSBsYXRlciB2YWx1ZXMgY2hhbmdlLiJ9LCJoaW50IjoiVXNlIFxcKFQgPSAxL2FcXCkuIiwibmVlZHNfdmlzdWFsIjp0cnVlLCJ2aXN1YWxfdHlwZSI6ImludGVyYWN0aXZlX2RlbW8iLCJzYW1lX3BvaW50X3ZhcmlhbnQiOnRydWV9XX0seyJpZCI6InRpbWVfY29uc3RhbnQiLCJsYWJlbCI6IlRpbWUgY29uc3RhbnQgb2YgXFwoZV57LWF0fVxcKSIsImltcG9ydGFuY2UiOiJoaWdoIiwiZXhhbV93ZWlnaHQiOiJoaWdoIiwibWFzdGVyeV9ydWxlIjp7ImNvcnJlY3Rfc3RyZWFrX3JlcXVpcmVkIjoyfSwicXVlc3Rpb25zIjpbeyJpZCI6ImtwMl9xMSIsInR5cGUiOiJtdWx0aXBsZV9jaG9pY2UiLCJzdGVtIjoiV2hhdCBpcyB0aGUgdGltZSBjb25zdGFudCBvZiBcXCh4KHQpID0gZV57LTV0fVxcKT8iLCJvcHRpb25zIjpbIkEuIDUgc2Vjb25kcyIsIkIuIFxcKDEvNVxcKSBzZWNvbmQiLCJDLiBcXChlXnstNX1cXCkgc2Vjb25kcyIsIkQuIDAuMzcgc2Vjb25kcyJdLCJjb3JyZWN0X29wdGlvbiI6IkIiLCJleHBsYW5hdGlvbiI6IkZvciBcXChlXnstYXR9XFwpLCB0aGUgdGltZSBjb25zdGFudCBpcyBcXChUID0gMS9hXFwpLiBIZXJlIFxcKGEgPSA1XFwpLCBzbyBcXChUID0gMS81XFwpIHNlY29uZC4iLCJ3cm9uZ19vcHRpb25fZXhwbGFuYXRpb25zIjp7IkEiOiJUaGlzIGNvbmZ1c2VzIFxcKGFcXCkgd2l0aCBcXCgxL2FcXCkuIiwiQyI6IlxcKGVeey01fVxcKSBpcyBhIHZhbHVlIG9mIHRoZSBleHBvbmVudGlhbCBhdCBcXCh0ID0gMVxcKSwgbm90IHRoZSB0aW1lIGNvbnN0YW50LiIsIkQiOiIwLjM3IGlzIHRoZSBmcmFjdGlvbiByZW1haW5pbmcgYWZ0ZXIgb25lIHRpbWUgY29uc3RhbnQsIG5vdCB0aGUgdGltZSBjb25zdGFudCBpdHNlbGYuIn0sImhpbnQiOiJUaGUgdGltZSBjb25zdGFudCBpcyB0aGUgcmVjaXByb2NhbCBvZiB0aGUgY29lZmZpY2llbnQgb2YgXFwodFxcKS4iLCJuZWVkc192aXN1YWwiOmZhbHNlLCJzYW1lX3BvaW50X3ZhcmlhbnQiOmZhbHNlfSx7ImlkIjoia3AyX3EyIiwidHlwZSI6Im11bHRpcGxlX2Nob2ljZSIsInN0ZW0iOiJBIHN0dWRlbnQgc2F5czogJ0ZvciBcXChlXnstNHR9XFwpLCB0aGUgdGltZSBjb25zdGFudCBpcyA0IHNlY29uZHMuJyBXaHkgaXMgdGhpcyB3cm9uZz8iLCJvcHRpb25zIjpbIkEuIFRoZSB0aW1lIGNvbnN0YW50IGlzIFxcKDEvNFxcKSBzZWNvbmQsIG5vdCA0IHNlY29uZHMuIiwiQi4gVGhlIHNpZ25hbCBpcyBncm93aW5nLCBzbyBpdCBoYXMgbm8gdGltZSBjb25zdGFudC4iLCJDLiBUaGUgdGltZSBjb25zdGFudCBpcyBcXChlXjRcXCkgc2Vjb25kcy4iLCJELiBUaGUgdGltZSBjb25zdGFudCBpcyBhbHdheXMgMSBzZWNvbmQuIl0sImNvcnJlY3Rfb3B0aW9uIjoiQSIsImV4cGxhbmF0aW9uIjoiRm9yIFxcKGVeey1hdH1cXCksIFxcKFQgPSAxL2FcXCkuIFdpdGggXFwoYSA9IDRcXCksIHRoZSB0aW1lIGNvbnN0YW50IGlzIDAuMjUgc2Vjb25kLiIsIndyb25nX29wdGlvbl9leHBsYW5hdGlvbnMiOnsiQiI6IlxcKGVeey00dH1cXCkgaXMgZGVjYXlpbmcsIG5vdCBncm93aW5nLiIsIkMiOiJcXChlXjRcXCkgaXMgbm90IHRoZSB0aW1lIGNvbnN0YW50IGZvcm11bGEuIiwiRCI6IlRoZSB0aW1lIGNvbnN0YW50IGRlcGVuZHMgb24gXFwoYVxcKS4ifSwiaGludCI6IkRvIG5vdCBjb3B5IHRoZSBjb2VmZmljaWVudDsgdGFrZSBpdHMgcmVjaXByb2NhbC4iLCJuZWVkc192aXN1YWwiOmZhbHNlLCJzYW1lX3BvaW50X3ZhcmlhbnQiOnRydWV9XX0seyJpZCI6InF1aWNrX3NrZXRjaF92YWx1ZXMiLCJsYWJlbCI6IlNrZXRjaGluZyB1c2luZyAzNyUgYW5kIDEzLjUlIHZhbHVlcyIsImltcG9ydGFuY2UiOiJoaWdoIiwiZXhhbV93ZWlnaHQiOiJoaWdoIiwibWFzdGVyeV9ydWxlIjp7ImNvcnJlY3Rfc3RyZWFrX3JlcXVpcmVkIjoxfSwicXVlc3Rpb25zIjpbeyJpZCI6ImtwM19xMSIsInR5cGUiOiJtdWx0aXBsZV9jaG9pY2UiLCJzdGVtIjoiRm9yIFxcKHgodCkgPSBlXnstMnR9XFwpLCB3aGljaCBwYWlyIG9mIHNrZXRjaCBwb2ludHMgaXMgY29ycmVjdD8iLCJvcHRpb25zIjpbIkEuIFxcKHgoMC41KSBcXGFwcHJveCAwLjM3XFwpIGFuZCBcXCh4KDEpIFxcYXBwcm94IDAuMTM1XFwpIiwiQi4gXFwoeCgwLjUpIFxcYXBwcm94IDAuMTM1XFwpIGFuZCBcXCh4KDEpIFxcYXBwcm94IDAuMzdcXCkiLCJDLiBcXCh4KDAuNSkgPSAyXFwpIGFuZCBcXCh4KDEpID0gNFxcKSIsIkQuIFxcKHgoMC41KSA9IDBcXCkgYW5kIFxcKHgoMSkgPSAwXFwpIl0sImNvcnJlY3Rfb3B0aW9uIjoiQSIsImV4cGxhbmF0aW9uIjoiSGVyZSBcXChUID0gMS8yID0gMC41XFwpLiBBZnRlciBvbmUgdGltZSBjb25zdGFudCB0aGUgdmFsdWUgaXMgYWJvdXQgMC4zNzsgYWZ0ZXIgdHdvLCBpdCBpcyBhYm91dCAwLjEzNS4iLCJ3cm9uZ19vcHRpb25fZXhwbGFuYXRpb25zIjp7IkIiOiJUaGlzIHJldmVyc2VzIHRoZSBvbmUtdGltZS1jb25zdGFudCBhbmQgdHdvLXRpbWUtY29uc3RhbnQgdmFsdWVzLiIsIkMiOiJUaG9zZSB2YWx1ZXMgZGVzY3JpYmUgZ3Jvd3RoLCBub3QgZGVjYXkuIiwiRCI6IkEgZGVjYXlpbmcgZXhwb25lbnRpYWwgYXBwcm9hY2hlcyB6ZXJvIGJ1dCBkb2VzIG5vdCBiZWNvbWUgemVybyBhdCBmaW5pdGUgdGltZS4ifSwiaGludCI6IkZvciBcXChlXnstMnR9XFwpLCBvbmUgdGltZSBjb25zdGFudCBpcyAwLjUuIiwibmVlZHNfdmlzdWFsIjp0cnVlLCJ2aXN1YWxfdHlwZSI6ImJvb2tfZmlndXJlIiwic2FtZV9wb2ludF92YXJpYW50IjpmYWxzZX0seyJpZCI6ImtwM19xMiIsInR5cGUiOiJzaG9ydF9hbnN3ZXIiLCJzdGVtIjoiR2l2ZSB0aGUgZmlyc3QgdGhyZWUga2V5IHNrZXRjaCBwb2ludHMgZm9yIFxcKHgodCkgPSBlXnstMnR9XFwpIHVzaW5nIHRoZSB0aW1lLWNvbnN0YW50IG1ldGhvZC4iLCJpZGVhbF9hbnN3ZXIiOiJUaGUgdGltZSBjb25zdGFudCBpcyBcXChUID0gMC41XFwpLiBUaGUga2V5IHBvaW50cyBhcmUgXFwoeCgwKSA9IDFcXCksIFxcKHgoMC41KSA9IDEvZSBcXGFwcHJveCAwLjM3XFwpLCBhbmQgXFwoeCgxKSA9IDEvZV4yIFxcYXBwcm94IDAuMTM1XFwpLiIsImdyYWRpbmdfcnVicmljIjpbIk11c3QgaWRlbnRpZnkgXFwoVCA9IDAuNVxcKSIsIk11c3QgaW5jbHVkZSBcXCh4KDApID0gMVxcKSIsIk11c3QgaW5jbHVkZSBcXCh4KDAuNSkgPSAxL2UgXFxhcHByb3ggMC4zN1xcKSIsIk11c3QgaW5jbHVkZSBcXCh4KDEpID0gMS9lXjIgXFxhcHByb3ggMC4xMzVcXCkiXSwiZXhwbGFuYXRpb24iOiJUaGVzZSBwb2ludHMgYXJlIGVub3VnaCB0byBndWlkZSBhIGZhc3QsIGFjY3VyYXRlIHNrZXRjaCBvZiBcXChlXnstMnR9XFwpLiIsImhpbnQiOiJVc2UgXFwodCA9IDBcXCksIG9uZSB0aW1lIGNvbnN0YW50LCBhbmQgdHdvIHRpbWUgY29uc3RhbnRzLiIsIm5lZWRzX3Zpc3VhbCI6ZmFsc2UsInNhbWVfcG9pbnRfdmFyaWFudCI6dHJ1ZX1dfSx7ImlkIjoiaW50ZXJ2YWxfcmF0aW9fcnVsZSIsImxhYmVsIjoiRGVjYXkgb3ZlciBhbnkgb25lLXRpbWUtY29uc3RhbnQgaW50ZXJ2YWwiLCJpbXBvcnRhbmNlIjoibWVkaXVtIiwiZXhhbV93ZWlnaHQiOiJtZWRpdW0iLCJtYXN0ZXJ5X3J1bGUiOnsiY29ycmVjdF9zdHJlYWtfcmVxdWlyZWQiOjF9LCJxdWVzdGlvbnMiOlt7ImlkIjoia3A0X3ExIiwidHlwZSI6Im11bHRpcGxlX2Nob2ljZSIsInN0ZW0iOiJGb3IgXFwoeCh0KSA9IGVeey1hdH1cXCksIGlmIFxcKHRfMiAtIHRfMSA9IDEvYVxcKSwgd2hhdCBpcyBcXCh4KHRfMikveCh0XzEpXFwpPyIsIm9wdGlvbnMiOlsiQS4gXFwoMS9lXFwpIiwiQi4gXFwoZVxcKSIsIkMuIFxcKGFcXCkiLCJELiBcXCgxL2FcXCkiXSwiY29ycmVjdF9vcHRpb24iOiJBIiwiZXhwbGFuYXRpb24iOiJUaGUgcmF0aW8gaXMgXFwoZV57LWEodF8yIC0gdF8xKX1cXCkuIElmIFxcKHRfMiAtIHRfMSA9IDEvYVxcKSwgdGhlbiB0aGUgcmF0aW8gaXMgXFwoZV57LTF9ID0gMS9lXFwpLiIsIndyb25nX29wdGlvbl9leHBsYW5hdGlvbnMiOnsiQiI6IlRoYXQgd291bGQgZGVzY3JpYmUgZ3Jvd3RoIGJ5IGEgZmFjdG9yIFxcKGVcXCksIG5vdCBkZWNheSBieSBcXCgxL2VcXCkuIiwiQyI6IlxcKGFcXCkgaXMgdGhlIHJhdGUgcGFyYW1ldGVyLCBub3QgdGhlIHJhdGlvIG92ZXIgb25lIHRpbWUgY29uc3RhbnQuIiwiRCI6IlxcKDEvYVxcKSBpcyB0aGUgdGltZSBpbnRlcnZhbCwgbm90IHRoZSBhbXBsaXR1ZGUgcmF0aW8uIn0sImhpbnQiOiJTdWJzdGl0dXRlIFxcKHRfMiAtIHRfMSA9IDEvYVxcKSBpbnRvIFxcKGVeey1hKHRfMiAtIHRfMSl9XFwpLiIsIm5lZWRzX3Zpc3VhbCI6ZmFsc2UsInNhbWVfcG9pbnRfdmFyaWFudCI6ZmFsc2V9XX1dfQ==" style="display:none;"></div>%%KC_END%%

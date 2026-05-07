@@ -1,0 +1,313 @@
+{
+  "blueprint": {
+    "section_id": "B.5-5",
+    "section_title": "B.5-5 Improper F(x) with m=n",
+    "difficulty": "intermediate",
+    "estimated_read_minutes": 6,
+    "learning_objectives": [
+      "Recognize an improper rational function when the numerator and denominator have the same degree.",
+      "Extract the constant term before doing partial fraction expansion.",
+      "Rewrite an equal-degree rational function as a constant plus proper partial fractions.",
+      "Avoid applying the cover-up method directly to the original improper fraction."
+    ],
+    "visualization_need": {
+      "level": "static",
+      "reason": [
+        "pattern_recognition_benefits_from_figure",
+        "misconception_needs_visual_correction",
+        "wrong_vs_right_contrast_is_high_value"
+      ],
+      "recommended_assets": [
+        "generated_image",
+        "latex_native_formula"
+      ]
+    },
+    "visual_plan": {
+      "primary_anchor": "generated_image",
+      "rationale": "This section is mostly symbolic, so LaTeX formulas should carry the exact mathematics. However, students often miss the workflow: first extract the constant term, then partial-fraction only the proper remainder, then add the constant back. There is no textbook figure and no relevant Wikipedia/Wikimedia reference visual for this specific algebraic decision flow, so one custom lecture-note workflow visual is justified.",
+      "cram": "Use the visual to recognize the exam trigger m=n and immediately remember: constant first, partial fractions second.",
+      "standard": "Use the visual as a clean workflow beside one representative worked example.",
+      "top_score": "Use the visual to catch the subtle trap of applying cover-up coefficients before removing the constant term."
+    },
+    "blocks": [
+      {
+        "type": "text_explanation",
+        "instruction": "Create the first page as a minimal overview only. Use the exact headings 'Section Objective' and 'Concepts In This Section'. Under 'Section Objective', write 1 short sentence: 'Learn how to expand an improper rational function when the numerator and denominator have the same degree.' Under 'Concepts In This Section', list only these concept names as bullets: 'equal-degree improper rational functions', 'constant quotient term', 'proper remainder', 'partial fraction expansion after division'. Do not add background paragraphs, examples, or formulas on this page."
+      },
+      {
+        "type": "math_block",
+        "latex": "K=\\frac{\\text{leading coefficient of }N(x)}{\\text{leading coefficient of }D(x)}",
+        "explanation_instruction": "Begin a new page with the heading '## 1. The m=n trigger: pull out a constant first'. Explain in 90–130 words that if \\(F(x)=N(x)/D(x)\\) and the numerator and denominator have the same degree, the rational function is improper, so ordinary partial fractions cannot be applied immediately. Define \\(K\\) as the constant quotient term. Explain each symbol: \\(N(x)\\) is the numerator, \\(D(x)\\) is the denominator, and \\(K\\) is the constant you remove before expanding the remainder. Exam trigger: top powers match. Common misuse: starting cover-up directly on the original fraction and forgetting the constant term."
+      },
+      {
+        "type": "generate_image",
+        "tool": "openai/gpt-5.4-image-2",
+        "reason": "No textbook figure is available, no relevant Wikipedia/Wikimedia reference visual exists for this exact algebraic workflow, and a custom exam-flow visual is needed to prevent the common mistake of skipping the constant quotient term.",
+        "teaching_role": "exam_pattern_anchor",
+        "mode_specific_visual_use": {
+          "cram": "Make the decision sequence instantly recognizable: m=n means extract K first.",
+          "standard": "Support the representative example by showing the correct order of operations.",
+          "top_score": "Highlight the wrong path: applying cover-up before removing K."
+        },
+        "prompt": "Pure white clean background, minimalist lecture-notes educational flowchart, exactly one knowledge point: how to handle an improper rational function when numerator degree equals denominator degree. Show a clear left-to-right path with four boxes: 'Check degrees: m = n', 'Find constant K from leading coefficients', 'Subtract K·D(x) to get proper remainder', 'Partial fractions + add K back'. Include one small muted red warning callout: 'Do not cover-up before removing K'. Use navy, muted teal, soft gray, and muted red only for warning. No decorative icons, no cartoon elements, no dense text, no extra examples, no full derivation.",
+        "style_hint": "lecture notes, academic, clean flowchart, restrained color boxes, exam-oriented, one concept only"
+      },
+      {
+        "type": "math_block",
+        "latex": "F(x)=K+\\frac{N(x)-K D(x)}{D(x)}",
+        "explanation_instruction": "Begin a new page with the heading '## 2. Turn the improper fraction into a proper one'. Explain in 100–140 words that after finding \\(K\\), the remaining numerator is \\(N(x)-K D(x)\\), whose degree is now lower than the denominator degree. That new fraction is proper, so it is safe to use the usual partial fraction methods. State when to use this formula: whenever \\(\\deg N=\\deg D\\). Add a minimal concrete example in words using the textbook case: denominator leading coefficient is 1 and numerator leading coefficient is 3, so \\(K=3\\). Common misuse: subtracting \\(K\\) from the numerator instead of subtracting \\(K D(x)\\)."
+      },
+      {
+        "type": "math_block",
+        "latex": "k_i=\\left[(x-\\lambda_i)\\bigl(F(x)-K\\bigr)\\right]_{x=\\lambda_i}",
+        "explanation_instruction": "Begin a new page with the heading '## 3. Apply cover-up only to the proper remainder'. Explain in 90–130 words that for a simple linear factor \\((x-\\lambda_i)\\), the coefficient \\(k_i\\) is found after the constant part \\(K\\) has been removed. Explain symbols: \\(\\lambda_i\\) is the root that makes the factor zero, \\(k_i\\) is the numerator coefficient of that partial fraction term, and \\(F(x)-K\\) is the proper part. Exam trigger: denominator factors are distinct linear factors. Common misuse: using \\(F(x)\\) instead of \\(F(x)-K\\), which silently includes the constant term and gives wrong coefficients."
+      },
+      {
+        "type": "math_block",
+        "latex": "\\frac{3x^2+9x-20}{(x-2)(x+3)}=3+\\frac{2}{x-2}+\\frac{4}{x+3}",
+        "explanation_instruction": "Begin a new page with the heading '## 4. Representative example from the textbook'. Walk through this result in 120–160 words. Say that the denominator expands to a degree-2 expression, and the numerator is also degree 2, so the function is improper with \\(m=n\\). The leading coefficient ratio gives \\(K=3\\). After removing the constant part, the proper remainder expands into the two simple terms \\(2/(x-2)\\) and \\(4/(x+3)\\). Point out that the final answer must include all three pieces: the constant \\(3\\), the term with \\(x-2\\), and the term with \\(x+3\\). End with an exam note: if the answer has no constant, it is incomplete."
+      },
+      {
+        "type": "text_explanation",
+        "instruction": "Begin a new page with the heading '## 5. Quick exam check: what can go wrong?'. Write 90–130 words using a wrong-vs-right contrast. Wrong path: 'I see factors \\((x-2)(x+3)\\), so I immediately use cover-up on the original fraction.' Right path: 'Because the top and bottom degrees match, I first extract \\(K=3\\), then expand only the proper remainder.' Include one short bullet list titled 'Fast check before submitting:' with exactly three bullets: 'Did I compare degrees?', 'Did I include the constant term?', 'Did I compute coefficients from the proper part only?'."
+      },
+      {
+        "type": "section_summary",
+        "instruction": "Create the recap page titled '📌 Key Takeaways'. Include exactly 4 bullets, each ≤24 words. The bullets must explicitly include these formulas: \\(K=\\frac{\\text{leading coefficient of }N(x)}{\\text{leading coefficient of }D(x)}\\), \\(F(x)=K+\\frac{N(x)-KD(x)}{D(x)}\\), \\(k_i=\\left[(x-\\lambda_i)(F(x)-K)\\right]_{x=\\lambda_i}\\), and the textbook example \\(\\frac{3x^2+9x-20}{(x-2)(x+3)}=3+\\frac{2}{x-2}+\\frac{4}{x+3}\\). End with one bridge sentence: 'Next, modified partial fractions adapt this idea for inverse z-transform forms.'"
+      },
+      {
+        "type": "quiz_plan",
+        "target_questions": 6,
+        "question_range": {
+          "min": 5,
+          "max": 7
+        },
+        "knowledge_points": [
+          {
+            "id": "equal_degree_trigger",
+            "label": "Recognizing the m=n improper case",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 2
+            },
+            "questions": [
+              {
+                "id": "kp1_q1",
+                "type": "multiple_choice",
+                "stem": "For \\(F(x)=\\frac{4x^2-7x+1}{2x^2+3x-5}\\), what is the first step before partial fraction expansion?",
+                "options": [
+                  "A. Apply cover-up directly to the original fraction",
+                  "B. Extract a constant term because the degrees are equal",
+                  "C. Ignore the highest-degree terms",
+                  "D. Factor only the numerator"
+                ],
+                "correct_option": "B",
+                "explanation": "The numerator and denominator are both degree 2, so the rational function is improper with \\(m=n\\). A constant term must be removed first.",
+                "wrong_option_explanations": {
+                  "A": "Cover-up applies to the proper remainder, not the original equal-degree fraction.",
+                  "C": "The highest-degree terms determine the constant quotient term.",
+                  "D": "Partial fractions depend on the denominator factors, not just the numerator."
+                },
+                "hint": "Compare the top degree and bottom degree first.",
+                "needs_visual": false,
+                "same_point_variant": true,
+                "question_role": "formula_trigger_check"
+              },
+              {
+                "id": "kp1_q2",
+                "type": "multiple_choice",
+                "stem": "A student sees \\(\\frac{3x^2+9x-20}{(x-2)(x+3)}\\) and writes only \\(\\frac{2}{x-2}+\\frac{4}{x+3}\\). What is wrong?",
+                "options": [
+                  "A. The denominator cannot be factored",
+                  "B. The answer forgot the constant term",
+                  "C. The roots should be \\(-2\\) and \\(3\\)",
+                  "D. Partial fractions cannot be used at all"
+                ],
+                "correct_option": "B",
+                "explanation": "Because the numerator and denominator have the same degree, the expansion must include the constant term \\(3\\).",
+                "wrong_option_explanations": {
+                  "A": "The denominator is already factored as \\((x-2)(x+3)\\).",
+                  "C": "The roots are \\(2\\) and \\(-3\\), not \\(-2\\) and \\(3\\).",
+                  "D": "Partial fractions can be used after removing the constant term."
+                },
+                "hint": "Ask whether the original fraction is proper or improper.",
+                "needs_visual": false,
+                "same_point_variant": true,
+                "question_role": "common_trap_check"
+              }
+            ]
+          },
+          {
+            "id": "constant_quotient_and_remainder",
+            "label": "Finding K and forming the proper remainder",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 2
+            },
+            "questions": [
+              {
+                "id": "kp2_q1",
+                "type": "multiple_choice",
+                "stem": "For \\(F(x)=\\frac{6x^3+x-4}{3x^3-2x+1}\\), what is \\(K\\)?",
+                "options": [
+                  "A. \\(K=2\\)",
+                  "B. \\(K=3\\)",
+                  "C. \\(K=6\\)",
+                  "D. \\(K=\\frac{1}{2}\\)"
+                ],
+                "correct_option": "A",
+                "explanation": "\\(K\\) is the ratio of leading coefficients: \\(6/3=2\\).",
+                "wrong_option_explanations": {
+                  "B": "This is the denominator leading coefficient, not the ratio.",
+                  "C": "This is the numerator leading coefficient only.",
+                  "D": "This reverses the ratio."
+                },
+                "hint": "Use numerator leading coefficient divided by denominator leading coefficient.",
+                "needs_visual": false,
+                "same_point_variant": true,
+                "question_role": "core_concept_check"
+              },
+              {
+                "id": "kp2_q2",
+                "type": "multiple_choice",
+                "stem": "After finding \\(K\\), which expression gives the numerator of the proper remainder?",
+                "options": [
+                  "A. \\(N(x)-K\\)",
+                  "B. \\(D(x)-K N(x)\\)",
+                  "C. \\(N(x)-K D(x)\\)",
+                  "D. \\(K-N(x)D(x)\\)"
+                ],
+                "correct_option": "C",
+                "explanation": "The proper remainder comes from subtracting the whole polynomial product \\(K D(x)\\) from \\(N(x)\\).",
+                "wrong_option_explanations": {
+                  "A": "You subtract \\(K D(x)\\), not just the number \\(K\\).",
+                  "B": "This reverses the roles of numerator and denominator.",
+                  "D": "This multiplies the numerator and denominator incorrectly."
+                },
+                "hint": "Think polynomial division: quotient times divisor is subtracted from the numerator.",
+                "needs_visual": false,
+                "same_point_variant": true,
+                "question_role": "common_trap_check"
+              }
+            ]
+          },
+          {
+            "id": "workflow_visual_interpretation",
+            "label": "Correct workflow order",
+            "importance": "medium",
+            "exam_weight": "medium",
+            "mastery_rule": {
+              "correct_streak_required": 1
+            },
+            "questions": [
+              {
+                "id": "kp3_q1",
+                "type": "multiple_choice",
+                "stem": "In the workflow visual, which step must happen immediately before using ordinary partial fractions?",
+                "options": [
+                  "A. Compare only the constant terms",
+                  "B. Remove the constant quotient and form a proper remainder",
+                  "C. Multiply the numerator by every factor",
+                  "D. Set all denominator roots equal to zero at once"
+                ],
+                "correct_option": "B",
+                "explanation": "Partial fractions are applied to the proper remainder, not to the original improper expression.",
+                "wrong_option_explanations": {
+                  "A": "Constant terms do not decide the improper/proper status.",
+                  "C": "That is not part of the equal-degree reduction step.",
+                  "D": "Roots are used later for coefficients, not all at once as the first step."
+                },
+                "hint": "The visual warns against using cover-up too early.",
+                "needs_visual": true,
+                "visual_type": "generated_flowchart",
+                "same_point_variant": false,
+                "question_role": "visual_or_demo_observation_check"
+              }
+            ]
+          },
+          {
+            "id": "cover_up_after_constant_removal",
+            "label": "Using cover-up after removing K",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 1
+            },
+            "questions": [
+              {
+                "id": "kp4_q1",
+                "type": "short_answer",
+                "stem": "A classmate says: 'Since the denominator is factored, I can use cover-up directly on \\(F(x)\\), even when \\(m=n\\).' Explain why this is wrong in one or two sentences.",
+                "ideal_answer": "When \\(m=n\\), \\(F(x)\\) is improper, so it contains a constant quotient term. Cover-up should be applied to the proper part \\(F(x)-K\\), then the constant \\(K\\) must be added back.",
+                "grading_rubric": [
+                  "Must state that equal degree means the function is improper",
+                  "Must mention removing or extracting the constant term \\(K\\)",
+                  "Must state that cover-up applies to the proper remainder, not the original fraction"
+                ],
+                "explanation": "This checks whether the student understands the order, not just the algebraic result.",
+                "hint": "Ask what happens to the polynomial quotient term.",
+                "needs_visual": false,
+                "same_point_variant": false,
+                "question_role": "mini_transfer_check"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "existing_page_images": {
+    "page-034": "/pages/page-034.png",
+    "page-035": "/pages/page-035.png"
+  },
+  "available_figures": {},
+  "web_sources": [
+    {
+      "index": 1,
+      "title": "Lockheed Martin F-22 Raptor",
+      "url": "https://en.wikipedia.org/wiki/Lockheed_Martin_F-22_Raptor",
+      "snippet": "United States strikes on Iranian nuclear sites on 22 June 2025. In January 2026, F-22s along with F-35s, B-1s, F/A-18s, E/A-18s alongside various intelligence"
+    },
+    {
+      "index": 2,
+      "title": "Gamma function",
+      "url": "https://en.wikipedia.org/wiki/Gamma_function",
+      "snippet": "factorial ⁠ f ( n ) = ( n − 1 ) ! {\\displaystyle f(n)=(n-1)!} ⁠: f ( x + 1 ) = x f ( x ) for all x > 0 , f ( 1 ) = 1. {\\displaystyle f(x+1)=xf(x)\\ {\\text{"
+    },
+    {
+      "index": 3,
+      "title": "QR code",
+      "url": "https://en.wikipedia.org/wiki/QR_code",
+      "snippet": "x ) = x 10 + x 8 + x 5 + x 4 + x 2 + x + 1 {\\displaystyle g(x)=x^{10}+x^{8}+x^{5}+x^{4}+x^{2}+x+1} . It can correct at most 3 bit-errors out of the 5"
+    },
+    {
+      "index": 4,
+      "title": "List of Latin phrases (full)",
+      "url": "https://en.wikipedia.org/wiki/List_of_Latin_phrases_(full)",
+      "snippet": "November 2022 Wikimedia Foundation, Eugène Tisserant#Second Vatican Council and beyond, accessed on 14 October 2025 Twelfth Night 1.5/53–54, Folger Shakespeare"
+    },
+    {
+      "index": 5,
+      "title": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Wikipedia",
+      "snippet": "changed Wikipedia&#039;s domain from wikipedia.com to wikipedia.org. After an early period of exponential growth, the growth rate of the English Wikipedia in terms"
+    },
+    {
+      "index": 6,
+      "title": "Seismic array",
+      "url": "https://en.wikipedia.org/wiki/Seismic_array",
+      "snippet": "obtained using special digital signal processing techniques such as beamforming, which suppress noises and thus enhance the signal-to-noise ratio (SNR). The"
+    }
+  ],
+  "output_contract": {
+    "format": "single_json_object",
+    "no_markdown_fences": true,
+    "no_prose": true,
+    "compact_json_preferred": true
+  },
+  "section_specific_rules": null,
+  "summary_hint": null,
+  "exam_priority_guidance": null
+}

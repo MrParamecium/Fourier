@@ -1,0 +1,252 @@
+{
+  "section_id": "B.5-6",
+  "section_title": "B.5-6 Improper F(x) with m>n",
+  "difficulty": "intermediate",
+  "estimated_read_minutes": 6,
+  "learning_objectives": [
+    "Recognize when a rational function is improper and must be reduced before partial fraction expansion.",
+    "Use polynomial division to split an improper rational function into a polynomial part plus a proper rational part.",
+    "Use the modified partial fraction method by expanding F(x)/x when terms of the form kx/(x - λ)^r are required.",
+    "Avoid the common trap of expanding F(x) directly when the target form requires x in the numerator."
+  ],
+  "visualization_need": {
+    "level": "static",
+    "reason": [
+      "pattern_recognition_benefits_from_figure",
+      "misconception_needs_visual_correction",
+      "wrong_vs_right_contrast_is_high_value"
+    ],
+    "recommended_assets": [
+      "generated_image"
+    ]
+  },
+  "visual_plan": {
+    "primary_anchor": "generated_image",
+    "rationale": "This section is algebraic and has no textbook figures. Wikipedia-style reference images are not useful for this specific exam workflow. A custom static decision-flow visual is justified because students must recognize whether to divide first, expand F(x), or expand F(x)/x depending on the target partial fraction form.",
+    "cram": "Use the visual as a fast decision tree: degree check first, then choose ordinary or modified expansion.",
+    "standard": "Use the visual to connect the formulas to one representative worked example without adding extra edge cases.",
+    "top_score": "Use the visual to highlight the trap: expanding F(x) directly does not produce kx/(x - λ)^r terms."
+  },
+  "blocks": [
+    {
+      "type": "text_explanation",
+      "instruction": "Render Page 1 as a minimal overview only. Use exactly two short sections: 'Section Objective' and 'Concepts In This Section'. For 'Section Objective', write one sentence: 'Learn how to handle improper rational functions and the modified partial fraction form needed for inverse z-transform work.' For 'Concepts In This Section', list only these concept names as bullets with no explanations: degree check, polynomial division, proper rational remainder, modified partial fractions, multiply-back step."
+    },
+    {
+      "type": "math_block",
+      "latex": "F(x)=\\frac{N(x)}{D(x)}=Q(x)+\\frac{R(x)}{D(x)},\\qquad \\deg R<\\deg D",
+      "explanation_instruction": "Start Page 2 with the heading '## 1. Reduce an improper rational function first'. Explain in 100–140 words that when the numerator degree is greater than or equal to the denominator degree, ordinary partial fractions should not start immediately. Define N(x), D(x), Q(x), and R(x). State when to use the formula: the exam trigger is m ≥ n, meaning the numerator degree is at least the denominator degree. Include the common misuse: trying to cover-up the original improper fraction before polynomial division. Add one minimal example sentence using the textbook-style result: (3x^2 + 9x - 20)/((x - 2)(x + 3)) becomes 3 plus a proper fraction."
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Continue Page 2 with one representative worked example. Show the example: F(x) = (3x^2 + 9x - 20)/((x - 2)(x + 3)). Explain that the denominator is x^2 + x - 6, so polynomial division gives quotient 3 and remainder 6x - 2. Then state the proper remainder expansion result: (6x - 2)/((x - 2)(x + 3)) = 2/(x - 2) + 4/(x + 3). End with the final result F(x) = 3 + 2/(x - 2) + 4/(x + 3). Keep this to 90–130 words and include one exam note: the constant 3 is part of the answer, not something to discard."
+    },
+    {
+      "type": "generate_image",
+      "tool": "openai/gpt-5.4-image-2",
+      "reason": "No textbook figure is available, and a generic Wikipedia image would not teach this specific algebraic decision process. A custom lecture-notes decision flow is needed to prevent the common exam error of choosing the wrong expansion route.",
+      "teaching_role": "exam_pattern_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Use it to identify the correct first move in seconds: degree check, divide, or expand F(x)/x.",
+        "standard": "Use it after the worked example to connect the symbolic steps into one clean workflow.",
+        "top_score": "Use it to notice the subtle distinction between ordinary partial fractions and modified partial fractions."
+      },
+      "prompt": "Pure white clean background, minimalist lecture-notes educational flowchart, exactly one knowledge point: choosing the correct partial fraction workflow. Title: 'Which expansion route should I use?' Three boxes in a vertical flow: Box 1 'Check degrees: numerator m, denominator n'; arrow to decision diamond 'Is m ≥ n?'; yes branch to 'Polynomial division: F(x)=Q(x)+proper fraction'; no branch to 'Proper fraction: expand normally'. Then a separate emphasized note box below: 'If inverse z-transform needs kx/(x−λ)^r, expand F(x)/x first, then multiply by x.' Use navy main text, muted teal arrows, soft gray boxes, muted red warning label: 'Trap: expanding F(x) directly may give k/(x−λ)^r, not kx/(x−λ)^r.' No decorative icons, no cartoon, no dense derivation, clean academic linework.",
+      "style_hint": "lecture notes, academic, clean, restrained color boxes, exam-oriented, one concept only"
+    },
+    {
+      "type": "math_block",
+      "latex": "\\frac{F(x)}{x}=\\frac{a_1}{x}+\\sum_i\\sum_{r=1}^{m_i}\\frac{a_{i,r}}{(x-\\lambda_i)^r}",
+      "explanation_instruction": "Start Page 3 with the heading '## 2. Modified partial fractions: expand F(x)/x'. Explain in 100–150 words that inverse z-transform tables often want terms shaped like kx/(x - λ)^r, not k/(x - λ)^r. Therefore the trick is to divide F(x) by x first, expand that new proper rational expression using the usual partial fraction method, and only then multiply the whole result by x. Define a1, ai,r, λi, and r. State the exam trigger: the problem asks for terms with x in the numerator. State the common misuse: expanding F(x) directly and wondering why the numerators are constants instead of x-multiples."
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Continue Page 3 with the textbook representative example. Use F(x) = (5x^2 + 20x + 18)/((x + 2)(x + 3)^2). First show that F(x)/x = (5x^2 + 20x + 18)/(x(x + 2)(x + 3)^2). Then state the partial fraction expansion: F(x)/x = 1/x + 1/(x + 2) - 2/(x + 3) + 1/(x + 3)^2. Briefly say the coefficients are found by the earlier cover-up/repeated-root method, but do not re-derive them. Keep the explanation to 90–130 words and include a quick check: every denominator factor from x(x + 2)(x + 3)^2 appears in the expansion."
+    },
+    {
+      "type": "math_block",
+      "latex": "F(x)=1+\\frac{x}{x+2}-\\frac{2x}{x+3}+\\frac{x}{(x+3)^2}",
+      "explanation_instruction": "Start Page 4 with the heading '## 3. Multiply back by x to get the required form'. Explain in 90–130 words that after expanding F(x)/x, every term must be multiplied by x to return to F(x). Identify the target pattern kx/(x - λ)^r in the last three terms. Explain that the first term becomes 1 because x · (1/x) = 1. State the exam trigger: if the final answer is supposed to match inverse z-transform table entries, stop only after this multiply-back step. State the common misuse: leaving the answer as F(x)/x instead of F(x)."
+    },
+    {
+      "type": "section_summary",
+      "instruction": "Create the recap page titled '📌 Key Takeaways'. Include exactly 4 bullets, each ≤25 words. The bullets must explicitly include these core formulas: F(x)=N(x)/D(x)=Q(x)+R(x)/D(x), deg R<deg D; F(x)/x expansion; final multiply-back form F(x)=1+x/(x+2)-2x/(x+3)+x/(x+3)^2. Also include the exam trigger: use modified partial fractions when kx/(x−λ)^r terms are required. End with one bridge sentence: 'Next, we move from rational-function tools into vectors and matrices.'"
+    },
+    {
+      "type": "quiz_plan",
+      "target_questions": 6,
+      "question_range": {
+        "min": 5,
+        "max": 7
+      },
+      "knowledge_points": [
+        {
+          "id": "improper_degree_check",
+          "label": "Recognizing an improper rational function",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp1_q1",
+              "type": "multiple_choice",
+              "stem": "A rational function has numerator degree m = 4 and denominator degree n = 2. What should you do before ordinary partial fraction expansion?",
+              "options": [
+                "A. Apply cover-up directly to the original fraction",
+                "B. Perform polynomial division first",
+                "C. Cancel the highest powers of x only",
+                "D. Rewrite every denominator factor as x - λ"
+              ],
+              "correct_option": "B",
+              "explanation": "When m ≥ n, the rational function is improper. First divide to get a polynomial part plus a proper rational remainder.",
+              "wrong_option_explanations": {
+                "A": "Cover-up applies cleanly after the rational part is proper.",
+                "C": "Canceling highest powers is not valid algebra unless there is a common factor.",
+                "D": "Factoring may be needed later, but it does not fix impropriety."
+              },
+              "hint": "Check numerator degree versus denominator degree first.",
+              "needs_visual": false,
+              "same_point_variant": true
+            },
+            {
+              "id": "kp1_q2",
+              "type": "multiple_choice",
+              "stem": "Which formula correctly describes the result of reducing an improper rational function?",
+              "options": [
+                "A. F(x)=Q(x)+R(x)/D(x), with deg R < deg D",
+                "B. F(x)=R(x)+Q(x)/D(x), with deg Q < deg D",
+                "C. F(x)=N(x)D(x)+R(x)",
+                "D. F(x)=Q(x)/R(x)+D(x)"
+              ],
+              "correct_option": "A",
+              "explanation": "Polynomial division splits F(x) into a polynomial quotient Q(x) plus a proper rational remainder R(x)/D(x).",
+              "wrong_option_explanations": {
+                "B": "The polynomial part is Q(x), not R(x).",
+                "C": "This multiplies instead of dividing and does not represent partial fraction preparation.",
+                "D": "This has no standard meaning in polynomial division for rational functions."
+              },
+              "hint": "The remainder must be the numerator of the proper fraction.",
+              "needs_visual": false,
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "polynomial_division_example",
+          "label": "Keeping the polynomial part after division",
+          "importance": "medium",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp2_q1",
+              "type": "multiple_choice",
+              "stem": "For F(x) = (3x^2 + 9x - 20)/((x - 2)(x + 3)), the textbook result is F(x)=3+2/(x-2)+4/(x+3). What is the most common mistake in this result?",
+              "options": [
+                "A. Dropping the constant term 3",
+                "B. Changing x - 2 into x + 2",
+                "C. Combining the two fractions into one denominator",
+                "D. Replacing x by 1/x"
+              ],
+              "correct_option": "A",
+              "explanation": "The constant 3 comes from polynomial division and remains part of F(x). It is not an intermediate step to throw away.",
+              "wrong_option_explanations": {
+                "B": "Sign errors can happen, but this question targets the improper-fraction step.",
+                "C": "Combining fractions reverses the partial fraction form but is not the main improper-fraction trap.",
+                "D": "Replacing x by 1/x is unrelated to this example."
+              },
+              "hint": "Ask what polynomial division contributed before partial fractions began.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "modified_partial_fraction_trigger",
+          "label": "Knowing when to expand F(x)/x",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp3_q1",
+              "type": "multiple_choice",
+              "stem": "An inverse z-transform problem requires partial fractions of the form kx/(x - λ)^r. What is the correct strategy?",
+              "options": [
+                "A. Expand F(x) directly and stop",
+                "B. Expand F(x)/x, then multiply the result by x",
+                "C. Differentiate F(x) with respect to x",
+                "D. Replace every k by kx without changing coefficients"
+              ],
+              "correct_option": "B",
+              "explanation": "Dividing by x first creates ordinary constant-numerator fractions. Multiplying back by x produces the required kx/(x - λ)^r form.",
+              "wrong_option_explanations": {
+                "A": "Direct expansion usually gives k/(x - λ)^r, not kx/(x - λ)^r.",
+                "C": "Differentiation is not part of this method.",
+                "D": "You cannot insert x into numerators without changing the expression."
+              },
+              "hint": "The target numerator contains x, so use the divide-then-multiply trick.",
+              "needs_visual": true,
+              "visual_type": "generated_workflow_diagram",
+              "same_point_variant": true
+            },
+            {
+              "id": "kp3_q2",
+              "type": "short_answer",
+              "stem": "A classmate expands F(x) directly and gets terms like 1/(x+2) and -2/(x+3), then claims this is already the modified partial fraction form. Explain why that is wrong.",
+              "ideal_answer": "The modified form needed here has x in the numerator, like kx/(x - λ)^r. To get that form, we expand F(x)/x first and then multiply the expansion by x. Directly expanding F(x) gives constant-numerator terms and misses the required table-matching form.",
+              "grading_rubric": [
+                "Must mention that the required form has x in the numerator",
+                "Must state that F(x)/x should be expanded first",
+                "Must mention multiplying back by x",
+                "Must distinguish ordinary partial fractions from modified partial fractions"
+              ],
+              "explanation": "This checks whether the student understands the purpose of the modified method, not just the algebra steps.",
+              "hint": "Compare k/(x - λ)^r with kx/(x - λ)^r.",
+              "needs_visual": false,
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "multiply_back_step",
+          "label": "Returning from F(x)/x to F(x)",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp4_q1",
+              "type": "multiple_choice",
+              "stem": "Given F(x)/x = 1/x + 1/(x+2) - 2/(x+3) + 1/(x+3)^2, which is F(x)?",
+              "options": [
+                "A. F(x)=1/x + 1/(x+2) - 2/(x+3) + 1/(x+3)^2",
+                "B. F(x)=1 + x/(x+2) - 2x/(x+3) + x/(x+3)^2",
+                "C. F(x)=x + 1/(x+2) - 2/(x+3) + 1/(x+3)^2",
+                "D. F(x)=1 + 1/(x+2) - 2/(x+3) + 1/(x+3)^2"
+              ],
+              "correct_option": "B",
+              "explanation": "Multiply every term in the expansion of F(x)/x by x. The term x·(1/x) becomes 1.",
+              "wrong_option_explanations": {
+                "A": "This is still F(x)/x, not F(x).",
+                "C": "Only the first term was multiplied incorrectly; x·(1/x)=1, not x.",
+                "D": "Only the first term was adjusted; every term must be multiplied by x."
+              },
+              "hint": "Multiply the entire right-hand side by x, not just one term.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

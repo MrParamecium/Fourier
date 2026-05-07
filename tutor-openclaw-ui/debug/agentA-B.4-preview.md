@@ -1,0 +1,601 @@
+# Agent A Preview: B.4 B.4 Cramer's Rule
+
+- Difficulty: intermediate
+- Estimated read minutes: 6
+
+## Learning Objectives
+
+- Write a system of simultaneous linear equations in matrix form.
+- Use Cramer's Rule to solve for each unknown using determinants.
+- Recognize when Cramer's Rule is valid and when it fails.
+- Apply the method to the section's representative 3-by-3 example.
+
+## Visualization Need
+
+```json
+{
+  "level": "static",
+  "reason": [
+    "pattern_recognition_benefits_from_figure",
+    "misconception_needs_visual_correction",
+    "wrong_vs_right_contrast_is_high_value"
+  ],
+  "recommended_assets": [
+    "wiki_figure"
+  ]
+}
+```
+
+## Visual Plan
+
+```json
+{
+  "primary_anchor": "wiki_reference",
+  "rationale": "Cramer's Rule is mainly symbolic, so the core teaching surface should be LaTeX matrices and determinant ratios. A static reference visual is still useful because students often confuse which column gets replaced by the right-hand-side vector.",
+  "cram": "Use the visual to recognize the exam pattern: replace one column of A with b, then divide by det(A).",
+  "standard": "Use the visual beside the formula to connect the symbolic rule to one representative 3-by-3 example.",
+  "top_score": "Use the visual to highlight traps: replacing a row instead of a column, replacing the wrong column, or using the rule when det(A)=0."
+}
+```
+
+## Planned Blocks
+
+### Block 1: `text_explanation`
+- **instruction**: Render Page 1 as a minimal overview only. Use the heading 'Section Objective' followed by one short sentence: 'Learn how Cramer’s Rule solves a square system of linear equations using determinants.' Then add the heading 'Concepts In This Section' and list only these concept names as bullets: matrix form, coefficient matrix, determinant condition, column replacement, Cramer’s Rule, representative 3-by-3 example. Do not add background paragraphs or explanations on this page.
+
+### Block 2: `math_block`
+- **latex**: A\mathbf{x}=\mathbf{b}
+- **explanation_instruction**: Start a new page with the heading '## 1. Matrix form of the system'. Explain in 90-130 words that a system of n linear equations in n unknowns can be compressed into this form. Define A as the coefficient matrix, \(\mathbf{x}\) as the unknown column vector, and \(\mathbf{b}\) as the right-hand-side vector. State when to use this form: whenever all equations are linear and the unknowns appear with coefficients. Include one minimal concrete example in words using a 3-by-3 system, but do not solve it yet. Exam trigger: seeing simultaneous linear equations with the same unknowns in every row. Common misuse: putting constants into A instead of into \(\mathbf{b}\).
+
+### Block 3: `math_block`
+- **latex**: \det(A)\ne 0
+- **explanation_instruction**: Continue the same concept page. Explain in 70-100 words that Cramer’s Rule requires the coefficient matrix to have a nonzero determinant. Say that this condition means the system has a unique solution, so dividing by \(\det(A)\) is legal. Exam trigger: before using Cramer’s Rule, check whether the determinant of A is zero. Common misuse: applying determinant ratios even when \(\det(A)=0\), which makes the formula invalid.
+
+### Block 4: `math_block`
+- **latex**: x_i=\frac{\det(A_i)}{\det(A)},\qquad i=1,2,\ldots,n
+- **explanation_instruction**: Start a new page with the heading '## 2. Cramer’s Rule'. Explain in 110-150 words that \(A_i\) is formed by taking the original coefficient matrix \(A\) and replacing only column i with \(\mathbf{b}\). Define every symbol: \(x_i\) is the ith unknown, \(A_i\) is the modified matrix, \(\det(A_i)\) is its determinant, and \(\det(A)\) is the determinant of the original coefficient matrix. Use case: solve one variable directly without row reduction. Exam trigger: a square linear system where determinant computation is expected. Common misuse: replacing a row, replacing all columns, or replacing the wrong column.
+
+### Block 5: `web_search_image`
+- **search_query**: Cramer's rule column replacement determinant matrix illustration Wikimedia Commons
+- **purpose**: Show a clean static reference visual of Cramer’s Rule where one column of the coefficient matrix is replaced by the right-hand-side vector.
+- **preferred_sources**:
+```json
+[
+  "wikimedia_commons",
+  "wikipedia"
+]
+```
+- **prefer_animated**:
+```json
+false
+```
+- **fallback**: If no suitable Wikimedia or Wikipedia image is available, use a clean LaTeX-native matrix column-replacement diagram rather than a decorative generated image.
+- **teaching_role**: concept_anchor
+- **mode_specific_visual_use**:
+```json
+{
+  "cram": "Point directly to the replaced column and the denominator determinant.",
+  "standard": "Use the visual to connect \\(A_i\\) with the formula before the example.",
+  "top_score": "Use it to contrast correct column replacement with common row-replacement mistakes."
+}
+```
+
+### Block 6: `text_explanation`
+- **instruction**: Start a new page with the heading '## 3. Representative example'. Present this system exactly: \(2x_1+x_2+x_3=3\), \(x_1+3x_2-x_3=7\), \(x_1+x_2+x_3=1\). State that \(A=\begin{bmatrix}2&1&1\\1&3&-1\\1&1&1\end{bmatrix}\), \(\mathbf{b}=\begin{bmatrix}3\\7\\1\end{bmatrix}\), and \(\det(A)=4\). Then explain in 120-160 words how the textbook gets \(x_1=2\), \(x_2=1\), and \(x_3=-2\) by replacing column 1, column 2, and column 3 respectively with \(\mathbf{b}\). Keep the arithmetic compact; focus on the replacement pattern. End with the exam note: 'Most mistakes happen before the determinant is computed: the wrong column is replaced.'
+
+### Block 7: `math_block`
+- **latex**: \mathbf{x}=\begin{bmatrix}2\\1\\-2\end{bmatrix}
+- **explanation_instruction**: Place this immediately after the worked example. In 40-60 words, explain that this vector means \(x_1=2\), \(x_2=1\), and \(x_3=-2\). Tell the student to quickly verify by substituting into the original three equations. Common misuse: reporting the solution as an unordered set instead of matching each value to the correct variable.
+
+### Block 8: `section_summary`
+- **instruction**: Create the recap page titled '📌 Key Takeaways'. Summarize the section in 4 concise bullets. The bullets must explicitly include these formulas: \(A\mathbf{x}=\mathbf{b}\), \(\det(A)\ne0\), and \(x_i=\frac{\det(A_i)}{\det(A)}\). Also include one bullet saying that \(A_i\) means replacing column i of A with \(\mathbf{b}\). Mention the example result \(\mathbf{x}=\begin{bmatrix}2\\1\\-2\end{bmatrix}\). End with one bridge sentence: 'In the next section we will use algebraic decomposition ideas to simplify rational functions.'
+
+### Block 9: `quiz_plan`
+- **target_questions**:
+```json
+6
+```
+- **question_range**:
+```json
+{
+  "min": 5,
+  "max": 7
+}
+```
+- **knowledge_points**:
+```json
+[
+  {
+    "id": "matrix_form",
+    "label": "Matrix form of simultaneous linear equations",
+    "importance": "high",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp1_q1",
+        "type": "multiple_choice",
+        "stem": "In the matrix equation \\(A\\mathbf{x}=\\mathbf{b}\\), what does \\(A\\) represent?",
+        "options": [
+          "A. The column vector of unknown variables",
+          "B. The coefficient matrix of the linear system",
+          "C. The column vector of constants on the right-hand side",
+          "D. The determinant of the system"
+        ],
+        "correct_option": "B",
+        "explanation": "\\(A\\) stores the coefficients multiplying the unknowns in the system.",
+        "wrong_option_explanations": {
+          "A": "The unknown variables are stored in \\(\\mathbf{x}\\), not \\(A\\).",
+          "C": "The right-hand-side constants are stored in \\(\\mathbf{b}\\).",
+          "D": "\\(\\det(A)\\) is the determinant of A; A itself is the matrix."
+        },
+        "hint": "Ask which object contains the numbers multiplying the unknowns.",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  },
+  {
+    "id": "determinant_condition",
+    "label": "Nonzero determinant condition",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "kp2_q1",
+        "type": "multiple_choice",
+        "stem": "Cramer’s Rule is valid only when which condition is true?",
+        "options": [
+          "A. \\(\\det(A)=0\\)",
+          "B. \\(\\det(A)\\ne0\\)",
+          "C. \\(\\det(A_i)=0\\) for every i",
+          "D. The matrix A has more rows than columns"
+        ],
+        "correct_option": "B",
+        "explanation": "Cramer’s Rule divides by \\(\\det(A)\\), so \\(\\det(A)\\) must be nonzero.",
+        "wrong_option_explanations": {
+          "A": "If \\(\\det(A)=0\\), the denominator is zero and Cramer’s Rule cannot be used.",
+          "C": "The numerators may be zero for some variables, but that is not the validity condition.",
+          "D": "Cramer’s Rule applies to square systems, not rectangular systems."
+        },
+        "hint": "Look at the denominator in \\(x_i=\\det(A_i)/\\det(A)\\).",
+        "needs_visual": false,
+        "same_point_variant": true
+      },
+      {
+        "id": "kp2_q2",
+        "type": "multiple_choice",
+        "stem": "A student computes \\(\\det(A)=0\\) and still writes \\(x_1=\\det(A_1)/\\det(A)\\). What is wrong?",
+        "options": [
+          "A. Nothing; Cramer’s Rule always works for linear systems",
+          "B. The formula divides by zero, so Cramer’s Rule is invalid here",
+          "C. The student should replace a row instead of a column",
+          "D. The determinant of \\(A_1\\) must be computed before checking \\(\\det(A)\\)"
+        ],
+        "correct_option": "B",
+        "explanation": "The denominator would be zero, so the determinant ratio is not a valid number.",
+        "wrong_option_explanations": {
+          "A": "Cramer’s Rule requires a square system with nonzero \\(\\det(A)\\).",
+          "C": "Cramer’s Rule replaces columns, not rows.",
+          "D": "Checking \\(\\det(A)\\) first is efficient because it determines whether the rule can be used."
+        },
+        "hint": "A formula with a zero denominator is not usable.",
+        "needs_visual": false,
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "column_replacement",
+    "label": "Constructing \\(A_i\\)",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "kp3_q1",
+        "type": "multiple_choice",
+        "stem": "To compute \\(x_2\\) using Cramer’s Rule, which matrix should be used in the numerator?",
+        "options": [
+          "A. A with row 2 replaced by \\(\\mathbf{b}\\)",
+          "B. A with column 2 replaced by \\(\\mathbf{b}\\)",
+          "C. A with every column replaced by \\(\\mathbf{b}\\)",
+          "D. A with column 1 replaced by \\(\\mathbf{b}\\)"
+        ],
+        "correct_option": "B",
+        "explanation": "\\(A_2\\) is formed by replacing column 2 of A with the right-hand-side vector \\(\\mathbf{b}\\).",
+        "wrong_option_explanations": {
+          "A": "Cramer’s Rule replaces columns, not rows.",
+          "C": "Only one column is replaced at a time.",
+          "D": "Replacing column 1 would compute \\(x_1\\), not \\(x_2\\)."
+        },
+        "hint": "The subscript tells you which column to replace.",
+        "needs_visual": true,
+        "visual_type": "latex_native_matrix_column_replacement_visual",
+        "same_point_variant": true
+      },
+      {
+        "id": "kp3_q2",
+        "type": "multiple_choice",
+        "stem": "Observe a visual where \\(\\mathbf{b}\\) replaces the third column of A. Which unknown is being computed?",
+        "options": [
+          "A. \\(x_1\\)",
+          "B. \\(x_2\\)",
+          "C. \\(x_3\\)",
+          "D. \\(\\det(A)\\)"
+        ],
+        "correct_option": "C",
+        "explanation": "Replacing column 3 forms \\(A_3\\), so the determinant ratio gives \\(x_3\\).",
+        "wrong_option_explanations": {
+          "A": "\\(x_1\\) would require replacing column 1.",
+          "B": "\\(x_2\\) would require replacing column 2.",
+          "D": "\\(\\det(A)\\) uses the original A, with no column replaced."
+        },
+        "hint": "Match the replaced column number to the variable subscript.",
+        "needs_visual": true,
+        "visual_type": "visual_pattern_recognition_check",
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "formula_application",
+    "label": "Applying Cramer’s Rule",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp4_q1",
+        "type": "multiple_choice",
+        "stem": "For the section example, \\(\\det(A)=4\\) and \\(\\det(A_2)=4\\). What is \\(x_2\\)?",
+        "options": [
+          "A. 0",
+          "B. 1",
+          "C. 4",
+          "D. 16"
+        ],
+        "correct_option": "B",
+        "explanation": "By Cramer’s Rule, \\(x_2=\\det(A_2)/\\det(A)=4/4=1\\).",
+        "wrong_option_explanations": {
+          "A": "The numerator is not zero.",
+          "C": "This forgets to divide by \\(\\det(A)=4\\).",
+          "D": "This multiplies the determinants instead of dividing."
+        },
+        "hint": "Use numerator divided by denominator.",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  },
+  {
+    "id": "worked_example_verification",
+    "label": "Verifying the solution vector",
+    "importance": "medium",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp5_q1",
+        "type": "short_answer",
+        "stem": "The section example gives \\(\\mathbf{x}=\\begin{bmatrix}2\\\\1\\\\-2\\end{bmatrix}\\). Verify the first equation \\(2x_1+x_2+x_3=3\\).",
+        "ideal_answer": "Substitute \\(x_1=2\\), \\(x_2=1\\), and \\(x_3=-2\\): \\(2(2)+1+(-2)=4+1-2=3\\), so the first equation checks.",
+        "grading_rubric": [
+          "Must substitute the correct values for \\(x_1\\), \\(x_2\\), and \\(x_3\\)",
+          "Must compute \\(2(2)+1-2=3\\)",
+          "Must state that the first equation is satisfied"
+        ],
+        "explanation": "Verification confirms that the determinant-based solution matches the original system.",
+        "hint": "Match each entry of the solution vector to the same subscripted variable.",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  }
+]
+```
+
+## Raw JSON
+
+```json
+{
+  "section_id": "B.4",
+  "section_title": "B.4 Cramer's Rule",
+  "difficulty": "intermediate",
+  "estimated_read_minutes": 6,
+  "learning_objectives": [
+    "Write a system of simultaneous linear equations in matrix form.",
+    "Use Cramer's Rule to solve for each unknown using determinants.",
+    "Recognize when Cramer's Rule is valid and when it fails.",
+    "Apply the method to the section's representative 3-by-3 example."
+  ],
+  "visualization_need": {
+    "level": "static",
+    "reason": [
+      "pattern_recognition_benefits_from_figure",
+      "misconception_needs_visual_correction",
+      "wrong_vs_right_contrast_is_high_value"
+    ],
+    "recommended_assets": [
+      "wiki_figure"
+    ]
+  },
+  "visual_plan": {
+    "primary_anchor": "wiki_reference",
+    "rationale": "Cramer's Rule is mainly symbolic, so the core teaching surface should be LaTeX matrices and determinant ratios. A static reference visual is still useful because students often confuse which column gets replaced by the right-hand-side vector.",
+    "cram": "Use the visual to recognize the exam pattern: replace one column of A with b, then divide by det(A).",
+    "standard": "Use the visual beside the formula to connect the symbolic rule to one representative 3-by-3 example.",
+    "top_score": "Use the visual to highlight traps: replacing a row instead of a column, replacing the wrong column, or using the rule when det(A)=0."
+  },
+  "blocks": [
+    {
+      "type": "text_explanation",
+      "instruction": "Render Page 1 as a minimal overview only. Use the heading 'Section Objective' followed by one short sentence: 'Learn how Cramer’s Rule solves a square system of linear equations using determinants.' Then add the heading 'Concepts In This Section' and list only these concept names as bullets: matrix form, coefficient matrix, determinant condition, column replacement, Cramer’s Rule, representative 3-by-3 example. Do not add background paragraphs or explanations on this page."
+    },
+    {
+      "type": "math_block",
+      "latex": "A\\mathbf{x}=\\mathbf{b}",
+      "explanation_instruction": "Start a new page with the heading '## 1. Matrix form of the system'. Explain in 90-130 words that a system of n linear equations in n unknowns can be compressed into this form. Define A as the coefficient matrix, \\(\\mathbf{x}\\) as the unknown column vector, and \\(\\mathbf{b}\\) as the right-hand-side vector. State when to use this form: whenever all equations are linear and the unknowns appear with coefficients. Include one minimal concrete example in words using a 3-by-3 system, but do not solve it yet. Exam trigger: seeing simultaneous linear equations with the same unknowns in every row. Common misuse: putting constants into A instead of into \\(\\mathbf{b}\\)."
+    },
+    {
+      "type": "math_block",
+      "latex": "\\det(A)\\ne 0",
+      "explanation_instruction": "Continue the same concept page. Explain in 70-100 words that Cramer’s Rule requires the coefficient matrix to have a nonzero determinant. Say that this condition means the system has a unique solution, so dividing by \\(\\det(A)\\) is legal. Exam trigger: before using Cramer’s Rule, check whether the determinant of A is zero. Common misuse: applying determinant ratios even when \\(\\det(A)=0\\), which makes the formula invalid."
+    },
+    {
+      "type": "math_block",
+      "latex": "x_i=\\frac{\\det(A_i)}{\\det(A)},\\qquad i=1,2,\\ldots,n",
+      "explanation_instruction": "Start a new page with the heading '## 2. Cramer’s Rule'. Explain in 110-150 words that \\(A_i\\) is formed by taking the original coefficient matrix \\(A\\) and replacing only column i with \\(\\mathbf{b}\\). Define every symbol: \\(x_i\\) is the ith unknown, \\(A_i\\) is the modified matrix, \\(\\det(A_i)\\) is its determinant, and \\(\\det(A)\\) is the determinant of the original coefficient matrix. Use case: solve one variable directly without row reduction. Exam trigger: a square linear system where determinant computation is expected. Common misuse: replacing a row, replacing all columns, or replacing the wrong column."
+    },
+    {
+      "type": "web_search_image",
+      "search_query": "Cramer's rule column replacement determinant matrix illustration Wikimedia Commons",
+      "purpose": "Show a clean static reference visual of Cramer’s Rule where one column of the coefficient matrix is replaced by the right-hand-side vector.",
+      "preferred_sources": [
+        "wikimedia_commons",
+        "wikipedia"
+      ],
+      "prefer_animated": false,
+      "fallback": "If no suitable Wikimedia or Wikipedia image is available, use a clean LaTeX-native matrix column-replacement diagram rather than a decorative generated image.",
+      "teaching_role": "concept_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Point directly to the replaced column and the denominator determinant.",
+        "standard": "Use the visual to connect \\(A_i\\) with the formula before the example.",
+        "top_score": "Use it to contrast correct column replacement with common row-replacement mistakes."
+      }
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Start a new page with the heading '## 3. Representative example'. Present this system exactly: \\(2x_1+x_2+x_3=3\\), \\(x_1+3x_2-x_3=7\\), \\(x_1+x_2+x_3=1\\). State that \\(A=\\begin{bmatrix}2&1&1\\\\1&3&-1\\\\1&1&1\\end{bmatrix}\\), \\(\\mathbf{b}=\\begin{bmatrix}3\\\\7\\\\1\\end{bmatrix}\\), and \\(\\det(A)=4\\). Then explain in 120-160 words how the textbook gets \\(x_1=2\\), \\(x_2=1\\), and \\(x_3=-2\\) by replacing column 1, column 2, and column 3 respectively with \\(\\mathbf{b}\\). Keep the arithmetic compact; focus on the replacement pattern. End with the exam note: 'Most mistakes happen before the determinant is computed: the wrong column is replaced.'"
+    },
+    {
+      "type": "math_block",
+      "latex": "\\mathbf{x}=\\begin{bmatrix}2\\\\1\\\\-2\\end{bmatrix}",
+      "explanation_instruction": "Place this immediately after the worked example. In 40-60 words, explain that this vector means \\(x_1=2\\), \\(x_2=1\\), and \\(x_3=-2\\). Tell the student to quickly verify by substituting into the original three equations. Common misuse: reporting the solution as an unordered set instead of matching each value to the correct variable."
+    },
+    {
+      "type": "section_summary",
+      "instruction": "Create the recap page titled '📌 Key Takeaways'. Summarize the section in 4 concise bullets. The bullets must explicitly include these formulas: \\(A\\mathbf{x}=\\mathbf{b}\\), \\(\\det(A)\\ne0\\), and \\(x_i=\\frac{\\det(A_i)}{\\det(A)}\\). Also include one bullet saying that \\(A_i\\) means replacing column i of A with \\(\\mathbf{b}\\). Mention the example result \\(\\mathbf{x}=\\begin{bmatrix}2\\\\1\\\\-2\\end{bmatrix}\\). End with one bridge sentence: 'In the next section we will use algebraic decomposition ideas to simplify rational functions.'"
+    },
+    {
+      "type": "quiz_plan",
+      "target_questions": 6,
+      "question_range": {
+        "min": 5,
+        "max": 7
+      },
+      "knowledge_points": [
+        {
+          "id": "matrix_form",
+          "label": "Matrix form of simultaneous linear equations",
+          "importance": "high",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp1_q1",
+              "type": "multiple_choice",
+              "stem": "In the matrix equation \\(A\\mathbf{x}=\\mathbf{b}\\), what does \\(A\\) represent?",
+              "options": [
+                "A. The column vector of unknown variables",
+                "B. The coefficient matrix of the linear system",
+                "C. The column vector of constants on the right-hand side",
+                "D. The determinant of the system"
+              ],
+              "correct_option": "B",
+              "explanation": "\\(A\\) stores the coefficients multiplying the unknowns in the system.",
+              "wrong_option_explanations": {
+                "A": "The unknown variables are stored in \\(\\mathbf{x}\\), not \\(A\\).",
+                "C": "The right-hand-side constants are stored in \\(\\mathbf{b}\\).",
+                "D": "\\(\\det(A)\\) is the determinant of A; A itself is the matrix."
+              },
+              "hint": "Ask which object contains the numbers multiplying the unknowns.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "determinant_condition",
+          "label": "Nonzero determinant condition",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp2_q1",
+              "type": "multiple_choice",
+              "stem": "Cramer’s Rule is valid only when which condition is true?",
+              "options": [
+                "A. \\(\\det(A)=0\\)",
+                "B. \\(\\det(A)\\ne0\\)",
+                "C. \\(\\det(A_i)=0\\) for every i",
+                "D. The matrix A has more rows than columns"
+              ],
+              "correct_option": "B",
+              "explanation": "Cramer’s Rule divides by \\(\\det(A)\\), so \\(\\det(A)\\) must be nonzero.",
+              "wrong_option_explanations": {
+                "A": "If \\(\\det(A)=0\\), the denominator is zero and Cramer’s Rule cannot be used.",
+                "C": "The numerators may be zero for some variables, but that is not the validity condition.",
+                "D": "Cramer’s Rule applies to square systems, not rectangular systems."
+              },
+              "hint": "Look at the denominator in \\(x_i=\\det(A_i)/\\det(A)\\).",
+              "needs_visual": false,
+              "same_point_variant": true
+            },
+            {
+              "id": "kp2_q2",
+              "type": "multiple_choice",
+              "stem": "A student computes \\(\\det(A)=0\\) and still writes \\(x_1=\\det(A_1)/\\det(A)\\). What is wrong?",
+              "options": [
+                "A. Nothing; Cramer’s Rule always works for linear systems",
+                "B. The formula divides by zero, so Cramer’s Rule is invalid here",
+                "C. The student should replace a row instead of a column",
+                "D. The determinant of \\(A_1\\) must be computed before checking \\(\\det(A)\\)"
+              ],
+              "correct_option": "B",
+              "explanation": "The denominator would be zero, so the determinant ratio is not a valid number.",
+              "wrong_option_explanations": {
+                "A": "Cramer’s Rule requires a square system with nonzero \\(\\det(A)\\).",
+                "C": "Cramer’s Rule replaces columns, not rows.",
+                "D": "Checking \\(\\det(A)\\) first is efficient because it determines whether the rule can be used."
+              },
+              "hint": "A formula with a zero denominator is not usable.",
+              "needs_visual": false,
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "column_replacement",
+          "label": "Constructing \\(A_i\\)",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp3_q1",
+              "type": "multiple_choice",
+              "stem": "To compute \\(x_2\\) using Cramer’s Rule, which matrix should be used in the numerator?",
+              "options": [
+                "A. A with row 2 replaced by \\(\\mathbf{b}\\)",
+                "B. A with column 2 replaced by \\(\\mathbf{b}\\)",
+                "C. A with every column replaced by \\(\\mathbf{b}\\)",
+                "D. A with column 1 replaced by \\(\\mathbf{b}\\)"
+              ],
+              "correct_option": "B",
+              "explanation": "\\(A_2\\) is formed by replacing column 2 of A with the right-hand-side vector \\(\\mathbf{b}\\).",
+              "wrong_option_explanations": {
+                "A": "Cramer’s Rule replaces columns, not rows.",
+                "C": "Only one column is replaced at a time.",
+                "D": "Replacing column 1 would compute \\(x_1\\), not \\(x_2\\)."
+              },
+              "hint": "The subscript tells you which column to replace.",
+              "needs_visual": true,
+              "visual_type": "latex_native_matrix_column_replacement_visual",
+              "same_point_variant": true
+            },
+            {
+              "id": "kp3_q2",
+              "type": "multiple_choice",
+              "stem": "Observe a visual where \\(\\mathbf{b}\\) replaces the third column of A. Which unknown is being computed?",
+              "options": [
+                "A. \\(x_1\\)",
+                "B. \\(x_2\\)",
+                "C. \\(x_3\\)",
+                "D. \\(\\det(A)\\)"
+              ],
+              "correct_option": "C",
+              "explanation": "Replacing column 3 forms \\(A_3\\), so the determinant ratio gives \\(x_3\\).",
+              "wrong_option_explanations": {
+                "A": "\\(x_1\\) would require replacing column 1.",
+                "B": "\\(x_2\\) would require replacing column 2.",
+                "D": "\\(\\det(A)\\) uses the original A, with no column replaced."
+              },
+              "hint": "Match the replaced column number to the variable subscript.",
+              "needs_visual": true,
+              "visual_type": "visual_pattern_recognition_check",
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "formula_application",
+          "label": "Applying Cramer’s Rule",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp4_q1",
+              "type": "multiple_choice",
+              "stem": "For the section example, \\(\\det(A)=4\\) and \\(\\det(A_2)=4\\). What is \\(x_2\\)?",
+              "options": [
+                "A. 0",
+                "B. 1",
+                "C. 4",
+                "D. 16"
+              ],
+              "correct_option": "B",
+              "explanation": "By Cramer’s Rule, \\(x_2=\\det(A_2)/\\det(A)=4/4=1\\).",
+              "wrong_option_explanations": {
+                "A": "The numerator is not zero.",
+                "C": "This forgets to divide by \\(\\det(A)=4\\).",
+                "D": "This multiplies the determinants instead of dividing."
+              },
+              "hint": "Use numerator divided by denominator.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "worked_example_verification",
+          "label": "Verifying the solution vector",
+          "importance": "medium",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp5_q1",
+              "type": "short_answer",
+              "stem": "The section example gives \\(\\mathbf{x}=\\begin{bmatrix}2\\\\1\\\\-2\\end{bmatrix}\\). Verify the first equation \\(2x_1+x_2+x_3=3\\).",
+              "ideal_answer": "Substitute \\(x_1=2\\), \\(x_2=1\\), and \\(x_3=-2\\): \\(2(2)+1+(-2)=4+1-2=3\\), so the first equation checks.",
+              "grading_rubric": [
+                "Must substitute the correct values for \\(x_1\\), \\(x_2\\), and \\(x_3\\)",
+                "Must compute \\(2(2)+1-2=3\\)",
+                "Must state that the first equation is satisfied"
+              ],
+              "explanation": "Verification confirms that the determinant-based solution matches the original system.",
+              "hint": "Match each entry of the solution vector to the same subscripted variable.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```

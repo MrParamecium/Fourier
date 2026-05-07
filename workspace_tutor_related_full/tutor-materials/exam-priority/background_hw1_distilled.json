@@ -1,0 +1,75 @@
+{
+  "source_pdf": "/Users/chenghaoxiang/Desktop/HW1_Yanglet.pdf",
+  "scope": "background",
+  "course_signal": "Complex numbers and sinusoids are priority-tested early topics.",
+  "high_priority_concepts": [
+    "Cartesian form of complex numbers",
+    "Polar / exponential form of complex numbers",
+    "Complex-plane interpretation",
+    "Conversion between Cartesian and polar forms",
+    "Multiplication and division of complex numbers",
+    "Powers and reciprocals of complex numbers",
+    "Real and imaginary parts of a complex-valued function",
+    "Magnitude and phase of a complex-valued function",
+    "Phasor interpretation of sinusoidal terms",
+    "Converting a cosine-sine combination into a single sinusoid"
+  ],
+  "high_priority_problem_types": [
+    "Convert Cartesian to polar",
+    "Convert polar/exponential to Cartesian",
+    "Place numbers on the complex plane",
+    "Compute product and quotient in both forms",
+    "Compute scalar multiples, powers, and reciprocals",
+    "Rewrite a rational complex function in Cartesian form",
+    "Extract real and imaginary parts",
+    "Rewrite a complex function in polar form and compute magnitude/angle",
+    "Combine sinusoidal terms into one sinusoid"
+  ],
+  "common_traps": [
+    "Wrong quadrant when computing angle",
+    "Forgetting magnitude must be nonnegative",
+    "Dropping the sign of the imaginary part",
+    "Confusing radians and informal degree intuition",
+    "Doing invalid termwise multiplication in Cartesian form",
+    "Forgetting argument subtraction in division",
+    "Missing conjugate logic in simplification",
+    "Getting phase sign wrong in sinusoid compression",
+    "Giving amplitude without final phase-adjusted sinusoid"
+  ],
+  "required_example_patterns": [
+    "a + jb to r*e^(jθ)",
+    "r*e^(jθ) to a + jb",
+    "nontrivial multiplication and division",
+    "reciprocal in polar form",
+    "power in polar form",
+    "real/imaginary/magnitude/angle extraction from F(ω)",
+    "cos(ωt) + k sin(ωt) to one sinusoid",
+    "a cos(ωt) - b sin(ωt) to one sinusoid with phase explanation"
+  ],
+  "explanation_bias": {
+    "worked_examples_over_history": true,
+    "representation_switching_is_core": true,
+    "phasor_and_phase_are_core": true,
+    "include_trap_warning_with_angle_topics": true,
+    "deemphasize_long_history_without_computational_payoff": true
+  },
+  "quiz_bias": {
+    "favor_conversion_items": true,
+    "favor_magnitude_phase_items": true,
+    "favor_complex_arithmetic_items": true,
+    "favor_single_sinusoid_items": true,
+    "favor_trap_questions_on_quadrant_and_phase": true
+  },
+  "section_priority_keywords": [
+    "complex plane",
+    "polar form",
+    "exponential form",
+    "argument",
+    "phase",
+    "complex multiplication",
+    "complex division",
+    "frequency response",
+    "sinusoid addition",
+    "phasor"
+  ]
+}

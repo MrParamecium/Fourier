@@ -1,0 +1,385 @@
+{
+  "blueprint": {
+    "section_id": "B.3-1",
+    "section_title": "B.3-1 Monotonic Exponentials",
+    "difficulty": "intermediate",
+    "estimated_read_minutes": 6,
+    "learning_objectives": [
+      "Recognize the shapes of monotonic decaying and growing exponentials.",
+      "Use the time constant to sketch a decaying exponential quickly.",
+      "Compute key exponential values at one, two, and three time constants.",
+      "Avoid confusing the parameter a with the time constant 1/a."
+    ],
+    "visualization_need": {
+      "level": "interactive",
+      "reason": [
+        "depends_on_parameter_change",
+        "formula_to_phenomenon_gap",
+        "student_should_manipulate_to_understand",
+        "pattern_recognition_benefits_from_figure"
+      ],
+      "recommended_assets": [
+        "react_canvas_demo",
+        "book_figure"
+      ]
+    },
+    "visual_plan": {
+      "primary_anchor": "react_demo",
+      "rationale": "The core idea is parameter-sensitive: changing a changes how fast e^{-at} decays or e^{at} grows, while the time-constant rule stays invariant. Use the available textbook Fig. B.10 as the canonical sketching reference, and use a React + Canvas demo so students can move a and see the decay rate and time constant update immediately.",
+      "cram": "Use visuals to memorize the exam trigger: one time constant means 37%, two time constants means 13.5%.",
+      "standard": "Use the textbook figure and demo together: first read the canonical sketch, then vary a to understand one representative example.",
+      "top_score": "Use the demo to stress subtle invariants: the absolute time changes with a, but every interval of length 1/a multiplies a decaying exponential by 1/e."
+    },
+    "blocks": [
+      {
+        "type": "text_explanation",
+        "instruction": "Render page 1 as a minimal overview only. Use the heading 'Section Objective' followed by one sentence: 'Learn how to sketch monotonic exponential signals quickly using the time constant.' Then use the heading 'Concepts In This Section' and list only these concept names as bullets: 'decaying exponential', 'growing exponential', 'time constant', 'quick sketching values'. Do not add background paragraphs, examples, formulas, or extra explanation on this page."
+      },
+      {
+        "type": "text_explanation",
+        "instruction": "Start a new page with the heading '## 1. Decay versus growth'. Explain in 80–110 words that for a positive constant a, e^{-at} decreases as t increases, while e^{at} increases as t increases. Emphasize that 'monotonic' means the signal keeps moving in one direction: down for decay, up for growth. Include one minimal example sentence: 'For a = 2, e^{-2t} decays faster than e^{-t} because the exponent becomes more negative more quickly.' End with an exam note: 'When you see a positive a multiplying t in the exponent, first check the sign before deciding growth or decay.'"
+      },
+      {
+        "type": "math_block",
+        "latex": "e^{-at}\\quad \\text{decays for } a>0",
+        "explanation_instruction": "Explain that this formula means the signal starts high and falls toward zero as t increases. Define a as a positive rate parameter and t as time. Use it when the exponent has a negative sign. Exam trigger: a signal like e^{-3t} or e^{-at}. Common misuse: saying the time constant is a instead of 1/a."
+      },
+      {
+        "type": "math_block",
+        "latex": "e^{at}\\quad \\text{grows for } a>0",
+        "explanation_instruction": "Explain that this formula means the signal increases as t increases. Define a as a positive rate parameter and t as time. Use it when the exponent has a positive sign. Exam trigger: a signal like e^{4t} or e^{at}. Common misuse: applying the 37% decay rule to a growing exponential without changing the interpretation."
+      },
+      {
+        "type": "interactive_demo",
+        "teaching_role": "concept_anchor",
+        "mode_specific_visual_use": {
+          "cram": "Let students drag a and instantly see that larger a means faster change.",
+          "standard": "Use the slider to connect the sign of the exponent and the value of a to the plotted curve.",
+          "top_score": "Use the overlay to compare e^{-at} and e^{at} and identify what changes versus what stays structurally similar."
+        },
+        "demo_spec": {
+          "title": "Decay and growth controlled by a",
+          "rendering": "React + Canvas interactive plot with a white background and clean lecture-note styling.",
+          "controls": [
+            {
+              "name": "a",
+              "type": "slider",
+              "min": 0.25,
+              "max": 5,
+              "step": 0.25,
+              "default": 1
+            },
+            {
+              "name": "mode",
+              "type": "toggle",
+              "options": [
+                "decay: e^{-at}",
+                "growth: e^{at}"
+              ],
+              "default": "decay: e^{-at}"
+            }
+          ],
+          "plot_instruction": "Plot t on the horizontal axis from 0 to 5 and amplitude on the vertical axis. For decay mode, show y=e^{-at} decreasing toward 0. For growth mode, show y=e^{at} increasing; cap the vertical display gracefully if values become large. Mark t=1/a with a vertical dashed line in muted teal. In decay mode, also mark y=1/e with a horizontal dashed line.",
+          "student_prompt": "Drag a upward and notice that the curve changes faster, while the one-time-constant decay value remains 1/e."
+        }
+      },
+      {
+        "type": "text_explanation",
+        "instruction": "Start a new page with the heading '## 2. Time constant'. Explain in 90–130 words that the time constant is the time required for a decaying exponential e^{-at} to drop by a factor of e, meaning it reaches about 37% of its previous value. State clearly that the time constant is not a; it is 1/a. Include a minimal concrete example: 'If a = 4, the time constant is 1/4 second, so the signal reaches about 37% after 0.25 seconds.' End with a quick check prompt: 'If a doubles, should the time constant double or halve?'"
+      },
+      {
+        "type": "math_block",
+        "latex": "T=\\frac{1}{a}",
+        "explanation_instruction": "Explain that T is the time constant of e^{-at}, a is the positive exponential rate, and T is measured in seconds when t is in seconds. Use this when sketching or estimating decay speed. Exam trigger: any decaying exponential in the form e^{-at}. Common misuse: using T=a, which reverses the effect of faster decay."
+      },
+      {
+        "type": "math_block",
+        "latex": "e^{-aT}=e^{-1}\\approx 0.37",
+        "explanation_instruction": "Explain that after one time constant, a decaying exponential is about 37% of its earlier value. Define T as 1/a. Use this to place the first key point on a sketch. Exam trigger: sketching e^{-at} without calculating many points. Common misuse: thinking 0.37 is the amount lost; it is the amount remaining."
+      },
+      {
+        "type": "book_image",
+        "source_page": "page-021",
+        "fig_id": "Fig. B.10",
+        "teaching_role": "example_support",
+        "mode_specific_visual_use": {
+          "cram": "Use the labeled 0.37 and 0.135 points as the fast sketching template.",
+          "standard": "Use the figure to connect T=1/a with actual plotted points for e^{-at} and e^{-2t}.",
+          "top_score": "Use the two subplots to compare the general case with the specific a=2 case."
+        },
+        "caption_instruction": "One sentence: Fig. B.10 shows how a decaying exponential reaches about 0.37 after one time constant and about 0.135 after two time constants.",
+        "description_instruction": "Describe the two plots separately. In the left plot, identify e^{-at}u(t), the points t=1/a and t=2/a, and the amplitudes 1/e and 1/e^2. In the right plot, identify the specific signal e^{-2t}u(t), with one time constant at t=0.5 and two time constants at t=1. Tell students to notice that the curve drops by the same factor each time-constant interval."
+      },
+      {
+        "type": "text_explanation",
+        "instruction": "Start a new page with the heading '## 3. Representative sketch: x(t)=e^{-2t}'. Walk through the example in 100–140 words. Say that a=2, so T=1/a=0.5. List the key sketch points in bullets: t=0 gives x(t)=1; t=0.5 gives x(t)=1/e≈0.37; t=1 gives x(t)=1/e^2≈0.135; t=1.5 gives x(t)=1/e^3≈0.05. Explain that these points are enough to draw the smooth decreasing curve. End with the exam note: 'For sketches, do not waste time computing random points; mark time-constant points.'"
+      },
+      {
+        "type": "math_block",
+        "latex": "\\frac{e^{-a t_2}}{e^{-a t_1}}=e^{-a(t_2-t_1)}",
+        "explanation_instruction": "Explain that this ratio compares the exponential value at two different times. Define t1 and t2 as two time instants. Use it to prove or check how much the signal changes over a time interval. Exam trigger: wording like 'over any interval of length 1/a.' Common misuse: treating the 37% drop as true only from t=0 instead of from any starting time."
+      },
+      {
+        "type": "math_block",
+        "latex": "t_2-t_1=\\frac{1}{a}",
+        "explanation_instruction": "Explain that this condition means the two times are separated by exactly one time constant. Use it together with the ratio formula to show the signal is multiplied by 1/e. Common misuse: thinking the 37% rule only applies at the first time constant rather than every interval of this same duration."
+      },
+      {
+        "type": "math_block",
+        "latex": "\\frac{e^{-a t_2}}{e^{-a t_1}}=\\frac{1}{e}\\approx 0.37",
+        "explanation_instruction": "Explain that whenever t2-t1=1/a, the later value is 37% of the earlier value. Use this for rapid sketching and interval comparisons. Exam trigger: questions asking how the exponential changes after one time constant. Common misuse: subtracting 0.37 from the old value instead of multiplying by 0.37."
+      },
+      {
+        "type": "section_summary",
+        "instruction": "Create a recap page titled '📌 Key Takeaways'. Include exactly 5 bullets, each no more than 22 words. The bullets must explicitly include these formulas: e^{-at} decays for a>0; e^{at} grows for a>0; T=1/a; e^{-aT}=e^{-1}\\approx0.37; if t_2-t_1=1/a, then e^{-at_2}/e^{-at_1}=1/e. End with one bridge sentence: 'Next, we use exponential envelopes to sketch more complicated signals.'"
+      },
+      {
+        "type": "quiz_plan",
+        "target_questions": 7,
+        "question_range": {
+          "min": 6,
+          "max": 8
+        },
+        "knowledge_points": [
+          {
+            "id": "decay_vs_growth",
+            "label": "Recognizing monotonic decay and growth",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 1
+            },
+            "questions": [
+              {
+                "id": "kp1_q1",
+                "type": "multiple_choice",
+                "stem": "Assume a>0. Which signal is monotonically decaying as t increases?",
+                "options": [
+                  "A. e^{at}",
+                  "B. e^{-at}",
+                  "C. e^{a/t}",
+                  "D. -e^{at}"
+                ],
+                "correct_option": "B",
+                "explanation": "For a>0, the negative exponent -at becomes more negative as t increases, so e^{-at} decreases toward zero.",
+                "wrong_option_explanations": {
+                  "A": "e^{at} grows because the exponent increases with t.",
+                  "C": "e^{a/t} is not the standard monotonic exponential form used in this section.",
+                  "D": "-e^{at} becomes more negative; it is not the positive decaying exponential shape discussed here."
+                },
+                "hint": "Check the sign multiplying at in the exponent.",
+                "needs_visual": false,
+                "same_point_variant": false
+              },
+              {
+                "id": "kp1_q2",
+                "type": "multiple_choice",
+                "stem": "In the interactive plot, when a is increased for e^{-at}, what should happen to the curve?",
+                "options": [
+                  "A. It decays more slowly and the time constant increases.",
+                  "B. It decays faster and the time constant decreases.",
+                  "C. It becomes a growing exponential.",
+                  "D. It stays unchanged because the initial value is still 1."
+                ],
+                "correct_option": "B",
+                "explanation": "For e^{-at}, larger a means faster decay, and since T=1/a, the time constant becomes smaller.",
+                "wrong_option_explanations": {
+                  "A": "This reverses the relationship; larger a makes T smaller, not larger.",
+                  "C": "Changing a does not change the negative sign in e^{-at}.",
+                  "D": "The initial value remains 1, but the later values change."
+                },
+                "hint": "Use T=1/a.",
+                "needs_visual": true,
+                "visual_type": "interactive_demo",
+                "same_point_variant": true
+              }
+            ]
+          },
+          {
+            "id": "time_constant",
+            "label": "Time constant of e^{-at}",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 2
+            },
+            "questions": [
+              {
+                "id": "kp2_q1",
+                "type": "multiple_choice",
+                "stem": "What is the time constant of x(t)=e^{-5t}?",
+                "options": [
+                  "A. 5 seconds",
+                  "B. 1/5 second",
+                  "C. e^{-5} seconds",
+                  "D. 0.37 seconds"
+                ],
+                "correct_option": "B",
+                "explanation": "For e^{-at}, the time constant is T=1/a. Here a=5, so T=1/5 second.",
+                "wrong_option_explanations": {
+                  "A": "This confuses a with 1/a.",
+                  "C": "e^{-5} is a value of the exponential at t=1, not the time constant.",
+                  "D": "0.37 is the fraction remaining after one time constant, not the time constant itself."
+                },
+                "hint": "The time constant is the reciprocal of the coefficient of t.",
+                "needs_visual": false,
+                "same_point_variant": false
+              },
+              {
+                "id": "kp2_q2",
+                "type": "multiple_choice",
+                "stem": "A student says: 'For e^{-4t}, the time constant is 4 seconds.' Why is this wrong?",
+                "options": [
+                  "A. The time constant is 1/4 second, not 4 seconds.",
+                  "B. The signal is growing, so it has no time constant.",
+                  "C. The time constant is e^4 seconds.",
+                  "D. The time constant is always 1 second."
+                ],
+                "correct_option": "A",
+                "explanation": "For e^{-at}, T=1/a. With a=4, the time constant is 0.25 second.",
+                "wrong_option_explanations": {
+                  "B": "e^{-4t} is decaying, not growing.",
+                  "C": "e^4 is not the time constant formula.",
+                  "D": "The time constant depends on a."
+                },
+                "hint": "Do not copy the coefficient; take its reciprocal.",
+                "needs_visual": false,
+                "same_point_variant": true
+              }
+            ]
+          },
+          {
+            "id": "quick_sketch_values",
+            "label": "Sketching using 37% and 13.5% values",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 1
+            },
+            "questions": [
+              {
+                "id": "kp3_q1",
+                "type": "multiple_choice",
+                "stem": "For x(t)=e^{-2t}, which pair of sketch points is correct?",
+                "options": [
+                  "A. x(0.5)≈0.37 and x(1)≈0.135",
+                  "B. x(0.5)≈0.135 and x(1)≈0.37",
+                  "C. x(0.5)=2 and x(1)=4",
+                  "D. x(0.5)=0 and x(1)=0"
+                ],
+                "correct_option": "A",
+                "explanation": "Here T=1/2=0.5. After one time constant, the value is about 0.37; after two, it is about 0.135.",
+                "wrong_option_explanations": {
+                  "B": "This reverses the one-time-constant and two-time-constant values.",
+                  "C": "Those values describe growth, not decay.",
+                  "D": "A decaying exponential approaches zero but does not become zero at finite time."
+                },
+                "hint": "For e^{-2t}, one time constant is 0.5.",
+                "needs_visual": true,
+                "visual_type": "book_figure",
+                "same_point_variant": false
+              },
+              {
+                "id": "kp3_q2",
+                "type": "short_answer",
+                "stem": "Give the first three key sketch points for x(t)=e^{-2t} using the time-constant method.",
+                "ideal_answer": "The time constant is T=0.5. The key points are x(0)=1, x(0.5)=1/e≈0.37, and x(1)=1/e^2≈0.135.",
+                "grading_rubric": [
+                  "Must identify T=0.5",
+                  "Must include x(0)=1",
+                  "Must include x(0.5)=1/e≈0.37",
+                  "Must include x(1)=1/e^2≈0.135"
+                ],
+                "explanation": "These points are enough to guide a fast, accurate sketch of e^{-2t}.",
+                "hint": "Use t=0, one time constant, and two time constants.",
+                "needs_visual": false,
+                "same_point_variant": true
+              }
+            ]
+          },
+          {
+            "id": "interval_ratio_rule",
+            "label": "Decay over any one-time-constant interval",
+            "importance": "medium",
+            "exam_weight": "medium",
+            "mastery_rule": {
+              "correct_streak_required": 1
+            },
+            "questions": [
+              {
+                "id": "kp4_q1",
+                "type": "multiple_choice",
+                "stem": "For x(t)=e^{-at}, if t2-t1=1/a, what is x(t2)/x(t1)?",
+                "options": [
+                  "A. 1/e",
+                  "B. e",
+                  "C. a",
+                  "D. 1/a"
+                ],
+                "correct_option": "A",
+                "explanation": "The ratio is e^{-a(t2-t1)}. If t2-t1=1/a, then the ratio is e^{-1}=1/e.",
+                "wrong_option_explanations": {
+                  "B": "That would describe growth by a factor e, not decay by 1/e.",
+                  "C": "a is the rate parameter, not the ratio over one time constant.",
+                  "D": "1/a is the time interval, not the amplitude ratio."
+                },
+                "hint": "Substitute t2-t1=1/a into e^{-a(t2-t1)}.",
+                "needs_visual": false,
+                "same_point_variant": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "existing_page_images": {
+    "page-020": "/pages/page-020.png",
+    "page-021": "/pages/page-021.png",
+    "page-022": "/pages/page-022.png"
+  },
+  "available_figures": {
+    "page-021": [
+      {
+        "fig_id": "Fig. B.10",
+        "caption": "Sketching (a) e^{-at}u(t) and (b) e^{-2t}u(t), illustrating the time constant and key amplitude values at 0.37 and 0.135.",
+        "description": "The figure shows two coordinate plots with horizontal axis t and vertical amplitude, sketching the decaying exponentials e^{-at}u(t) and e^{-2t}u(t). In both plots the curve starts at value 1 at t=0 and decreases monotonically toward 0 for t>0, with labeled reference points marking 1/e ≈ 0.37 and 1/e^2 ≈ 0.135. The left plot labels these at t=1/a and t=2/a, while the right plot gives the specific case a=2 with the same amplitudes at t=0.5 and t=1. Students should notice the time constant relationship: after one time constant the exponential falls to about 37% of its initial value, and after two time constants to about 13.5%."
+      }
+    ]
+  },
+  "web_sources": [
+    {
+      "index": 1,
+      "title": "Artificial intelligence",
+      "url": "https://en.wikipedia.org/wiki/Artificial_intelligence",
+      "snippet": "\"degree of truth\" between 0 and 1. It can therefore handle propositions that are vague and partially true. Non-monotonic logics, including logic programming"
+    },
+    {
+      "index": 2,
+      "title": "Slide rule",
+      "url": "https://en.wikipedia.org/wiki/Slide_rule",
+      "snippet": "elaborate slide rules can perform other calculations, such as square roots, exponentials, and trigonometric functions. The user may estimate the location of the"
+    },
+    {
+      "index": 3,
+      "title": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Wikipedia",
+      "snippet": "changed Wikipedia&#039;s domain from wikipedia.com to wikipedia.org. After an early period of exponential growth, the growth rate of the English Wikipedia in terms"
+    },
+    {
+      "index": 4,
+      "title": "Seismic array",
+      "url": "https://en.wikipedia.org/wiki/Seismic_array",
+      "snippet": "obtained using special digital signal processing techniques such as beamforming, which suppress noises and thus enhance the signal-to-noise ratio (SNR). The"
+    }
+  ],
+  "output_contract": {
+    "format": "single_json_object",
+    "no_markdown_fences": true,
+    "no_prose": true,
+    "compact_json_preferred": true
+  },
+  "section_specific_rules": "section_specific_rules:\n- This section is computationally central and may receive strong exam-priority weighting.\n- Favor worked examples, conversion fluency, trap warnings, and quiz alignment.",
+  "summary_hint": null,
+  "exam_priority_guidance": null
+}

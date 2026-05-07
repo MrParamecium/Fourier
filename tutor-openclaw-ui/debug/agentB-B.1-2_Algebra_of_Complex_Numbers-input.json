@@ -1,0 +1,625 @@
+{
+  "blueprint": {
+    "section_id": "B.1-2",
+    "section_title": "Algebra of Complex Numbers",
+    "difficulty": "intermediate",
+    "estimated_read_minutes": 12,
+    "learning_objectives": [
+      "Read a complex number in rectangular, polar, and exponential form.",
+      "Convert between rectangular and polar form while avoiding quadrant errors.",
+      "Use conjugates to extract real and imaginary parts and simplify products or quotients.",
+      "Choose the efficient form for addition, multiplication, division, powers, roots, and logarithms.",
+      "Extract magnitude and phase from complex-valued expressions."
+    ],
+    "visualization_need": {
+      "level": "static",
+      "reason": [
+        "complex_plane_geometry_is_core",
+        "pattern_recognition_benefits_from_figure",
+        "wikipedia_has_standard_reference_visual_but_textbook_has_more_section_aligned_figures",
+        "misconception_needs_visual_correction",
+        "wrong_quadrant_angle_is_high_value_exam_trap"
+      ],
+      "recommended_assets": [
+        "textbook_figure",
+        "latex_native_visual",
+        "wiki_figure"
+      ]
+    },
+    "visual_plan": {
+      "primary_anchor": "both",
+      "rationale": "Use the textbook complex-plane figures as the visual anchors because they exactly match the section notation: rectangular coordinates, magnitude, angle, conjugate reflection, and quadrant examples. Use LaTeX-native formula blocks for algebra rules because students need exact symbolic structure more than decorative visuals. Do not use GPTImage2 because ready-made textbook figures and symbolic formulas accurately demonstrate the key ideas.",
+      "cram": "Use figures to identify quadrant, sign, magnitude, and angle quickly before computing.",
+      "standard": "Use each visual beside one representative example so the student connects the formula to the complex plane.",
+      "top_score": "Use visuals to catch subtle traps: principal angle, conjugate reflection, coterminal angles, and argument addition or subtraction."
+    },
+    "blocks": [
+      {
+        "type": "text_explanation",
+        "instruction": "Create a minimal overview page only. Use the heading 'Section Objective' followed by one short sentence: 'Learn how to represent, convert, and compute with complex numbers efficiently.' Then add the heading 'Concepts In This Section' and list only these concept names as bullets: rectangular form, polar and exponential form, Euler bridge, magnitude and angle, conjugate, complex arithmetic, powers and roots, complex logarithms, magnitude and phase of functions. Do not add expanded background paragraphs."
+      },
+      {
+        "type": "math_block",
+        "latex": "\\text{(B.1)}\\quad z=a+jb,\\qquad \\operatorname{Re}z=a,\\qquad \\operatorname{Im}z=b",
+        "explanation_instruction": "Start this concept page with the heading '## 1. Rectangular form: read the coordinates'. Explain in 90–130 words that \\(a\\) is the horizontal real coordinate and \\(b\\) is the vertical-axis coefficient of \\(j\\). State that \\(\\operatorname{Im}z\\) is \\(b\\), not \\(jb\\). Include the representative example \\(z=3-j4\\): \\(\\operatorname{Re}z=3\\), \\(\\operatorname{Im}z=-4\\), point \\((3,-4)\\). Add one exam note: if a problem asks for real and imaginary parts, report real numbers, not terms containing \\(j\\)."
+      },
+      {
+        "type": "book_image",
+        "source_page": "page-005",
+        "fig_id": "Fig. B.2",
+        "caption_instruction": "One sentence: this figure shows \\(z=a+jb\\) as a point in the complex plane, with magnitude, angle, and conjugate reflection.",
+        "description_instruction": "Describe the horizontal Real axis and vertical Imaginary axis. Point out that \\(z\\) is located at \\((a,b)\\), its distance from the origin is \\(r\\), its angle from the positive real axis is \\(\\theta\\), and \\(z^*\\) is reflected across the real axis. Tell students to notice that the conjugate keeps the same real part and flips the sign of the imaginary part.",
+        "teaching_role": "concept_anchor",
+        "mode_specific_visual_use": {
+          "cram": "Use the figure to instantly map signs of \\(a\\) and \\(b\\) to quadrant position.",
+          "standard": "Use the figure while reading \\(z=a+jb\\), \\(r\\), \\(\\theta\\), and \\(z^*\\).",
+          "top_score": "Use the reflection to distinguish imaginary part, imaginary term, and conjugate."
+        }
+      },
+      {
+        "type": "math_block",
+        "latex": "\\text{(B.2)}\\quad z=a+jb=r(\\cos\\theta+j\\sin\\theta)\\\\[4pt]\\text{(B.3)}\\quad e^{j\\theta}=\\cos\\theta+j\\sin\\theta\\\\[4pt]\\text{(B.4)}\\quad z=re^{j\\theta}",
+        "explanation_instruction": "Start this concept page with the heading '## 2. Polar and exponential form: distance plus direction'. Explain in 110–150 words that rectangular form gives coordinates, while polar/exponential form gives magnitude \\(r\\) and angle \\(\\theta\\). Define every symbol: \\(r\\ge 0\\), \\(\\theta\\) is the argument, \\(j\\) marks the vertical direction, and \\(e^{j\\theta}\\) is Euler's compact rotation notation. Include the representative example \\(2e^{j\\pi/3}=2(\\cos\\pi/3+j\\sin\\pi/3)=1+j\\sqrt3\\). Exam trigger: use exponential form when multiplying, dividing, taking powers, or reading magnitude and phase. Common misuse: do not treat \\(e^{j\\theta}\\) as a growing real exponential; its magnitude is 1."
+      },
+      {
+        "type": "math_block",
+        "latex": "\\text{(B.5)}\\quad a=r\\cos\\theta,\\qquad b=r\\sin\\theta,\\qquad r=\\sqrt{a^2+b^2},\\qquad \\theta=\\tan^{-1}\\!\\left(\\frac{b}{a}\\right)\\ \\text{with quadrant correction}",
+        "explanation_instruction": "Start this concept page with the heading '## 3. Conversion and the quadrant check'. Explain in 120–160 words that \\(r\\) is always nonnegative distance from the origin, while \\(\\theta\\) must match the quadrant of \\((a,b)\\). Include the representative worked example \\(z=-2-j3\\): \\(r=\\sqrt{13}\\); the calculator value from \\(\\tan^{-1}(3/2)\\) points to the wrong quadrant, so the principal angle is \\(-123.7^\\circ\\), giving \\(z=\\sqrt{13}e^{-j123.7^\\circ}\\). Add a quick check: negative real and negative imaginary parts mean quadrant III, so a first-quadrant angle cannot be correct. Common misuse: using \\(\\tan^{-1}(b/a)\\) without drawing or checking signs."
+      },
+      {
+        "type": "book_image",
+        "source_page": "page-009",
+        "fig_id": "unknown",
+        "caption_instruction": "One sentence: these Argand diagrams show how quadrant position determines the correct polar angle.",
+        "description_instruction": "Describe the four plotted examples \\(2+j3\\), \\(-2+j1\\), \\(-2-j3\\), and \\(1-j3\\). Emphasize that each vector's length is the magnitude and its direction is the argument measured from the positive real axis. Tell students to use the diagrams to see why the calculator tangent angle must be adjusted in quadrants II and III.",
+        "teaching_role": "trap_exposure",
+        "mode_specific_visual_use": {
+          "cram": "Use the four diagrams as a fast sign-to-quadrant checklist.",
+          "standard": "Use the diagrams to connect each conversion example to magnitude and angle.",
+          "top_score": "Use the principal-angle choices to compare equivalent coterminal answers."
+        }
+      },
+      {
+        "type": "math_block",
+        "latex": "\\text{(B.6)}\\quad z^*=a-jb=re^{-j\\theta}\\\\[4pt]\\operatorname{Re}z=\\frac{z+z^*}{2},\\qquad \\text{(B.8)}\\quad \\operatorname{Im}z=\\frac{z-z^*}{2j}\\\\[4pt]\\text{(B.9)}\\quad zz^*=|z|^2",
+        "explanation_instruction": "Start this concept page with the heading '## 4. Conjugate: flip the vertical part'. Explain in 110–150 words that the conjugate changes \\(j\\) to \\(-j\\), which reflects the point across the real axis and changes the sign of the angle. Define \\(z^*\\), \\(|z|\\), and why \\(zz^*\\) becomes real. Include the representative example \\(z=3+j4\\): \\(z^*=3-j4\\), \\(zz^*=25\\), \\(\\operatorname{Re}z=(z+z^*)/2=3\\), \\(\\operatorname{Im}z=(z-z^*)/(2j)=4\\). Exam trigger: use the conjugate to remove a complex denominator. Common misuse: flipping both real and imaginary signs instead of only the imaginary sign."
+      },
+      {
+        "type": "math_block",
+        "latex": "z_1=a_1+jb_1,\\quad z_2=a_2+jb_2\\\\[2pt]z_1\\pm z_2=(a_1\\pm a_2)+j(b_1\\pm b_2)\\\\[6pt]z_1=r_1e^{j\\theta_1},\\quad z_2=r_2e^{j\\theta_2}\\\\[2pt]z_1z_2=r_1r_2e^{j(\\theta_1+\\theta_2)},\\qquad \\frac{z_1}{z_2}=\\frac{r_1}{r_2}e^{j(\\theta_1-\\theta_2)}",
+        "explanation_instruction": "Start this concept page with the heading '## 5. Arithmetic: choose the form that makes the operation easy'. Explain in 120–160 words that addition and subtraction are easiest in rectangular form because coordinates combine directly, while multiplication and division are easiest in polar form because magnitudes multiply or divide and angles add or subtract. Include one representative worked example: if \\(z_1=2e^{j\\pi/4}\\) and \\(z_2=4e^{j2\\pi/3}\\), then \\(z_1/z_2=\\frac12 e^{j(\\pi/4-2\\pi/3)}=\\frac12 e^{-j5\\pi/12}\\). Add exam note: if the problem says product, quotient, reciprocal, or power, consider polar form first. Common misuse: multiplying real parts together and imaginary parts together as if complex numbers were coordinate pairs."
+      },
+      {
+        "type": "math_block",
+        "latex": "z=re^{j\\theta}\\\\[2pt]\\frac{1}{z}=\\frac{1}{r}e^{-j\\theta},\\qquad z^n=r^ne^{jn\\theta}\\\\[4pt]z^{1/n}=r^{1/n}e^{j(\\theta+2\\pi k)/n},\\quad k=0,1,\\ldots,n-1\\\\[6pt]\\ln z=\\ln r+j(\\theta+2\\pi k),\\quad k\\in\\mathbb{Z}",
+        "explanation_instruction": "Start this concept page with the heading '## 6. Reciprocals, powers, roots, and logarithms'. Explain in 120–160 words that powers and reciprocals are angle operations in polar form: reciprocals invert magnitude and negate angle, powers raise magnitude and multiply angle, and roots split the angle into multiple equally spaced answers. Include the representative examples \\((2e^{j\\pi/6})^3=8e^{j\\pi/2}=j8\\) and \\(1/(4e^{-j\\pi/3})=\\frac14e^{j\\pi/3}\\). Explain that complex logarithms are multi-valued because angles can differ by \\(2\\pi k\\). Exam trigger: roots or logarithms usually require listing multiple angle branches. Common misuse: giving only one root when the problem asks for all roots."
+      },
+      {
+        "type": "interactive_demo",
+        "title": "Drag the complex number",
+        "content": "Move the real and imaginary components. Watch the same point become rectangular form, magnitude, and angle.",
+        "explanation": "This demo links coordinates to polar form and quadrant-safe phase.",
+        "teaching_role": "interactive_demo",
+        "mode_specific_visual_use": {
+          "cram": "Use it to recognize the conversion pattern quickly.",
+          "standard": "Use it to connect (a), (b), (r), and (\theta).",
+          "top_score": "Use it to catch quadrant and sign mistakes."
+        },
+        "demo_spec": {
+          "framework": "react_canvas",
+          "panels": [
+            {
+              "id": "phasor_panel",
+              "title": "Complex plane"
+            },
+            {
+              "id": "wave_panel",
+              "title": "Equivalent phase view"
+            }
+          ],
+          "controls": [
+            {
+              "id": "slider_a",
+              "label": "a",
+              "min": -5,
+              "max": 5,
+              "step": 0.1,
+              "default": 3
+            },
+            {
+              "id": "slider_b",
+              "label": "b",
+              "min": -5,
+              "max": 5,
+              "step": 0.1,
+              "default": 4
+            },
+            {
+              "id": "angle_toggle",
+              "label": "angle units",
+              "options": [
+                "degrees",
+                "radians"
+              ],
+              "default": "degrees"
+            },
+            {
+              "id": "reset_demo",
+              "label": "Reset",
+              "action": "set defaults"
+            }
+          ]
+        },
+        "section_id": "B.1-2 Algebra of Complex Numbers",
+        "section_title": "Algebra of Complex Numbers"
+      },
+      {
+        "type": "section_summary",
+        "instruction": "Create the recap page titled '📌 Key Takeaways'. Use compact bullets, but include the core formulas explicitly. Include: rectangular form \\(z=a+jb\\), polar bridge \\(z=r(\\cos\\theta+j\\sin\\theta)=re^{j\\theta}\\), Euler formula \\(e^{j\\theta}=\\cos\\theta+j\\sin\\theta\\), conversion rules \\(a=r\\cos\\theta\\), \\(b=r\\sin\\theta\\), \\(r=\\sqrt{a^2+b^2}\\), quadrant-corrected \\(\\theta\\), conjugate rules \\(z^*=a-jb\\), \\(zz^*=|z|^2\\), arithmetic rules \\(z_1z_2=r_1r_2e^{j(\\theta_1+\\theta_2)}\\), \\(z_1/z_2=(r_1/r_2)e^{j(\\theta_1-\\theta_2)}\\), power/root/log formulas. End with one bridge sentence: 'Next, these complex-number tools will support sinusoid and phasor calculations.'"
+      },
+      {
+        "type": "quiz_plan",
+        "target_questions": 9,
+        "question_range": {
+          "min": 7,
+          "max": 10
+        },
+        "knowledge_points": [
+          {
+            "id": "rectangular_form_parts",
+            "label": "Rectangular form and real/imaginary parts",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 2
+            },
+            "questions": [
+              {
+                "id": "kp1_q1",
+                "type": "multiple_choice",
+                "stem": "For \\(z=5-j7\\), which statement is correct?",
+                "options": [
+                  "A. \\(\\operatorname{Re}z=5\\) and \\(\\operatorname{Im}z=-7\\)",
+                  "B. \\(\\operatorname{Re}z=5\\) and \\(\\operatorname{Im}z=-j7\\)",
+                  "C. \\(\\operatorname{Re}z=-7\\) and \\(\\operatorname{Im}z=5\\)",
+                  "D. \\(\\operatorname{Re}z=5-j7\\) and \\(\\operatorname{Im}z=j\\)"
+                ],
+                "correct_option": "A",
+                "explanation": "The imaginary part is the real coefficient of \\(j\\), so it is \\(-7\\), not \\(-j7\\).",
+                "wrong_option_explanations": {
+                  "B": "\\(-j7\\) is the imaginary term, not the imaginary part.",
+                  "C": "This swaps the coordinate roles.",
+                  "D": "The real part is a real number, not the whole complex expression."
+                },
+                "hint": "Separate the coefficient from the symbol \\(j\\).",
+                "needs_visual": false,
+                "same_point_variant": true
+              },
+              {
+                "id": "kp1_q2",
+                "type": "short_answer",
+                "stem": "A classmate says the imaginary part of \\(z=3+j4\\) is \\(j4\\). Explain precisely why that wording is wrong.",
+                "ideal_answer": "The imaginary part is the real coefficient of \\(j\\), so \\(\\operatorname{Im}z=4\\). The term \\(j4\\) is the imaginary term in the expression.",
+                "grading_rubric": [
+                  "States \\(\\operatorname{Im}z=4\\)",
+                  "Distinguishes imaginary part from imaginary term",
+                  "Does not include \\(j\\) in the value of the imaginary part"
+                ],
+                "explanation": "This checks whether the student understands the definition, not just the notation.",
+                "hint": "Ask what number multiplies \\(j\\).",
+                "needs_visual": false,
+                "same_point_variant": true
+              }
+            ]
+          },
+          {
+            "id": "polar_exponential_conversion",
+            "label": "Polar/exponential form and Euler conversion",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 1
+            },
+            "questions": [
+              {
+                "id": "kp2_q1",
+                "type": "multiple_choice",
+                "stem": "Which Cartesian form equals \\(2e^{j\\pi/3}\\)?",
+                "options": [
+                  "A. \\(1+j\\sqrt3\\)",
+                  "B. \\(\\sqrt3+j\\)",
+                  "C. \\(1-j\\sqrt3\\)",
+                  "D. \\(2+j\\pi/3\\)"
+                ],
+                "correct_option": "A",
+                "explanation": "Use \\(re^{j\\theta}=r(\\cos\\theta+j\\sin\\theta)\\). Since \\(\\cos\\pi/3=1/2\\) and \\(\\sin\\pi/3=\\sqrt3/2\\), the result is \\(1+j\\sqrt3\\).",
+                "wrong_option_explanations": {
+                  "B": "This swaps cosine and sine values.",
+                  "C": "The angle \\(\\pi/3\\) has positive sine, so the imaginary part is positive.",
+                  "D": "Exponential form is not converted by copying the angle as an imaginary coordinate."
+                },
+                "hint": "Use Euler's formula first.",
+                "needs_visual": true,
+                "visual_type": "complex_plane_angle_reference",
+                "same_point_variant": false
+              }
+            ]
+          },
+          {
+            "id": "quadrant_angle_trap",
+            "label": "Magnitude, angle, and quadrant correction",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 2
+            },
+            "questions": [
+              {
+                "id": "kp3_q1",
+                "type": "multiple_choice",
+                "stem": "What is the best principal-angle polar form of \\(-2-j3\\)?",
+                "options": [
+                  "A. \\(\\sqrt{13}e^{j56.3^\\circ}\\)",
+                  "B. \\(\\sqrt{13}e^{-j123.7^\\circ}\\)",
+                  "C. \\(13e^{-j123.7^\\circ}\\)",
+                  "D. \\(\\sqrt5e^{j236.3^\\circ}\\)"
+                ],
+                "correct_option": "B",
+                "explanation": "The magnitude is \\(\\sqrt{(-2)^2+(-3)^2}=\\sqrt{13}\\). The point is in quadrant III, so the principal angle is \\(-123.7^\\circ\\).",
+                "wrong_option_explanations": {
+                  "A": "This is the calculator's first-quadrant tangent angle, not the quadrant III angle.",
+                  "C": "The magnitude should be \\(\\sqrt{13}\\), not \\(13\\).",
+                  "D": "The magnitude \\(\\sqrt5\\) is wrong, although \\(236.3^\\circ\\) is coterminal with \\(-123.7^\\circ\\)."
+                },
+                "hint": "Check the signs before trusting \\(\\tan^{-1}\\).",
+                "needs_visual": true,
+                "visual_type": "wrong_quadrant_argand_diagram",
+                "same_point_variant": true
+              },
+              {
+                "id": "kp3_q2",
+                "type": "multiple_choice",
+                "stem": "A calculator gives \\(\\tan^{-1}((-3)/(-2))=56.3^\\circ\\). Why is this not the principal angle of \\(-2-j3\\)?",
+                "options": [
+                  "A. Because \\(-2-j3\\) lies in quadrant III, not quadrant I",
+                  "B. Because magnitude must be negative in quadrant III",
+                  "C. Because tangent cannot be used for complex numbers",
+                  "D. Because the imaginary part should be treated as \\(+3\\)"
+                ],
+                "correct_option": "A",
+                "explanation": "The tangent ratio alone does not identify the quadrant. Both real and imaginary parts are negative, so the point lies in quadrant III.",
+                "wrong_option_explanations": {
+                  "B": "Magnitude is always nonnegative.",
+                  "C": "Tangent can help, but it must be paired with quadrant information.",
+                  "D": "The imaginary part is \\(-3\\), not \\(+3\\)."
+                },
+                "hint": "Draw or imagine the point \\((-2,-3)\\).",
+                "needs_visual": true,
+                "visual_type": "visual_pattern_recognition_check",
+                "same_point_variant": true
+              }
+            ]
+          },
+          {
+            "id": "conjugate_rules",
+            "label": "Conjugate, real/imag extraction, and \\(zz^*\\)",
+            "importance": "high",
+            "exam_weight": "medium",
+            "mastery_rule": {
+              "correct_streak_required": 1
+            },
+            "questions": [
+              {
+                "id": "kp4_q1",
+                "type": "multiple_choice",
+                "stem": "If \\(z=3+j4\\), what is \\(zz^*\\)?",
+                "options": [
+                  "A. \\(25\\)",
+                  "B. \\(3-j4\\)",
+                  "C. \\(-7\\)",
+                  "D. \\(9-j16\\)"
+                ],
+                "correct_option": "A",
+                "explanation": "\\(z^*=3-j4\\), so \\(zz^*=|z|^2=3^2+4^2=25\\).",
+                "wrong_option_explanations": {
+                  "B": "That is the conjugate, not the product with the conjugate.",
+                  "C": "This incorrectly subtracts squared components.",
+                  "D": "This treats multiplication termwise and ignores cross terms."
+                },
+                "hint": "Use \\(zz^*=|z|^2\\).",
+                "needs_visual": true,
+                "visual_type": "conjugate_reflection_check",
+                "same_point_variant": false
+              }
+            ]
+          },
+          {
+            "id": "complex_arithmetic_form_choice",
+            "label": "Choosing rectangular or polar form for arithmetic",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 2
+            },
+            "questions": [
+              {
+                "id": "kp5_q1",
+                "type": "multiple_choice",
+                "stem": "Let \\(z_1=2e^{j\\pi/4}\\) and \\(z_2=4e^{j2\\pi/3}\\). What is \\(z_1/z_2\\)?",
+                "options": [
+                  "A. \\(\\frac12 e^{-j5\\pi/12}\\)",
+                  "B. \\(\\frac12 e^{j11\\pi/12}\\)",
+                  "C. \\(8e^{j11\\pi/12}\\)",
+                  "D. \\(\\frac12 e^{j5\\pi/12}\\)"
+                ],
+                "correct_option": "A",
+                "explanation": "For division in polar form, divide magnitudes and subtract angles: \\(2/4=1/2\\), and \\(\\pi/4-2\\pi/3=-5\\pi/12\\).",
+                "wrong_option_explanations": {
+                  "B": "This adds the angles instead of subtracting them.",
+                  "C": "This multiplies magnitudes and adds angles.",
+                  "D": "This has the wrong sign for the angle difference."
+                },
+                "hint": "Division means angle of numerator minus angle of denominator.",
+                "needs_visual": false,
+                "same_point_variant": true
+              },
+              {
+                "id": "kp5_q2",
+                "type": "multiple_choice",
+                "stem": "Which operation is usually easiest in rectangular form rather than polar form?",
+                "options": [
+                  "A. \\((3+j4)+(2-j5)\\)",
+                  "B. \\((2e^{j\\pi/3})(5e^{-j\\pi/6})\\)",
+                  "C. \\((4e^{j\\pi/2})^3\\)",
+                  "D. \\((6e^{j\\pi/4})/(2e^{-j\\pi/4})\\)"
+                ],
+                "correct_option": "A",
+                "explanation": "Addition and subtraction combine real parts with real parts and imaginary parts with imaginary parts, so rectangular form is efficient.",
+                "wrong_option_explanations": {
+                  "B": "Multiplication is very efficient in polar form.",
+                  "C": "Powers are efficient in polar form.",
+                  "D": "Division is efficient in polar form."
+                },
+                "hint": "Ask whether the operation combines coordinates or combines magnitudes and angles.",
+                "needs_visual": false,
+                "same_point_variant": true
+              }
+            ]
+          },
+          {
+            "id": "powers_roots_logs",
+            "label": "Reciprocals, powers, roots, and logarithms",
+            "importance": "medium",
+            "exam_weight": "medium",
+            "mastery_rule": {
+              "correct_streak_required": 1
+            },
+            "questions": [
+              {
+                "id": "kp6_q1",
+                "type": "multiple_choice",
+                "stem": "Which expression equals \\((2e^{j\\pi/6})^3\\)?",
+                "options": [
+                  "A. \\(8e^{j\\pi/2}\\)",
+                  "B. \\(6e^{j\\pi/18}\\)",
+                  "C. \\(8e^{j\\pi/18}\\)",
+                  "D. \\(2e^{j\\pi/2}\\)"
+                ],
+                "correct_option": "A",
+                "explanation": "Raise the magnitude to the third power and multiply the angle by 3: \\(2^3=8\\), \\(3(\\pi/6)=\\pi/2\\).",
+                "wrong_option_explanations": {
+                  "B": "This multiplies the magnitude by 3 and divides the angle.",
+                  "C": "The angle should be multiplied by 3, not divided.",
+                  "D": "The magnitude also needs to be cubed."
+                },
+                "hint": "Use \\((re^{j\\theta})^n=r^ne^{jn\\theta}\\).",
+                "needs_visual": false,
+                "same_point_variant": false
+              },
+              {
+                "id": "kp6_q2",
+                "type": "multiple_choice",
+                "stem": "Why is \\(\\ln z\\) multi-valued for a nonzero complex number \\(z=re^{j\\theta}\\)?",
+                "options": [
+                  "A. Because \\(\\theta\\) and \\(\\theta+2\\pi k\\) represent the same point",
+                  "B. Because \\(r\\) can be positive or negative",
+                  "C. Because \\(j\\) changes value in different quadrants",
+                  "D. Because \\(\\ln r\\) is never real"
+                ],
+                "correct_option": "A",
+                "explanation": "Complex angles are not unique; adding any integer multiple of \\(2\\pi\\) gives the same point, so \\(\\ln z=\\ln r+j(\\theta+2\\pi k)\\).",
+                "wrong_option_explanations": {
+                  "B": "In polar form, \\(r\\) is normally taken nonnegative.",
+                  "C": "\\(j\\) is fixed; it does not change value.",
+                  "D": "\\(\\ln r\\) is real for \\(r>0\\)."
+                },
+                "hint": "Think about full rotations on the complex plane.",
+                "needs_visual": true,
+                "visual_type": "coterminal_angle_circle_check",
+                "same_point_variant": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "existing_page_images": {
+    "page-005": "/pages/page-005.png",
+    "page-006": "/pages/page-006.png",
+    "page-007": "/pages/page-007.png",
+    "page-008": "/pages/page-008.png",
+    "page-009": "/pages/page-009.png",
+    "page-010": "/pages/page-010.png",
+    "page-011": "/pages/page-011.png",
+    "page-012": "/pages/page-012.png",
+    "page-013": "/pages/page-013.png",
+    "page-014": "/pages/page-014.png",
+    "page-015": "/pages/page-015.png",
+    "page-016": "/pages/page-016.png",
+    "page-017": "/pages/page-017.png"
+  },
+  "available_figures": {
+    "page-005": [
+      {
+        "fig_id": "Fig. B.2",
+        "caption": "The complex plane showing a complex number z = a + jb represented by point coordinates (a, b), its magnitude r and angle θ, along with its complex conjugate z* = a − jb reflected across the real axis.",
+        "description": "The figure is a complex plane with the horizontal axis labeled Real and the vertical axis labeled Imaginary. A point z is plotted at coordinates (a, b), with dashed guides to the axes, and a vector from the origin to z labeled magnitude r and angle θ from the positive real axis. A second point z* appears at (a, -b), reflected across the real axis, showing the complex conjugate of z. Students should notice that z and z* share the same real part a, have opposite imaginary parts ±b, and are symmetric about the real axis."
+      }
+    ],
+    "page-007": [
+      {
+        "fig_id": "Fig. B.3",
+        "caption": "Understanding some useful identities in terms of re^(jθ).",
+        "description": "The figure shows two complex-plane diagrams with horizontal Re and vertical Im axes. In (a), a vector from the origin to a point labeled re^{j\\theta} has magnitude r and angle \\theta from the positive real axis, illustrating polar form of a complex number. In (b), the unit points 1, -1, j, and -j are marked on the axes with circular arrows labeled \\pi/2, -\\pi/2, \\pi, and -\\pi, emphasizing how multiplying by e^{j\\theta} corresponds to rotation and how standard angles map to key points on the unit circle."
+      }
+    ],
+    "page-009": [
+      {
+        "fig_id": "unknown",
+        "caption": "Argand diagrams illustrating the polar (exponential) form of four complex numbers: 2+j3, −2+j1, −2−j3, and 1−j3, showing their magnitudes and angles measured from the positive real axis.",
+        "description": "Four Argand diagrams plot complex numbers on axes labeled Re (horizontal) and Im (vertical): (a) 2 + j3, (b) -2 + j1, (c) -2 - j3, and (d) 1 - j3. Each point is connected to the origin, with dashed projections showing its real and imaginary coordinates, and each vector is labeled with its magnitude and angle from the positive real axis: √13 at 56.3°, √5 at 153.4°, √13 at -123.7°, and √10 at -71.6°. Students should notice how quadrant position determines the sign of the real and imaginary parts and how the polar form represents the same complex number by magnitude and argument."
+      }
+    ],
+    "page-011": [
+      {
+        "fig_id": "Fig. B.5",
+        "caption": "Graphical representations on the complex plane illustrating the conversion of complex numbers from polar (exponential) form to Cartesian form for various examples including positive and negative angles and multiple full rotations.",
+        "description": "Six subfigures on the complex plane show Re on the horizontal axis and Im on the vertical axis, plotting complex numbers given in polar/exponential form and their Cartesian coordinates. Vectors from the origin mark magnitudes and angles such as π/3, -3π/4, and π/2, with dashed projections labeling coordinates like (1, √3) and (-2√2, -2√2). Other panels use spiral arrows for angles 4π, -4π, and -3π to show multiple full rotations ending at the same Cartesian point on the real or imaginary axis. Students should notice how modulus sets distance from the origin, angle sets direction, and coterminal angles represent the same complex number."
+      }
+    ],
+    "page-017": [
+      {
+        "fig_id": "Fig. B.6",
+        "caption": "Sketching a sinusoid, showing (a) C cos ω₀t, (b) C sin ω₀t, and (c) the phase-shifted sinusoid C cos(ω₀t − 60°) obtained by delaying C cos ω₀t by one-sixth of a period (T₀/6).",
+        "description": "The figure has three time-domain sinusoid plots with horizontal axis t and marked times -T0, -T0/2, 0, T0/2, and T0; amplitude is labeled C, and the period relation T0 = 1/f0 = 2π/ω0 is shown. Panel (a) plots C cos(ω0 t), panel (b) plots C sin(ω0 t), and panel (c) overlays C cos(ω0 t) with the shifted waveform C cos(ω0 t - 60°). Students should notice the different starting values of cosine and sine at t = 0, the common amplitude and period, and that a 60° phase delay corresponds to shifting the cosine right by T0/6."
+      }
+    ]
+  },
+  "web_sources": [
+    {
+      "index": 1,
+      "title": "List of arbitrary-precision arithmetic software",
+      "url": "https://en.wikipedia.org/wiki/List_of_arbitrary-precision_arithmetic_software",
+      "snippet": "supports arbitrary-precision floating-point numbers, bigfloats. Maple, Mathematica, and several other computer algebra software include arbitrary-precision arithmetic"
+    },
+    {
+      "index": 2,
+      "title": "List of Perl software and tools",
+      "url": "https://en.wikipedia.org/wiki/List_of_Perl_software_and_tools",
+      "snippet": "perldoc.perl.org. \"Math::BigFloat - arbitrary size floating point math package - Perldoc Browser\". perldoc.perl.org. \"Math::Complex - complex numbers and associated"
+    },
+    {
+      "index": 3,
+      "title": "Gamma function",
+      "url": "https://en.wikipedia.org/wiki/Gamma_function",
+      "snippet": "capital Greek letter gamma) is the most common extension of the factorial function to complex numbers. First studied by Daniel Bernoulli, the gamma function"
+    },
+    {
+      "index": 4,
+      "title": "Alexander Grothendieck",
+      "url": "https://en.wikipedia.org/wiki/Alexander_Grothendieck",
+      "snippet": "creation of modern algebraic geometry. His research extended the scope of the field and added elements of commutative algebra, homological algebra, sheaf"
+    },
+    {
+      "index": 5,
+      "title": "History of mathematics",
+      "url": "https://en.wikipedia.org/wiki/History_of_mathematics",
+      "snippet": "now called Boolean algebra, in which the only numbers were 0 and 1. Boolean algebra is the starting point of mathematical logic and has important applications"
+    },
+    {
+      "index": 6,
+      "title": "Terence Tao",
+      "url": "https://en.wikipedia.org/wiki/Terence_Tao",
+      "snippet": "2021 – IEEE Jack S. Kilby Signal Processing Medal 2022 – Global Australian of the Year (Advance Global Australians; Advance.org) 2022 – Grande Médaille"
+    }
+  ],
+  "output_contract": {
+    "format": "single_json_object",
+    "no_markdown_fences": true,
+    "no_prose": true,
+    "compact_json_preferred": true
+  },
+  "section_specific_rules": "section_specific_rules:\n- This section teaches the algebra of complex numbers. Use a B.2-1-style lecture-note rhythm: context -> standalone formula -> symbol/use-case explanation -> example/trap.\n- Absolutely do not place a bank of all formulas immediately after the overview. No formula dump at the top.\n- Split the early representation formulas into separate concept-local pages: rectangular form, polar/exponential form, Euler bridge, magnitude/angle/quadrant check.\n- Each page may contain at most one small formula family. If the formula block is more than 3-4 aligned lines, split it into another page unless those lines are inseparable.\n- Textbook-numbered formulas like (B.1), (B.2), (B.3), etc. are key formula signals, but they must be taught locally rather than collected in one table.\n- Preserve enough explanation. Each formula page should explain what the symbols mean, when to use the formula, one representative example or near-miss, and one common trap when relevant.\n- Keep Key Takeaways complete but selective: include the core representation, conjugate, arithmetic, roots/log formulas and the quadrant rule; exclude worked-example intermediate arithmetic.",
+  "summary_hint": "Preserve the sign-sensitive detail that sqrt(-1) = ±j and sqrt(-4) = ±2j. Do not reduce this to only j^2 = -1.",
+  "exam_priority_guidance": {
+    "source": "background_hw1_distilled",
+    "markdown": "# Background HW1 Distillation\n\nSource: `/Users/chenghaoxiang/Desktop/HW1_Yanglet.pdf`\nCourse signal: `Background`\nCoverage extracted from homework: `Complex numbers and sinusoids`\n\n## Why This Matters\nThis homework is a strong exam-priority signal for the early `Background` unit. It shows that the instructor is not mainly testing historical storytelling or abstract motivation. The graded emphasis is on representation changes, algebraic manipulation, geometric interpretation in the complex plane, and converting sums of sinusoids into one canonical sinusoid.\n\n## High-Priority Concepts\n1. Cartesian form of complex numbers\n2. Polar / exponential form of complex numbers\n3. Complex-plane interpretation\n4. Conversion between Cartesian and polar forms\n5. Multiplication and division of complex numbers\n6. Powers and reciprocals of complex numbers\n7. Real and imaginary parts of a complex-valued function\n8. Magnitude and phase of a complex-valued function\n9. Phasor interpretation of sinusoidal terms\n10. Converting `a cos(ωt) + b sin(ωt)` into a single sinusoid\n\n## High-Priority Problem Types\n1. Convert a given complex number from Cartesian to polar form\n2. Convert a polar / exponential complex number into Cartesian form\n3. Plot or identify a complex number on the complex plane\n4. Compute product and quotient of two complex numbers in both forms\n5. Handle scalar multiples, powers, and reciprocals in polar form\n6. Rewrite a rational complex function `F(ω)` into Cartesian form\n7. Extract `Re{F(ω)}` and `Im{F(ω)}`\n8. Rewrite `F(ω)` into polar form and compute magnitude / angle\n9. Combine cosine and sine terms into one sinusoid with amplitude and phase\n\n## What The Homework Implies About Exam Weighting\n- Heavy weight on representation switching\n- Heavy weight on procedural fluency\n- Medium weight on geometric interpretation\n- Medium weight on function-level magnitude/phase reading\n- Heavy weight on sinusoid compression into one-term form\n- Low weight on pure history unless it supports computation\n\n## Required Explanation Bias For Background Lessons\nWhen generating `Background` lessons, bias toward the following:\n1. Show the canonical forms side-by-side: Cartesian, polar, exponential\n2. Use short worked examples with actual numbers, not only concept prose\n3. Emphasize the operation rules that make polar form efficient\n4. Explain argument / phase carefully, especially sign and quadrant issues\n5. For sinusoids, explicitly connect algebraic coefficients to phasor magnitude and angle\n6. End each major concept with one exam-style conversion or simplification example\n\n## Required Example Patterns\n1. Convert `a + jb` to `r e^{jθ}`\n2. Convert `r e^{jθ}` back to `a + jb`\n3. Multiply and divide two nontrivial complex numbers\n4. Compute a reciprocal using polar form\n5. Take a small integer power using polar form\n6. Given `F(ω)`, compute real part, imaginary part, magnitude, and angle\n7. Rewrite `cos(ωt) + k sin(ωt)` as `A cos(ωt + φ)` or equivalent\n8. Rewrite `a cos(ωt) - b sin(ωt)` as a single sinusoid and explain phase sign\n\n## Common Traps To Explicitly Teach\n1. Wrong quadrant when computing angle from tangent\n2. Forgetting that magnitude is always nonnegative\n3. Losing the sign of the imaginary part when converting forms\n4. Mixing degree intuition with radian expressions\n5. Multiplying Cartesian coordinates termwise instead of using proper complex arithmetic\n6. Mishandling division by not subtracting arguments in polar form\n7. Forgetting conjugate logic when simplifying rational complex expressions\n8. Confusing coefficient matching in sinusoid compression\n9. Getting the phase sign wrong when rewriting `a cos + b sin`\n10. Reporting only amplitude without the phase-adjusted final sinusoid\n\n## What To De-Emphasize\n1. Long historical narrative without computational payoff\n2. Purely philosophical discussion of why complex numbers exist\n3. Decorative visuals that do not support conversion, phase, or sinusoid combination\n4. Proof-heavy treatment when the likely exam skill is procedural manipulation\n\n## Lesson Generation Rules Derived From This Homework\nFor `Background` sections, the lesson generator should:\n1. Prefer exam-style worked examples over long exposition\n2. Prefer conversion drills and interpretation drills\n3. Treat complex-form switching as a core competency\n4. Treat magnitude/phase extraction as core\n5. Treat sinusoid combination as a core tested skill\n6. Include at least one representative worked example per major computational pattern\n7. Include at least one trap warning whenever angle / phase appears\n8. Generate quizzes that mirror homework forms, not generic conceptual trivia\n\n## Quiz Bias\nQuiz generation for `Background` should favor:\n1. Multiple-choice on correct form conversion\n2. Short-answer on magnitude / angle extraction\n3. Calculation items on products, quotients, reciprocals, and powers\n4. Items asking for a single-sinusoid equivalent\n5. Trap questions about quadrant, sign, and phase\n\n## Section Prioritization Heuristic\nIf a `Background` section touches these topics, raise its teaching priority:\n- complex-plane form conversion\n- polar/exponential notation\n- argument / phase\n- complex multiplication/division\n- complex-valued frequency response form\n- sinusoid addition / phasor compression\n\nIf a section is mostly historical, motivational, or definitional, keep it shorter unless it directly supports the above problem types.\n",
+    "json": {
+      "source_pdf": "/Users/chenghaoxiang/Desktop/HW1_Yanglet.pdf",
+      "scope": "background",
+      "course_signal": "Complex numbers and sinusoids are priority-tested early topics.",
+      "high_priority_concepts": [
+        "Cartesian form of complex numbers",
+        "Polar / exponential form of complex numbers",
+        "Complex-plane interpretation",
+        "Conversion between Cartesian and polar forms",
+        "Multiplication and division of complex numbers",
+        "Powers and reciprocals of complex numbers",
+        "Real and imaginary parts of a complex-valued function",
+        "Magnitude and phase of a complex-valued function",
+        "Phasor interpretation of sinusoidal terms",
+        "Converting a cosine-sine combination into a single sinusoid"
+      ],
+      "high_priority_problem_types": [
+        "Convert Cartesian to polar",
+        "Convert polar/exponential to Cartesian",
+        "Place numbers on the complex plane",
+        "Compute product and quotient in both forms",
+        "Compute scalar multiples, powers, and reciprocals",
+        "Rewrite a rational complex function in Cartesian form",
+        "Extract real and imaginary parts",
+        "Rewrite a complex function in polar form and compute magnitude/angle",
+        "Combine sinusoidal terms into one sinusoid"
+      ],
+      "common_traps": [
+        "Wrong quadrant when computing angle",
+        "Forgetting magnitude must be nonnegative",
+        "Dropping the sign of the imaginary part",
+        "Confusing radians and informal degree intuition",
+        "Doing invalid termwise multiplication in Cartesian form",
+        "Forgetting argument subtraction in division",
+        "Missing conjugate logic in simplification",
+        "Getting phase sign wrong in sinusoid compression",
+        "Giving amplitude without final phase-adjusted sinusoid"
+      ],
+      "required_example_patterns": [
+        "a + jb to r*e^(jθ)",
+        "r*e^(jθ) to a + jb",
+        "nontrivial multiplication and division",
+        "reciprocal in polar form",
+        "power in polar form",
+        "real/imaginary/magnitude/angle extraction from F(ω)",
+        "cos(ωt) + k sin(ωt) to one sinusoid",
+        "a cos(ωt) - b sin(ωt) to one sinusoid with phase explanation"
+      ],
+      "explanation_bias": {
+        "worked_examples_over_history": true,
+        "representation_switching_is_core": true,
+        "phasor_and_phase_are_core": true,
+        "include_trap_warning_with_angle_topics": true,
+        "deemphasize_long_history_without_computational_payoff": true
+      },
+      "quiz_bias": {
+        "favor_conversion_items": true,
+        "favor_magnitude_phase_items": true,
+        "favor_complex_arithmetic_items": true,
+        "favor_single_sinusoid_items": true,
+        "favor_trap_questions_on_quadrant_and_phase": true
+      },
+      "section_priority_keywords": [
+        "complex plane",
+        "polar form",
+        "exponential form",
+        "argument",
+        "phase",
+        "complex multiplication",
+        "complex division",
+        "frequency response",
+        "sinusoid addition",
+        "phasor"
+      ]
+    },
+    "usage_instruction": "Use this only as a weighting signal for emphasis, worked examples, trap warnings, and quiz bias in Background sections."
+  }
+}

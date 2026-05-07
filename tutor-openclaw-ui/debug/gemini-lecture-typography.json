@@ -1,0 +1,26 @@
+{
+  "direction": "Refining the typography of the lecture content pane to align with a modern, premium minimalist aesthetic, moving away from overly stylized serif and monospace headings.",
+  "problems": [
+    "H1 uses Playfair Display which clashes with the Vercel/Linear minimalist style.",
+    "H2 has a heavy left border that feels outdated.",
+    "H3 uses uppercase monospace which is hard to read for longer subheadings.",
+    "H4 uses italic styling which can look inconsistent."
+  ],
+  "css_changes": [
+    {
+      "selector": ".explain-body h1, .learn-explain-body h1",
+      "why": "Modernize H1 typography to match the premium minimalist style using Space Grotesk.",
+      "change": "font-family: 'Space Grotesk', sans-serif;\n  font-size: 2.25rem;\n  font-weight: 700;\n  color: var(--h1-color);\n  letter-spacing: -0.02em;\n  margin: 2.5rem 0 1rem;\n  line-height: 1.2;\n  padding-bottom: 0.5rem;\n  border-bottom: 1px solid var(--rule-color);"
+    },
+    {
+      "selector": ".explain-body h2, .learn-explain-body h2",
+      "why": "Simplify H2 by removing the heavy left border and updating font sizing for a cleaner look.",
+      "change": "font-family: 'Inter', sans-serif;\n  font-size: 1.5rem;\n  font-weight: 600;\n  color: var(--h2-color);\n  margin: 2rem 0 0.75rem;\n  padding-left: 0;\n  border-left: none;\n  letter-spacing: -0.01em;\n  line-height: 1.3;"
+    },
+    {
+      "selector": ".explain-body h3, .learn-explain-body h3",
+      "why": "Update H3 to be more readable and less stylized by removing uppercase and monospace properties.",
+      "change": "font-family: 'Inter', sans-serif;\n  font-size: 1.125rem;\n  font-weight: 600;\n  color: var(--h3-color);\n  text-transform: none;\n  letter-spacing: 0;\n  margin: 1.5rem 0 0.5rem;\n  padding: 0;\n  border: none;"
+    },
+    {
+      "selector": ".explain-

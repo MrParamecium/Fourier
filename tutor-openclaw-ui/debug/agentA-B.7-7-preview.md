@@ -1,0 +1,554 @@
+# Agent A Preview: B.7-7 B.7-7 Partial Fraction Expansions with MATLAB residue
+
+- Difficulty: intermediate
+- Estimated read minutes: 5
+
+## Learning Objectives
+
+- Use MATLAB's residue command to compute a partial fraction expansion of a rational function.
+- Enter numerator and denominator coefficient vectors in descending powers.
+- Interpret the outputs R, P, and K correctly, including repeated roots and direct terms.
+
+## Visualization Need
+
+```json
+{
+  "level": "static",
+  "reason": [
+    "pattern_recognition_benefits_from_figure",
+    "misconception_needs_visual_correction",
+    "wrong_vs_right_contrast_is_high_value"
+  ],
+  "recommended_assets": [
+    "generated_image"
+  ]
+}
+```
+
+## Visual Plan
+
+```json
+{
+  "primary_anchor": "generated_image",
+  "rationale": "The OCR page has no textbook figure, and this MATLAB-focused section is best supported by a compact custom input-output diagram showing how B and A enter residue and how R, P, and K come out. A Wikipedia-style reference image is unlikely to teach the MATLAB command structure cleanly. LaTeX blocks will carry the formulas; one generated diagram will carry the workflow recognition.",
+  "cram": "Use the diagram to memorize the command pattern and what each output vector means.",
+  "standard": "Use the diagram with one representative example so students can connect coefficients, roots, residues, and direct terms.",
+  "top_score": "Use the diagram to catch subtle mistakes: coefficient order, repeated-root ordering, and when K is nonempty."
+}
+```
+
+## Planned Blocks
+
+### Block 1: `text_explanation`
+- **instruction**: Create a minimal first page only. Use the heading 'Section Objective' and write one sentence: 'Learn how MATLAB computes partial fraction expansions using the residue command.' Then use the heading 'Concepts In This Section' and list only these concept names as bullets: rational function setup; residue command syntax; coefficient-vector order; outputs R, P, and K; repeated roots; improper rational functions. Do not add background paragraphs or explanations on this page.
+
+### Block 2: `text_explanation`
+- **instruction**: Start a new knowledge-point page with the heading '## 1. The rational function MATLAB is decomposing'. Explain in 80–120 words that the section works with a rational function, meaning one polynomial divided by another. State that MATLAB does not receive the expression as handwriting; it receives the numerator and denominator coefficient vectors. Include the representative setup: for \(F(x)=\frac{2x+5}{x^2+3x+2}\), the numerator coefficients are \([2,5]\) and the denominator coefficients are \([1,3,2]\). Exam note: the coefficients must be listed from highest power down to constant term.
+
+### Block 3: `math_block`
+- **latex**: F(x)=\frac{B(x)}{A(x)}
+- **explanation_instruction**: Explain that \(B(x)\) is the numerator polynomial and \(A(x)\) is the denominator polynomial. Use this when the problem asks for a partial fraction expansion of a rational function. Common misuse: entering coefficients in increasing powers instead of descending powers.
+
+### Block 4: `text_explanation`
+- **instruction**: Start a new knowledge-point page with the heading '## 2. The residue command: inputs and outputs'. Explain in 90–140 words that MATLAB's command takes coefficient vectors \(B\) and \(A\), then returns three outputs: \(R\), \(P\), and \(K\). Define \(R\) as the partial-fraction coefficients, \(P\) as the corresponding roots or poles, and \(K\) as the direct polynomial terms when the rational function is not proper. Include the exact MATLAB-style command as plain code text before the formula block: '[R,P,K] = residue(B,A)'. Exam trigger: if a problem gives polynomial coefficients and asks for partial fractions, this command is the shortcut.
+
+### Block 5: `math_block`
+- **latex**: \texttt{[R,P,K] = residue(B,A)}
+- **explanation_instruction**: Explain that \(B\) and \(A\) are input coefficient vectors, while \(R\), \(P\), and \(K\) are outputs. Common misuse: thinking \(P\) stores powers; it stores roots or poles.
+
+### Block 6: `generate_image`
+- **tool**: openai/gpt-5.4-image-2
+- **reason**: No textbook figure is available, and a custom MATLAB input-output workflow diagram will teach the command structure more directly than a generic partial-fractions reference image.
+- **teaching_role**: concept_anchor
+- **mode_specific_visual_use**:
+```json
+{
+  "cram": "Memorize the pipeline: B and A go in; R, P, and K come out.",
+  "standard": "Use the diagram to connect each vector to its role in the partial fraction expansion.",
+  "top_score": "Use the callouts to avoid confusing poles, residues, and direct polynomial terms."
+}
+```
+- **prompt**: Pure white clean background, minimalist lecture-notes educational diagram, exactly one knowledge point: MATLAB residue command input-output workflow. Show two input boxes on the left labeled 'B: numerator coefficients, descending powers' and 'A: denominator coefficients, descending powers'. Arrow into a central box labeled '[R,P,K] = residue(B,A)'. Three output boxes on the right labeled 'R: partial-fraction coefficients', 'P: corresponding roots / poles', and 'K: direct terms if not proper'. Include one small warning box: 'Do not reverse coefficient order.' Use navy, muted teal, soft gray, and muted red only for the warning. No decorative elements, no dense text, no extra examples, clean academic linework.
+- **style_hint**: lecture notes, academic, clean, restrained color boxes, exam-oriented, one concept only
+
+### Block 7: `text_explanation`
+- **instruction**: Start a new knowledge-point page with the heading '## 3. Reading R and P as a partial fraction expansion'. Explain in 100–150 words how outputs \(R\) and \(P\) translate back into fractions. For distinct roots, each residue \(R_i\) pairs with one pole \(P_i\), giving a term \(R_i/(x-P_i)\). Then give the representative worked example: for \(F(x)=\frac{2x+5}{x^2+3x+2}\), \(B=[2,5]\), \(A=[1,3,2]\), and the expansion is \(\frac{3}{x+1}-\frac{1}{x+2}\). State that this corresponds to poles \(-1\) and \(-2\). Keep the example short and do not introduce MATLAB output ordering beyond what is needed.
+
+### Block 8: `math_block`
+- **latex**: \frac{B(x)}{A(x)}=\sum_i \frac{R_i}{x-P_i}+K(x)
+- **explanation_instruction**: Explain that \(R_i\) is the coefficient of the partial fraction, \(P_i\) is the corresponding root or pole, and \(K(x)\) is present only for direct terms. Use this formula to translate MATLAB's output back into algebra. Common misuse: writing \(x+P_i\) instead of \(x-P_i\).
+
+### Block 9: `text_explanation`
+- **instruction**: Start a new knowledge-point page with the heading '## 4. Repeated roots and direct terms'. Explain in 100–150 words that if a root is repeated \(r\) times, MATLAB lists the corresponding partial fractions in ascending denominator powers: first \((x-p)^1\), then \((x-p)^2\), and so on. Then explain that if the rational function is not proper, meaning the numerator degree is greater than or equal to the denominator degree, \(K\) contains the direct polynomial terms in descending powers. Include one quick check: 'If \(F(x)=\frac{x^2+1}{x+1}\), expect a nonempty \(K\) because the numerator degree is not smaller.'
+
+### Block 10: `math_block`
+- **latex**: \frac{R_1}{x-p}+\frac{R_2}{(x-p)^2}+\cdots+\frac{R_r}{(x-p)^r}
+- **explanation_instruction**: Explain that this is the repeated-root pattern for a root \(p\) repeated \(r\) times. Use it when MATLAB returns the same pole multiple times in \(P\). Common misuse: reversing the order and pairing the first residue with the highest power.
+
+### Block 11: `section_summary`
+- **instruction**: Create the recap page titled '📌 Key Takeaways'. Include exactly four bullets, each ≤25 words, and include the core formulas explicitly: \(F(x)=B(x)/A(x)\); \(\texttt{[R,P,K]=residue(B,A)}\); \(B(x)/A(x)=\sum_i R_i/(x-P_i)+K(x)\); repeated-root terms \(R_1/(x-p), R_2/(x-p)^2,\ldots\). End with one sentence: 'Next, use these outputs to rebuild and verify partial fraction expansions quickly.'
+
+### Block 12: `quiz_plan`
+- **target_questions**:
+```json
+6
+```
+- **question_range**:
+```json
+{
+  "min": 5,
+  "max": 7
+}
+```
+- **knowledge_points**:
+```json
+[
+  {
+    "id": "rational_function_setup",
+    "label": "Representing B(x)/A(x) with coefficient vectors",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "kp1_q1",
+        "type": "multiple_choice",
+        "stem": "For \\(F(x)=\\frac{4x^2-3x+7}{x^3+2x+1}\\), which MATLAB coefficient vectors are correct?",
+        "options": [
+          "A. B = [4, -3, 7], A = [1, 0, 2, 1]",
+          "B. B = [7, -3, 4], A = [1, 2, 1]",
+          "C. B = [4, -3, 7], A = [1, 2, 1]",
+          "D. B = [4, 3, 7], A = [1, 0, 2, 1]"
+        ],
+        "correct_option": "A",
+        "explanation": "Coefficients are entered in descending powers. The denominator has no \\(x^2\\) term, so its coefficient is 0.",
+        "wrong_option_explanations": {
+          "B": "The numerator is reversed, and the denominator omits the missing \\(x^2\\) coefficient.",
+          "C": "The denominator omits the zero coefficient for the missing \\(x^2\\) term.",
+          "D": "The sign of the \\(-3x\\) coefficient is wrong."
+        },
+        "hint": "Include zero coefficients for missing powers.",
+        "needs_visual": false,
+        "same_point_variant": true
+      },
+      {
+        "id": "kp1_q2",
+        "type": "multiple_choice",
+        "stem": "A student enters A = [1, 3, 2] for \\(A(x)\\). What polynomial does this represent?",
+        "options": [
+          "A. \\(1+3x+2x^2\\)",
+          "B. \\(x^2+3x+2\\)",
+          "C. \\(x^3+2\\)",
+          "D. \\(3x^2+x+2\\)"
+        ],
+        "correct_option": "B",
+        "explanation": "MATLAB reads coefficient vectors from highest power down to the constant term.",
+        "wrong_option_explanations": {
+          "A": "This reads the vector in increasing powers, which is the common mistake.",
+          "C": "There are three coefficients, so this is a quadratic, not a cubic.",
+          "D": "The first coefficient 1 belongs to \\(x^2\\), not the middle term."
+        },
+        "hint": "The leftmost entry is attached to the highest power.",
+        "needs_visual": false,
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "residue_command_outputs",
+    "label": "Meaning of R, P, and K",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "kp2_q1",
+        "type": "multiple_choice",
+        "stem": "In MATLAB's command \\(\\texttt{[R,P,K]=residue(B,A)}\\), what does P contain?",
+        "options": [
+          "A. The powers of each partial fraction term",
+          "B. The roots or poles corresponding to the partial fractions",
+          "C. The numerator polynomial coefficients",
+          "D. The direct polynomial terms"
+        ],
+        "correct_option": "B",
+        "explanation": "P stores the corresponding roots or poles. The residues in R pair with these poles.",
+        "wrong_option_explanations": {
+          "A": "P does not mean powers; repeated roots create powers in the denominator, but P stores pole values.",
+          "C": "The numerator coefficients are the input vector B.",
+          "D": "Direct terms are stored in K."
+        },
+        "hint": "Think: R gives residues, P gives pole locations.",
+        "needs_visual": true,
+        "visual_type": "generated_input_output_workflow_diagram",
+        "same_point_variant": true
+      },
+      {
+        "id": "kp2_q2",
+        "type": "multiple_choice",
+        "stem": "When is K expected to be nonempty?",
+        "options": [
+          "A. When the numerator degree is smaller than the denominator degree",
+          "B. When the denominator has complex roots",
+          "C. When the rational function is not proper",
+          "D. Whenever the denominator has repeated roots"
+        ],
+        "correct_option": "C",
+        "explanation": "K stores direct polynomial terms, which occur when the rational function is not proper.",
+        "wrong_option_explanations": {
+          "A": "That is a proper rational function, so usually K is empty.",
+          "B": "Complex roots affect P, not the existence of K.",
+          "D": "Repeated roots affect the powers of denominator terms, not necessarily K."
+        },
+        "hint": "Compare numerator degree with denominator degree.",
+        "needs_visual": false,
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "partial_fraction_reconstruction",
+    "label": "Rebuilding the partial fraction expansion",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp3_q1",
+        "type": "multiple_choice",
+        "stem": "Suppose MATLAB returns \\(R=[3,-1]\\), \\(P=[-1,-2]\\), and \\(K=[]\\). Which expansion matches the output?",
+        "options": [
+          "A. \\(\\frac{3}{x-1}-\\frac{1}{x-2}\\)",
+          "B. \\(\\frac{3}{x+1}-\\frac{1}{x+2}\\)",
+          "C. \\(\\frac{-1}{x+3}+\\frac{3}{x+2}\\)",
+          "D. \\(3(x+1)-(x+2)\\)"
+        ],
+        "correct_option": "B",
+        "explanation": "Each term has the form \\(R_i/(x-P_i)\\). If \\(P_i=-1\\), then \\(x-P_i=x+1\\).",
+        "wrong_option_explanations": {
+          "A": "This uses \\(x+P_i\\) instead of \\(x-P_i\\).",
+          "C": "The residues and poles are mismatched.",
+          "D": "Partial fractions use denominators, not multiplied factors."
+        },
+        "hint": "Substitute the pole into \\(x-P_i\\) carefully.",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  },
+  {
+    "id": "repeated_roots_ordering",
+    "label": "Repeated roots in ascending denominator powers",
+    "importance": "medium",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp4_q1",
+        "type": "multiple_choice",
+        "stem": "A pole \\(p\\) is repeated three times. Which denominator-power order matches the section's rule?",
+        "options": [
+          "A. \\((x-p)^3, (x-p)^2, (x-p)^1\\)",
+          "B. \\((x-p)^1, (x-p)^2, (x-p)^3\\)",
+          "C. \\((x+p)^1, (x+p)^2, (x+p)^3\\)",
+          "D. \\(p^1, p^2, p^3\\)"
+        ],
+        "correct_option": "B",
+        "explanation": "For repeated roots, the partial fractions are ordered in ascending powers of the denominator.",
+        "wrong_option_explanations": {
+          "A": "This reverses the required order.",
+          "C": "The denominator should be based on \\(x-p\\), not automatically \\(x+p\\).",
+          "D": "The powers apply to the denominator factor, not to the pole alone."
+        },
+        "hint": "Ascending powers means first power first.",
+        "needs_visual": true,
+        "visual_type": "latex_structure_visual",
+        "same_point_variant": false
+      }
+    ]
+  }
+]
+```
+
+## Raw JSON
+
+```json
+{
+  "section_id": "B.7-7",
+  "section_title": "B.7-7 Partial Fraction Expansions with MATLAB residue",
+  "difficulty": "intermediate",
+  "estimated_read_minutes": 5,
+  "learning_objectives": [
+    "Use MATLAB's residue command to compute a partial fraction expansion of a rational function.",
+    "Enter numerator and denominator coefficient vectors in descending powers.",
+    "Interpret the outputs R, P, and K correctly, including repeated roots and direct terms."
+  ],
+  "visualization_need": {
+    "level": "static",
+    "reason": [
+      "pattern_recognition_benefits_from_figure",
+      "misconception_needs_visual_correction",
+      "wrong_vs_right_contrast_is_high_value"
+    ],
+    "recommended_assets": [
+      "generated_image"
+    ]
+  },
+  "visual_plan": {
+    "primary_anchor": "generated_image",
+    "rationale": "The OCR page has no textbook figure, and this MATLAB-focused section is best supported by a compact custom input-output diagram showing how B and A enter residue and how R, P, and K come out. A Wikipedia-style reference image is unlikely to teach the MATLAB command structure cleanly. LaTeX blocks will carry the formulas; one generated diagram will carry the workflow recognition.",
+    "cram": "Use the diagram to memorize the command pattern and what each output vector means.",
+    "standard": "Use the diagram with one representative example so students can connect coefficients, roots, residues, and direct terms.",
+    "top_score": "Use the diagram to catch subtle mistakes: coefficient order, repeated-root ordering, and when K is nonempty."
+  },
+  "blocks": [
+    {
+      "type": "text_explanation",
+      "instruction": "Create a minimal first page only. Use the heading 'Section Objective' and write one sentence: 'Learn how MATLAB computes partial fraction expansions using the residue command.' Then use the heading 'Concepts In This Section' and list only these concept names as bullets: rational function setup; residue command syntax; coefficient-vector order; outputs R, P, and K; repeated roots; improper rational functions. Do not add background paragraphs or explanations on this page."
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Start a new knowledge-point page with the heading '## 1. The rational function MATLAB is decomposing'. Explain in 80–120 words that the section works with a rational function, meaning one polynomial divided by another. State that MATLAB does not receive the expression as handwriting; it receives the numerator and denominator coefficient vectors. Include the representative setup: for \\(F(x)=\\frac{2x+5}{x^2+3x+2}\\), the numerator coefficients are \\([2,5]\\) and the denominator coefficients are \\([1,3,2]\\). Exam note: the coefficients must be listed from highest power down to constant term."
+    },
+    {
+      "type": "math_block",
+      "latex": "F(x)=\\frac{B(x)}{A(x)}",
+      "explanation_instruction": "Explain that \\(B(x)\\) is the numerator polynomial and \\(A(x)\\) is the denominator polynomial. Use this when the problem asks for a partial fraction expansion of a rational function. Common misuse: entering coefficients in increasing powers instead of descending powers."
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Start a new knowledge-point page with the heading '## 2. The residue command: inputs and outputs'. Explain in 90–140 words that MATLAB's command takes coefficient vectors \\(B\\) and \\(A\\), then returns three outputs: \\(R\\), \\(P\\), and \\(K\\). Define \\(R\\) as the partial-fraction coefficients, \\(P\\) as the corresponding roots or poles, and \\(K\\) as the direct polynomial terms when the rational function is not proper. Include the exact MATLAB-style command as plain code text before the formula block: '[R,P,K] = residue(B,A)'. Exam trigger: if a problem gives polynomial coefficients and asks for partial fractions, this command is the shortcut."
+    },
+    {
+      "type": "math_block",
+      "latex": "\\texttt{[R,P,K] = residue(B,A)}",
+      "explanation_instruction": "Explain that \\(B\\) and \\(A\\) are input coefficient vectors, while \\(R\\), \\(P\\), and \\(K\\) are outputs. Common misuse: thinking \\(P\\) stores powers; it stores roots or poles."
+    },
+    {
+      "type": "generate_image",
+      "tool": "openai/gpt-5.4-image-2",
+      "reason": "No textbook figure is available, and a custom MATLAB input-output workflow diagram will teach the command structure more directly than a generic partial-fractions reference image.",
+      "teaching_role": "concept_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Memorize the pipeline: B and A go in; R, P, and K come out.",
+        "standard": "Use the diagram to connect each vector to its role in the partial fraction expansion.",
+        "top_score": "Use the callouts to avoid confusing poles, residues, and direct polynomial terms."
+      },
+      "prompt": "Pure white clean background, minimalist lecture-notes educational diagram, exactly one knowledge point: MATLAB residue command input-output workflow. Show two input boxes on the left labeled 'B: numerator coefficients, descending powers' and 'A: denominator coefficients, descending powers'. Arrow into a central box labeled '[R,P,K] = residue(B,A)'. Three output boxes on the right labeled 'R: partial-fraction coefficients', 'P: corresponding roots / poles', and 'K: direct terms if not proper'. Include one small warning box: 'Do not reverse coefficient order.' Use navy, muted teal, soft gray, and muted red only for the warning. No decorative elements, no dense text, no extra examples, clean academic linework.",
+      "style_hint": "lecture notes, academic, clean, restrained color boxes, exam-oriented, one concept only"
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Start a new knowledge-point page with the heading '## 3. Reading R and P as a partial fraction expansion'. Explain in 100–150 words how outputs \\(R\\) and \\(P\\) translate back into fractions. For distinct roots, each residue \\(R_i\\) pairs with one pole \\(P_i\\), giving a term \\(R_i/(x-P_i)\\). Then give the representative worked example: for \\(F(x)=\\frac{2x+5}{x^2+3x+2}\\), \\(B=[2,5]\\), \\(A=[1,3,2]\\), and the expansion is \\(\\frac{3}{x+1}-\\frac{1}{x+2}\\). State that this corresponds to poles \\(-1\\) and \\(-2\\). Keep the example short and do not introduce MATLAB output ordering beyond what is needed."
+    },
+    {
+      "type": "math_block",
+      "latex": "\\frac{B(x)}{A(x)}=\\sum_i \\frac{R_i}{x-P_i}+K(x)",
+      "explanation_instruction": "Explain that \\(R_i\\) is the coefficient of the partial fraction, \\(P_i\\) is the corresponding root or pole, and \\(K(x)\\) is present only for direct terms. Use this formula to translate MATLAB's output back into algebra. Common misuse: writing \\(x+P_i\\) instead of \\(x-P_i\\)."
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Start a new knowledge-point page with the heading '## 4. Repeated roots and direct terms'. Explain in 100–150 words that if a root is repeated \\(r\\) times, MATLAB lists the corresponding partial fractions in ascending denominator powers: first \\((x-p)^1\\), then \\((x-p)^2\\), and so on. Then explain that if the rational function is not proper, meaning the numerator degree is greater than or equal to the denominator degree, \\(K\\) contains the direct polynomial terms in descending powers. Include one quick check: 'If \\(F(x)=\\frac{x^2+1}{x+1}\\), expect a nonempty \\(K\\) because the numerator degree is not smaller.'"
+    },
+    {
+      "type": "math_block",
+      "latex": "\\frac{R_1}{x-p}+\\frac{R_2}{(x-p)^2}+\\cdots+\\frac{R_r}{(x-p)^r}",
+      "explanation_instruction": "Explain that this is the repeated-root pattern for a root \\(p\\) repeated \\(r\\) times. Use it when MATLAB returns the same pole multiple times in \\(P\\). Common misuse: reversing the order and pairing the first residue with the highest power."
+    },
+    {
+      "type": "section_summary",
+      "instruction": "Create the recap page titled '📌 Key Takeaways'. Include exactly four bullets, each ≤25 words, and include the core formulas explicitly: \\(F(x)=B(x)/A(x)\\); \\(\\texttt{[R,P,K]=residue(B,A)}\\); \\(B(x)/A(x)=\\sum_i R_i/(x-P_i)+K(x)\\); repeated-root terms \\(R_1/(x-p), R_2/(x-p)^2,\\ldots\\). End with one sentence: 'Next, use these outputs to rebuild and verify partial fraction expansions quickly.'"
+    },
+    {
+      "type": "quiz_plan",
+      "target_questions": 6,
+      "question_range": {
+        "min": 5,
+        "max": 7
+      },
+      "knowledge_points": [
+        {
+          "id": "rational_function_setup",
+          "label": "Representing B(x)/A(x) with coefficient vectors",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp1_q1",
+              "type": "multiple_choice",
+              "stem": "For \\(F(x)=\\frac{4x^2-3x+7}{x^3+2x+1}\\), which MATLAB coefficient vectors are correct?",
+              "options": [
+                "A. B = [4, -3, 7], A = [1, 0, 2, 1]",
+                "B. B = [7, -3, 4], A = [1, 2, 1]",
+                "C. B = [4, -3, 7], A = [1, 2, 1]",
+                "D. B = [4, 3, 7], A = [1, 0, 2, 1]"
+              ],
+              "correct_option": "A",
+              "explanation": "Coefficients are entered in descending powers. The denominator has no \\(x^2\\) term, so its coefficient is 0.",
+              "wrong_option_explanations": {
+                "B": "The numerator is reversed, and the denominator omits the missing \\(x^2\\) coefficient.",
+                "C": "The denominator omits the zero coefficient for the missing \\(x^2\\) term.",
+                "D": "The sign of the \\(-3x\\) coefficient is wrong."
+              },
+              "hint": "Include zero coefficients for missing powers.",
+              "needs_visual": false,
+              "same_point_variant": true
+            },
+            {
+              "id": "kp1_q2",
+              "type": "multiple_choice",
+              "stem": "A student enters A = [1, 3, 2] for \\(A(x)\\). What polynomial does this represent?",
+              "options": [
+                "A. \\(1+3x+2x^2\\)",
+                "B. \\(x^2+3x+2\\)",
+                "C. \\(x^3+2\\)",
+                "D. \\(3x^2+x+2\\)"
+              ],
+              "correct_option": "B",
+              "explanation": "MATLAB reads coefficient vectors from highest power down to the constant term.",
+              "wrong_option_explanations": {
+                "A": "This reads the vector in increasing powers, which is the common mistake.",
+                "C": "There are three coefficients, so this is a quadratic, not a cubic.",
+                "D": "The first coefficient 1 belongs to \\(x^2\\), not the middle term."
+              },
+              "hint": "The leftmost entry is attached to the highest power.",
+              "needs_visual": false,
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "residue_command_outputs",
+          "label": "Meaning of R, P, and K",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp2_q1",
+              "type": "multiple_choice",
+              "stem": "In MATLAB's command \\(\\texttt{[R,P,K]=residue(B,A)}\\), what does P contain?",
+              "options": [
+                "A. The powers of each partial fraction term",
+                "B. The roots or poles corresponding to the partial fractions",
+                "C. The numerator polynomial coefficients",
+                "D. The direct polynomial terms"
+              ],
+              "correct_option": "B",
+              "explanation": "P stores the corresponding roots or poles. The residues in R pair with these poles.",
+              "wrong_option_explanations": {
+                "A": "P does not mean powers; repeated roots create powers in the denominator, but P stores pole values.",
+                "C": "The numerator coefficients are the input vector B.",
+                "D": "Direct terms are stored in K."
+              },
+              "hint": "Think: R gives residues, P gives pole locations.",
+              "needs_visual": true,
+              "visual_type": "generated_input_output_workflow_diagram",
+              "same_point_variant": true
+            },
+            {
+              "id": "kp2_q2",
+              "type": "multiple_choice",
+              "stem": "When is K expected to be nonempty?",
+              "options": [
+                "A. When the numerator degree is smaller than the denominator degree",
+                "B. When the denominator has complex roots",
+                "C. When the rational function is not proper",
+                "D. Whenever the denominator has repeated roots"
+              ],
+              "correct_option": "C",
+              "explanation": "K stores direct polynomial terms, which occur when the rational function is not proper.",
+              "wrong_option_explanations": {
+                "A": "That is a proper rational function, so usually K is empty.",
+                "B": "Complex roots affect P, not the existence of K.",
+                "D": "Repeated roots affect the powers of denominator terms, not necessarily K."
+              },
+              "hint": "Compare numerator degree with denominator degree.",
+              "needs_visual": false,
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "partial_fraction_reconstruction",
+          "label": "Rebuilding the partial fraction expansion",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp3_q1",
+              "type": "multiple_choice",
+              "stem": "Suppose MATLAB returns \\(R=[3,-1]\\), \\(P=[-1,-2]\\), and \\(K=[]\\). Which expansion matches the output?",
+              "options": [
+                "A. \\(\\frac{3}{x-1}-\\frac{1}{x-2}\\)",
+                "B. \\(\\frac{3}{x+1}-\\frac{1}{x+2}\\)",
+                "C. \\(\\frac{-1}{x+3}+\\frac{3}{x+2}\\)",
+                "D. \\(3(x+1)-(x+2)\\)"
+              ],
+              "correct_option": "B",
+              "explanation": "Each term has the form \\(R_i/(x-P_i)\\). If \\(P_i=-1\\), then \\(x-P_i=x+1\\).",
+              "wrong_option_explanations": {
+                "A": "This uses \\(x+P_i\\) instead of \\(x-P_i\\).",
+                "C": "The residues and poles are mismatched.",
+                "D": "Partial fractions use denominators, not multiplied factors."
+              },
+              "hint": "Substitute the pole into \\(x-P_i\\) carefully.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "repeated_roots_ordering",
+          "label": "Repeated roots in ascending denominator powers",
+          "importance": "medium",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp4_q1",
+              "type": "multiple_choice",
+              "stem": "A pole \\(p\\) is repeated three times. Which denominator-power order matches the section's rule?",
+              "options": [
+                "A. \\((x-p)^3, (x-p)^2, (x-p)^1\\)",
+                "B. \\((x-p)^1, (x-p)^2, (x-p)^3\\)",
+                "C. \\((x+p)^1, (x+p)^2, (x+p)^3\\)",
+                "D. \\(p^1, p^2, p^3\\)"
+              ],
+              "correct_option": "B",
+              "explanation": "For repeated roots, the partial fractions are ordered in ascending powers of the denominator.",
+              "wrong_option_explanations": {
+                "A": "This reverses the required order.",
+                "C": "The denominator should be based on \\(x-p\\), not automatically \\(x+p\\).",
+                "D": "The powers apply to the denominator factor, not to the pole alone."
+              },
+              "hint": "Ascending powers means first power first.",
+              "needs_visual": true,
+              "visual_type": "latex_structure_visual",
+              "same_point_variant": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```

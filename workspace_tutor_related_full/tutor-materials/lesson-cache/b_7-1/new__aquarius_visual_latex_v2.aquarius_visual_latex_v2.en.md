@@ -1,0 +1,114 @@
+%%KC_BLOCK%%<div class="kc-visual-plan" data-visual-plan-b64="eyJwcmltYXJ5X2FuY2hvciI6InJlYWN0X2RlbW8iLCJyYXRpb25hbGUiOiJNYXRyaXggdGVybWlub2xvZ3kgaXMgc3ltYm9saWMgYW5kIHN0cnVjdHVyYWwsIHNvIHRoZSBtYWluIHRlYWNoaW5nIHN1cmZhY2Ugc2hvdWxkIGJlIGNsZWFuIExhVGVYIG1hdHJpeCBub3RhdGlvbi4gVGhlIGF2YWlsYWJsZSB0ZXh0Ym9vayBwYWdlcyBjb250YWluIG5vIHVzZWZ1bCBzdGFuZGFsb25lIGZpZ3VyZSBmb3IgdGhpcyBzdWJzZWN0aW9uLiBBIHNtYWxsIFJlYWN0ICsgQ2FudmFzIGVudHJ5LWxvY2F0b3IgZGVtbyBpcyB0aGUgYmVzdCB2aXN1YWwgYW5jaG9yIGJlY2F1c2Ugc3R1ZGVudHMgbGVhcm4gcm93cywgY29sdW1ucywgc2l6ZSwgYW5kIGVudHJpZXMgZmFzdGVyIGJ5IGhpZ2hsaWdodGluZyBwb3NpdGlvbnMgZGlyZWN0bHkuIiwiY3JhbSI6IlVzZSB0aGUgZGVtbyB0byByZWNvZ25pemUgcm93LWNvdW50LCBjb2x1bW4tY291bnQsIGFuZCBlbnRyeS1sb2NhdGlvbiBxdWVzdGlvbnMgaW5zdGFudGx5LiIsInN0YW5kYXJkIjoiVXNlIExhVGVYIGRlZmluaXRpb25zIHBsdXMgb25lIGludGVyYWN0aXZlIGxvY2F0b3IgZXhhbXBsZSB0byBjb25uZWN0IG5vdGF0aW9uIHRvIG1hdHJpeCBwb3NpdGlvbnMuIiwidG9wX3Njb3JlIjoiVXNlIHRoZSBkZW1vIHRvIGNhdGNoIGluZGV4LW9yZGVyIHRyYXBzLCBlc3BlY2lhbGx5IGNvbmZ1c2luZyBhX2lqIHdpdGggYV9qaS4ifQ==" style="display:none;"></div>%%KC_END%%
+# B.7 Matrix Terminology
+
+> **Section Objective:** Learn the basic vocabulary used to describe matrices so later operations are easier to read.
+
+## Concepts In This Section
+
+- Matrix entries
+- Matrix size
+- Row vector
+- Column vector
+- Square matrix
+- Main diagonal
+
+## 1. Matrix Entries and Size
+
+\(\mathbf{A}\) is the name of the matrix. The symbol \(a_{ij}\) refers to the entry in row \(i\) and column \(j\). The subscript \(m \times n\) tells you the matrix has \(m\) rows and \(n\) columns — always rows first, columns second.
+
+For example, in a \(2 \times 3\) matrix, the entry \(a_{23}\) sits in the **second row** and **third column**.
+
+### EXAM TRIGGER
+
+When a question gives \(a_{ij}\), locate the **row first**, then the **column**.
+
+### COMMON MISTAKE
+
+Reversing the order: reading \(a_{23}\) as row 3, column 2. The first index is always the row.
+
+$$\mathbf{A} = [a_{ij}]_{m \times n}$$
+
+%%KC_BLOCK%%<div class="kc-visual-meta" data-visual-kind="interactive_demo" data-teaching-role="concept_anchor" data-visual-use-b64="eyJjcmFtIjoiTWFrZSBzdHVkZW50cyBpZGVudGlmeSBtYXRyaXggc2l6ZSBhbmQgZW50cnkgcG9zaXRpb24gaW4gdW5kZXIgMTAgc2Vjb25kcy4iLCJzdGFuZGFyZCI6IkxldCBzdHVkZW50cyBjbGljayByb3dzIGFuZCBjb2x1bW5zIHRvIGNvbm5lY3QgXFwoYV97aWp9XFwpIG5vdGF0aW9uIHRvIGEgdmlzaWJsZSBjZWxsLiIsInRvcF9zY29yZSI6IkluY2x1ZGUgc3dhcHBlZC1pbmRleCBjYXNlcyBzbyBzdHVkZW50cyBub3RpY2UgdGhlIGRpZmZlcmVuY2UgYmV0d2VlbiBcXChhX3tpan1cXCkgYW5kIFxcKGFfe2ppfVxcKS4ifQ==" style="display:none;"></div><div class="kc-interactive-demo" data-demo-b64="eyJ0eXBlIjoiaW50ZXJhY3RpdmVfZGVtbyIsImRlbW9faWQiOiJtYXRyaXhfc2l6ZV9hbmRfZW50cnlfbG9jYXRvciIsInRlYWNoaW5nX3JvbGUiOiJjb25jZXB0X2FuY2hvciIsIm1vZGVfc3BlY2lmaWNfdmlzdWFsX3VzZSI6eyJjcmFtIjoiTWFrZSBzdHVkZW50cyBpZGVudGlmeSBtYXRyaXggc2l6ZSBhbmQgZW50cnkgcG9zaXRpb24gaW4gdW5kZXIgMTAgc2Vjb25kcy4iLCJzdGFuZGFyZCI6IkxldCBzdHVkZW50cyBjbGljayByb3dzIGFuZCBjb2x1bW5zIHRvIGNvbm5lY3QgXFwoYV97aWp9XFwpIG5vdGF0aW9uIHRvIGEgdmlzaWJsZSBjZWxsLiIsInRvcF9zY29yZSI6IkluY2x1ZGUgc3dhcHBlZC1pbmRleCBjYXNlcyBzbyBzdHVkZW50cyBub3RpY2UgdGhlIGRpZmZlcmVuY2UgYmV0d2VlbiBcXChhX3tpan1cXCkgYW5kIFxcKGFfe2ppfVxcKS4ifSwic3BlYyI6eyJmcmFtZXdvcmsiOiJyZWFjdCIsImNhbnZhcyI6ZmFsc2UsImRlc2NyaXB0aW9uIjoiQSBjb21wYWN0IGludGVyYWN0aXZlIG1hdHJpeCBlbnRyeSBsb2NhdG9yLiBEaXNwbGF5cyBhIGdyaWQgb2YgY2VsbHMgd2l0aCBtIHJvd3MgYW5kIG4gY29sdW1ucy4gUm93cyBhcmUgbGFiZWxlZCAxIHRvIG0gb24gdGhlIGxlZnQgc2lkZTsgY29sdW1ucyBhcmUgbGFiZWxlZCAxIHRvIG4gYWxvbmcgdGhlIHRvcC4gVHdvIHNsaWRlcnMgb3Igc3RlcHBlcnMgY29udHJvbCBtICgx4oCTNSkgYW5kIG4gKDHigJM1KS4gVHdvIG51bWJlciBpbnB1dHMgY29udHJvbCBpIChyb3cgaW5kZXgpIGFuZCBqIChjb2x1bW4gaW5kZXgpLiBUaGUgc2VsZWN0ZWQgY2VsbCBhX2lqIGlzIGhpZ2hsaWdodGVkIGluIG11dGVkIHRlYWwuIEEgc2VudGVuY2UgYmVsb3cgdGhlIGdyaWQgcmVhZHM6ICdUaGlzIGlzIHJvdyBpLCBjb2x1bW4gai4nIEEgUXVpY2sgQ2hlY2sgYnV0dG9uIGFza3M6IEluIGEgMyBieSA0IG1hdHJpeCwgd2hlcmUgaXMgYV8yND8gQ29ycmVjdCBhbnN3ZXIgZmVlZGJhY2s6ICdTZWNvbmQgcm93LCBmb3VydGggY29sdW1uLicgV3JvbmcgYW5zd2VyIGZlZWRiYWNrOiAnUmVtZW1iZXI6IHJvdyBpbmRleCBmaXJzdCwgY29sdW1uIGluZGV4IHNlY29uZC4nIFdoaXRlIGJhY2tncm91bmQsIGNsZWFuIGdyaWQgbGluZXMsIGxlY3R1cmUtbm90ZSBzdHlsZSwgbm8gZGVjb3JhdGl2ZSBlbGVtZW50cy4iLCJjb250cm9scyI6W3sibGFiZWwiOiJSb3dzIChtKSIsInR5cGUiOiJzdGVwcGVyIiwibWluIjoxLCJtYXgiOjUsImRlZmF1bHQiOjN9LHsibGFiZWwiOiJDb2x1bW5zIChuKSIsInR5cGUiOiJzdGVwcGVyIiwibWluIjoxLCJtYXgiOjUsImRlZmF1bHQiOjR9LHsibGFiZWwiOiJSb3cgaW5kZXggKGkpIiwidHlwZSI6Im51bWJlcl9pbnB1dCIsIm1pbiI6MSwibWF4IjoibSIsImRlZmF1bHQiOjJ9LHsibGFiZWwiOiJDb2x1bW4gaW5kZXggKGopIiwidHlwZSI6Im51bWJlcl9pbnB1dCIsIm1pbiI6MSwibWF4IjoibiIsImRlZmF1bHQiOjN9XSwiaGlnaGxpZ2h0X2NvbG9yIjoibXV0ZWRfdGVhbCIsInF1aWNrX2NoZWNrIjp7InByb21wdCI6IkluIGEgXFwoMyBcXHRpbWVzIDRcXCkgbWF0cml4LCB3aGVyZSBpcyBcXChhX3syNH1cXCk/IiwiY29ycmVjdF9hbnN3ZXIiOiJTZWNvbmQgcm93LCBmb3VydGggY29sdW1uLiIsImNvcnJlY3RfZmVlZGJhY2siOiJDb3JyZWN0ISBTZWNvbmQgcm93LCBmb3VydGggY29sdW1uLiIsIndyb25nX2ZlZWRiYWNrIjoiUmVtZW1iZXI6IHJvdyBpbmRleCBmaXJzdCwgY29sdW1uIGluZGV4IHNlY29uZC4ifSwiZGlzcGxheV9zZW50ZW5jZSI6IlRoaXMgaXMgcm93IHtpfSwgY29sdW1uIHtqfS4ifSwiY2FwdGlvbiI6IlVzZSB0aGUgY29udHJvbHMgdG8gbW92ZSB0aGUgaGlnaGxpZ2h0ZWQgY2VsbC4gTm90aWNlIHRoYXQgY2hhbmdpbmcgaSBtb3ZlcyB5b3UgdXAgb3IgZG93biAocm93cyksIGFuZCBjaGFuZ2luZyBqIG1vdmVzIHlvdSBsZWZ0IG9yIHJpZ2h0IChjb2x1bW5zKS4ifQ=="></div>%%KC_END%%
+
+## 2. Column Vectors
+
+A **column vector** is a matrix with exactly one column and \(m\) rows, so its size is \(m \times 1\). Each entry \(x_i\) sits in row \(i\).
+
+**Minimal example:** \(\begin{bmatrix}2\\-1\\5\end{bmatrix}\) is a \(3 \times 1\) column vector — three rows, one column.
+
+### EXAM TRIGGER
+
+Vertical stacking of entries means **column vector**.
+
+### COMMON MISTAKE
+
+Calling it a row vector just because it contains several numbers. Shape matters, not count.
+
+$$\mathbf{x} = \begin{bmatrix} x_1 \\ x_2 \\ \vdots \\ x_m \end{bmatrix}$$
+
+## Row Vectors
+
+A **row vector** is a matrix with exactly one row and \(m\) columns, so its size is \(1 \times m\). The superscript \(T\) signals **transpose** — it turns a column layout into a row layout.
+
+**Minimal example:** \(\begin{bmatrix}2 & -1 & 5\end{bmatrix}\) is a \(1 \times 3\) row vector — one row, three columns.
+
+### COMMON MISTAKE
+
+Ignoring orientation and treating row and column vectors as interchangeable. In matrix operations, shape is not optional — a \(3 \times 1\) and a \(1 \times 3\) are fundamentally different objects.
+
+$$\mathbf{x}^{T} = \begin{bmatrix} x_1 & x_2 & \cdots & x_m \end{bmatrix}$$
+
+### WORKED EXAMPLE — Row vs. Column
+
+Consider these two objects:
+
+$$\begin{bmatrix}4\\7\end{bmatrix} \quad \text{and} \quad \begin{bmatrix}4 & 7\end{bmatrix}$$
+
+The first has entries stacked **vertically**: 2 rows, 1 column — size \(2 \times 1\). It is a **column vector**.
+
+The second has entries arranged **horizontally**: 1 row, 2 columns — size \(1 \times 2\). It is a **row vector**.
+
+#### Exam Note
+
+Same numbers, different shape. Matrix problems often care about shape — an operation valid for one may be invalid for the other.
+
+## 3. Square Matrices
+
+A **square matrix** has the same number of rows and columns: \(m = n\). Here \(m\) is the row count and \(n\) is the column count.
+
+**Minimal example:** A \(3 \times 3\) matrix is square. A \(3 \times 2\) matrix is not — it has more rows than columns.
+
+### EXAM TRIGGER
+
+Determinant, inverse, eigenvalue, and main diagonal questions almost always require a **square** matrix. Check dimensions before applying those operations.
+
+### COMMON MISTAKE
+
+Assuming any matrix with many entries is square without checking whether \(m = n\).
+
+$$\mathbf{A} \text{ is square} \Longleftrightarrow m = n$$
+
+## Main Diagonal
+
+The **main diagonal** runs from the upper-left entry to the lower-right entry of a square matrix. An entry \(a_{ij}\) is on the main diagonal if and only if its row index equals its column index: \(i = j\).
+
+The diagonal entries are \(a_{11}, a_{22}, a_{33}, \ldots\)
+
+**Quick check:** In a \(4 \times 4\) matrix, is \(a_{34}\) on the main diagonal? No — because \(3 \ne 4\).
+
+### COMMON MISTAKE
+
+Treating any visually slanted group of entries as the main diagonal. Only entries where the row number and column number are **equal** qualify.
+
+$$a_{ij} \text{ is on the main diagonal} \Longleftrightarrow i = j$$
+
+---
+**📌 Key Takeaways**
+- \(\mathbf{A} = [a_{ij}]_{m \times n}\): entry \(a_{ij}\) is in row \(i\), column \(j\); size is rows \(\times\) columns.
+- Column vector size is \(m \times 1\) (vertical); row vector size is \(1 \times m\) (horizontal) — shape is not interchangeable.
+- \(\mathbf{A}\) is square \(\Longleftrightarrow m = n\); required for determinants, inverses, and eigenvalues.
+- \(a_{ij}\) is on the main diagonal \(\Longleftrightarrow i = j\); diagonal entries are \(a_{11}, a_{22}, a_{33}, \ldots\)
+
+*Next, these terms will make matrix operations easier to describe and check.*
+
+%%KC_BLOCK%%<div class="kc-quiz-plan" data-quiz-b64="eyJ0eXBlIjoicXVpel9wbGFuIiwidGFyZ2V0X3F1ZXN0aW9ucyI6NywicXVlc3Rpb25fcmFuZ2UiOnsibWluIjo1LCJtYXgiOjh9LCJrbm93bGVkZ2VfcG9pbnRzIjpbeyJpZCI6Im1hdHJpeF9lbnRyaWVzX2FuZF9zaXplIiwibGFiZWwiOiJNYXRyaXggZW50cmllcyBhbmQgZGltZW5zaW9ucyIsImltcG9ydGFuY2UiOiJoaWdoIiwiZXhhbV93ZWlnaHQiOiJoaWdoIiwibWFzdGVyeV9ydWxlIjp7ImNvcnJlY3Rfc3RyZWFrX3JlcXVpcmVkIjoyfSwicXVlc3Rpb25zIjpbeyJpZCI6ImtwMV9xMSIsInR5cGUiOiJtdWx0aXBsZV9jaG9pY2UiLCJzdGVtIjoiQSBtYXRyaXggXFwoXFxtYXRoYmZ7QX1cXCkgaGFzIHNpemUgXFwoNCBcXHRpbWVzIDZcXCkuIFdoYXQgZG9lcyB0aGlzIG1lYW4/Iiwib3B0aW9ucyI6WyJBLiA0IGNvbHVtbnMgYW5kIDYgcm93cyIsIkIuIDQgcm93cyBhbmQgNiBjb2x1bW5zIiwiQy4gNCBlbnRyaWVzIHRvdGFsIGFuZCA2IGRpYWdvbmFsIGVudHJpZXMiLCJELiBSb3cgNCBhbmQgY29sdW1uIDYgYXJlIHRoZSBvbmx5IGltcG9ydGFudCBlbnRyaWVzIl0sImNvcnJlY3Rfb3B0aW9uIjoiQiIsImV4cGxhbmF0aW9uIjoiTWF0cml4IHNpemUgaXMgYWx3YXlzIHJlYWQgYXMgcm93cyBieSBjb2x1bW5zLCBzbyBcXCg0IFxcdGltZXMgNlxcKSBtZWFucyA0IHJvd3MgYW5kIDYgY29sdW1ucy4iLCJ3cm9uZ19vcHRpb25fZXhwbGFuYXRpb25zIjp7IkEiOiJUaGlzIHJldmVyc2VzIHRoZSBvcmRlci4gUm93cyBjb21lIGZpcnN0LiIsIkMiOiJBIFxcKDQgXFx0aW1lcyA2XFwpIG1hdHJpeCBoYXMgMjQgZW50cmllcyB0b3RhbCwgbm90IDQuIiwiRCI6IlRoZSBzaXplIGRlc2NyaWJlcyB0aGUgd2hvbGUgbWF0cml4LCBub3Qgb25lIGVudHJ5LiJ9LCJoaW50IjoiUmVhZCBtYXRyaXggZGltZW5zaW9ucyBhcyByb3dzIGZpcnN0LCBjb2x1bW5zIHNlY29uZC4iLCJuZWVkc192aXN1YWwiOmZhbHNlLCJzYW1lX3BvaW50X3ZhcmlhbnQiOnRydWV9LHsiaWQiOiJrcDFfcTIiLCJ0eXBlIjoibXVsdGlwbGVfY2hvaWNlIiwic3RlbSI6IkluIFxcKGFfezM1fVxcKSwgd2hhdCBkb2VzIHRoZSBzdWJzY3JpcHQgbWVhbj8iLCJvcHRpb25zIjpbIkEuIFRoaXJkIGNvbHVtbiwgZmlmdGggcm93IiwiQi4gVGhpcmQgcm93LCBmaWZ0aCBjb2x1bW4iLCJDLiBUaGUgbWF0cml4IGhhcyAzIHJvd3MgYW5kIDUgY29sdW1ucyIsIkQuIFRoZSBlbnRyeSBlcXVhbHMgMzUiXSwiY29ycmVjdF9vcHRpb24iOiJCIiwiZXhwbGFuYXRpb24iOiJcXChhX3tpan1cXCkgbWVhbnMgcm93IFxcKGlcXCksIGNvbHVtbiBcXChqXFwpLiBUaGVyZWZvcmUgXFwoYV97MzV9XFwpIGlzIGluIHJvdyAzLCBjb2x1bW4gNS4iLCJ3cm9uZ19vcHRpb25fZXhwbGFuYXRpb25zIjp7IkEiOiJUaGlzIHJldmVyc2VzIHJvdyBhbmQgY29sdW1uIG9yZGVyLiIsIkMiOiJUaGUgc3Vic2NyaXB0IGxvY2F0ZXMgb25lIGVudHJ5OyBpdCBkb2VzIG5vdCBnaXZlIHRoZSB3aG9sZSBtYXRyaXggc2l6ZS4iLCJEIjoiVGhlIHN1YnNjcmlwdCBpcyBhIGxvY2F0aW9uIGxhYmVsLCBub3QgdGhlIHZhbHVlIG9mIHRoZSBlbnRyeS4ifSwiaGludCI6IkZvciBcXChhX3tpan1cXCksIHNheSAncm93IGksIGNvbHVtbiBqLiciLCJuZWVkc192aXN1YWwiOmZhbHNlLCJzYW1lX3BvaW50X3ZhcmlhbnQiOnRydWV9LHsiaWQiOiJrcDFfcTMiLCJ0eXBlIjoibXVsdGlwbGVfY2hvaWNlIiwic3RlbSI6IkRlbW8gb2JzZXJ2YXRpb246IEluIHRoZSBlbnRyeS1sb2NhdG9yIGRlbW8sIHNldCBcXChtPTNcXCksIFxcKG49NFxcKSwgXFwoaT0yXFwpLCBhbmQgXFwoaj00XFwpLiBXaGljaCBjZWxsIHNob3VsZCBiZSBoaWdobGlnaHRlZD8iLCJvcHRpb25zIjpbIkEuIFNlY29uZCByb3csIGZvdXJ0aCBjb2x1bW4iLCJCLiBGb3VydGggcm93LCBzZWNvbmQgY29sdW1uIiwiQy4gVGhpcmQgcm93LCBmb3VydGggY29sdW1uIiwiRC4gU2Vjb25kIHJvdywgdGhpcmQgY29sdW1uIl0sImNvcnJlY3Rfb3B0aW9uIjoiQSIsImV4cGxhbmF0aW9uIjoiVGhlIGhpZ2hsaWdodGVkIGNlbGwgaXMgXFwoYV97MjR9XFwpLCB3aGljaCBtZWFucyByb3cgMiwgY29sdW1uIDQuIiwid3Jvbmdfb3B0aW9uX2V4cGxhbmF0aW9ucyI6eyJCIjoiVGhpcyBzd2FwcyB0aGUgaW5kaWNlcy4iLCJDIjoiVGhlIHJvdyBpbmRleCBpcyAyLCBub3QgMy4iLCJEIjoiVGhlIGNvbHVtbiBpbmRleCBpcyA0LCBub3QgMy4ifSwiaGludCI6IlVzZSB0aGUgaW5wdXRzIFxcKGlcXCkgYW5kIFxcKGpcXCksIG5vdCBqdXN0IHRoZSBtYXRyaXggc2l6ZS4iLCJuZWVkc192aXN1YWwiOnRydWUsInZpc3VhbF90eXBlIjoiaW50ZXJhY3RpdmVfZGVtb19vYnNlcnZhdGlvbiIsInNhbWVfcG9pbnRfdmFyaWFudCI6dHJ1ZX1dfSx7ImlkIjoicm93X3ZzX2NvbHVtbl92ZWN0b3JzIiwibGFiZWwiOiJSb3cgdmVjdG9ycyB2ZXJzdXMgY29sdW1uIHZlY3RvcnMiLCJpbXBvcnRhbmNlIjoiaGlnaCIsImV4YW1fd2VpZ2h0IjoibWVkaXVtIiwibWFzdGVyeV9ydWxlIjp7ImNvcnJlY3Rfc3RyZWFrX3JlcXVpcmVkIjoyfSwicXVlc3Rpb25zIjpbeyJpZCI6ImtwMl9xMSIsInR5cGUiOiJtdWx0aXBsZV9jaG9pY2UiLCJzdGVtIjoiV2hhdCBpcyB0aGUgc2l6ZSBvZiBcXChcXGJlZ2lue2JtYXRyaXh9OFxcXFwtMlxcXFwxXFxlbmR7Ym1hdHJpeH1cXCk/Iiwib3B0aW9ucyI6WyJBLiBcXCgxIFxcdGltZXMgM1xcKSIsIkIuIFxcKDMgXFx0aW1lcyAxXFwpIiwiQy4gXFwoMyBcXHRpbWVzIDNcXCkiLCJELiBcXCgxIFxcdGltZXMgMVxcKSJdLCJjb3JyZWN0X29wdGlvbiI6IkIiLCJleHBsYW5hdGlvbiI6IlRoZSBlbnRyaWVzIGFyZSBzdGFja2VkIHZlcnRpY2FsbHksIHNvIHRoZXJlIGFyZSAzIHJvd3MgYW5kIDEgY29sdW1uLiIsIndyb25nX29wdGlvbl9leHBsYW5hdGlvbnMiOnsiQSI6IlRoYXQgd291bGQgYmUgYSByb3cgdmVjdG9yLCB3aXRoIGVudHJpZXMgd3JpdHRlbiBob3Jpem9udGFsbHkuIiwiQyI6IlRoZXJlIGlzIG9ubHkgb25lIGNvbHVtbiwgbm90IHRocmVlLiIsIkQiOiJUaGVyZSBhcmUgdGhyZWUgZW50cmllcywgbm90IG9uZS4ifSwiaGludCI6IkNvdW50IHJvd3MgZmlyc3QsIHRoZW4gY29sdW1ucy4iLCJuZWVkc192aXN1YWwiOnRydWUsInZpc3VhbF90eXBlIjoibGF0ZXhfbWF0cml4X3N0cnVjdHVyZSIsInNhbWVfcG9pbnRfdmFyaWFudCI6dHJ1ZX0seyJpZCI6ImtwMl9xMiIsInR5cGUiOiJtdWx0aXBsZV9jaG9pY2UiLCJzdGVtIjoiV2hpY2ggb2JqZWN0IGlzIGEgcm93IHZlY3Rvcj8iLCJvcHRpb25zIjpbIkEuIFxcKFxcYmVnaW57Ym1hdHJpeH0xXFxcXDJcXFxcM1xcZW5ke2JtYXRyaXh9XFwpIiwiQi4gXFwoXFxiZWdpbntibWF0cml4fTEgJiAyICYgM1xcZW5ke2JtYXRyaXh9XFwpIiwiQy4gXFwoXFxiZWdpbntibWF0cml4fTEgJiAyXFxcXDMgJiA0XFxlbmR7Ym1hdHJpeH1cXCkiLCJELiBcXChcXGJlZ2lue2JtYXRyaXh9MSAmIDBcXFxcMCAmIDFcXGVuZHtibWF0cml4fVxcKSJdLCJjb3JyZWN0X29wdGlvbiI6IkIiLCJleHBsYW5hdGlvbiI6IkEgcm93IHZlY3RvciBoYXMgZXhhY3RseSBvbmUgcm93IGFuZCBtdWx0aXBsZSBjb2x1bW5zLiIsIndyb25nX29wdGlvbl9leHBsYW5hdGlvbnMiOnsiQSI6IlRoaXMgaXMgYSBjb2x1bW4gdmVjdG9yIGJlY2F1c2UgdGhlIGVudHJpZXMgYXJlIHZlcnRpY2FsLiIsIkMiOiJUaGlzIGlzIGEgXFwoMiBcXHRpbWVzIDJcXCkgbWF0cml4LCBub3QgYSB2ZWN0b3Igd2l0aCBvbmUgcm93IG9yIG9uZSBjb2x1bW4uIiwiRCI6IlRoaXMgaXMgYSBzcXVhcmUgbWF0cml4LCBub3QgYSByb3cgdmVjdG9yLiJ9LCJoaW50IjoiQSByb3cgdmVjdG9yIGlzIGhvcml6b250YWwuIiwibmVlZHNfdmlzdWFsIjp0cnVlLCJ2aXN1YWxfdHlwZSI6ImxhdGV4X21hdHJpeF9zdHJ1Y3R1cmUiLCJzYW1lX3BvaW50X3ZhcmlhbnQiOnRydWV9XX0seyJpZCI6InNxdWFyZV9hbmRfZGlhZ29uYWwiLCJsYWJlbCI6IlNxdWFyZSBtYXRyaWNlcyBhbmQgbWFpbiBkaWFnb25hbCBlbnRyaWVzIiwiaW1wb3J0YW5jZSI6ImhpZ2giLCJleGFtX3dlaWdodCI6ImhpZ2giLCJtYXN0ZXJ5X3J1bGUiOnsiY29ycmVjdF9zdHJlYWtfcmVxdWlyZWQiOjJ9LCJxdWVzdGlvbnMiOlt7ImlkIjoia3AzX3ExIiwidHlwZSI6Im11bHRpcGxlX2Nob2ljZSIsInN0ZW0iOiJXaGljaCBtYXRyaXggc2l6ZSBpcyBzcXVhcmU/Iiwib3B0aW9ucyI6WyJBLiBcXCgyIFxcdGltZXMgM1xcKSIsIkIuIFxcKDUgXFx0aW1lcyAxXFwpIiwiQy4gXFwoNCBcXHRpbWVzIDRcXCkiLCJELiBcXCgxIFxcdGltZXMgNlxcKSJdLCJjb3JyZWN0X29wdGlvbiI6IkMiLCJleHBsYW5hdGlvbiI6IkEgc3F1YXJlIG1hdHJpeCBoYXMgdGhlIHNhbWUgbnVtYmVyIG9mIHJvd3MgYW5kIGNvbHVtbnMsIHNvIFxcKDQgXFx0aW1lcyA0XFwpIGlzIHNxdWFyZS4iLCJ3cm9uZ19vcHRpb25fZXhwbGFuYXRpb25zIjp7IkEiOiJSb3dzIGFuZCBjb2x1bW5zIGFyZSBub3QgZXF1YWwuIiwiQiI6IlRoaXMgaXMgYSBjb2x1bW4gdmVjdG9yIHNoYXBlLCBub3Qgc3F1YXJlLiIsIkQiOiJUaGlzIGlzIGEgcm93IHZlY3RvciBzaGFwZSwgbm90IHNxdWFyZS4ifSwiaGludCI6IkNoZWNrIHdoZXRoZXIgXFwobSA9IG5cXCkuIiwibmVlZHNfdmlzdWFsIjpmYWxzZSwic2FtZV9wb2ludF92YXJpYW50Ijp0cnVlfSx7ImlkIjoia3AzX3EyIiwidHlwZSI6InNob3J0X2Fuc3dlciIsInN0ZW0iOiJBIGNsYXNzbWF0ZSBzYXlzIFxcKGFfezIzfVxcKSBpcyBvbiB0aGUgbWFpbiBkaWFnb25hbCBiZWNhdXNlIGJvdGggaW5kaWNlcyBhcmUgc21hbGwuIEV4cGxhaW4gd2h5IHRoaXMgaXMgd3JvbmcuIiwiaWRlYWxfYW5zd2VyIjoiXFwoYV97MjN9XFwpIGlzIG5vdCBvbiB0aGUgbWFpbiBkaWFnb25hbCBiZWNhdXNlIGRpYWdvbmFsIGVudHJpZXMgcmVxdWlyZSBtYXRjaGluZyByb3cgYW5kIGNvbHVtbiBpbmRpY2VzLiBTaW5jZSBcXCgyIFxcbmUgM1xcKSwgXFwoYV97MjN9XFwpIGlzIG9mZiB0aGUgbWFpbiBkaWFnb25hbC4iLCJncmFkaW5nX3J1YnJpYyI6WyJNdXN0IHN0YXRlIHRoZSBkaWFnb25hbCBjb25kaXRpb24gXFwoaSA9IGpcXCkiLCJNdXN0IGNvbXBhcmUgdGhlIGluZGljZXMgMiBhbmQgMyIsIk11c3QgY29uY2x1ZGUgdGhhdCBcXChhX3syM31cXCkgaXMgbm90IG9uIHRoZSBtYWluIGRpYWdvbmFsIl0sImV4cGxhbmF0aW9uIjoiVGhpcyBjaGVja3Mgd2hldGhlciB0aGUgc3R1ZGVudCBrbm93cyB0aGUgYWN0dWFsIGluZGV4IHJ1bGUgaW5zdGVhZCBvZiByZWx5aW5nIG9uIHZhZ3VlIHZpc3VhbCBndWVzc2luZy4iLCJoaW50IjoiTWFpbiBkaWFnb25hbCBlbnRyaWVzIGhhdmUgdGhlIHNhbWUgcm93IG51bWJlciBhbmQgY29sdW1uIG51bWJlci4iLCJuZWVkc192aXN1YWwiOnRydWUsInZpc3VhbF90eXBlIjoibGF0ZXhfbWF0cml4X2luZGV4X2NoZWNrIiwic2FtZV9wb2ludF92YXJpYW50Ijp0cnVlfV19XX0=" style="display:none;"></div>%%KC_END%%

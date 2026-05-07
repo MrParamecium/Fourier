@@ -1,0 +1,420 @@
+{
+  "section_id": "B.6-2",
+  "section_title": "Matrix Algebra",
+  "difficulty": "beginner",
+  "estimated_read_minutes": 8,
+  "lesson_version": "aquarius_std_v1",
+  "learning_objectives": [
+    "Know when matrix addition is valid",
+    "Understand scalar multiplication as entrywise scaling",
+    "Compute matrix multiplication using the row-by-column rule",
+    "Check conformability before multiplying matrices",
+    "Understand the role of the identity matrix and inverse"
+  ],
+  "visualization_need": {
+    "level": "interactive",
+    "reason": [
+      "formula_to_phenomenon_gap",
+      "student_should_manipulate_to_understand",
+      "misconception_needs_visual_correction",
+      "wrong_vs_right_contrast_is_high_value"
+    ],
+    "recommended_assets": [
+      "wiki_figure",
+      "react_canvas_demo",
+      "generated_image"
+    ]
+  },
+  "visual_plan": {
+    "primary_anchor": "both",
+    "rationale": "This section should feel operational and visual. Students should see valid vs invalid operations, watch row-by-column interaction, and compare wrong reasoning with correct reasoning instead of reading long prose.",
+    "cram": "Use visuals to make valid vs invalid matrix operations recognizable at a glance and to expose dimension traps fast.",
+    "standard": "Use visuals and one interactive demo to connect formulas to the actual multiplication process and to show wrong-vs-right reasoning clearly.",
+    "top_score": "Use visuals to expose common dimension traps, output-size reasoning, and noncommutativity clearly and compactly."
+  },
+  "blocks": [
+    {
+      "type": "text_explanation",
+      "instruction": "Write the overview page for B.6-2. Explain that this section turns matrix notation into actual operations: addition, scalar multiplication, multiplication, and inverse ideas. Tell the student that the biggest mistakes here come from ignoring dimensions and applying scalar instincts to matrices. Keep it concise, direct, and operational. Target 80-110 words."
+    },
+    {
+      "type": "math_block",
+      "latex": "A + B = [a_{ij} + b_{ij}]",
+      "explanation_instruction": "Explain that matrix addition is entrywise and is defined only when the two matrices have the same order."
+    },
+    {
+      "type": "math_block",
+      "latex": "cA = Ac",
+      "explanation_instruction": "Explain that scalar multiplication multiplies every entry of the matrix by the scalar and that the scalar commutes with the matrix."
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Teach matrix addition and scalar multiplication together. Emphasize the same-order rule, the entrywise nature of both operations, and the idea that these are structurally simple operations compared with matrix multiplication. Use a short concrete example in words, not a long computation. Explicitly tell the student to use the visual to separate valid and invalid cases. Target 100-130 words."
+    },
+    {
+      "type": "generate_image",
+      "tool": "openai/gpt-5.4-image-2",
+      "reason": "Need a clean visual that contrasts valid matrix addition with invalid addition due to mismatched order if no suitable external image is found.",
+      "teaching_role": "comparison_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Use this visual to instantly check whether addition is even allowed.",
+        "standard": "Use this visual to connect same-order requirement with entrywise addition.",
+        "top_score": "Use this visual to prevent dimension mistakes before any calculation starts."
+      },
+      "prompt": "Pure white clean background, minimalist lecture-notes educational diagram, exactly one knowledge point. Show one valid matrix addition example with two same-size matrices and one invalid addition example with mismatched dimensions. Add one short label: 'same order required'. Use navy, muted teal, soft gray, and muted red only for the invalid warning. No clutter, no poster styling.",
+      "style_hint": "lecture notes, dimension check, clean comparison"
+    },
+    {
+      "type": "math_block",
+      "latex": "c_{ij} = \\sum_{k=1}^{n} a_{ik} b_{kj}",
+      "explanation_instruction": "Explain that one output entry c_{ij} comes from the ith row of A and the jth column of B. Keep it precise and beginner-safe."
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Teach matrix multiplication. Explain the row-by-column rule, the meaning of conformability, and how to determine the output size. Also state clearly that in general AB is not equal to BA, and sometimes one product exists while the other does not. Keep this page very operational and anti-confusion. Explicitly tell the student what to watch in the demo. Target 140-180 words."
+    },
+    {
+      "type": "interactive_demo",
+      "demo_type": "matrix_multiplication_conformability",
+      "title": "Matrix multiplication and conformability demo",
+      "learning_objective": "See exactly when AB is defined and how one entry of the product is formed from one row of A and one column of B.",
+      "render_mode": "react_canvas",
+      "controls": [
+        {
+          "key": "rowsA",
+          "type": "stepper",
+          "min": 1,
+          "max": 4,
+          "step": 1,
+          "default": 2
+        },
+        {
+          "key": "colsA",
+          "type": "stepper",
+          "min": 1,
+          "max": 4,
+          "step": 1,
+          "default": 3
+        },
+        {
+          "key": "rowsB",
+          "type": "stepper",
+          "min": 1,
+          "max": 4,
+          "step": 1,
+          "default": 3
+        },
+        {
+          "key": "colsB",
+          "type": "stepper",
+          "min": 1,
+          "max": 4,
+          "step": 1,
+          "default": 2
+        },
+        {
+          "key": "focusEntry",
+          "type": "stepper",
+          "min": 1,
+          "max": 4,
+          "step": 1,
+          "default": 1
+        }
+      ],
+      "observe": [
+        "Watch that multiplication is valid only when the inner dimensions match.",
+        "Watch one highlighted row of A pair with one highlighted column of B.",
+        "Notice that the output size comes from the outer dimensions."
+      ],
+      "student_task": "Change the dimensions until AB becomes invalid, then explain exactly why. Then restore a valid case and identify the output size."
+    },
+    {
+      "type": "generate_image",
+      "tool": "openai/gpt-5.4-image-2",
+      "reason": "Need a static backup visual for the row-by-column multiplication rule and output-dimension logic when a suitable external image is unavailable.",
+      "teaching_role": "concept_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Use this visual to memorize the inner-dimensions rule and output-size rule quickly.",
+        "standard": "Use this visual to support the interactive demo and reinforce the row-times-column mechanism.",
+        "top_score": "Use this visual to prevent dimensional reasoning mistakes in harder matrix products."
+      },
+      "prompt": "Pure white clean background, minimalist lecture-notes educational diagram, one knowledge point only. Show matrix A of size m x n and matrix B of size n x p. Highlight the inner matching dimension n, show one row of A and one column of B producing c_ij, and label the output matrix size as m x p. Use navy, muted teal, soft gray, muted red only if needed for invalid cases. Clean and sparse.",
+      "style_hint": "lecture notes, row-column multiplication, output size"
+    },
+    {
+      "type": "math_block",
+      "latex": "AI = IA = A",
+      "explanation_instruction": "Explain that the identity matrix leaves a compatible matrix unchanged under multiplication."
+    },
+    {
+      "type": "math_block",
+      "latex": "A^{-1}A = I, \\qquad x = A^{-1}y",
+      "explanation_instruction": "Explain that the inverse undoes the action of A and exists only for a nonsingular square matrix."
+    },
+    {
+      "type": "web_search_image",
+      "search_query": "identity matrix inverse matrix Wikipedia Wikimedia",
+      "purpose": "Find a clean reference visual for the identity matrix and inverse-matrix idea so the student can see standard notation and the do-nothing role of I.",
+      "fallback": "generate_image",
+      "teaching_role": "definition_visual"
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Write one compact page that introduces matrix-vector multiplication, the identity matrix under multiplication, and the main idea of the inverse. Do not turn this into a full determinant/cofactor lecture. The goal is not full proof, but operational understanding: vectors can be treated as n x 1 matrices, the identity leaves things unchanged, and the inverse undoes a matrix when it exists. Target 150-190 words."
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Write one worked example page that includes: one valid matrix product with output-size reasoning, one invalid attempted product rejected by conformability, and one short inverse interpretation statement. Then add a compact lead-in sentence that tells the student the next visual will summarize the biggest traps. Keep it tight and exam-oriented. Target 180-220 words."
+    },
+    {
+      "type": "generate_image",
+      "tool": "openai/gpt-5.4-image-2",
+      "reason": "Need a visual correction block for matrix algebra traps.",
+      "teaching_role": "trap_exposure",
+      "mode_specific_visual_use": {
+        "cram": "Use this visual to expose the fastest dimension and operation mistakes.",
+        "standard": "Use this visual to compare valid vs invalid operations and to correct common reasoning errors.",
+        "top_score": "Use this visual to expose subtle order, output-size, and noncommutativity traps."
+      },
+      "prompt": "Pure white clean background, minimalist lecture-notes educational diagram, one trap-comparison cluster only. Show three compact panels: panel 1 valid addition same size vs invalid addition mismatched size; panel 2 valid multiplication with matching inner dimensions vs invalid multiplication with mismatched inner dimensions; panel 3 AB and BA with a short note that order matters. Use navy / muted teal / soft gray, muted red only for invalid or crossed-out cases. No dense text, clean spacing, wrong-vs-right structure.",
+      "style_hint": "lecture notes, wrong vs right, matrix algebra traps"
+    },
+    {
+      "type": "section_summary",
+      "instruction": "Summarize the 3 or 4 most important operating rules from this section in bullet points of at most 20 words each. Make sure one bullet mentions conformability, one mentions row-by-column multiplication, and one mentions identity/inverse. End with a one-sentence bridge to why matrix methods matter later in system analysis."
+    },
+    {
+      "type": "quiz_plan",
+      "target_questions": 7,
+      "question_range": {
+        "min": 6,
+        "max": 8
+      },
+      "knowledge_points": [
+        {
+          "id": "addition_and_scalar_multiplication",
+          "label": "Addition and scalar multiplication",
+          "importance": "high",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "b62_q1",
+              "type": "multiple_choice",
+              "task_type": "core_concept_check",
+              "stem": "When is A + B defined?",
+              "options": [
+                "A. Whenever A and B are both square",
+                "B. Whenever A and B have the same order",
+                "C. Whenever A and B have the same determinant",
+                "D. Whenever A and B are conformable for multiplication"
+              ],
+              "correct_option": "B",
+              "explanation": "Matrix addition is defined only when the matrices have exactly the same order.",
+              "wrong_option_explanations": {
+                "A": "Being square is not enough if the sizes are different.",
+                "C": "Determinants are irrelevant to whether addition is defined.",
+                "D": "Conformability is the condition for multiplication, not addition."
+              },
+              "hint": "Addition is entry by entry, so corresponding entries must exist.",
+              "needs_visual": true,
+              "visual_type": "valid_vs_invalid_addition",
+              "needs_demo": false,
+              "common_mistake_target": "addition_order_confusion",
+              "if_wrong_then_review": "same-order rule for addition"
+            }
+          ]
+        },
+        {
+          "id": "matrix_multiplication_rule",
+          "label": "Matrix multiplication rule",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "b62_q2",
+              "type": "multiple_choice",
+              "task_type": "formula_trigger_check",
+              "stem": "What is the correct rule for computing the entry c_{ij} of C = AB?",
+              "options": [
+                "A. Multiply the ith row of A by the ith row of B",
+                "B. Multiply the jth column of A by the jth column of B",
+                "C. Take the dot product of the ith row of A with the jth column of B",
+                "D. Add the ith row of A to the jth column of B"
+              ],
+              "correct_option": "C",
+              "explanation": "Each output entry c_{ij} is formed by taking the ith row of A and the jth column of B and combining them through the row-by-column product rule.",
+              "wrong_option_explanations": {
+                "A": "Rows are not multiplied row-to-row in standard matrix multiplication.",
+                "B": "Columns are not paired column-to-column for c_{ij}.",
+                "D": "Addition is not the rule that defines matrix multiplication entries."
+              },
+              "hint": "Think row of A, column of B.",
+              "needs_visual": true,
+              "visual_type": "row_by_column_flow",
+              "needs_demo": true,
+              "common_mistake_target": "row_column_product_confusion",
+              "if_wrong_then_review": "row-by-column multiplication rule"
+            },
+            {
+              "id": "b62_q3",
+              "type": "multiple_choice",
+              "task_type": "common_trap_check",
+              "stem": "If A is 2 x 3 and B is 3 x 4, what is the order of AB?",
+              "options": [
+                "A. 3 x 3",
+                "B. 2 x 4",
+                "C. 3 x 2",
+                "D. 2 x 3"
+              ],
+              "correct_option": "B",
+              "explanation": "The inner dimensions 3 and 3 match, so the product is defined, and the output size comes from the outer dimensions: 2 x 4.",
+              "wrong_option_explanations": {
+                "A": "The inner dimensions control validity, not the output size.",
+                "C": "This reverses the output dimensions incorrectly.",
+                "D": "The product does not keep the same order as A in general."
+              },
+              "hint": "Use outer dimensions after checking the inner match.",
+              "needs_visual": true,
+              "visual_type": "matrix_dimension_flow",
+              "needs_demo": true,
+              "common_mistake_target": "output_dimension_confusion",
+              "if_wrong_then_review": "conformability and output-size rule"
+            }
+          ]
+        },
+        {
+          "id": "conformability_and_noncommutativity",
+          "label": "Conformability and noncommutativity",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "b62_q4",
+              "type": "short_answer",
+              "task_type": "common_trap_check",
+              "stem": "Why can AB exist while BA does not exist?",
+              "ideal_answer": "Because conformability depends on the order of the matrices. The number of columns of the first matrix must equal the number of rows of the second. This may hold for AB but fail for BA.",
+              "grading_rubric": [
+                "Must mention order matters",
+                "Must mention columns of first = rows of second",
+                "Must explain that one direction can satisfy the rule while the reverse fails"
+              ],
+              "explanation": "This checks whether the student really understands conformability instead of memorizing a slogan.",
+              "hint": "Write the dimensions in order and compare inner dimensions.",
+              "needs_visual": true,
+              "visual_type": "ab_vs_ba_conformability_comparison",
+              "needs_demo": true,
+              "common_mistake_target": "ab_equals_ba_instinct",
+              "if_wrong_then_review": "conformability rule and noncommutativity"
+            }
+          ]
+        },
+        {
+          "id": "identity_and_inverse",
+          "label": "Identity and inverse meaning",
+          "importance": "medium",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "b62_q5",
+              "type": "multiple_choice",
+              "task_type": "core_concept_check",
+              "stem": "What does the identity matrix do under multiplication when dimensions are compatible?",
+              "options": [
+                "A. It transposes the matrix",
+                "B. It leaves the matrix unchanged",
+                "C. It makes every entry equal to 1",
+                "D. It always produces a zero matrix"
+              ],
+              "correct_option": "B",
+              "explanation": "The identity matrix acts like the multiplicative do-nothing object, so AI = IA = A when dimensions are compatible.",
+              "wrong_option_explanations": {
+                "A": "Transpose is a different operation.",
+                "C": "Identity does not overwrite entries with ones.",
+                "D": "That describes multiplication by zero, not by identity."
+              },
+              "hint": "Think of the multiplicative analogue of the number 1.",
+              "needs_visual": true,
+              "visual_type": "identity_matrix_effect",
+              "needs_demo": false,
+              "common_mistake_target": "identity_role_confusion",
+              "if_wrong_then_review": "identity matrix under multiplication"
+            },
+            {
+              "id": "b62_q6",
+              "type": "multiple_choice",
+              "task_type": "formula_trigger_check",
+              "stem": "For which kind of matrix can an inverse exist in this section's definition?",
+              "options": [
+                "A. Any rectangular matrix",
+                "B. Any square matrix",
+                "C. Only a nonsingular square matrix",
+                "D. Only a symmetric matrix"
+              ],
+              "correct_option": "C",
+              "explanation": "The inverse exists only for a square matrix with nonzero determinant, that is, a nonsingular square matrix.",
+              "wrong_option_explanations": {
+                "A": "Rectangular matrices do not qualify here.",
+                "B": "Square is necessary but not sufficient if the determinant is zero.",
+                "D": "Symmetry is not the defining condition."
+              },
+              "hint": "Square is necessary, but what else is required?",
+              "needs_visual": false,
+              "needs_demo": false,
+              "common_mistake_target": "inverse_existence_confusion",
+              "if_wrong_then_review": "nonsingular square matrix condition"
+            }
+          ]
+        },
+        {
+          "id": "demo_observation",
+          "label": "Reading the multiplication demo correctly",
+          "importance": "medium",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "b62_q7",
+              "type": "multiple_choice",
+              "task_type": "visual_or_demo_observation_check",
+              "stem": "In the matrix multiplication demo, what should you check first before trying to compute any output entry?",
+              "options": [
+                "A. Whether the diagonal entries are all nonzero",
+                "B. Whether the inner dimensions match",
+                "C. Whether the matrices are symmetric",
+                "D. Whether the determinant of each matrix is 1"
+              ],
+              "correct_option": "B",
+              "explanation": "The first check is conformability: the number of columns of the first matrix must equal the number of rows of the second.",
+              "wrong_option_explanations": {
+                "A": "Diagonal entries are irrelevant to whether multiplication is defined.",
+                "C": "Symmetry is not the first validity check here.",
+                "D": "Determinant conditions are not required for multiplication itself."
+              },
+              "hint": "Before computing anything, ask whether the product is even defined.",
+              "needs_visual": true,
+              "visual_type": "react_canvas_demo",
+              "needs_demo": true,
+              "common_mistake_target": "skip_validity_check",
+              "if_wrong_then_review": "interactive conformability demo"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

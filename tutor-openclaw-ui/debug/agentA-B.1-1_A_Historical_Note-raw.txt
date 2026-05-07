@@ -1,0 +1,267 @@
+{
+  "section_id": "B.1-1",
+  "section_title": "A Historical Note",
+  "difficulty": "beginner",
+  "estimated_read_minutes": 5,
+  "learning_objectives": [
+    "Recognize the historical pattern: new kinds of numbers were accepted when old number systems could not solve useful problems.",
+    "Explain why complex numbers were introduced after equations like x^2 + 1 = 0 had no real-number solution.",
+    "State the role of j in electrical engineering notation and connect it to the need for square roots of negative numbers.",
+    "Use the Country X / Country Y analogy to explain why complex numbers can simplify work even when final answers are real."
+  ],
+  "visualization_need": {
+    "level": "static",
+    "reason": [
+      "historical_progression_benefits_from_comparison",
+      "textbook_has_canonical_route_analogy",
+      "misconception_needs_visual_correction"
+    ],
+    "recommended_assets": [
+      "book_figure",
+      "latex_native_visual"
+    ]
+  },
+  "visual_plan": {
+    "primary_anchor": "both",
+    "rationale": "This historical note is not a skills lesson, so the strongest visual strategy is the textbook's own Fig. B.1 route analogy plus LaTeX-native equation examples that show why number systems had to expand. Do not use generated images because a relevant textbook figure is available and the formulas are clearer as math.",
+    "cram": "Use the route analogy to remember the main claim: complex numbers are a shortcut, not a final-answer requirement.",
+    "standard": "Use Fig. B.1 and one equation example to connect history, motivation, and the need for j.",
+    "top_score": "Use the visual analogy to distinguish 'complex numbers as fiction' from 'complex numbers as a valid intermediate tool'."
+  },
+  "blocks": [
+    {
+      "type": "text_explanation",
+      "instruction": "Render Page 1 as a compact outline only. Use exactly two short sections: 'Section Objective' and 'Concepts In This Section'. Under Section Objective, write one sentence: 'Understand why complex numbers were historically introduced and why they are useful even when final answers are real.' Under Concepts In This Section, list concept names only as bullets: 'expanding number systems', 'negative numbers', 'square roots of negative numbers', 'Cardano, Bombelli, and Gauss', 'complex numbers as a shortcut'. Do not add background paragraphs."
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Start Page 2 with heading '## 1. Number systems expanded when old ones stopped working'. Explain the historical pattern in 100–140 words: natural numbers were enough for counting, fractions became necessary for measurement, irrational numbers appeared when lengths like the diagonal of a unit square could not be written as fractions, and negative numbers became useful for debts or deficits. Keep the tone practical, not philosophical. Include one representative example in words: before negative numbers were accepted, subtracting 7 from 5 looked impossible, but banking made it meaningful as a debt of 2. End with one sentence that sets up the next page: 'Complex numbers follow the same pattern: they were accepted because real numbers could not solve every useful equation.'"
+    },
+    {
+      "type": "math_block",
+      "latex": "x+5=0 \\Rightarrow x=-5",
+      "explanation_instruction": "Explain in 70–100 words that this equation shows why negative numbers mattered. Define x as the unknown number. State that the exam trigger is a historical or conceptual question asking why a new number type was introduced: the answer is that a previously impossible equation became solvable. Common misuse: do not say negative numbers were invented only for algebra; the textbook also connects them to practical bookkeeping and debt."
+    },
+    {
+      "type": "math_block",
+      "latex": "x^2+1=0 \\Rightarrow x^2=-1",
+      "explanation_instruction": "Start Page 3 with heading '## 2. Complex numbers entered because real numbers were not enough'. Explain in 90–130 words that no real number squared gives -1, because positive and negative real numbers both square to nonnegative values. Use this as the historical pressure point that motivated a new kind of number. Define x as the unknown. When to use it: when asked why imaginary or complex numbers were introduced. Exam trigger: equations requiring a square root of a negative number. Common misuse: do not treat this as a rectangular-form or complex-plane problem; this section is only about the historical need."
+    },
+    {
+      "type": "math_block",
+      "latex": "j^2=-1 \\qquad \\text{and} \\qquad \\sqrt{-1}=\\pm j",
+      "explanation_instruction": "Explain in 90–130 words that electrical engineers use j instead of i because i is often used for electrical current. Define j as the symbol introduced so that a square can equal -1. Say what each symbol means: j is the imaginary unit, j^2 means j multiplied by itself, and \\sqrt{-1} refers to a square root of -1 in the textbook's notation. When to use it: whenever a calculation demands the square root of a negative number. Common misuse: do not say j is 'just a variable'; it is a defined number-like unit with the special property j^2=-1."
+    },
+    {
+      "type": "math_block",
+      "latex": "\\sqrt{-4}=\\sqrt{4}\\sqrt{-1}=\\pm 2j",
+      "explanation_instruction": "Give one minimal worked example in 60–90 words. Show that the negative sign is handled by the new unit j, while the ordinary size comes from \\sqrt{4}=2. State the pattern: \\sqrt{-a} becomes a real magnitude times j. Keep it historical and motivational; do not branch into complex arithmetic rules, graphing, polar form, or Euler's formula."
+    },
+    {
+      "type": "book_image",
+      "source_page": "page-004",
+      "fig_id": "unknown",
+      "caption_instruction": "One sentence: Fig. B.1 compares a direct route through another country with a longer route that stays inside one country, illustrating why complex numbers can reduce work.",
+      "description_instruction": "Describe the figure in 2–3 sentences: two points a and b lie in Country X; the direct route crosses Country Y; the alternate route remains inside Country X but is longer. Tell students to read Country X as the real-number world and Country Y as the complex-number world. Emphasize that the journey begins and ends in Country X, just as many real-world problems start and end with real quantities.",
+      "teaching_role": "concept_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Memorize the shortcut message: complex detours can make real problems easier.",
+        "standard": "Use the route comparison to understand why complex numbers are useful intermediates.",
+        "top_score": "Notice that the analogy is about efficiency, not about final answers becoming non-real."
+      }
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Start Page 4 with heading '## 3. Complex numbers became accepted tools, not algebraic fiction'. In 110–150 words, connect the textbook's historical figures to the acceptance story. Mention Cardano as linked to cubic equations where complex-looking expressions appeared during the solution process, Bombelli as an important figure in making sense of such expressions, and Gauss as the mathematician who gave complex numbers a coherent status and proved the fundamental theorem of algebra. State Gauss's key idea in plain language: an nth-order algebraic equation has exactly n roots when complex numbers are allowed. End with a quick check sentence: 'The point is not to calculate with complex numbers yet; the point is to see why mathematics had to make room for them.'"
+    },
+    {
+      "type": "section_summary",
+      "instruction": "Create a recap page titled '📌 Key Takeaways'. Include exactly 4 bullets, each ≤25 words. The bullets must explicitly include these formulas: \\(x+5=0\\Rightarrow x=-5\\), \\(x^2+1=0\\Rightarrow x^2=-1\\), \\(j^2=-1\\), and \\(\\sqrt{-4}=\\pm2j\\). Also include the route analogy in one bullet. End with one bridge sentence: 'In the next section we will turn this historical idea into algebraic rules for writing and manipulating complex numbers.'"
+    },
+    {
+      "type": "quiz_plan",
+      "target_questions": 6,
+      "question_range": {
+        "min": 5,
+        "max": 7
+      },
+      "knowledge_points": [
+        {
+          "id": "number_system_expansion",
+          "label": "Why number systems expanded",
+          "importance": "high",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp1_q1",
+              "type": "multiple_choice",
+              "stem": "Which statement best captures the historical pattern in this section?",
+              "options": [
+                "A. New numbers were added mainly to make notation look more elegant.",
+                "B. New numbers were accepted when older number systems could not handle useful problems.",
+                "C. Complex numbers replaced real numbers in practical calculations.",
+                "D. Fractions, negatives, and complex numbers were all discovered at the same time."
+              ],
+              "correct_option": "B",
+              "explanation": "The section repeatedly shows expansion: fractions for measurement, negatives for deficits, and complex numbers for equations beyond the real system.",
+              "wrong_option_explanations": {
+                "A": "The section emphasizes usefulness and solvability, not cosmetic notation.",
+                "C": "Complex numbers generalize real numbers; they do not replace them.",
+                "D": "The section presents these as separate historical stages."
+              },
+              "hint": "Ask what problem each new type of number solved.",
+              "needs_visual": false,
+              "same_point_variant": false
+            },
+            {
+              "id": "kp1_q2",
+              "type": "multiple_choice",
+              "stem": "Before negative numbers were accepted, which equation would have been problematic in the same historical sense?",
+              "options": [
+                "A. x+5=0",
+                "B. x=5",
+                "C. x^2=4",
+                "D. x+1=6"
+              ],
+              "correct_option": "A",
+              "explanation": "Solving x+5=0 requires x=-5, so it needs negative numbers.",
+              "wrong_option_explanations": {
+                "B": "This uses an ordinary positive number.",
+                "C": "This has real solutions x=2 and x=-2; it is not the section's main example of needing a new system before negatives.",
+                "D": "This gives x=5, a positive number."
+              },
+              "hint": "Look for the equation whose solution is below zero.",
+              "needs_visual": false,
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "imaginary_unit_need",
+          "label": "Need for j and square roots of negative numbers",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp2_q1",
+              "type": "multiple_choice",
+              "stem": "Why does x^2+1=0 force mathematics beyond the real number system?",
+              "options": [
+                "A. Because x must be a fraction.",
+                "B. Because it requires x^2=-1, and no real number squares to -1.",
+                "C. Because it has too many real roots.",
+                "D. Because it cannot be written using algebraic notation."
+              ],
+              "correct_option": "B",
+              "explanation": "The equation becomes x^2=-1. Real numbers square to nonnegative values, so a new unit is needed.",
+              "wrong_option_explanations": {
+                "A": "Fractions do not solve the problem; the issue is the negative square.",
+                "C": "The issue is not too many real roots; it is no real root.",
+                "D": "The equation is already algebraic."
+              },
+              "hint": "What happens when you square any real number?",
+              "needs_visual": false,
+              "same_point_variant": false
+            },
+            {
+              "id": "kp2_q2",
+              "type": "multiple_choice",
+              "stem": "In electrical engineering notation, what is the defining property of j?",
+              "options": [
+                "A. j=0",
+                "B. j^2=-1",
+                "C. j^2=1",
+                "D. j means electrical current"
+              ],
+              "correct_option": "B",
+              "explanation": "The imaginary unit j is defined by the property j^2=-1.",
+              "wrong_option_explanations": {
+                "A": "If j were 0, then j^2 would be 0, not -1.",
+                "C": "That property would match 1 or -1, not the imaginary unit.",
+                "D": "Engineers use j partly because i is often used for current."
+              },
+              "hint": "The key formula on the page is the square of j.",
+              "needs_visual": false,
+              "same_point_variant": true
+            },
+            {
+              "id": "kp2_q3",
+              "type": "short_answer",
+              "stem": "A student says, 'j is just a normal variable, so j^2=-1 only for one special problem.' Explain why this is wrong.",
+              "ideal_answer": "j is not an ordinary variable in this context. It is the imaginary unit, defined by the property j^2=-1, so it can be used whenever a square root of a negative number is needed.",
+              "grading_rubric": [
+                "Must state that j is the imaginary unit, not an ordinary variable",
+                "Must include the defining property j^2=-1",
+                "Must connect j to square roots of negative numbers"
+              ],
+              "explanation": "This checks whether the student understands j as a defined unit introduced to expand the number system.",
+              "hint": "Use the word 'defined' in your answer.",
+              "needs_visual": false,
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "complex_numbers_as_shortcut",
+          "label": "Complex numbers as useful intermediates",
+          "importance": "high",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp3_q1",
+              "type": "multiple_choice",
+              "stem": "In the Country X / Country Y analogy from Fig. B.1, what does the direct route through Country Y represent?",
+              "options": [
+                "A. Avoiding complex numbers completely",
+                "B. Using complex numbers as an intermediate shortcut while starting and ending with real quantities",
+                "C. Replacing all real-world answers with complex answers",
+                "D. Proving that real numbers are useless"
+              ],
+              "correct_option": "B",
+              "explanation": "The direct route crosses Country Y but begins and ends in Country X. Likewise, complex numbers can simplify work even when the final answer is real.",
+              "wrong_option_explanations": {
+                "A": "Avoiding complex numbers matches the longer alternate route inside Country X.",
+                "C": "The analogy says the journey ends back in Country X, so final answers may still be real.",
+                "D": "The section treats real numbers as a special case within a broader system, not as useless."
+              },
+              "hint": "Country X represents the real-number world; Country Y represents the complex-number world.",
+              "needs_visual": true,
+              "visual_type": "book_figure_fig_B1_route_analogy",
+              "same_point_variant": false
+            },
+            {
+              "id": "kp3_q2",
+              "type": "multiple_choice",
+              "stem": "Which historical figure is most associated in this section with giving complex numbers coherent status and proving the fundamental theorem of algebra?",
+              "options": [
+                "A. Pythagoras",
+                "B. Bhaskar",
+                "C. Karl Friedrich Gauss",
+                "D. Descartes only"
+              ],
+              "correct_option": "C",
+              "explanation": "The section highlights Gauss's 1799 proof and his role in interpreting complex numbers coherently.",
+              "wrong_option_explanations": {
+                "A": "Pythagoras is linked here to irrational numbers, not the acceptance of complex numbers.",
+                "B": "Bhaskar is linked to negative quantities and arithmetic rules.",
+                "D": "Descartes appears in the broader historical background, but Gauss is the central figure for the theorem and coherent account."
+              },
+              "hint": "Look for the mathematician connected to 1799 and the fundamental theorem of algebra.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

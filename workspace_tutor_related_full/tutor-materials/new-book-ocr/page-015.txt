@@ -1,0 +1,48 @@
+B.1 Complex Numbers     15
+
+     (b)
+                        √                         
+                                        −1
+               2 + jω      4 + ω2 ej tan (ω/2)       4 + ω2 j[tan−1 (ω/2)−tan−1 (4ω/3)]
+       X(ω) =         =√                        =            e
+              3 + j4ω                    −1
+                         9 + 16ω2 ej tan (4ω/3)     9 + 16ω2
+
+This is the polar representation of X(ω). Observe that
+                      
+                         4 + ω2                              ω         4ω
+            |X(ω)| =                  and      X(ω) = tan−1   − tan−1
+                        9 + 16ω2                             2          3
+
+
+
+
+L OGARITHMS OF C OMPLEX N UMBERS
+To take the natural logarithm of a complex number z, we first express z in general polar form as
+
+                               z = rejθ = rej(θ±2πk)            k = 0, 1, 2, 3, . . .
+
+Taking the natural logarithm, we see that
+                                      
+                   ln z = ln rej(θ±2πk) = ln r ± j(θ + 2π k)                k = 0, 1, 2, 3, . . .
+
+The value of ln z for k = 0 is called the principal value of ln z and is denoted by Ln z. In this way,
+we see that
+
+                       ln 1 = ln(1e±j2πk ) = ±j2π k              k = 0, 1, 2, 3, . . .
+                                     ±jπ(2k+1)
+                   ln(−1) = ln[1e              ] = ±j(2k + 1)π         k = 0, 1, 2, 3, . . .
+                                  jπ(1±4k)/2      π(1 ± 4k)
+                       ln j = ln e              =j                  k = 0, 1, 2, 3, . . .
+                                                        2
+                         jj = ej ln j = e−π(1±4k)/2     k = 0, 1, 2, 3, . . .
+
+In all of these cases, setting k = 0 yields the principal value of the expression.
+     We can further our logarithm skills by noting that the familiar properties of logarithms hold
+for complex arguments. Therefore, we have
+
+                                        log(z1 z2 ) = log z1 + log z2
+                                       log(z1 /z2 ) = log z1 − log z2
+                                           a(z1 +z2 ) = az1 × az2
+                                                 zc = ec ln z
+                                                 az = ez ln a

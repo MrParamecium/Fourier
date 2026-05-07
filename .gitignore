@@ -1,0 +1,14 @@
+.DS_Store
+*.log
+*.bak
+*.orig
+*.patch
+*.rej
+.env
+.env.*
+!.env.example
+node_modules/
+__pycache__/
+*.pyc
+tutor-openclaw-ui/users/
+workspace_tutor_related_full/tutor-openclaw-ui/users/

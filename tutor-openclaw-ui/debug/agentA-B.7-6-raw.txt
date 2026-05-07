@@ -1,0 +1,290 @@
+{
+  "section_id": "B.7-6",
+  "section_title": "B.7-6 Matrix Transpose",
+  "difficulty": "beginner",
+  "estimated_read_minutes": 5,
+  "learning_objectives": [
+    "Recognize that a transpose swaps the row and column positions of a matrix entry.",
+    "Compute the transpose of a small matrix by turning rows into columns.",
+    "Use the correct MATLAB transpose syntax for real and complex matrices."
+  ],
+  "visualization_need": {
+    "level": "static",
+    "reason": [
+      "pattern_recognition_benefits_from_figure",
+      "classification_benefits_from_figure",
+      "misconception_needs_visual_correction"
+    ],
+    "recommended_assets": [
+      "wiki_figure",
+      "latex_native_matrix_visual"
+    ]
+  },
+  "visual_plan": {
+    "primary_anchor": "wiki_reference",
+    "rationale": "Matrix transpose is definition-first and should be taught mainly through exact LaTeX matrices. A simple Wikimedia-style before-and-after transpose diagram can support visual recognition of rows becoming columns without replacing the symbolic definition.",
+    "cram": "Use the visual to recognize the exam action immediately: row 1 becomes column 1, row 2 becomes column 2.",
+    "standard": "Use the visual next to one representative matrix example so the student sees both the rule and the computation.",
+    "top_score": "Use the visual and MATLAB syntax notes to catch the common trap: transpose versus complex conjugate transpose."
+  },
+  "blocks": [
+    {
+      "type": "text_explanation",
+      "instruction": "Render Page 1 as a minimal overview only. Use the heading 'Section Objective' followed by one short sentence: 'Learn how matrix transpose swaps rows and columns, and how MATLAB writes transpose operations.' Then add the heading 'Concepts In This Section' and list only these concept names as bullets: 'matrix transpose', 'row-to-column example', 'MATLAB transpose syntax', 'complex conjugate transpose'. Do not add background paragraphs, history, or expanded explanations."
+    },
+    {
+      "type": "math_block",
+      "latex": "(A^T)_{ij}=a_{ji}",
+      "explanation_instruction": "Start a new concept page with the heading '## 1. Matrix transpose: swap row and column positions'. Explain in 90–130 words that the transpose of matrix \\(A\\), written \\(A^T\\), is made by swapping every entry's row index and column index. Define each symbol: \\(a_{ji}\\) is the entry originally in row \\(j\\), column \\(i\\), and \\((A^T)_{ij}\\) is where that entry lands after transposing. State when to use it: when a problem asks for \\(A^T\\), when MATLAB code transposes a vector or matrix, or when rows must become columns. Exam trigger: phrases like 'transpose', 'row vector to column vector', or 'write \\(A^T\\)'. Common misuse: reversing the order of entries inside each row instead of turning rows into columns."
+    },
+    {
+      "type": "web_search_image",
+      "search_query": "matrix transpose rows become columns diagram Wikimedia Commons",
+      "purpose": "Show a clean before-and-after diagram where a matrix is transposed and the original rows become the new columns.",
+      "preferred_sources": [
+        "wikimedia_commons",
+        "wikipedia"
+      ],
+      "prefer_animated": false,
+      "fallback": "none",
+      "teaching_role": "concept_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Point to the row-to-column arrows and make the operation recognizable in seconds.",
+        "standard": "Place it beside the formula so students connect \\((A^T)_{ij}=a_{ji}\\) with the visible position swap.",
+        "top_score": "Use it to prevent the subtle wrong operation of merely reversing row order or column order."
+      }
+    },
+    {
+      "type": "math_block",
+      "latex": "A=\\begin{bmatrix}2&3\\\\4&5\\\\0&6\\end{bmatrix}",
+      "explanation_instruction": "Start a representative example page with the heading '## 2. Worked example: transpose the textbook matrix'. Present this as the original \\(3\\times2\\) matrix from the section. In 40–70 words, tell the student to label the first row as \\([2\\;3]\\), the second row as \\([4\\;5]\\), and the third row as \\([0\\;6]\\). Emphasize that because \\(A\\) has 3 rows and 2 columns, \\(A^T\\) must have 2 rows and 3 columns."
+    },
+    {
+      "type": "math_block",
+      "latex": "A^T=\\begin{bmatrix}2&4&0\\\\3&5&6\\end{bmatrix}",
+      "explanation_instruction": "Continue the same example page. Explain in 80–120 words that the first column of \\(A^T\\) comes from the first row of \\(A\\), the second column of \\(A^T\\) comes from the second row of \\(A\\), and the third column of \\(A^T\\) comes from the third row of \\(A\\). Add a quick check: the entry \\(a_{32}=6\\) moves to position \\((2,3)\\) in \\(A^T\\). Exam note: always check the new size first; a \\(3\\times2\\) matrix transposes into a \\(2\\times3\\) matrix."
+    },
+    {
+      "type": "math_block",
+      "latex": "\\texttt{A.'}=A^T",
+      "explanation_instruction": "Start a new concept page with the heading '## 3. MATLAB syntax: ordinary transpose'. Explain in 80–110 words that MATLAB uses \\(\\texttt{A.'}\\) for the ordinary transpose, meaning rows and columns are swapped without changing the actual numbers. Say that this is the safest notation when the matrix may contain complex entries and the student wants only the geometric row-column flip. Include one minimal example in words: a row vector typed as \\(\\texttt{[1 0 0]}\\) becomes a column vector when transposed. Exam trigger: MATLAB code containing dot-apostrophe after an array."
+    },
+    {
+      "type": "math_block",
+      "latex": "\\texttt{A'}=\\overline{A}^{T}",
+      "explanation_instruction": "Continue the MATLAB syntax page, but keep it visually separate from the ordinary transpose formula. Explain in 90–130 words that MATLAB's plain apostrophe \\(\\texttt{A'}\\) performs the complex conjugate transpose, not just the ordinary transpose. Define \\(\\overline{A}\\) as the matrix formed by changing each complex entry to its complex conjugate, such as \\(3+2j\\) becoming \\(3-2j\\). State the practical shortcut: for real-valued matrices, \\(\\texttt{A'}\\) and \\(\\texttt{A.'}\\) give the same result. Common misuse: using \\(\\texttt{A'}\\) on complex data when the problem only asks to swap rows and columns."
+    },
+    {
+      "type": "section_summary",
+      "instruction": "Create a recap page titled '📌 Key Takeaways'. Include exactly 4 bullets, each no more than 22 words. The bullets must explicitly include these formulas: \\((A^T)_{ij}=a_{ji}\\), \\(3\\times2\\to2\\times3\\), \\(\\texttt{A.'}=A^T\\), and \\(\\texttt{A'}=\\overline{A}^{T}\\). Do not include worked-example intermediate steps beyond the size change. End with one bridge sentence: 'Next, use this transpose idea to read and write matrix operations more confidently in MATLAB.'"
+    },
+    {
+      "type": "quiz_plan",
+      "target_questions": 6,
+      "question_range": {
+        "min": 5,
+        "max": 7
+      },
+      "knowledge_points": [
+        {
+          "id": "transpose_entry_rule",
+          "label": "Entry-wise transpose rule",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp1_q1",
+              "type": "multiple_choice",
+              "stem": "If \\((A^T)_{ij}=a_{ji}\\), what does transpose do to an entry originally in row 3, column 2?",
+              "options": [
+                "A. It moves to row 2, column 3.",
+                "B. It stays in row 3, column 2.",
+                "C. It moves to row 3, column 1.",
+                "D. It moves to row 2, column 1."
+              ],
+              "correct_option": "A",
+              "explanation": "Transpose swaps the row and column indices, so position \\((3,2)\\) becomes \\((2,3)\\).",
+              "wrong_option_explanations": {
+                "B": "That would mean no transpose happened.",
+                "C": "Transpose does not reverse entries within a row.",
+                "D": "Transpose swaps indices; it does not reset either index to 1."
+              },
+              "hint": "Swap the two index numbers.",
+              "needs_visual": false,
+              "same_point_variant": true
+            },
+            {
+              "id": "kp1_q2",
+              "type": "multiple_choice",
+              "stem": "Which statement best describes the transpose operation?",
+              "options": [
+                "A. Reverse the order of entries in every row.",
+                "B. Swap rows and columns of the matrix.",
+                "C. Multiply every entry by \\(-1\\).",
+                "D. Replace every off-diagonal entry with zero."
+              ],
+              "correct_option": "B",
+              "explanation": "A transpose turns rows into columns and columns into rows.",
+              "wrong_option_explanations": {
+                "A": "That is row reversal, not transpose.",
+                "C": "Changing signs is unrelated to transpose.",
+                "D": "That describes forcing a diagonal form, not transposing."
+              },
+              "hint": "Think: row 1 becomes column 1.",
+              "needs_visual": true,
+              "visual_type": "before_after_matrix_transpose_diagram",
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "transpose_dimension_change",
+          "label": "Matrix size after transpose",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp2_q1",
+              "type": "multiple_choice",
+              "stem": "A matrix \\(A\\) has size \\(3\\times2\\). What is the size of \\(A^T\\)?",
+              "options": [
+                "A. \\(3\\times2\\)",
+                "B. \\(2\\times3\\)",
+                "C. \\(3\\times3\\)",
+                "D. \\(2\\times2\\)"
+              ],
+              "correct_option": "B",
+              "explanation": "Transpose swaps the number of rows and columns, so \\(3\\times2\\) becomes \\(2\\times3\\).",
+              "wrong_option_explanations": {
+                "A": "That would keep the same orientation.",
+                "C": "Transpose does not make a matrix square.",
+                "D": "Transpose does not discard a row."
+              },
+              "hint": "Swap the two dimensions.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "worked_matrix_transpose",
+          "label": "Compute a small matrix transpose",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp3_q1",
+              "type": "multiple_choice",
+              "stem": "Given \\(A=\\begin{bmatrix}2&3\\\\4&5\\\\0&6\\end{bmatrix}\\), which matrix is \\(A^T\\)?",
+              "options": [
+                "A. \\(\\begin{bmatrix}2&4&0\\\\3&5&6\\end{bmatrix}\\)",
+                "B. \\(\\begin{bmatrix}3&2\\\\5&4\\\\6&0\\end{bmatrix}\\)",
+                "C. \\(\\begin{bmatrix}2&3\\\\4&5\\\\0&6\\end{bmatrix}\\)",
+                "D. \\(\\begin{bmatrix}0&6\\\\4&5\\\\2&3\\end{bmatrix}\\)"
+              ],
+              "correct_option": "A",
+              "explanation": "The rows \\([2\\;3]\\), \\([4\\;5]\\), and \\([0\\;6]\\) become the columns of \\(A^T\\).",
+              "wrong_option_explanations": {
+                "B": "This reverses entries inside each row rather than transposing.",
+                "C": "This leaves the matrix unchanged.",
+                "D": "This reverses row order, not row-column position."
+              },
+              "hint": "Write each original row as a new column.",
+              "needs_visual": true,
+              "visual_type": "matrix_rows_becoming_columns_highlight",
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "matlab_transpose_syntax",
+          "label": "MATLAB ordinary transpose syntax",
+          "importance": "medium",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp4_q1",
+              "type": "multiple_choice",
+              "stem": "In MATLAB, which notation means ordinary transpose without complex conjugation?",
+              "options": [
+                "A. \\(\\texttt{A.'}\\)",
+                "B. \\(\\texttt{A'}\\)",
+                "C. \\(\\texttt{A*}\\)",
+                "D. \\(\\texttt{transpose(A')}\\)"
+              ],
+              "correct_option": "A",
+              "explanation": "\\(\\texttt{A.'}\\) is MATLAB's nonconjugate transpose operator.",
+              "wrong_option_explanations": {
+                "B": "\\(\\texttt{A'}\\) is the complex conjugate transpose in MATLAB.",
+                "C": "\\(\\texttt{A*}\\) is not valid MATLAB transpose syntax.",
+                "D": "This applies transpose to a conjugate-transposed matrix, which is not the basic ordinary transpose notation."
+              },
+              "hint": "Look for the dot before the apostrophe.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "complex_conjugate_transpose_trap",
+          "label": "Complex conjugate transpose trap",
+          "importance": "high",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp5_q1",
+              "type": "multiple_choice",
+              "stem": "A MATLAB matrix contains complex entries. What does \\(\\texttt{A'}\\) compute?",
+              "options": [
+                "A. Ordinary transpose only",
+                "B. Complex conjugate transpose",
+                "C. Element-by-element reciprocal",
+                "D. Matrix inverse"
+              ],
+              "correct_option": "B",
+              "explanation": "MATLAB's plain apostrophe transposes the matrix and conjugates complex entries.",
+              "wrong_option_explanations": {
+                "A": "Ordinary transpose without conjugation is written \\(\\texttt{A.'}\\).",
+                "C": "No reciprocal operation is involved.",
+                "D": "Transpose and inverse are different operations."
+              },
+              "hint": "Plain apostrophe is safe for real matrices, but it has extra meaning for complex matrices.",
+              "needs_visual": false,
+              "same_point_variant": true
+            },
+            {
+              "id": "kp5_q2",
+              "type": "short_answer",
+              "stem": "A classmate uses \\(\\texttt{A'}\\) on a complex MATLAB matrix and says it only swaps rows and columns. Explain why that is wrong and what notation should be used instead for ordinary transpose.",
+              "ideal_answer": "\\(\\texttt{A'}\\) computes the complex conjugate transpose in MATLAB, so it also changes entries like \\(3+2j\\) to \\(3-2j\\). For ordinary transpose only, use \\(\\texttt{A.'}\\).",
+              "grading_rubric": [
+                "Must state that \\(\\texttt{A'}\\) is complex conjugate transpose",
+                "Must mention that complex entries are conjugated",
+                "Must identify \\(\\texttt{A.'}\\) as ordinary transpose syntax"
+              ],
+              "explanation": "This checks the most important MATLAB-specific trap in the section.",
+              "hint": "Ask what happens to the sign of the imaginary part.",
+              "needs_visual": false,
+              "same_point_variant": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

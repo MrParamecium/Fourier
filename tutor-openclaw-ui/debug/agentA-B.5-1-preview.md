@@ -1,0 +1,522 @@
+# Agent A Preview: B.5-1 Method of Clearing Fractions
+
+- Difficulty: intermediate
+- Estimated read minutes: 6
+
+## Learning Objectives
+
+- Set up a partial fraction expansion with unknown coefficients.
+- Clear fractions by multiplying both sides by the common denominator.
+- Equate coefficients of like powers to solve for the unknown constants.
+- Recognize the repeated-factor pattern used in Example B.8.
+
+## Visualization Need
+
+```json
+{
+  "level": "interactive",
+  "reason": [
+    "formula_to_phenomenon_gap",
+    "student_should_manipulate_to_understand",
+    "input_output_response_is_visual"
+  ],
+  "recommended_assets": [
+    "react_canvas_demo"
+  ]
+}
+```
+
+## Visual Plan
+
+```json
+{
+  "primary_anchor": "react_demo",
+  "rationale": "This section is algebraic and has no textbook figures. A Wikipedia-style static visual would not teach the exact symbolic operation better than formulas. The best visual support is an interactive equation-flow demo showing how multiplying by the common denominator removes fractions and turns the problem into coefficient matching.",
+  "cram": "Use the demo to recognize the exam pattern: write unknown constants, multiply by the full denominator, compare coefficients.",
+  "standard": "Use the demo to connect the formula to one representative example and see why denominators disappear.",
+  "top_score": "Use the demo to expose traps with repeated factors and with multiplying only part of the equation."
+}
+```
+
+## Planned Blocks
+
+### Block 1: `text_explanation`
+- **instruction**: Render Page 1 as a minimal overview only. Use exactly two short sections: 'Section Objective' and 'Concepts In This Section'. Under 'Section Objective', write one sentence: 'Learn how to expand a proper rational function into partial fractions by clearing denominators and solving for unknown coefficients.' Under 'Concepts In This Section', list concept names only: 'partial fraction template', 'clearing fractions', 'equating coefficients', 'repeated linear factors'. Do not add background paragraphs, examples, or exam tips on this page.
+
+### Block 2: `text_explanation`
+- **instruction**: Start Page 2 with the heading '## 1. Set up the partial fraction template'. Explain in 90–130 words that the method begins by rewriting one rational function as a sum of simpler fractions with unknown constants. Emphasize that the denominator factor pattern controls the template. Use the Example B.8 final denominator pattern visible from the answer: factors x+1, x+2, and repeated factor (x+3)^2. State that repeated linear factors require both x+3 and (x+3)^2 terms. Include one short exam note: 'Do not start solving until the template has the right denominator terms.'
+
+### Block 3: `math_block`
+- **latex**: F(x)=\frac{k_1}{x+1}+\frac{k_2}{x+2}+\frac{k_3}{x+3}+\frac{k_4}{(x+3)^2}
+- **explanation_instruction**: Explain that this is the partial-fraction template matching Example B.8's factor pattern. Define k_1, k_2, k_3, and k_4 as unknown constants to be solved. State when to use it: when the denominator contains two distinct linear factors and one repeated linear factor of power 2. Exam trigger: seeing a factor like (x+3)^2 means include both 1/(x+3) and 1/(x+3)^2. Common misuse: writing only the squared-denominator term and forgetting the lower-power term.
+
+### Block 4: `text_explanation`
+- **instruction**: Start Page 3 with the heading '## 2. Clear fractions'. Explain in 90–130 words that clearing fractions means multiplying both sides by the full common denominator so that every fractional term becomes a polynomial term. Use this exact representative example setup: F(x) = (2x+3)/((x+1)(x+2)) = A/(x+1)+B/(x+2). Tell Agent B to show the idea before solving: the purpose is not to cancel randomly, but to create a polynomial identity true for all x except excluded denominator roots. Include one quick check sentence: 'If a denominator remains after clearing, you did not multiply every term by the full denominator.'
+
+### Block 5: `math_block`
+- **latex**: 2x+3=A(x+2)+B(x+1)
+- **explanation_instruction**: Explain that this equation comes from multiplying both sides of \(\frac{2x+3}{(x+1)(x+2)}=\frac{A}{x+1}+\frac{B}{x+2}\) by \((x+1)(x+2)\). Define A and B as unknown coefficients. Use case: this is the main clearing-fractions step. Exam trigger: once the partial fractions are written, multiply by the entire original denominator. Common misuse: multiplying only the left side or canceling a factor from only one term.
+
+### Block 6: `interactive_demo`
+- **teaching_role**: concept_anchor
+- **mode_specific_visual_use**:
+```json
+{
+  "cram": "Let students see the three-step workflow in seconds: template, clear denominators, compare coefficients.",
+  "standard": "Use the demo as the representative example for how the algebra changes after multiplying by the common denominator.",
+  "top_score": "Include a toggle that shows the common trap of multiplying by only one factor, then mark the remaining denominator as an error."
+}
+```
+- **demo_instruction**: Create a React + Canvas or React + SVG interactive demo titled 'Clearing Fractions: What Changes?'. Use the example \(\frac{2x+3}{(x+1)(x+2)}=\frac{A}{x+1}+\frac{B}{x+2}\). The demo must have three steps controlled by buttons: Step 1 shows the fraction equation; Step 2 highlights multiplication by the full common denominator \((x+1)(x+2)\) on both sides; Step 3 displays \(2x+3=A(x+2)+B(x+1)\). Add a coefficient-comparison panel that expands the right side to \((A+B)x+(2A+B)\), then shows the system \(A+B=2\), \(2A+B=3\), and the solution \(A=1, B=1\). Include a 'wrong move' toggle that multiplies by only \((x+1)\), leaving a denominator in one term; label it 'Not cleared'. Keep the interface clean, white-background, and lecture-note style.
+
+### Block 7: `math_block`
+- **latex**: F(x)=\frac{1}{x+1}-\frac{2}{x+2}+\frac{2}{x+3}-\frac{3}{(x+3)^2}
+- **explanation_instruction**: Start Page 4 with the heading '## 3. Solve the coefficient equations'. Explain that Example B.8 solves four simultaneous equations and obtains \(k_1=1\), \(k_2=-2\), \(k_3=2\), and \(k_4=-3\), giving this final expansion. Make clear that the OCR excerpt does not show the original numerator, so Agent B should not reconstruct it. Focus on the method conclusion: after clearing fractions and equating coefficients, the unknown constants are inserted back into the template. Common misuse: stopping after finding the constants without rewriting the final partial fraction expansion.
+
+### Block 8: `text_explanation`
+- **instruction**: Still on Page 4, add a short exam-focused note of 80–120 words titled 'Exam pattern to recognize'. Use bullets. Include: 1) proper rational function means numerator degree is lower than denominator degree before partial fractions; 2) write one unknown coefficient for each required denominator term; 3) multiply by the full denominator; 4) expand and collect powers of x; 5) equate coefficients of like powers; 6) solve the resulting simultaneous linear equations. End with one warning sentence: 'The most common error is using the right idea but the wrong template, especially with repeated factors.'
+
+### Block 9: `section_summary`
+- **instruction**: Render the recap page titled '📌 Key Takeaways'. Summarize the section in 4 concise bullets, each ≤24 words. The summary must explicitly include these formulas: \(F(x)=\frac{k_1}{x+1}+\frac{k_2}{x+2}+\frac{k_3}{x+3}+\frac{k_4}{(x+3)^2}\), \(2x+3=A(x+2)+B(x+1)\), and \(F(x)=\frac{1}{x+1}-\frac{2}{x+2}+\frac{2}{x+3}-\frac{3}{(x+3)^2}\). Also include the method phrase 'clear fractions, then equate coefficients.' End with one bridge sentence: 'Next, the cover-up method will reduce the amount of algebra for distinct linear factors.'
+
+### Block 10: `quiz_plan`
+- **target_questions**:
+```json
+6
+```
+- **question_range**:
+```json
+{
+  "min": 5,
+  "max": 7
+}
+```
+- **knowledge_points**:
+```json
+[
+  {
+    "id": "partial_fraction_template",
+    "label": "Choosing the correct partial fraction template",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "kp1_q1",
+        "type": "multiple_choice",
+        "stem": "Which template matches a denominator with factors \\((x+1)(x+2)(x+3)^2\\)?",
+        "options": [
+          "A. \\(\\frac{k_1}{x+1}+\\frac{k_2}{x+2}+\\frac{k_3}{(x+3)^2}\\)",
+          "B. \\(\\frac{k_1}{x+1}+\\frac{k_2}{x+2}+\\frac{k_3}{x+3}+\\frac{k_4}{(x+3)^2}\\)",
+          "C. \\(\\frac{k_1}{(x+1)(x+2)}+\\frac{k_2}{(x+3)^2}\\)",
+          "D. \\(\\frac{k_1}{x+1}+\\frac{k_2}{x+2}+\\frac{k_3x}{(x+3)^2}\\)"
+        ],
+        "correct_option": "B",
+        "explanation": "A repeated linear factor \\((x+3)^2\\) requires both \\(\\frac{k_3}{x+3}\\) and \\(\\frac{k_4}{(x+3)^2}\\).",
+        "wrong_option_explanations": {
+          "A": "It forgets the lower-power term \\(\\frac{k_3}{x+3}\\).",
+          "C": "It groups factors instead of decomposing into simple partial fractions.",
+          "D": "A linear numerator is not needed over a repeated linear factor; constants are used."
+        },
+        "hint": "For \\((x-a)^2\\), include powers 1 and 2.",
+        "needs_visual": false,
+        "same_point_variant": true
+      },
+      {
+        "id": "kp1_q2",
+        "type": "multiple_choice",
+        "stem": "A student writes only \\(\\frac{k}{(x+3)^2}\\) for the repeated factor \\((x+3)^2\\). What is wrong?",
+        "options": [
+          "A. The coefficient should be \\(kx\\), not \\(k\\).",
+          "B. The term \\(\\frac{1}{x+3}\\) is missing.",
+          "C. Repeated factors cannot be used in partial fractions.",
+          "D. The factor should be written as \\((x-3)^2\\)."
+        ],
+        "correct_option": "B",
+        "explanation": "A repeated linear factor of power 2 needs two denominator powers: \\(x+3\\) and \\((x+3)^2\\).",
+        "wrong_option_explanations": {
+          "A": "Linear numerators are for irreducible quadratic factors, not repeated linear factors.",
+          "C": "Repeated factors are allowed; they just require multiple terms.",
+          "D": "Changing \\(x+3\\) to \\(x-3\\) changes the denominator."
+        },
+        "hint": "List every power up to the repeated power.",
+        "needs_visual": false,
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "clearing_fractions_step",
+    "label": "Clearing denominators correctly",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "kp2_q1",
+        "type": "multiple_choice",
+        "stem": "Starting from \\(\\frac{2x+3}{(x+1)(x+2)}=\\frac{A}{x+1}+\\frac{B}{x+2}\\), what is the correct equation after clearing fractions?",
+        "options": [
+          "A. \\(2x+3=A+B\\)",
+          "B. \\(2x+3=A(x+2)+B(x+1)\\)",
+          "C. \\((2x+3)(x+1)(x+2)=A+B\\)",
+          "D. \\(2x+3=A(x+1)+B(x+2)\\)"
+        ],
+        "correct_option": "B",
+        "explanation": "Multiplying by \\((x+1)(x+2)\\) cancels \\(x+1\\) under A and \\(x+2\\) under B, leaving the opposite factors.",
+        "wrong_option_explanations": {
+          "A": "This loses the remaining factors after cancellation.",
+          "C": "The left side already has the full denominator, so it becomes \\(2x+3\\), not a product.",
+          "D": "The remaining factors are swapped incorrectly."
+        },
+        "hint": "Each term keeps the factor it did not already have in its denominator.",
+        "needs_visual": true,
+        "visual_type": "demo_observation_check",
+        "same_point_variant": true
+      },
+      {
+        "id": "kp2_q2",
+        "type": "multiple_choice",
+        "stem": "In the clearing-fractions demo, the 'wrong move' multiplies by only \\((x+1)\\). Why is it marked 'Not cleared'?",
+        "options": [
+          "A. Because multiplying by \\((x+1)\\) changes the value of x.",
+          "B. Because one term still contains a denominator.",
+          "C. Because partial fractions cannot be multiplied.",
+          "D. Because the left side must always become zero."
+        ],
+        "correct_option": "B",
+        "explanation": "To clear fractions, every denominator must disappear. Multiplying by only one factor leaves at least one fractional term.",
+        "wrong_option_explanations": {
+          "A": "Multiplying an equation does not change x; it changes the equation form.",
+          "C": "Multiplication is exactly the intended clearing step.",
+          "D": "The left side becomes a polynomial numerator, not necessarily zero."
+        },
+        "hint": "Ask whether any denominator remains.",
+        "needs_visual": true,
+        "visual_type": "demo_observation_check",
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "equating_coefficients",
+    "label": "Equating coefficients of like powers",
+    "importance": "high",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp3_q1",
+        "type": "multiple_choice",
+        "stem": "After clearing fractions, suppose \\(2x+3=A(x+2)+B(x+1)\\). Expanding gives \\(2x+3=(A+B)x+(2A+B)\\). Which coefficient equations are correct?",
+        "options": [
+          "A. \\(A+B=3\\), \\(2A+B=2\\)",
+          "B. \\(A+B=2\\), \\(2A+B=3\\)",
+          "C. \\(A+B=2x\\), \\(2A+B=3\\)",
+          "D. \\(A=2\\), \\(B=3\\)"
+        ],
+        "correct_option": "B",
+        "explanation": "Match the coefficient of \\(x\\): \\(A+B=2\\). Match the constant term: \\(2A+B=3\\).",
+        "wrong_option_explanations": {
+          "A": "It swaps the coefficient of \\(x\\) and the constant term.",
+          "C": "Coefficients are numbers or expressions in A and B, not terms containing x.",
+          "D": "You cannot assign A and B directly from the left-side coefficients."
+        },
+        "hint": "Compare x-coefficient with x-coefficient, constant with constant.",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  },
+  {
+    "id": "method_conclusion",
+    "label": "Writing the final expansion",
+    "importance": "medium",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp4_q1",
+        "type": "short_answer",
+        "stem": "Example B.8 gives \\(k_1=1\\), \\(k_2=-2\\), \\(k_3=2\\), and \\(k_4=-3\\). Write the final partial fraction expansion using the template \\(F(x)=\\frac{k_1}{x+1}+\\frac{k_2}{x+2}+\\frac{k_3}{x+3}+\\frac{k_4}{(x+3)^2}\\).",
+        "ideal_answer": "\\(F(x)=\\frac{1}{x+1}-\\frac{2}{x+2}+\\frac{2}{x+3}-\\frac{3}{(x+3)^2}\\).",
+        "grading_rubric": [
+          "Must substitute all four constants into the correct denominators.",
+          "Must keep the negative signs on \\(-2\\) and \\(-3\\).",
+          "Must include both \\(x+3\\) and \\((x+3)^2\\) terms."
+        ],
+        "explanation": "The constants are not the final answer until they are placed back into the partial-fraction template.",
+        "hint": "Replace each \\(k_i\\) in the template one at a time.",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  }
+]
+```
+
+## Raw JSON
+
+```json
+{
+  "section_id": "B.5-1",
+  "section_title": "Method of Clearing Fractions",
+  "difficulty": "intermediate",
+  "estimated_read_minutes": 6,
+  "learning_objectives": [
+    "Set up a partial fraction expansion with unknown coefficients.",
+    "Clear fractions by multiplying both sides by the common denominator.",
+    "Equate coefficients of like powers to solve for the unknown constants.",
+    "Recognize the repeated-factor pattern used in Example B.8."
+  ],
+  "visualization_need": {
+    "level": "interactive",
+    "reason": [
+      "formula_to_phenomenon_gap",
+      "student_should_manipulate_to_understand",
+      "input_output_response_is_visual"
+    ],
+    "recommended_assets": [
+      "react_canvas_demo"
+    ]
+  },
+  "visual_plan": {
+    "primary_anchor": "react_demo",
+    "rationale": "This section is algebraic and has no textbook figures. A Wikipedia-style static visual would not teach the exact symbolic operation better than formulas. The best visual support is an interactive equation-flow demo showing how multiplying by the common denominator removes fractions and turns the problem into coefficient matching.",
+    "cram": "Use the demo to recognize the exam pattern: write unknown constants, multiply by the full denominator, compare coefficients.",
+    "standard": "Use the demo to connect the formula to one representative example and see why denominators disappear.",
+    "top_score": "Use the demo to expose traps with repeated factors and with multiplying only part of the equation."
+  },
+  "blocks": [
+    {
+      "type": "text_explanation",
+      "instruction": "Render Page 1 as a minimal overview only. Use exactly two short sections: 'Section Objective' and 'Concepts In This Section'. Under 'Section Objective', write one sentence: 'Learn how to expand a proper rational function into partial fractions by clearing denominators and solving for unknown coefficients.' Under 'Concepts In This Section', list concept names only: 'partial fraction template', 'clearing fractions', 'equating coefficients', 'repeated linear factors'. Do not add background paragraphs, examples, or exam tips on this page."
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Start Page 2 with the heading '## 1. Set up the partial fraction template'. Explain in 90–130 words that the method begins by rewriting one rational function as a sum of simpler fractions with unknown constants. Emphasize that the denominator factor pattern controls the template. Use the Example B.8 final denominator pattern visible from the answer: factors x+1, x+2, and repeated factor (x+3)^2. State that repeated linear factors require both x+3 and (x+3)^2 terms. Include one short exam note: 'Do not start solving until the template has the right denominator terms.'"
+    },
+    {
+      "type": "math_block",
+      "latex": "F(x)=\\frac{k_1}{x+1}+\\frac{k_2}{x+2}+\\frac{k_3}{x+3}+\\frac{k_4}{(x+3)^2}",
+      "explanation_instruction": "Explain that this is the partial-fraction template matching Example B.8's factor pattern. Define k_1, k_2, k_3, and k_4 as unknown constants to be solved. State when to use it: when the denominator contains two distinct linear factors and one repeated linear factor of power 2. Exam trigger: seeing a factor like (x+3)^2 means include both 1/(x+3) and 1/(x+3)^2. Common misuse: writing only the squared-denominator term and forgetting the lower-power term."
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Start Page 3 with the heading '## 2. Clear fractions'. Explain in 90–130 words that clearing fractions means multiplying both sides by the full common denominator so that every fractional term becomes a polynomial term. Use this exact representative example setup: F(x) = (2x+3)/((x+1)(x+2)) = A/(x+1)+B/(x+2). Tell Agent B to show the idea before solving: the purpose is not to cancel randomly, but to create a polynomial identity true for all x except excluded denominator roots. Include one quick check sentence: 'If a denominator remains after clearing, you did not multiply every term by the full denominator.'"
+    },
+    {
+      "type": "math_block",
+      "latex": "2x+3=A(x+2)+B(x+1)",
+      "explanation_instruction": "Explain that this equation comes from multiplying both sides of \\(\\frac{2x+3}{(x+1)(x+2)}=\\frac{A}{x+1}+\\frac{B}{x+2}\\) by \\((x+1)(x+2)\\). Define A and B as unknown coefficients. Use case: this is the main clearing-fractions step. Exam trigger: once the partial fractions are written, multiply by the entire original denominator. Common misuse: multiplying only the left side or canceling a factor from only one term."
+    },
+    {
+      "type": "interactive_demo",
+      "teaching_role": "concept_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Let students see the three-step workflow in seconds: template, clear denominators, compare coefficients.",
+        "standard": "Use the demo as the representative example for how the algebra changes after multiplying by the common denominator.",
+        "top_score": "Include a toggle that shows the common trap of multiplying by only one factor, then mark the remaining denominator as an error."
+      },
+      "demo_instruction": "Create a React + Canvas or React + SVG interactive demo titled 'Clearing Fractions: What Changes?'. Use the example \\(\\frac{2x+3}{(x+1)(x+2)}=\\frac{A}{x+1}+\\frac{B}{x+2}\\). The demo must have three steps controlled by buttons: Step 1 shows the fraction equation; Step 2 highlights multiplication by the full common denominator \\((x+1)(x+2)\\) on both sides; Step 3 displays \\(2x+3=A(x+2)+B(x+1)\\). Add a coefficient-comparison panel that expands the right side to \\((A+B)x+(2A+B)\\), then shows the system \\(A+B=2\\), \\(2A+B=3\\), and the solution \\(A=1, B=1\\). Include a 'wrong move' toggle that multiplies by only \\((x+1)\\), leaving a denominator in one term; label it 'Not cleared'. Keep the interface clean, white-background, and lecture-note style."
+    },
+    {
+      "type": "math_block",
+      "latex": "F(x)=\\frac{1}{x+1}-\\frac{2}{x+2}+\\frac{2}{x+3}-\\frac{3}{(x+3)^2}",
+      "explanation_instruction": "Start Page 4 with the heading '## 3. Solve the coefficient equations'. Explain that Example B.8 solves four simultaneous equations and obtains \\(k_1=1\\), \\(k_2=-2\\), \\(k_3=2\\), and \\(k_4=-3\\), giving this final expansion. Make clear that the OCR excerpt does not show the original numerator, so Agent B should not reconstruct it. Focus on the method conclusion: after clearing fractions and equating coefficients, the unknown constants are inserted back into the template. Common misuse: stopping after finding the constants without rewriting the final partial fraction expansion."
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Still on Page 4, add a short exam-focused note of 80–120 words titled 'Exam pattern to recognize'. Use bullets. Include: 1) proper rational function means numerator degree is lower than denominator degree before partial fractions; 2) write one unknown coefficient for each required denominator term; 3) multiply by the full denominator; 4) expand and collect powers of x; 5) equate coefficients of like powers; 6) solve the resulting simultaneous linear equations. End with one warning sentence: 'The most common error is using the right idea but the wrong template, especially with repeated factors.'"
+    },
+    {
+      "type": "section_summary",
+      "instruction": "Render the recap page titled '📌 Key Takeaways'. Summarize the section in 4 concise bullets, each ≤24 words. The summary must explicitly include these formulas: \\(F(x)=\\frac{k_1}{x+1}+\\frac{k_2}{x+2}+\\frac{k_3}{x+3}+\\frac{k_4}{(x+3)^2}\\), \\(2x+3=A(x+2)+B(x+1)\\), and \\(F(x)=\\frac{1}{x+1}-\\frac{2}{x+2}+\\frac{2}{x+3}-\\frac{3}{(x+3)^2}\\). Also include the method phrase 'clear fractions, then equate coefficients.' End with one bridge sentence: 'Next, the cover-up method will reduce the amount of algebra for distinct linear factors.'"
+    },
+    {
+      "type": "quiz_plan",
+      "target_questions": 6,
+      "question_range": {
+        "min": 5,
+        "max": 7
+      },
+      "knowledge_points": [
+        {
+          "id": "partial_fraction_template",
+          "label": "Choosing the correct partial fraction template",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp1_q1",
+              "type": "multiple_choice",
+              "stem": "Which template matches a denominator with factors \\((x+1)(x+2)(x+3)^2\\)?",
+              "options": [
+                "A. \\(\\frac{k_1}{x+1}+\\frac{k_2}{x+2}+\\frac{k_3}{(x+3)^2}\\)",
+                "B. \\(\\frac{k_1}{x+1}+\\frac{k_2}{x+2}+\\frac{k_3}{x+3}+\\frac{k_4}{(x+3)^2}\\)",
+                "C. \\(\\frac{k_1}{(x+1)(x+2)}+\\frac{k_2}{(x+3)^2}\\)",
+                "D. \\(\\frac{k_1}{x+1}+\\frac{k_2}{x+2}+\\frac{k_3x}{(x+3)^2}\\)"
+              ],
+              "correct_option": "B",
+              "explanation": "A repeated linear factor \\((x+3)^2\\) requires both \\(\\frac{k_3}{x+3}\\) and \\(\\frac{k_4}{(x+3)^2}\\).",
+              "wrong_option_explanations": {
+                "A": "It forgets the lower-power term \\(\\frac{k_3}{x+3}\\).",
+                "C": "It groups factors instead of decomposing into simple partial fractions.",
+                "D": "A linear numerator is not needed over a repeated linear factor; constants are used."
+              },
+              "hint": "For \\((x-a)^2\\), include powers 1 and 2.",
+              "needs_visual": false,
+              "same_point_variant": true
+            },
+            {
+              "id": "kp1_q2",
+              "type": "multiple_choice",
+              "stem": "A student writes only \\(\\frac{k}{(x+3)^2}\\) for the repeated factor \\((x+3)^2\\). What is wrong?",
+              "options": [
+                "A. The coefficient should be \\(kx\\), not \\(k\\).",
+                "B. The term \\(\\frac{1}{x+3}\\) is missing.",
+                "C. Repeated factors cannot be used in partial fractions.",
+                "D. The factor should be written as \\((x-3)^2\\)."
+              ],
+              "correct_option": "B",
+              "explanation": "A repeated linear factor of power 2 needs two denominator powers: \\(x+3\\) and \\((x+3)^2\\).",
+              "wrong_option_explanations": {
+                "A": "Linear numerators are for irreducible quadratic factors, not repeated linear factors.",
+                "C": "Repeated factors are allowed; they just require multiple terms.",
+                "D": "Changing \\(x+3\\) to \\(x-3\\) changes the denominator."
+              },
+              "hint": "List every power up to the repeated power.",
+              "needs_visual": false,
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "clearing_fractions_step",
+          "label": "Clearing denominators correctly",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp2_q1",
+              "type": "multiple_choice",
+              "stem": "Starting from \\(\\frac{2x+3}{(x+1)(x+2)}=\\frac{A}{x+1}+\\frac{B}{x+2}\\), what is the correct equation after clearing fractions?",
+              "options": [
+                "A. \\(2x+3=A+B\\)",
+                "B. \\(2x+3=A(x+2)+B(x+1)\\)",
+                "C. \\((2x+3)(x+1)(x+2)=A+B\\)",
+                "D. \\(2x+3=A(x+1)+B(x+2)\\)"
+              ],
+              "correct_option": "B",
+              "explanation": "Multiplying by \\((x+1)(x+2)\\) cancels \\(x+1\\) under A and \\(x+2\\) under B, leaving the opposite factors.",
+              "wrong_option_explanations": {
+                "A": "This loses the remaining factors after cancellation.",
+                "C": "The left side already has the full denominator, so it becomes \\(2x+3\\), not a product.",
+                "D": "The remaining factors are swapped incorrectly."
+              },
+              "hint": "Each term keeps the factor it did not already have in its denominator.",
+              "needs_visual": true,
+              "visual_type": "demo_observation_check",
+              "same_point_variant": true
+            },
+            {
+              "id": "kp2_q2",
+              "type": "multiple_choice",
+              "stem": "In the clearing-fractions demo, the 'wrong move' multiplies by only \\((x+1)\\). Why is it marked 'Not cleared'?",
+              "options": [
+                "A. Because multiplying by \\((x+1)\\) changes the value of x.",
+                "B. Because one term still contains a denominator.",
+                "C. Because partial fractions cannot be multiplied.",
+                "D. Because the left side must always become zero."
+              ],
+              "correct_option": "B",
+              "explanation": "To clear fractions, every denominator must disappear. Multiplying by only one factor leaves at least one fractional term.",
+              "wrong_option_explanations": {
+                "A": "Multiplying an equation does not change x; it changes the equation form.",
+                "C": "Multiplication is exactly the intended clearing step.",
+                "D": "The left side becomes a polynomial numerator, not necessarily zero."
+              },
+              "hint": "Ask whether any denominator remains.",
+              "needs_visual": true,
+              "visual_type": "demo_observation_check",
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "equating_coefficients",
+          "label": "Equating coefficients of like powers",
+          "importance": "high",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp3_q1",
+              "type": "multiple_choice",
+              "stem": "After clearing fractions, suppose \\(2x+3=A(x+2)+B(x+1)\\). Expanding gives \\(2x+3=(A+B)x+(2A+B)\\). Which coefficient equations are correct?",
+              "options": [
+                "A. \\(A+B=3\\), \\(2A+B=2\\)",
+                "B. \\(A+B=2\\), \\(2A+B=3\\)",
+                "C. \\(A+B=2x\\), \\(2A+B=3\\)",
+                "D. \\(A=2\\), \\(B=3\\)"
+              ],
+              "correct_option": "B",
+              "explanation": "Match the coefficient of \\(x\\): \\(A+B=2\\). Match the constant term: \\(2A+B=3\\).",
+              "wrong_option_explanations": {
+                "A": "It swaps the coefficient of \\(x\\) and the constant term.",
+                "C": "Coefficients are numbers or expressions in A and B, not terms containing x.",
+                "D": "You cannot assign A and B directly from the left-side coefficients."
+              },
+              "hint": "Compare x-coefficient with x-coefficient, constant with constant.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "method_conclusion",
+          "label": "Writing the final expansion",
+          "importance": "medium",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp4_q1",
+              "type": "short_answer",
+              "stem": "Example B.8 gives \\(k_1=1\\), \\(k_2=-2\\), \\(k_3=2\\), and \\(k_4=-3\\). Write the final partial fraction expansion using the template \\(F(x)=\\frac{k_1}{x+1}+\\frac{k_2}{x+2}+\\frac{k_3}{x+3}+\\frac{k_4}{(x+3)^2}\\).",
+              "ideal_answer": "\\(F(x)=\\frac{1}{x+1}-\\frac{2}{x+2}+\\frac{2}{x+3}-\\frac{3}{(x+3)^2}\\).",
+              "grading_rubric": [
+                "Must substitute all four constants into the correct denominators.",
+                "Must keep the negative signs on \\(-2\\) and \\(-3\\).",
+                "Must include both \\(x+3\\) and \\((x+3)^2\\) terms."
+              ],
+              "explanation": "The constants are not the final answer until they are placed back into the partial-fraction template.",
+              "hint": "Replace each \\(k_i\\) in the template one at a time.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```

@@ -1,0 +1,568 @@
+# Agent A Preview: B.6-1 B.6-1 Taylor Series
+
+- Difficulty: beginner
+- Estimated read minutes: 5
+
+## Learning Objectives
+
+- Read matrix entry notation using row and column indices.
+- Identify the order of a matrix from notation such as \(m \times n\).
+- Understand the transpose operation and how it swaps rows with columns.
+- Use the identity \((A^T)^T = A\) correctly.
+
+## Visualization Need
+
+```json
+{
+  "level": "static",
+  "reason": [
+    "pattern_recognition_benefits_from_figure",
+    "classification_benefits_from_figure",
+    "wikipedia_has_standard_reference_visual",
+    "wrong_vs_right_contrast_is_high_value"
+  ],
+  "recommended_assets": [
+    "wiki_figure",
+    "latex_native_formula"
+  ]
+}
+```
+
+## Visual Plan
+
+```json
+{
+  "primary_anchor": "wiki_reference",
+  "rationale": "The OCR-supported content is symbolic matrix notation, so the main teaching surface should be clean LaTeX formulas and matrix examples. Because visualization is required and row-column indexing is easier to recognize visually, use a Wikipedia/Wikimedia-style matrix diagram as the static support. No textbook figures are available.",
+  "cram": "Use visuals to make row-first, column-second indexing recognizable immediately.",
+  "standard": "Use visuals beside one representative matrix example to connect notation with entries.",
+  "top_score": "Use visuals to expose common traps: reversing row and column indices, and forgetting that transpose changes matrix order."
+}
+```
+
+## Planned Blocks
+
+### Block 1: `text_explanation`
+- **instruction**: Render Page 1 as a minimal overview only. Use exactly two short sections: 'Section Objective' and 'Concepts In This Section'. Under Section Objective, write one sentence: 'Learn how to read matrix entry notation and how transpose swaps rows with columns.' Under Concepts In This Section, list only these concept names as bullets: 'matrix entry notation', 'matrix order', 'transpose', 'double transpose'. Do not mention Taylor series on the student-facing page unless the system requires a source note elsewhere.
+
+### Block 2: `math_block`
+- **latex**: A = (a_{ij})_{m \times n}
+- **explanation_instruction**: Start Page 2 with the heading '## 1. Matrix entry notation'. Explain in 90-130 words that \(A\) is an \(m \times n\) matrix, \(a_{ij}\) means the entry in row \(i\), column \(j\), and the first index always means row while the second index always means column. Include one minimal concrete example: in a \(2 \times 3\) matrix, \(a_{23}\) is in row 2, column 3. State when to use this notation: whenever a problem describes matrix entries by position instead of writing the whole matrix. Exam trigger: phrases like 'the \((i,j)\) entry' or 'element \(a_{ij}\)'. Common misuse: reading \(a_{23}\) as column 2, row 3.
+
+### Block 3: `web_search_image`
+- **search_query**: Wikimedia Commons matrix notation row column indices a_ij
+- **purpose**: Show a clean visual where one matrix entry is highlighted by its row index and column index.
+- **preferred_sources**:
+```json
+[
+  "wikimedia_commons",
+  "wikipedia"
+]
+```
+- **prefer_animated**:
+```json
+false
+```
+- **fallback**: render_latex_native_matrix_example_do_not_generate_image
+- **teaching_role**: concept_anchor
+- **mode_specific_visual_use**:
+```json
+{
+  "cram": "Have students memorize the visual rule: first index points to the row, second index points to the column.",
+  "standard": "Use the image beside the \\(a_{23}\\) example so students connect notation to position.",
+  "top_score": "Ask students to identify why reversing row and column gives a different entry."
+}
+```
+
+### Block 4: `math_block`
+- **latex**: A^T = (a_{ji})_{n \times m}
+- **explanation_instruction**: Start Page 3 with the heading '## 2. Transpose'. Explain in 90-140 words that the transpose \(A^T\) is formed by swapping rows and columns of \(A\). If \(A\) has order \(m \times n\), then \(A^T\) has order \(n \times m\). Explain the symbols: \(a_{ij}\) is an entry of \(A\), while \(a_{ji}\) shows that row and column positions are exchanged in the transpose. Include one representative example using a \(2 \times 3\) matrix becoming a \(3 \times 2\) matrix. Exam trigger: 'find \(A^T\)', 'transpose the matrix', or 'write columns as rows'. Common misuse: changing entry values instead of only changing their positions.
+
+### Block 5: `web_search_image`
+- **search_query**: Wikimedia Commons matrix transpose rows become columns
+- **purpose**: Show a standard static visual of matrix transpose where rows become columns.
+- **preferred_sources**:
+```json
+[
+  "wikimedia_commons",
+  "wikipedia"
+]
+```
+- **prefer_animated**:
+```json
+false
+```
+- **fallback**: render_latex_native_transpose_example_do_not_generate_image
+- **teaching_role**: example_support
+- **mode_specific_visual_use**:
+```json
+{
+  "cram": "Use the visual as the fast exam cue: rows turn into columns.",
+  "standard": "Use the visual to support the worked \\(2 \\times 3\\) to \\(3 \\times 2\\) example.",
+  "top_score": "Use the visual to check both entry placement and order change."
+}
+```
+
+### Block 6: `math_block`
+- **latex**: (A^T)^T = A
+- **explanation_instruction**: Start Page 4 with the heading '## 3. Double transpose'. Explain in 80-120 words that transposing once swaps rows and columns, and transposing a second time swaps them back. Explain each symbol: \(A\) is the original matrix, \(A^T\) is its transpose, and \((A^T)^T\) means transpose the transpose. Use case: simplify expressions involving repeated transpose operations. Exam trigger: a problem contains nested transpose notation. Common misuse: thinking each transpose changes the numerical entries; it only changes positions, so doing it twice returns the original matrix. Include one quick check sentence asking the student what order \((A^T)^T\) has if \(A\) is \(4 \times 2\).
+
+### Block 7: `section_summary`
+- **instruction**: Create the recap page with the heading '📌 Key Takeaways'. Include exactly 4 bullets, each no more than 22 words. The bullets must explicitly include these formulas: \(A=(a_{ij})_{m\times n}\), \(A^T=(a_{ji})_{n\times m}\), and \((A^T)^T=A\). Also include one bullet stating the row-first, column-second rule. End with one bridge sentence: 'Next, use these notation rules to understand basic matrix operations.'
+
+### Block 8: `quiz_plan`
+- **target_questions**:
+```json
+6
+```
+- **question_range**:
+```json
+{
+  "min": 5,
+  "max": 7
+}
+```
+- **knowledge_points**:
+```json
+[
+  {
+    "id": "matrix_entry_notation",
+    "label": "Matrix entry notation",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "kp1_q1",
+        "type": "multiple_choice",
+        "stem": "In the notation \\(a_{ij}\\), what does the index \\(j\\) represent?",
+        "options": [
+          "A. The row number",
+          "B. The column number",
+          "C. The total number of rows",
+          "D. The value of the entry"
+        ],
+        "correct_option": "B",
+        "explanation": "In \\(a_{ij}\\), the first index \\(i\\) gives the row and the second index \\(j\\) gives the column.",
+        "wrong_option_explanations": {
+          "A": "The row number is represented by \\(i\\), not \\(j\\).",
+          "C": "The total number of rows is usually represented by \\(m\\) in an \\(m \\times n\\) matrix.",
+          "D": "The value of the entry is \\(a_{ij}\\) itself, not the index \\(j\\)."
+        },
+        "hint": "Read matrix entries as row first, column second.",
+        "needs_visual": false,
+        "same_point_variant": true
+      },
+      {
+        "id": "kp1_q2",
+        "type": "multiple_choice",
+        "stem": "A student says \\(a_{23}\\) means 'column 2, row 3'. Why is this wrong?",
+        "options": [
+          "A. Because \\(a_{23}\\) means row 2, column 3",
+          "B. Because \\(a_{23}\\) means row 3, column 2",
+          "C. Because \\(a_{23}\\) only exists in square matrices",
+          "D. Because matrix entries cannot use two indices"
+        ],
+        "correct_option": "A",
+        "explanation": "\\(a_{23}\\) uses the first index for row and the second index for column, so it means row 2, column 3.",
+        "wrong_option_explanations": {
+          "B": "That reverses the row-column order.",
+          "C": "\\(a_{23}\\) can exist in any matrix with at least 2 rows and 3 columns.",
+          "D": "Matrix entries are commonly labeled with two indices."
+        },
+        "hint": "The first number tells you which row to move to.",
+        "needs_visual": true,
+        "visual_type": "visual_pattern_recognition_check",
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "matrix_order",
+    "label": "Matrix order",
+    "importance": "medium",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp2_q1",
+        "type": "multiple_choice",
+        "stem": "If \\(A=(a_{ij})_{4\\times 7}\\), how many rows and columns does \\(A\\) have?",
+        "options": [
+          "A. 4 rows and 7 columns",
+          "B. 7 rows and 4 columns",
+          "C. 4 columns and 7 entries",
+          "D. 28 rows and 1 column"
+        ],
+        "correct_option": "A",
+        "explanation": "The order \\(4\\times 7\\) means 4 rows and 7 columns.",
+        "wrong_option_explanations": {
+          "B": "This reverses the order.",
+          "C": "The first number counts rows, not columns.",
+          "D": "The product 28 gives the total number of entries, not the number of rows."
+        },
+        "hint": "Matrix order is rows by columns.",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  },
+  {
+    "id": "transpose_operation",
+    "label": "Transpose operation",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "kp3_q1",
+        "type": "multiple_choice",
+        "stem": "If \\(A\\) is a \\(2\\times 5\\) matrix, what is the order of \\(A^T\\)?",
+        "options": [
+          "A. \\(2\\times 5\\)",
+          "B. \\(5\\times 2\\)",
+          "C. \\(2\\times 2\\)",
+          "D. \\(5\\times 5\\)"
+        ],
+        "correct_option": "B",
+        "explanation": "Transpose swaps rows and columns, so a \\(2\\times 5\\) matrix becomes a \\(5\\times 2\\) matrix.",
+        "wrong_option_explanations": {
+          "A": "That would leave the order unchanged, but transpose swaps the dimensions.",
+          "C": "Transpose does not make the matrix square.",
+          "D": "Transpose does not duplicate the number of columns."
+        },
+        "hint": "Swap the two numbers in the matrix order.",
+        "needs_visual": false,
+        "same_point_variant": true
+      },
+      {
+        "id": "kp3_q2",
+        "type": "multiple_choice",
+        "stem": "Which statement best describes \\(A^T=(a_{ji})_{n\\times m}\\)?",
+        "options": [
+          "A. The entries are squared",
+          "B. Rows and columns are exchanged",
+          "C. Every entry changes sign",
+          "D. Only diagonal entries remain"
+        ],
+        "correct_option": "B",
+        "explanation": "The notation \\(a_{ji}\\) shows that the row and column positions are swapped.",
+        "wrong_option_explanations": {
+          "A": "Transpose changes positions, not powers.",
+          "C": "Changing signs is not part of the transpose operation.",
+          "D": "Keeping only diagonal entries describes a different operation, not transpose."
+        },
+        "hint": "Look at how \\(ij\\) becomes \\(ji\\).",
+        "needs_visual": true,
+        "visual_type": "structure_comparison_check",
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "double_transpose",
+    "label": "Double transpose",
+    "importance": "medium",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp4_q1",
+        "type": "short_answer",
+        "stem": "Explain why \\((A^T)^T=A\\) in one or two sentences.",
+        "ideal_answer": "The first transpose swaps the rows and columns of \\(A\\). The second transpose swaps them back, so the original matrix \\(A\\) is recovered.",
+        "grading_rubric": [
+          "Must state that transpose swaps rows and columns",
+          "Must state that doing the swap twice returns to the original matrix",
+          "Must not claim that transpose changes the numerical values of entries"
+        ],
+        "explanation": "This checks whether the student understands the operation rather than only memorizing the formula.",
+        "hint": "Think of transpose as a position swap, then apply the same swap again.",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  }
+]
+```
+
+## Raw JSON
+
+```json
+{
+  "section_id": "B.6-1",
+  "section_title": "B.6-1 Taylor Series",
+  "source_alignment_note": "The provided OCR pages do not contain Taylor series content. They contain matrix notation and transpose content from a vectors and matrices section. This blueprint avoids inventing Taylor series material and plans only the OCR-supported matrix content.",
+  "difficulty": "beginner",
+  "estimated_read_minutes": 5,
+  "learning_objectives": [
+    "Read matrix entry notation using row and column indices.",
+    "Identify the order of a matrix from notation such as \\(m \\times n\\).",
+    "Understand the transpose operation and how it swaps rows with columns.",
+    "Use the identity \\((A^T)^T = A\\) correctly."
+  ],
+  "visualization_need": {
+    "level": "static",
+    "reason": [
+      "pattern_recognition_benefits_from_figure",
+      "classification_benefits_from_figure",
+      "wikipedia_has_standard_reference_visual",
+      "wrong_vs_right_contrast_is_high_value"
+    ],
+    "recommended_assets": [
+      "wiki_figure",
+      "latex_native_formula"
+    ]
+  },
+  "visual_plan": {
+    "primary_anchor": "wiki_reference",
+    "rationale": "The OCR-supported content is symbolic matrix notation, so the main teaching surface should be clean LaTeX formulas and matrix examples. Because visualization is required and row-column indexing is easier to recognize visually, use a Wikipedia/Wikimedia-style matrix diagram as the static support. No textbook figures are available.",
+    "cram": "Use visuals to make row-first, column-second indexing recognizable immediately.",
+    "standard": "Use visuals beside one representative matrix example to connect notation with entries.",
+    "top_score": "Use visuals to expose common traps: reversing row and column indices, and forgetting that transpose changes matrix order."
+  },
+  "blocks": [
+    {
+      "type": "text_explanation",
+      "instruction": "Render Page 1 as a minimal overview only. Use exactly two short sections: 'Section Objective' and 'Concepts In This Section'. Under Section Objective, write one sentence: 'Learn how to read matrix entry notation and how transpose swaps rows with columns.' Under Concepts In This Section, list only these concept names as bullets: 'matrix entry notation', 'matrix order', 'transpose', 'double transpose'. Do not mention Taylor series on the student-facing page unless the system requires a source note elsewhere."
+    },
+    {
+      "type": "math_block",
+      "latex": "A = (a_{ij})_{m \\times n}",
+      "explanation_instruction": "Start Page 2 with the heading '## 1. Matrix entry notation'. Explain in 90-130 words that \\(A\\) is an \\(m \\times n\\) matrix, \\(a_{ij}\\) means the entry in row \\(i\\), column \\(j\\), and the first index always means row while the second index always means column. Include one minimal concrete example: in a \\(2 \\times 3\\) matrix, \\(a_{23}\\) is in row 2, column 3. State when to use this notation: whenever a problem describes matrix entries by position instead of writing the whole matrix. Exam trigger: phrases like 'the \\((i,j)\\) entry' or 'element \\(a_{ij}\\)'. Common misuse: reading \\(a_{23}\\) as column 2, row 3."
+    },
+    {
+      "type": "web_search_image",
+      "search_query": "Wikimedia Commons matrix notation row column indices a_ij",
+      "purpose": "Show a clean visual where one matrix entry is highlighted by its row index and column index.",
+      "preferred_sources": [
+        "wikimedia_commons",
+        "wikipedia"
+      ],
+      "prefer_animated": false,
+      "fallback": "render_latex_native_matrix_example_do_not_generate_image",
+      "teaching_role": "concept_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Have students memorize the visual rule: first index points to the row, second index points to the column.",
+        "standard": "Use the image beside the \\(a_{23}\\) example so students connect notation to position.",
+        "top_score": "Ask students to identify why reversing row and column gives a different entry."
+      }
+    },
+    {
+      "type": "math_block",
+      "latex": "A^T = (a_{ji})_{n \\times m}",
+      "explanation_instruction": "Start Page 3 with the heading '## 2. Transpose'. Explain in 90-140 words that the transpose \\(A^T\\) is formed by swapping rows and columns of \\(A\\). If \\(A\\) has order \\(m \\times n\\), then \\(A^T\\) has order \\(n \\times m\\). Explain the symbols: \\(a_{ij}\\) is an entry of \\(A\\), while \\(a_{ji}\\) shows that row and column positions are exchanged in the transpose. Include one representative example using a \\(2 \\times 3\\) matrix becoming a \\(3 \\times 2\\) matrix. Exam trigger: 'find \\(A^T\\)', 'transpose the matrix', or 'write columns as rows'. Common misuse: changing entry values instead of only changing their positions."
+    },
+    {
+      "type": "web_search_image",
+      "search_query": "Wikimedia Commons matrix transpose rows become columns",
+      "purpose": "Show a standard static visual of matrix transpose where rows become columns.",
+      "preferred_sources": [
+        "wikimedia_commons",
+        "wikipedia"
+      ],
+      "prefer_animated": false,
+      "fallback": "render_latex_native_transpose_example_do_not_generate_image",
+      "teaching_role": "example_support",
+      "mode_specific_visual_use": {
+        "cram": "Use the visual as the fast exam cue: rows turn into columns.",
+        "standard": "Use the visual to support the worked \\(2 \\times 3\\) to \\(3 \\times 2\\) example.",
+        "top_score": "Use the visual to check both entry placement and order change."
+      }
+    },
+    {
+      "type": "math_block",
+      "latex": "(A^T)^T = A",
+      "explanation_instruction": "Start Page 4 with the heading '## 3. Double transpose'. Explain in 80-120 words that transposing once swaps rows and columns, and transposing a second time swaps them back. Explain each symbol: \\(A\\) is the original matrix, \\(A^T\\) is its transpose, and \\((A^T)^T\\) means transpose the transpose. Use case: simplify expressions involving repeated transpose operations. Exam trigger: a problem contains nested transpose notation. Common misuse: thinking each transpose changes the numerical entries; it only changes positions, so doing it twice returns the original matrix. Include one quick check sentence asking the student what order \\((A^T)^T\\) has if \\(A\\) is \\(4 \\times 2\\)."
+    },
+    {
+      "type": "section_summary",
+      "instruction": "Create the recap page with the heading '📌 Key Takeaways'. Include exactly 4 bullets, each no more than 22 words. The bullets must explicitly include these formulas: \\(A=(a_{ij})_{m\\times n}\\), \\(A^T=(a_{ji})_{n\\times m}\\), and \\((A^T)^T=A\\). Also include one bullet stating the row-first, column-second rule. End with one bridge sentence: 'Next, use these notation rules to understand basic matrix operations.'"
+    },
+    {
+      "type": "quiz_plan",
+      "target_questions": 6,
+      "question_range": {
+        "min": 5,
+        "max": 7
+      },
+      "knowledge_points": [
+        {
+          "id": "matrix_entry_notation",
+          "label": "Matrix entry notation",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp1_q1",
+              "type": "multiple_choice",
+              "stem": "In the notation \\(a_{ij}\\), what does the index \\(j\\) represent?",
+              "options": [
+                "A. The row number",
+                "B. The column number",
+                "C. The total number of rows",
+                "D. The value of the entry"
+              ],
+              "correct_option": "B",
+              "explanation": "In \\(a_{ij}\\), the first index \\(i\\) gives the row and the second index \\(j\\) gives the column.",
+              "wrong_option_explanations": {
+                "A": "The row number is represented by \\(i\\), not \\(j\\).",
+                "C": "The total number of rows is usually represented by \\(m\\) in an \\(m \\times n\\) matrix.",
+                "D": "The value of the entry is \\(a_{ij}\\) itself, not the index \\(j\\)."
+              },
+              "hint": "Read matrix entries as row first, column second.",
+              "needs_visual": false,
+              "same_point_variant": true
+            },
+            {
+              "id": "kp1_q2",
+              "type": "multiple_choice",
+              "stem": "A student says \\(a_{23}\\) means 'column 2, row 3'. Why is this wrong?",
+              "options": [
+                "A. Because \\(a_{23}\\) means row 2, column 3",
+                "B. Because \\(a_{23}\\) means row 3, column 2",
+                "C. Because \\(a_{23}\\) only exists in square matrices",
+                "D. Because matrix entries cannot use two indices"
+              ],
+              "correct_option": "A",
+              "explanation": "\\(a_{23}\\) uses the first index for row and the second index for column, so it means row 2, column 3.",
+              "wrong_option_explanations": {
+                "B": "That reverses the row-column order.",
+                "C": "\\(a_{23}\\) can exist in any matrix with at least 2 rows and 3 columns.",
+                "D": "Matrix entries are commonly labeled with two indices."
+              },
+              "hint": "The first number tells you which row to move to.",
+              "needs_visual": true,
+              "visual_type": "visual_pattern_recognition_check",
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "matrix_order",
+          "label": "Matrix order",
+          "importance": "medium",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp2_q1",
+              "type": "multiple_choice",
+              "stem": "If \\(A=(a_{ij})_{4\\times 7}\\), how many rows and columns does \\(A\\) have?",
+              "options": [
+                "A. 4 rows and 7 columns",
+                "B. 7 rows and 4 columns",
+                "C. 4 columns and 7 entries",
+                "D. 28 rows and 1 column"
+              ],
+              "correct_option": "A",
+              "explanation": "The order \\(4\\times 7\\) means 4 rows and 7 columns.",
+              "wrong_option_explanations": {
+                "B": "This reverses the order.",
+                "C": "The first number counts rows, not columns.",
+                "D": "The product 28 gives the total number of entries, not the number of rows."
+              },
+              "hint": "Matrix order is rows by columns.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "transpose_operation",
+          "label": "Transpose operation",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp3_q1",
+              "type": "multiple_choice",
+              "stem": "If \\(A\\) is a \\(2\\times 5\\) matrix, what is the order of \\(A^T\\)?",
+              "options": [
+                "A. \\(2\\times 5\\)",
+                "B. \\(5\\times 2\\)",
+                "C. \\(2\\times 2\\)",
+                "D. \\(5\\times 5\\)"
+              ],
+              "correct_option": "B",
+              "explanation": "Transpose swaps rows and columns, so a \\(2\\times 5\\) matrix becomes a \\(5\\times 2\\) matrix.",
+              "wrong_option_explanations": {
+                "A": "That would leave the order unchanged, but transpose swaps the dimensions.",
+                "C": "Transpose does not make the matrix square.",
+                "D": "Transpose does not duplicate the number of columns."
+              },
+              "hint": "Swap the two numbers in the matrix order.",
+              "needs_visual": false,
+              "same_point_variant": true
+            },
+            {
+              "id": "kp3_q2",
+              "type": "multiple_choice",
+              "stem": "Which statement best describes \\(A^T=(a_{ji})_{n\\times m}\\)?",
+              "options": [
+                "A. The entries are squared",
+                "B. Rows and columns are exchanged",
+                "C. Every entry changes sign",
+                "D. Only diagonal entries remain"
+              ],
+              "correct_option": "B",
+              "explanation": "The notation \\(a_{ji}\\) shows that the row and column positions are swapped.",
+              "wrong_option_explanations": {
+                "A": "Transpose changes positions, not powers.",
+                "C": "Changing signs is not part of the transpose operation.",
+                "D": "Keeping only diagonal entries describes a different operation, not transpose."
+              },
+              "hint": "Look at how \\(ij\\) becomes \\(ji\\).",
+              "needs_visual": true,
+              "visual_type": "structure_comparison_check",
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "double_transpose",
+          "label": "Double transpose",
+          "importance": "medium",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp4_q1",
+              "type": "short_answer",
+              "stem": "Explain why \\((A^T)^T=A\\) in one or two sentences.",
+              "ideal_answer": "The first transpose swaps the rows and columns of \\(A\\). The second transpose swaps them back, so the original matrix \\(A\\) is recovered.",
+              "grading_rubric": [
+                "Must state that transpose swaps rows and columns",
+                "Must state that doing the swap twice returns to the original matrix",
+                "Must not claim that transpose changes the numerical values of entries"
+              ],
+              "explanation": "This checks whether the student understands the operation rather than only memorizing the formula.",
+              "hint": "Think of transpose as a position swap, then apply the same swap again.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```

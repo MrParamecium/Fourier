@@ -1,0 +1,252 @@
+{
+  "section_id": "B.8",
+  "section_title": "B.8 Greek Alphabet",
+  "difficulty": "beginner",
+  "estimated_read_minutes": 4,
+  "learning_objectives": [
+    "Recognize the most common Greek letters used in engineering mathematics.",
+    "Distinguish uppercase and lowercase Greek symbols when they carry different meanings.",
+    "Use context to interpret Greek symbols in formulas instead of assuming one fixed meaning.",
+    "Avoid common look-alike symbol mistakes in signals and systems notation."
+  ],
+  "visualization_need": {
+    "level": "static",
+    "reason": [
+      "pattern_recognition_benefits_from_figure",
+      "wikipedia_has_standard_reference_visual",
+      "misconception_needs_visual_correction"
+    ],
+    "recommended_assets": [
+      "wiki_figure",
+      "latex_native_symbol_visual"
+    ]
+  },
+  "visual_plan": {
+    "primary_anchor": "wiki_reference",
+    "rationale": "This section is a reference-recognition lesson, not a derivation. A clean Greek alphabet chart from Wikipedia or Wikimedia is the best primary anchor because students need to visually recognize symbol shapes and uppercase/lowercase pairs. LaTeX-native symbol displays should handle exact exam-facing notation and look-alike corrections.",
+    "cram": "Use the chart to memorize high-frequency symbols quickly, then focus on omega, phi, theta, lambda, sigma, delta, and pi.",
+    "standard": "Use the chart for recognition, then connect the most common symbols to one representative signals-and-systems formula.",
+    "top_score": "Use the chart and LaTeX comparisons to catch case sensitivity and look-alike traps such as omega versus w, nu versus v, and uppercase Omega versus lowercase omega."
+  },
+  "blocks": [
+    {
+      "type": "text_explanation",
+      "instruction": "Render the first page as a compact outline only. Use exactly two short sections: 'Section Objective' and 'Concepts In This Section'. Under 'Section Objective', write one sentence: 'Learn to recognize Greek letters commonly used in engineering formulas and avoid symbol-confusion mistakes.' Under 'Concepts In This Section', list only these concept names as bullets with no explanations: Greek alphabet chart, uppercase versus lowercase, common engineering meanings, look-alike traps."
+    },
+    {
+      "type": "web_search_image",
+      "search_query": "Greek alphabet uppercase lowercase chart Wikimedia Commons",
+      "purpose": "Show a clean reference chart of Greek uppercase and lowercase letters so students can visually match symbol shapes to names.",
+      "preferred_sources": [
+        "wikimedia_commons",
+        "wikipedia"
+      ],
+      "prefer_animated": false,
+      "fallback": "none",
+      "teaching_role": "concept_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Use the chart as a rapid recognition sheet for high-frequency symbols.",
+        "standard": "Use the chart to connect symbol names, uppercase forms, and lowercase forms before formulas appear.",
+        "top_score": "Use the chart to inspect subtle shape differences and case-sensitive notation."
+      }
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Start this knowledge page with the heading '## 1. Greek letters are notation symbols'. Explain in 90–130 words that Greek letters are used like compact labels in engineering formulas. Emphasize that a Greek letter does not have one universal meaning; its meaning comes from the local formula and surrounding text. Give one representative example: in one formula, \\(\\theta\\) may mean an angle; in another, \\(\\lambda\\) may mean a decay rate or eigenvalue. End with an exam note: first identify the symbol, then read the formula context."
+    },
+    {
+      "type": "math_block",
+      "latex": "\\alpha,\\ \\beta,\\ \\gamma,\\ \\delta,\\ \\epsilon,\\ \\theta,\\ \\lambda,\\ \\mu,\\ \\pi,\\ \\rho,\\ \\sigma,\\ \\tau,\\ \\phi,\\ \\omega",
+      "explanation_instruction": "Explain that this display shows common lowercase Greek letters. State that each symbol is a label whose meaning depends on the formula. Use case: reading equations in signals, systems, calculus, and differential equations. Exam trigger: when a formula contains unfamiliar non-English letters, decode the symbol name before manipulating the equation. Common misuse: assuming a letter has the same meaning in every problem."
+    },
+    {
+      "type": "math_block",
+      "latex": "\\Gamma,\\ \\Delta,\\ \\Theta,\\ \\Lambda,\\ \\Pi,\\ \\Sigma,\\ \\Phi,\\ \\Omega",
+      "explanation_instruction": "Explain that these are common uppercase Greek letters and that uppercase and lowercase forms can mean different things. Give the example that \\(\\Omega\\) often denotes ohms or a frequency-domain set, while \\(\\omega\\) often denotes angular frequency. Exam trigger: if the case changes, treat it as a different symbol unless the problem explicitly says otherwise. Common misuse: reading \\(\\Omega\\) and \\(\\omega\\) as interchangeable."
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Start a new knowledge page with the heading '## 2. Common Greek letters in signals and systems'. Explain in 80–120 words that this course often uses Greek letters for angles, frequencies, phase, constants, and summations. Keep the focus practical: students do not need to memorize every possible meaning, but they should know the common patterns. Include one representative worked example using a sinusoid: in \\(x(t)=A\\cos(\\omega t+\\phi)\\), \\(\\omega\\) controls angular frequency and \\(\\phi\\) controls phase shift. End with a quick check sentence: 'If you see a cosine or sine with \\(\\omega t+\\phi\\), immediately look for frequency and phase information.'"
+    },
+    {
+      "type": "math_block",
+      "latex": "x(t)=A\\cos(\\omega t+\\phi)",
+      "explanation_instruction": "Explain this as a representative engineering formula, not as a new derivation. Define \\(x(t)\\) as the signal value at time \\(t\\), \\(A\\) as amplitude, \\(\\omega\\) as angular frequency, and \\(\\phi\\) as phase. Use case: recognizing sinusoidal signals. Exam trigger: when a problem asks for frequency, period, or phase from a sinusoid. Common misuse: confusing \\(\\omega\\), the Greek letter omega, with ordinary \\(w\\), or treating \\(\\phi\\) as amplitude."
+    },
+    {
+      "type": "math_block",
+      "latex": "\\omega \\ne w,\\quad \\nu \\ne v,\\quad \\rho \\ne p,\\quad \\Omega \\ne \\omega",
+      "explanation_instruction": "Start a new knowledge page with the heading '## 3. Look-alike traps'. Explain in 90–130 words that many mistakes come from copying a Greek symbol as a similar-looking English letter. Define each comparison verbally: lowercase omega is not w, lowercase nu is not v, lowercase rho is not p, and uppercase Omega is not lowercase omega. Give one minimal example: if a formula uses \\(\\omega\\), rewriting it as \\(w\\) may make later answers inconsistent with the textbook notation. Exam trigger: handwritten formulas, copied notes, and multiple-choice answers that differ only by symbol shape. Common misuse: changing the symbol while preserving the number and assuming nothing changed."
+    },
+    {
+      "type": "section_summary",
+      "instruction": "Create a recap page titled '📌 Key Takeaways'. Include exactly 4 bullets, each ≤22 words. The bullets must explicitly include these core symbolic forms: \\(\\alpha,\\beta,\\gamma,\\delta,\\theta,\\lambda,\\pi,\\sigma,\\phi,\\omega\\); \\(\\Gamma,\\Delta,\\Theta,\\Lambda,\\Pi,\\Sigma,\\Phi,\\Omega\\); \\(x(t)=A\\cos(\\omega t+\\phi)\\); and \\(\\omega\\ne w,\\ \\nu\\ne v,\\ \\rho\\ne p,\\ \\Omega\\ne\\omega\\). End with one bridge sentence: 'Next, use these symbols confidently when reading formulas in signals and systems.'"
+    },
+    {
+      "type": "quiz_plan",
+      "target_questions": 6,
+      "question_range": {
+        "min": 5,
+        "max": 7
+      },
+      "knowledge_points": [
+        {
+          "id": "greek_symbol_recognition",
+          "label": "Recognizing common Greek letters",
+          "importance": "high",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp1_q1",
+              "type": "multiple_choice",
+              "stem": "Which option correctly names the symbol \\(\\omega\\)?",
+              "options": [
+                "A. Lowercase omega",
+                "B. Lowercase sigma",
+                "C. Lowercase phi",
+                "D. Uppercase Omega"
+              ],
+              "correct_option": "A",
+              "explanation": "\\(\\omega\\) is lowercase omega. In signals and systems, it often appears as angular frequency.",
+              "wrong_option_explanations": {
+                "B": "\\(\\sigma\\) is lowercase sigma, not omega.",
+                "C": "\\(\\phi\\) is lowercase phi, often used for phase.",
+                "D": "\\(\\Omega\\) is uppercase Omega; case matters."
+              },
+              "hint": "Look for the rounded lowercase shape, not the horseshoe uppercase shape.",
+              "needs_visual": true,
+              "visual_type": "wiki_reference_chart",
+              "same_point_variant": true
+            },
+            {
+              "id": "kp1_q2",
+              "type": "multiple_choice",
+              "stem": "Which pair correctly matches an uppercase Greek letter with its lowercase form?",
+              "options": [
+                "A. \\(\\Omega\\) and \\(\\omega\\)",
+                "B. \\(\\Sigma\\) and \\(\\phi\\)",
+                "C. \\(\\Delta\\) and \\(\\lambda\\)",
+                "D. \\(\\Phi\\) and \\(\\theta\\)"
+              ],
+              "correct_option": "A",
+              "explanation": "\\(\\Omega\\) is uppercase Omega and \\(\\omega\\) is lowercase omega.",
+              "wrong_option_explanations": {
+                "B": "\\(\\Sigma\\) pairs with \\(\\sigma\\), not \\(\\phi\\).",
+                "C": "\\(\\Delta\\) pairs with \\(\\delta\\), not \\(\\lambda\\).",
+                "D": "\\(\\Phi\\) pairs with \\(\\phi\\), not \\(\\theta\\)."
+              },
+              "hint": "Match by letter name, not by how common the symbol is.",
+              "needs_visual": true,
+              "visual_type": "wiki_reference_chart",
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "context_controls_meaning",
+          "label": "Greek symbols get meaning from context",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp2_q1",
+              "type": "multiple_choice",
+              "stem": "A problem uses \\(\\lambda\\) in one equation as a decay rate and another problem uses \\(\\lambda\\) as an eigenvalue. What is the best conclusion?",
+              "options": [
+                "A. One of the problems must be using the wrong symbol.",
+                "B. \\(\\lambda\\) always means wavelength.",
+                "C. Greek letters get their meaning from the formula context.",
+                "D. \\(\\lambda\\) should be replaced by \\(L\\) to avoid confusion."
+              ],
+              "correct_option": "C",
+              "explanation": "Greek letters are notation symbols. Their meaning is assigned by the formula, topic, or problem statement.",
+              "wrong_option_explanations": {
+                "A": "The same symbol can be reused in different contexts.",
+                "B": "\\(\\lambda\\) can mean wavelength in some contexts, but not always.",
+                "D": "Changing notation without permission can create errors."
+              },
+              "hint": "Ask: where did the problem define the symbol?",
+              "needs_visual": false,
+              "same_point_variant": false
+            },
+            {
+              "id": "kp2_q2",
+              "type": "short_answer",
+              "stem": "A classmate says, '\\(\\theta\\) always means angle, so I do not need to read the rest of the formula.' Explain why that reasoning is unsafe.",
+              "ideal_answer": "\\(\\theta\\) often represents an angle, but Greek symbols do not have universal meanings. The correct meaning must be read from the formula, diagram, or problem statement.",
+              "grading_rubric": [
+                "Must state that \\(\\theta\\) commonly but not always means angle.",
+                "Must explain that context defines the symbol.",
+                "Must warn against skipping the formula or problem statement."
+              ],
+              "explanation": "This checks whether the student understands notation as context-dependent rather than memorizing one fixed meaning.",
+              "hint": "Use the phrase 'often, but not always.'",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "sinusoid_and_lookalike_traps",
+          "label": "Common sinusoid notation and symbol traps",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp3_q1",
+              "type": "multiple_choice",
+              "stem": "In \\(x(t)=A\\cos(\\omega t+\\phi)\\), which statement is correct?",
+              "options": [
+                "A. \\(\\omega\\) usually controls angular frequency and \\(\\phi\\) usually controls phase.",
+                "B. \\(\\omega\\) is amplitude and \\(\\phi\\) is time.",
+                "C. \\(\\phi\\) is always frequency and \\(A\\) is always phase.",
+                "D. \\(\\omega\\) and \\(w\\) are the same symbol."
+              ],
+              "correct_option": "A",
+              "explanation": "In the standard sinusoid form, \\(A\\) is amplitude, \\(\\omega\\) is angular frequency, and \\(\\phi\\) is phase.",
+              "wrong_option_explanations": {
+                "B": "\\(A\\), not \\(\\omega\\), is amplitude; \\(t\\), not \\(\\phi\\), is time.",
+                "C": "\\(\\phi\\) usually represents phase here, not frequency.",
+                "D": "\\(\\omega\\) is Greek omega; \\(w\\) is an English letter."
+              },
+              "hint": "Read the sinusoid as amplitude outside, frequency multiplying time, phase added inside.",
+              "needs_visual": false,
+              "same_point_variant": true
+            },
+            {
+              "id": "kp3_q2",
+              "type": "multiple_choice",
+              "stem": "Which correction best explains the mistake in rewriting \\(\\omega=2\\pi f\\) as \\(w=2\\pi f\\)?",
+              "options": [
+                "A. It is harmless because \\(\\omega\\) and \\(w\\) are identical.",
+                "B. It changes the Greek symbol omega into the English letter w, which can break notation consistency.",
+                "C. It is wrong because \\(2\\pi f\\) must always equal \\(\\Omega\\), not \\(\\omega\\).",
+                "D. It is wrong because Greek symbols cannot appear in equations."
+              ],
+              "correct_option": "B",
+              "explanation": "\\(\\omega\\) and \\(w\\) are different symbols. Even if a teacher informally says 'w', written notation should preserve the Greek omega.",
+              "wrong_option_explanations": {
+                "A": "They look similar in handwriting but are not the same symbol.",
+                "C": "\\(\\Omega\\) is uppercase Omega and is not the standard symbol in this relationship.",
+                "D": "Greek symbols commonly appear in equations."
+              },
+              "hint": "This is a symbol-shape trap, not an algebra trap.",
+              "needs_visual": true,
+              "visual_type": "latex_symbol_comparison",
+              "same_point_variant": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

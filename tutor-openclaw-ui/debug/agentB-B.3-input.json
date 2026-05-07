@@ -1,0 +1,316 @@
+{
+  "blueprint": {
+    "section_id": "B.3",
+    "section_title": "B.3 Sketching Signals",
+    "difficulty": "beginner",
+    "estimated_read_minutes": 7,
+    "learning_objectives": [
+      "Recognize whether an exponential signal is growing or decaying from its sign.",
+      "Use the time constant to sketch decaying exponentials quickly.",
+      "Mark the key values 1, 1/e, and 1/e^2 on an exponential sketch.",
+      "Explain why every one-time-constant interval changes the signal by the same factor."
+    ],
+    "visualization_need": {
+      "level": "interactive",
+      "reason": [
+        "depends_on_parameter_change",
+        "formula_to_phenomenon_gap",
+        "student_should_manipulate_to_understand"
+      ],
+      "recommended_assets": [
+        "react_canvas_demo"
+      ]
+    },
+    "visual_plan": {
+      "primary_anchor": "both",
+      "rationale": "Use the textbook's Fig. B.10 because it is the canonical exam-facing sketch for time constants, then add an interactive exponential sketcher because students understand the role of a faster when they can change it and see the curve compress or stretch.",
+      "cram": "Use visuals to memorize the sketch landmarks: start at 1, hit 0.37 after one time constant, hit 0.135 after two.",
+      "standard": "Use the textbook figure plus one interactive demo to connect the formula T = 1/a with the visible curve shape.",
+      "top_score": "Use visuals to notice that the 37% drop happens over any interval of length 1/a, not only from t = 0."
+    },
+    "blocks": [
+      {
+        "type": "text_explanation",
+        "instruction": "Render the first lesson page as a compact outline only. Use the heading 'Section Objective' followed by one sentence: 'Learn how to sketch exponential signals quickly using growth/decay direction and the time constant.' Then use the heading 'Concepts In This Section' and list only these concept names as bullets: 'monotonic exponential signals', 'decaying versus growing exponentials', 'time constant', 'quick sketch landmarks'. Do not add any expanded introduction, history, or background paragraph."
+      },
+      {
+        "type": "text_explanation",
+        "instruction": "Start a new concept page with the heading '## 1. Recognize monotonic exponentials'. Explain in 90–130 words that a monotonic exponential keeps moving in one direction instead of oscillating. Contrast a decaying exponential with a growing exponential. State clearly that for a positive constant a, e^{-at} falls toward 0 as t increases, while e^{at} rises. Include one representative example: 'e^{-2t} decays faster than e^{-t} because the multiplier 2 makes the exponent become negative more quickly.' End with the exam note: 'The sign in the exponent tells you the direction; the size of a tells you how fast the change happens.'"
+      },
+      {
+        "type": "math_block",
+        "latex": "x(t)=e^{-at},\\qquad a>0",
+        "explanation_instruction": "Explain this as the standard decaying exponential. Define x(t) as the signal value, t as time, and a as the positive decay rate. Say to use it when the waveform starts high and moves toward 0. Exam trigger: a signal that loses a fixed fraction over equal time intervals. Common misuse: treating larger a as a taller starting value; it actually makes the decay faster."
+      },
+      {
+        "type": "math_block",
+        "latex": "x(t)=e^{at},\\qquad a>0",
+        "explanation_instruction": "Explain this as the standard growing exponential. Define a as the positive growth rate. Say to use it when the waveform increases by a constant factor over equal time intervals. Exam trigger: language such as 'grows exponentially' or 'increases by a factor e every fixed interval.' Common misuse: confusing e^{at} with e^{-at}; the missing minus sign changes the sketch direction."
+      },
+      {
+        "type": "book_image",
+        "source_page": "page-021",
+        "fig_id": "Fig. B.10",
+        "teaching_role": "concept_anchor",
+        "mode_specific_visual_use": {
+          "cram": "Focus on the three sketch points: 1, 0.37, and 0.135.",
+          "standard": "Use the figure to connect time constant labels with the curve shape.",
+          "top_score": "Notice that changing a changes the horizontal spacing of the same percentage drops."
+        },
+        "caption_instruction": "One sentence: Fig. B.10 shows how a decaying exponential reaches 1/e after one time constant and 1/e^2 after two time constants.",
+        "description_instruction": "Describe the two plots with horizontal axis t and vertical amplitude. Point out that e^{-at} starts at 1, falls to about 0.37 at t = 1/a, and falls to about 0.135 at t = 2/a. In the e^{-2t} example, emphasize that the same landmarks occur at t = 0.5 and t = 1 because the time constant is 0.5."
+      },
+      {
+        "type": "math_block",
+        "latex": "T=\\frac{1}{a}",
+        "explanation_instruction": "Start a new concept page with the heading '## 2. Use the time constant to sketch quickly'. Explain that T is the time constant of e^{-at}; it is the time needed for the signal to drop to 1/e, about 37% of its previous value. Define T, a, and 1/e. Include the representative example: for x(t)=e^{-2t}, a=2, so T=1/2=0.5; mark x(0)=1, x(0.5)=1/e\\approx0.37, and x(1)=1/e^2\\approx0.135. Common misuse: thinking the signal becomes zero after one time constant; it only becomes smaller."
+      },
+      {
+        "type": "interactive_demo",
+        "demo_id": "exponential_time_constant_sketcher",
+        "teaching_role": "example_support",
+        "mode_specific_visual_use": {
+          "cram": "Drag a to see how the sketch landmarks move, then memorize the landmark pattern.",
+          "standard": "Use the slider to connect a, T = 1/a, and the curve spacing.",
+          "top_score": "Test that every interval of length T gives the same factor drop, even if the interval does not start at zero."
+        },
+        "instruction": "Build a React + Canvas interactive demo on the same page as the time-constant explanation. Show the plot of x(t)=e^{-at}u(t) for t from 0 to 4. Include a slider for a from 0.25 to 4.0 with default a=2. Display T=1/a numerically. Draw vertical dashed markers at t=T and t=2T, and horizontal dashed markers at y=1/e and y=1/e^2. Label the points (T, 0.37) and (2T, 0.135). Include a toggle labeled 'show growing exponential e^{at}' that switches the curve and changes the note to 'growing exponentials increase by a factor e every T seconds.' Keep the visual clean: white background, navy curve, muted teal guide lines, muted red only for a short warning note. Add one observation prompt under the demo: 'When a increases, does the curve become wider or narrower?'"
+      },
+      {
+        "type": "math_block",
+        "latex": "\\frac{e^{-at_2}}{e^{-at_1}}=e^{-a(t_2-t_1)}=\\frac{1}{e}\\quad\\text{when}\\quad t_2-t_1=\\frac{1}{a}",
+        "explanation_instruction": "Start a new concept page with the heading '## 3. Why the same percentage drop repeats'. Explain in 100–140 words that the time constant is not just a first-interval trick. If two times are separated by T=1/a, the ratio of the later value to the earlier value is always 1/e. Define t1 and t2 as any two instants separated by one time constant. Use the quick example: if a curve has value 0.50 at some time, then one time constant later it is about 0.50/e, not 0.50 minus 0.37. End with the exam trap: time constants multiply by 0.37; they do not subtract 0.37."
+      },
+      {
+        "type": "section_summary",
+        "instruction": "Create a recap page titled '📌 Key Takeaways'. Include exactly 4 bullets, each no more than 22 words. The bullets must explicitly include these formulas: x(t)=e^{-at}, x(t)=e^{at}, T=1/a, and e^{-at_2}/e^{-at_1}=1/e when t_2-t_1=1/a. Mention the sketch landmarks 1, 0.37, and 0.135. End with one sentence: 'In the next section, we will use these sketching habits for more complicated signal shapes.'"
+      },
+      {
+        "type": "quiz_plan",
+        "target_questions": 6,
+        "question_range": {
+          "min": 5,
+          "max": 7
+        },
+        "knowledge_points": [
+          {
+            "id": "decay_vs_growth",
+            "label": "Decaying versus growing exponential signals",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 2
+            },
+            "questions": [
+              {
+                "id": "kp1_q1",
+                "type": "multiple_choice",
+                "stem": "For a positive constant a, which signal decays toward 0 as t increases?",
+                "options": [
+                  "A. x(t)=e^{at}",
+                  "B. x(t)=e^{-at}",
+                  "C. x(t)=a e^t",
+                  "D. x(t)=e^{-a}"
+                ],
+                "correct_option": "B",
+                "explanation": "The negative sign in the exponent makes e^{-at} shrink as t increases.",
+                "wrong_option_explanations": {
+                  "A": "e^{at} grows because the exponent becomes larger and positive.",
+                  "C": "a e^t grows with t; a only scales the height.",
+                  "D": "e^{-a} is a constant with respect to t, not a signal that decays over time."
+                },
+                "hint": "Look for whether the exponent becomes more negative as t increases.",
+                "needs_visual": false,
+                "same_point_variant": true
+              },
+              {
+                "id": "kp1_q2",
+                "type": "multiple_choice",
+                "stem": "A student sketches e^{-4t} as a curve that starts at 4 and decays. What is wrong?",
+                "options": [
+                  "A. It should start at 1, not 4.",
+                  "B. It should grow, not decay.",
+                  "C. It should cross zero at t=4.",
+                  "D. It should be negative for t>0."
+                ],
+                "correct_option": "A",
+                "explanation": "At t=0, e^{-4t}=e^0=1. The 4 changes the decay speed, not the starting value.",
+                "wrong_option_explanations": {
+                  "B": "The negative exponent means it decays.",
+                  "C": "An exponential approaches zero but does not cross it.",
+                  "D": "e^{-4t} stays positive for all t."
+                },
+                "hint": "Evaluate the signal at t=0.",
+                "needs_visual": true,
+                "visual_type": "wrong_vs_right_visual_check",
+                "same_point_variant": true
+              }
+            ]
+          },
+          {
+            "id": "time_constant_formula",
+            "label": "Time constant T = 1/a",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 2
+            },
+            "questions": [
+              {
+                "id": "kp2_q1",
+                "type": "multiple_choice",
+                "stem": "For x(t)=e^{-2t}, what is the time constant?",
+                "options": [
+                  "A. 2",
+                  "B. 1",
+                  "C. 0.5",
+                  "D. 0.37"
+                ],
+                "correct_option": "C",
+                "explanation": "For e^{-at}, the time constant is T=1/a. Here a=2, so T=0.5.",
+                "wrong_option_explanations": {
+                  "A": "2 is the decay rate a, not the time constant.",
+                  "B": "1 is the initial value e^0, not T.",
+                  "D": "0.37 is approximately 1/e, the amplitude fraction after one time constant."
+                },
+                "hint": "Use T=1/a.",
+                "needs_visual": false,
+                "same_point_variant": true
+              },
+              {
+                "id": "kp2_q2",
+                "type": "multiple_choice",
+                "stem": "In a plot of e^{-at}, the curve reaches about 0.37 of its current value after what time interval?",
+                "options": [
+                  "A. a seconds",
+                  "B. 1/a seconds",
+                  "C. e seconds",
+                  "D. 1/e seconds"
+                ],
+                "correct_option": "B",
+                "explanation": "One time constant is 1/a seconds, and after that interval the value is multiplied by 1/e≈0.37.",
+                "wrong_option_explanations": {
+                  "A": "a is the rate parameter, not the time interval.",
+                  "C": "e is the factor used in the amplitude ratio, not the time interval.",
+                  "D": "1/e is the amplitude fraction, not the elapsed time."
+                },
+                "hint": "Separate time interval from amplitude fraction.",
+                "needs_visual": true,
+                "visual_type": "book_figure_reference",
+                "same_point_variant": true
+              }
+            ]
+          },
+          {
+            "id": "repeated_percentage_drop",
+            "label": "Repeated factor drop over equal time constants",
+            "importance": "medium",
+            "exam_weight": "medium",
+            "mastery_rule": {
+              "correct_streak_required": 1
+            },
+            "questions": [
+              {
+                "id": "kp3_q1",
+                "type": "multiple_choice",
+                "stem": "If a decaying exponential has value 0.60 at some time, what is its value one time constant later?",
+                "options": [
+                  "A. About 0.60/e",
+                  "B. About 0.60 - 0.37",
+                  "C. Exactly 0",
+                  "D. About 0.60e"
+                ],
+                "correct_option": "A",
+                "explanation": "One time constant later, the value is multiplied by 1/e, regardless of where the interval starts.",
+                "wrong_option_explanations": {
+                  "B": "The drop is multiplicative, not subtractive.",
+                  "C": "A decaying exponential approaches zero but does not become zero after one time constant.",
+                  "D": "Multiplying by e would describe growth, not decay."
+                },
+                "hint": "A time constant changes the value by a factor, not by a fixed amount.",
+                "needs_visual": false,
+                "same_point_variant": false
+              }
+            ]
+          },
+          {
+            "id": "interactive_sketch_observation",
+            "label": "Interpreting the exponential sketcher",
+            "importance": "medium",
+            "exam_weight": "medium",
+            "mastery_rule": {
+              "correct_streak_required": 1
+            },
+            "questions": [
+              {
+                "id": "kp4_q1",
+                "type": "short_answer",
+                "stem": "In the interactive sketcher, you increase a from 1 to 4 for x(t)=e^{-at}. What happens to the curve, and why?",
+                "ideal_answer": "The curve becomes narrower and decays faster because the time constant T=1/a becomes smaller. The 0.37 landmark occurs sooner.",
+                "grading_rubric": [
+                  "Must state that the curve decays faster or becomes horizontally compressed",
+                  "Must connect this to T=1/a decreasing",
+                  "Must mention that the 0.37 point occurs earlier"
+                ],
+                "explanation": "This checks whether the student connects the parameter a to the visible sketch, not just to a memorized formula.",
+                "hint": "Ask what happens to T=1/a when a gets larger.",
+                "needs_visual": true,
+                "visual_type": "interactive_demo_observation",
+                "same_point_variant": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "existing_page_images": {
+    "page-020": "/pages/page-020.png",
+    "page-021": "/pages/page-021.png",
+    "page-022": "/pages/page-022.png"
+  },
+  "available_figures": {
+    "page-021": [
+      {
+        "fig_id": "Fig. B.10",
+        "caption": "Sketching (a) e^{-at}u(t) and (b) e^{-2t}u(t), illustrating the time constant and key amplitude values at 0.37 and 0.135.",
+        "description": "The figure shows two coordinate plots with horizontal axis t and vertical amplitude, sketching the decaying exponentials e^{-at}u(t) and e^{-2t}u(t). In both plots the curve starts at value 1 at t=0 and decreases monotonically toward 0 for t>0, with labeled reference points marking 1/e ≈ 0.37 and 1/e^2 ≈ 0.135. The left plot labels these at t=1/a and t=2/a, while the right plot gives the specific case a=2 with the same amplitudes at t=0.5 and t=1. Students should notice the time constant relationship: after one time constant the exponential falls to about 37% of its initial value, and after two time constants to about 13.5%."
+      }
+    ]
+  },
+  "web_sources": [
+    {
+      "index": 1,
+      "title": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Wikipedia",
+      "snippet": "changed Wikipedia&#039;s domain from wikipedia.com to wikipedia.org. After an early period of exponential growth, the growth rate of the English Wikipedia in terms"
+    },
+    {
+      "index": 2,
+      "title": "Northrop B-2 Spirit",
+      "url": "https://en.wikipedia.org/wiki/Northrop_B-2_Spirit",
+      "snippet": "F-35 or B-2 Stealth Bomber\". nationalinterest.org. Archived from the original on 20 November 2018. Retrieved 21 November 2018. Dawson 1957, p. 3. Rich 1994"
+    },
+    {
+      "index": 3,
+      "title": "Samuel Morse",
+      "url": "https://en.wikipedia.org/wiki/Samuel_Morse",
+      "snippet": "better ways to send signals at a distance using the electromagnetic force. The problem that Morse faced (the deterioration of the signal with distance) and"
+    },
+    {
+      "index": 4,
+      "title": "Seismic array",
+      "url": "https://en.wikipedia.org/wiki/Seismic_array",
+      "snippet": "obtained using special digital signal processing techniques such as beamforming, which suppress noises and thus enhance the signal-to-noise ratio (SNR). The"
+    }
+  ],
+  "output_contract": {
+    "format": "single_json_object",
+    "no_markdown_fences": true,
+    "no_prose": true,
+    "compact_json_preferred": true
+  },
+  "section_specific_rules": null,
+  "summary_hint": null,
+  "exam_priority_guidance": null
+}

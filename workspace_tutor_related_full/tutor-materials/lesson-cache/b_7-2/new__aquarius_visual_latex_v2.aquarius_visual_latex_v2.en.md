@@ -1,0 +1,69 @@
+%%KC_BLOCK%%<div class="kc-visual-plan" data-visual-plan-b64="eyJwcmltYXJ5X2FuY2hvciI6ImdlbmVyYXRlZF9pbWFnZSIsInJhdGlvbmFsZSI6Ik1hdHJpeCBlcXVhbGl0eSBpcyBkZWZpbml0aW9uLWZpcnN0LCBzbyB0aGUgbWFpbiB0ZWFjaGluZyBzdXJmYWNlIHNob3VsZCBiZSBMYVRlWC4gQSBjdXN0b20gc3RhdGljIHdyb25nLXZzLXJpZ2h0IHZpc3VhbCBpcyBzdGlsbCB1c2VmdWwgYmVjYXVzZSBzdHVkZW50cyBvZnRlbiBjb21wYXJlIHZhbHVlcyB3aXRob3V0IGNoZWNraW5nIG1hdHJpeCBzaXplIG9yIG1hdGNoaW5nIHBvc2l0aW9ucy4gTm8gdGV4dGJvb2sgZmlndXJlIGlzIGF2YWlsYWJsZSwgYW5kIGEgV2lraXBlZGlhIGltYWdlIGlzIHVubmVjZXNzYXJ5IGZvciB0aGlzIHN5bWJvbGljIGNvbmNlcHQuIiwiY3JhbSI6IlVzZSB0aGUgdmlzdWFsIHRvIHJlbWVtYmVyIHRoZSBmYXN0IGV4YW0gdHJpZ2dlcjogc2FtZSBzaXplIGZpcnN0LCB0aGVuIHNhbWUgcG9zaXRpb25zLiIsInN0YW5kYXJkIjoiVXNlIHRoZSB2aXN1YWwgYWZ0ZXIgdGhlIGZvcm11bGEgdG8gY29ubmVjdCB0aGUgZGVmaW5pdGlvbiB0byBvbmUgcmVwcmVzZW50YXRpdmUgY29tcGFyaXNvbi4iLCJ0b3Bfc2NvcmUiOiJVc2UgdGhlIHZpc3VhbCB0byBjYXRjaCBzdWJ0bGUgdHJhcHM6IHNhbWUgbnVtYmVycyBpbiBkaWZmZXJlbnQgcG9zaXRpb25zLCBvciBkaWZmZXJlbnQgZGltZW5zaW9ucy4ifQ==" style="display:none;"></div>%%KC_END%%
+# Matrix Equality
+
+> **Section Objective:** Learn how to decide when two matrices are equal and how to use equality to find unknown entries.
+
+## Concepts In This Section
+
+- Same dimensions
+- Entry-by-entry equality
+- Unknown entries from matrix equality
+
+## 1. What Matrix Equality Means
+
+Two matrices are equal **only when** both of the following hold:
+
+1. They have the **same number of rows** and the **same number of columns**.
+2. Every **corresponding entry** is equal — meaning the entry at the same row and same column in each matrix must match.
+
+"Corresponding" is the key word. If the top-right entry of one matrix is 5, the top-right entry of the other must also be 5. It is not enough for the number 5 to appear somewhere in the second matrix — it must appear at the **exact same position**.
+
+## 2. Using equality to solve unknown entries
+
+Here \(\mathbf{A}\) and \(\mathbf{B}\) are matrices of the same size. The symbols \(a_{ij}\) and \(b_{ij}\) denote the entries in row \(i\), column \(j\) of each matrix respectively.
+
+**Use case:** Apply this formula whenever an exam asks whether two matrices are equal, or when a matrix equation contains unknowns.
+
+**Exam trigger:** Check size first — if dimensions differ, stop immediately. Then compare entries at identical row-column positions.
+
+**Common misuse:** Students sometimes check whether the same numbers appear anywhere in both matrices. That is wrong. The numbers must appear at the same \((i,j)\) position in both matrices.
+
+$$\mathbf{A}=\mathbf{B}\quad\Longleftrightarrow\quad a_{ij}=b_{ij}\ \text{for every matching position }(i,j)$$
+
+%%KC_BLOCK%%<div class="kc-visual-meta" data-visual-kind="generate_image" data-teaching-role="trap_exposure" data-visual-use-b64="eyJjcmFtIjoiVXNlIGl0IGFzIGEgb25lLWdsYW5jZSBjaGVja2xpc3Q6IHNhbWUgc2l6ZSwgc2FtZSBwb3NpdGlvbnMuIiwic3RhbmRhcmQiOiJVc2UgaXQgdG8gcmVpbmZvcmNlIHRoZSBkZWZpbml0aW9uIGltbWVkaWF0ZWx5IGFmdGVyIHRoZSBmb3JtdWxhLiIsInRvcF9zY29yZSI6IlVzZSBpdCB0byBjYXRjaCBuZWFyLW1pc3MgY2FzZXMgd2hlcmUgdGhlIHNhbWUgbnVtYmVycyBhcHBlYXIgYnV0IG5vdCBpbiBjb3JyZXNwb25kaW5nIGVudHJpZXMuIn0=" style="display:none;"></div>%%KC_END%%
+*🎨 Notice: the bottom pair contains the same four numbers but they are not in matching positions — so the matrices are NOT equal.*
+![Illustration](/generated/gptimage2-1778181644436-4826.png)
+
+## 2. Using Equality to Solve Unknown Entries
+
+When a matrix equation contains variables, matrix equality turns the single matrix equation into **separate scalar equations** — one for each position.
+
+Match each entry on the left to the entry in the **same position** on the right, then solve each equation independently.
+
+**Example:** In the matrix equation below, the top-right position gives \(x = 7\) directly. The bottom-left position gives \(y - 1 = 3\), so \(y = 4\).
+
+#### Exam Note
+
+Never try to compare whole rows or columns as objects. Always go position by position: row 1 column 1 with row 1 column 1, row 1 column 2 with row 1 column 2, and so on.
+
+$$\begin{bmatrix}2 & x \\ y-1 & 5\end{bmatrix}=\begin{bmatrix}2 & 7 \\ 3 & 5\end{bmatrix}$$
+*This is a representative example of solving unknowns from matrix equality.
+
+Match entries at each position:
+
+- Position \((1,1)\): \(2 = 2\) — already satisfied.
+- Position \((1,2)\): \(x = 7\).
+- Position \((2,1)\): \(y - 1 = 3\), so \(y = 4\).
+- Position \((2,2)\): \(5 = 5\) — already satisfied.
+
+The key step is identifying **which position** each variable occupies. Position \((1,2)\) is row 1, column 2 — the top-right cell. Position \((2,1)\) is row 2, column 1 — the bottom-left cell. Matching positions, not values floating somewhere in the matrix, is what makes this work.*
+
+---
+**📌 Key Takeaways**
+- \(\mathbf{A}=\mathbf{B}\Longleftrightarrow a_{ij}=b_{ij}\) for every matching \((i,j)\) — same size and same entry at every position.
+- Matrices must have the same dimensions before any entry-by-entry comparison is valid.
+- Unknown entries are solved by setting each variable equal to the entry in the corresponding row-column position.
+
+*Next, use this entry-by-entry thinking whenever a matrix equation contains variables.*
+
+%%KC_BLOCK%%<div class="kc-quiz-plan" data-quiz-b64="eyJ0eXBlIjoicXVpel9wbGFuIiwidGFyZ2V0X3F1ZXN0aW9ucyI6NSwicXVlc3Rpb25fcmFuZ2UiOnsibWluIjo0LCJtYXgiOjV9LCJrbm93bGVkZ2VfcG9pbnRzIjpbeyJpZCI6Im1hdHJpeF9lcXVhbGl0eV9kZWZpbml0aW9uIiwibGFiZWwiOiJEZWZpbml0aW9uIG9mIG1hdHJpeCBlcXVhbGl0eSIsImltcG9ydGFuY2UiOiJoaWdoIiwiZXhhbV93ZWlnaHQiOiJoaWdoIiwibWFzdGVyeV9ydWxlIjp7ImNvcnJlY3Rfc3RyZWFrX3JlcXVpcmVkIjoyfSwicXVlc3Rpb25zIjpbeyJpZCI6ImtwMV9xMSIsInR5cGUiOiJtdWx0aXBsZV9jaG9pY2UiLCJzdGVtIjoiV2hpY2ggY29uZGl0aW9uIGlzIHJlcXVpcmVkIGZvciB0d28gbWF0cmljZXMgXFwoXFxtYXRoYmZ7QX1cXCkgYW5kIFxcKFxcbWF0aGJme0J9XFwpIHRvIGJlIGVxdWFsPyIsIm9wdGlvbnMiOlsiQS4gVGhleSBtdXN0IGNvbnRhaW4gdGhlIHNhbWUgbnVtYmVycyBzb21ld2hlcmUgaW5zaWRlIHRoZW0uIiwiQi4gVGhleSBtdXN0IGhhdmUgdGhlIHNhbWUgZGltZW5zaW9ucyBhbmQgZXF1YWwgZW50cmllcyBpbiBldmVyeSBtYXRjaGluZyBwb3NpdGlvbi4iLCJDLiBUaGV5IG11c3QgaGF2ZSB0aGUgc2FtZSBudW1iZXIgb2Ygbm9uemVybyBlbnRyaWVzLiIsIkQuIFRoZXkgbXVzdCBoYXZlIHRoZSBzYW1lIGRldGVybWluYW50LiJdLCJjb3JyZWN0X29wdGlvbiI6IkIiLCJleHBsYW5hdGlvbiI6Ik1hdHJpeCBlcXVhbGl0eSByZXF1aXJlcyBib3RoIHRoZSBzYW1lIHNpemUgYW5kIGVxdWFsaXR5IG9mIGNvcnJlc3BvbmRpbmcgZW50cmllcy4iLCJ3cm9uZ19vcHRpb25fZXhwbGFuYXRpb25zIjp7IkEiOiJUaGUgZW50cmllcyBtdXN0IGJlIGluIHRoZSBzYW1lIHJvdy1jb2x1bW4gcG9zaXRpb25zLCBub3QganVzdCBzb21ld2hlcmUgaW4gdGhlIG1hdHJpeC4iLCJDIjoiVGhlIG51bWJlciBvZiBub256ZXJvIGVudHJpZXMgZG9lcyBub3QgZGV0ZXJtaW5lIGVxdWFsaXR5LiIsIkQiOiJFcXVhbCBkZXRlcm1pbmFudHMgZG8gbm90IGltcGx5IGVxdWFsIG1hdHJpY2VzLiJ9LCJoaW50IjoiQ2hlY2sgc2l6ZSBmaXJzdCwgdGhlbiBjb21wYXJlIG1hdGNoaW5nIHBvc2l0aW9ucy4iLCJuZWVkc192aXN1YWwiOmZhbHNlLCJzYW1lX3BvaW50X3ZhcmlhbnQiOnRydWV9LHsiaWQiOiJrcDFfcTIiLCJ0eXBlIjoibXVsdGlwbGVfY2hvaWNlIiwic3RlbSI6IldoeSBhcmUgXFwoXFxiZWdpbntibWF0cml4fTEmMlxcXFwzJjRcXGVuZHtibWF0cml4fVxcKSBhbmQgXFwoXFxiZWdpbntibWF0cml4fTEmM1xcXFwyJjRcXGVuZHtibWF0cml4fVxcKSBub3QgZXF1YWw/Iiwib3B0aW9ucyI6WyJBLiBUaGVpciBkaW1lbnNpb25zIGFyZSBkaWZmZXJlbnQuIiwiQi4gVGhlaXIgY29ycmVzcG9uZGluZyBlbnRyaWVzIGRvIG5vdCBhbGwgbWF0Y2guIiwiQy4gVGhleSBjb250YWluIGRpZmZlcmVudCB0b3RhbCBudW1iZXJzIG9mIGVudHJpZXMuIiwiRC4gTWF0cml4IGVxdWFsaXR5IGRvZXMgbm90IGFwcGx5IHRvIFxcKDJcXHRpbWVzMlxcKSBtYXRyaWNlcy4iXSwiY29ycmVjdF9vcHRpb24iOiJCIiwiZXhwbGFuYXRpb24iOiJCb3RoIG1hdHJpY2VzIGFyZSBcXCgyXFx0aW1lczJcXCksIGJ1dCB0aGUgZW50cmllcyAyIGFuZCAzIGFyZSBzd2FwcGVkLCBzbyBtYXRjaGluZyBwb3NpdGlvbnMgZmFpbC4iLCJ3cm9uZ19vcHRpb25fZXhwbGFuYXRpb25zIjp7IkEiOiJCb3RoIG1hdHJpY2VzIGhhdmUgdGhlIHNhbWUgZGltZW5zaW9ucy4iLCJDIjoiQm90aCBjb250YWluIGZvdXIgZW50cmllcy4iLCJEIjoiTWF0cml4IGVxdWFsaXR5IGFwcGxpZXMgdG8gbWF0cmljZXMgb2YgYW55IHNpemUsIGFzIGxvbmcgYXMgdGhlIHNpemVzIG1hdGNoLiJ9LCJoaW50IjoiQ29tcGFyZSB0b3AtcmlnaHQgd2l0aCB0b3AtcmlnaHQsIG5vdCBqdXN0IHRoZSBjb2xsZWN0aW9uIG9mIG51bWJlcnMuIiwibmVlZHNfdmlzdWFsIjp0cnVlLCJ2aXN1YWxfdHlwZSI6Indyb25nX3ZzX3JpZ2h0X3Zpc3VhbF9jaGVjayIsInNhbWVfcG9pbnRfdmFyaWFudCI6dHJ1ZX1dfSx7ImlkIjoiZGltZW5zaW9uX2NoZWNrIiwibGFiZWwiOiJTYW1lIGRpbWVuc2lvbnMgbXVzdCBiZSBjaGVja2VkIGZpcnN0IiwiaW1wb3J0YW5jZSI6ImhpZ2giLCJleGFtX3dlaWdodCI6Im1lZGl1bSIsIm1hc3RlcnlfcnVsZSI6eyJjb3JyZWN0X3N0cmVha19yZXF1aXJlZCI6MX0sInF1ZXN0aW9ucyI6W3siaWQiOiJrcDJfcTEiLCJ0eXBlIjoibXVsdGlwbGVfY2hvaWNlIiwic3RlbSI6IkNhbiBhIFxcKDJcXHRpbWVzM1xcKSBtYXRyaXggZXF1YWwgYSBcXCgzXFx0aW1lczJcXCkgbWF0cml4PyIsIm9wdGlvbnMiOlsiQS4gWWVzLCBpZiB0aGV5IGNvbnRhaW4gdGhlIHNhbWUgc2l4IG51bWJlcnMuIiwiQi4gWWVzLCBpZiB0aGVpciBlbnRyaWVzIGFkZCB0byB0aGUgc2FtZSB0b3RhbC4iLCJDLiBObywgYmVjYXVzZSB0aGVpciBkaW1lbnNpb25zIGFyZSBkaWZmZXJlbnQuIiwiRC4gTm8sIHVubGVzcyBib3RoIG1hdHJpY2VzIGNvbnRhaW4gb25seSB6ZXJvcy4iXSwiY29ycmVjdF9vcHRpb24iOiJDIiwiZXhwbGFuYXRpb24iOiJNYXRyaWNlcyBtdXN0IGhhdmUgdGhlIHNhbWUgZGltZW5zaW9ucyBiZWZvcmUgZW50cnktYnktZW50cnkgZXF1YWxpdHkgaXMgZXZlbiBwb3NzaWJsZS4iLCJ3cm9uZ19vcHRpb25fZXhwbGFuYXRpb25zIjp7IkEiOiJTYW1lIG51bWJlcnMgYXJlIG5vdCBlbm91Z2ggaWYgdGhlIHNoYXBlcyBkaWZmZXIuIiwiQiI6IkVxdWFsIHN1bXMgZG8gbm90IGltcGx5IG1hdHJpeCBlcXVhbGl0eS4iLCJEIjoiRXZlbiB6ZXJvIG1hdHJpY2VzIG11c3QgaGF2ZSB0aGUgc2FtZSBkaW1lbnNpb25zIHRvIGJlIGVxdWFsLiJ9LCJoaW50IjoiQSBcXCgyXFx0aW1lczNcXCkgZ3JpZCBhbmQgYSBcXCgzXFx0aW1lczJcXCkgZ3JpZCBoYXZlIGRpZmZlcmVudCBwb3NpdGlvbnMuIiwibmVlZHNfdmlzdWFsIjp0cnVlLCJ2aXN1YWxfdHlwZSI6InN0cnVjdHVyZV9jb21wYXJpc29uX2NoZWNrIiwic2FtZV9wb2ludF92YXJpYW50IjpmYWxzZX1dfSx7ImlkIjoic29sdmluZ191bmtub3duX2VudHJpZXMiLCJsYWJlbCI6IlNvbHZpbmcgdmFyaWFibGVzIGZyb20gbWF0cml4IGVxdWFsaXR5IiwiaW1wb3J0YW5jZSI6ImhpZ2giLCJleGFtX3dlaWdodCI6ImhpZ2giLCJtYXN0ZXJ5X3J1bGUiOnsiY29ycmVjdF9zdHJlYWtfcmVxdWlyZWQiOjF9LCJxdWVzdGlvbnMiOlt7ImlkIjoia3AzX3ExIiwidHlwZSI6Im11bHRpcGxlX2Nob2ljZSIsInN0ZW0iOiJJZiBcXChcXGJlZ2lue2JtYXRyaXh9NCZ4XFxcXDImMVxcZW5ke2JtYXRyaXh9PVxcYmVnaW57Ym1hdHJpeH00JjlcXFxcMiYxXFxlbmR7Ym1hdHJpeH1cXCksIHdoYXQgaXMgXFwoeFxcKT8iLCJvcHRpb25zIjpbIkEuIDEiLCJCLiAyIiwiQy4gNCIsIkQuIDkiXSwiY29ycmVjdF9vcHRpb24iOiJEIiwiZXhwbGFuYXRpb24iOiJUaGUgdW5rbm93biBcXCh4XFwpIGlzIGluIHRoZSB0b3AtcmlnaHQgcG9zaXRpb24gXFwoKDEsMilcXCksIHNvIGl0IG11c3QgZXF1YWwgdGhlIHRvcC1yaWdodCBlbnRyeSA5LiIsIndyb25nX29wdGlvbl9leHBsYW5hdGlvbnMiOnsiQSI6IjEgaXMgdGhlIGJvdHRvbS1yaWdodCBlbnRyeSwgbm90IHRoZSBtYXRjaGluZyBwb3NpdGlvbiBmb3IgXFwoeFxcKS4iLCJCIjoiMiBpcyB0aGUgYm90dG9tLWxlZnQgZW50cnkuIiwiQyI6IjQgaXMgdGhlIHRvcC1sZWZ0IGVudHJ5LiIsIkQiOiJDb3JyZWN0LiJ9LCJoaW50IjoiTWF0Y2ggXFwoeFxcKSdzIHBvc2l0aW9uLCBub3QgdGhlIG5lYXJlc3QgbnVtYmVyLiIsIm5lZWRzX3Zpc3VhbCI6ZmFsc2UsInNhbWVfcG9pbnRfdmFyaWFudCI6ZmFsc2V9LHsiaWQiOiJrcDNfcTIiLCJ0eXBlIjoic2hvcnRfYW5zd2VyIiwic3RlbSI6IkdpdmVuIFxcKFxcYmVnaW57Ym1hdHJpeH0yJmErMVxcXFxiLTMmMFxcZW5ke2JtYXRyaXh9PVxcYmVnaW57Ym1hdHJpeH0yJjZcXFxcNCYwXFxlbmR7Ym1hdHJpeH1cXCksIGZpbmQgXFwoYVxcKSBhbmQgXFwoYlxcKS4iLCJpZGVhbF9hbnN3ZXIiOiJcXChhKzE9NlxcKSwgc28gXFwoYT01XFwpLiBBbHNvIFxcKGItMz00XFwpLCBzbyBcXChiPTdcXCkuIiwiZ3JhZGluZ19ydWJyaWMiOlsiTXVzdCBtYXRjaCB0aGUgdG9wLXJpZ2h0IGVudHJpZXMgdG8gZ2V0IFxcKGErMT02XFwpLiIsIk11c3QgbWF0Y2ggdGhlIGJvdHRvbS1sZWZ0IGVudHJpZXMgdG8gZ2V0IFxcKGItMz00XFwpLiIsIk11c3QgZ2l2ZSBmaW5hbCB2YWx1ZXMgXFwoYT01XFwpIGFuZCBcXChiPTdcXCkuIl0sImV4cGxhbmF0aW9uIjoiTWF0cml4IGVxdWFsaXR5IHR1cm5zIG1hdGNoaW5nIGVudHJpZXMgaW50byBvcmRpbmFyeSBzY2FsYXIgZXF1YXRpb25zLiIsImhpbnQiOiJVc2UgdGhlIHBvc2l0aW9uIG9mIGVhY2ggdmFyaWFibGUgdG8gZGVjaWRlIHdoaWNoIG51bWJlciBpdCBlcXVhbHMuIiwibmVlZHNfdmlzdWFsIjpmYWxzZSwic2FtZV9wb2ludF92YXJpYW50IjpmYWxzZX1dfV19" style="display:none;"></div>%%KC_END%%

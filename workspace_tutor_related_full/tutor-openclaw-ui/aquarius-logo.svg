@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="Aquarius">
+  <rect x="26" y="26" width="116" height="116" rx="28" fill="#1E293B"/>
+  <g transform="rotate(-5 80 80)">
+    <rect x="20" y="20" width="116" height="116" rx="28" fill="#FDFBF7" stroke="#1E293B" stroke-width="6"/>
+    <rect x="42" y="58" width="76" height="28" rx="14" fill="#FDE047" opacity="0.8" transform="rotate(-3 80 72)"/>
+    <path d="M40 60 Q52 42 64 60 T88 60 T112 60" fill="none" stroke="#1E293B" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M40 90 Q52 72 64 90 T88 90 T112 90" fill="none" stroke="#0EA5E9" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M112 28 Q116 38 126 38 Q116 38 112 48 Q112 38 102 38 Q112 38 112 28 Z" fill="#F9A8D4" stroke="#1E293B" stroke-width="4" stroke-linejoin="round"/>
+  </g>
+  <g transform="rotate(-18 35 25)">
+    <rect x="0" y="0" width="60" height="22" fill="#7DD3FC" opacity="0.9"/>
+    <path d="M0 0 L60 0 M0 22 L60 22" stroke="#1E293B" stroke-width="2" stroke-dasharray="4 4" opacity="0.5"/>
+  </g>
+</svg>

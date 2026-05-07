@@ -1,0 +1,98 @@
+{
+  "section_id": "B.1-2",
+  "section_title": "B.1-2 Algebra of Complex Numbers",
+  "difficulty": "intermediate",
+  "estimated_read_minutes": 8,
+  "learning_objectives": [
+    "Read a complex number in rectangular form and identify its real and imaginary parts.",
+    "Convert between rectangular and polar/exponential forms without losing the correct quadrant.",
+    "Use Euler's formula to connect complex exponentials with sine and cosine.",
+    "Use conjugates, magnitude, angle, multiplication, division, powers, roots, and logarithms of complex numbers in exam-style algebra."
+  ],
+  "visualization_need": {
+    "level": "static",
+    "reason": [
+      "complex_plane_interpretation_is_visual",
+      "quadrant_errors_are_common",
+      "textbook_has_canonical_complex_plane_figures",
+      "pattern_recognition_benefits_from_figure"
+    ],
+    "recommended_assets": [
+      "book_figure",
+      "latex_native_formula"
+    ]
+  },
+  "visual_plan": {
+    "primary_anchor": "both",
+    "rationale": "Use clean LaTeX-native formula pages for algebra rules, supported by the textbook's existing complex-plane figures because they are canonical, notation-matched, and directly exam-facing. Do not use GPTImage2 because the key visuals already exist as textbook figures and the algebra rules are best shown symbolically.",
+    "cram": "Use the figures to recognize quadrant, magnitude, and angle traps quickly.",
+    "standard": "Pair each core formula with one representative example and one nearby complex-plane visual when it reduces confusion.",
+    "top_score": "Use the visuals to notice quadrant ambiguity, coterminal angles, and why polar form simplifies products and quotients."
+  },
+  "blocks": [
+    {
+      "type": "text_explanation",
+      "instruction": "Write Page 1 as a minimal overview only. Include exactly two short sections: 'Section Objective' and 'Concepts In This Section'. Section Objective: one sentence saying students will learn how to represent, convert, and compute with complex numbers. Concepts In This Section: list concept names only: rectangular form, complex plane, polar/exponential form, Euler's formula, magnitude and angle, conjugate, polar arithmetic, complex functions, complex logarithms. Do not add background paragraphs."
+    },
+    {
+      "type": "math_block",
+      "latex": "z = a + jb \\tag{B.1}",
+      "additional_latex": [
+        "\\operatorname{Re} z = a",
+        "\\operatorname{Im} z = b"
+      ],
+      "explanation_instruction": "Start the page with heading '## 1. Rectangular form: read the coordinates'. Explain in 90–130 words that \\(a\\) is the horizontal real-axis coordinate and \\(b\\) is the vertical-axis coefficient of \\(j\\). State that \\(j\\) marks the imaginary-axis direction. Include the representative example \\(z=-3+2j\\): \\(\\operatorname{Re}z=-3\\), \\(\\operatorname{Im}z=2\\). Exam trigger: use rectangular form when the problem asks for real part, imaginary part, addition, subtraction, or plotting coordinates. Common misuse: the imaginary part is \\(b\\), not \\(jb\\); for \\(-3+2j\\), the imaginary part is \\(2\\), not \\(2j\\)."
+    },
+    {
+      "type": "book_image",
+      "source_page": "page-005",
+      "fig_id": "Fig. B.2",
+      "caption_instruction": "One sentence: Fig. B.2 shows \\(z=a+jb\\) as a point in the complex plane, with magnitude, angle, and conjugate reflection.",
+      "description_instruction": "Describe the horizontal real axis, vertical imaginary axis, the point \\(z=(a,b)\\), the distance \\(r\\), the angle \\(\\theta\\), and the reflected point \\(z^*=a-jb\\). Tell students to notice that the same point can be read as coordinates \\((a,b)\\) or as distance-plus-angle \\((r,\\theta)\\).",
+      "teaching_role": "concept_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Use it to instantly locate real part, imaginary part, magnitude, angle, and conjugate.",
+        "standard": "Use it as the main picture connecting rectangular and polar form.",
+        "top_score": "Use it to catch sign and reflection mistakes before algebra starts."
+      }
+    },
+    {
+      "type": "math_block",
+      "latex": "e^{j\\theta} = \\cos\\theta + j\\sin\\theta \\tag{B.3}",
+      "additional_latex": [
+        "z = r(\\cos\\theta + j\\sin\\theta) \\tag{B.2}",
+        "z = re^{j\\theta} \\tag{B.4}"
+      ],
+      "supporting_book_image": {
+        "source_page": "page-007",
+        "fig_id": "Fig. B.3",
+        "caption_instruction": "Use Fig. B.3 to show that \\(re^{j\\theta}\\) is a vector of length \\(r\\) rotated by angle \\(\\theta\\).",
+        "description_instruction": "Point out the unit locations \\(1\\), \\(-1\\), \\(j\\), and \\(-j\\), and connect them to angles \\(0\\), \\(\\pi\\), \\(\\pi/2\\), and \\(-\\pi/2\\)."
+      },
+      "explanation_instruction": "Start with heading '## 2. Euler's formula: the bridge to polar form'. Explain in 100–150 words that Euler's formula turns the cosine-sine expression into the compact exponential form. Define \\(r\\) as distance from the origin and \\(\\theta\\) as angle from the positive real axis. Use the representative example \\(2e^{j\\pi/3}=2(\\cos\\pi/3+j\\sin\\pi/3)=1+j\\sqrt{3}\\). Exam trigger: use this when converting polar/exponential form to rectangular form. Common misuse: do not treat \\(e^{j\\theta}\\) as real exponential growth; for pure \\(j\\theta\\), it represents rotation on the complex plane."
+    },
+    {
+      "type": "math_block",
+      "latex": "r = |z| = \\sqrt{a^2+b^2}",
+      "additional_latex": [
+        "\\theta = \\operatorname{atan2}(b,a)",
+        "a = r\\cos\\theta",
+        "b = r\\sin\\theta"
+      ],
+      "supporting_book_image": {
+        "source_page": "page-009",
+        "fig_id": "unknown",
+        "caption_instruction": "Use the four Argand diagrams to show why the same tangent ratio can point to different quadrants.",
+        "description_instruction": "Describe the four plotted examples \\(2+j3\\), \\(-2+j1\\), \\(-2-j3\\), and \\(1-j3\\). Emphasize that signs of \\(a\\) and \\(b\\) determine the quadrant, so the calculator's inverse tangent result may need a \\(180^\\circ\\) correction."
+      },
+      "explanation_instruction": "Start with heading '## 3. Magnitude and angle: convert without the quadrant trap'. Explain in 110–160 words. Teach that \\(r\\) is always nonnegative and \\(\\theta\\) must point to the correct quadrant. Use \\(\\operatorname{atan2}(b,a)\\) as the safest modern notation, while noting the textbook warning about \\(\\tan^{-1}(b/a)\\). Representative example: for \\(z=-2-j3\\), \\(r=\\sqrt{13}\\) and the principal angle is \\(-123.7^\\circ\\), not \\(56.3^\\circ\\). Exam trigger: conversion from \\(a+jb\\) to \\(re^{j\\theta}\\). Common misuse: using \\(\\tan^{-1}(b/a)\\) blindly and landing in the wrong quadrant."
+    },
+    {
+      "type": "math_block",
+      "latex": "z^* = a - jb = re^{-j\\theta} \\tag{B.6}",
+      "additional_latex": [
+        "\\operatorname{Re}z = \\frac{z+z^*}{2}",
+        "\\operatorname{Im}z = \\frac{z-z^*}{2j} \\tag{B.8}",
+        "zz^* = |z|^2 \\tag{B.9}"
+      ],
+      "explanation_instruction": "Start with heading '## 4. Conjugate: flip the vertical part'. Explain in 100–150 words that the conjugate keeps the real part and changes the sign

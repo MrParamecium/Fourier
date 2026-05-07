@@ -1,7 +1,0 @@
-primary=capi/gpt-5.3-codex
-fallbacks=['capi/gpt-5.4', 'moonshot/kimi-k2.5']
-allowlist=['capi/gpt-5.3-codex', 'capi/gpt-5.4', 'moonshot/kimi-k2.5']
-aliases=[]
-provider capi models=['gpt-5.4', 'gpt-5.3-codex']
-provider moonshot models=['kimi-k2.5']
-agent main model=capi/gpt-5.3-codex

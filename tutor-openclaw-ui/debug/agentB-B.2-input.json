@@ -1,0 +1,382 @@
+{
+  "blueprint": {
+    "section_id": "B.2",
+    "section_title": "B.2 Sinusoids",
+    "difficulty": "intermediate",
+    "estimated_read_minutes": 6,
+    "learning_objectives": [
+      "Identify amplitude, frequency, period, angular frequency, and phase in a sinusoid.",
+      "Use period-frequency conversions correctly.",
+      "Connect a sinusoid to a rotating phasor intuition.",
+      "Convert a cosine-sine combination with the same frequency into one phase-shifted cosine."
+    ],
+    "visualization_need": {
+      "level": "interactive",
+      "reason": [
+        "depends_on_parameter_change",
+        "formula_to_phenomenon_gap",
+        "student_should_manipulate_to_understand",
+        "input_output_response_is_visual"
+      ],
+      "recommended_assets": [
+        "react_canvas_demo"
+      ]
+    },
+    "visual_plan": {
+      "primary_anchor": "react_demo",
+      "rationale": "The textbook page has no usable figure, and sinusoids are best learned by seeing how amplitude, frequency, period, and phase change the waveform. A static sine-wave reference is less valuable than a controlled React + Canvas demo because the key student confusion is parameter change.",
+      "cram": "Use the demo to recognize amplitude, period, and phase-shift patterns quickly.",
+      "standard": "Use the demo to connect each formula to one representative waveform and one phasor projection.",
+      "top_score": "Use the demo to expose sign conventions, phase direction, and same-frequency compression traps."
+    },
+    "blocks": [
+      {
+        "type": "text_explanation",
+        "instruction": "Render Page 1 as a minimal overview only. Include exactly two short sections: 'Section Objective' and 'Concepts In This Section'. Under Section Objective, write one sentence: 'Learn how to read, sketch, and combine sinusoidal signals used throughout signals and systems.' Under Concepts In This Section, list only these concept names as bullets with no explanations: sinusoid model; amplitude; frequency and period; angular frequency; phase; phasor view; converting cosine-sine sums into one sinusoid."
+      },
+      {
+        "type": "math_block",
+        "latex": "x(t)=C\\cos(2\\pi f_0t+\\theta) \\qquad \\text{(B.13)}",
+        "explanation_instruction": "Start Page 2 with heading '## 1. The basic sinusoid model'. Explain in 100–140 words that this is the standard real sinusoidal signal. Define every symbol: \\(x(t)\\) is the signal value at time \\(t\\), \\(C\\) is amplitude, \\(f_0\\) is frequency in cycles per second, and \\(\\theta\\) is phase in radians. State when to use it: whenever a waveform repeats smoothly like a cosine. Exam trigger: a phrase like 'sinusoid', 'frequency', 'phase', or 'periodic cosine'. Common misuse: treating \\(\\theta\\) as degrees unless the problem explicitly says degrees. Include one minimal example: for \\(x(t)=3\\cos(2\\pi\\cdot 5t+\\pi/4)\\), amplitude is 3, frequency is 5 Hz, and phase is \\(\\pi/4\\)."
+      },
+      {
+        "type": "interactive_demo",
+        "teaching_role": "concept_anchor",
+        "mode_specific_visual_use": {
+          "cram": "Let students drag sliders and memorize what each parameter visually changes.",
+          "standard": "Use one default example and ask students to observe amplitude, period, and phase directly.",
+          "top_score": "Add sign-sensitive phase observations and compare positive versus negative phase."
+        },
+        "title": "Interactive sinusoid: amplitude, frequency, period, and phase",
+        "demo_instruction": "Build a React + Canvas demo showing \\(x(t)=C\\cos(2\\pi f_0t+\\theta)\\). Use a clean white background, navy waveform, muted teal period marker, and muted red phase marker. Include sliders for \\(C\\) from 0.5 to 4, \\(f_0\\) from 0.25 to 5 Hz, and \\(\\theta\\) from \\(-\\pi\\) to \\(\\pi\\). Show the current formula numerically above the canvas. Draw a horizontal time axis, vertical amplitude axis, a double-arrow marking one period \\(T_0\\), and a faint reference cosine with \\(\\theta=0\\). Include a small optional phasor inset: a rotating vector whose horizontal projection matches the waveform. Default settings: \\(C=2\\), \\(f_0=1\\), \\(\\theta=\\pi/3\\).",
+        "student_tasks": [
+          "Increase \\(C\\) and observe that peaks get taller but spacing does not change.",
+          "Increase \\(f_0\\) and observe that more cycles fit into the same time window.",
+          "Change \\(\\theta\\) and observe that the waveform shifts horizontally without changing height or frequency.",
+          "Use the period marker to verify that doubling \\(f_0\\) halves \\(T_0\\)."
+        ],
+        "fallback": "If interactive rendering fails, use a simple Canvas-generated static comparison with three separate rows: amplitude change, frequency change, and phase change. Do not use GPTImage2."
+      },
+      {
+        "type": "math_block",
+        "latex": "T_0=\\frac{1}{f_0}",
+        "explanation_instruction": "Start Page 3 with heading '## 2. Period and frequency are reciprocals'. Explain in 100–130 words that \\(T_0\\) is the time for one full repeat and \\(f_0\\) is the number of repeats per second. Connect this directly to the OCR logic: cosine repeats when its angle changes by \\(2\\pi\\), so \\(2\\pi f_0t+\\theta\\) needs a time change of \\(1/f_0\\) to complete one cycle. Use case: convert between seconds per cycle and cycles per second. Exam trigger: a problem gives one of \\(T_0\\) or \\(f_0\\) and asks for the other. Common misuse: saying larger frequency means larger period; it is the opposite. Example: if \\(f_0=50\\) Hz, then \\(T_0=1/50=0.02\\) s."
+      },
+      {
+        "type": "math_block",
+        "latex": "\\omega_0=2\\pi f_0",
+        "explanation_instruction": "Continue Page 3 under the period formula. Explain in 80–110 words that \\(\\omega_0\\) is angular frequency in radians per second, while \\(f_0\\) is ordinary frequency in cycles per second. The factor \\(2\\pi\\) appears because one cycle equals \\(2\\pi\\) radians. State the equivalent relation \\(\\omega_0=2\\pi/T_0\\) in inline math only. Exam trigger: the sinusoid is written as \\(\\cos(\\omega_0t+\\theta)\\) instead of \\(\\cos(2\\pi f_0t+\\theta)\\). Common misuse: forgetting the \\(2\\pi\\) and treating Hz as rad/s. Example: if \\(f_0=10\\) Hz, then \\(\\omega_0=20\\pi\\) rad/s."
+      },
+      {
+        "type": "math_block",
+        "latex": "x(t)=\\Re\\{Xe^{j\\omega_0t}\\}",
+        "explanation_instruction": "Start Page 4 with heading '## 3. Phasor view: one rotating vector creates the sinusoid'. Explain in 110–150 words for students with mixed complex-number background. Say that \\(X\\) is a complex number called a phasor; its magnitude gives amplitude and its angle gives phase. The real-part operator \\(\\Re\\{\\cdot\\}\\) means we take the horizontal projection of the rotating vector. Use the demo's phasor inset as the visual anchor: as the vector rotates at angular speed \\(\\omega_0\\), its horizontal projection traces the cosine wave. Use case: same-frequency sinusoidal terms can be combined by combining their phasor components. Exam trigger: a problem asks to combine sinusoids or interpret phase. Common misuse: forgetting the real part and treating the complex exponential itself as the final real signal."
+      },
+      {
+        "type": "math_block",
+        "latex": "A\\cos(\\omega t)+B\\sin(\\omega t)=R\\cos(\\omega t+\\theta)",
+        "explanation_instruction": "Start Page 5 with heading '## 4. Convert a cosine-sine sum into one sinusoid'. Explain in 130–160 words that this works only because both terms have the same angular frequency \\(\\omega\\). State that the target is a single cosine with amplitude \\(R\\) and phase \\(\\theta\\). In inline math, give the coefficient-matching rules: \\(A=R\\cos\\theta\\), \\(B=-R\\sin\\theta\\), so \\(R=\\sqrt{A^2+B^2}\\) and \\(\\theta=\\operatorname{atan2}(-B,A)\\). Exam trigger: terms like \\(\\cos(\\omega t)+k\\sin(\\omega t)\\) or \\(a\\cos(\\omega t)-b\\sin(\\omega t)\\). Common misuse: giving only amplitude \\(R\\) and forgetting the final phase-shifted sinusoid. Mention that phase sign is the main trap because expanding \\(\\cos(\\omega t+\\theta)\\) produces a minus sign on the sine coefficient."
+      },
+      {
+        "type": "text_explanation",
+        "instruction": "Continue Page 5 with one representative worked example and one quick exam note. Work this example step by step in 110–150 words: convert \\(x(t)=\\cos(\\omega t)+2\\sin(\\omega t)\\) into one cosine. Show that \\(A=1\\), \\(B=2\\), \\(R=\\sqrt{1^2+2^2}=\\sqrt{5}\\), and \\(\\theta=\\operatorname{atan2}(-2,1)\\approx -1.107\\) rad. Final answer must be \\(x(t)=\\sqrt{5}\\cos(\\omega t-1.107)\\). Then add one short near-miss: for \\(3\\cos(\\omega t)-4\\sin(\\omega t)\\), the sine coefficient is \\(B=-4\\), so \\(\\theta=\\operatorname{atan2}(4,3)\\), not \\(\\operatorname{atan2}(-4,3)\\). End with the exam note: always write the final single sinusoid, not just \\(R\\) and \\(\\theta\\)."
+      },
+      {
+        "type": "section_summary",
+        "instruction": "Create the recap page titled '📌 Key Takeaways'. Use 5 concise bullets. Include these formulas explicitly as display or inline math, not only prose: \\(x(t)=C\\cos(2\\pi f_0t+\\theta)\\) (B.13); \\(T_0=1/f_0\\); \\(\\omega_0=2\\pi f_0=2\\pi/T_0\\); \\(x(t)=\\Re\\{Xe^{j\\omega_0t}\\}\\); \\(A\\cos(\\omega t)+B\\sin(\\omega t)=R\\cos(\\omega t+\\theta)\\) with \\(R=\\sqrt{A^2+B^2}\\) and \\(\\theta=\\operatorname{atan2}(-B,A)\\). Keep each bullet under 25 words. End with one bridge sentence: 'Next, these sinusoid ideas become easier to manipulate using complex numbers and phasors.'"
+      },
+      {
+        "type": "quiz_plan",
+        "target_questions": 7,
+        "question_range": {
+          "min": 6,
+          "max": 8
+        },
+        "knowledge_points": [
+          {
+            "id": "sinusoid_parameter_reading",
+            "label": "Reading amplitude, frequency, and phase from the sinusoid model",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 1
+            },
+            "questions": [
+              {
+                "id": "kp1_q1",
+                "type": "multiple_choice",
+                "stem": "For \\(x(t)=4\\cos(2\\pi\\cdot 7t-\\pi/6)\\), which parameter reading is correct?",
+                "options": [
+                  "A. Amplitude \\(4\\), frequency \\(7\\) Hz, phase \\(-\\pi/6\\)",
+                  "B. Amplitude \\(7\\), frequency \\(4\\) Hz, phase \\(-\\pi/6\\)",
+                  "C. Amplitude \\(4\\), frequency \\(14\\pi\\) Hz, phase \\(-\\pi/6\\)",
+                  "D. Amplitude \\(4\\), frequency \\(7\\) rad/s, phase \\(-30\\)"
+                ],
+                "correct_option": "A",
+                "explanation": "The model is \\(C\\cos(2\\pi f_0t+\\theta)\\), so \\(C=4\\), \\(f_0=7\\) Hz, and \\(\\theta=-\\pi/6\\) radians.",
+                "wrong_option_explanations": {
+                  "B": "The amplitude is the multiplier outside the cosine, not the frequency.",
+                  "C": "\\(14\\pi\\) is the angular frequency in rad/s, not the hertzian frequency.",
+                  "D": "Frequency in this form is in Hz, and phase is in radians unless degrees are stated."
+                },
+                "hint": "Match the expression to \\(C\\cos(2\\pi f_0t+\\theta)\\).",
+                "needs_visual": false,
+                "same_point_variant": false
+              }
+            ]
+          },
+          {
+            "id": "period_frequency_conversion",
+            "label": "Converting among period, frequency, and angular frequency",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 1
+            },
+            "questions": [
+              {
+                "id": "kp2_q1",
+                "type": "multiple_choice",
+                "stem": "A sinusoid has period \\(T_0=0.01\\) s. What are \\(f_0\\) and \\(\\omega_0\\)?",
+                "options": [
+                  "A. \\(f_0=100\\) Hz and \\(\\omega_0=200\\pi\\) rad/s",
+                  "B. \\(f_0=0.01\\) Hz and \\(\\omega_0=0.02\\pi\\) rad/s",
+                  "C. \\(f_0=100\\) rad/s and \\(\\omega_0=100\\) Hz",
+                  "D. \\(f_0=2\\pi/0.01\\) Hz and \\(\\omega_0=100\\) rad/s"
+                ],
+                "correct_option": "A",
+                "explanation": "\\(f_0=1/T_0=100\\) Hz, and \\(\\omega_0=2\\pi f_0=200\\pi\\) rad/s.",
+                "wrong_option_explanations": {
+                  "B": "This treats period as frequency instead of taking the reciprocal.",
+                  "C": "Hz and rad/s are swapped.",
+                  "D": "The factor \\(2\\pi\\) belongs in angular frequency, not hertzian frequency."
+                },
+                "hint": "First take the reciprocal, then multiply by \\(2\\pi\\).",
+                "needs_visual": false,
+                "same_point_variant": false
+              },
+              {
+                "id": "kp2_q2",
+                "type": "multiple_choice",
+                "stem": "In the interactive demo, doubling \\(f_0\\) while keeping \\(C\\) and \\(\\theta\\) fixed causes what visual change?",
+                "options": [
+                  "A. The waveform has twice as many cycles in the same time window, and the period halves.",
+                  "B. The waveform becomes twice as tall, and the period stays fixed.",
+                  "C. The waveform shifts right by half a period, but spacing stays fixed.",
+                  "D. The waveform changes from cosine to sine."
+                ],
+                "correct_option": "A",
+                "explanation": "Frequency counts cycles per second. Doubling frequency compresses the waveform horizontally, so \\(T_0=1/f_0\\) halves.",
+                "wrong_option_explanations": {
+                  "B": "Height is controlled by amplitude \\(C\\), not frequency.",
+                  "C": "Horizontal phase shift is controlled by \\(\\theta\\), not frequency alone.",
+                  "D": "Changing frequency does not change the signal type from cosine to sine."
+                },
+                "hint": "Look at the period marker when \\(f_0\\) changes.",
+                "needs_visual": true,
+                "visual_type": "interactive_demo_observation",
+                "same_point_variant": true
+              }
+            ]
+          },
+          {
+            "id": "phase_and_phasor_view",
+            "label": "Phase and phasor interpretation",
+            "importance": "medium",
+            "exam_weight": "medium",
+            "mastery_rule": {
+              "correct_streak_required": 1
+            },
+            "questions": [
+              {
+                "id": "kp3_q1",
+                "type": "multiple_choice",
+                "stem": "What does \\(x(t)=\\Re\\{Xe^{j\\omega_0t}\\}\\) mean in the phasor view?",
+                "options": [
+                  "A. The real signal is the horizontal projection of a rotating complex vector.",
+                  "B. The signal is complex-valued and should keep both real and imaginary parts.",
+                  "C. The phasor removes the frequency from the signal permanently.",
+                  "D. The phase must always be zero if the signal is real."
+                ],
+                "correct_option": "A",
+                "explanation": "The rotating complex vector carries amplitude and phase; taking \\(\\Re\\{\\cdot\\}\\) gives the real cosine waveform.",
+                "wrong_option_explanations": {
+                  "B": "The real-part operator explicitly extracts a real signal.",
+                  "C": "The factor \\(e^{j\\omega_0t}\\) still contains the frequency dependence.",
+                  "D": "A real sinusoid can have any phase."
+                },
+                "hint": "Ask what the operator \\(\\Re\\{\\cdot\\}\\) does.",
+                "needs_visual": true,
+                "visual_type": "phasor_projection_demo",
+                "same_point_variant": false
+              }
+            ]
+          },
+          {
+            "id": "single_sinusoid_conversion",
+            "label": "Combining same-frequency cosine and sine terms into one sinusoid",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 2
+            },
+            "questions": [
+              {
+                "id": "kp4_q1",
+                "type": "multiple_choice",
+                "stem": "Convert \\(x(t)=\\cos(\\omega t)+2\\sin(\\omega t)\\) into one cosine.",
+                "options": [
+                  "A. \\(\\sqrt{5}\\cos(\\omega t-1.107)\\)",
+                  "B. \\(\\sqrt{5}\\cos(\\omega t+1.107)\\)",
+                  "C. \\(3\\cos(\\omega t-1.107)\\)",
+                  "D. \\(\\sqrt{5}\\sin(\\omega t-1.107)\\)"
+                ],
+                "correct_option": "A",
+                "explanation": "Here \\(A=1\\), \\(B=2\\), so \\(R=\\sqrt{5}\\) and \\(\\theta=\\operatorname{atan2}(-2,1)\\approx -1.107\\).",
+                "wrong_option_explanations": {
+                  "B": "The phase sign is wrong because the sine coefficient equals \\(-R\\sin\\theta\\).",
+                  "C": "Amplitude is \\(\\sqrt{1^2+2^2}\\), not \\(1+2\\).",
+                  "D": "The requested form is one cosine; switching to sine changes the phase convention."
+                },
+                "hint": "Use \\(B=-R\\sin\\theta\\), not \\(B=R\\sin\\theta\\).",
+                "needs_visual": false,
+                "same_point_variant": true
+              },
+              {
+                "id": "kp4_q2",
+                "type": "multiple_choice",
+                "stem": "For \\(x(t)=3\\cos(\\omega t)-4\\sin(\\omega t)\\), which phase setup is correct for \\(R\\cos(\\omega t+\\theta)\\)?",
+                "options": [
+                  "A. \\(R=5\\), \\(\\theta=\\operatorname{atan2}(4,3)\\)",
+                  "B. \\(R=7\\), \\(\\theta=\\operatorname{atan2}(-4,3)\\)",
+                  "C. \\(R=5\\), \\(\\theta=\\operatorname{atan2}(-4,3)\\)",
+                  "D. \\(R=1\\), \\(\\theta=\\operatorname{atan2}(3,-4)\\)"
+                ],
+                "correct_option": "A",
+                "explanation": "Here \\(A=3\\), \\(B=-4\\), so \\(R=5\\) and \\(\\theta=\\operatorname{atan2}(-B,A)=\\operatorname{atan2}(4,3)\\).",
+                "wrong_option_explanations": {
+                  "B": "Amplitude should be \\(\\sqrt{3^2+(-4)^2}=5\\), not 7.",
+                  "C": "This uses \\(B\\) directly and misses the minus sign in \\(B=-R\\sin\\theta\\).",
+                  "D": "This does not match the coefficient rules."
+                },
+                "hint": "The formula uses \\(-B\\) inside \\(\\operatorname{atan2}(-B,A)\\).",
+                "needs_visual": false,
+                "same_point_variant": true
+              },
+              {
+                "id": "kp4_q3",
+                "type": "short_answer",
+                "stem": "A classmate converts \\(2\\cos(\\omega t)+2\\sin(\\omega t)\\) and reports only \\(R=2\\sqrt{2}\\). Explain why this answer is incomplete.",
+                "ideal_answer": "The amplitude is correct, but the problem asks for one sinusoid, so the phase must also be included. Since \\(A=2\\) and \\(B=2\\), \\(\\theta=\\operatorname{atan2}(-2,2)=-\\pi/4\\), so the final form is \\(2\\sqrt{2}\\cos(\\omega t-\\pi/4)\\).",
+                "grading_rubric": [
+                  "Must state that amplitude alone is incomplete.",
+                  "Must include a phase value.",
+                  "Must give or describe the final single-sinusoid form.",
+                  "Must use the correct negative phase sign for the positive sine coefficient."
+                ],
+                "explanation": "This catches the common exam trap of stopping after magnitude and forgetting the final phase-adjusted signal.",
+                "hint": "The final answer must look like \\(R\\cos(\\omega t+\\theta)\\), not just \\(R\\).",
+                "needs_visual": false,
+                "same_point_variant": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "existing_page_images": {
+    "page-016": "/pages/page-016.png"
+  },
+  "available_figures": {},
+  "web_sources": [
+    {
+      "index": 1,
+      "title": "Liver",
+      "url": "https://en.wikipedia.org/wiki/Liver",
+      "snippet": "These blood vessels subdivide into small capillaries known as liver sinusoids, which then lead to hepatic lobules. Hepatic lobules are the functional"
+    },
+    {
+      "index": 2,
+      "title": "Hemorrhoid",
+      "url": "https://en.wikipedia.org/wiki/Hemorrhoid",
+      "snippet": "arteries nor veins, but blood vessels called sinusoids, connective tissue, and smooth muscle. Sinusoids do not have muscle tissue in their walls, as veins"
+    },
+    {
+      "index": 3,
+      "title": "Bone marrow",
+      "url": "https://en.wikipedia.org/wiki/Bone_marrow",
+      "snippet": "form the sinusoids. These are derived from endothelial stem cells, which are also present in the bone marrow. That bone marrow is a priming site for T-cell"
+    },
+    {
+      "index": 4,
+      "title": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Wikipedia",
+      "snippet": "changed Wikipedia&#039;s domain from wikipedia.com to wikipedia.org. After an early period of exponential growth, the growth rate of the English Wikipedia in terms"
+    },
+    {
+      "index": 5,
+      "title": "Seismic array",
+      "url": "https://en.wikipedia.org/wiki/Seismic_array",
+      "snippet": "obtained using special digital signal processing techniques such as beamforming, which suppress noises and thus enhance the signal-to-noise ratio (SNR). The"
+    }
+  ],
+  "output_contract": {
+    "format": "single_json_object",
+    "no_markdown_fences": true,
+    "no_prose": true,
+    "compact_json_preferred": true
+  },
+  "section_specific_rules": "section_specific_rules:\n- This section is computationally central and may receive strong exam-priority weighting.\n- Favor worked examples, conversion fluency, trap warnings, and quiz alignment.",
+  "summary_hint": null,
+  "exam_priority_guidance": {
+    "source": "background_hw1_distilled",
+    "markdown": "# Background HW1 Distillation — Section Filtered\n\nCurrent section: B.2\nRelevant topic buckets: sinusoid_phasor\nPreview-only topic buckets: complex_algebra\n\n## Relevant Concepts\n- Phasor interpretation of sinusoidal terms\n- Converting a cosine-sine combination into a single sinusoid\n\n## Relevant Problem Types\n- Combine sinusoidal terms into one sinusoid\n\n## Required Example Patterns\n- cos(ωt) + k sin(ωt) to one sinusoid\n- a cos(ωt) - b sin(ωt) to one sinusoid with phase explanation\n\n## Common Traps\n- Confusing radians and informal degree intuition\n- Getting phase sign wrong in sinusoid compression\n- Giving amplitude without final phase-adjusted sinusoid\n\n## Hard Rule\n- Section identity wins. Do not import formulas, examples, quiz bias, or Key Takeaways from non-relevant topic buckets.\n- Preview-only topics are limited to one short bridge sentence and must not become a teaching page.",
+    "json": {
+      "source_pdf": "/Users/chenghaoxiang/Desktop/HW1_Yanglet.pdf",
+      "scope": "background",
+      "topic_filter": {
+        "section_id": "B.2",
+        "section_title": "B.2 Sinusoids",
+        "relevant_topic_ids": [
+          "sinusoid_phasor"
+        ],
+        "preview_only_topic_ids": [
+          "complex_algebra"
+        ],
+        "rule": "Only relevant topics may shape lesson structure, examples, quizzes, and Key Takeaways. Preview-only topics may receive at most one short bridge sentence and must not be listed as core formulas."
+      },
+      "high_priority_concepts": [
+        "Phasor interpretation of sinusoidal terms",
+        "Converting a cosine-sine combination into a single sinusoid"
+      ],
+      "high_priority_problem_types": [
+        "Combine sinusoidal terms into one sinusoid"
+      ],
+      "required_example_patterns": [
+        "cos(ωt) + k sin(ωt) to one sinusoid",
+        "a cos(ωt) - b sin(ωt) to one sinusoid with phase explanation"
+      ],
+      "common_traps": [
+        "Confusing radians and informal degree intuition",
+        "Getting phase sign wrong in sinusoid compression",
+        "Giving amplitude without final phase-adjusted sinusoid"
+      ],
+      "explanation_bias": {
+        "worked_examples_over_history": true,
+        "representation_switching_is_core": true,
+        "phasor_and_phase_are_core": true,
+        "include_trap_warning_with_angle_topics": true,
+        "deemphasize_long_history_without_computational_payoff": true
+      },
+      "quiz_bias": {
+        "favor_conversion_items": true,
+        "favor_magnitude_phase_items": true,
+        "favor_complex_arithmetic_items": true,
+        "favor_single_sinusoid_items": true,
+        "favor_trap_questions_on_quadrant_and_phase": true
+      }
+    },
+    "usage_instruction": "Use this only as a weighting signal for emphasis, worked examples, trap warnings, and quiz bias in Background sections."
+  }
+}

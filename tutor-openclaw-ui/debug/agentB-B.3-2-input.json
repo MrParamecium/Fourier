@@ -1,0 +1,357 @@
+{
+  "blueprint": {
+    "section_id": "B.3-2",
+    "section_title": "B.3-2 The Exponentially Varying Sinusoid",
+    "difficulty": "intermediate",
+    "estimated_read_minutes": 6,
+    "learning_objectives": [
+      "Recognize an exponentially varying sinusoid as a sinusoid whose amplitude is controlled by an exponential envelope.",
+      "Sketch the exponential factor, the sinusoidal factor, and their product in the correct order.",
+      "Use period, phase delay, and envelope values to build an exam-ready waveform sketch."
+    ],
+    "visualization_need": {
+      "level": "interactive",
+      "reason": [
+        "depends_on_parameter_change",
+        "formula_to_phenomenon_gap",
+        "student_should_manipulate_to_understand",
+        "input_output_response_is_visual"
+      ],
+      "recommended_assets": [
+        "react_canvas_demo"
+      ]
+    },
+    "visual_plan": {
+      "primary_anchor": "react_demo",
+      "rationale": "This section teaches a waveform shape produced by multiplying a sinusoid by a decaying exponential. The referenced textbook Fig. B.11 is not available as a precision-cropped asset, and a full-page screenshot must not be used. A React + Canvas demo is the strongest option because students need to see how changing A, a, omega0, and theta changes the envelope, period, phase shift, and final product.",
+      "cram": "Use the demo to memorize the sketching recipe: draw the envelope first, then fit the sinusoid inside it.",
+      "standard": "Use the demo to connect the formula, one numerical example, and the final waveform shape.",
+      "top_score": "Use parameter controls to expose phase-sign errors, radians-versus-degrees mistakes, and envelope-touching conditions."
+    },
+    "blocks": [
+      {
+        "type": "text_explanation",
+        "instruction": "Page 1 must be minimal. Render only two short sections. First heading: 'Section Objective'. Under it, write one sentence: 'Learn how to sketch a sinusoid whose amplitude grows or decays exponentially.' Second heading: 'Concepts In This Section'. Under it, list concept names only as bullets: 'exponentially varying sinusoid', 'decaying exponential envelope', 'period and phase delay', 'envelope-constrained sketch'. Do not add background paragraphs, examples, formulas, or extra motivation on this page."
+      },
+      {
+        "type": "math_block",
+        "latex": "x(t)=Ae^{-at}\\cos(\\omega_0t+\\theta)",
+        "explanation_instruction": "Start the page with heading '## 1. What the formula means'. Explain in 100-140 words that this is a cosine wave whose size is multiplied by an exponential factor. Define every symbol: A is the starting scale, a controls decay rate when positive, omega0 controls oscillation speed in radians per second, theta is phase, and t is time. State when to use it: when a sinusoid has a visible growing or decaying amplitude envelope. Exam trigger: a problem asks to sketch or identify a sinusoid inside exponential bounds. Common misuse: treating e^{-at} as changing the period; it changes amplitude, not oscillation frequency. Include one minimal example sentence: 'For 4e^{-2t}cos(6t-60 degrees), the exponential controls height while cos(6t-60 degrees) controls oscillation.'"
+      },
+      {
+        "type": "interactive_demo",
+        "teaching_role": "concept_anchor",
+        "mode_specific_visual_use": {
+          "cram": "Make the envelope-first sketching pattern instantly recognizable.",
+          "standard": "Let the student connect each formula parameter to one visible waveform feature.",
+          "top_score": "Use sliders to test phase sign, decay rate, and envelope-touching edge cases."
+        },
+        "title": "Interactive envelope-controlled sinusoid",
+        "instruction": "Build a React + Canvas demo for x(t)=Ae^{-at}cos(omega0 t + theta). Use a white background and restrained colors: navy for x(t), muted teal for +Ae^{-at}, muted teal dashed for -Ae^{-at}, soft gray axes. Include sliders for A from 0.5 to 6, a from -1 to 4, omega0 from 1 to 12 rad/s, and theta from -180 degrees to 180 degrees. Default values must be A=4, a=2, omega0=6, theta=-60 degrees. Add checkboxes to show/hide the exponential envelopes and the plain cosine factor. Under the canvas, display live readouts for T0=2pi/omega0 and phase shift -theta/omega0 using radians internally. Add a short prompt: 'Move a first: what changes, amplitude or period?' Do not include dense derivations."
+      },
+      {
+        "type": "math_block",
+        "latex": "T_0=\\frac{2\\pi}{\\omega_0}",
+        "explanation_instruction": "Start the page with heading '## 2. Sketch the sinusoidal factor'. Explain in 90-130 words that before multiplying by the exponential, students should sketch cos(omega0 t + theta) as an ordinary shifted cosine. Define T0 as the period and omega0 as angular frequency in rad/s. Use the section example: omega0=6, so T0=2pi/6=pi/3 approximately 1.05 seconds; the textbook rounds this to about 1 second for sketching. Explain phase delay for cos(6t-60 degrees): 60 degrees is pi/3 radians, so the delay is (pi/3)/6=pi/18 approximately 0.17 seconds, close to 1/6 second. Exam note: convert degrees to radians before using omega0 in rad/s. Common trap: saying the delay is 60 seconds or using 60 directly with omega0=6."
+      },
+      {
+        "type": "text_explanation",
+        "instruction": "Continue the same page with a representative worked mini-example titled 'Worked example: the cosine part'. In 80-110 words, walk through cos(6t-60 degrees). Say: first find the period, then convert phase to time delay, then sketch a cosine shifted right by about 0.17 s. Mention that this is only the oscillating skeleton; the exponential envelope will shrink its height later. End with a quick check: 'If theta were +60 degrees instead, would the cosine shift left or right?' Give the answer immediately: it shifts left because cos(omega0 t + theta) reaches the same phase earlier."
+      },
+      {
+        "type": "math_block",
+        "latex": "-Ae^{-at}\\le x(t)\\le Ae^{-at}",
+        "explanation_instruction": "Start the page with heading '## 3. The envelope controls the allowed amplitude'. Explain in 100-150 words that because cosine always stays between -1 and 1, multiplying by Ae^{-at} traps the final signal between +Ae^{-at} and -Ae^{-at}. Define the positive envelope and negative envelope. State when the waveform touches the positive envelope: when cos(omega0 t + theta)=1. State when it touches the negative envelope: when cos(omega0 t + theta)=-1. Use the example A=4 and a=2: the positive envelope is 4e^{-2t} and the negative envelope is -4e^{-2t}. Common misuse: drawing the final waveform crossing outside the envelopes or making the envelope oscillate."
+      },
+      {
+        "type": "text_explanation",
+        "instruction": "Add a representative full-sketch example titled 'Worked example: 4e^{-2t}cos(6t-60 degrees)'. Target 120-160 words. Give the three-step sketching recipe exactly: 1) draw 4e^{-2t}; 2) draw -4e^{-2t}; 3) fit the shifted cosine inside those bounds. Include the guide values from the OCR: at t=0, 0.5, 1, 1.5, and 2 seconds, the positive envelope is approximately 4, 1.47, 0.54, 0.20, and 0.07. Explain that these values come from one time constant of 0.5 s because a=2. End with exam note: 'For a sketch, envelope shape and phase direction usually matter more than plotting many exact points.'"
+      },
+      {
+        "type": "section_summary",
+        "instruction": "Create a recap page titled '📌 Key Takeaways'. Include 4-5 bullets, each no more than 24 words. The bullets must explicitly include these formulas: x(t)=Ae^{-at}cos(omega0 t+theta), T0=2pi/omega0, phase shift = -theta/omega0 with theta in radians, and -Ae^{-at} <= x(t) <= Ae^{-at}. Also include the sketching recipe: draw envelopes first, then fit the shifted sinusoid inside. End with one bridge sentence: 'In the next section we will use these waveform ideas as building blocks for more signal analysis.'"
+      },
+      {
+        "type": "quiz_plan",
+        "target_questions": 7,
+        "question_range": {
+          "min": 6,
+          "max": 8
+        },
+        "knowledge_points": [
+          {
+            "id": "formula_roles",
+            "label": "Roles of the exponential and sinusoidal factors",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 2
+            },
+            "questions": [
+              {
+                "id": "kp1_q1",
+                "type": "multiple_choice",
+                "stem": "In x(t)=Ae^{-at}cos(omega0 t+theta), what does e^{-at} mainly change when a>0?",
+                "options": [
+                  "A. The oscillation period",
+                  "B. The amplitude envelope",
+                  "C. The phase angle only",
+                  "D. The horizontal time axis units"
+                ],
+                "correct_option": "B",
+                "explanation": "For a>0, e^{-at} multiplies the cosine and makes its amplitude decay over time.",
+                "wrong_option_explanations": {
+                  "A": "The period is controlled by omega0, not by the exponential factor.",
+                  "C": "Phase is controlled by theta, not by e^{-at}.",
+                  "D": "The exponential does not change the unit of time."
+                },
+                "hint": "Ask which factor controls height rather than left-right spacing.",
+                "needs_visual": false,
+                "same_point_variant": true
+              },
+              {
+                "id": "kp1_q2",
+                "type": "multiple_choice",
+                "stem": "A plotted waveform oscillates faster and faster as time increases, while its peak height decays smoothly. Is this the expected shape of Ae^{-at}cos(omega0 t+theta) with constant omega0 and a>0?",
+                "options": [
+                  "A. Yes, because exponential decay speeds up the cosine",
+                  "B. Yes, because theta changes with time",
+                  "C. No, the height decays but the period stays constant",
+                  "D. No, the height must stay constant"
+                ],
+                "correct_option": "C",
+                "explanation": "The exponential changes the amplitude envelope, but constant omega0 means the spacing between cycles stays constant.",
+                "wrong_option_explanations": {
+                  "A": "The exponential multiplier does not change frequency.",
+                  "B": "Theta is a fixed phase constant here, not a time-varying parameter.",
+                  "D": "The height does not stay constant when a>0."
+                },
+                "hint": "Separate vertical height from horizontal cycle spacing.",
+                "needs_visual": true,
+                "visual_type": "wrong_vs_right_visual_check",
+                "same_point_variant": true
+              }
+            ]
+          },
+          {
+            "id": "period_phase_delay",
+            "label": "Period and phase delay",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 2
+            },
+            "questions": [
+              {
+                "id": "kp2_q1",
+                "type": "multiple_choice",
+                "stem": "For cos(6t-60 degrees), what is the best sketching interpretation?",
+                "options": [
+                  "A. Period about 1.05 s, shifted right by about 0.17 s",
+                  "B. Period 6 s, shifted left by 60 s",
+                  "C. Period about 0.17 s, shifted right by about 1.05 s",
+                  "D. Period about 1.05 s, shifted left by about 0.17 s"
+                ],
+                "correct_option": "A",
+                "explanation": "T0=2pi/6≈1.05 s. The term -60 degrees means a delay, so the cosine shifts right by (pi/3)/6≈0.17 s.",
+                "wrong_option_explanations": {
+                  "B": "6 is angular frequency, not period, and 60 degrees is not 60 seconds.",
+                  "C": "This swaps the period and time delay.",
+                  "D": "A negative phase inside cos(omega0 t + theta) produces a right shift, not a left shift."
+                },
+                "hint": "Convert 60 degrees to pi/3 radians before dividing by 6.",
+                "needs_visual": false,
+                "same_point_variant": true
+              },
+              {
+                "id": "kp2_q2",
+                "type": "multiple_choice",
+                "stem": "For cos(8t+pi/4), which statement is correct?",
+                "options": [
+                  "A. It shifts right by pi/32 seconds",
+                  "B. It shifts left by pi/32 seconds",
+                  "C. It shifts left by pi/4 seconds",
+                  "D. It has period pi/4 seconds and no shift"
+                ],
+                "correct_option": "B",
+                "explanation": "The time shift is -theta/omega0=-(pi/4)/8=-pi/32, so the waveform shifts left by pi/32 seconds.",
+                "wrong_option_explanations": {
+                  "A": "The sign is wrong; positive theta produces a left shift.",
+                  "C": "You must divide the phase by omega0 to convert angle to time.",
+                  "D": "The period is 2pi/8=pi/4 seconds, but there is also a phase shift."
+                },
+                "hint": "Use shift = -theta/omega0.",
+                "needs_visual": false,
+                "same_point_variant": true
+              }
+            ]
+          },
+          {
+            "id": "envelope_sketching",
+            "label": "Envelope-constrained sketch",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 2
+            },
+            "questions": [
+              {
+                "id": "kp3_q1",
+                "type": "multiple_choice",
+                "stem": "For x(t)=4e^{-2t}cos(6t-60 degrees), which pair of curves forms the amplitude envelope?",
+                "options": [
+                  "A. y=cos(6t-60 degrees) and y=-cos(6t-60 degrees)",
+                  "B. y=4e^{-2t} and y=-4e^{-2t}",
+                  "C. y=6t-60 degrees and y=-(6t-60 degrees)",
+                  "D. y=4cos(6t-60 degrees) and y=-4cos(6t-60 degrees)"
+                ],
+                "correct_option": "B",
+                "explanation": "The cosine ranges from -1 to 1, so multiplying by 4e^{-2t} traps the waveform between +4e^{-2t} and -4e^{-2t}.",
+                "wrong_option_explanations": {
+                  "A": "Those are the unscaled oscillating factors, not the envelope curves.",
+                  "C": "The angle expression is not an amplitude boundary.",
+                  "D": "Those are constant-amplitude sinusoids, not exponential envelopes."
+                },
+                "hint": "The envelope comes from the multiplier outside the cosine.",
+                "needs_visual": true,
+                "visual_type": "envelope_waveform_plot",
+                "same_point_variant": true
+              },
+              {
+                "id": "kp3_q2",
+                "type": "multiple_choice",
+                "stem": "When does x(t)=Ae^{-at}cos(omega0 t+theta) touch its positive envelope Ae^{-at}?",
+                "options": [
+                  "A. When cos(omega0 t+theta)=1",
+                  "B. When cos(omega0 t+theta)=0",
+                  "C. When cos(omega0 t+theta)=-1",
+                  "D. At every time t"
+                ],
+                "correct_option": "A",
+                "explanation": "The product equals Ae^{-at} only when the cosine factor is exactly 1.",
+                "wrong_option_explanations": {
+                  "B": "If the cosine is 0, then x(t)=0, not the positive envelope.",
+                  "C": "If the cosine is -1, the signal touches the negative envelope.",
+                  "D": "The waveform stays inside the envelope but only touches it at peaks."
+                },
+                "hint": "Set x(t)=Ae^{-at} and solve for the cosine factor.",
+                "needs_visual": true,
+                "visual_type": "visual_pattern_recognition_check",
+                "same_point_variant": true
+              }
+            ]
+          },
+          {
+            "id": "demo_observation",
+            "label": "Interpreting parameter changes in the interactive demo",
+            "importance": "medium",
+            "exam_weight": "medium",
+            "mastery_rule": {
+              "correct_streak_required": 1
+            },
+            "questions": [
+              {
+                "id": "kp4_q1",
+                "type": "short_answer",
+                "stem": "In the interactive demo, keep A=4, omega0=6, theta=-60 degrees, and increase a from 1 to 3. What visible feature changes, and what feature should stay the same?",
+                "ideal_answer": "The envelope decays faster, so the peak heights shrink more quickly. The period of the oscillation stays the same because omega0 did not change.",
+                "grading_rubric": [
+                  "Must say the envelope or amplitude decay becomes faster",
+                  "Must say the period or cycle spacing stays the same",
+                  "Must connect unchanged period to unchanged omega0"
+                ],
+                "explanation": "This checks whether the student separates amplitude decay from oscillation frequency.",
+                "hint": "Changing a affects e^{-at}, not cos(omega0 t+theta)'s frequency.",
+                "needs_visual": true,
+                "visual_type": "demo_observation_check",
+                "same_point_variant": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "existing_page_images": {
+    "page-022": "/pages/page-022.png"
+  },
+  "available_figures": {},
+  "web_sources": [
+    {
+      "index": 1,
+      "title": "Organ-on-a-chip",
+      "url": "https://en.wikipedia.org/wiki/Organ-on-a-chip",
+      "snippet": "Lamontagne J, Cirillo J, Rajiv C, Bouchard MJ, Noh M (December 2015). \"Liver sinusoid on a chip: Long-term layered co-culture of primary rat hepatocytes and"
+    },
+    {
+      "index": 2,
+      "title": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Wikipedia",
+      "snippet": "changed Wikipedia&#039;s domain from wikipedia.com to wikipedia.org. After an early period of exponential growth, the growth rate of the English Wikipedia in terms"
+    },
+    {
+      "index": 3,
+      "title": "Duga radar",
+      "url": "https://en.wikipedia.org/wiki/Duga_radar",
+      "snippet": "signal became such a nuisance that some communications receivers began including \"Woodpecker Blankers\" in their circuit designs. The unclaimed signal"
+    }
+  ],
+  "output_contract": {
+    "format": "single_json_object",
+    "no_markdown_fences": true,
+    "no_prose": true,
+    "compact_json_preferred": true
+  },
+  "section_specific_rules": "section_specific_rules:\n- This section is computationally central and may receive strong exam-priority weighting.\n- Favor worked examples, conversion fluency, trap warnings, and quiz alignment.",
+  "summary_hint": null,
+  "exam_priority_guidance": {
+    "source": "background_hw1_distilled",
+    "markdown": "# Background HW1 Distillation — Section Filtered\n\nCurrent section: B.3-2\nRelevant topic buckets: sinusoid_phasor\nPreview-only topic buckets: complex_algebra\n\n## Relevant Concepts\n- Phasor interpretation of sinusoidal terms\n- Converting a cosine-sine combination into a single sinusoid\n\n## Relevant Problem Types\n- Combine sinusoidal terms into one sinusoid\n\n## Required Example Patterns\n- cos(ωt) + k sin(ωt) to one sinusoid\n- a cos(ωt) - b sin(ωt) to one sinusoid with phase explanation\n\n## Common Traps\n- Confusing radians and informal degree intuition\n- Getting phase sign wrong in sinusoid compression\n- Giving amplitude without final phase-adjusted sinusoid\n\n## Hard Rule\n- Section identity wins. Do not import formulas, examples, quiz bias, or Key Takeaways from non-relevant topic buckets.\n- Preview-only topics are limited to one short bridge sentence and must not become a teaching page.",
+    "json": {
+      "source_pdf": "/Users/chenghaoxiang/Desktop/HW1_Yanglet.pdf",
+      "scope": "background",
+      "topic_filter": {
+        "section_id": "B.3-2",
+        "section_title": "B.3-2 The Exponentially Varying Sinusoid",
+        "relevant_topic_ids": [
+          "sinusoid_phasor"
+        ],
+        "preview_only_topic_ids": [
+          "complex_algebra"
+        ],
+        "rule": "Only relevant topics may shape lesson structure, examples, quizzes, and Key Takeaways. Preview-only topics may receive at most one short bridge sentence and must not be listed as core formulas."
+      },
+      "high_priority_concepts": [
+        "Phasor interpretation of sinusoidal terms",
+        "Converting a cosine-sine combination into a single sinusoid"
+      ],
+      "high_priority_problem_types": [
+        "Combine sinusoidal terms into one sinusoid"
+      ],
+      "required_example_patterns": [
+        "cos(ωt) + k sin(ωt) to one sinusoid",
+        "a cos(ωt) - b sin(ωt) to one sinusoid with phase explanation"
+      ],
+      "common_traps": [
+        "Confusing radians and informal degree intuition",
+        "Getting phase sign wrong in sinusoid compression",
+        "Giving amplitude without final phase-adjusted sinusoid"
+      ],
+      "explanation_bias": {
+        "worked_examples_over_history": true,
+        "representation_switching_is_core": true,
+        "phasor_and_phase_are_core": true,
+        "include_trap_warning_with_angle_topics": true,
+        "deemphasize_long_history_without_computational_payoff": true
+      },
+      "quiz_bias": {
+        "favor_conversion_items": true,
+        "favor_magnitude_phase_items": true,
+        "favor_complex_arithmetic_items": true,
+        "favor_single_sinusoid_items": true,
+        "favor_trap_questions_on_quadrant_and_phase": true
+      }
+    },
+    "usage_instruction": "Use this only as a weighting signal for emphasis, worked examples, trap warnings, and quiz bias in Background sections."
+  }
+}

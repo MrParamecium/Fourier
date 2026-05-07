@@ -1,0 +1,552 @@
+# Agent A Preview: B.7-1 Matrix Terminology
+
+- Difficulty: beginner
+- Estimated read minutes: 5
+
+## Learning Objectives
+
+- Read matrix notation using row and column indices
+- Identify the size of a matrix as rows by columns
+- Distinguish row vectors from column vectors
+- Recognize square matrices and main diagonal entries
+
+## Visualization Need
+
+```json
+{
+  "level": "interactive",
+  "reason": [
+    "depends_on_parameter_change",
+    "student_should_manipulate_to_understand",
+    "pattern_recognition_benefits_from_figure"
+  ],
+  "recommended_assets": [
+    "react_canvas_demo"
+  ]
+}
+```
+
+## Visual Plan
+
+```json
+{
+  "primary_anchor": "react_demo",
+  "rationale": "Matrix terminology is symbolic and structural, so the main teaching surface should be clean LaTeX matrix notation. The available textbook pages contain no useful standalone figure for this subsection. A small React + Canvas entry-locator demo is the best visual anchor because students learn rows, columns, size, and entries faster by highlighting positions directly.",
+  "cram": "Use the demo to recognize row-count, column-count, and entry-location questions instantly.",
+  "standard": "Use LaTeX definitions plus one interactive locator example to connect notation to matrix positions.",
+  "top_score": "Use the demo to catch index-order traps, especially confusing a_ij with a_ji."
+}
+```
+
+## Planned Blocks
+
+### Block 1: `text_explanation`
+- **instruction**: Create a minimal overview page only. Use exactly these two short sections: 'Section Objective' and 'Concepts In This Section'. Under 'Section Objective', write one sentence: 'Learn the basic vocabulary used to describe matrices so later operations are easier to read.' Under 'Concepts In This Section', list only these concept names as bullets: matrix entries, matrix size, row vector, column vector, square matrix, main diagonal. Do not add background paragraphs or explanations.
+
+### Block 2: `math_block`
+- **latex**: \mathbf{A}=[a_{ij}]_{m\times n}
+- **explanation_instruction**: Start a new page headed '## 1. Matrix entries and size'. Explain in 90–130 words that \(\mathbf{A}\) is the matrix name, \(a_{ij}\) means the entry in row \(i\), column \(j\), and \(m\times n\) means \(m\) rows and \(n\) columns. Include this representative example in prose: for a \(2\times 3\) matrix, \(a_{23}\) is in the second row and third column. State the exam trigger: when a question gives \(a_{ij}\), locate row first, column second. State the most common misuse: reversing the order and reading \(a_{23}\) as row 3, column 2.
+
+### Block 3: `interactive_demo`
+- **demo_id**: matrix_size_and_entry_locator
+- **teaching_role**: concept_anchor
+- **mode_specific_visual_use**:
+```json
+{
+  "cram": "Make students identify matrix size and entry position in under 10 seconds.",
+  "standard": "Let students click rows and columns to connect \\(a_{ij}\\) notation to a visible cell.",
+  "top_score": "Include swapped-index cases so students notice the difference between \\(a_{ij}\\) and \\(a_{ji}\\)."
+}
+```
+- **instruction**: Build a compact React + Canvas demo on the same page as the matrix-entry explanation. Show a matrix grid with controls for rows \(m\) from 1 to 5 and columns \(n\) from 1 to 5. Label rows on the left and columns on top. Add two small number inputs for \(i\) and \(j\). Highlight the selected cell \(a_{ij}\) in muted teal and display the sentence: 'This is row i, column j.' Include a small quick-check button that asks: 'In a 3 by 4 matrix, where is \(a_{24}\)?' The correct feedback must say: 'Second row, fourth column.' The wrong feedback must say: 'Remember: row index first, column index second.' Keep the visual clean, white-background, and lecture-note style.
+
+### Block 4: `math_block`
+- **latex**: \mathbf{x}=\begin{bmatrix}x_1\\x_2\\\vdots\\x_m\end{bmatrix}
+- **explanation_instruction**: Start a new page headed '## 2. Column vectors'. Explain in 70–100 words that a column vector is a matrix with one column and usually many rows, so its size is \(m\times 1\). Define each \(x_i\) as the entry in row \(i\). Include one minimal example: \(\begin{bmatrix}2\\-1\\5\end{bmatrix}\) is a \(3\times 1\) column vector. Exam trigger: vertical stacking means column vector. Common misuse: calling it a row vector just because it contains several numbers.
+
+### Block 5: `math_block`
+- **latex**: \mathbf{x}^{T}=\begin{bmatrix}x_1&x_2&\cdots&x_m\end{bmatrix}
+- **explanation_instruction**: Continue the same row-versus-column vector page, but keep this as the separate row-vector formula. Explain in 70–100 words that a row vector is a matrix with one row and many columns, so its size is \(1\times m\). Mention that the superscript \(T\) often signals transpose, turning a column layout into a row layout. Include one minimal example: \(\begin{bmatrix}2&-1&5\end{bmatrix}\) is a \(1\times 3\) row vector. Common misuse: ignoring orientation and treating row and column vectors as interchangeable.
+
+### Block 6: `text_explanation`
+- **instruction**: Add a short representative worked example on the row-versus-column vector page. Use 80–120 words. Show these two objects in inline LaTeX: \(\begin{bmatrix}4\\7\end{bmatrix}\) and \(\begin{bmatrix}4&7\end{bmatrix}\). Ask the student to name each size, then answer immediately: the first is \(2\times 1\), the second is \(1\times 2\). End with an exam note: 'Same numbers, different shape; matrix problems often care about shape.'
+
+### Block 7: `math_block`
+- **latex**: \mathbf{A}\text{ is square}\Longleftrightarrow m=n
+- **explanation_instruction**: Start a new page headed '## 3. Square matrices'. Explain in 80–110 words that a square matrix has the same number of rows and columns. Define \(m\) as the row count and \(n\) as the column count. Include one minimal example: a \(3\times 3\) matrix is square, but a \(3\times 2\) matrix is not. Exam trigger: determinant, inverse, eigenvalue, and main diagonal questions usually require a square matrix. Common misuse: thinking any matrix with many entries is square without checking dimensions.
+
+### Block 8: `math_block`
+- **latex**: a_{ij}\text{ is on the main diagonal}\Longleftrightarrow i=j
+- **explanation_instruction**: Continue the square-matrix page with the main diagonal as a closely linked term. Explain in 80–110 words that the main diagonal runs from the upper-left entry to the lower-right entry of a square matrix. State that diagonal entries are exactly those whose row and column indices match: \(a_{11}, a_{22}, a_{33}\), and so on. Include one quick check: in a \(4\times 4\) matrix, \(a_{34}\) is not diagonal because \(3\ne4\). Common misuse: treating every visually slanted line of entries as the main diagonal.
+
+### Block 9: `section_summary`
+- **instruction**: Create a recap page titled '📌 Key Takeaways'. Use 4 compact bullets, each no more than 22 words. Include these formulas explicitly: \(\mathbf{A}=[a_{ij}]_{m\times n}\), column vector size \(m\times1\), row vector size \(1\times m\), \(\mathbf{A}\text{ is square}\Longleftrightarrow m=n\), and \(a_{ij}\text{ is diagonal}\Longleftrightarrow i=j\). End with one sentence: 'Next, these terms will make matrix operations easier to describe and check.'
+
+### Block 10: `quiz_plan`
+- **target_questions**:
+```json
+7
+```
+- **question_range**:
+```json
+{
+  "min": 5,
+  "max": 8
+}
+```
+- **knowledge_points**:
+```json
+[
+  {
+    "id": "matrix_entries_and_size",
+    "label": "Matrix entries and dimensions",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "kp1_q1",
+        "type": "multiple_choice",
+        "stem": "A matrix \\(\\mathbf{A}\\) has size \\(4\\times 6\\). What does this mean?",
+        "options": [
+          "A. 4 columns and 6 rows",
+          "B. 4 rows and 6 columns",
+          "C. 4 entries total and 6 diagonal entries",
+          "D. Row 4 and column 6 are the only important entries"
+        ],
+        "correct_option": "B",
+        "explanation": "Matrix size is always read as rows by columns, so \\(4\\times6\\) means 4 rows and 6 columns.",
+        "wrong_option_explanations": {
+          "A": "This reverses the order. Rows come first.",
+          "C": "A \\(4\\times6\\) matrix has 24 entries total, not 4.",
+          "D": "The size describes the whole matrix, not one entry."
+        },
+        "hint": "Read matrix dimensions as rows first, columns second.",
+        "needs_visual": false,
+        "same_point_variant": true
+      },
+      {
+        "id": "kp1_q2",
+        "type": "multiple_choice",
+        "stem": "In \\(a_{35}\\), what does the subscript mean?",
+        "options": [
+          "A. Third column, fifth row",
+          "B. Third row, fifth column",
+          "C. The matrix has 3 rows and 5 columns",
+          "D. The entry equals 35"
+        ],
+        "correct_option": "B",
+        "explanation": "\\(a_{ij}\\) means row \\(i\\), column \\(j\\). Therefore \\(a_{35}\\) is in row 3, column 5.",
+        "wrong_option_explanations": {
+          "A": "This reverses row and column order.",
+          "C": "The subscript locates one entry; it does not give the whole matrix size.",
+          "D": "The subscript is a location label, not the value of the entry."
+        },
+        "hint": "For \\(a_{ij}\\), say 'row i, column j.'",
+        "needs_visual": false,
+        "same_point_variant": true
+      },
+      {
+        "id": "kp1_q3",
+        "type": "multiple_choice",
+        "stem": "Demo observation: In the entry-locator demo, set \\(m=3\\), \\(n=4\\), \\(i=2\\), and \\(j=4\\). Which cell should be highlighted?",
+        "options": [
+          "A. Second row, fourth column",
+          "B. Fourth row, second column",
+          "C. Third row, fourth column",
+          "D. Second row, third column"
+        ],
+        "correct_option": "A",
+        "explanation": "The highlighted cell is \\(a_{24}\\), which means row 2, column 4.",
+        "wrong_option_explanations": {
+          "B": "This swaps the indices.",
+          "C": "The row index is 2, not 3.",
+          "D": "The column index is 4, not 3."
+        },
+        "hint": "Use the inputs \\(i\\) and \\(j\\), not just the matrix size.",
+        "needs_visual": true,
+        "visual_type": "interactive_demo_observation",
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "row_vs_column_vectors",
+    "label": "Row vectors versus column vectors",
+    "importance": "high",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "kp2_q1",
+        "type": "multiple_choice",
+        "stem": "What is the size of \\(\\begin{bmatrix}8\\\\-2\\\\1\\end{bmatrix}\\)?",
+        "options": [
+          "A. \\(1\\times3\\)",
+          "B. \\(3\\times1\\)",
+          "C. \\(3\\times3\\)",
+          "D. \\(1\\times1\\)"
+        ],
+        "correct_option": "B",
+        "explanation": "The entries are stacked vertically, so there are 3 rows and 1 column.",
+        "wrong_option_explanations": {
+          "A": "That would be a row vector, with entries written horizontally.",
+          "C": "There is only one column, not three.",
+          "D": "There are three entries, not one."
+        },
+        "hint": "Count rows first, then columns.",
+        "needs_visual": true,
+        "visual_type": "latex_matrix_structure",
+        "same_point_variant": true
+      },
+      {
+        "id": "kp2_q2",
+        "type": "multiple_choice",
+        "stem": "Which object is a row vector?",
+        "options": [
+          "A. \\(\\begin{bmatrix}1\\\\2\\\\3\\end{bmatrix}\\)",
+          "B. \\(\\begin{bmatrix}1&2&3\\end{bmatrix}\\)",
+          "C. \\(\\begin{bmatrix}1&2\\\\3&4\\end{bmatrix}\\)",
+          "D. \\(\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix}\\)"
+        ],
+        "correct_option": "B",
+        "explanation": "A row vector has exactly one row and multiple columns.",
+        "wrong_option_explanations": {
+          "A": "This is a column vector because the entries are vertical.",
+          "C": "This is a \\(2\\times2\\) matrix, not a vector with one row or one column.",
+          "D": "This is a square matrix, not a row vector."
+        },
+        "hint": "A row vector is horizontal.",
+        "needs_visual": true,
+        "visual_type": "latex_matrix_structure",
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "square_and_diagonal",
+    "label": "Square matrices and main diagonal entries",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "kp3_q1",
+        "type": "multiple_choice",
+        "stem": "Which matrix size is square?",
+        "options": [
+          "A. \\(2\\times3\\)",
+          "B. \\(5\\times1\\)",
+          "C. \\(4\\times4\\)",
+          "D. \\(1\\times6\\)"
+        ],
+        "correct_option": "C",
+        "explanation": "A square matrix has the same number of rows and columns, so \\(4\\times4\\) is square.",
+        "wrong_option_explanations": {
+          "A": "Rows and columns are not equal.",
+          "B": "This is a column vector shape, not square.",
+          "D": "This is a row vector shape, not square."
+        },
+        "hint": "Check whether \\(m=n\\).",
+        "needs_visual": false,
+        "same_point_variant": true
+      },
+      {
+        "id": "kp3_q2",
+        "type": "short_answer",
+        "stem": "A classmate says \\(a_{23}\\) is on the main diagonal because both indices are small. Explain why this is wrong.",
+        "ideal_answer": "\\(a_{23}\\) is not on the main diagonal because diagonal entries require matching row and column indices. Since \\(2\\ne3\\), \\(a_{23}\\) is off the main diagonal.",
+        "grading_rubric": [
+          "Must state the diagonal condition \\(i=j\\)",
+          "Must compare the indices 2 and 3",
+          "Must conclude that \\(a_{23}\\) is not on the main diagonal"
+        ],
+        "explanation": "This checks whether the student knows the actual index rule instead of relying on vague visual guessing.",
+        "hint": "Main diagonal entries have the same row number and column number.",
+        "needs_visual": true,
+        "visual_type": "latex_matrix_index_check",
+        "same_point_variant": true
+      }
+    ]
+  }
+]
+```
+
+## Raw JSON
+
+```json
+{
+  "section_id": "B.7-1",
+  "section_title": "Matrix Terminology",
+  "difficulty": "beginner",
+  "estimated_read_minutes": 5,
+  "learning_objectives": [
+    "Read matrix notation using row and column indices",
+    "Identify the size of a matrix as rows by columns",
+    "Distinguish row vectors from column vectors",
+    "Recognize square matrices and main diagonal entries"
+  ],
+  "visualization_need": {
+    "level": "interactive",
+    "reason": [
+      "depends_on_parameter_change",
+      "student_should_manipulate_to_understand",
+      "pattern_recognition_benefits_from_figure"
+    ],
+    "recommended_assets": [
+      "react_canvas_demo"
+    ]
+  },
+  "visual_plan": {
+    "primary_anchor": "react_demo",
+    "rationale": "Matrix terminology is symbolic and structural, so the main teaching surface should be clean LaTeX matrix notation. The available textbook pages contain no useful standalone figure for this subsection. A small React + Canvas entry-locator demo is the best visual anchor because students learn rows, columns, size, and entries faster by highlighting positions directly.",
+    "cram": "Use the demo to recognize row-count, column-count, and entry-location questions instantly.",
+    "standard": "Use LaTeX definitions plus one interactive locator example to connect notation to matrix positions.",
+    "top_score": "Use the demo to catch index-order traps, especially confusing a_ij with a_ji."
+  },
+  "blocks": [
+    {
+      "type": "text_explanation",
+      "instruction": "Create a minimal overview page only. Use exactly these two short sections: 'Section Objective' and 'Concepts In This Section'. Under 'Section Objective', write one sentence: 'Learn the basic vocabulary used to describe matrices so later operations are easier to read.' Under 'Concepts In This Section', list only these concept names as bullets: matrix entries, matrix size, row vector, column vector, square matrix, main diagonal. Do not add background paragraphs or explanations."
+    },
+    {
+      "type": "math_block",
+      "latex": "\\mathbf{A}=[a_{ij}]_{m\\times n}",
+      "explanation_instruction": "Start a new page headed '## 1. Matrix entries and size'. Explain in 90–130 words that \\(\\mathbf{A}\\) is the matrix name, \\(a_{ij}\\) means the entry in row \\(i\\), column \\(j\\), and \\(m\\times n\\) means \\(m\\) rows and \\(n\\) columns. Include this representative example in prose: for a \\(2\\times 3\\) matrix, \\(a_{23}\\) is in the second row and third column. State the exam trigger: when a question gives \\(a_{ij}\\), locate row first, column second. State the most common misuse: reversing the order and reading \\(a_{23}\\) as row 3, column 2."
+    },
+    {
+      "type": "interactive_demo",
+      "demo_id": "matrix_size_and_entry_locator",
+      "teaching_role": "concept_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Make students identify matrix size and entry position in under 10 seconds.",
+        "standard": "Let students click rows and columns to connect \\(a_{ij}\\) notation to a visible cell.",
+        "top_score": "Include swapped-index cases so students notice the difference between \\(a_{ij}\\) and \\(a_{ji}\\)."
+      },
+      "instruction": "Build a compact React + Canvas demo on the same page as the matrix-entry explanation. Show a matrix grid with controls for rows \\(m\\) from 1 to 5 and columns \\(n\\) from 1 to 5. Label rows on the left and columns on top. Add two small number inputs for \\(i\\) and \\(j\\). Highlight the selected cell \\(a_{ij}\\) in muted teal and display the sentence: 'This is row i, column j.' Include a small quick-check button that asks: 'In a 3 by 4 matrix, where is \\(a_{24}\\)?' The correct feedback must say: 'Second row, fourth column.' The wrong feedback must say: 'Remember: row index first, column index second.' Keep the visual clean, white-background, and lecture-note style."
+    },
+    {
+      "type": "math_block",
+      "latex": "\\mathbf{x}=\\begin{bmatrix}x_1\\\\x_2\\\\\\vdots\\\\x_m\\end{bmatrix}",
+      "explanation_instruction": "Start a new page headed '## 2. Column vectors'. Explain in 70–100 words that a column vector is a matrix with one column and usually many rows, so its size is \\(m\\times 1\\). Define each \\(x_i\\) as the entry in row \\(i\\). Include one minimal example: \\(\\begin{bmatrix}2\\\\-1\\\\5\\end{bmatrix}\\) is a \\(3\\times 1\\) column vector. Exam trigger: vertical stacking means column vector. Common misuse: calling it a row vector just because it contains several numbers."
+    },
+    {
+      "type": "math_block",
+      "latex": "\\mathbf{x}^{T}=\\begin{bmatrix}x_1&x_2&\\cdots&x_m\\end{bmatrix}",
+      "explanation_instruction": "Continue the same row-versus-column vector page, but keep this as the separate row-vector formula. Explain in 70–100 words that a row vector is a matrix with one row and many columns, so its size is \\(1\\times m\\). Mention that the superscript \\(T\\) often signals transpose, turning a column layout into a row layout. Include one minimal example: \\(\\begin{bmatrix}2&-1&5\\end{bmatrix}\\) is a \\(1\\times 3\\) row vector. Common misuse: ignoring orientation and treating row and column vectors as interchangeable."
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Add a short representative worked example on the row-versus-column vector page. Use 80–120 words. Show these two objects in inline LaTeX: \\(\\begin{bmatrix}4\\\\7\\end{bmatrix}\\) and \\(\\begin{bmatrix}4&7\\end{bmatrix}\\). Ask the student to name each size, then answer immediately: the first is \\(2\\times 1\\), the second is \\(1\\times 2\\). End with an exam note: 'Same numbers, different shape; matrix problems often care about shape.'"
+    },
+    {
+      "type": "math_block",
+      "latex": "\\mathbf{A}\\text{ is square}\\Longleftrightarrow m=n",
+      "explanation_instruction": "Start a new page headed '## 3. Square matrices'. Explain in 80–110 words that a square matrix has the same number of rows and columns. Define \\(m\\) as the row count and \\(n\\) as the column count. Include one minimal example: a \\(3\\times 3\\) matrix is square, but a \\(3\\times 2\\) matrix is not. Exam trigger: determinant, inverse, eigenvalue, and main diagonal questions usually require a square matrix. Common misuse: thinking any matrix with many entries is square without checking dimensions."
+    },
+    {
+      "type": "math_block",
+      "latex": "a_{ij}\\text{ is on the main diagonal}\\Longleftrightarrow i=j",
+      "explanation_instruction": "Continue the square-matrix page with the main diagonal as a closely linked term. Explain in 80–110 words that the main diagonal runs from the upper-left entry to the lower-right entry of a square matrix. State that diagonal entries are exactly those whose row and column indices match: \\(a_{11}, a_{22}, a_{33}\\), and so on. Include one quick check: in a \\(4\\times 4\\) matrix, \\(a_{34}\\) is not diagonal because \\(3\\ne4\\). Common misuse: treating every visually slanted line of entries as the main diagonal."
+    },
+    {
+      "type": "section_summary",
+      "instruction": "Create a recap page titled '📌 Key Takeaways'. Use 4 compact bullets, each no more than 22 words. Include these formulas explicitly: \\(\\mathbf{A}=[a_{ij}]_{m\\times n}\\), column vector size \\(m\\times1\\), row vector size \\(1\\times m\\), \\(\\mathbf{A}\\text{ is square}\\Longleftrightarrow m=n\\), and \\(a_{ij}\\text{ is diagonal}\\Longleftrightarrow i=j\\). End with one sentence: 'Next, these terms will make matrix operations easier to describe and check.'"
+    },
+    {
+      "type": "quiz_plan",
+      "target_questions": 7,
+      "question_range": {
+        "min": 5,
+        "max": 8
+      },
+      "knowledge_points": [
+        {
+          "id": "matrix_entries_and_size",
+          "label": "Matrix entries and dimensions",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp1_q1",
+              "type": "multiple_choice",
+              "stem": "A matrix \\(\\mathbf{A}\\) has size \\(4\\times 6\\). What does this mean?",
+              "options": [
+                "A. 4 columns and 6 rows",
+                "B. 4 rows and 6 columns",
+                "C. 4 entries total and 6 diagonal entries",
+                "D. Row 4 and column 6 are the only important entries"
+              ],
+              "correct_option": "B",
+              "explanation": "Matrix size is always read as rows by columns, so \\(4\\times6\\) means 4 rows and 6 columns.",
+              "wrong_option_explanations": {
+                "A": "This reverses the order. Rows come first.",
+                "C": "A \\(4\\times6\\) matrix has 24 entries total, not 4.",
+                "D": "The size describes the whole matrix, not one entry."
+              },
+              "hint": "Read matrix dimensions as rows first, columns second.",
+              "needs_visual": false,
+              "same_point_variant": true
+            },
+            {
+              "id": "kp1_q2",
+              "type": "multiple_choice",
+              "stem": "In \\(a_{35}\\), what does the subscript mean?",
+              "options": [
+                "A. Third column, fifth row",
+                "B. Third row, fifth column",
+                "C. The matrix has 3 rows and 5 columns",
+                "D. The entry equals 35"
+              ],
+              "correct_option": "B",
+              "explanation": "\\(a_{ij}\\) means row \\(i\\), column \\(j\\). Therefore \\(a_{35}\\) is in row 3, column 5.",
+              "wrong_option_explanations": {
+                "A": "This reverses row and column order.",
+                "C": "The subscript locates one entry; it does not give the whole matrix size.",
+                "D": "The subscript is a location label, not the value of the entry."
+              },
+              "hint": "For \\(a_{ij}\\), say 'row i, column j.'",
+              "needs_visual": false,
+              "same_point_variant": true
+            },
+            {
+              "id": "kp1_q3",
+              "type": "multiple_choice",
+              "stem": "Demo observation: In the entry-locator demo, set \\(m=3\\), \\(n=4\\), \\(i=2\\), and \\(j=4\\). Which cell should be highlighted?",
+              "options": [
+                "A. Second row, fourth column",
+                "B. Fourth row, second column",
+                "C. Third row, fourth column",
+                "D. Second row, third column"
+              ],
+              "correct_option": "A",
+              "explanation": "The highlighted cell is \\(a_{24}\\), which means row 2, column 4.",
+              "wrong_option_explanations": {
+                "B": "This swaps the indices.",
+                "C": "The row index is 2, not 3.",
+                "D": "The column index is 4, not 3."
+              },
+              "hint": "Use the inputs \\(i\\) and \\(j\\), not just the matrix size.",
+              "needs_visual": true,
+              "visual_type": "interactive_demo_observation",
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "row_vs_column_vectors",
+          "label": "Row vectors versus column vectors",
+          "importance": "high",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp2_q1",
+              "type": "multiple_choice",
+              "stem": "What is the size of \\(\\begin{bmatrix}8\\\\-2\\\\1\\end{bmatrix}\\)?",
+              "options": [
+                "A. \\(1\\times3\\)",
+                "B. \\(3\\times1\\)",
+                "C. \\(3\\times3\\)",
+                "D. \\(1\\times1\\)"
+              ],
+              "correct_option": "B",
+              "explanation": "The entries are stacked vertically, so there are 3 rows and 1 column.",
+              "wrong_option_explanations": {
+                "A": "That would be a row vector, with entries written horizontally.",
+                "C": "There is only one column, not three.",
+                "D": "There are three entries, not one."
+              },
+              "hint": "Count rows first, then columns.",
+              "needs_visual": true,
+              "visual_type": "latex_matrix_structure",
+              "same_point_variant": true
+            },
+            {
+              "id": "kp2_q2",
+              "type": "multiple_choice",
+              "stem": "Which object is a row vector?",
+              "options": [
+                "A. \\(\\begin{bmatrix}1\\\\2\\\\3\\end{bmatrix}\\)",
+                "B. \\(\\begin{bmatrix}1&2&3\\end{bmatrix}\\)",
+                "C. \\(\\begin{bmatrix}1&2\\\\3&4\\end{bmatrix}\\)",
+                "D. \\(\\begin{bmatrix}1&0\\\\0&1\\end{bmatrix}\\)"
+              ],
+              "correct_option": "B",
+              "explanation": "A row vector has exactly one row and multiple columns.",
+              "wrong_option_explanations": {
+                "A": "This is a column vector because the entries are vertical.",
+                "C": "This is a \\(2\\times2\\) matrix, not a vector with one row or one column.",
+                "D": "This is a square matrix, not a row vector."
+              },
+              "hint": "A row vector is horizontal.",
+              "needs_visual": true,
+              "visual_type": "latex_matrix_structure",
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "square_and_diagonal",
+          "label": "Square matrices and main diagonal entries",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp3_q1",
+              "type": "multiple_choice",
+              "stem": "Which matrix size is square?",
+              "options": [
+                "A. \\(2\\times3\\)",
+                "B. \\(5\\times1\\)",
+                "C. \\(4\\times4\\)",
+                "D. \\(1\\times6\\)"
+              ],
+              "correct_option": "C",
+              "explanation": "A square matrix has the same number of rows and columns, so \\(4\\times4\\) is square.",
+              "wrong_option_explanations": {
+                "A": "Rows and columns are not equal.",
+                "B": "This is a column vector shape, not square.",
+                "D": "This is a row vector shape, not square."
+              },
+              "hint": "Check whether \\(m=n\\).",
+              "needs_visual": false,
+              "same_point_variant": true
+            },
+            {
+              "id": "kp3_q2",
+              "type": "short_answer",
+              "stem": "A classmate says \\(a_{23}\\) is on the main diagonal because both indices are small. Explain why this is wrong.",
+              "ideal_answer": "\\(a_{23}\\) is not on the main diagonal because diagonal entries require matching row and column indices. Since \\(2\\ne3\\), \\(a_{23}\\) is off the main diagonal.",
+              "grading_rubric": [
+                "Must state the diagonal condition \\(i=j\\)",
+                "Must compare the indices 2 and 3",
+                "Must conclude that \\(a_{23}\\) is not on the main diagonal"
+              ],
+              "explanation": "This checks whether the student knows the actual index rule instead of relying on vague visual guessing.",
+              "hint": "Main diagonal entries have the same row number and column number.",
+              "needs_visual": true,
+              "visual_type": "latex_matrix_index_check",
+              "same_point_variant": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```

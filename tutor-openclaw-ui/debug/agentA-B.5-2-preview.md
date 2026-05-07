@@ -1,0 +1,596 @@
+# Agent A Preview: B.5-2 B.5-2 Heaviside Cover-Up Method
+
+- Difficulty: intermediate
+- Estimated read minutes: 7
+
+## Learning Objectives
+
+- Use the Heaviside cover-up method to expand proper rational functions with distinct linear factors.
+- Compute partial-fraction coefficients by covering a denominator factor and substituting its root.
+- Handle complex-conjugate linear factors and recombine them into a real irreducible quadratic term.
+
+## Visualization Need
+
+```json
+{
+  "level": "static",
+  "reason": [
+    "pattern_recognition_benefits_from_figure",
+    "misconception_needs_visual_correction",
+    "wrong_vs_right_contrast_is_high_value"
+  ],
+  "recommended_assets": [
+    "generated_image"
+  ]
+}
+```
+
+## Visual Plan
+
+```json
+{
+  "primary_anchor": "generated_image",
+  "rationale": "This section has no available textbook figures, and the key action is a custom symbolic procedure: cover one denominator factor, then substitute that factor's root into the remaining expression. A standard Wikipedia image would not show this exam-facing algebraic action accurately. Use one clean generated lecture-note visual only for the cover-up action; keep the rest formula-native because exact symbolic structure matters most.",
+  "cram": "Use the visual to recognize the exam pattern: one distinct linear factor gives one coefficient by cover-and-substitute.",
+  "standard": "Use the visual beside the formula and one worked example so students connect the rule to the actual algebra.",
+  "top_score": "Use the visual to prevent the subtle trap of substituting before removing the zero factor."
+}
+```
+
+## Planned Blocks
+
+### Block 1: `text_explanation`
+- **instruction**: Render Page 1 as a minimal overview only. Include exactly two short sections: 'Section Objective' and 'Concepts In This Section'. Under 'Section Objective', write one sentence: 'Learn how to expand rational functions into partial fractions quickly using the Heaviside cover-up method.' Under 'Concepts In This Section', list concept names only: proper rational function, distinct linear factors, cover-up coefficient formula, worked real-factor example, complex-conjugate factors, real quadratic recombination. Do not add background paragraphs or examples on this page.
+
+### Block 2: `math_block`
+- **latex**: F(x)=\frac{P(x)}{(x-\lambda_1)(x-\lambda_2)\cdots(x-\lambda_n)}
+- **explanation_instruction**: Start a new page with the heading '## 1. The setup: distinct denominator factors'. Explain in 90–130 words that the cover-up method applies here when \(F(x)\) is proper and every denominator factor is distinct. Define \(P(x)\), \(Q(x)\), \(\lambda_i\), and 'proper' as numerator degree smaller than denominator degree. State the exam trigger: a denominator already factored into non-repeated linear terms. State the common misuse: trying to use this exact simple cover-up rule on repeated factors without modification.
+
+### Block 3: `math_block`
+- **latex**: F(x)=\frac{k_1}{x-\lambda_1}+\frac{k_2}{x-\lambda_2}+\cdots+\frac{k_n}{x-\lambda_n}
+- **explanation_instruction**: Continue the same page. Explain in 70–100 words that each distinct linear denominator factor produces one simple fraction. Define each \(k_i\) as the coefficient, or residue, attached to the factor \(x-\lambda_i\). Tell Agent B to include one minimal example sentence: if the factor is \(x+1\), rewrite it as \(x-(-1)\), so the corresponding root is \(-1\). Exam note: first identify the roots of the factors before substituting anything.
+
+### Block 4: `math_block`
+- **latex**: k_i=\left[(x-\lambda_i)F(x)\right]_{x=\lambda_i}
+- **explanation_instruction**: Start a new page with the heading '## 2. The cover-up formula'. Explain in 120–160 words exactly how to read this formula. Say: multiply by, or mentally cover, the factor \(x-\lambda_i\); then substitute \(x=\lambda_i\) into what remains. Define \(k_i\), \(\lambda_i\), and \([\,]_{x=\lambda_i}\). Include the use case: computing one partial-fraction coefficient for a distinct linear factor. Include the exam trigger: 'find the coefficient over \(x-a\)'. Include the most common misuse: substituting \(x=\lambda_i\) into the original \(F(x)\) before covering, which creates division by zero.
+
+### Block 5: `generate_image`
+- **tool**: openai/gpt-5.4-image-2
+- **reason**: No textbook figure is available, and a standard reference image would not show the custom exam action of covering one denominator factor before substitution. This visual is needed to make the procedure visually obvious.
+- **teaching_role**: concept_anchor
+- **mode_specific_visual_use**:
+```json
+{
+  "cram": "Make the two-step action instantly recognizable: cover the factor, then plug in its root.",
+  "standard": "Place beside the cover-up formula so students can match each symbol to a visible action.",
+  "top_score": "Highlight that the covered factor must disappear before substitution; otherwise the denominator becomes zero."
+}
+```
+- **prompt**: Pure white clean background, minimalist lecture-notes educational diagram, one knowledge point only: the Heaviside cover-up step for the factor (x+1) in F(x) = (2x^2 + 9x - 11)/((x+1)(x-2)(x+3)). Show Step 1: a muted teal cover strip placed over only the factor (x+1). Show Step 2: substitute x = -1 into the remaining expression (2x^2 + 9x - 11)/((x-2)(x+3)). Use restrained navy labels, soft gray denominator factors, muted teal highlight for the covered factor, and one small muted red warning box: 'Do not substitute before covering.' No decorative elements, no cartoon hands, no dense text, no extra examples, no full derivation.
+- **style_hint**: lecture notes, academic, clean, restrained color boxes, exam-oriented, one concept only
+
+### Block 6: `math_block`
+- **latex**: \frac{2x^2+9x-11}{(x+1)(x-2)(x+3)}=\frac{3}{x+1}+\frac{1}{x-2}-\frac{2}{x+3}
+- **explanation_instruction**: Start a new page with the heading '## 3. Representative example: three real factors'. Teach Example B.9 in 130–170 words. Show the three coefficient evaluations in prose or short inline math: for \(x+1\), use \(x=-1\) to get \(k_1=3\); for \(x-2\), use \(x=2\) to get \(k_2=1\); for \(x+3\), use \(x=-3\) to get \(k_3=-2\). Keep this as one representative worked example, not a long derivation. End with a quick exam check: the denominator factors are distinct, so one cover-up evaluation per factor is enough.
+
+### Block 7: `math_block`
+- **latex**: x^2+4x+13=(x+2-j3)(x+2+j3)
+- **explanation_instruction**: Start a new page with the heading '## 4. Complex factors: the same method still works'. Explain in 100–140 words that the cover-up method does not require roots to be real. The quadratic \(x^2+4x+13\) has complex-conjugate factors, so the same coefficient rule can be applied at \(x=-2+j3\) and \(x=-2-j3\). Briefly remind students that \(j\) marks the imaginary-axis component. State the exam trigger: an irreducible quadratic may hide a conjugate pair. Common trap: stopping at complex terms when the original rational function has real coefficients and the final answer is expected in real quadratic form.
+
+### Block 8: `math_block`
+- **latex**: \frac{4x^2+2x+18}{(x+1)(x^2+4x+13)}=\frac{2}{x+1}+\frac{2x-8}{x^2+4x+13}
+- **explanation_instruction**: Continue the complex-factors page in 100–140 words. Explain that covering \(x+1\) gives the real coefficient \(2\), while the complex-conjugate pair recombines into one real quadratic term with numerator \(2x-8\). Define the form \((c_1x+c_2)/(x^2+4x+13)\). Mention that the textbook obtains \(c_1=2\) and \(c_2=-8\). Exam note: if the denominator includes an irreducible quadratic, the numerator over that quadratic is linear, not a constant.
+
+### Block 9: `section_summary`
+- **instruction**: Create the recap page titled '📌 Key Takeaways'. Include exactly 4 bullet points, each ≤25 words. The bullets must explicitly include these core formulas: \(F(x)=P(x)/\prod_{i=1}^{n}(x-\lambda_i)\), \(F(x)=\sum_{i=1}^{n} k_i/(x-\lambda_i)\), \(k_i=[(x-\lambda_i)F(x)]_{x=\lambda_i}\), and the irreducible-quadratic form \((c_1x+c_2)/(x^2+4x+13)\). End with one bridge sentence: 'Next, use these expansions to make inverse transforms and system-response calculations easier.'
+
+### Block 10: `quiz_plan`
+- **target_questions**:
+```json
+6
+```
+- **question_range**:
+```json
+{
+  "min": 5,
+  "max": 7
+}
+```
+- **knowledge_points**:
+```json
+[
+  {
+    "id": "distinct_factor_setup",
+    "label": "Recognizing when the simple cover-up method applies",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp1_q1",
+        "type": "multiple_choice",
+        "stem": "Which denominator is the best direct match for the simple Heaviside cover-up method from this section?",
+        "options": [
+          "A. \\((x-1)(x+2)(x-4)\\)",
+          "B. \\((x-1)^2(x+2)\\)",
+          "C. \\(x^2(x+1)\\)",
+          "D. \\((x^2+1)^2\\)"
+        ],
+        "correct_option": "A",
+        "explanation": "The simple cover-up rule here is for distinct, non-repeated linear factors.",
+        "wrong_option_explanations": {
+          "B": "The factor \\((x-1)\\) is repeated, so the simple one-step cover-up rule is not enough.",
+          "C": "\\(x^2\\) means the factor \\(x\\) is repeated.",
+          "D": "The quadratic factor is repeated and is not a distinct linear-factor setup."
+        },
+        "hint": "Look for linear factors, each appearing once.",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  },
+  {
+    "id": "cover_up_coefficient_formula",
+    "label": "Computing a coefficient by covering the matching factor",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "kp2_q1",
+        "type": "multiple_choice",
+        "stem": "For \\(F(x)=\\frac{5x+1}{(x-3)(x+2)}\\), what expression gives the coefficient over \\(x-3\\)?",
+        "options": [
+          "A. Substitute \\(x=3\\) into \\(F(x)\\)",
+          "B. Substitute \\(x=-3\\) into \\((x-3)F(x)\\)",
+          "C. Substitute \\(x=3\\) into \\((x-3)F(x)\\)",
+          "D. Substitute \\(x=2\\) into \\((x+2)F(x)\\)"
+        ],
+        "correct_option": "C",
+        "explanation": "For the factor \\(x-3\\), the root is \\(3\\), so \\(k=[(x-3)F(x)]_{x=3}\\).",
+        "wrong_option_explanations": {
+          "A": "Substituting into the original function creates division by zero.",
+          "B": "The root of \\(x-3\\) is \\(3\\), not \\(-3\\).",
+          "D": "This targets the wrong denominator factor."
+        },
+        "hint": "Cover the factor whose coefficient you want, then use that factor's root.",
+        "needs_visual": true,
+        "visual_type": "cover_up_step_diagram",
+        "same_point_variant": true
+      },
+      {
+        "id": "kp2_q2",
+        "type": "multiple_choice",
+        "stem": "A student says: 'To find the coefficient over \\(x+1\\), I plug \\(x=-1\\) into the original \\(F(x)\\).' Why is this wrong?",
+        "options": [
+          "A. The original function has a zero denominator at \\(x=-1\\)",
+          "B. The root of \\(x+1\\) is \\(1\\)",
+          "C. Cover-up only works for complex roots",
+          "D. The numerator must always be zero first"
+        ],
+        "correct_option": "A",
+        "explanation": "You must first remove the matching factor. Otherwise substituting the root makes the original denominator zero.",
+        "wrong_option_explanations": {
+          "B": "The root of \\(x+1\\) is \\(-1\\), not \\(1\\).",
+          "C": "Cover-up works for real distinct linear factors too.",
+          "D": "There is no requirement that the numerator become zero."
+        },
+        "hint": "Ask what happens to the factor \\(x+1\\) when \\(x=-1\\).",
+        "needs_visual": true,
+        "visual_type": "wrong_vs_right_visual_check",
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "worked_real_factor_example",
+    "label": "Expanding the textbook real-factor example",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp3_q1",
+        "type": "multiple_choice",
+        "stem": "For \\(\\frac{2x^2+9x-11}{(x+1)(x-2)(x+3)}\\), what is the coefficient over \\(x-2\\)?",
+        "options": [
+          "A. \\(-2\\)",
+          "B. \\(1\\)",
+          "C. \\(2\\)",
+          "D. \\(3\\)"
+        ],
+        "correct_option": "B",
+        "explanation": "Cover \\(x-2\\) and substitute \\(x=2\\): \\((8+18-11)/((3)(5))=15/15=1\\).",
+        "wrong_option_explanations": {
+          "A": "\\(-2\\) is the coefficient over \\(x+3\\), not \\(x-2\\).",
+          "C": "This is not obtained by the cover-up evaluation for \\(x=2\\).",
+          "D": "\\(3\\) is the coefficient over \\(x+1\\)."
+        },
+        "hint": "For \\(x-2\\), use the root \\(2\\).",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  },
+  {
+    "id": "complex_conjugate_factors",
+    "label": "Applying cover-up to complex-conjugate factors",
+    "importance": "medium",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp4_q1",
+        "type": "multiple_choice",
+        "stem": "The quadratic \\(x^2+4x+13\\) factors as \\((x+2-j3)(x+2+j3)\\). What are the two roots?",
+        "options": [
+          "A. \\(2+j3\\) and \\(2-j3\\)",
+          "B. \\(-2+j3\\) and \\(-2-j3\\)",
+          "C. \\(-4+j13\\) and \\(-4-j13\\)",
+          "D. \\(2+j13\\) and \\(2-j13\\)"
+        ],
+        "correct_option": "B",
+        "explanation": "Set each factor equal to zero: \\(x+2-j3=0\\) gives \\(x=-2+j3\\), and \\(x+2+j3=0\\) gives \\(x=-2-j3\\).",
+        "wrong_option_explanations": {
+          "A": "The sign of the real part is wrong.",
+          "C": "These numbers come from coefficients, not from solving the linear factors.",
+          "D": "Both the real part and imaginary magnitude are wrong."
+        },
+        "hint": "Move \\(+2\\) and \\(\\mp j3\\) to the other side.",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  },
+  {
+    "id": "real_quadratic_recombination",
+    "label": "Writing complex-pair results as a real quadratic fraction",
+    "importance": "high",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp5_q1",
+        "type": "multiple_choice",
+        "stem": "When a real rational function contains the irreducible quadratic factor \\(x^2+4x+13\\), what numerator form should be used over that quadratic?",
+        "options": [
+          "A. A constant only, such as \\(c/(x^2+4x+13)\\)",
+          "B. A linear numerator, such as \\((c_1x+c_2)/(x^2+4x+13)\\)",
+          "C. A quadratic numerator, such as \\((c_1x^2+c_2x+c_3)/(x^2+4x+13)\\)",
+          "D. No numerator is needed"
+        ],
+        "correct_option": "B",
+        "explanation": "An irreducible quadratic factor gets a numerator one degree lower, so the numerator is linear.",
+        "wrong_option_explanations": {
+          "A": "A constant is too restrictive for a general irreducible quadratic term.",
+          "C": "The numerator degree must be lower than the quadratic denominator degree.",
+          "D": "Every partial-fraction term has a numerator."
+        },
+        "hint": "For a denominator of degree 2, use a numerator of degree 1.",
+        "needs_visual": false,
+        "same_point_variant": false
+      },
+      {
+        "id": "kp5_q2",
+        "type": "short_answer",
+        "stem": "In one sentence, explain why \\(\\frac{4x^2+2x+18}{(x+1)(x^2+4x+13)}\\) can be written as \\(\\frac{2}{x+1}+\\frac{2x-8}{x^2+4x+13}\\) instead of leaving two complex fractions.",
+        "ideal_answer": "Because the complex roots occur as a conjugate pair, their two complex partial-fraction terms combine into one real term with linear numerator \\(2x-8\\) over the irreducible quadratic.",
+        "grading_rubric": [
+          "Must mention the complex-conjugate pair",
+          "Must state that the pair recombines into a real quadratic-denominator term",
+          "Must identify the numerator as linear, specifically \\(2x-8\\)"
+        ],
+        "explanation": "This checks whether the student understands the purpose of recombining complex factors rather than just copying the final formula.",
+        "hint": "Real coefficients plus conjugate roots usually combine back into a real expression.",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  }
+]
+```
+
+## Raw JSON
+
+```json
+{
+  "section_id": "B.5-2",
+  "section_title": "B.5-2 Heaviside Cover-Up Method",
+  "difficulty": "intermediate",
+  "estimated_read_minutes": 7,
+  "learning_objectives": [
+    "Use the Heaviside cover-up method to expand proper rational functions with distinct linear factors.",
+    "Compute partial-fraction coefficients by covering a denominator factor and substituting its root.",
+    "Handle complex-conjugate linear factors and recombine them into a real irreducible quadratic term."
+  ],
+  "visualization_need": {
+    "level": "static",
+    "reason": [
+      "pattern_recognition_benefits_from_figure",
+      "misconception_needs_visual_correction",
+      "wrong_vs_right_contrast_is_high_value"
+    ],
+    "recommended_assets": [
+      "generated_image"
+    ]
+  },
+  "visual_plan": {
+    "primary_anchor": "generated_image",
+    "rationale": "This section has no available textbook figures, and the key action is a custom symbolic procedure: cover one denominator factor, then substitute that factor's root into the remaining expression. A standard Wikipedia image would not show this exam-facing algebraic action accurately. Use one clean generated lecture-note visual only for the cover-up action; keep the rest formula-native because exact symbolic structure matters most.",
+    "cram": "Use the visual to recognize the exam pattern: one distinct linear factor gives one coefficient by cover-and-substitute.",
+    "standard": "Use the visual beside the formula and one worked example so students connect the rule to the actual algebra.",
+    "top_score": "Use the visual to prevent the subtle trap of substituting before removing the zero factor."
+  },
+  "blocks": [
+    {
+      "type": "text_explanation",
+      "instruction": "Render Page 1 as a minimal overview only. Include exactly two short sections: 'Section Objective' and 'Concepts In This Section'. Under 'Section Objective', write one sentence: 'Learn how to expand rational functions into partial fractions quickly using the Heaviside cover-up method.' Under 'Concepts In This Section', list concept names only: proper rational function, distinct linear factors, cover-up coefficient formula, worked real-factor example, complex-conjugate factors, real quadratic recombination. Do not add background paragraphs or examples on this page."
+    },
+    {
+      "type": "math_block",
+      "latex": "F(x)=\\frac{P(x)}{(x-\\lambda_1)(x-\\lambda_2)\\cdots(x-\\lambda_n)}",
+      "explanation_instruction": "Start a new page with the heading '## 1. The setup: distinct denominator factors'. Explain in 90–130 words that the cover-up method applies here when \\(F(x)\\) is proper and every denominator factor is distinct. Define \\(P(x)\\), \\(Q(x)\\), \\(\\lambda_i\\), and 'proper' as numerator degree smaller than denominator degree. State the exam trigger: a denominator already factored into non-repeated linear terms. State the common misuse: trying to use this exact simple cover-up rule on repeated factors without modification."
+    },
+    {
+      "type": "math_block",
+      "latex": "F(x)=\\frac{k_1}{x-\\lambda_1}+\\frac{k_2}{x-\\lambda_2}+\\cdots+\\frac{k_n}{x-\\lambda_n}",
+      "explanation_instruction": "Continue the same page. Explain in 70–100 words that each distinct linear denominator factor produces one simple fraction. Define each \\(k_i\\) as the coefficient, or residue, attached to the factor \\(x-\\lambda_i\\). Tell Agent B to include one minimal example sentence: if the factor is \\(x+1\\), rewrite it as \\(x-(-1)\\), so the corresponding root is \\(-1\\). Exam note: first identify the roots of the factors before substituting anything."
+    },
+    {
+      "type": "math_block",
+      "latex": "k_i=\\left[(x-\\lambda_i)F(x)\\right]_{x=\\lambda_i}",
+      "explanation_instruction": "Start a new page with the heading '## 2. The cover-up formula'. Explain in 120–160 words exactly how to read this formula. Say: multiply by, or mentally cover, the factor \\(x-\\lambda_i\\); then substitute \\(x=\\lambda_i\\) into what remains. Define \\(k_i\\), \\(\\lambda_i\\), and \\([\\,]_{x=\\lambda_i}\\). Include the use case: computing one partial-fraction coefficient for a distinct linear factor. Include the exam trigger: 'find the coefficient over \\(x-a\\)'. Include the most common misuse: substituting \\(x=\\lambda_i\\) into the original \\(F(x)\\) before covering, which creates division by zero."
+    },
+    {
+      "type": "generate_image",
+      "tool": "openai/gpt-5.4-image-2",
+      "reason": "No textbook figure is available, and a standard reference image would not show the custom exam action of covering one denominator factor before substitution. This visual is needed to make the procedure visually obvious.",
+      "teaching_role": "concept_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Make the two-step action instantly recognizable: cover the factor, then plug in its root.",
+        "standard": "Place beside the cover-up formula so students can match each symbol to a visible action.",
+        "top_score": "Highlight that the covered factor must disappear before substitution; otherwise the denominator becomes zero."
+      },
+      "prompt": "Pure white clean background, minimalist lecture-notes educational diagram, one knowledge point only: the Heaviside cover-up step for the factor (x+1) in F(x) = (2x^2 + 9x - 11)/((x+1)(x-2)(x+3)). Show Step 1: a muted teal cover strip placed over only the factor (x+1). Show Step 2: substitute x = -1 into the remaining expression (2x^2 + 9x - 11)/((x-2)(x+3)). Use restrained navy labels, soft gray denominator factors, muted teal highlight for the covered factor, and one small muted red warning box: 'Do not substitute before covering.' No decorative elements, no cartoon hands, no dense text, no extra examples, no full derivation.",
+      "style_hint": "lecture notes, academic, clean, restrained color boxes, exam-oriented, one concept only"
+    },
+    {
+      "type": "math_block",
+      "latex": "\\frac{2x^2+9x-11}{(x+1)(x-2)(x+3)}=\\frac{3}{x+1}+\\frac{1}{x-2}-\\frac{2}{x+3}",
+      "explanation_instruction": "Start a new page with the heading '## 3. Representative example: three real factors'. Teach Example B.9 in 130–170 words. Show the three coefficient evaluations in prose or short inline math: for \\(x+1\\), use \\(x=-1\\) to get \\(k_1=3\\); for \\(x-2\\), use \\(x=2\\) to get \\(k_2=1\\); for \\(x+3\\), use \\(x=-3\\) to get \\(k_3=-2\\). Keep this as one representative worked example, not a long derivation. End with a quick exam check: the denominator factors are distinct, so one cover-up evaluation per factor is enough."
+    },
+    {
+      "type": "math_block",
+      "latex": "x^2+4x+13=(x+2-j3)(x+2+j3)",
+      "explanation_instruction": "Start a new page with the heading '## 4. Complex factors: the same method still works'. Explain in 100–140 words that the cover-up method does not require roots to be real. The quadratic \\(x^2+4x+13\\) has complex-conjugate factors, so the same coefficient rule can be applied at \\(x=-2+j3\\) and \\(x=-2-j3\\). Briefly remind students that \\(j\\) marks the imaginary-axis component. State the exam trigger: an irreducible quadratic may hide a conjugate pair. Common trap: stopping at complex terms when the original rational function has real coefficients and the final answer is expected in real quadratic form."
+    },
+    {
+      "type": "math_block",
+      "latex": "\\frac{4x^2+2x+18}{(x+1)(x^2+4x+13)}=\\frac{2}{x+1}+\\frac{2x-8}{x^2+4x+13}",
+      "explanation_instruction": "Continue the complex-factors page in 100–140 words. Explain that covering \\(x+1\\) gives the real coefficient \\(2\\), while the complex-conjugate pair recombines into one real quadratic term with numerator \\(2x-8\\). Define the form \\((c_1x+c_2)/(x^2+4x+13)\\). Mention that the textbook obtains \\(c_1=2\\) and \\(c_2=-8\\). Exam note: if the denominator includes an irreducible quadratic, the numerator over that quadratic is linear, not a constant."
+    },
+    {
+      "type": "section_summary",
+      "instruction": "Create the recap page titled '📌 Key Takeaways'. Include exactly 4 bullet points, each ≤25 words. The bullets must explicitly include these core formulas: \\(F(x)=P(x)/\\prod_{i=1}^{n}(x-\\lambda_i)\\), \\(F(x)=\\sum_{i=1}^{n} k_i/(x-\\lambda_i)\\), \\(k_i=[(x-\\lambda_i)F(x)]_{x=\\lambda_i}\\), and the irreducible-quadratic form \\((c_1x+c_2)/(x^2+4x+13)\\). End with one bridge sentence: 'Next, use these expansions to make inverse transforms and system-response calculations easier.'"
+    },
+    {
+      "type": "quiz_plan",
+      "target_questions": 6,
+      "question_range": {
+        "min": 5,
+        "max": 7
+      },
+      "knowledge_points": [
+        {
+          "id": "distinct_factor_setup",
+          "label": "Recognizing when the simple cover-up method applies",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp1_q1",
+              "type": "multiple_choice",
+              "stem": "Which denominator is the best direct match for the simple Heaviside cover-up method from this section?",
+              "options": [
+                "A. \\((x-1)(x+2)(x-4)\\)",
+                "B. \\((x-1)^2(x+2)\\)",
+                "C. \\(x^2(x+1)\\)",
+                "D. \\((x^2+1)^2\\)"
+              ],
+              "correct_option": "A",
+              "explanation": "The simple cover-up rule here is for distinct, non-repeated linear factors.",
+              "wrong_option_explanations": {
+                "B": "The factor \\((x-1)\\) is repeated, so the simple one-step cover-up rule is not enough.",
+                "C": "\\(x^2\\) means the factor \\(x\\) is repeated.",
+                "D": "The quadratic factor is repeated and is not a distinct linear-factor setup."
+              },
+              "hint": "Look for linear factors, each appearing once.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "cover_up_coefficient_formula",
+          "label": "Computing a coefficient by covering the matching factor",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp2_q1",
+              "type": "multiple_choice",
+              "stem": "For \\(F(x)=\\frac{5x+1}{(x-3)(x+2)}\\), what expression gives the coefficient over \\(x-3\\)?",
+              "options": [
+                "A. Substitute \\(x=3\\) into \\(F(x)\\)",
+                "B. Substitute \\(x=-3\\) into \\((x-3)F(x)\\)",
+                "C. Substitute \\(x=3\\) into \\((x-3)F(x)\\)",
+                "D. Substitute \\(x=2\\) into \\((x+2)F(x)\\)"
+              ],
+              "correct_option": "C",
+              "explanation": "For the factor \\(x-3\\), the root is \\(3\\), so \\(k=[(x-3)F(x)]_{x=3}\\).",
+              "wrong_option_explanations": {
+                "A": "Substituting into the original function creates division by zero.",
+                "B": "The root of \\(x-3\\) is \\(3\\), not \\(-3\\).",
+                "D": "This targets the wrong denominator factor."
+              },
+              "hint": "Cover the factor whose coefficient you want, then use that factor's root.",
+              "needs_visual": true,
+              "visual_type": "cover_up_step_diagram",
+              "same_point_variant": true
+            },
+            {
+              "id": "kp2_q2",
+              "type": "multiple_choice",
+              "stem": "A student says: 'To find the coefficient over \\(x+1\\), I plug \\(x=-1\\) into the original \\(F(x)\\).' Why is this wrong?",
+              "options": [
+                "A. The original function has a zero denominator at \\(x=-1\\)",
+                "B. The root of \\(x+1\\) is \\(1\\)",
+                "C. Cover-up only works for complex roots",
+                "D. The numerator must always be zero first"
+              ],
+              "correct_option": "A",
+              "explanation": "You must first remove the matching factor. Otherwise substituting the root makes the original denominator zero.",
+              "wrong_option_explanations": {
+                "B": "The root of \\(x+1\\) is \\(-1\\), not \\(1\\).",
+                "C": "Cover-up works for real distinct linear factors too.",
+                "D": "There is no requirement that the numerator become zero."
+              },
+              "hint": "Ask what happens to the factor \\(x+1\\) when \\(x=-1\\).",
+              "needs_visual": true,
+              "visual_type": "wrong_vs_right_visual_check",
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "worked_real_factor_example",
+          "label": "Expanding the textbook real-factor example",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp3_q1",
+              "type": "multiple_choice",
+              "stem": "For \\(\\frac{2x^2+9x-11}{(x+1)(x-2)(x+3)}\\), what is the coefficient over \\(x-2\\)?",
+              "options": [
+                "A. \\(-2\\)",
+                "B. \\(1\\)",
+                "C. \\(2\\)",
+                "D. \\(3\\)"
+              ],
+              "correct_option": "B",
+              "explanation": "Cover \\(x-2\\) and substitute \\(x=2\\): \\((8+18-11)/((3)(5))=15/15=1\\).",
+              "wrong_option_explanations": {
+                "A": "\\(-2\\) is the coefficient over \\(x+3\\), not \\(x-2\\).",
+                "C": "This is not obtained by the cover-up evaluation for \\(x=2\\).",
+                "D": "\\(3\\) is the coefficient over \\(x+1\\)."
+              },
+              "hint": "For \\(x-2\\), use the root \\(2\\).",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "complex_conjugate_factors",
+          "label": "Applying cover-up to complex-conjugate factors",
+          "importance": "medium",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp4_q1",
+              "type": "multiple_choice",
+              "stem": "The quadratic \\(x^2+4x+13\\) factors as \\((x+2-j3)(x+2+j3)\\). What are the two roots?",
+              "options": [
+                "A. \\(2+j3\\) and \\(2-j3\\)",
+                "B. \\(-2+j3\\) and \\(-2-j3\\)",
+                "C. \\(-4+j13\\) and \\(-4-j13\\)",
+                "D. \\(2+j13\\) and \\(2-j13\\)"
+              ],
+              "correct_option": "B",
+              "explanation": "Set each factor equal to zero: \\(x+2-j3=0\\) gives \\(x=-2+j3\\), and \\(x+2+j3=0\\) gives \\(x=-2-j3\\).",
+              "wrong_option_explanations": {
+                "A": "The sign of the real part is wrong.",
+                "C": "These numbers come from coefficients, not from solving the linear factors.",
+                "D": "Both the real part and imaginary magnitude are wrong."
+              },
+              "hint": "Move \\(+2\\) and \\(\\mp j3\\) to the other side.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "real_quadratic_recombination",
+          "label": "Writing complex-pair results as a real quadratic fraction",
+          "importance": "high",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp5_q1",
+              "type": "multiple_choice",
+              "stem": "When a real rational function contains the irreducible quadratic factor \\(x^2+4x+13\\), what numerator form should be used over that quadratic?",
+              "options": [
+                "A. A constant only, such as \\(c/(x^2+4x+13)\\)",
+                "B. A linear numerator, such as \\((c_1x+c_2)/(x^2+4x+13)\\)",
+                "C. A quadratic numerator, such as \\((c_1x^2+c_2x+c_3)/(x^2+4x+13)\\)",
+                "D. No numerator is needed"
+              ],
+              "correct_option": "B",
+              "explanation": "An irreducible quadratic factor gets a numerator one degree lower, so the numerator is linear.",
+              "wrong_option_explanations": {
+                "A": "A constant is too restrictive for a general irreducible quadratic term.",
+                "C": "The numerator degree must be lower than the quadratic denominator degree.",
+                "D": "Every partial-fraction term has a numerator."
+              },
+              "hint": "For a denominator of degree 2, use a numerator of degree 1.",
+              "needs_visual": false,
+              "same_point_variant": false
+            },
+            {
+              "id": "kp5_q2",
+              "type": "short_answer",
+              "stem": "In one sentence, explain why \\(\\frac{4x^2+2x+18}{(x+1)(x^2+4x+13)}\\) can be written as \\(\\frac{2}{x+1}+\\frac{2x-8}{x^2+4x+13}\\) instead of leaving two complex fractions.",
+              "ideal_answer": "Because the complex roots occur as a conjugate pair, their two complex partial-fraction terms combine into one real term with linear numerator \\(2x-8\\) over the irreducible quadratic.",
+              "grading_rubric": [
+                "Must mention the complex-conjugate pair",
+                "Must state that the pair recombines into a real quadratic-denominator term",
+                "Must identify the numerator as linear, specifically \\(2x-8\\)"
+              ],
+              "explanation": "This checks whether the student understands the purpose of recombining complex factors rather than just copying the final formula.",
+              "hint": "Real coefficients plus conjugate roots usually combine back into a real expression.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```

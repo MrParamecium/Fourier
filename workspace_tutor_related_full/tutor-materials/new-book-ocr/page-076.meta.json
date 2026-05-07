@@ -1,0 +1,31 @@
+{
+  "chapter": "1",
+  "section": "1.2",
+  "subsection": "1.2-3",
+  "title": "Time Reversal",
+  "summary": "This page covers time compression and expansion of sinusoids (Drill 1.5) and introduces time reversal of signals. Time reversal of x(t) is achieved by replacing t with -t, reflecting the signal about the vertical axis, resulting in x(-t), while reflection about the horizontal axis gives -x(t).",
+  "keywords": [
+    "time reversal",
+    "time compression",
+    "time expansion",
+    "sinusoid",
+    "signal transformation",
+    "reflection",
+    "x(-t)",
+    "frequency scaling"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "page-076",
+  "figures": [
+    {
+      "top": 0.5378,
+      "left": 0.1282,
+      "bottom": 0.9165,
+      "right": 0.5553,
+      "fig_id": "unknown",
+      "caption": "Illustration of time-reversal of a signal x(t) to obtain its reflected version \u03c6(t) = x(\u2212t), showing the original signal (a) and its time-reversed counterpart (b).",
+      "crop_file": "page-076-unknown-1.png"
+    }
+  ]
+}
