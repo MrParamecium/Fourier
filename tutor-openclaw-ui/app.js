@@ -79,12 +79,8 @@ function initIntroLanding() {
   if (shell) shell.classList.add('hidden');
 
   const handleEnter = () => {
-    setAuthReturnIntent('workspace');
     hideIntroLanding(true);
     showLoginView();
-    if (currentUser && clerkInstance?.user) {
-      onUserSignedIn(clerkInstance.user);
-    }
   };
 
   const navbar = document.getElementById('introNavbar');
@@ -167,6 +163,7 @@ let loginScene = null;
 let openClerkSignIn = () => {};
 let loginActionBusy = false;
 let authRedirectInProgress = false;
+let allowAuthNavigation = false;
 
 function isQuizProfileComplete(memory = userMemory) {
   return Boolean(memory && memory.quiz && ['track', 'math', 'timeline', 'preference', 'priority'].every(k => {
@@ -261,6 +258,7 @@ async function startOAuthRedirect(provider) {
     return;
   }
   try {
+    allowAuthNavigation = true;
     setAuthReturnIntent('workspace');
     authRedirectInProgress = true;
     document.body.classList.add('auth-redirecting');
@@ -281,6 +279,7 @@ async function startOAuthRedirect(provider) {
     setLoginButtonsBusy(false);
     openClerkSignIn();
   } catch (err) {
+    allowAuthNavigation = false;
     authRedirectInProgress = false;
     document.body.classList.remove('auth-redirecting');
     console.error(`[Clerk OAuth ${provider}]`, err);
@@ -298,6 +297,7 @@ async function startOAuthRedirect(provider) {
 async function handleAuthRedirectIfNeeded() {
   if (!clerkInstance || !isAuthCallbackRequest()) return false;
   try {
+    allowAuthNavigation = true;
     authRedirectInProgress = true;
     document.body.classList.add('auth-redirecting');
     showLoginView();
@@ -312,6 +312,7 @@ async function handleAuthRedirectIfNeeded() {
     clearAuthCallbackParams();
     return true;
   } catch (err) {
+    allowAuthNavigation = false;
     authRedirectInProgress = false;
     document.body.classList.remove('auth-redirecting');
     console.error('[Clerk redirect callback]', err);
@@ -582,7 +583,7 @@ async function initClerk() {
     clerkInstance.addListener(async (e) => {
       if (e.user) {
         hideAuthOverlay();
-        const shouldEnter = authRedirectInProgress || hasPendingAuthReturnIntent() || Boolean(loginView && !loginView.classList.contains('hidden'));
+        const shouldEnter = allowAuthNavigation || authRedirectInProgress;
         if (shouldEnter) await onUserSignedIn(e.user);
         else await syncCurrentUserWithoutNavigation(e.user);
       } else {
@@ -593,7 +594,7 @@ async function initClerk() {
     // Check immediately if already logged in or session resumed early
     if (clerkInstance.user) {
       hideAuthOverlay();
-      const shouldEnter = authRedirectInProgress || hasPendingAuthReturnIntent() || Boolean(loginView && !loginView.classList.contains('hidden'));
+      const shouldEnter = allowAuthNavigation || authRedirectInProgress;
       if (shouldEnter) await onUserSignedIn(clerkInstance.user);
       else await syncCurrentUserWithoutNavigation(clerkInstance.user);
       return;
@@ -612,6 +613,8 @@ async function initClerk() {
       alert('Sign-in service failed to load. Please refresh the page and try again, or continue as Guest.');
       return;
     }
+    allowAuthNavigation = true;
+    setAuthReturnIntent('workspace');
     setLoginStatus('Opening sign-in form...', 'info');
     setLoginButtonsBusy(true);
     const targets = [
@@ -676,7 +679,7 @@ async function initClerk() {
     clerkInstance.addListener(({ user }) => {
       if (user && !currentUser) {
         hideAuthOverlay();
-        const shouldEnter = authRedirectInProgress || hasPendingAuthReturnIntent() || Boolean(loginView && !loginView.classList.contains('hidden'));
+        const shouldEnter = allowAuthNavigation || authRedirectInProgress;
         if (shouldEnter) onUserSignedIn(user);
         else syncCurrentUserWithoutNavigation(user);
       }
@@ -685,10 +688,11 @@ async function initClerk() {
 }
 
 async function onUserSignedIn(user) {
+  const navigationAllowed = allowAuthNavigation || authRedirectInProgress;
   authRedirectInProgress = false;
   document.body.classList.remove('auth-redirecting');
   const authReturnIntent = consumeAuthReturnIntent();
-  const loginViewWasVisible = Boolean(loginView && !loginView.classList.contains('hidden'));
+  allowAuthNavigation = false;
   currentUser = {
     uid: user.id,
     name: user.fullName || user.firstName || 'Student',
@@ -711,7 +715,7 @@ async function onUserSignedIn(user) {
   renderUserBadge();
 
   const quizDone = isQuizProfileComplete(userMemory);
-  const shouldEnterWorkspace = authReturnIntent === 'workspace' || loginViewWasVisible;
+  const shouldEnterWorkspace = navigationAllowed && authReturnIntent === 'workspace';
 
   if (!shouldEnterWorkspace) return;
 
