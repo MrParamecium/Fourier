@@ -697,19 +697,9 @@ async function onUserSignedIn(user) {
   updatePreferenceSidebarSummary();
   hideIntroLanding(true);
 
-  // New user = show quiz; returning user = go straight in
-  const quizDone = userMemory.quiz && ['track', 'math', 'timeline', 'preference', 'priority'].every(k => {
-    const v = userMemory.quiz[k];
-    return Array.isArray(v) ? v.length > 0 : !!v;
-  });
-  if (!quizDone) {
-    showWelcome();
-    showQuiz();
-  } else {
-    updateLearnModeBadge(userMemory && userMemory.quiz ? userMemory.quiz.track : null);
-    renderUserBadge();
-    showWelcome();
-  }
+  updateLearnModeBadge(userMemory && userMemory.quiz ? userMemory.quiz.track : null);
+  renderUserBadge();
+  showWelcome();
 }
 
 function startGuestMode() {
@@ -728,7 +718,6 @@ function startGuestMode() {
       updatedAt: new Date().toISOString()
     }
   };
-  // Guests always see the quiz (fresh each tab)
   setLoginButtonsBusy(false);
   setLoginStatus('');
   if (loginView) loginView.classList.add('hidden');
@@ -740,7 +729,6 @@ function startGuestMode() {
   if (courseTrackerView) courseTrackerView.classList.add('hidden');
   if (libraryView) libraryView.classList.add('hidden');
   if (topbar) topbar.classList.add('hidden');
-  showQuiz();
   renderUserBadge();
   updatePreferenceSidebarSummary();
 }
@@ -1577,14 +1565,10 @@ function fallbackLocalUid() {
         userMemory.quiz.goal = userMemory.quiz.track;
       }
       updateLearnModeBadge(userMemory && userMemory.quiz ? userMemory.quiz.track : null);
-      const quizDone = userMemory.quiz && ['track', 'math', 'timeline', 'preference', 'priority'].every(k => {
-        const v = userMemory.quiz[k];
-        return Array.isArray(v) ? v.length > 0 : !!v;
-      });
       updatePreferenceSidebarSummary();
-      if (!quizDone) showQuiz(); else renderUserBadge();
+      renderUserBadge();
     })
-    .catch(() => showQuiz());
+    .catch(() => renderUserBadge());
 }
 
 // Helper: get current uid for API calls
