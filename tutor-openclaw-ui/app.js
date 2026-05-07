@@ -5357,6 +5357,7 @@ function renderCurrentKnowledgePoint() {
   decorateLectureContent(learnExplainContent);
   enhanceVisualMetadataUI(learnExplainContent);
   hydrateInteractiveDemos(learnExplainContent);
+  bindOverviewSubsectionCards();
   
   const learnKpTitle = document.getElementById('learnKpTitle');
   if (learnKpTitle) learnKpTitle.textContent = block.title || '';
@@ -6535,7 +6536,7 @@ async function openLearnMode(sectionId, sectionTitle, subsections = []) {
   resetLearnKnowledgePointState();
   showLearnView();
   // Bypass intro card: auto-start lesson immediately
-  setTimeout(() => { if (typeof startLesson === 'function') startLesson(); }, 80);
+  if (typeof startLesson === 'function') startLesson({ silent: true });
 
   // ── Use pre-generated preview if available (instant, no API call) ──
   const preview = getSectionPreview(sectionId, sectionTitle);
@@ -6606,16 +6607,21 @@ async function openLearnMode(sectionId, sectionTitle, subsections = []) {
   }
 }
 
-async function startLesson() {
+async function startLesson(options = {}) {
+  const silent = Boolean(options && options.silent);
   learnIntroCard.classList.add('hidden');
   let splashVisible = false;
   if (splashShowDelayTimer) clearTimeout(splashShowDelayTimer);
-  splashShowDelayTimer = setTimeout(() => {
-    splashShowDelayTimer = null;
-    splashVisible = true;
-    showSplash();
-    startSplashProgress(1, 3, 8000); // animate stages 1-3 over ~8s (real API determines actual timing)
-  }, 260);
+  if (!silent) {
+    splashShowDelayTimer = setTimeout(() => {
+      splashShowDelayTimer = null;
+      splashVisible = true;
+      showSplash();
+      startSplashProgress(1, 3, 8000); // animate stages 1-3 over ~8s (real API determines actual timing)
+    }, 1800);
+  } else {
+    hideSplash();
+  }
 
   if (learnAbort) learnAbort.abort();
   learnAbort = new AbortController();
@@ -6659,10 +6665,11 @@ async function startLesson() {
     renderLearnPages();
 
     // Add the "Start Test" bottom section
+    const isFormulaAppendixLesson = Boolean(data && data.formulaAppendix);
     const lessonHtml = isCacheMissLesson
       ? `<p class="ghost">${escapeHtml(data.lesson || 'This section has not been prepared yet.')}</p>`
       : markdownToHtml(data.lesson || 'No explanation available.');
-    const testSectionHtml = buildLessonTestBannerHtml();
+    const testSectionHtml = isFormulaAppendixLesson ? '' : buildLessonTestBannerHtml();
     setLearnLessonContent(lessonHtml + testSectionHtml);
     const parsedPages = parseLessonKnowledgePoints(lessonHtml + testSectionHtml);
     const quizPage = parsedPages.points.find(p => p.type === 'quiz');

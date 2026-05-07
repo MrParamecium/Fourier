@@ -1137,6 +1137,115 @@ function normalizeQuizProfile(quiz = {}) {
     return next;
 }
 
+function getB8FormulaAppendix(sectionId = '', sectionTitle = '') {
+    const text = compactWhitespace(`${sectionId} ${sectionTitle}`);
+    if (!/B\.8\b/i.test(text)) return null;
+    const pages = [
+        {
+            title: 'B.8-1 Mathematical Constants',
+            formulas: [
+                '\\pi \\approx 3.14159',
+                'e \\approx 2.71828',
+                'e^{-1}=\\frac{1}{e} \\approx 0.36788',
+                '\\log_{10}2 \\approx 0.30103',
+                '\\log_{10}3 \\approx 0.47712'
+            ]
+        },
+        {
+            title: 'B.8-2 Complex-Number Identities',
+            formulas: [
+                'e^{\\pm j\\theta}=\\cos\\theta \\pm j\\sin\\theta',
+                'a+jb = r e^{j\\theta}',
+                'r=\\sqrt{a^2+b^2}',
+                '\\theta=\\tan^{-1}\\left(\\frac{b}{a}\\right)\\quad\\text{with quadrant check}',
+                'e^{\\pm j\\pi/2}=\\pm j',
+                'e^{\\pm jn\\pi}=(-1)^n'
+            ]
+        },
+        {
+            title: 'B.8-3 Summation Formulas',
+            formulas: [
+                '\\sum_{k=m}^{n} r^k = \\frac{r^{n+1}-r^m}{r-1},\\quad r\\ne 1',
+                '\\sum_{k=0}^{n} k = \\frac{n(n+1)}{2}',
+                '\\sum_{k=0}^{n} k^2 = \\frac{n(n+1)(2n+1)}{6}',
+                '\\sum_{k=0}^{n} kr^k = \\frac{r+[n(r-1)-1]r^{n+1}}{(r-1)^2},\\quad r\\ne1'
+            ]
+        },
+        {
+            title: 'B.8-4 Taylor and Maclaurin Series',
+            formulas: [
+                'f(x)=\\sum_{n=0}^{\\infty}\\frac{f^{(n)}(a)}{n!}(x-a)^n',
+                'f(x)=\\sum_{n=0}^{\\infty}\\frac{f^{(n)}(0)}{n!}x^n',
+                'e^x=\\sum_{n=0}^{\\infty}\\frac{x^n}{n!}',
+                '\\ln(1+x)=\\sum_{n=1}^{\\infty}(-1)^{n+1}\\frac{x^n}{n}'
+            ]
+        },
+        {
+            title: 'B.8-5 Power Series',
+            formulas: [
+                '\\sin x=\\sum_{n=0}^{\\infty}(-1)^n\\frac{x^{2n+1}}{(2n+1)!}',
+                '\\cos x=\\sum_{n=0}^{\\infty}(-1)^n\\frac{x^{2n}}{(2n)!}',
+                '\\frac{1}{1-x}=\\sum_{n=0}^{\\infty}x^n,\\quad |x|<1',
+                '(1+x)^\\alpha=1+\\alpha x+\\frac{\\alpha(\\alpha-1)}{2!}x^2+\\cdots'
+            ]
+        },
+        {
+            title: 'B.8-6 Trigonometric Identities',
+            formulas: [
+                '\\sin^2 x+\\cos^2 x=1',
+                '\\sin(\\alpha\\pm\\beta)=\\sin\\alpha\\cos\\beta\\pm\\cos\\alpha\\sin\\beta',
+                '\\cos(\\alpha\\pm\\beta)=\\cos\\alpha\\cos\\beta\\mp\\sin\\alpha\\sin\\beta',
+                '\\sin 2x=2\\sin x\\cos x',
+                '\\cos 2x=\\cos^2x-\\sin^2x=1-2\\sin^2x=2\\cos^2x-1'
+            ]
+        },
+        {
+            title: 'B.8-7 Common Derivative Formulas',
+            formulas: [
+                '\\frac{d}{dx}x^n=nx^{n-1}',
+                '\\frac{d}{dx}e^{ax}=ae^{ax}',
+                '\\frac{d}{dx}\\ln x=\\frac{1}{x}',
+                '\\frac{d}{dx}\\sin ax=a\\cos ax',
+                '\\frac{d}{dx}\\cos ax=-a\\sin ax',
+                '\\frac{d}{dx}\\tan ax=a\\sec^2 ax'
+            ]
+        },
+        {
+            title: 'B.8-8 Indefinite Integrals',
+            formulas: [
+                '\\int x^n\\,dx=\\frac{x^{n+1}}{n+1}+C,\\quad n\\ne -1',
+                '\\int e^{ax}\\,dx=\\frac{1}{a}e^{ax}+C',
+                '\\int \\sin ax\\,dx=-\\frac{1}{a}\\cos ax+C',
+                '\\int \\cos ax\\,dx=\\frac{1}{a}\\sin ax+C',
+                '\\int u\\,dv=uv-\\int v\\,du'
+            ]
+        },
+        {
+            title: "B.8-9 L'Hôpital's Rule",
+            formulas: [
+                "\\lim_{x\\to a}\\frac{f(x)}{g(x)}=\\lim_{x\\to a}\\frac{f'(x)}{g'(x)}",
+                '\\text{Valid for indeterminate forms }0/0\\text{ or }\\infty/\\infty',
+                "g'(x)\\ne 0\\text{ near }a"
+            ]
+        },
+        {
+            title: 'B.8-10 Solution of Quadratic and Cubic Equations',
+            formulas: [
+                'ax^2+bx+c=0',
+                'x=\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}',
+                'ax^3+bx^2+cx+d=0',
+                'x=y-\\frac{b}{3a}',
+                'y^3+py+q=0',
+                'y=\\sqrt[3]{-\\frac{q}{2}+\\sqrt{\\left(\\frac{q}{2}\\right)^2+\\left(\\frac{p}{3}\\right)^3}}+\\sqrt[3]{-\\frac{q}{2}-\\sqrt{\\left(\\frac{q}{2}\\right)^2+\\left(\\frac{p}{3}\\right)^3}}'
+            ]
+        }
+    ];
+    return pages.map((page) => {
+        const formulas = page.formulas.map((formula, i) => `${i + 1}.\n\n$$\n${formula}\n$$`).join('\n\n');
+        return `## ${page.title}\n\n${formulas}`;
+    }).join('\n\n');
+}
+
 function buildLessonCacheKey(_memory, bookSource = 'old', cacheVariant = 'lesson') {
     const sourceKey = bookSource === 'new' ? 'new' : 'old';
     const variantKey = cacheVariant && cacheVariant !== 'lesson' ? `__${cacheVariant}` : '';
@@ -4894,6 +5003,7 @@ const server = http.createServer(async (req, res) => {
             const profileMemory = requestProfileMemory
                 || (userMemory ? { ...userMemory, quiz: normalizeQuizProfile(userMemory.quiz || {}) } : null);
             const userProfilePrompt = buildUserProfilePrompt(profileMemory);
+            const b8FormulaAppendix = getB8FormulaAppendix(sectionId, sectionTitle);
             const { ocrDir: secOcrDir } = getBookDirs(data.bookSource);
 
             if (!sectionId) {
@@ -4908,6 +5018,26 @@ const server = http.createServer(async (req, res) => {
                 ...item,
                 image: getPageImageUrl(data.bookSource, item.pageImage)
             }));
+
+            if (b8FormulaAppendix && mode === 'lesson') {
+                res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+                res.end(JSON.stringify({
+                    sectionId,
+                    sectionTitle,
+                    lesson: b8FormulaAppendix,
+                    cached: true,
+                    formulaAppendix: true,
+                    bookPages: bookPages.map(p => ({
+                        page: p.page,
+                        image: p.image,
+                        subsection: p.subsection,
+                        title: p.title,
+                        summary: p.summary
+                    })),
+                    webSources: []
+                }));
+                return;
+            }
 
             if (mode === 'intro') {
                 const intro = await generateSectionIntro(sectionId, sectionTitle, rawPages, language);
