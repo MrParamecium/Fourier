@@ -1,4 +1,10 @@
-const API_BASE = window.location.hostname === 'localhost' ? 'http://127.0.0.1:9000' : 'https://aquarius-5ss0.onrender.com';
+const API_BASE = (() => {
+  const configured = window.AQUARIUS_CONFIG?.apiBase;
+  if (typeof configured === 'string' && configured.trim()) {
+    return configured.trim().replace(/\/+$/, '');
+  }
+  return window.location.hostname === 'localhost' ? 'http://127.0.0.1:9000' : window.location.origin;
+})();
 
 const INTRO_LANDING_SEEN_KEY = 'aquarius-intro-seen';
 const THEME_STORAGE_KEY = 'aquarius-theme';
