@@ -52,6 +52,9 @@ function shouldShowIntroLanding() {
   if (params.get(AUTH_VIEW_FLAG) === 'login' || params.has(AUTH_CALLBACK_FLAG)) {
     return false;
   }
+  if (hasPendingAuthReturnIntent()) {
+    return false;
+  }
   return true;
 }
 
@@ -79,6 +82,7 @@ function initIntroLanding() {
   if (shell) shell.classList.add('hidden');
 
   const handleEnter = () => {
+    prepareLearnReturnTarget();
     hideIntroLanding(true);
     showLoginView();
   };
@@ -133,6 +137,7 @@ const CLERK_PUBLISHABLE_KEY = 'pk_test_ZHJpdmVuLXRyb2xsLTI4LmNsZXJrLmFjY291bnRzL
 const AUTH_CALLBACK_FLAG = 'auth_callback';
 const AUTH_VIEW_FLAG = 'view';
 const AUTH_RETURN_INTENT_KEY = 'aquarius-auth-return-intent';
+const AUTH_RETURN_TARGET_KEY = 'aquarius-auth-return-target';
 
 let currentUser = null;  // { uid, name, email, imageUrl }
 let userMemory  = {};    // loaded from backend after login
@@ -239,6 +244,14 @@ function setAuthReturnIntent(intent = 'workspace') {
   try { sessionStorage.setItem(AUTH_RETURN_INTENT_KEY, intent); } catch (_) {}
 }
 
+function peekAuthReturnIntent() {
+  try { return sessionStorage.getItem(AUTH_RETURN_INTENT_KEY) || ''; } catch (_) { return ''; }
+}
+
+function ensureAuthReturnIntent(intent = 'workspace') {
+  if (!peekAuthReturnIntent()) setAuthReturnIntent(intent);
+}
+
 function consumeAuthReturnIntent() {
   try {
     const intent = sessionStorage.getItem(AUTH_RETURN_INTENT_KEY) || '';
@@ -249,10 +262,66 @@ function consumeAuthReturnIntent() {
   }
 }
 
+function setAuthReturnTarget(target) {
+  if (!target) return;
+  try { sessionStorage.setItem(AUTH_RETURN_TARGET_KEY, JSON.stringify(target)); } catch (_) {}
+}
+
+function peekAuthReturnTarget() {
+  try {
+    const raw = sessionStorage.getItem(AUTH_RETURN_TARGET_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (_) {
+    return null;
+  }
+}
+
+function consumeAuthReturnTarget() {
+  const target = peekAuthReturnTarget();
+  try { sessionStorage.removeItem(AUTH_RETURN_TARGET_KEY); } catch (_) {}
+  return target;
+}
+
+function getFirstLearnTarget() {
+  const chapters = Array.isArray(syllabusData) ? syllabusData : [];
+  for (const chapter of chapters) {
+    const sections = Array.isArray(chapter.sections) ? chapter.sections : [];
+    for (const rawSection of sections) {
+      const section = typeof rawSection === 'string' ? { title: rawSection, subsections: [] } : rawSection;
+      const title = section.title || section.sectionTitle || '';
+      const subsections = Array.isArray(section.subsections) ? section.subsections : [];
+      if (subsections.length) {
+        return { type: 'lesson', sectionId: subsections[0], sectionTitle: subsections[0], book: currentBook };
+      }
+      if (title) return { type: 'lesson', sectionId: title, sectionTitle: title, book: currentBook };
+    }
+  }
+  return null;
+}
+
+function prepareLearnReturnTarget(target = null) {
+  setAuthReturnIntent('learn');
+  setAuthReturnTarget(target || getFirstLearnTarget());
+}
+
+function continueToPendingLearnTarget() {
+  const target = consumeAuthReturnTarget();
+  if (!target) return false;
+  if (target.book && target.book !== currentBook) {
+    setBook(target.book, { preserveView: true });
+  }
+  if (target.type === 'overview') {
+    openChapterOverviewMode(target.sectionId, target.sectionTitle, target.subsections || []);
+  } else {
+    openLearnMode(target.sectionId, target.sectionTitle, target.subsections || []);
+  }
+  return true;
+}
+
 async function enterWorkspaceWithExistingSession() {
   if (!clerkInstance?.user) return false;
   allowAuthNavigation = true;
-  setAuthReturnIntent('workspace');
+  ensureAuthReturnIntent('workspace');
   await onUserSignedIn(clerkInstance.user);
   return true;
 }
@@ -272,7 +341,7 @@ async function startOAuthRedirect(provider) {
       return;
     }
     allowAuthNavigation = true;
-    setAuthReturnIntent('workspace');
+    ensureAuthReturnIntent('workspace');
     authRedirectInProgress = true;
     document.body.classList.add('auth-redirecting');
     showLoginView();
@@ -311,7 +380,7 @@ async function handleAuthRedirectIfNeeded() {
   if (!clerkInstance || !isAuthCallbackRequest()) return false;
   try {
     allowAuthNavigation = true;
-    setAuthReturnIntent('workspace');
+    ensureAuthReturnIntent('workspace');
     authRedirectInProgress = true;
     document.body.classList.add('auth-redirecting');
     showLoginView();
@@ -603,7 +672,7 @@ async function initClerk() {
     clerkInstance.addListener(async (e) => {
       if (e.user) {
         hideAuthOverlay();
-        const shouldEnter = allowAuthNavigation || authRedirectInProgress;
+        const shouldEnter = allowAuthNavigation || authRedirectInProgress || hasPendingAuthReturnIntent();
         if (shouldEnter) await onUserSignedIn(e.user);
         else await syncCurrentUserWithoutNavigation(e.user);
       } else {
@@ -614,7 +683,7 @@ async function initClerk() {
     // Check immediately if already logged in or session resumed early
     if (clerkInstance.user) {
       hideAuthOverlay();
-      const shouldEnter = allowAuthNavigation || authRedirectInProgress;
+      const shouldEnter = allowAuthNavigation || authRedirectInProgress || hasPendingAuthReturnIntent();
       if (shouldEnter) await onUserSignedIn(clerkInstance.user);
       else await syncCurrentUserWithoutNavigation(clerkInstance.user);
       return;
@@ -634,7 +703,7 @@ async function initClerk() {
       return;
     }
     allowAuthNavigation = true;
-    setAuthReturnIntent('workspace');
+    ensureAuthReturnIntent('workspace');
     setLoginStatus('Opening sign-in form...', 'info');
     setLoginButtonsBusy(true);
     const targets = [
@@ -699,7 +768,7 @@ async function initClerk() {
     clerkInstance.addListener(({ user }) => {
       if (user && !currentUser) {
         hideAuthOverlay();
-        const shouldEnter = allowAuthNavigation || authRedirectInProgress;
+        const shouldEnter = allowAuthNavigation || authRedirectInProgress || hasPendingAuthReturnIntent();
         if (shouldEnter) onUserSignedIn(user);
         else syncCurrentUserWithoutNavigation(user);
       }
@@ -708,7 +777,7 @@ async function initClerk() {
 }
 
 async function onUserSignedIn(user) {
-  const navigationAllowed = allowAuthNavigation || authRedirectInProgress;
+  const navigationAllowed = allowAuthNavigation || authRedirectInProgress || hasPendingAuthReturnIntent();
   authRedirectInProgress = false;
   document.body.classList.remove('auth-redirecting');
   const authReturnIntent = consumeAuthReturnIntent();
@@ -735,11 +804,12 @@ async function onUserSignedIn(user) {
   renderUserBadge();
 
   const quizDone = isQuizProfileComplete(userMemory);
-  const shouldEnterWorkspace = navigationAllowed && authReturnIntent === 'workspace';
+  const shouldEnterWorkspace = navigationAllowed && (authReturnIntent === 'workspace' || authReturnIntent === 'learn');
 
   if (!shouldEnterWorkspace) return;
 
   hideIntroLanding(true);
+  if (authReturnIntent === 'learn' && quizDone && continueToPendingLearnTarget()) return;
   showWelcome();
   if (!quizDone) showQuiz();
 }
@@ -1590,6 +1660,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         updateLearnModeBadge(userMemory && userMemory.quiz ? userMemory.quiz.track : null);
         renderUserBadge();
+        if (continueToPendingLearnTarget()) return;
+        showWelcome();
       }
     });
   }
