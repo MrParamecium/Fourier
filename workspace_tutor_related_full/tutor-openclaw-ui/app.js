@@ -249,6 +249,14 @@ function consumeAuthReturnIntent() {
   }
 }
 
+async function enterWorkspaceWithExistingSession() {
+  if (!clerkInstance?.user) return false;
+  allowAuthNavigation = true;
+  setAuthReturnIntent('workspace');
+  await onUserSignedIn(clerkInstance.user);
+  return true;
+}
+
 async function startOAuthRedirect(provider) {
   console.log(`[Login] startOAuthRedirect(${provider})`, { clerkLoaded: !!window.Clerk?.loaded, hasClient: !!window.Clerk?.client });
   if (loginActionBusy) return;
@@ -258,6 +266,8 @@ async function startOAuthRedirect(provider) {
     return;
   }
   try {
+    await clerkInstance.load();
+    if (await enterWorkspaceWithExistingSession()) return;
     allowAuthNavigation = true;
     setAuthReturnIntent('workspace');
     authRedirectInProgress = true;
@@ -265,7 +275,6 @@ async function startOAuthRedirect(provider) {
     showLoginView();
     setLoginStatus(`Connecting to ${provider === 'github' ? 'GitHub' : 'Google'}...`, 'info');
     setLoginButtonsBusy(true);
-    await clerkInstance.load();
     const strategy = provider === 'github' ? 'oauth_github' : 'oauth_google';
     if (clerkInstance.client?.signIn?.authenticateWithRedirect) {
       await clerkInstance.client.signIn.authenticateWithRedirect({
@@ -286,11 +295,12 @@ async function startOAuthRedirect(provider) {
     const status = err?.status || err?.errors?.[0]?.meta?.status;
     if (status === 429) {
       setLoginStatus('Google / GitHub login is temporarily rate-limited by Clerk. Please wait 20-30 seconds and try again.', 'error');
+    } else if (status === 400) {
+      setLoginStatus('This browser already has a sign-in session. Refresh once, then use Open Workspace again.', 'error');
     } else {
       setLoginStatus(`Could not start ${provider === 'github' ? 'GitHub' : 'Google'} login. Please try again or use Sign In below.`, 'error');
     }
     setLoginButtonsBusy(false);
-    openClerkSignIn();
   }
 }
 
@@ -618,6 +628,10 @@ async function initClerk() {
     if (!clerkInstance) {
       setLoginStatus('Sign-in service failed to load. Please refresh the page and try again, or continue as Guest.', 'error');
       alert('Sign-in service failed to load. Please refresh the page and try again, or continue as Guest.');
+      return;
+    }
+    if (clerkInstance.loaded && clerkInstance.user) {
+      enterWorkspaceWithExistingSession();
       return;
     }
     allowAuthNavigation = true;
