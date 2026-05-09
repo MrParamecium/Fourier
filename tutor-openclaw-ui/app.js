@@ -4461,6 +4461,7 @@ function hydrateInteractiveDemos(root) {
       const waveCanvas = node.querySelector('.phasor-demo-wave');
       const planeCtx = planeCanvas && planeCanvas.getContext ? planeCanvas.getContext('2d') : null;
       const waveCtx = waveCanvas && waveCanvas.getContext ? waveCanvas.getContext('2d') : null;
+      const shellEl = node.querySelector('.phasor-demo-shell');
 
       const toRadians = (deg) => (deg * Math.PI) / 180;
       const formatNum = (value) => {
@@ -4482,10 +4483,16 @@ function hydrateInteractiveDemos(root) {
       const sizeCanvas = (canvas, ctx, height) => {
         if (!canvas || !ctx) return { width: 0, height: 0 };
         const dpr = Math.max(window.devicePixelRatio || 1, 1);
-        const width = Math.max(Math.floor(canvas.parentElement.clientWidth), 360);
+        const parentEl = canvas.parentElement;
+        const parentStyle = parentEl ? window.getComputedStyle(parentEl) : null;
+        const horizontalPadding = parentStyle
+          ? (parseFloat(parentStyle.paddingLeft) || 0) + (parseFloat(parentStyle.paddingRight) || 0)
+          : 0;
+        const availableWidth = Math.floor((parentEl ? parentEl.clientWidth : 0) - horizontalPadding);
+        const width = Math.max(availableWidth || 0, 160);
         canvas.width = Math.floor(width * dpr);
         canvas.height = Math.floor(height * dpr);
-        canvas.style.width = `${width}px`;
+        canvas.style.width = '100%';
         canvas.style.height = `${height}px`;
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         return { width, height };
@@ -4600,6 +4607,9 @@ function hydrateInteractiveDemos(root) {
       };
 
       const renderPhasor = () => {
+        if (shellEl) {
+          shellEl.classList.toggle('is-narrow', shellEl.clientWidth < 760);
+        }
         drawPlane();
         drawWave();
         const a = getA();
@@ -4696,7 +4706,19 @@ function hydrateInteractiveDemos(root) {
           controlsEl.appendChild(btn);
         });
 
-      const rerender = () => renderPhasor();
+      let pendingPhasorFrame = 0;
+      const rerender = () => {
+        if (pendingPhasorFrame) return;
+        pendingPhasorFrame = window.requestAnimationFrame(() => {
+          pendingPhasorFrame = 0;
+          renderPhasor();
+        });
+      };
+      if (window.ResizeObserver && shellEl) {
+        const observer = new ResizeObserver(rerender);
+        observer.observe(shellEl);
+        node._phasorResizeObserver = observer;
+      }
       window.addEventListener('resize', rerender, { passive: true });
       renderPhasor();
       return;
