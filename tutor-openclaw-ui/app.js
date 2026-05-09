@@ -6198,26 +6198,28 @@ function resetLearnChatFabPosition() {
 function enableFloatingDrag(handle, target, defaults = { right: 28, bottom: 28 }, options = {}) {
   if (!handle || !target) return;
   const threshold = Number(options.threshold || 5);
+  const isInteractiveDragTarget = (node) => Boolean(node?.closest?.(
+    'button, a, input, textarea, select, option, label, [role="button"], [data-no-drag]'
+  ));
   let dragging = false;
   let moved = false;
   let offsetX = 0;
   let offsetY = 0;
   let startX = 0;
   let startY = 0;
+  let startRect = null;
 
   handle.addEventListener('mousedown', (e) => {
     if (e.button !== 0) return;
+    if (isInteractiveDragTarget(e.target)) return;
     dragging = true;
     moved = false;
     startX = e.clientX;
     startY = e.clientY;
     const rect = target.getBoundingClientRect();
+    startRect = rect;
     offsetX = e.clientX - rect.left;
     offsetY = e.clientY - rect.top;
-    target.style.width = `${rect.width}px`;
-    target.style.height = `${rect.height}px`;
-    target.style.bottom = 'auto';
-    target.style.right = 'auto';
     e.preventDefault();
   });
 
@@ -6228,6 +6230,14 @@ function enableFloatingDrag(handle, target, defaults = { right: 28, bottom: 28 }
       const dy = Math.abs(e.clientY - startY);
       if (dx < threshold && dy < threshold) return;
       moved = true;
+      if (startRect) {
+        target.style.width = `${startRect.width}px`;
+        target.style.height = `${startRect.height}px`;
+        target.style.left = `${startRect.left}px`;
+        target.style.top = `${startRect.top}px`;
+        target.style.bottom = 'auto';
+        target.style.right = 'auto';
+      }
     }
     const maxLeft = window.innerWidth - target.offsetWidth - 12;
     const maxTop = window.innerHeight - target.offsetHeight - 12;
@@ -6248,6 +6258,7 @@ function enableFloatingDrag(handle, target, defaults = { right: 28, bottom: 28 }
     }
     dragging = false;
     moved = false;
+    startRect = null;
   });
 
   target.addEventListener('click', (e) => {
