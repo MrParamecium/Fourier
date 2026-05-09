@@ -4190,30 +4190,72 @@ function decorateLectureContent(root) {
     const t = compactWhitespace(String(text || '')).toLowerCase();
     if (!t) return '';
     if (t.includes('example') || t.includes('worked example') || t.includes('near-miss')) return 'example';
-    if (t.includes('common mistake')) return 'warning';
-    if (t.includes('exam note') || t.includes('exam trigger')) return 'exam';
-    if (t.includes('quick reading rule')) return 'rule';
+    if (t.includes('common mistake') || t.includes('common misuse')) return 'warning';
+    if (t.includes('exam note') || t.includes('exam trigger') || t.includes('exam tip')) return 'exam';
+    if (t.includes('quick reading rule') || t.includes('when to use it')) return 'rule';
     if (t.includes('important formulas')) return 'formula';
     return '';
   };
 
-  Array.from(root.querySelectorAll('h3')).forEach((heading) => {
+  const trimLeadingWhitespace = (node) => {
+    while (node.firstChild && node.firstChild.nodeType === Node.TEXT_NODE && !node.firstChild.textContent.trim()) {
+      node.firstChild.remove();
+    }
+    if (node.firstChild && node.firstChild.nodeType === Node.TEXT_NODE) {
+      node.firstChild.textContent = node.firstChild.textContent.replace(/^[\s:：-]+/, '');
+    }
+  };
+
+  const wrapInlineCallout = (paragraph) => {
+    if (!paragraph || paragraph.closest('.lecture-note-card')) return;
+    const firstElement = paragraph.firstElementChild;
+    if (!firstElement || firstElement.tagName !== 'STRONG') return;
+    let probe = paragraph.firstChild;
+    while (probe && probe !== firstElement) {
+      if (probe.nodeType !== Node.TEXT_NODE || probe.textContent.trim()) return;
+      probe = probe.nextSibling;
+    }
+    const label = compactWhitespace(firstElement.textContent || '').replace(/[:：]\s*$/, '');
+    const type = cardTypeForHeading(label);
+    if (!type) return;
+    const parent = paragraph.parentNode;
+    if (!parent) return;
+    const card = document.createElement('section');
+    card.className = `lecture-note-card lecture-note-card-${type} lecture-note-card-compact`;
+    const heading = document.createElement('h4');
+    heading.textContent = label;
+    parent.insertBefore(card, paragraph);
+    firstElement.remove();
+    trimLeadingWhitespace(paragraph);
+    paragraph.classList.add('lecture-inline-callout-body');
+    card.appendChild(heading);
+    card.appendChild(paragraph);
+  };
+
+  const wrapHeadingCard = (heading) => {
     const type = cardTypeForHeading(heading.textContent || '');
     if (!type || heading.closest('.lecture-note-card')) return;
     const card = document.createElement('section');
     card.className = `lecture-note-card lecture-note-card-${type}`;
     const parent = heading.parentNode;
     if (!parent) return;
+    const headingLevel = Number(String(heading.tagName || '').replace(/^H/i, '')) || 3;
     parent.insertBefore(card, heading);
     card.appendChild(heading);
     let sibling = card.nextSibling;
     while (sibling) {
       const next = sibling.nextSibling;
-      if (sibling.nodeType === Node.ELEMENT_NODE && /^H[1-3]$/.test(sibling.tagName)) break;
+      if (sibling.nodeType === Node.ELEMENT_NODE && /^H[1-6]$/.test(sibling.tagName)) {
+        const siblingLevel = Number(String(sibling.tagName || '').replace(/^H/i, '')) || headingLevel;
+        if (siblingLevel <= headingLevel || cardTypeForHeading(sibling.textContent || '')) break;
+      }
       card.appendChild(sibling);
       sibling = next;
     }
-  });
+  };
+
+  Array.from(root.querySelectorAll('p')).forEach(wrapInlineCallout);
+  Array.from(root.querySelectorAll('h3, h4')).forEach(wrapHeadingCard);
 
   root.querySelectorAll('h2').forEach((h2) => {
     const next = h2.nextElementSibling;
@@ -4222,23 +4264,33 @@ function decorateLectureContent(root) {
     }
   });
 
-  const takeawayHeading = Array.from(root.querySelectorAll('h1, h2, h3')).find((node) => {
+  const isTakeawayHeadingNode = (node) => {
     const text = compactWhitespace(node.textContent || '');
     return /^📌\s*Key Takeaways$/i.test(text) || /^Key Takeaways$/i.test(text);
-  });
-  if (takeawayHeading && !root.querySelector('ol.learn-key-takeaways-list')) {
+  };
+  const takeawayHeading = Array.from(root.querySelectorAll('h1, h2, h3, p')).find(isTakeawayHeadingNode);
+  if (takeawayHeading && !root.querySelector('.lecture-note-card-summary')) {
     const takeawayNodes = [];
     let cursor = takeawayHeading.nextElementSibling;
     while (cursor) {
-      if (/^H[1-3]$/.test(cursor.tagName)) break;
+      if (/^H[1-6]$/.test(cursor.tagName)) break;
+      if (cursor.querySelector('.kc-quiz-plan, .lesson-test-banner')) break;
       const text = compactWhitespace(cursor.textContent || '');
-      if (cursor.tagName === 'P' && text && !cursor.querySelector('img, table, .kc-quiz-plan, .lesson-test-banner')) {
+      if (/^next[,.:;]\s+/i.test(text)) break;
+      if ((cursor.tagName === 'P' || cursor.tagName === 'LI') && text && !cursor.querySelector('img, table, .kc-quiz-plan, .lesson-test-banner')) {
         takeawayNodes.push(cursor);
+      }
+      if ((cursor.tagName === 'UL' || cursor.tagName === 'OL') && !cursor.querySelector('img, table, .kc-quiz-plan, .lesson-test-banner')) {
+        Array.from(cursor.children || []).forEach((child) => {
+          if (child.tagName === 'LI' && compactWhitespace(child.textContent || '')) takeawayNodes.push(child);
+        });
       }
       cursor = cursor.nextElementSibling;
     }
 
-    if (takeawayNodes.length >= 2) {
+    if (takeawayNodes.length >= 1) {
+      const summaryCard = document.createElement('section');
+      summaryCard.className = 'lecture-note-card lecture-note-card-summary';
       const list = document.createElement('ol');
       list.className = 'learn-key-takeaways-list';
       takeawayNodes.forEach((node) => {
@@ -4246,8 +4298,23 @@ function decorateLectureContent(root) {
         li.innerHTML = node.innerHTML;
         list.appendChild(li);
       });
-      takeawayHeading.parentNode.insertBefore(list, takeawayNodes[0]);
-      takeawayNodes.forEach((node) => node.remove());
+      takeawayHeading.parentNode.insertBefore(summaryCard, takeawayHeading);
+      if (/^H[1-6]$/.test(takeawayHeading.tagName)) {
+        summaryCard.appendChild(takeawayHeading);
+      } else {
+        const heading = document.createElement('h2');
+        heading.innerHTML = takeawayHeading.innerHTML;
+        summaryCard.appendChild(heading);
+        takeawayHeading.remove();
+      }
+      summaryCard.appendChild(list);
+      const removedParents = new Set();
+      takeawayNodes.forEach((node) => {
+        const parent = node.parentNode;
+        if (parent && (parent.tagName === 'UL' || parent.tagName === 'OL')) removedParents.add(parent);
+        else node.remove();
+      });
+      removedParents.forEach((node) => node.remove());
     }
   }
 
