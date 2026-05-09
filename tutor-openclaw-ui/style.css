@@ -14939,15 +14939,15 @@ h6,
 }
 
 .learn-body.explain-collapsed:not(.chat-collapsed) .learn-chat-scroll {
-  padding: 82px clamp(34px, 5vw, 72px) 18px !important;
+  padding: 82px clamp(42px, 7vw, 110px) 18px !important;
 }
 
 .learn-body.explain-collapsed:not(.chat-collapsed) .learn-chat-empty-state {
-  width: 100% !important;
-  max-width: none !important;
-  min-height: clamp(420px, calc(100vh - 360px), 720px) !important;
-  margin: 0 !important;
-  padding: clamp(42px, 6vw, 76px) !important;
+  width: min(75%, 1160px) !important;
+  max-width: 1160px !important;
+  min-height: clamp(360px, calc(100vh - 430px), 560px) !important;
+  margin: 0 auto !important;
+  padding: clamp(34px, 5vw, 58px) !important;
   border: 2px solid rgba(203, 213, 225, 0.78) !important;
   border-radius: 30px !important;
   background:
@@ -14991,29 +14991,30 @@ h6,
 }
 
 .learn-body.explain-collapsed:not(.chat-collapsed) .learn-chat-empty-title {
-  font-size: clamp(34px, 4.4vw, 64px) !important;
-  line-height: 0.98 !important;
+  font-size: 22px !important;
+  line-height: 1.12 !important;
   letter-spacing: 0 !important;
 }
 
 .learn-body.explain-collapsed:not(.chat-collapsed) .learn-chat-empty-copy {
-  max-width: 560px !important;
-  font-size: clamp(16px, 1.35vw, 22px) !important;
+  max-width: 250px !important;
+  font-size: 13px !important;
+  line-height: 1.45 !important;
 }
 
 .learn-body.explain-collapsed:not(.chat-collapsed) .learn-chat-empty-prompts {
   display: flex !important;
-  margin-top: 16px !important;
-  gap: 10px !important;
+  margin-top: 8px !important;
+  gap: 8px !important;
 }
 
 .learn-body.explain-collapsed:not(.chat-collapsed) .learn-chat-empty-prompts span {
-  padding: 8px 12px !important;
+  padding: 5px 8px !important;
   border: 1px solid rgba(203, 213, 225, 0.86) !important;
   border-radius: 999px !important;
   background: rgba(255, 255, 255, 0.78) !important;
   color: #475569 !important;
-  font-size: 10px !important;
+  font-size: 9px !important;
   font-weight: 800 !important;
   letter-spacing: 0.05em !important;
   text-transform: uppercase !important;
@@ -15021,8 +15022,8 @@ h6,
 }
 
 .learn-body.explain-collapsed:not(.chat-collapsed) .learn-followup-bar {
-  width: calc(100% - clamp(56px, 7vw, 112px)) !important;
-  max-width: none !important;
+  width: min(75%, 1160px) !important;
+  max-width: 1160px !important;
   margin: 0 auto 24px !important;
   padding: 12px 14px !important;
   border: 2px solid rgba(203, 213, 225, 0.95) !important;
