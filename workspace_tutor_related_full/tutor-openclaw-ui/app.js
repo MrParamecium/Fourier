@@ -9856,7 +9856,7 @@ function findParentOverviewContextForSubsection(sectionId = '', sectionTitle = '
   return null;
 }
 
-function getOverviewLessonEntries(sectionId = '', sectionTitle = '', subsections = [], includeParentLesson = true) {
+function getOverviewLessonEntries(sectionId = '', sectionTitle = '', subsections = [], includeParentLesson = false) {
   const entries = [];
   if (includeParentLesson) {
     entries.push({
@@ -9888,7 +9888,7 @@ function getOverviewSummaryHtml(sectionId, sectionTitle, subsections = [], optio
   const preludeStatusHtml = options.preludeLoading
     ? `<section class="chapter-overview-prelude chapter-overview-prelude-loading" id="chapterOverviewPreludeStatus">Preparing chapter notes...</section>`
     : '';
-  const entries = getOverviewLessonEntries(sectionId, sectionTitle, subsections, options.includeParentLesson !== false);
+  const entries = getOverviewLessonEntries(sectionId, sectionTitle, subsections, options.includeParentLesson === true);
   const cardsHtml = entries.map((entry, idx) => {
     const entryTitle = typeof entry === 'string' ? entry : entry.title;
     const isParentLesson = Boolean(entry && typeof entry === 'object' && entry.isParentLesson);
@@ -10056,12 +10056,12 @@ async function loadChapterOverviewPrelude(sectionId, sectionTitle, subsections =
     if (!res.ok) throw new Error(`overview request failed: ${res.status}`);
     const data = await res.json();
     if (!canWriteOverview()) return;
-    renderChapterOverviewContent(sectionId, sectionTitle, subsections);
+    renderChapterOverviewContent(sectionId, sectionTitle, subsections, { includeParentLesson: Boolean(data && data.hasPrelude && data.lesson) });
   } catch (err) {
     clearTimeout(timeout);
     if (!canWriteOverview()) return;
     console.warn('[ChapterOverview] prelude load failed:', err);
-    renderChapterOverviewContent(sectionId, sectionTitle, subsections);
+    renderChapterOverviewContent(sectionId, sectionTitle, subsections, { includeParentLesson: false });
   }
 }
 
