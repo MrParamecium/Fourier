@@ -10013,7 +10013,7 @@ function renderChapterOverviewContent(sectionId, sectionTitle, subsections = [],
     () => decorateLectureContent(learnExplainContent),
     () => enhanceVisualMetadataUI(learnExplainContent),
     () => hydrateInteractiveDemos(learnExplainContent),
-    () => buildTocFromRenderedLesson()
+    () => buildTocFromContent(learnExplainContent)
   ];
   enhancementSteps.forEach((step) => {
     try {
