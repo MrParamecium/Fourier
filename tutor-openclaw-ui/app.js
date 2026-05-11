@@ -303,7 +303,7 @@ function getFirstLearnTarget() {
       const section = typeof rawSection === 'string' ? { title: rawSection, subsections: [] } : rawSection;
       const title = section.title || section.sectionTitle || '';
       const subsections = Array.isArray(section.subsections) ? section.subsections : [];
-      if (subsections.length) {
+      if (subsections.length && !isB8TextbookOnlySection(title, title)) {
         return { type: 'lesson', sectionId: subsections[0], sectionTitle: subsections[0], book: currentBook };
       }
       if (title) return { type: 'lesson', sectionId: title, sectionTitle: title, book: currentBook };
@@ -2357,7 +2357,8 @@ function getB8TextbookOnlyMarkdown() {
 }
 
 function shouldOpenSectionAsChapterOverview(sectionId = '', sectionTitle = '', subsections = []) {
-  return Boolean(compactWhitespace(`${sectionId || ''} ${sectionTitle || ''}`));
+  if (isB8TextbookOnlySection(sectionId, sectionTitle)) return false;
+  return Array.isArray(subsections) && subsections.length > 0;
 }
 
 function forceB8TextbookOnlyLesson(sectionId = '', sectionTitle = '', markdown = '') {
