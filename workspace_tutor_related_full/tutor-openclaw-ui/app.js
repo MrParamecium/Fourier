@@ -6210,12 +6210,31 @@ function getDemoControlValue(control, state) {
 const CHAPTER_ONE_DEMO_TYPES = new Set([
   'energy_cross_term',
   'step_window_composer',
+  'impulse_unit_area_limit',
   'impulse_sifting',
   'invertibility_tester'
 ]);
 
+function inferChapterOneDemoType(demo = {}) {
+  const explicit = demo.demo_type || demo.demo_spec?.demo_type || '';
+  if (explicit) return explicit;
+  const spec = demo.spec || demo.demo_spec || {};
+  const text = [
+    demo.title,
+    demo.explanation,
+    demo.content,
+    spec.description,
+    spec.note_below_demo,
+    JSON.stringify(spec.pulse_formulas || {})
+  ].filter(Boolean).join(' ');
+  if (/impulse/i.test(text) && /unit[-\s]?area|pulse|rectangular|triangular|gaussian|exponential/i.test(text)) {
+    return 'impulse_unit_area_limit';
+  }
+  return '';
+}
+
 function hydrateChapterOneDemo(node, demo) {
-  const demoType = demo.demo_type || demo.demo_spec?.demo_type || '';
+  const demoType = inferChapterOneDemoType(demo);
   const state = Object.create(null);
   const title = demo.title || 'Interactive check';
   const explanation = demo.explanation || 'Move the controls and watch the formulas update.';
@@ -6434,6 +6453,72 @@ function hydrateChapterOneDemo(node, demo) {
     ]);
   };
 
+  const renderImpulseUnitAreaLimit = () => {
+    const { width } = setupCanvas(250);
+    const alpha = Math.max(1, Number(state.alpha || 3));
+    const shape = state.shape || 'rectangular';
+    const minT = -3;
+    const maxT = 3;
+    const pad = 42;
+    const baseY = 190;
+    const topY = 38;
+    const usableHeight = baseY - topY;
+    const toX = drawAxis(width, baseY, minT, maxT, pad);
+    const maxAmplitude = Math.max(alpha, alpha / Math.sqrt(Math.PI), 1);
+    const toY = (value) => baseY - (Math.min(value, maxAmplitude) / maxAmplitude) * usableHeight;
+    const sampleCount = 360;
+    const valueAt = (t) => {
+      if (shape === 'triangular') return Math.max(0, alpha * (1 - alpha * Math.abs(t)));
+      if (shape === 'exponential') return t >= 0 ? alpha * Math.exp(-alpha * t) : 0;
+      if (shape === 'gaussian') return (alpha / Math.sqrt(Math.PI)) * Math.exp(-((alpha * t) ** 2));
+      return Math.abs(t) <= (0.5 / alpha) ? alpha : 0;
+    };
+    const formulaMap = {
+      rectangular: `height = ${fmt(alpha)}, width = ${fmt(1 / alpha)}`,
+      triangular: `peak = ${fmt(alpha)}, base = ${fmt(2 / alpha)}`,
+      exponential: `${fmt(alpha)} exp(-${fmt(alpha)}t) u(t)`,
+      gaussian: `${fmt(alpha)}/sqrt(pi) exp(-(${fmt(alpha)}t)^2)`
+    };
+    ctx.fillStyle = 'rgba(37, 99, 235, 0.12)';
+    ctx.beginPath();
+    ctx.moveTo(toX(minT), baseY);
+    for (let i = 0; i <= sampleCount; i += 1) {
+      const t = minT + ((maxT - minT) * i) / sampleCount;
+      ctx.lineTo(toX(t), toY(valueAt(t)));
+    }
+    ctx.lineTo(toX(maxT), baseY);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = '#2563eb';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    for (let i = 0; i <= sampleCount; i += 1) {
+      const t = minT + ((maxT - minT) * i) / sampleCount;
+      const x = toX(t);
+      const y = toY(valueAt(t));
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    ctx.strokeStyle = '#f97316';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([5, 5]);
+    ctx.beginPath();
+    ctx.moveTo(toX(0), baseY);
+    ctx.lineTo(toX(0), topY);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#334155';
+    ctx.font = '700 13px Quicksand, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('area stays 1', toX(0), 24);
+    setReadouts([
+      `<strong>Shape:</strong> ${escapeHtml(shape)}`,
+      `<strong>Sharpness:</strong> alpha = ${fmt(alpha)}; ${escapeHtml(formulaMap[shape] || formulaMap.rectangular)}`,
+      `<strong>Limit idea:</strong> as alpha grows, width shrinks and height grows, but total area remains 1.`
+    ]);
+  };
+
   const renderImpulseSifting = () => {
     const { width } = setupCanvas(250);
     const form = state.form || 't_minus_a';
@@ -6565,6 +6650,7 @@ function hydrateChapterOneDemo(node, demo) {
     if (shellEl) shellEl.classList.toggle('is-narrow', shellEl.clientWidth < 740);
     if (demoType === 'energy_cross_term') renderEnergyCrossTerm();
     else if (demoType === 'step_window_composer') renderStepWindow();
+    else if (demoType === 'impulse_unit_area_limit') renderImpulseUnitAreaLimit();
     else if (demoType === 'impulse_sifting') renderImpulseSifting();
     else if (demoType === 'invertibility_tester') renderInvertibilityTester();
   }
@@ -6574,6 +6660,14 @@ function hydrateChapterOneDemo(node, demo) {
   } else if (demoType === 'step_window_composer') {
     addRange('start', 'Start a', -4, 4, 0.5, 2);
     addRange('end', 'End b', -3, 5, 0.5, 4);
+  } else if (demoType === 'impulse_unit_area_limit') {
+    addRange('alpha', 'Sharpness alpha', 1, 50, 1, 3);
+    addSelect('shape', 'Pulse shape', [
+      { value: 'rectangular', label: 'Rectangular' },
+      { value: 'triangular', label: 'Triangular' },
+      { value: 'exponential', label: 'Exponential' },
+      { value: 'gaussian', label: 'Gaussian' }
+    ], 'rectangular');
   } else if (demoType === 'impulse_sifting') {
     addSelect('form', 'Delta argument', [
       { value: 't_minus_a', label: 'delta(t-a)' },
@@ -6637,7 +6731,7 @@ function hydrateInteractiveDemos(root) {
       || (demo.type === 'interactive_demo'
         && /sinusoid/i.test(demoText)
         && /phasor|amplitude|frequency|phase/i.test(demoText));
-    const chapterOneDemoType = demo.demo_type || demo.demo_spec?.demo_type || '';
+    const chapterOneDemoType = inferChapterOneDemoType(demo);
     const isChapterOneDemo = CHAPTER_ONE_DEMO_TYPES.has(chapterOneDemoType);
 
     if (!isMatrixDemo && !isComplexPlaneDemo && !isPhasorDemo && !isSinusoidDemo && !isChapterOneDemo) return;
