@@ -6354,6 +6354,7 @@ function hydrateChapterOneDemo(node, demo) {
       render();
     });
     controlsEl.appendChild(wrap);
+    return wrap;
   };
   const addSelect = (key, label, options, value) => {
     state[key] = value;
@@ -6371,6 +6372,7 @@ function hydrateChapterOneDemo(node, demo) {
       render();
     });
     controlsEl.appendChild(wrap);
+    return wrap;
   };
 
   const renderEnergyCrossTerm = () => {
@@ -6537,7 +6539,7 @@ function hydrateChapterOneDemo(node, demo) {
     }
     const sample = (support ** 2) + 1;
     const integral = factor * sample;
-    const toX = drawAxis(width, 184, -4, 5);
+    const toX = drawAxis(width, 184, -4, 6);
     const x = toX(support);
     ctx.strokeStyle = '#f97316';
     ctx.lineWidth = 3;
@@ -6669,14 +6671,27 @@ function hydrateChapterOneDemo(node, demo) {
       { value: 'gaussian', label: 'Gaussian' }
     ], 'rectangular');
   } else if (demoType === 'impulse_sifting') {
-    addSelect('form', 'Delta argument', [
+    const formControl = addSelect('form', 'Delta argument', [
       { value: 't_minus_a', label: 'delta(t-a)' },
       { value: 'a_minus_t', label: 'delta(a-t)' },
       { value: 'k_t_minus_b', label: 'delta(kt-b)' }
-    ], 't_minus_a');
-    addRange('a', 'a', -3, 4, 0.5, 2);
-    addRange('k', 'k', 0.5, 4, 0.5, 2);
-    addRange('b', 'b', -4, 6, 0.5, 4);
+    ], 'k_t_minus_b');
+    const aControl = addRange('a', 'a', -3, 4, 0.5, 2);
+    const kControl = addRange('k', 'k', 1, 4, 0.5, 2.5);
+    const bControl = addRange('b', 'b', -4, 6, 0.5, 4);
+    const updateImpulseSiftingControls = () => {
+      const usesScaledArgument = state.form === 'k_t_minus_b';
+      aControl.hidden = usesScaledArgument;
+      kControl.hidden = !usesScaledArgument;
+      bControl.hidden = !usesScaledArgument;
+    };
+    formControl.querySelector('select')?.addEventListener('change', updateImpulseSiftingControls);
+    const originalRender = render;
+    render = () => {
+      updateImpulseSiftingControls();
+      originalRender();
+    };
+    updateImpulseSiftingControls();
   } else if (demoType === 'invertibility_tester') {
     addSelect('system', 'System', [
       { value: 'reverse', label: 'y(t)=x(-t)' },
