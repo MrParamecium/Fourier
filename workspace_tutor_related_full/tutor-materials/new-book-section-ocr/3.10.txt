@@ -1,0 +1,59 @@
+# Aquarius section OCR
+section_id: 3.10
+source_pages: page-305, page-306
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+3.10  Intuitive Insights into System Behavior                                                                 305
+
+DRILL 3.21  Assessing Stability by Characteristic Roots
+Using the complex plane, locate the characteristic roots of the following systems, and use the characteristic root locations to determine external and internal stability of each system.
+
+(a)  (E + 1)(E^2 + 6E + 25)y[n] = 3Ex[n]
+(b)  (E − 1)^2(E + 0.5)y[n] = (E^2 + 2E + 3)x[n]
+
+ANSWERS
+Both systems are BIBO- and asymptotically unstable.
+
+3.10 INTUITIVE INSIGHTS INTO SYSTEM BEHAVIOR
+The intuitive insights into the behavior of continuous-time systems and their qualitative proofs, discussed in Sec. 2.6, also apply to discrete-time systems. For this reason, we shall merely mention here without discussion some of the insights presented in Sec. 2.6.
+
+The system’s entire (zero-input and zero-state) behavior is strongly influenced by the characteristic roots (or modes) of the system. The system responds strongly to input signals similar to its characteristic modes and poorly to inputs very different from its characteristic modes. In fact, when the input is a characteristic mode of the system, the response goes to infinity, provided the mode is a nondecaying signal. This is the resonance phenomenon. The width of an impulse response h[n] indicates the response time (time required to respond fully to an input) of the system. It is the time constant of the system.† Discrete-time pulses are generally dispersed when passed through a discrete-time system. The amount of dispersion (or spreading out) is equal to the system time constant (or width of h[n]). The system time constant also determines the rate at which the system can transmit information. A smaller time constant corresponds to a higher rate of information transmission, and vice versa. We keep in mind that concepts such as time constant and pulse dispersion only coarsely illustrate system behavior. Let us illustrate these ideas with an example.
+
+EXAMPLE 3.28  Intuitive Insights into Lowpass DT System Behavior
+Determine the time constant, rise time, pulse dispersion, and filter characteristics of a lowpass DT system with impulse response h[n] = 2(0.6)^n u[n].
+
+† This part of the discussion applies to systems with impulse response h[n] that is a mostly positive (or mostly negative) pulse.
+
+[[PAGE page-306]]
+306     CHAPTER 3   TIME-DOMAIN ANALYSIS OF DISCRETE-TIME SYSTEMS
+
+Since h[n] resembles a single, mostly positive pulse, we know that the DT system is lowpass.
+Similar to the CT case shown in Sec. 2.6, we can determine the time constant T_h as the width
+of a rectangle that approximates h[n]. This rectangle possesses the same peak height and total
+sum (area), as does h[n]. The peak of h[n] is 2, and the total sum (area) is
+
+∞
+∑ 2(0.6)^n = 2 (1 - 0)/(1 - 0.6) = 5
+n=0
+
+Since the width of a DT signal is 1 less than its length, we see that the time constant T_h
+(rectangle width) is
+
+T_h = rectangle width = area/height - 1 = 5/2 - 1 = 1.5 samples
+
+Since time constant, rise time, pulse dispersion are all given by the same value, we see that
+
+time constant = rise time = pulse dispersion = T_h = 1.5 samples
+
+The approximate cutoff frequency of our DT system can be determined as the frequency of a
+DT sinusoid whose period equals the length of the rectangle approximation to h[n]. That is,
+
+cutoff frequency = 1/(T_h + 1) = 2/5 cycles/sample
+
+Equivalently, we can express the cutoff frequency as 4π/5 radians/sample.
+Notice that T_h is not an integer and thus lacks a clear physical meaning for our DT system.
+How, for example, can it take 1.5 samples for our DT system to fully respond to an input? We
+can put our minds at ease by remembering the approximate nature of T_h, which is meant to
+provide only a rough understanding of system behavior.

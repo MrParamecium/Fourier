@@ -1,0 +1,18 @@
+{
+  "sectionId": "2.6-6",
+  "sourcePages": [
+    "page-209",
+    "page-210"
+  ],
+  "usedPages": [
+    "page-209",
+    "page-210"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "2.6-6 Time Constant and Rate of Information Transmission",
+  "foundEnd": true,
+  "endBeforeLine": "2.6-7 The Resonance Phenomenon",
+  "endBeforeCode": "2.6-7",
+  "charCount": 3216
+}

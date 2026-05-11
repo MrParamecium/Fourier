@@ -1,0 +1,321 @@
+{
+  "section_id": "1.7-7",
+  "section_title": "Invertible and Noninvertible Systems",
+  "difficulty": "intermediate",
+  "estimated_read_minutes": 6,
+  "learning_objectives": [
+    "Decide whether a system is invertible by checking whether the input can be uniquely recovered from the output.",
+    "Recognize that cascading a system with its inverse gives an identity system.",
+    "Identify common noninvertible patterns: absolute value, multiplication by zero at a time point, and differentiation losing constants."
+  ],
+  "visualization_need": {
+    "level": "static",
+    "reason": [
+      "pattern_recognition_benefits_from_figure",
+      "misconception_needs_visual_correction",
+      "wrong_vs_right_contrast_is_high_value"
+    ],
+    "recommended_assets": [
+      "book_figure",
+      "generated_image"
+    ]
+  },
+  "visual_plan": {
+    "primary_anchor": "both",
+    "rationale": "The textbook cascade diagram is the canonical visual for the inverse-system idea, so it should anchor the identity-system concept. A custom static teaching visual is also useful for the rectifier because students need to see two different inputs collapsing to the same output, which is the core noninvertibility trap.",
+    "cram": "Use the cascade diagram to remember the test: system followed by inverse must return x(t). Use the rectifier visual to spot many-to-one mappings fast.",
+    "standard": "Use one clean cascade visual for the main definition and one custom trap visual for the representative noninvertible example.",
+    "top_score": "Use visuals to distinguish reversible transformations from information-losing transformations, especially single-point loss and dc-component loss."
+  },
+  "blocks": [
+    {
+      "type": "text_explanation",
+      "instruction": "Render the first page as a compact outline only. Include exactly two short sections: 'Section Objective' and 'Concepts In This Section'. Under Section Objective, write one sentence: 'Decide when a system output contains enough information to recover the original input.' Under Concepts In This Section, list concept names only: invertible system; inverse system; identity system; noninvertible system; rectifier; lost information. Do not add any expanded introduction or background paragraph."
+    },
+    {
+      "type": "math_block",
+      "latex": "S_i\\bigl\\{S\\{x(t)\\}\\bigr\\}=x(t)",
+      "explanation_instruction": "Start the page with heading '## 1. Invertible Means You Can Recover the Input'. Explain in 100–140 words that a system is invertible when every output comes from exactly one possible input, so an inverse system can undo the original operation. Define S as the original system, S_i as the inverse system, x(t) as the original input, and y(t) as the intermediate output. State when to use this formula: when an exam asks whether a system can be undone or whether an inverse exists. Include the common misuse: finding a formula that works for most t is not enough if any input information is lost. Include one minimal example in words: integration can be undone by differentiation only under the ideal assumptions used by the textbook."
+    },
+    {
+      "type": "book_image",
+      "source_page": "page-109",
+      "fig_id": "Figure 1.33",
+      "teaching_role": "concept_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Read the cascade as a shortcut: original system then inverse system must return x(t).",
+        "standard": "Use it to connect the formula S_i{S{x(t)}}=x(t) to a block-diagram system picture.",
+        "top_score": "Notice that the inverse is a second system in cascade, not a verbal statement that the operation feels reversible."
+      },
+      "caption_instruction": "One sentence: Figure 1.33 shows that cascading a system with its inverse produces an identity system.",
+      "description_instruction": "Describe the diagram as a left-to-right cascade: input x(t) enters system S, produces y(t), then y(t) enters inverse system S_i and returns x(t). Emphasize that the final output matching the original input is the visual test for an inverse system."
+    },
+    {
+      "type": "math_block",
+      "latex": "y(t)=x(-t)",
+      "explanation_instruction": "Start the page with heading '## 2. Example of an Invertible System: Time Reversal'. Explain in 90–130 words that time reversal is invertible because applying the same reversal again returns the original signal. State the recovery formula in prose: from y(t)=x(-t), the input is recovered as x(t)=y(-t). Explain the symbols: x(t) is the original signal, y(t) is the reversed signal, and -t flips the time axis. Use-case trigger: if the operation only re-labels or rearranges time without merging values, suspect invertible. Common misuse: students may think any altered-looking waveform is noninvertible; the real issue is whether information was lost."
+    },
+    {
+      "type": "math_block",
+      "latex": "y(t)=|x(t)|",
+      "explanation_instruction": "Start the page with heading '## 3. Noninvertible Means Different Inputs Can Give the Same Output'. Explain in 100–140 words that the rectifier is noninvertible because it removes the sign of the input. Define x(t) as the input and y(t) as the rectified output. Give the concrete example: x(t)=3 and x(t)=-3 both produce y(t)=3 at the same time instant, so the output cannot tell which input occurred. Exam trigger: absolute value, squaring, clipping, saturation, or any many-to-one mapping usually signals noninvertibility. Common misuse: saying 'take the absolute value again' is not an inverse because it does not recover the original sign."
+    },
+    {
+      "type": "generate_image",
+      "tool": "openai/gpt-5.4-image-2",
+      "reason": "The teaching need is a custom trap-exposure visual: students must see two distinct inputs, x(t) and -x(t), collapsing into the same rectified output. A generic absolute-value graph would not emphasize the system-invertibility mistake clearly enough.",
+      "teaching_role": "trap_exposure",
+      "mode_specific_visual_use": {
+        "cram": "Use the visual to recognize the exam pattern: two different inputs produce one output, so no inverse exists.",
+        "standard": "Use it directly after y(t)=|x(t)| to make sign loss intuitive.",
+        "top_score": "Use it to distinguish a reversible waveform change from a many-to-one information loss."
+      },
+      "prompt": "Pure white clean background, minimalist lecture-notes educational diagram, one knowledge point only: rectifier noninvertibility. Show two simple input paths on the left: a small positive pulse labeled x(t) and a matching negative pulse labeled -x(t). Both arrows feed into one center box labeled y(t)=|x(t)|. On the right, show the same positive output pulse for both paths, with a small muted red warning label: 'same output, sign lost'. Low-saturation academic palette: navy for signals, muted teal arrows, soft gray box, muted red warning only. No decorative styling, no shadows, no cartoon elements, no dense text, no extra examples.",
+      "style_hint": "lecture notes, academic, clean, restrained color boxes, exam-oriented, one concept only"
+    },
+    {
+      "type": "math_block",
+      "latex": "y(t)=t\\,x(t)",
+      "explanation_instruction": "Start the page with heading '## 4. Noninvertible Even If It Almost Looks Recoverable'. Explain in 100–140 words that a tempting recovery rule is x(t)=y(t)/t, but this fails at t=0. At t=0, the output is y(0)=0·x(0)=0 no matter what x(0) was, so the value x(0) is lost. Define t as time, x(t) as input, and y(t) as output. Exam trigger: division-based inverse formulas must be checked for zeros. Common misuse: saying the system is invertible because the inverse works for every t except one point; the textbook treats that lost point as enough to make the system noninvertible."
+    },
+    {
+      "type": "math_block",
+      "latex": "y(t)=\\frac{d}{dt}x(t)",
+      "explanation_instruction": "Start the page with heading '## 5. Differentiation Loses the DC Component'. Explain in 100–140 words that differentiation is noninvertible because constants disappear. Give the minimal example: x_1(t)=1 and x_2(t)=2 both produce y(t)=0 after differentiation, so the output cannot identify the original constant level. Briefly define the dc component as the constant offset of a signal. Use-case trigger: if a system removes constants or offsets, suspect lost information. Common misuse: saying integration is automatically the inverse; integration can recover a family of possible inputs, but without the missing constant it cannot recover the exact original input."
+    },
+    {
+      "type": "section_summary",
+      "instruction": "Create a recap page titled '📌 Key Takeaways'. Include exactly 5 bullets, each ≤24 words. The bullets must explicitly include these formulas: S_i{S{x(t)}}=x(t), y(t)=x(-t), y(t)=|x(t)|, y(t)=t x(t), and y(t)=d x(t)/dt. State the main conclusion for each formula: inverse cascade returns input; time reversal is invertible; rectifier loses sign; t-multiplication loses x(0); differentiation loses constants. End with one bridge sentence: 'Next, we will use similar input-output reasoning to test other system properties.'"
+    },
+    {
+      "type": "quiz_plan",
+      "target_questions": 7,
+      "question_range": {
+        "min": 6,
+        "max": 8
+      },
+      "knowledge_points": [
+        {
+          "id": "invertibility_definition",
+          "label": "Invertibility as unique input recovery",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp1_q1",
+              "type": "multiple_choice",
+              "stem": "A system is invertible when:",
+              "options": [
+                "A. Every input produces an output that looks simple",
+                "B. The input can be uniquely recovered from the corresponding output",
+                "C. The system output is always nonzero",
+                "D. The system has no time variable"
+              ],
+              "correct_option": "B",
+              "explanation": "Invertibility means the output contains enough information to recover exactly one original input.",
+              "wrong_option_explanations": {
+                "A": "Visual simplicity is irrelevant; the issue is unique recovery.",
+                "C": "A nonzero output does not guarantee uniqueness.",
+                "D": "Systems with time variables can be invertible or noninvertible."
+              },
+              "hint": "Ask whether two different inputs could lead to the same output.",
+              "needs_visual": false,
+              "same_point_variant": false
+            },
+            {
+              "id": "kp1_q2",
+              "type": "multiple_choice",
+              "stem": "Which formula best represents a system S followed by its inverse system S_i?",
+              "options": [
+                "A. S_i{S{x(t)}}=x(t)",
+                "B. S{x(t)}=0",
+                "C. S_i{x(t)}=S{x(t)}",
+                "D. S{S_i{x(t)}}=y(t)+x(t)"
+              ],
+              "correct_option": "A",
+              "explanation": "The inverse system must undo S and return the original input x(t).",
+              "wrong_option_explanations": {
+                "B": "Zero output is not the definition of an inverse.",
+                "C": "The inverse system does not generally produce the same result as the original system.",
+                "D": "Adding y(t) and x(t) is not the identity-system condition."
+              },
+              "hint": "The final output of the cascade should match the original input.",
+              "needs_visual": true,
+              "visual_type": "book_cascade_diagram",
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "time_reversal_invertible",
+          "label": "Time reversal is invertible",
+          "importance": "medium",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp2_q1",
+              "type": "multiple_choice",
+              "stem": "For the system y(t)=x(-t), how can x(t) be recovered from y(t)?",
+              "options": [
+                "A. x(t)=y(-t)",
+                "B. x(t)=|y(t)|",
+                "C. x(t)=t y(t)",
+                "D. x(t)=dy(t)/dt"
+              ],
+              "correct_option": "A",
+              "explanation": "Applying time reversal a second time returns the signal to its original time orientation.",
+              "wrong_option_explanations": {
+                "B": "Absolute value would lose sign information.",
+                "C": "Multiplication by t is unrelated to undoing time reversal.",
+                "D": "Differentiation changes the signal and does not undo reflection."
+              },
+              "hint": "Reverse the time axis again.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "rectifier_noninvertible",
+          "label": "Rectifier loses sign information",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp3_q1",
+              "type": "multiple_choice",
+              "stem": "Why is y(t)=|x(t)| noninvertible?",
+              "options": [
+                "A. Because the output is always negative",
+                "B. Because x(t) and -x(t) can produce the same output",
+                "C. Because absolute value changes time into frequency",
+                "D. Because every input produces zero output"
+              ],
+              "correct_option": "B",
+              "explanation": "The rectifier removes sign information, so two different inputs can collapse to the same output.",
+              "wrong_option_explanations": {
+                "A": "The output of an absolute value is nonnegative, not always negative.",
+                "C": "No frequency conversion is involved here.",
+                "D": "The output is not always zero; for example, |3|=3."
+              },
+              "hint": "Compare input values 3 and -3.",
+              "needs_visual": true,
+              "visual_type": "rectifier_two_inputs_same_output",
+              "same_point_variant": false
+            },
+            {
+              "id": "kp3_q2",
+              "type": "short_answer",
+              "stem": "A student claims y(t)=|x(t)| is invertible because you can apply absolute value again. Explain why this is wrong.",
+              "ideal_answer": "Applying absolute value again gives the same nonnegative output, but it does not recover the original sign of x(t). Since x(t) and -x(t) can produce the same y(t), the original input is not uniquely recoverable.",
+              "grading_rubric": [
+                "Must mention loss of sign information",
+                "Must state that two different inputs can produce the same output",
+                "Must explain that applying absolute value again is not a true inverse"
+              ],
+              "explanation": "This checks whether the student understands inverse recovery, not just repeated operations.",
+              "hint": "An inverse must recover the original input, not merely reproduce the output.",
+              "needs_visual": true,
+              "visual_type": "wrong_vs_right_rectifier_check",
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "single_point_loss",
+          "label": "Multiplication by t loses x(0)",
+          "importance": "high",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp4_q1",
+              "type": "multiple_choice",
+              "stem": "For y(t)=t x(t), why does the recovery rule x(t)=y(t)/t fail as an inverse?",
+              "options": [
+                "A. It fails at t=0, where y(0)=0 for any value of x(0)",
+                "B. It fails because multiplication by t always removes all signal values",
+                "C. It fails because division is never allowed in system analysis",
+                "D. It fails only if x(t) is complex-valued"
+              ],
+              "correct_option": "A",
+              "explanation": "At t=0, the output is always zero, so the original value x(0) cannot be recovered.",
+              "wrong_option_explanations": {
+                "B": "Values for t≠0 can be recovered by division; the problem is the lost point.",
+                "C": "Division can be valid when it does not divide by zero.",
+                "D": "The issue is t=0, not whether the signal is complex."
+              },
+              "hint": "Check the proposed inverse exactly where the divisor equals zero.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "differentiation_loses_constants",
+          "label": "Differentiation loses the dc component",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp5_q1",
+              "type": "multiple_choice",
+              "stem": "Why is y(t)=d x(t)/dt noninvertible in this section's sense?",
+              "options": [
+                "A. Differentiation always produces a larger signal",
+                "B. Different inputs that differ by a constant can have the same derivative",
+                "C. Differentiation cannot be applied to any signal",
+                "D. The output never depends on the input"
+              ],
+              "correct_option": "B",
+              "explanation": "Differentiation removes constant offsets, so the exact original input cannot be uniquely recovered.",
+              "wrong_option_explanations": {
+                "A": "Differentiation does not always increase signal size.",
+                "C": "Many signals can be differentiated; the issue is information loss.",
+                "D": "The output does depend on the input's rate of change."
+              },
+              "hint": "What is the derivative of x(t)=1? What about x(t)=2?",
+              "needs_visual": false,
+              "same_point_variant": false
+            },
+            {
+              "id": "kp5_q2",
+              "type": "multiple_choice",
+              "stem": "Which pair of inputs proves that differentiation can be noninvertible?",
+              "options": [
+                "A. x1(t)=1 and x2(t)=2",
+                "B. x1(t)=t and x2(t)=t^2",
+                "C. x1(t)=sin(t) and x2(t)=cos(t)",
+                "D. x1(t)=t and x2(t)=-t"
+              ],
+              "correct_option": "A",
+              "explanation": "Both constants have derivative zero, so the same output could come from two different inputs.",
+              "wrong_option_explanations": {
+                "B": "Their derivatives are 1 and 2t, which are not generally the same.",
+                "C": "Their derivatives are cos(t) and -sin(t), not the same.",
+                "D": "Their derivatives are 1 and -1, not the same."
+              },
+              "hint": "Look for two different signals with the same derivative.",
+              "needs_visual": false,
+              "same_point_variant": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

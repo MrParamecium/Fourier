@@ -1,0 +1,22 @@
+{
+  "sectionId": "1.7-4",
+  "sourcePages": [
+    "page-104",
+    "page-105",
+    "page-106",
+    "page-107"
+  ],
+  "usedPages": [
+    "page-104",
+    "page-105",
+    "page-106",
+    "page-107"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "1.7-4 Causal and Noncausal Systems",
+  "foundEnd": true,
+  "endBeforeLine": "1.7-5 Continuous-Time and Discrete-Time Systems",
+  "endBeforeCode": "1.7-5",
+  "charCount": 8167
+}

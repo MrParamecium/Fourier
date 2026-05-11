@@ -1,0 +1,296 @@
+{
+  "section_id": "1.11-3",
+  "section_title": "Visualizing Operations on the Independent Variable",
+  "difficulty": "intermediate",
+  "estimated_read_minutes": 6,
+  "learning_objectives": [
+    "Recognize how shifting, scaling, and reflection act on a signal through its input argument.",
+    "Use the argument of a transformed signal to predict where the waveform turns on.",
+    "Interpret MATLAB plots of transformed and summed signals."
+  ],
+  "visualization_need": {
+    "level": "interactive",
+    "reason": [
+      "depends_on_parameter_change",
+      "formula_to_phenomenon_gap",
+      "student_should_manipulate_to_understand",
+      "input_output_response_is_visual"
+    ],
+    "recommended_assets": [
+      "react_canvas_demo"
+    ]
+  },
+  "visual_plan": {
+    "primary_anchor": "both",
+    "rationale": "This section is about how changing the independent variable changes a signal. The textbook figures are directly relevant and should be used because they show the exact MATLAB outputs students are expected to recognize. An interactive React + Canvas demo is also needed because students learn time scaling, shifting, and reflection fastest by changing a and b and seeing the waveform move, compress, or flip.",
+    "cram": "Use visuals to identify the exam pattern quickly: a controls compression/reflection, b affects the shift through solving at+b=0.",
+    "standard": "Use the demo and textbook plots to connect each formula to one representative example, especially g(2t+1).",
+    "top_score": "Use visuals to expose the trap that b>0 does not always mean a simple right shift; the actual feature location comes from solving the input argument."
+  },
+  "blocks": [
+    {
+      "type": "text_explanation",
+      "instruction": "Create a minimal overview page only. Use the heading 'Section Objective' followed by one short sentence: 'Learn how changing the input of a signal, such as g(2t+1) or g(-t+1), changes its plotted waveform.' Then add the heading 'Concepts In This Section' and list only these concept names as bullets: 'causal signal g(t)', 'time scaling', 'time shifting', 'time reversal', 'turn-on location', 'superposition of transformed signals'. Do not add background paragraphs or examples on this page."
+    },
+    {
+      "type": "math_block",
+      "latex": "g(t)=f(t)u(t)=e^{-t}\\cos(2\\pi t)u(t)",
+      "explanation_instruction": "Start a new page with the heading '## 1. The base signal: g(t)'. Explain in 90–130 words that g(t) is the signal being transformed throughout this section. Define u(t) as the unit step that makes the signal causal, meaning the waveform is zero before it turns on. Explain that e^{-t} controls decay and cos(2\\pi t) controls oscillation. Include one minimal example sentence: 'Because u(t) is present, g(t) turns on when its input equals 0.' End with the exam note: 'When you see g(something), inspect the something first; that input controls where the visible waveform begins.'"
+    },
+    {
+      "type": "math_block",
+      "latex": "x(t)=g(at+b)",
+      "explanation_instruction": "Start a new page with the heading '## 2. Scaling and shifting through the input'. Explain in 100–150 words that x(t)=g(at+b) means the original signal g is not changed internally; instead, the time axis feeding into g is changed. State clearly: if |a|>1, the waveform is compressed in time; if 0<|a|<1, it is stretched; if a<0, it is reflected. Explain that b contributes to shifting, but students should not guess the shift just from the sign of b. Include the representative example g(2t+1): a=2 gives compression by 2, and the +1 shifts the turn-on location left after solving the input equation. Mention the common misuse: saying '+1 means right shift' without solving."
+    },
+    {
+      "type": "math_block",
+      "latex": "at+b=0\\quad\\Rightarrow\\quad t=-\\frac{b}{a}",
+      "explanation_instruction": "Keep this formula on the same page as the g(at+b) discussion. Explain in 80–120 words that this is the fastest way to locate where a causal transformed signal turns on. Define a and b as the constants inside the input argument. Say when to use it: use it whenever the original signal g turns on when its own input is 0. Work the section's example in one line of prose: for g(2t+1), solve 2t+1=0, so the turn-on is at t=-0.5. Exam trigger: a signal of the form g(at+b) with a unit step or causal behavior. Common mistake: treating b alone as the shift amount."
+    },
+    {
+      "type": "interactive_demo",
+      "teaching_role": "concept_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Let students drag a and b until they can instantly recognize compression, reflection, and turn-on movement.",
+        "standard": "Use the default setting a=2, b=1 first, then compare with a=-1, b=1.",
+        "top_score": "Ask students to predict the turn-on location before revealing the plotted result."
+      },
+      "demo_instruction": "Build a React + Canvas interactive demo titled 'Explore g(at+b)'. Show two plots on the same axes: a light gray reference curve g(t) and a navy transformed curve g(at+b). Use a simplified causal damped cosine model g(s)=e^{-s}cos(2πs)u(s), with u(s)=0 for s<0 and u(s)=1 for s≥0. Provide sliders for a from -3 to 3 excluding a=0, and b from -3 to 3. Include preset buttons: 'g(2t+1)', 'g(-t+1)', 'g(0.5t-1)'. Display the live input equation at+b=0 and the computed turn-on t=-b/a. Add a small note under the demo: 'Predict the turn-on before looking at the curve.' Keep the visual clean: white background, labeled t-axis, no decorative styling, navy transformed curve, gray original curve, muted red vertical marker at t=-b/a."
+    },
+    {
+      "type": "book_image",
+      "source_page": "page-130",
+      "fig_id": "Fig. 1.51",
+      "teaching_role": "example_support",
+      "mode_specific_visual_use": {
+        "cram": "Use the figure to memorize the quick check: g(2t+1) turns on at t=-0.5.",
+        "standard": "Use it as the representative worked example connecting the formula to the MATLAB plot.",
+        "top_score": "Use it to verify that compression and shifting are both visible, not just stated algebraically."
+      },
+      "caption_instruction": "Write one sentence: 'Figure 1.51 shows g(2t+1), a compressed and left-shifted version of the causal signal g(t).'",
+      "description_instruction": "Describe the axes and the key visible feature in 2–3 sentences. State that the waveform is zero before about t=-0.5, then begins a damped oscillation. Explicitly connect this to the equation 2t+1=0, so the plot confirms the predicted turn-on at t=-0.5."
+    },
+    {
+      "type": "math_block",
+      "latex": "h(t)=g(2t+1)+g(-t+1)",
+      "explanation_instruction": "Start a new page with the heading '## 3. Adding transformed signals'. Explain in 100–140 words that h(t) is formed by superposition: evaluate each transformed copy of g, then add their values at the same t. Briefly re-explain the two terms: g(2t+1) is compressed and shifted left, while g(-t+1) is reflected because the coefficient of t is negative and has a right-shifted turn-on after solving -t+1=0. Include the representative exam note: 'For sums, do not try to transform the final plot all at once; analyze each term separately, then add.' Common mistake: combining the two input arguments into one imaginary single transformation."
+    },
+    {
+      "type": "book_image",
+      "source_page": "page-131",
+      "fig_id": "Figure 1.53",
+      "teaching_role": "example_support",
+      "mode_specific_visual_use": {
+        "cram": "Use the plot to recognize that sums of transformed signals are easier to plot with MATLAB than by hand.",
+        "standard": "Use it to see how two transformed copies combine point-by-point into h(t).",
+        "top_score": "Use it to identify where jumps and peaks come from by tracing each term's turn-on behavior."
+      },
+      "caption_instruction": "Write one sentence: 'Figure 1.53 shows h(t)=g(2t+1)+g(-t+1), the point-by-point sum of two transformed signals.'",
+      "description_instruction": "Describe the plot in 2–3 sentences. Mention that the waveform combines a compressed left-shifted copy and a reflected shifted copy of g. Tell students to notice that features near t=-0.5 and t=1 come from the separate turn-on points of the two terms."
+    },
+    {
+      "type": "section_summary",
+      "instruction": "Create the recap page titled '📌 Key Takeaways'. Include exactly 4 bullets, each no more than 24 words. The bullets must explicitly include these formulas: g(t)=e^{-t}\\cos(2\\pi t)u(t), x(t)=g(at+b), at+b=0 \\Rightarrow t=-b/a, and h(t)=g(2t+1)+g(-t+1). Also include the key meanings: |a| controls time scale, a<0 reflects, and sums are analyzed term by term. End with one sentence: 'Next, use these visual rules whenever MATLAB plots transformed signals or when you sketch signal operations by hand.'"
+    },
+    {
+      "type": "quiz_plan",
+      "target_questions": 6,
+      "question_range": {
+        "min": 5,
+        "max": 7
+      },
+      "knowledge_points": [
+        {
+          "id": "base_causal_signal",
+          "label": "Causal base signal g(t)",
+          "importance": "medium",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp1_q1",
+              "type": "multiple_choice",
+              "stem": "In this section, why does g(t)=e^{-t}cos(2πt)u(t) turn on only at and after t=0?",
+              "options": [
+                "A. Because e^{-t} is zero for t<0",
+                "B. Because cos(2πt) is zero for t<0",
+                "C. Because u(t) acts like a switch that is zero before t=0",
+                "D. Because MATLAB cannot plot negative time values"
+              ],
+              "correct_option": "C",
+              "explanation": "The unit step u(t) makes the signal causal by turning it off before t=0.",
+              "wrong_option_explanations": {
+                "A": "e^{-t} is not zero for negative t.",
+                "B": "cos(2πt) oscillates for both positive and negative t.",
+                "D": "MATLAB can plot negative t values; the zero region comes from u(t)."
+              },
+              "hint": "Look for the factor that behaves like an on/off switch.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "input_transformation",
+          "label": "Interpreting g(at+b)",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp2_q1",
+              "type": "multiple_choice",
+              "stem": "For x(t)=g(2t+1), which description is most accurate?",
+              "options": [
+                "A. The waveform is stretched by 2 and shifted right",
+                "B. The waveform is compressed by 2 and its turn-on moves to t=-0.5",
+                "C. The waveform is reflected and shifted left",
+                "D. The waveform is unchanged because only the input variable changed"
+              ],
+              "correct_option": "B",
+              "explanation": "The coefficient 2 compresses the waveform, and 2t+1=0 gives t=-0.5.",
+              "wrong_option_explanations": {
+                "A": "|a|>1 compresses, not stretches, and the turn-on is left of zero.",
+                "C": "Reflection requires a negative coefficient of t.",
+                "D": "Changing the input variable changes the plotted waveform."
+              },
+              "hint": "Check the sign and size of a, then solve the input equal to zero.",
+              "needs_visual": true,
+              "visual_type": "book_figure_reading",
+              "same_point_variant": true
+            },
+            {
+              "id": "kp2_q2",
+              "type": "multiple_choice",
+              "stem": "A student says, 'g(2t+1) shifts right because of the +1.' What is the best correction?",
+              "options": [
+                "A. Correct; every +b shifts right",
+                "B. Incorrect; first solve 2t+1=0, which gives a left turn-on at t=-0.5",
+                "C. Incorrect; +1 always causes reflection",
+                "D. Correct only if the graph is made in MATLAB"
+              ],
+              "correct_option": "B",
+              "explanation": "The safe method is to solve the input argument. Here the feature occurs when 2t+1=0, so t=-0.5.",
+              "wrong_option_explanations": {
+                "A": "The sign of b alone is not enough when a is also present.",
+                "C": "Reflection depends on the sign of a, not on +1.",
+                "D": "The transformation rule is mathematical, not MATLAB-specific."
+              },
+              "hint": "Do not guess from +1; solve the input equation.",
+              "needs_visual": false,
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "turn_on_location",
+          "label": "Finding the turn-on location",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp3_q1",
+              "type": "multiple_choice",
+              "stem": "If a causal signal appears as g(-t+1), where does it turn on?",
+              "options": [
+                "A. t=-1",
+                "B. t=0",
+                "C. t=1",
+                "D. t=2"
+              ],
+              "correct_option": "C",
+              "explanation": "Set the input equal to zero: -t+1=0, so t=1.",
+              "wrong_option_explanations": {
+                "A": "That would come from t+1=0, not -t+1=0.",
+                "B": "The input at t=0 is 1, not 0.",
+                "D": "No coefficient or constant here gives t=2."
+              },
+              "hint": "Solve the expression inside g equal to zero.",
+              "needs_visual": true,
+              "visual_type": "interactive_demo_observation",
+              "same_point_variant": true
+            },
+            {
+              "id": "kp3_q2",
+              "type": "short_answer",
+              "stem": "For g(3t-6), find the turn-on location and state whether the waveform is compressed or stretched.",
+              "ideal_answer": "Set 3t-6=0, so t=2. Since |a|=3>1, the waveform is compressed by a factor of 3.",
+              "grading_rubric": [
+                "Must set 3t-6 equal to zero",
+                "Must identify t=2 as the turn-on location",
+                "Must identify compression, not stretching",
+                "Must connect compression to |a|=3>1"
+              ],
+              "explanation": "This checks whether the student can use the rule on a new input argument, not just the textbook examples.",
+              "hint": "Use at+b=0, then inspect |a|.",
+              "needs_visual": false,
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "superposition_transformed_signals",
+          "label": "Superposition of transformed signals",
+          "importance": "high",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp4_q1",
+              "type": "multiple_choice",
+              "stem": "For h(t)=g(2t+1)+g(-t+1), what is the correct plotting strategy?",
+              "options": [
+                "A. Combine the inputs into g(t+2) and plot once",
+                "B. Analyze each transformed copy of g separately, then add their values point-by-point",
+                "C. Ignore the negative sign because it only changes amplitude",
+                "D. Plot only g(2t+1), because the second term is redundant"
+              ],
+              "correct_option": "B",
+              "explanation": "A sum of transformed signals is handled by evaluating each term at the same t and adding the results.",
+              "wrong_option_explanations": {
+                "A": "g(2t+1)+g(-t+1) is not the same as one signal with a combined input.",
+                "C": "The negative sign in -t+1 causes reflection in time, not amplitude change.",
+                "D": "The second term changes the final waveform and cannot be ignored."
+              },
+              "hint": "Sums are handled term by term.",
+              "needs_visual": true,
+              "visual_type": "book_figure_reading",
+              "same_point_variant": false
+            },
+            {
+              "id": "kp4_q2",
+              "type": "multiple_choice",
+              "stem": "In the interactive demo, when a changes from 2 to -1 while b stays at 1, what visual change should you expect?",
+              "options": [
+                "A. The waveform only becomes taller",
+                "B. The waveform reflects in time, and the turn-on changes according to -t+1=0",
+                "C. The waveform disappears because a is negative",
+                "D. The waveform becomes a straight line"
+              ],
+              "correct_option": "B",
+              "explanation": "A negative a reflects the waveform, and the turn-on must still be found by solving at+b=0.",
+              "wrong_option_explanations": {
+                "A": "Changing a affects time behavior, not just amplitude.",
+                "C": "Negative a causes reflection, not disappearance.",
+                "D": "The damped cosine remains a waveform, not a straight line."
+              },
+              "hint": "Negative coefficient of t means reflection.",
+              "needs_visual": true,
+              "visual_type": "interactive_demo_observation",
+              "same_point_variant": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

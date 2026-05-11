@@ -1,0 +1,9 @@
+# Aquarius section OCR
+section_id: 2.5
+source_pages: page-196, page-197, page-198, page-199, page-200, page-201, page-202, page-203
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+2.5 SYSTEM STABILITY
+Stability is an important system property. Two types of system stability are generally considered: external (BIBO) stability and internal (asymptotic) stability. Let us consider both stability types in turn.

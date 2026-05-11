@@ -1,0 +1,25 @@
+# Aquarius section OCR
+section_id: 3.8-3
+source_pages: page-297
+cut_start_found: yes
+cut_end_found: no
+
+--- OCR ---
+3.8-3  Total Response
+
+The total response of an LTID system can be expressed as a sum of the zero-input and zero-state
+responses:
+
+total response = \sum_{j=1}^{N} c_j y_j^n + x[n] ∗ h[n]
+                 ZIR                 ZSR
+
+In this expression, the zero-input response should be appropriately modified for the case of
+repeated roots. We have developed procedures to determine these two components. From the
+system equation, we find the characteristic roots and characteristic modes. The zero-input response
+is a linear combination of the characteristic modes. From the system equation, we also determine
+h[n], the impulse response, as discussed in Sec. 3.7. Knowing h[n] and the input x[n], we find the
+zero-state response as the convolution of x[n] and h[n]. The arbitrary constants c_1, c_2, . . . , c_n in the
+zero-input response are determined from the n initial conditions. For the system described by the
+equation
+
+y[n + 2] − 0.6y[n + 1] − 0.16y[n] = 5x[n + 2]

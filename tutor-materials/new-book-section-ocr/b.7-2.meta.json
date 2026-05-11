@@ -1,0 +1,20 @@
+{
+  "sectionId": "b.7-2",
+  "sourcePages": [
+    "page-043",
+    "page-044",
+    "page-045"
+  ],
+  "usedPages": [
+    "page-043",
+    "page-044",
+    "page-045"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "B.7-2 Calculator Operations",
+  "foundEnd": true,
+  "endBeforeLine": "B.7-3 Vector Operations",
+  "endBeforeCode": "b.7-3",
+  "charCount": 4333
+}

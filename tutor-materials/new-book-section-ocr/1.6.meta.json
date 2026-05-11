@@ -1,0 +1,20 @@
+{
+  "sectionId": "1.6",
+  "sourcePages": [
+    "page-095",
+    "page-096",
+    "page-097"
+  ],
+  "usedPages": [
+    "page-095",
+    "page-096",
+    "page-097"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "1.6 Systems 95",
+  "foundEnd": true,
+  "endBeforeLine": "1.7 Classiﬁcation of Systems 97",
+  "endBeforeCode": "1.7",
+  "charCount": 6537
+}

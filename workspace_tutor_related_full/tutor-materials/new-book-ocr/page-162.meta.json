@@ -1,0 +1,24 @@
+{
+  "chapter": "2",
+  "section": null,
+  "subsection": null,
+  "title": "TIME-DOMAIN ANALYSIS OF CONTINUOUS-TIME SYSTEMS",
+  "summary": "This page explains that after external excitation is removed, a system returns to equilibrium only through its characteristic modes, with examples from automobile suspension and RC circuits. It then verifies mathematically for a series RL circuit that the characteristic mode e^(−2t) can persist with zero input, illustrating that modes are sustained by the system itself.",
+  "keywords": [
+    "characteristic modes",
+    "equilibrium",
+    "automobile suspension",
+    "RC circuit",
+    "RL circuit",
+    "characteristic root",
+    "exponential response",
+    "zero input response",
+    "loop equation",
+    "Figure 2.2"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "page-162",
+  "figures": [],
+  "metadata_model": "openrouter:openai/gpt-5.4"
+}

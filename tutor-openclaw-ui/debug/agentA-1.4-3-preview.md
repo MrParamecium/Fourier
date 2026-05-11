@@ -1,0 +1,716 @@
+# Agent A Preview: 1.4-3 1.4-3 The Exponential Function e^st
+
+- Difficulty: intermediate
+- Estimated read minutes: 7
+
+## Learning Objectives
+
+- Interpret the complex frequency \(s = \sigma + j\omega\).
+- Expand \(e^{st}\) into exponential and sinusoidal parts.
+- Recognize how \(\sigma\) controls growth or decay and \(\omega\) controls oscillation.
+- Locate complex frequencies in the s-plane and connect left/right half-plane position to signal behavior.
+- Express real exponentially varying cosines using conjugate complex exponentials.
+
+## Visualization Need
+
+```json
+{
+  "level": "interactive",
+  "reason": [
+    "depends_on_parameter_change",
+    "formula_to_phenomenon_gap",
+    "student_should_manipulate_to_understand",
+    "input_output_response_is_visual"
+  ],
+  "recommended_assets": [
+    "react_canvas_demo",
+    "book_figure"
+  ]
+}
+```
+
+## Visual Plan
+
+```json
+{
+  "primary_anchor": "both",
+  "rationale": "Use the textbook figures because Figures 1.21 and 1.22 are the exact canonical signal-shape and s-plane representations students are expected to recognize. Add one interactive React Canvas demo because the meaning of \\(\\sigma\\) and \\(\\omega\\) is best learned by changing them and watching amplitude growth/decay and oscillation frequency respond.",
+  "cram": "Use visuals to instantly map sign of \\(\\sigma\\) to decay, constant amplitude, or growth.",
+  "standard": "Use the textbook figures and demo to connect one formula, one waveform, and one s-plane point.",
+  "top_score": "Use visuals to distinguish real-axis, imaginary-axis, LHP, RHP, and conjugate-frequency cases precisely."
+}
+```
+
+## Planned Blocks
+
+### Block 1: `text_explanation`
+- **page_role**: overview
+- **instruction**: Render Page 1 as a minimal outline only. Include exactly two sections: 'Section Objective' and 'Concepts In This Section'. Section Objective: one sentence saying that this section explains how the complex exponential \(e^{st}\) represents constants, exponentials, sinusoids, and growing/decaying sinusoids. Concepts In This Section: list concept names only: complex frequency, expansion of \(e^{st}\), growth/decay versus oscillation, s-plane, conjugate exponential representation. Do not add background paragraphs, examples, or formulas beyond the objective sentence.
+
+### Block 2: `math_block`
+- **page_role**: knowledge_point
+- **page_title**: ## 1. Complex frequency
+- **latex**: s = \sigma + j\omega
+- **explanation_instruction**: Teach this as the definition of complex frequency. Use 90–130 words. Explain that \(\sigma\) is the real part and controls amplitude growth or decay, while \(\omega\) is the imaginary-axis frequency and controls oscillation rate. Define \(j\) briefly as the complex-axis marker with \(j^2=-1\). Include the minimal example \(s=2+j5\), so \(\sigma=2\) and \(\omega=5\). Exam trigger: when a signal has both an exponential envelope and a sinusoidal oscillation, look for \(s=\sigma+j\omega\). Common misuse: treating \(\omega\) as the whole term \(j\omega\); \(\omega\) itself is the real-valued radian frequency.
+
+### Block 3: `math_block`
+- **page_role**: knowledge_point
+- **page_title**: ## 2. Expanding the complex exponential
+- **latex**: e^{st} = e^{(\sigma+j\omega)t} = e^{\sigma t}(\cos \omega t + j\sin \omega t)
+- **equation_label**: (1.13)
+- **explanation_instruction**: Teach Eq. (1.13) as the section's core formula. Use 110–150 words. State that the complex exponential splits into an amplitude envelope \(e^{\sigma t}\) and a rotating sinusoidal part \(\cos\omega t+j\sin\omega t\). Explain each symbol: \(t\) is time, \(\sigma\) sets growth/decay rate, \(\omega\) sets oscillation rate, and \(j\) marks the quadrature component. Include the representative example \(e^{(2+j5)t}=e^{2t}(\cos 5t+j\sin 5t)\), a growing oscillatory complex exponential. Exam trigger: expand when asked to classify the signal behavior from \(s\). Common misuse: saying \(e^{st}\) is always just a sinusoid; it is sinusoidal only when \(\sigma=0\).
+
+### Block 4: `book_image`
+- **page_role**: knowledge_point_visual
+- **source_page**: page-090
+- **fig_id**: Figure 1.21
+- **caption_instruction**: One sentence: Figure 1.21 shows how different choices of \(\sigma\) and \(\omega\) produce constants, exponentials, sinusoids, decaying sinusoids, and growing sinusoids.
+- **description_instruction**: Write 2–3 sentences describing the four panels. Emphasize that \(\sigma<0\) gives a decaying envelope, \(\sigma=0\) gives constant amplitude, and \(\sigma>0\) gives a growing envelope. Also point out that \(\omega=0\) removes oscillation, while nonzero \(\omega\) creates sinusoidal variation.
+- **teaching_role**: concept_anchor
+- **mode_specific_visual_use**:
+```json
+{
+  "cram": "Memorize the visual mapping: left/negative means decay, zero means constant, right/positive means growth.",
+  "standard": "Use each panel to connect the formula \\(e^{\\sigma t}(\\cos\\omega t+j\\sin\\omega t)\\) to a waveform shape.",
+  "top_score": "Notice the separate roles of envelope change and oscillation frequency."
+}
+```
+
+### Block 5: `interactive_demo`
+- **page_role**: knowledge_point_visual
+- **demo_id**: complex_exponential_sigma_omega_waveform
+- **teaching_role**: parameter_effect_anchor
+- **instruction**: Build a React + Canvas demo with two sliders: \(\sigma\in[-3,3]\) and \(\omega\in[0,12]\). Plot the real part \(\operatorname{Re}\{e^{(\sigma+j\omega)t}\}=e^{\sigma t}\cos\omega t\) over \(0\le t\le 4\). Also draw faint dashed envelope curves \(\pm e^{\sigma t}\). Include three quick preset buttons: Decay \((\sigma=-1,\omega=5)\), Constant amplitude \((\sigma=0,\omega=5)\), Growth \((\sigma=1,\omega=5)\). Under the canvas, show one sentence that updates: '\(\sigma\) controls envelope; \(\omega\) controls oscillation spacing.' Keep the interface clean and lecture-note styled.
+- **mode_specific_visual_use**:
+```json
+{
+  "cram": "Move only \\(\\sigma\\) first to memorize decay/constant/growth behavior.",
+  "standard": "Use the presets, then adjust \\(\\omega\\) to see frequency change without changing the envelope rule.",
+  "top_score": "Test mixed cases where both \\(\\sigma\\) and \\(\\omega\\) are nonzero and identify the matching s-plane region."
+}
+```
+- **quick_check_instruction**: After the demo, ask one short check: If \(\sigma=-2\) and \(\omega=8\), should the waveform decay, grow, or stay constant, and should it oscillate slowly or rapidly? Expected answer: it decays and oscillates relatively rapidly.
+
+### Block 6: `math_block`
+- **page_role**: knowledge_point
+- **page_title**: ## 3. Real sinusoids from conjugate exponentials
+- **latex**: e^{\sigma t}\cos \omega t = \frac{1}{2}\left(e^{st}+e^{s^{*}t}\right)
+- **equation_label**: (1.14)
+- **explanation_instruction**: Teach Eq. (1.14) as the formula for writing a real exponentially varying cosine as a sum of two conjugate complex exponentials. Use 120–160 words. Define \(s^*=\sigma-j\omega\) as the conjugate of \(s=\sigma+j\omega\). Explain that the imaginary sine parts cancel when the conjugate pair is averaged, leaving the real cosine term. Include the representative example: \(e^{2t}\cos 5t=\frac{1}{2}(e^{(2+j5)t}+e^{(2-j5)t})\). Exam trigger: use this when a cosine with an exponential envelope must be rewritten in complex-exponential form. Common misuse: forgetting the factor \(\frac{1}{2}\), or using only one exponential instead of the conjugate pair.
+
+### Block 7: `book_image`
+- **page_role**: knowledge_point_visual
+- **source_page**: page-091
+- **fig_id**: Figure 1.22
+- **caption_instruction**: One sentence: Figure 1.22 shows the s-plane, where the sign of \(\sigma\) separates decaying signals from growing signals.
+- **description_instruction**: Write 2–3 sentences describing the horizontal \(\sigma\) axis and vertical \(j\omega\) axis. Explain that points in the left half-plane have \(\sigma<0\) and correspond to exponentially decreasing signals, while points in the right half-plane have \(\sigma>0\) and correspond to exponentially increasing signals. State that points on the imaginary axis have \(\sigma=0\), so the amplitude stays constant.
+- **teaching_role**: exam_pattern_anchor
+- **mode_specific_visual_use**:
+```json
+{
+  "cram": "Use the plane as a sign chart: LHP decays, imaginary axis constant, RHP grows.",
+  "standard": "Match a frequency point like \\(-2+j5\\), \\(j5\\), or \\(2+j5\\) to the corresponding waveform behavior.",
+  "top_score": "Distinguish real-axis exponentials from off-axis growing or decaying sinusoids."
+}
+```
+
+### Block 8: `text_explanation`
+- **page_role**: knowledge_point
+- **page_title**: ## 4. Special cases and exam classification
+- **instruction**: Write a compact classification page in 120–160 words. Use bullets, not a dense paragraph. Cover exactly these cases: \(s=0\) gives a constant dc signal; \(\omega=0\) gives a monotonic exponential \(e^{\sigma t}\); \(\sigma=0\) gives a constant-amplitude sinusoid; \(\sigma<0\) gives exponential decay; \(\sigma>0\) gives exponential growth; \(\sigma\ne0\) and \(\omega\ne0\) gives a growing or decaying sinusoid. Include one representative worked classification: \(e^{-2t}\cos5t\) has frequencies \(-2\pm j5\), lies in the left half-plane, and decays while oscillating. End with one exam note: classify first by the sign of \(\sigma\), then by whether \(\omega\) is zero.
+
+### Block 9: `section_summary`
+- **page_role**: recap
+- **instruction**: Create a recap page titled '📌 Key Takeaways'. Include 5 concise bullets. The bullets must explicitly include these formulas: \(s=\sigma+j\omega\), \(e^{st}=e^{\sigma t}(\cos\omega t+j\sin\omega t)\), and \(e^{\sigma t}\cos\omega t=\frac{1}{2}(e^{st}+e^{s^{*}t})\). Also include the s-plane rule: \(\sigma<0\) means decay, \(\sigma=0\) means constant amplitude, \(\sigma>0\) means growth. Keep each bullet under 25 words. End with one bridge sentence: 'Next, we will use these signal models to analyze signals and systems more efficiently.'
+
+### Block 10: `quiz_plan`
+- **page_role**: quiz
+- **target_questions**:
+```json
+7
+```
+- **question_range**:
+```json
+{
+  "min": 6,
+  "max": 8
+}
+```
+- **knowledge_points**:
+```json
+[
+  {
+    "id": "complex_frequency_definition",
+    "label": "Reading \\(s=\\sigma+j\\omega\\)",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp1_q1",
+        "type": "multiple_choice",
+        "stem": "For the complex frequency \\(s=-3+j8\\), which statement is correct?",
+        "options": [
+          "A. \\(\\sigma=-3\\), \\(\\omega=8\\)",
+          "B. \\(\\sigma=8\\), \\(\\omega=-3\\)",
+          "C. \\(\\sigma=-3\\), \\(\\omega=j8\\)",
+          "D. \\(\\sigma=j8\\), \\(\\omega=-3\\)"
+        ],
+        "correct_option": "A",
+        "explanation": "\\(\\sigma\\) is the real part of \\(s\\), and \\(\\omega\\) is the real coefficient multiplying \\(j\\).",
+        "wrong_option_explanations": {
+          "B": "This swaps the real part and imaginary-axis coefficient.",
+          "C": "\\(\\omega\\) is 8, not \\(j8\\). The \\(j\\) marks the imaginary axis.",
+          "D": "\\(\\sigma\\) must be the real part, not the imaginary term."
+        },
+        "hint": "Separate the coefficient from the symbol \\(j\\).",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  },
+  {
+    "id": "expand_complex_exponential",
+    "label": "Using Eq. (1.13)",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp2_q1",
+        "type": "multiple_choice",
+        "stem": "Which expansion of \\(e^{(2+j5)t}\\) is correct?",
+        "options": [
+          "A. \\(e^{2t}(\\cos5t+j\\sin5t)\\)",
+          "B. \\(e^{5t}(\\cos2t+j\\sin2t)\\)",
+          "C. \\(e^{2t}\\cos5t\\)",
+          "D. \\(e^{j5t}(\\cos2t+j\\sin2t)\\)"
+        ],
+        "correct_option": "A",
+        "explanation": "Eq. (1.13) gives \\(e^{(\\sigma+j\\omega)t}=e^{\\sigma t}(\\cos\\omega t+j\\sin\\omega t)\\). Here \\(\\sigma=2\\) and \\(\\omega=5\\).",
+        "wrong_option_explanations": {
+          "B": "This swaps \\(\\sigma\\) and \\(\\omega\\).",
+          "C": "This keeps only the real cosine part, not the full complex exponential.",
+          "D": "This incorrectly applies Euler's formula to the real part instead of the imaginary part."
+        },
+        "hint": "The real part goes into the exponential envelope; the imaginary coefficient goes into sine and cosine.",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  },
+  {
+    "id": "sigma_omega_waveform_effect",
+    "label": "\\(\\sigma\\) controls envelope and \\(\\omega\\) controls oscillation",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "kp3_q1",
+        "type": "multiple_choice",
+        "stem": "A signal has the form \\(e^{-2t}\\cos 7t\\). What behavior should you expect?",
+        "options": [
+          "A. A decaying sinusoid",
+          "B. A growing sinusoid",
+          "C. A constant-amplitude sinusoid",
+          "D. A monotonic exponential with no oscillation"
+        ],
+        "correct_option": "A",
+        "explanation": "\\(\\sigma=-2<0\\), so the envelope decays. Since \\(\\omega=7\\ne0\\), the signal oscillates.",
+        "wrong_option_explanations": {
+          "B": "Growth requires \\(\\sigma>0\\).",
+          "C": "Constant amplitude requires \\(\\sigma=0\\).",
+          "D": "No oscillation requires \\(\\omega=0\\), but here \\(\\omega=7\\)."
+        },
+        "hint": "Classify first by \\(\\sigma\\), then by whether \\(\\omega\\) is zero.",
+        "needs_visual": true,
+        "visual_type": "book_figure_1_21_or_waveform_demo",
+        "same_point_variant": true
+      },
+      {
+        "id": "kp3_q2",
+        "type": "multiple_choice",
+        "stem": "In the interactive demo, you keep \\(\\sigma=0\\) and increase \\(\\omega\\). What should change?",
+        "options": [
+          "A. The oscillations become more closely spaced, but the amplitude envelope stays constant.",
+          "B. The signal grows faster, but oscillation spacing stays the same.",
+          "C. The signal decays faster, but oscillation spacing stays the same.",
+          "D. The signal becomes a non-oscillating exponential."
+        ],
+        "correct_option": "A",
+        "explanation": "\\(\\omega\\) controls oscillation rate. With \\(\\sigma=0\\), the envelope is \\(e^{0t}=1\\), so amplitude stays constant.",
+        "wrong_option_explanations": {
+          "B": "Growth rate is controlled by \\(\\sigma\\), not \\(\\omega\\).",
+          "C": "Decay rate is controlled by negative \\(\\sigma\\), not \\(\\omega\\).",
+          "D": "Nonzero \\(\\omega\\) creates oscillation."
+        },
+        "hint": "Ask which parameter changes the envelope and which changes the wave spacing.",
+        "needs_visual": true,
+        "visual_type": "interactive_demo_observation",
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "s_plane_classification",
+    "label": "s-plane location and signal behavior",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "kp4_q1",
+        "type": "multiple_choice",
+        "stem": "Where do the frequencies \\(-2+j5\\) and \\(-2-j5\\) lie, and what signal behavior do they represent?",
+        "options": [
+          "A. Left half-plane; exponentially decaying sinusoid",
+          "B. Right half-plane; exponentially growing sinusoid",
+          "C. Imaginary axis; constant-amplitude sinusoid",
+          "D. Real axis; monotonic exponential"
+        ],
+        "correct_option": "A",
+        "explanation": "Both frequencies have real part \\(\\sigma=-2<0\\), so they lie in the left half-plane and represent decay. Their nonzero imaginary parts create oscillation.",
+        "wrong_option_explanations": {
+          "B": "Right half-plane requires positive real part.",
+          "C": "The imaginary axis requires \\(\\sigma=0\\).",
+          "D": "The real axis requires \\(\\omega=0\\), but these have imaginary parts \\(\\pm5\\)."
+        },
+        "hint": "The real part decides left versus right half-plane.",
+        "needs_visual": true,
+        "visual_type": "book_figure_1_22_s_plane",
+        "same_point_variant": true
+      },
+      {
+        "id": "kp4_q2",
+        "type": "multiple_choice",
+        "stem": "A point lies exactly on the imaginary axis of the s-plane at \\(s=j6\\). What does this imply?",
+        "options": [
+          "A. The signal has constant amplitude and oscillates.",
+          "B. The signal grows exponentially and oscillates.",
+          "C. The signal decays exponentially and oscillates.",
+          "D. The signal is a constant dc signal."
+        ],
+        "correct_option": "A",
+        "explanation": "On the imaginary axis, \\(\\sigma=0\\), so the amplitude is constant. Since \\(\\omega=6\\ne0\\), the signal oscillates.",
+        "wrong_option_explanations": {
+          "B": "Growth requires \\(\\sigma>0\\).",
+          "C": "Decay requires \\(\\sigma<0\\).",
+          "D": "A dc signal requires \\(s=0\\), not \\(j6\\)."
+        },
+        "hint": "Imaginary axis means \\(\\sigma=0\\), not \\(\\omega=0\\).",
+        "needs_visual": true,
+        "visual_type": "book_figure_1_22_s_plane",
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "conjugate_exponential_representation",
+    "label": "Using Eq. (1.14)",
+    "importance": "high",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp5_q1",
+        "type": "multiple_choice",
+        "stem": "Which expression correctly represents \\(e^{2t}\\cos5t\\) using complex exponentials?",
+        "options": [
+          "A. \\(\\frac{1}{2}\\left(e^{(2+j5)t}+e^{(2-j5)t}\\right)\\)",
+          "B. \\(e^{(2+j5)t}+e^{(2-j5)t}\\)",
+          "C. \\(\\frac{1}{2}\\left(e^{(5+j2)t}+e^{(5-j2)t}\\right)\\)",
+          "D. \\(\\frac{1}{2}e^{(2+j5)t}\\)"
+        ],
+        "correct_option": "A",
+        "explanation": "A real exponentially varying cosine requires the conjugate pair and the factor \\(\\frac{1}{2}\\).",
+        "wrong_option_explanations": {
+          "B": "This omits the required factor \\(\\frac{1}{2}\\).",
+          "C": "This swaps \\(\\sigma=2\\) and \\(\\omega=5\\).",
+          "D": "One complex exponential alone includes a sine component; the conjugate pair is needed to cancel it."
+        },
+        "hint": "For a cosine, use both \\(s\\) and \\(s^*\\), then average.",
+        "needs_visual": false,
+        "same_point_variant": false
+      },
+      {
+        "id": "kp5_q2",
+        "type": "short_answer",
+        "stem": "A classmate writes \\(e^{-2t}\\cos5t=e^{(-2+j5)t}\\). Explain precisely what is wrong.",
+        "ideal_answer": "One complex exponential \\(e^{(-2+j5)t}\\) equals \\(e^{-2t}(\\cos5t+j\\sin5t)\\), so it includes an imaginary sine part. The real cosine signal requires the conjugate pair: \\(e^{-2t}\\cos5t=\\frac{1}{2}(e^{(-2+j5)t}+e^{(-2-j5)t})\\).",
+        "grading_rubric": [
+          "Must state that one exponential includes both cosine and imaginary sine parts.",
+          "Must identify the missing conjugate exponential.",
+          "Must include or correctly describe the factor \\(\\frac{1}{2}\\)."
+        ],
+        "explanation": "This checks whether the student understands why conjugate exponentials are needed, not just how to copy the formula.",
+        "hint": "Expand the single exponential using Eq. (1.13).",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  }
+]
+```
+
+## Raw JSON
+
+```json
+{
+  "section_id": "1.4-3",
+  "section_title": "1.4-3 The Exponential Function e^st",
+  "difficulty": "intermediate",
+  "estimated_read_minutes": 7,
+  "learning_objectives": [
+    "Interpret the complex frequency \\(s = \\sigma + j\\omega\\).",
+    "Expand \\(e^{st}\\) into exponential and sinusoidal parts.",
+    "Recognize how \\(\\sigma\\) controls growth or decay and \\(\\omega\\) controls oscillation.",
+    "Locate complex frequencies in the s-plane and connect left/right half-plane position to signal behavior.",
+    "Express real exponentially varying cosines using conjugate complex exponentials."
+  ],
+  "visualization_need": {
+    "level": "interactive",
+    "reason": [
+      "depends_on_parameter_change",
+      "formula_to_phenomenon_gap",
+      "student_should_manipulate_to_understand",
+      "input_output_response_is_visual"
+    ],
+    "recommended_assets": [
+      "react_canvas_demo",
+      "book_figure"
+    ]
+  },
+  "visual_plan": {
+    "primary_anchor": "both",
+    "rationale": "Use the textbook figures because Figures 1.21 and 1.22 are the exact canonical signal-shape and s-plane representations students are expected to recognize. Add one interactive React Canvas demo because the meaning of \\(\\sigma\\) and \\(\\omega\\) is best learned by changing them and watching amplitude growth/decay and oscillation frequency respond.",
+    "cram": "Use visuals to instantly map sign of \\(\\sigma\\) to decay, constant amplitude, or growth.",
+    "standard": "Use the textbook figures and demo to connect one formula, one waveform, and one s-plane point.",
+    "top_score": "Use visuals to distinguish real-axis, imaginary-axis, LHP, RHP, and conjugate-frequency cases precisely."
+  },
+  "blocks": [
+    {
+      "type": "text_explanation",
+      "page_role": "overview",
+      "instruction": "Render Page 1 as a minimal outline only. Include exactly two sections: 'Section Objective' and 'Concepts In This Section'. Section Objective: one sentence saying that this section explains how the complex exponential \\(e^{st}\\) represents constants, exponentials, sinusoids, and growing/decaying sinusoids. Concepts In This Section: list concept names only: complex frequency, expansion of \\(e^{st}\\), growth/decay versus oscillation, s-plane, conjugate exponential representation. Do not add background paragraphs, examples, or formulas beyond the objective sentence."
+    },
+    {
+      "type": "math_block",
+      "page_role": "knowledge_point",
+      "page_title": "## 1. Complex frequency",
+      "latex": "s = \\sigma + j\\omega",
+      "explanation_instruction": "Teach this as the definition of complex frequency. Use 90–130 words. Explain that \\(\\sigma\\) is the real part and controls amplitude growth or decay, while \\(\\omega\\) is the imaginary-axis frequency and controls oscillation rate. Define \\(j\\) briefly as the complex-axis marker with \\(j^2=-1\\). Include the minimal example \\(s=2+j5\\), so \\(\\sigma=2\\) and \\(\\omega=5\\). Exam trigger: when a signal has both an exponential envelope and a sinusoidal oscillation, look for \\(s=\\sigma+j\\omega\\). Common misuse: treating \\(\\omega\\) as the whole term \\(j\\omega\\); \\(\\omega\\) itself is the real-valued radian frequency."
+    },
+    {
+      "type": "math_block",
+      "page_role": "knowledge_point",
+      "page_title": "## 2. Expanding the complex exponential",
+      "latex": "e^{st} = e^{(\\sigma+j\\omega)t} = e^{\\sigma t}(\\cos \\omega t + j\\sin \\omega t)",
+      "equation_label": "(1.13)",
+      "explanation_instruction": "Teach Eq. (1.13) as the section's core formula. Use 110–150 words. State that the complex exponential splits into an amplitude envelope \\(e^{\\sigma t}\\) and a rotating sinusoidal part \\(\\cos\\omega t+j\\sin\\omega t\\). Explain each symbol: \\(t\\) is time, \\(\\sigma\\) sets growth/decay rate, \\(\\omega\\) sets oscillation rate, and \\(j\\) marks the quadrature component. Include the representative example \\(e^{(2+j5)t}=e^{2t}(\\cos 5t+j\\sin 5t)\\), a growing oscillatory complex exponential. Exam trigger: expand when asked to classify the signal behavior from \\(s\\). Common misuse: saying \\(e^{st}\\) is always just a sinusoid; it is sinusoidal only when \\(\\sigma=0\\)."
+    },
+    {
+      "type": "book_image",
+      "page_role": "knowledge_point_visual",
+      "source_page": "page-090",
+      "fig_id": "Figure 1.21",
+      "caption_instruction": "One sentence: Figure 1.21 shows how different choices of \\(\\sigma\\) and \\(\\omega\\) produce constants, exponentials, sinusoids, decaying sinusoids, and growing sinusoids.",
+      "description_instruction": "Write 2–3 sentences describing the four panels. Emphasize that \\(\\sigma<0\\) gives a decaying envelope, \\(\\sigma=0\\) gives constant amplitude, and \\(\\sigma>0\\) gives a growing envelope. Also point out that \\(\\omega=0\\) removes oscillation, while nonzero \\(\\omega\\) creates sinusoidal variation.",
+      "teaching_role": "concept_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Memorize the visual mapping: left/negative means decay, zero means constant, right/positive means growth.",
+        "standard": "Use each panel to connect the formula \\(e^{\\sigma t}(\\cos\\omega t+j\\sin\\omega t)\\) to a waveform shape.",
+        "top_score": "Notice the separate roles of envelope change and oscillation frequency."
+      }
+    },
+    {
+      "type": "interactive_demo",
+      "page_role": "knowledge_point_visual",
+      "demo_id": "complex_exponential_sigma_omega_waveform",
+      "teaching_role": "parameter_effect_anchor",
+      "instruction": "Build a React + Canvas demo with two sliders: \\(\\sigma\\in[-3,3]\\) and \\(\\omega\\in[0,12]\\). Plot the real part \\(\\operatorname{Re}\\{e^{(\\sigma+j\\omega)t}\\}=e^{\\sigma t}\\cos\\omega t\\) over \\(0\\le t\\le 4\\). Also draw faint dashed envelope curves \\(\\pm e^{\\sigma t}\\). Include three quick preset buttons: Decay \\((\\sigma=-1,\\omega=5)\\), Constant amplitude \\((\\sigma=0,\\omega=5)\\), Growth \\((\\sigma=1,\\omega=5)\\). Under the canvas, show one sentence that updates: '\\(\\sigma\\) controls envelope; \\(\\omega\\) controls oscillation spacing.' Keep the interface clean and lecture-note styled.",
+      "mode_specific_visual_use": {
+        "cram": "Move only \\(\\sigma\\) first to memorize decay/constant/growth behavior.",
+        "standard": "Use the presets, then adjust \\(\\omega\\) to see frequency change without changing the envelope rule.",
+        "top_score": "Test mixed cases where both \\(\\sigma\\) and \\(\\omega\\) are nonzero and identify the matching s-plane region."
+      },
+      "quick_check_instruction": "After the demo, ask one short check: If \\(\\sigma=-2\\) and \\(\\omega=8\\), should the waveform decay, grow, or stay constant, and should it oscillate slowly or rapidly? Expected answer: it decays and oscillates relatively rapidly."
+    },
+    {
+      "type": "math_block",
+      "page_role": "knowledge_point",
+      "page_title": "## 3. Real sinusoids from conjugate exponentials",
+      "latex": "e^{\\sigma t}\\cos \\omega t = \\frac{1}{2}\\left(e^{st}+e^{s^{*}t}\\right)",
+      "equation_label": "(1.14)",
+      "explanation_instruction": "Teach Eq. (1.14) as the formula for writing a real exponentially varying cosine as a sum of two conjugate complex exponentials. Use 120–160 words. Define \\(s^*=\\sigma-j\\omega\\) as the conjugate of \\(s=\\sigma+j\\omega\\). Explain that the imaginary sine parts cancel when the conjugate pair is averaged, leaving the real cosine term. Include the representative example: \\(e^{2t}\\cos 5t=\\frac{1}{2}(e^{(2+j5)t}+e^{(2-j5)t})\\). Exam trigger: use this when a cosine with an exponential envelope must be rewritten in complex-exponential form. Common misuse: forgetting the factor \\(\\frac{1}{2}\\), or using only one exponential instead of the conjugate pair."
+    },
+    {
+      "type": "book_image",
+      "page_role": "knowledge_point_visual",
+      "source_page": "page-091",
+      "fig_id": "Figure 1.22",
+      "caption_instruction": "One sentence: Figure 1.22 shows the s-plane, where the sign of \\(\\sigma\\) separates decaying signals from growing signals.",
+      "description_instruction": "Write 2–3 sentences describing the horizontal \\(\\sigma\\) axis and vertical \\(j\\omega\\) axis. Explain that points in the left half-plane have \\(\\sigma<0\\) and correspond to exponentially decreasing signals, while points in the right half-plane have \\(\\sigma>0\\) and correspond to exponentially increasing signals. State that points on the imaginary axis have \\(\\sigma=0\\), so the amplitude stays constant.",
+      "teaching_role": "exam_pattern_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Use the plane as a sign chart: LHP decays, imaginary axis constant, RHP grows.",
+        "standard": "Match a frequency point like \\(-2+j5\\), \\(j5\\), or \\(2+j5\\) to the corresponding waveform behavior.",
+        "top_score": "Distinguish real-axis exponentials from off-axis growing or decaying sinusoids."
+      }
+    },
+    {
+      "type": "text_explanation",
+      "page_role": "knowledge_point",
+      "page_title": "## 4. Special cases and exam classification",
+      "instruction": "Write a compact classification page in 120–160 words. Use bullets, not a dense paragraph. Cover exactly these cases: \\(s=0\\) gives a constant dc signal; \\(\\omega=0\\) gives a monotonic exponential \\(e^{\\sigma t}\\); \\(\\sigma=0\\) gives a constant-amplitude sinusoid; \\(\\sigma<0\\) gives exponential decay; \\(\\sigma>0\\) gives exponential growth; \\(\\sigma\\ne0\\) and \\(\\omega\\ne0\\) gives a growing or decaying sinusoid. Include one representative worked classification: \\(e^{-2t}\\cos5t\\) has frequencies \\(-2\\pm j5\\), lies in the left half-plane, and decays while oscillating. End with one exam note: classify first by the sign of \\(\\sigma\\), then by whether \\(\\omega\\) is zero."
+    },
+    {
+      "type": "section_summary",
+      "page_role": "recap",
+      "instruction": "Create a recap page titled '📌 Key Takeaways'. Include 5 concise bullets. The bullets must explicitly include these formulas: \\(s=\\sigma+j\\omega\\), \\(e^{st}=e^{\\sigma t}(\\cos\\omega t+j\\sin\\omega t)\\), and \\(e^{\\sigma t}\\cos\\omega t=\\frac{1}{2}(e^{st}+e^{s^{*}t})\\). Also include the s-plane rule: \\(\\sigma<0\\) means decay, \\(\\sigma=0\\) means constant amplitude, \\(\\sigma>0\\) means growth. Keep each bullet under 25 words. End with one bridge sentence: 'Next, we will use these signal models to analyze signals and systems more efficiently.'"
+    },
+    {
+      "type": "quiz_plan",
+      "page_role": "quiz",
+      "target_questions": 7,
+      "question_range": {
+        "min": 6,
+        "max": 8
+      },
+      "knowledge_points": [
+        {
+          "id": "complex_frequency_definition",
+          "label": "Reading \\(s=\\sigma+j\\omega\\)",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp1_q1",
+              "type": "multiple_choice",
+              "stem": "For the complex frequency \\(s=-3+j8\\), which statement is correct?",
+              "options": [
+                "A. \\(\\sigma=-3\\), \\(\\omega=8\\)",
+                "B. \\(\\sigma=8\\), \\(\\omega=-3\\)",
+                "C. \\(\\sigma=-3\\), \\(\\omega=j8\\)",
+                "D. \\(\\sigma=j8\\), \\(\\omega=-3\\)"
+              ],
+              "correct_option": "A",
+              "explanation": "\\(\\sigma\\) is the real part of \\(s\\), and \\(\\omega\\) is the real coefficient multiplying \\(j\\).",
+              "wrong_option_explanations": {
+                "B": "This swaps the real part and imaginary-axis coefficient.",
+                "C": "\\(\\omega\\) is 8, not \\(j8\\). The \\(j\\) marks the imaginary axis.",
+                "D": "\\(\\sigma\\) must be the real part, not the imaginary term."
+              },
+              "hint": "Separate the coefficient from the symbol \\(j\\).",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "expand_complex_exponential",
+          "label": "Using Eq. (1.13)",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp2_q1",
+              "type": "multiple_choice",
+              "stem": "Which expansion of \\(e^{(2+j5)t}\\) is correct?",
+              "options": [
+                "A. \\(e^{2t}(\\cos5t+j\\sin5t)\\)",
+                "B. \\(e^{5t}(\\cos2t+j\\sin2t)\\)",
+                "C. \\(e^{2t}\\cos5t\\)",
+                "D. \\(e^{j5t}(\\cos2t+j\\sin2t)\\)"
+              ],
+              "correct_option": "A",
+              "explanation": "Eq. (1.13) gives \\(e^{(\\sigma+j\\omega)t}=e^{\\sigma t}(\\cos\\omega t+j\\sin\\omega t)\\). Here \\(\\sigma=2\\) and \\(\\omega=5\\).",
+              "wrong_option_explanations": {
+                "B": "This swaps \\(\\sigma\\) and \\(\\omega\\).",
+                "C": "This keeps only the real cosine part, not the full complex exponential.",
+                "D": "This incorrectly applies Euler's formula to the real part instead of the imaginary part."
+              },
+              "hint": "The real part goes into the exponential envelope; the imaginary coefficient goes into sine and cosine.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "sigma_omega_waveform_effect",
+          "label": "\\(\\sigma\\) controls envelope and \\(\\omega\\) controls oscillation",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp3_q1",
+              "type": "multiple_choice",
+              "stem": "A signal has the form \\(e^{-2t}\\cos 7t\\). What behavior should you expect?",
+              "options": [
+                "A. A decaying sinusoid",
+                "B. A growing sinusoid",
+                "C. A constant-amplitude sinusoid",
+                "D. A monotonic exponential with no oscillation"
+              ],
+              "correct_option": "A",
+              "explanation": "\\(\\sigma=-2<0\\), so the envelope decays. Since \\(\\omega=7\\ne0\\), the signal oscillates.",
+              "wrong_option_explanations": {
+                "B": "Growth requires \\(\\sigma>0\\).",
+                "C": "Constant amplitude requires \\(\\sigma=0\\).",
+                "D": "No oscillation requires \\(\\omega=0\\), but here \\(\\omega=7\\)."
+              },
+              "hint": "Classify first by \\(\\sigma\\), then by whether \\(\\omega\\) is zero.",
+              "needs_visual": true,
+              "visual_type": "book_figure_1_21_or_waveform_demo",
+              "same_point_variant": true
+            },
+            {
+              "id": "kp3_q2",
+              "type": "multiple_choice",
+              "stem": "In the interactive demo, you keep \\(\\sigma=0\\) and increase \\(\\omega\\). What should change?",
+              "options": [
+                "A. The oscillations become more closely spaced, but the amplitude envelope stays constant.",
+                "B. The signal grows faster, but oscillation spacing stays the same.",
+                "C. The signal decays faster, but oscillation spacing stays the same.",
+                "D. The signal becomes a non-oscillating exponential."
+              ],
+              "correct_option": "A",
+              "explanation": "\\(\\omega\\) controls oscillation rate. With \\(\\sigma=0\\), the envelope is \\(e^{0t}=1\\), so amplitude stays constant.",
+              "wrong_option_explanations": {
+                "B": "Growth rate is controlled by \\(\\sigma\\), not \\(\\omega\\).",
+                "C": "Decay rate is controlled by negative \\(\\sigma\\), not \\(\\omega\\).",
+                "D": "Nonzero \\(\\omega\\) creates oscillation."
+              },
+              "hint": "Ask which parameter changes the envelope and which changes the wave spacing.",
+              "needs_visual": true,
+              "visual_type": "interactive_demo_observation",
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "s_plane_classification",
+          "label": "s-plane location and signal behavior",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp4_q1",
+              "type": "multiple_choice",
+              "stem": "Where do the frequencies \\(-2+j5\\) and \\(-2-j5\\) lie, and what signal behavior do they represent?",
+              "options": [
+                "A. Left half-plane; exponentially decaying sinusoid",
+                "B. Right half-plane; exponentially growing sinusoid",
+                "C. Imaginary axis; constant-amplitude sinusoid",
+                "D. Real axis; monotonic exponential"
+              ],
+              "correct_option": "A",
+              "explanation": "Both frequencies have real part \\(\\sigma=-2<0\\), so they lie in the left half-plane and represent decay. Their nonzero imaginary parts create oscillation.",
+              "wrong_option_explanations": {
+                "B": "Right half-plane requires positive real part.",
+                "C": "The imaginary axis requires \\(\\sigma=0\\).",
+                "D": "The real axis requires \\(\\omega=0\\), but these have imaginary parts \\(\\pm5\\)."
+              },
+              "hint": "The real part decides left versus right half-plane.",
+              "needs_visual": true,
+              "visual_type": "book_figure_1_22_s_plane",
+              "same_point_variant": true
+            },
+            {
+              "id": "kp4_q2",
+              "type": "multiple_choice",
+              "stem": "A point lies exactly on the imaginary axis of the s-plane at \\(s=j6\\). What does this imply?",
+              "options": [
+                "A. The signal has constant amplitude and oscillates.",
+                "B. The signal grows exponentially and oscillates.",
+                "C. The signal decays exponentially and oscillates.",
+                "D. The signal is a constant dc signal."
+              ],
+              "correct_option": "A",
+              "explanation": "On the imaginary axis, \\(\\sigma=0\\), so the amplitude is constant. Since \\(\\omega=6\\ne0\\), the signal oscillates.",
+              "wrong_option_explanations": {
+                "B": "Growth requires \\(\\sigma>0\\).",
+                "C": "Decay requires \\(\\sigma<0\\).",
+                "D": "A dc signal requires \\(s=0\\), not \\(j6\\)."
+              },
+              "hint": "Imaginary axis means \\(\\sigma=0\\), not \\(\\omega=0\\).",
+              "needs_visual": true,
+              "visual_type": "book_figure_1_22_s_plane",
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "conjugate_exponential_representation",
+          "label": "Using Eq. (1.14)",
+          "importance": "high",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp5_q1",
+              "type": "multiple_choice",
+              "stem": "Which expression correctly represents \\(e^{2t}\\cos5t\\) using complex exponentials?",
+              "options": [
+                "A. \\(\\frac{1}{2}\\left(e^{(2+j5)t}+e^{(2-j5)t}\\right)\\)",
+                "B. \\(e^{(2+j5)t}+e^{(2-j5)t}\\)",
+                "C. \\(\\frac{1}{2}\\left(e^{(5+j2)t}+e^{(5-j2)t}\\right)\\)",
+                "D. \\(\\frac{1}{2}e^{(2+j5)t}\\)"
+              ],
+              "correct_option": "A",
+              "explanation": "A real exponentially varying cosine requires the conjugate pair and the factor \\(\\frac{1}{2}\\).",
+              "wrong_option_explanations": {
+                "B": "This omits the required factor \\(\\frac{1}{2}\\).",
+                "C": "This swaps \\(\\sigma=2\\) and \\(\\omega=5\\).",
+                "D": "One complex exponential alone includes a sine component; the conjugate pair is needed to cancel it."
+              },
+              "hint": "For a cosine, use both \\(s\\) and \\(s^*\\), then average.",
+              "needs_visual": false,
+              "same_point_variant": false
+            },
+            {
+              "id": "kp5_q2",
+              "type": "short_answer",
+              "stem": "A classmate writes \\(e^{-2t}\\cos5t=e^{(-2+j5)t}\\). Explain precisely what is wrong.",
+              "ideal_answer": "One complex exponential \\(e^{(-2+j5)t}\\) equals \\(e^{-2t}(\\cos5t+j\\sin5t)\\), so it includes an imaginary sine part. The real cosine signal requires the conjugate pair: \\(e^{-2t}\\cos5t=\\frac{1}{2}(e^{(-2+j5)t}+e^{(-2-j5)t})\\).",
+              "grading_rubric": [
+                "Must state that one exponential includes both cosine and imaginary sine parts.",
+                "Must identify the missing conjugate exponential.",
+                "Must include or correctly describe the factor \\(\\frac{1}{2}\\)."
+              ],
+              "explanation": "This checks whether the student understands why conjugate exponentials are needed, not just how to copy the formula.",
+              "hint": "Expand the single exponential using Eq. (1.13).",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```

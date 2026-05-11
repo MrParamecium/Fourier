@@ -1,0 +1,20 @@
+{
+  "sectionId": "b.3-1",
+  "sourcePages": [
+    "page-020",
+    "page-021",
+    "page-022"
+  ],
+  "usedPages": [
+    "page-020",
+    "page-021",
+    "page-022"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "B.3-1 Monotonic Exponentials",
+  "foundEnd": true,
+  "endBeforeLine": "B.3-2 The Exponentially Varying Sinusoid",
+  "endBeforeCode": "b.3-2",
+  "charCount": 3402
+}

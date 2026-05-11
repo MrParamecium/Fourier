@@ -1,0 +1,30 @@
+{
+  "sectionId": "2.7",
+  "sourcePages": [
+    "page-212",
+    "page-213",
+    "page-214",
+    "page-215",
+    "page-216",
+    "page-217",
+    "page-218",
+    "page-219"
+  ],
+  "usedPages": [
+    "page-212",
+    "page-213",
+    "page-214",
+    "page-215",
+    "page-216",
+    "page-217",
+    "page-218",
+    "page-219"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "2.7 MATLAB: M-FILES",
+  "foundEnd": true,
+  "endBeforeLine": "2.7-1 Script M-Files",
+  "endBeforeCode": "2.7-1",
+  "charCount": 958
+}

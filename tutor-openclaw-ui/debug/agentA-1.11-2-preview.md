@@ -1,0 +1,687 @@
+# Agent A Preview: 1.11-2 Relational Operators and the Unit Step Function
+
+- Difficulty: beginner
+- Estimated read minutes: 6
+
+## Learning Objectives
+
+- Use MATLAB relational operators to create logical 0/1 signals.
+- Define the unit step function with an anonymous function.
+- Build a unit pulse using logical AND or shifted unit steps.
+- Plot jump discontinuities more clearly by increasing sample density and setting axes.
+- Distinguish elementwise logical operators from scalar short-circuit logical operators.
+
+## Visualization Need
+
+```json
+{
+  "level": "static",
+  "reason": [
+    "pattern_recognition_benefits_from_figure",
+    "misconception_needs_visual_correction",
+    "wrong_vs_right_contrast_is_high_value",
+    "one_stable_visual_representation_is_helpful"
+  ],
+  "recommended_assets": [
+    "wiki_figure",
+    "generated_image"
+  ]
+}
+```
+
+## Visual Plan
+
+```json
+{
+  "primary_anchor": "both",
+  "rationale": "The unit step has a standard signal shape that can be supported by a Wikipedia/Wikimedia reference visual, while the MATLAB plotting mistakes in this section require custom wrong-vs-right teaching visuals because the available book assets are only full page screenshots and no clean cropped figures are provided.",
+  "cram": "Use visuals to instantly recognize step, pulse, half-open interval, and bad discontinuity plots.",
+  "standard": "Use visuals to connect each MATLAB expression to one representative signal plot and one plotting correction.",
+  "top_score": "Use visuals to expose endpoint traps, elementwise logic traps, and the misleading sloped segment created by coarse samples."
+}
+```
+
+## Planned Blocks
+
+### Block 1: `text_explanation`
+- **instruction**: Render Page 1 as a minimal overview only. Use exactly these two headings: 'Section Objective' and 'Concepts In This Section'. Under 'Section Objective', write one short sentence: 'Use MATLAB relational operators to build and plot step-like signals.' Under 'Concepts In This Section', list only these concept names as bullets with no explanations: relational operators, unit step function, unit pulse function, plotting jump discontinuities, logical operators.
+
+### Block 2: `math_block`
+- **latex**: u(t)=1.0\,(t\ge 0)
+- **explanation_instruction**: Start a new page with heading '## 1. Unit step from a relational test'. Explain in 100–140 words that MATLAB treats the relational test \(t\ge 0\) as logical 1 when true and logical 0 when false, so multiplying by 1.0 makes a numeric signal. State the MATLAB anonymous function exactly as code: `u = @(t) 1.0.*(t>=0);`. Define every symbol: \(t\) is the input vector or scalar, \(u(t)\) is the output, and \(\ge\) includes the value \(t=0\). Include this representative example: for `t = [-1 0 2]`, `u(t)` gives `[0 1 1]`. Exam trigger: use this when a signal turns on at zero. Common misuse: using `>` instead of `>=` changes the value at exactly zero.
+
+### Block 3: `web_search_image`
+- **search_query**: Wikipedia Heaviside step function graph unit step function
+- **purpose**: Show the standard shape of the unit step: 0 before the switch time and 1 after the switch time.
+- **preferred_sources**:
+```json
+[
+  "wikimedia_commons",
+  "wikipedia"
+]
+```
+- **prefer_animated**:
+```json
+false
+```
+- **fallback**: generate_image
+- **teaching_role**: concept_anchor
+- **mode_specific_visual_use**:
+```json
+{
+  "cram": "Use the shape to recognize a unit step immediately.",
+  "standard": "Connect the graph directly to the condition t >= 0.",
+  "top_score": "Check the endpoint convention at t = 0 instead of assuming it is excluded."
+}
+```
+
+### Block 4: `math_block`
+- **latex**: p(t)=1.0\,\big((t\ge 0)\ \&\ (t<1)\big)
+- **explanation_instruction**: Start a new page with heading '## 2. Unit pulse from two relational tests'. Explain in 100–140 words that the pulse is 1 only when both conditions are true: \(t\ge 0\) and \(t<1\). State the MATLAB anonymous function exactly as code: `p = @(t) 1.0.*((t>=0)&(t<1));`. Define symbols and operators: \(&\) means elementwise logical AND, so it tests every entry of a vector. Include this representative example: for `t = [-0.5 0 0.5 1]`, `p(t)` gives `[0 1 1 0]`. Exam trigger: use this pattern for a rectangular pulse over an interval. Common misuse: replacing \(&\) with `&&` for vector inputs.
+
+### Block 5: `generate_image`
+- **tool**: openai/gpt-5.4-image-2
+- **reason**: A custom endpoint visual is needed to show the exact MATLAB half-open pulse interval 0 <= t < 1; generic reference images may not clearly show the included left endpoint and excluded right endpoint.
+- **teaching_role**: trap_exposure
+- **mode_specific_visual_use**:
+```json
+{
+  "cram": "Make the endpoint inclusion rule memorable: 0 included, 1 excluded.",
+  "standard": "Support the representative pulse example with one clean interval picture.",
+  "top_score": "Highlight the common exam trap of treating both endpoints as included."
+}
+```
+- **prompt**: Pure white clean background, minimalist lecture-notes educational diagram. Draw one horizontal t-axis from -0.5 to 1.5. Show a rectangular pulse p(t) at height 1 only on the interval from t = 0 to t = 1. Use a filled dot at t = 0 and an open circle at t = 1. Label the interval above the pulse as '0 <= t < 1'. Label p(t)=0 outside the interval and p(t)=1 inside. Use navy axis lines, muted teal pulse line, and muted red only for a small warning note: 't = 1 is not included'. No decorative styling, no extra examples, no dense text.
+- **style_hint**: lecture notes, academic, clean, restrained color boxes, exam-oriented, one concept only
+
+### Block 6: `math_block`
+- **latex**: p(t)=u(t)-u(t-1)
+- **explanation_instruction**: Continue the same pulse page after the endpoint visual. Explain in 80–110 words that the same pulse can be built by subtracting a delayed unit step from the original unit step. The first step turns the signal on at \(t=0\); the shifted step \(u(t-1)\) turns on at \(t=1\); subtracting it turns the pulse back off. Include the MATLAB alternative exactly as code: `p = @(t) u(t)-u(t-1);`. Exam trigger: if a rectangular pulse starts at one time and ends one unit later, think 'step on minus shifted step off'. Common misuse: writing \(u(t+1)\) when the turn-off should happen at \(t=1\).
+
+### Block 7: `math_block`
+- **latex**: \operatorname{axis}\big([x_{\min}\ x_{\max}\ y_{\min}\ y_{\max}]\big)
+- **explanation_instruction**: Start a new page with heading '## 3. Plotting jump discontinuities without misleading yourself'. Explain in 110–150 words that MATLAB connects plotted sample points with straight line segments, so a coarse vector such as `t = (-2:2)` makes the unit step look like it has a sloped ramp between samples. Then explain that a denser vector such as `t = (-2:0.01:2)` reduces the visual problem, and `axis([-2 2 -0.1 1.1])` prevents the automatic axis scaling from hiding the signal shape. Define the four axis entries in order. Exam trigger: when a jump discontinuity plot looks like a diagonal line, increase sample density and adjust axes. Common misuse: thinking the plotted ramp is part of the mathematical signal.
+
+### Block 8: `generate_image`
+- **tool**: openai/gpt-5.4-image-2
+- **reason**: A custom wrong-vs-right visual is needed to teach the specific MATLAB plotting misconception: coarse samples create a misleading sloped segment for a jump discontinuity.
+- **teaching_role**: comparison_anchor
+- **mode_specific_visual_use**:
+```json
+{
+  "cram": "Recognize the bad sloped segment as a plotting artifact, not signal behavior.",
+  "standard": "Compare coarse sampling versus dense sampling for the same unit step.",
+  "top_score": "Notice that axis limits and sample density solve different plot readability problems."
+}
+```
+- **prompt**: Pure white clean background, minimalist lecture-notes educational comparison. Create two side-by-side small plots. Left plot title: 'Coarse t = -2:2'. Show unit step samples connected by a misleading diagonal segment from 0 to 1 near the jump; add a muted red label 'plotting artifact'. Right plot title: 'Dense t = -2:0.01:2 + axis'. Show a crisp step-like plot with y-axis range slightly below 0 and above 1; add a muted teal label 'clearer view'. Axes labeled t and u(t). Keep text minimal, no full derivation, no decorative elements.
+- **style_hint**: lecture notes, academic, clean, restrained color boxes, exam-oriented, one concept only
+
+### Block 9: `text_explanation`
+- **instruction**: Start a new page with heading '## 4. Logical operators: vector tests vs scalar short-circuit tests'. Explain in 120–160 words. Cover exactly these points: relational operators include `<`, `>`, `<=`, `>=`, `==`, and `~=`; vector logical combinations use `&`, `|`, and `~`; scalar short-circuit logic uses `&&` and `||`. Use the example `(t>0)&(t<1)` as the vector test for `0 < t < 1`. Explain that `&&` and `||` test the second part only when necessary, but they are for scalar operands, not vectorized signal definitions. Include this exam note: for anonymous functions that accept vectors, prefer `&` and `|` over `&&` and `||`. Common misuse: writing `(t>0)&&(t<1)` and expecting it to work element-by-element.
+
+### Block 10: `section_summary`
+- **instruction**: Create a recap page titled '📌 Key Takeaways'. Include 4 concise bullets, each no more than 25 words, and include the core formulas explicitly: `u(t)=1.0(t>=0)`, `p(t)=1.0((t>=0)&(t<1))`, `p(t)=u(t)-u(t-1)`, and `axis([xmin xmax ymin ymax])`. Also include one bullet distinguishing `&`/`|` from `&&`/`||`. End with one sentence: 'Next, you will use these signal-building tools inside larger signal and system examples.'
+
+### Block 11: `quiz_plan`
+- **target_questions**:
+```json
+7
+```
+- **question_range**:
+```json
+{
+  "min": 6,
+  "max": 8
+}
+```
+- **knowledge_points**:
+```json
+[
+  {
+    "id": "relational_operator_outputs",
+    "label": "Relational operators return logical 0/1 values",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "kp1_q1",
+        "type": "multiple_choice",
+        "stem": "In MATLAB, what does the expression `(t>=0)` return when `t = [-2 0 3]`?",
+        "options": [
+          "A. `[0 0 1]`",
+          "B. `[0 1 1]`",
+          "C. `[-2 0 3]`",
+          "D. `[false false true]` only, with no numeric use possible"
+        ],
+        "correct_option": "B",
+        "explanation": "`t>=0` is true for 0 and 3, false for -2, so it returns logical values equivalent to `[0 1 1]` in numeric signal construction.",
+        "wrong_option_explanations": {
+          "A": "This treats 0 as false, but `>=` includes equality.",
+          "C": "A relational test returns logical results, not the original vector.",
+          "D": "MATLAB logical values can be used numerically as 0 and 1 in this context."
+        },
+        "hint": "Check whether equality at zero is included.",
+        "needs_visual": false,
+        "same_point_variant": true
+      },
+      {
+        "id": "kp1_q2",
+        "type": "multiple_choice",
+        "stem": "Which anonymous function matches the section's unit step convention?",
+        "options": [
+          "A. `u = @(t) 1.0.*(t>0);`",
+          "B. `u = @(t) 1.0.*(t>=0);`",
+          "C. `u = @(t) 1.0.*(t<=0);`",
+          "D. `u = @(t) 1.0.*(t~=0);`"
+        ],
+        "correct_option": "B",
+        "explanation": "The unit step used here turns on at zero, so `t>=0` gives `u(0)=1`.",
+        "wrong_option_explanations": {
+          "A": "This excludes zero, giving `u(0)=0`.",
+          "C": "This is 1 before or at zero, which is the opposite direction.",
+          "D": "This is 0 only at zero and 1 elsewhere, not a step."
+        },
+        "hint": "The textbook definition includes the switching instant.",
+        "needs_visual": true,
+        "visual_type": "unit_step_endpoint_check",
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "unit_pulse_definition",
+    "label": "Unit pulse from logical AND or shifted steps",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "kp2_q1",
+        "type": "multiple_choice",
+        "stem": "For `p = @(t) 1.0.*((t>=0)&(t<1));`, what is `p([0 0.5 1])`?",
+        "options": [
+          "A. `[1 1 1]`",
+          "B. `[0 1 1]`",
+          "C. `[1 1 0]`",
+          "D. `[0 1 0]`"
+        ],
+        "correct_option": "C",
+        "explanation": "The pulse is 1 for `0 <= t < 1`. Therefore 0 and 0.5 are included, but 1 is excluded.",
+        "wrong_option_explanations": {
+          "A": "This incorrectly includes the right endpoint t = 1.",
+          "B": "This incorrectly excludes the left endpoint t = 0.",
+          "D": "This incorrectly excludes t = 0 even though `>=` includes it."
+        },
+        "hint": "Read the two inequalities separately.",
+        "needs_visual": true,
+        "visual_type": "half_open_interval_pulse",
+        "same_point_variant": true
+      },
+      {
+        "id": "kp2_q2",
+        "type": "multiple_choice",
+        "stem": "Which expression is equivalent to a pulse that turns on at t = 0 and turns off at t = 1?",
+        "options": [
+          "A. `u(t) - u(t-1)`",
+          "B. `u(t-1) - u(t)`",
+          "C. `u(t) + u(t-1)`",
+          "D. `u(t+1) - u(t)`"
+        ],
+        "correct_option": "A",
+        "explanation": "`u(t)` turns on at 0, and subtracting `u(t-1)` removes the signal starting at 1.",
+        "wrong_option_explanations": {
+          "B": "This gives a negative pulse over the interval instead of a positive one.",
+          "C": "This adds steps and creates levels 1 and 2, not a pulse that turns off.",
+          "D": "This uses a step that turns on at -1, so the interval is shifted."
+        },
+        "hint": "Think: first step turns on, shifted step turns off.",
+        "needs_visual": true,
+        "visual_type": "step_subtraction_pulse",
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "plotting_discontinuities",
+    "label": "Plotting jump discontinuities with better sample density and axes",
+    "importance": "medium",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp3_q1",
+        "type": "multiple_choice",
+        "stem": "A plotted unit step shows a diagonal ramp between t = -1 and t = 0. What is the best interpretation?",
+        "options": [
+          "A. The true unit step has a linear ramp before zero.",
+          "B. MATLAB connected sparse sample points with a straight line.",
+          "C. The relational operator `>=` creates a ramp.",
+          "D. The axis command caused the ramp."
+        ],
+        "correct_option": "B",
+        "explanation": "MATLAB's default line plot connects sampled data points. With coarse samples, a jump discontinuity can look like a sloped segment.",
+        "wrong_option_explanations": {
+          "A": "The unit step jumps; it does not ramp.",
+          "C": "The relational test returns 0 or 1, not intermediate ramp values.",
+          "D": "The axis command changes the viewing window, not the signal values."
+        },
+        "hint": "Ask whether the slope is mathematical or just plotted between samples.",
+        "needs_visual": true,
+        "visual_type": "wrong_vs_right_discontinuity_plot",
+        "same_point_variant": false
+      },
+      {
+        "id": "kp3_q2",
+        "type": "multiple_choice",
+        "stem": "In `axis([-2 2 -0.1 1.1])`, what do the four numbers mean?",
+        "options": [
+          "A. `[xmin xmax ymin ymax]`",
+          "B. `[ymin ymax xmin xmax]`",
+          "C. `[xstep ystep xmin ymax]`",
+          "D. `[left right grid color]`"
+        ],
+        "correct_option": "A",
+        "explanation": "The axis command uses `[xmin xmax ymin ymax]` to set the visible plot window.",
+        "wrong_option_explanations": {
+          "B": "This reverses the x and y ranges.",
+          "C": "The axis command does not set sample spacing.",
+          "D": "The axis command does not set grid or color."
+        },
+        "hint": "The x-limits come first, then the y-limits.",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  },
+  {
+    "id": "logical_operator_choice",
+    "label": "Choosing vector logical operators versus scalar short-circuit operators",
+    "importance": "high",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "kp4_q1",
+        "type": "multiple_choice",
+        "stem": "Which operator should be used inside a vectorized anonymous function to test `0 < t < 1` for every element of `t`?",
+        "options": [
+          "A. `&&`",
+          "B. `&`",
+          "C. `||`",
+          "D. `==`"
+        ],
+        "correct_option": "B",
+        "explanation": "`&` performs elementwise logical AND, which is needed when `t` is a vector.",
+        "wrong_option_explanations": {
+          "A": "`&&` is scalar short-circuit AND, not elementwise vector AND.",
+          "C": "`||` is scalar short-circuit OR, and it also uses the wrong logical operation.",
+          "D": "`==` tests equality, not whether two inequalities are both true."
+        },
+        "hint": "For vectors, choose the elementwise logical operator.",
+        "needs_visual": false,
+        "same_point_variant": true
+      },
+      {
+        "id": "kp4_q2",
+        "type": "short_answer",
+        "stem": "A classmate writes `p = @(t) 1.0.*((t>=0)&&(t<1));` for a pulse with vector input `t`. Explain what is wrong and give the corrected version.",
+        "ideal_answer": "The operator `&&` is for scalar short-circuit logic, not elementwise vector testing. For a vector input, use `&`: `p = @(t) 1.0.*((t>=0)&(t<1));`.",
+        "grading_rubric": [
+          "Must identify `&&` as scalar short-circuit logic",
+          "Must state that vector inputs require elementwise `&`",
+          "Must provide the corrected anonymous function"
+        ],
+        "explanation": "This checks whether the student can choose the correct MATLAB logical operator for signal vectors, not just remember the pulse shape.",
+        "hint": "Ask whether the operator tests one scalar condition or every entry of a vector.",
+        "needs_visual": false,
+        "same_point_variant": true
+      }
+    ]
+  }
+]
+```
+
+## Raw JSON
+
+```json
+{
+  "section_id": "1.11-2",
+  "section_title": "Relational Operators and the Unit Step Function",
+  "difficulty": "beginner",
+  "estimated_read_minutes": 6,
+  "learning_objectives": [
+    "Use MATLAB relational operators to create logical 0/1 signals.",
+    "Define the unit step function with an anonymous function.",
+    "Build a unit pulse using logical AND or shifted unit steps.",
+    "Plot jump discontinuities more clearly by increasing sample density and setting axes.",
+    "Distinguish elementwise logical operators from scalar short-circuit logical operators."
+  ],
+  "visualization_need": {
+    "level": "static",
+    "reason": [
+      "pattern_recognition_benefits_from_figure",
+      "misconception_needs_visual_correction",
+      "wrong_vs_right_contrast_is_high_value",
+      "one_stable_visual_representation_is_helpful"
+    ],
+    "recommended_assets": [
+      "wiki_figure",
+      "generated_image"
+    ]
+  },
+  "visual_plan": {
+    "primary_anchor": "both",
+    "rationale": "The unit step has a standard signal shape that can be supported by a Wikipedia/Wikimedia reference visual, while the MATLAB plotting mistakes in this section require custom wrong-vs-right teaching visuals because the available book assets are only full page screenshots and no clean cropped figures are provided.",
+    "cram": "Use visuals to instantly recognize step, pulse, half-open interval, and bad discontinuity plots.",
+    "standard": "Use visuals to connect each MATLAB expression to one representative signal plot and one plotting correction.",
+    "top_score": "Use visuals to expose endpoint traps, elementwise logic traps, and the misleading sloped segment created by coarse samples."
+  },
+  "blocks": [
+    {
+      "type": "text_explanation",
+      "instruction": "Render Page 1 as a minimal overview only. Use exactly these two headings: 'Section Objective' and 'Concepts In This Section'. Under 'Section Objective', write one short sentence: 'Use MATLAB relational operators to build and plot step-like signals.' Under 'Concepts In This Section', list only these concept names as bullets with no explanations: relational operators, unit step function, unit pulse function, plotting jump discontinuities, logical operators."
+    },
+    {
+      "type": "math_block",
+      "latex": "u(t)=1.0\\,(t\\ge 0)",
+      "explanation_instruction": "Start a new page with heading '## 1. Unit step from a relational test'. Explain in 100–140 words that MATLAB treats the relational test \\(t\\ge 0\\) as logical 1 when true and logical 0 when false, so multiplying by 1.0 makes a numeric signal. State the MATLAB anonymous function exactly as code: `u = @(t) 1.0.*(t>=0);`. Define every symbol: \\(t\\) is the input vector or scalar, \\(u(t)\\) is the output, and \\(\\ge\\) includes the value \\(t=0\\). Include this representative example: for `t = [-1 0 2]`, `u(t)` gives `[0 1 1]`. Exam trigger: use this when a signal turns on at zero. Common misuse: using `>` instead of `>=` changes the value at exactly zero."
+    },
+    {
+      "type": "web_search_image",
+      "search_query": "Wikipedia Heaviside step function graph unit step function",
+      "purpose": "Show the standard shape of the unit step: 0 before the switch time and 1 after the switch time.",
+      "preferred_sources": [
+        "wikimedia_commons",
+        "wikipedia"
+      ],
+      "prefer_animated": false,
+      "fallback": "generate_image",
+      "teaching_role": "concept_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Use the shape to recognize a unit step immediately.",
+        "standard": "Connect the graph directly to the condition t >= 0.",
+        "top_score": "Check the endpoint convention at t = 0 instead of assuming it is excluded."
+      }
+    },
+    {
+      "type": "math_block",
+      "latex": "p(t)=1.0\\,\\big((t\\ge 0)\\ \\&\\ (t<1)\\big)",
+      "explanation_instruction": "Start a new page with heading '## 2. Unit pulse from two relational tests'. Explain in 100–140 words that the pulse is 1 only when both conditions are true: \\(t\\ge 0\\) and \\(t<1\\). State the MATLAB anonymous function exactly as code: `p = @(t) 1.0.*((t>=0)&(t<1));`. Define symbols and operators: \\(&\\) means elementwise logical AND, so it tests every entry of a vector. Include this representative example: for `t = [-0.5 0 0.5 1]`, `p(t)` gives `[0 1 1 0]`. Exam trigger: use this pattern for a rectangular pulse over an interval. Common misuse: replacing \\(&\\) with `&&` for vector inputs."
+    },
+    {
+      "type": "generate_image",
+      "tool": "openai/gpt-5.4-image-2",
+      "reason": "A custom endpoint visual is needed to show the exact MATLAB half-open pulse interval 0 <= t < 1; generic reference images may not clearly show the included left endpoint and excluded right endpoint.",
+      "teaching_role": "trap_exposure",
+      "mode_specific_visual_use": {
+        "cram": "Make the endpoint inclusion rule memorable: 0 included, 1 excluded.",
+        "standard": "Support the representative pulse example with one clean interval picture.",
+        "top_score": "Highlight the common exam trap of treating both endpoints as included."
+      },
+      "prompt": "Pure white clean background, minimalist lecture-notes educational diagram. Draw one horizontal t-axis from -0.5 to 1.5. Show a rectangular pulse p(t) at height 1 only on the interval from t = 0 to t = 1. Use a filled dot at t = 0 and an open circle at t = 1. Label the interval above the pulse as '0 <= t < 1'. Label p(t)=0 outside the interval and p(t)=1 inside. Use navy axis lines, muted teal pulse line, and muted red only for a small warning note: 't = 1 is not included'. No decorative styling, no extra examples, no dense text.",
+      "style_hint": "lecture notes, academic, clean, restrained color boxes, exam-oriented, one concept only"
+    },
+    {
+      "type": "math_block",
+      "latex": "p(t)=u(t)-u(t-1)",
+      "explanation_instruction": "Continue the same pulse page after the endpoint visual. Explain in 80–110 words that the same pulse can be built by subtracting a delayed unit step from the original unit step. The first step turns the signal on at \\(t=0\\); the shifted step \\(u(t-1)\\) turns on at \\(t=1\\); subtracting it turns the pulse back off. Include the MATLAB alternative exactly as code: `p = @(t) u(t)-u(t-1);`. Exam trigger: if a rectangular pulse starts at one time and ends one unit later, think 'step on minus shifted step off'. Common misuse: writing \\(u(t+1)\\) when the turn-off should happen at \\(t=1\\)."
+    },
+    {
+      "type": "math_block",
+      "latex": "\\operatorname{axis}\\big([x_{\\min}\\ x_{\\max}\\ y_{\\min}\\ y_{\\max}]\\big)",
+      "explanation_instruction": "Start a new page with heading '## 3. Plotting jump discontinuities without misleading yourself'. Explain in 110–150 words that MATLAB connects plotted sample points with straight line segments, so a coarse vector such as `t = (-2:2)` makes the unit step look like it has a sloped ramp between samples. Then explain that a denser vector such as `t = (-2:0.01:2)` reduces the visual problem, and `axis([-2 2 -0.1 1.1])` prevents the automatic axis scaling from hiding the signal shape. Define the four axis entries in order. Exam trigger: when a jump discontinuity plot looks like a diagonal line, increase sample density and adjust axes. Common misuse: thinking the plotted ramp is part of the mathematical signal."
+    },
+    {
+      "type": "generate_image",
+      "tool": "openai/gpt-5.4-image-2",
+      "reason": "A custom wrong-vs-right visual is needed to teach the specific MATLAB plotting misconception: coarse samples create a misleading sloped segment for a jump discontinuity.",
+      "teaching_role": "comparison_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Recognize the bad sloped segment as a plotting artifact, not signal behavior.",
+        "standard": "Compare coarse sampling versus dense sampling for the same unit step.",
+        "top_score": "Notice that axis limits and sample density solve different plot readability problems."
+      },
+      "prompt": "Pure white clean background, minimalist lecture-notes educational comparison. Create two side-by-side small plots. Left plot title: 'Coarse t = -2:2'. Show unit step samples connected by a misleading diagonal segment from 0 to 1 near the jump; add a muted red label 'plotting artifact'. Right plot title: 'Dense t = -2:0.01:2 + axis'. Show a crisp step-like plot with y-axis range slightly below 0 and above 1; add a muted teal label 'clearer view'. Axes labeled t and u(t). Keep text minimal, no full derivation, no decorative elements.",
+      "style_hint": "lecture notes, academic, clean, restrained color boxes, exam-oriented, one concept only"
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Start a new page with heading '## 4. Logical operators: vector tests vs scalar short-circuit tests'. Explain in 120–160 words. Cover exactly these points: relational operators include `<`, `>`, `<=`, `>=`, `==`, and `~=`; vector logical combinations use `&`, `|`, and `~`; scalar short-circuit logic uses `&&` and `||`. Use the example `(t>0)&(t<1)` as the vector test for `0 < t < 1`. Explain that `&&` and `||` test the second part only when necessary, but they are for scalar operands, not vectorized signal definitions. Include this exam note: for anonymous functions that accept vectors, prefer `&` and `|` over `&&` and `||`. Common misuse: writing `(t>0)&&(t<1)` and expecting it to work element-by-element."
+    },
+    {
+      "type": "section_summary",
+      "instruction": "Create a recap page titled '📌 Key Takeaways'. Include 4 concise bullets, each no more than 25 words, and include the core formulas explicitly: `u(t)=1.0(t>=0)`, `p(t)=1.0((t>=0)&(t<1))`, `p(t)=u(t)-u(t-1)`, and `axis([xmin xmax ymin ymax])`. Also include one bullet distinguishing `&`/`|` from `&&`/`||`. End with one sentence: 'Next, you will use these signal-building tools inside larger signal and system examples.'"
+    },
+    {
+      "type": "quiz_plan",
+      "target_questions": 7,
+      "question_range": {
+        "min": 6,
+        "max": 8
+      },
+      "knowledge_points": [
+        {
+          "id": "relational_operator_outputs",
+          "label": "Relational operators return logical 0/1 values",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp1_q1",
+              "type": "multiple_choice",
+              "stem": "In MATLAB, what does the expression `(t>=0)` return when `t = [-2 0 3]`?",
+              "options": [
+                "A. `[0 0 1]`",
+                "B. `[0 1 1]`",
+                "C. `[-2 0 3]`",
+                "D. `[false false true]` only, with no numeric use possible"
+              ],
+              "correct_option": "B",
+              "explanation": "`t>=0` is true for 0 and 3, false for -2, so it returns logical values equivalent to `[0 1 1]` in numeric signal construction.",
+              "wrong_option_explanations": {
+                "A": "This treats 0 as false, but `>=` includes equality.",
+                "C": "A relational test returns logical results, not the original vector.",
+                "D": "MATLAB logical values can be used numerically as 0 and 1 in this context."
+              },
+              "hint": "Check whether equality at zero is included.",
+              "needs_visual": false,
+              "same_point_variant": true
+            },
+            {
+              "id": "kp1_q2",
+              "type": "multiple_choice",
+              "stem": "Which anonymous function matches the section's unit step convention?",
+              "options": [
+                "A. `u = @(t) 1.0.*(t>0);`",
+                "B. `u = @(t) 1.0.*(t>=0);`",
+                "C. `u = @(t) 1.0.*(t<=0);`",
+                "D. `u = @(t) 1.0.*(t~=0);`"
+              ],
+              "correct_option": "B",
+              "explanation": "The unit step used here turns on at zero, so `t>=0` gives `u(0)=1`.",
+              "wrong_option_explanations": {
+                "A": "This excludes zero, giving `u(0)=0`.",
+                "C": "This is 1 before or at zero, which is the opposite direction.",
+                "D": "This is 0 only at zero and 1 elsewhere, not a step."
+              },
+              "hint": "The textbook definition includes the switching instant.",
+              "needs_visual": true,
+              "visual_type": "unit_step_endpoint_check",
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "unit_pulse_definition",
+          "label": "Unit pulse from logical AND or shifted steps",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp2_q1",
+              "type": "multiple_choice",
+              "stem": "For `p = @(t) 1.0.*((t>=0)&(t<1));`, what is `p([0 0.5 1])`?",
+              "options": [
+                "A. `[1 1 1]`",
+                "B. `[0 1 1]`",
+                "C. `[1 1 0]`",
+                "D. `[0 1 0]`"
+              ],
+              "correct_option": "C",
+              "explanation": "The pulse is 1 for `0 <= t < 1`. Therefore 0 and 0.5 are included, but 1 is excluded.",
+              "wrong_option_explanations": {
+                "A": "This incorrectly includes the right endpoint t = 1.",
+                "B": "This incorrectly excludes the left endpoint t = 0.",
+                "D": "This incorrectly excludes t = 0 even though `>=` includes it."
+              },
+              "hint": "Read the two inequalities separately.",
+              "needs_visual": true,
+              "visual_type": "half_open_interval_pulse",
+              "same_point_variant": true
+            },
+            {
+              "id": "kp2_q2",
+              "type": "multiple_choice",
+              "stem": "Which expression is equivalent to a pulse that turns on at t = 0 and turns off at t = 1?",
+              "options": [
+                "A. `u(t) - u(t-1)`",
+                "B. `u(t-1) - u(t)`",
+                "C. `u(t) + u(t-1)`",
+                "D. `u(t+1) - u(t)`"
+              ],
+              "correct_option": "A",
+              "explanation": "`u(t)` turns on at 0, and subtracting `u(t-1)` removes the signal starting at 1.",
+              "wrong_option_explanations": {
+                "B": "This gives a negative pulse over the interval instead of a positive one.",
+                "C": "This adds steps and creates levels 1 and 2, not a pulse that turns off.",
+                "D": "This uses a step that turns on at -1, so the interval is shifted."
+              },
+              "hint": "Think: first step turns on, shifted step turns off.",
+              "needs_visual": true,
+              "visual_type": "step_subtraction_pulse",
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "plotting_discontinuities",
+          "label": "Plotting jump discontinuities with better sample density and axes",
+          "importance": "medium",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp3_q1",
+              "type": "multiple_choice",
+              "stem": "A plotted unit step shows a diagonal ramp between t = -1 and t = 0. What is the best interpretation?",
+              "options": [
+                "A. The true unit step has a linear ramp before zero.",
+                "B. MATLAB connected sparse sample points with a straight line.",
+                "C. The relational operator `>=` creates a ramp.",
+                "D. The axis command caused the ramp."
+              ],
+              "correct_option": "B",
+              "explanation": "MATLAB's default line plot connects sampled data points. With coarse samples, a jump discontinuity can look like a sloped segment.",
+              "wrong_option_explanations": {
+                "A": "The unit step jumps; it does not ramp.",
+                "C": "The relational test returns 0 or 1, not intermediate ramp values.",
+                "D": "The axis command changes the viewing window, not the signal values."
+              },
+              "hint": "Ask whether the slope is mathematical or just plotted between samples.",
+              "needs_visual": true,
+              "visual_type": "wrong_vs_right_discontinuity_plot",
+              "same_point_variant": false
+            },
+            {
+              "id": "kp3_q2",
+              "type": "multiple_choice",
+              "stem": "In `axis([-2 2 -0.1 1.1])`, what do the four numbers mean?",
+              "options": [
+                "A. `[xmin xmax ymin ymax]`",
+                "B. `[ymin ymax xmin xmax]`",
+                "C. `[xstep ystep xmin ymax]`",
+                "D. `[left right grid color]`"
+              ],
+              "correct_option": "A",
+              "explanation": "The axis command uses `[xmin xmax ymin ymax]` to set the visible plot window.",
+              "wrong_option_explanations": {
+                "B": "This reverses the x and y ranges.",
+                "C": "The axis command does not set sample spacing.",
+                "D": "The axis command does not set grid or color."
+              },
+              "hint": "The x-limits come first, then the y-limits.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "logical_operator_choice",
+          "label": "Choosing vector logical operators versus scalar short-circuit operators",
+          "importance": "high",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp4_q1",
+              "type": "multiple_choice",
+              "stem": "Which operator should be used inside a vectorized anonymous function to test `0 < t < 1` for every element of `t`?",
+              "options": [
+                "A. `&&`",
+                "B. `&`",
+                "C. `||`",
+                "D. `==`"
+              ],
+              "correct_option": "B",
+              "explanation": "`&` performs elementwise logical AND, which is needed when `t` is a vector.",
+              "wrong_option_explanations": {
+                "A": "`&&` is scalar short-circuit AND, not elementwise vector AND.",
+                "C": "`||` is scalar short-circuit OR, and it also uses the wrong logical operation.",
+                "D": "`==` tests equality, not whether two inequalities are both true."
+              },
+              "hint": "For vectors, choose the elementwise logical operator.",
+              "needs_visual": false,
+              "same_point_variant": true
+            },
+            {
+              "id": "kp4_q2",
+              "type": "short_answer",
+              "stem": "A classmate writes `p = @(t) 1.0.*((t>=0)&&(t<1));` for a pulse with vector input `t`. Explain what is wrong and give the corrected version.",
+              "ideal_answer": "The operator `&&` is for scalar short-circuit logic, not elementwise vector testing. For a vector input, use `&`: `p = @(t) 1.0.*((t>=0)&(t<1));`.",
+              "grading_rubric": [
+                "Must identify `&&` as scalar short-circuit logic",
+                "Must state that vector inputs require elementwise `&`",
+                "Must provide the corrected anonymous function"
+              ],
+              "explanation": "This checks whether the student can choose the correct MATLAB logical operator for signal vectors, not just remember the pulse shape.",
+              "hint": "Ask whether the operator tests one scalar condition or every entry of a vector.",
+              "needs_visual": false,
+              "same_point_variant": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```

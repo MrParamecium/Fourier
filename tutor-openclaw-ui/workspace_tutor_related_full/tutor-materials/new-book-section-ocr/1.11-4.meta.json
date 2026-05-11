@@ -1,0 +1,20 @@
+{
+  "sectionId": "1.11-4",
+  "sourcePages": [
+    "page-131",
+    "page-132",
+    "page-133"
+  ],
+  "usedPages": [
+    "page-131",
+    "page-132",
+    "page-133"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "1.11-4 Numerical Integration and Estimating Signal Energy",
+  "foundEnd": true,
+  "endBeforeLine": "1.12 Summary 133",
+  "endBeforeCode": "1.12",
+  "charCount": 2959
+}

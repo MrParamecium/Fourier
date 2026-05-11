@@ -49,6 +49,23 @@ def parent_section(code):
     return code.rsplit("-", 1)[0]
 
 
+def chapter_prefix(chapter):
+    chapter = normalize(chapter)
+    if not chapter:
+        return None
+    if chapter.lower() == "b":
+        return "b."
+    return f"{chapter.lower()}."
+
+
+def same_chapter(code, chapter):
+    code = str(code or "").strip().lower()
+    prefix = chapter_prefix(chapter)
+    if not code or not prefix:
+        return True
+    return code.startswith(prefix)
+
+
 def load_page_text(meta_file):
     txt_file = meta_file.with_name(meta_file.name.replace(".meta.json", ".txt"))
     try:
@@ -106,8 +123,15 @@ def main():
 
         text = load_page_text(file)
         explicit_sections, explicit_subsections = detect_headers(text)
+        if active_chapter:
+            explicit_sections = [s for s in explicit_sections if same_chapter(s, active_chapter)]
+            explicit_subsections = [s for s in explicit_subsections if same_chapter(s, active_chapter)]
         raw_section = normalize(meta.get("section"))
         raw_subsection = normalize(meta.get("subsection"))
+        if active_chapter and raw_section and not same_chapter(raw_section, active_chapter):
+            raw_section = None
+        if active_chapter and raw_subsection and not same_chapter(raw_subsection, active_chapter):
+            raw_subsection = None
 
         if explicit_sections:
             page_section = explicit_sections[-1]
@@ -122,11 +146,11 @@ def main():
             active_section = page_section
 
         boundary_prev_section = None
-        if explicit_sections and prev_section and normalize(prev_section) != normalize(explicit_sections[0]):
+        if explicit_sections and prev_section and normalize(prev_section) != normalize(explicit_sections[0]) and same_chapter(prev_section, active_chapter):
             boundary_prev_section = prev_section
 
         boundary_prev_subsection = None
-        if explicit_subsections and prev_subsection and normalize(prev_section) == normalize(active_section):
+        if explicit_subsections and prev_subsection and normalize(prev_section) == normalize(active_section) and same_chapter(prev_subsection, active_chapter):
             if normalize(prev_subsection) != normalize(explicit_subsections[0]):
                 boundary_prev_subsection = prev_subsection
 

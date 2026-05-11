@@ -1,0 +1,24 @@
+{
+  "sectionId": "1.10",
+  "sourcePages": [
+    "page-121",
+    "page-122",
+    "page-123",
+    "page-124",
+    "page-125"
+  ],
+  "usedPages": [
+    "page-121",
+    "page-122",
+    "page-123",
+    "page-124",
+    "page-125"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "1.10 Internal Description: The State-Space Description 121",
+  "foundEnd": false,
+  "endBeforeLine": "",
+  "endBeforeCode": "",
+  "charCount": 15955
+}

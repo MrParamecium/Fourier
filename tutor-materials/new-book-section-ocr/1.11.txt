@@ -1,0 +1,11 @@
+# Aquarius section OCR
+section_id: 1.11
+source_pages: page-126
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+1.11 MATLAB: W ORKING WITH F UNCTIONS
+      Working with functions is fundamental to signals and systems applications. MATLAB provides
+      several methods of defining and evaluating functions. An understanding and proficient use of these
+      methods are therefore necessary and beneficial.

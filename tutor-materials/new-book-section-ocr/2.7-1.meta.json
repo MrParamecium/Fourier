@@ -1,0 +1,18 @@
+{
+  "sectionId": "2.7-1",
+  "sourcePages": [
+    "page-213",
+    "page-214"
+  ],
+  "usedPages": [
+    "page-213",
+    "page-214"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "2.7-1 Script M-Files",
+  "foundEnd": true,
+  "endBeforeLine": "2.7-2 Function M-Files",
+  "endBeforeCode": "2.7-2",
+  "charCount": 3648
+}

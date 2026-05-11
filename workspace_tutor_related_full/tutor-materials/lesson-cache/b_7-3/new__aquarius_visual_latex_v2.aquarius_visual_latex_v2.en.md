@@ -10,8 +10,10 @@
 - MATLAB indexing
 - sampled sinusoid
 
+## 1. Colon notation creates stored vectors
+
 $$\texttt{a:b:c}$$
-*This is the core MATLAB pattern for creating a row vector of evenly spaced values.
+This is the core MATLAB pattern for creating a row vector of evenly spaced values.
 
 - \(a\) is the **first value** (start)
 - \(b\) is the **step size** (increment)
@@ -27,14 +29,16 @@ MATLAB keeps adding the step while the next value does not pass \(c\). This mean
 Any problem asking for evenly spaced values or a vector grid.
 
 #### Common Misuse
-Assuming the termination value \(c\) must always appear in the output vector.*
+Assuming the termination value \(c\) must always appear in the output vector.
 
 %%KC_BLOCK%%<div class="kc-visual-meta" data-visual-kind="generate_image" data-teaching-role="concept_anchor" data-visual-use-b64="eyJjcmFtIjoiTWFrZSB0aGUgY29sb24gcGF0dGVybiBhbmQgZXhjbHVkZWQgZW5kcG9pbnQgb2J2aW91cyBhdCBhIGdsYW5jZS4iLCJzdGFuZGFyZCI6IkNvbm5lY3QgXFwoXFx0ZXh0dHR7MDoyOjExfVxcKSB0byB0aGUgc3RvcmVkIHZlY3RvciBlbnRyaWVzIHN0ZXAgYnkgc3RlcC4iLCJ0b3Bfc2NvcmUiOiJFbXBoYXNpemUgd2h5IDExIGlzIGEgc3RvcHBpbmcgbGltaXQsIG5vdCBndWFyYW50ZWVkIG91dHB1dC4ifQ==" style="display:none;"></div>%%KC_END%%
 *🎨 The expression \(\texttt{0:2:11}\) produces six entries ending at 10 — the stop value 11 is a limit, not a guaranteed output.*
 ![Illustration](/generated/gptimage2-1778181824657-8466.png)
 
+## 2. Vectorize the cube roots
+
 $$w_k = e^{j\left(\frac{\pi}{3} + \frac{2\pi k}{3}\right)}, \quad k = 0, 1, 2$$
-*This formula gives the three unique cube roots of \(-1\).
+This formula gives the three unique cube roots of \(-1\).
 
 **Why this formula:** Since \(-1 = e^{j(\pi + 2\pi k)}\), taking the cube root divides the exponent angle by 3, yielding \(e^{j(\pi/3 + 2\pi k/3)}\).
 
@@ -57,10 +61,12 @@ MATLAB evaluates the expression for all three values of \(k\) simultaneously, pr
 A formula evaluated for several consecutive integer values — use a colon vector, not a loop.
 
 #### Common Misuse
-Writing a loop mentally when one vectorized expression already evaluates all entries at once.*
+Writing a loop mentally when one vectorized expression already evaluates all entries at once.
+
+## 3. Index position is not function input
 
 $$\texttt{f(1)} \ne f(t)\big|_{t=1}$$
-***This is the most common indexing trap.**
+**This is the most common indexing trap.**
 
 In MATLAB, indexing starts at **1**. So \(\texttt{x(1)}\) means "the first stored element of vector x" — it does **not** mean the mathematical function value at input \(t = 1\).
 
@@ -75,14 +81,16 @@ If \(\texttt{k = 0:99}\), the stored vector is \([0, 1, 2, 3, 4, \ldots, 99]\).
 Any expression like \(\texttt{f(1)}\), \(\texttt{w(5)}\), or \(\texttt{x(98:100)}\) — always ask: is this a storage position or a function input?
 
 #### Common Misuse
-Reading MATLAB parentheses as ordinary mathematical function notation.*
+Reading MATLAB parentheses as ordinary mathematical function notation.
 
 %%KC_BLOCK%%<div class="kc-visual-meta" data-visual-kind="generate_image" data-teaching-role="trap_exposure" data-visual-use-b64="eyJjcmFtIjoiU3BvdCB0aGUgaW5kZXgtdmVyc3VzLWlucHV0IHRyYXAgaW5zdGFudGx5LiIsInN0YW5kYXJkIjoiVXNlIHRoZSBzaWRlLWJ5LXNpZGUgY29udHJhc3QgdG8gcmVtZW1iZXIgdGhhdCBNQVRMQUIgcG9zaXRpb25zIHN0YXJ0IGF0IDEuIiwidG9wX3Njb3JlIjoiTm90aWNlIHRoYXQgdmVjdG9yIGluZGV4IGFuZCBpbmRlcGVuZGVudCB2YXJpYWJsZSB1c3VhbGx5IGRpZmZlci4ifQ==" style="display:none;"></div>%%KC_END%%
 *🎨 \(\texttt{f(1)}\) retrieves the first stored sample — it does not evaluate the function at \(t = 1\).*
 ![Illustration](/generated/gptimage2-1778181998164-1306.png)
 
+## 4. Build a sampled sinusoid vector
+
 $$\texttt{t = 0:0.2/500:0.2-0.2/500}$$
-*This MATLAB line creates **500 uniformly spaced time samples** over \(0 \le t < 0.2\).
+This MATLAB line creates **500 uniformly spaced time samples** over \(0 \le t < 0.2\).
 
 **Breaking down the three parts:**
 - Start: \(0\) — first time value
@@ -97,10 +105,10 @@ $$\texttt{t = 0:0.2/500:0.2-0.2/500}$$
 Creating a sample grid over a specified interval.
 
 #### Common Misuse
-Ending at \(0.2\) and accidentally changing the intended sample count or endpoint behavior.*
+Ending at \(0.2\) and accidentally changing the intended sample count or endpoint behavior.
 
 $$f(t) = \sin\!\left(2\pi \cdot 10t + \frac{\pi}{6}\right)$$
-*This is the representative sinusoidal signal evaluated at every entry of the time vector \(t\).
+This is the representative sinusoidal signal evaluated at every entry of the time vector \(t\).
 
 **Symbol meanings:**
 - \(10\) — frequency in hertz
@@ -109,9 +117,7 @@ $$f(t) = \sin\!\left(2\pi \cdot 10t + \frac{\pi}{6}\right)$$
 
 **MATLAB evaluation:**
 
-$$\texttt{f =$$
-
-$$\\sin(2*pi*10*t + pi/6)}$$
+$$\texttt{f = sin(2*pi*10*t + pi/6)}$$
 
 MATLAB applies this element by element across the entire vector \(t\), producing a vector of 500 sampled signal values.
 
@@ -119,7 +125,7 @@ MATLAB applies this element by element across the entire vector \(t\), producing
 
 $$f(0) = \sin\!\left(\frac{\pi}{6}\right) = 0.5$$
 
-In MATLAB, this first stored value is accessed as \(\texttt{f(1)}\) — the first position in the output vector, corresponding to \(t = 0\), not \(t = 1\).*
+In MATLAB, this first stored value is accessed as \(\texttt{f(1)}\) — the first position in the output vector, corresponding to \(t = 0\), not \(t = 1\).
 
 ---
 **📌 Key Takeaways**

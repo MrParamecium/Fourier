@@ -1,0 +1,319 @@
+{
+  "section_id": "1.2-4",
+  "section_title": "1.2-4 Combined Operations",
+  "difficulty": "intermediate",
+  "estimated_read_minutes": 6,
+  "learning_objectives": [
+    "Recognize a combined time operation in the form \\(x(at-b)\\).",
+    "Apply time shifting and time scaling in either valid order.",
+    "Identify when the visible shift is \\(b/a\\), not \\(b\\).",
+    "Recognize that negative \\(a\\) adds time reversal."
+  ],
+  "visualization_need": {
+    "level": "interactive",
+    "reason": [
+      "depends_on_parameter_change",
+      "formula_to_phenomenon_gap",
+      "student_should_manipulate_to_understand",
+      "input_output_response_is_visual"
+    ],
+    "recommended_assets": [
+      "react_canvas_demo"
+    ]
+  },
+  "visual_plan": {
+    "primary_anchor": "react_demo",
+    "rationale": "Combined signal operations are easiest to learn by watching a signal shift, scale, and reflect as \\(a\\) and \\(b\\) change. The OCR mentions a figure on page-077, but no cropped figure asset is available, and full-page screenshots are forbidden. A React + Canvas demo is more precise than a static image because the main confusion is parameter-dependent: students often mistake the apparent shift as \\(b\\) instead of \\(b/a\\).",
+    "cram": "Use the demo to recognize the exam pattern \\(x(at-b)=x(a(t-b/a))\\) quickly and choose the correct operation order.",
+    "standard": "Use the demo to connect the formula to one representative example, especially \\(x(2t-6)=x(2(t-3))\\).",
+    "top_score": "Use the demo to test negative \\(a\\), reversal, and how landmarks move under \\(t=(\\tau+b)/a\\)."
+  },
+  "blocks": [
+    {
+      "type": "text_explanation",
+      "instruction": "Create the first lesson page as a compact outline only. Use exactly two short sections: 'Section Objective' and 'Concepts In This Section'. For Section Objective, write one sentence: 'Learn how to combine time shifting, time scaling, and time reversal in expressions like x(at-b).' For Concepts In This Section, list concept names only: combined time operation, two operation orders, effective shift b/a, negative scaling and reversal, worked example x(2t-6). Do not add any expanded introduction, background paragraph, or example on this page."
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Start a new concept page with the heading '## 1. The combined operation x(at-b)'. Explain in 90–130 words that \\(x(at-b)\\) means the original signal \\(x(t)\\) is being viewed through a changed time input \\(at-b\\). Emphasize that the outside signal shape is not being algebraically changed; instead, the time axis is being shifted, scaled, and possibly reversed. Include the sentence: 'The safest exam habit is to rewrite the inside as \\(a(t-b/a)\\) whenever \\(a\\neq 0\\).' End with a mini example: for \\(x(2t-6)\\), rewrite the inside as \\(2(t-3)\\). Avoid long derivations."
+    },
+    {
+      "type": "math_block",
+      "latex": "y(t)=x(at-b)",
+      "explanation_instruction": "Explain that this is the core combined-operation form from the section. Define \\(y(t)\\) as the transformed signal, \\(x(t)\\) as the original signal, \\(a\\) as the time-scaling factor, and \\(b\\) as the shift parameter inside the input. State when to use it: when an exam expression contains both multiplication of \\(t\\) and addition/subtraction inside the signal argument. State the common misuse: treating \\(b\\) as the final visible shift without checking \\(b/a\\)."
+    },
+    {
+      "type": "interactive_demo",
+      "title": "Explore y(t)=x(at-b)",
+      "teaching_role": "concept_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Make students instantly see whether the transformed signal is delayed, advanced, compressed, expanded, or reversed.",
+        "standard": "Let students adjust \\(a\\) and \\(b\\) and compare the original and transformed signal side by side.",
+        "top_score": "Use landmark tracking to show exactly why the apparent shift is \\(b/a\\) and why negative \\(a\\) reverses time."
+      },
+      "demo_spec": {
+        "rendering": "Use React + Canvas. Show two stacked plots on a white background: top plot labeled 'Original x(t)', bottom plot labeled 'Transformed y(t)=x(at-b)'. Use navy for the original signal and muted teal for the transformed signal.",
+        "base_signal": "Use a simple asymmetric piecewise signal so reversal is visible: a triangular pulse with key points (-1,0), (0,1), (2,0). Mark the peak with a small dot labeled 'peak'.",
+        "controls": [
+          "Slider for a from -3 to 3 excluding 0, with snap values -2, -1, 0.5, 1, 2.",
+          "Slider for b from -6 to 6 in integer steps.",
+          "Reset button setting a=2 and b=6."
+        ],
+        "dynamic_labels": [
+          "Display the current formula \\(y(t)=x(at-b)\\).",
+          "Display the rewritten form \\(y(t)=x(a(t-b/a))\\).",
+          "Display 'effective shift = b/a' when \\(a\\neq0\\).",
+          "If \\(a<0\\), display a muted red note: 'negative a includes time reversal'."
+        ],
+        "student_task_prompt": "Ask students to set a=2 and b=6, then observe that the transformed signal behaves like a compression by 2 with an effective shift of 3, not 6.",
+        "what_to_notice": "Write one short note below the demo: 'Landmarks move according to the equation \\(at-b=\\tau\\), so a feature originally at \\(t=\\tau\\) appears at \\(t=(\\tau+b)/a\\).'"
+      }
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Start a new concept page with the heading '## 2. Two valid operation orders'. Explain in 100–140 words that the textbook gives two ways to produce \\(x(at-b)\\). Order 1: shift first by \\(b\\), then replace \\(t\\) with \\(at\\). Order 2: scale first by \\(a\\), then shift by \\(b/a\\). Make the key exam point explicit: both paths give the same final expression, but the second path reveals the effective visible shift more clearly. Include a quick check sentence: 'If your final expression is not exactly \\(x(at-b)\\), the order or shift amount was wrong.' Mention that if \\(a\\) is negative, the scaling step also includes time reversal."
+    },
+    {
+      "type": "math_block",
+      "latex": "x(t-b)\\;\\longrightarrow\\;x(at-b)",
+      "explanation_instruction": "Explain this as the shift-first route: first shift \\(x(t)\\) by \\(b\\) to get \\(x(t-b)\\), then time-scale by replacing \\(t\\) with \\(at\\). State when to use it: when the problem statement asks for shift first. State the common misuse: stopping at \\(x(t-b)\\) and forgetting that the later replacement \\(t\\mapsto at\\) acts inside the shifted expression."
+    },
+    {
+      "type": "math_block",
+      "latex": "x(at)\\;\\longrightarrow\\;x\\!\\left(a\\left(t-\\frac{b}{a}\\right)\\right)=x(at-b)",
+      "explanation_instruction": "Explain this as the scale-first route: first form \\(x(at)\\), then shift by \\(b/a\\), not by \\(b\\). Define \\(b/a\\) as the effective shift after factoring the inside expression. State the exam trigger: any expression like \\(x(2t-6)\\), \\(x(3t+12)\\), or \\(x(-2t+4)\\). State the common misuse: using \\(b\\) as the shift after scaling."
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Start a new concept page with the heading '## 3. Worked example: x(2t-6)'. Give one representative worked example in 120–160 words. Show that \\(a=2\\) and \\(b=6\\). Explain the textbook's first route: delay \\(x(t)\\) by 6 to get \\(x(t-6)\\), then time-compress by factor 2 to get \\(x(2t-6)\\). Then show the cleaner exam route: \\(2t-6=2(t-3)\\), so you can also compress first and then delay by 3. Include this exam note verbatim: 'The trap is saying the final graph is delayed by 6; after factoring, the visible shift is 3.' Keep the tone direct and practical."
+    },
+    {
+      "type": "math_block",
+      "latex": "x(2t-6)=x\\bigl(2(t-3)\\bigr)",
+      "explanation_instruction": "Explain that this formula is the key simplification for the example. Define \\(a=2\\), \\(b=6\\), and \\(b/a=3\\). State when to use it: whenever the inside expression can be factored to reveal the effective shift. State the common misuse: reading \\(x(2t-6)\\) as a delay of 6 instead of recognizing the delay of 3 after compression."
+    },
+    {
+      "type": "section_summary",
+      "instruction": "Create the recap page titled '📌 Key Takeaways'. Include exactly 4 bullet points, each no more than 24 words. The bullets must explicitly include these formulas: \\(y(t)=x(at-b)\\), \\(x(at-b)=x(a(t-b/a))\\), \\(x(2t-6)=x(2(t-3))\\), and the statement that \\(a<0\\) includes time reversal. Do not include worked-example intermediate steps beyond the key formula. End with one bridge sentence: 'Next, you will use these operation rules to read and sketch transformed signals more confidently.'"
+    },
+    {
+      "type": "quiz_plan",
+      "target_questions": 6,
+      "question_range": {
+        "min": 5,
+        "max": 7
+      },
+      "knowledge_points": [
+        {
+          "id": "combined_operation_form",
+          "label": "Recognizing the combined-operation form",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp1_q1",
+              "type": "multiple_choice",
+              "stem": "Which expression matches the general combined-operation form from this section?",
+              "options": [
+                "A. \\(x(t)+a-b\\)",
+                "B. \\(x(at-b)\\)",
+                "C. \\(ax(t-b)\\)",
+                "D. \\(x(t)/(a-b)\\)"
+              ],
+              "correct_option": "B",
+              "explanation": "\\(x(at-b)\\) changes the time input of the signal, combining time scaling and time shifting inside the argument.",
+              "wrong_option_explanations": {
+                "A": "This adds constants outside the signal input; it is not a time-axis operation.",
+                "C": "This scales the amplitude by \\(a\\), not the time variable by \\(a\\).",
+                "D": "This divides the signal value, not the time input."
+              },
+              "hint": "Look for the operation inside the parentheses of \\(x(\\cdot)\\).",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "effective_shift",
+          "label": "Effective shift is b/a",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp2_q1",
+              "type": "multiple_choice",
+              "stem": "Rewrite \\(x(2t-6)\\) to reveal the effective shift.",
+              "options": [
+                "A. \\(x(2(t-6))\\)",
+                "B. \\(x(2(t-3))\\)",
+                "C. \\(x(t-3)\\)",
+                "D. \\(2x(t-6)\\)"
+              ],
+              "correct_option": "B",
+              "explanation": "Factor the inside: \\(2t-6=2(t-3)\\), so the effective shift after scaling is 3.",
+              "wrong_option_explanations": {
+                "A": "\\(2(t-6)=2t-12\\), not \\(2t-6\\).",
+                "C": "This loses the time-compression factor 2.",
+                "D": "This changes amplitude and does not match the input transformation."
+              },
+              "hint": "Factor the coefficient of \\(t\\) from the entire inside expression.",
+              "needs_visual": false,
+              "same_point_variant": true
+            },
+            {
+              "id": "kp2_q2",
+              "type": "multiple_choice",
+              "stem": "For \\(x(3t-12)\\), what is the effective shift after factoring?",
+              "options": [
+                "A. Delay by 12",
+                "B. Delay by 4",
+                "C. Advance by 4",
+                "D. Time expansion by 12"
+              ],
+              "correct_option": "B",
+              "explanation": "\\(3t-12=3(t-4)\\), so the effective shift is a delay of 4.",
+              "wrong_option_explanations": {
+                "A": "This mistakes \\(b\\) for the visible shift; the shift is \\(b/a=12/3=4\\).",
+                "C": "\\(t-4\\) indicates delay, not advance.",
+                "D": "The number 12 is not the time-scaling factor."
+              },
+              "hint": "Use \\(x(at-b)=x(a(t-b/a))\\).",
+              "needs_visual": false,
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "operation_order",
+          "label": "Two valid operation orders",
+          "importance": "medium",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp3_q1",
+              "type": "multiple_choice",
+              "stem": "Which scale-first sequence correctly produces \\(x(at-b)\\)?",
+              "options": [
+                "A. Form \\(x(at)\\), then shift by \\(b/a\\)",
+                "B. Form \\(x(at)\\), then shift by \\(b\\)",
+                "C. Form \\(x(t-b)\\), then shift again by \\(a\\)",
+                "D. Form \\(ax(t)\\), then shift by \\(b\\)"
+              ],
+              "correct_option": "A",
+              "explanation": "After scaling first, the shift must be \\(b/a\\) because \\(at-b=a(t-b/a)\\).",
+              "wrong_option_explanations": {
+                "B": "Shifting by \\(b\\) after scaling usually gives the wrong inside expression.",
+                "C": "This is not the textbook's scale-first route and does not correctly account for scaling.",
+                "D": "\\(ax(t)\\) is amplitude scaling, not time scaling."
+              },
+              "hint": "Factor \\(a\\) from \\(at-b\\).",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "negative_a_reversal",
+          "label": "Negative scaling includes time reversal",
+          "importance": "medium",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp4_q1",
+              "type": "multiple_choice",
+              "stem": "What extra operation occurs when \\(a<0\\) in \\(x(at-b)\\)?",
+              "options": [
+                "A. Amplitude inversion",
+                "B. Time reversal",
+                "C. Vertical shifting",
+                "D. No extra operation"
+              ],
+              "correct_option": "B",
+              "explanation": "A negative time-scaling factor reverses the time axis, so the signal is reflected in time as part of the scaling operation.",
+              "wrong_option_explanations": {
+                "A": "Amplitude inversion would multiply the signal value by a negative number, not the time variable.",
+                "C": "Vertical shifting changes signal value, not time input.",
+                "D": "The sign of \\(a\\) matters; negative \\(a\\) causes reversal."
+              },
+              "hint": "Negative inside the time argument flips the time axis.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "demo_observation",
+          "label": "Interpreting the interactive signal transformation",
+          "importance": "high",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp5_q1",
+              "type": "multiple_choice",
+              "stem": "In the demo, set \\(a=2\\) and \\(b=6\\). A feature originally at \\(t=0\\) appears where in the transformed signal?",
+              "options": [
+                "A. \\(t=6\\)",
+                "B. \\(t=3\\)",
+                "C. \\(t=-3\\)",
+                "D. \\(t=12\\)"
+              ],
+              "correct_option": "B",
+              "explanation": "A feature at original time \\(\\tau=0\\) appears where \\(2t-6=0\\), so \\(t=3\\).",
+              "wrong_option_explanations": {
+                "A": "This is the common trap of using \\(b\\) instead of \\(b/a\\).",
+                "C": "The sign is wrong; \\(2t-6=0\\) gives \\(t=3\\).",
+                "D": "This multiplies instead of solving the time-input equation."
+              },
+              "hint": "Solve \\(at-b=\\tau\\) with \\(\\tau=0\\).",
+              "needs_visual": true,
+              "visual_type": "interactive_demo_state",
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "explain_common_trap",
+          "label": "Explaining why the b-shift answer is wrong",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp6_q1",
+              "type": "short_answer",
+              "stem": "A classmate says \\(x(2t-6)\\) is simply \\(x(t)\\) delayed by 6. Explain precisely why that is wrong.",
+              "ideal_answer": "\\(x(2t-6)\\) must be factored as \\(x(2(t-3))\\). The factor 2 means time compression is also present, and the effective shift is \\(6/2=3\\), not 6.",
+              "grading_rubric": [
+                "Must factor \\(2t-6\\) as \\(2(t-3)\\)",
+                "Must state that time compression by factor 2 is present",
+                "Must identify the effective shift as 3, not 6",
+                "Must avoid describing it as only a delay"
+              ],
+              "explanation": "This checks whether the student understands the main exam trap rather than only recognizing the formula.",
+              "hint": "Rewrite the inside in the form \\(a(t-b/a)\\).",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

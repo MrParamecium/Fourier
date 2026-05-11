@@ -1,0 +1,18 @@
+# Aquarius section OCR
+section_id: 1.8
+source_pages: page-111
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+1.8 System Model: Input–Output Description            111
+
+
+    1.8 S YSTEM M ODEL : I NPUT–O UTPUT D ESCRIPTION
+    A system description in terms of the measurements at the input and output terminals is called
+    the input–output description. As mentioned earlier, systems theory encompasses a variety of
+    systems, such as electrical, mechanical, hydraulic, acoustic, electromechanical, and chemical, as
+    well as social, political, economic, and biological. The first step in analyzing any system is the
+    construction of a system model, which is a mathematical expression or a rule that satisfactorily
+    approximates the dynamical behavior of the system. In this chapter we shall consider only
+    continuous-time systems. Modeling of discrete-time systems is discussed in Ch. 3.

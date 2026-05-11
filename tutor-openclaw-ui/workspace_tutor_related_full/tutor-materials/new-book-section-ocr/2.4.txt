@@ -1,0 +1,108 @@
+# Aquarius section OCR
+section_id: 2.4
+source_pages: page-168, page-169, page-170, page-171, page-172, page-173, page-174, page-175, page-176, page-177, page-178, page-179, page-180, page-181, page-182, page-183, page-184, page-185, page-186, page-187, page-188, page-189, page-190, page-191, page-192, page-193, page-194, page-195, page-196
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+2.4 SYSTEM RESPONSE TO EXTERNAL INPUT:
+THE ZERO-STATE RESPONSE
+This section is devoted to the determination of the zero-state response of an LTIC system. This is the system response y(t) to an input x(t) when the system is in the zero state, that is, when all initial conditions are zero. We shall assume that the systems discussed in this section are in the zero state unless mentioned otherwise. Under these conditions, the zero-state response will be the total response of the system.
+
+We shall use the superposition property for finding the system response to an arbitrary input x(t). Let us define a basic pulse p(t) of unit height and width Δτ, starting at t = 0 as illustrated in Fig. 2.3a. Figure 2.3b shows an input x(t) as a sum of narrow rectangular pulses. The pulse starting at t = nΔτ in Fig. 2.3b has a height x(nΔτ) and can be expressed as x(nΔτ)p(t − nΔτ). Now, x(t) is the sum of all such pulses. Hence,
+
+x(t) = lim
+      Δτ→0 ∑
+           τ x(nΔτ)p(t − nΔτ) = lim
+                                Δτ→0 ∑
+                                     τ [x(nΔτ)/Δτ] p(t − nΔτ)Δτ
+
+The term [x(nΔτ)/Δτ]p(t − nΔτ) represents a pulse p(t − nΔτ) with height [x(nΔτ)/Δτ]. As Δτ → 0, the height of this strip → ∞, but its area remains x(nΔτ). Hence, this strip approaches an impulse x(nΔτ)δ(t − nΔτ) as Δτ → 0 (Fig. 2.3e). Therefore,
+
+x(t) = lim
+      Δτ→0 ∑
+           τ x(nΔτ)δ(t − nΔτ) Δτ                                             (2.22)
+
+To find the response for this input x(t), we consider the input and the corresponding output pairs, as shown in Figs. 2.3c−2.3f and also shown by directed arrow notation as follows:
+
+input ⟹ output
+δ(t) ⟹ h(t)
+δ(t − nΔτ) ⟹ h(t − nΔτ)
+[x(nΔτ)Δτ]δ(t − nΔτ) ⟹ [x(nΔτ)Δτ]h(t − nΔτ)
+lim ∑ x(nΔτ)δ(t − nΔτ)Δτ ⟹ lim ∑ x(nΔτ)h(t − nΔτ)Δτ
+Δτ→0 τ                                     Δτ→0 τ
+
+x(t)   [see Eq. (2.22)]                     y(t)
+
+[[PAGE page-169]]
+2.4  System Response to External Input: The Zero-State Response
+169
+
+(a)
+p(t)
+1
+0
+Δτ
+t
+
+(b)
+x(t)
+x(nΔτ)
+Δτ
+t = nΔτ
+t
+
+(c)
+δ(t)
+0
+t
+
+h(t)
+0
+t
+
+(d)
+δ(t − nΔτ)
+0
+nΔτ
+t
+
+h(t − nΔτ)
+0
+nΔτ
+t
+
+(e)
+= [x(nΔτ)Δτ]δ(t − nΔτ)
+0
+nΔτ
+t
+
+Δy(t)
+x(nΔτ)h(t − nΔτ)Δτ
+0
+nΔτ
+t
+
+(f)
+y(t)
+0
+nΔτ
+t
+
+Figure 2.3  Finding the system response to an arbitrary input x(t).
+
+[[PAGE page-170]]
+170    CHAPTER 2    TIME-DOMAIN ANALYSIS OF CONTINUOUS-TIME SYSTEMS
+
+Therefore,†
+
+y(t) = lim
+Δτ→0 ∑
+τ x(nΔτ)h(t − nΔτ)Δτ
+
+= ∫ from −∞ to ∞ x(τ)h(t − τ)dτ                                              (2.23)
+
+This is the result we seek. We have obtained the system response y(t) to an arbitrary input x(t) in terms of the unit impulse response h(t). Knowing h(t), we can determine the response y(t) to any input. Observe once again the all-pervasive nature of the system’s characteristic modes. The system response to any input is determined by the impulse response, which, in turn, is made up of characteristic modes of the system.
+
+It is important to keep in mind the assumptions used in deriving Eq. (2.23). We assumed a linear time-invariant (LTI) system. Linearity allowed us to use the principle of superposition, and time invariance made it possible to express the system’s response to δ(t − nΔτ) as h(t − nΔτ).

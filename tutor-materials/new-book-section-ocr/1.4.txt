@@ -1,0 +1,11 @@
+# Aquarius section OCR
+section_id: 1.4
+source_pages: page-082
+cut_start_found: yes
+cut_end_found: no
+
+--- OCR ---
+1.4 S OME U SEFUL S IGNAL M ODELS
+     In the area of signals and systems, the step, the impulse, and the exponential functions play very
+     important roles. Not only do they serve as a basis for representing other signals, but their use can
+     simplify many aspects of the signals and systems.

@@ -23,9 +23,19 @@
       "left": 0.1282,
       "bottom": 0.9165,
       "right": 0.5553,
-      "fig_id": "unknown",
-      "caption": "Illustration of time-reversal of a signal x(t) to obtain its reflected version \u03c6(t) = x(\u2212t), showing the original signal (a) and its time-reversed counterpart (b).",
-      "crop_file": "page-076-unknown-1.png"
+      "fig_id": "Figure 1.8",
+      "caption": "Figure 1.8 Time reversal of a signal.",
+      "crop_file": "page-076-figure_1_8-1.png",
+      "description": "The figure contains two time-domain plots that demonstrate time reversal. Panel (a) shows the original signal x(t), with a slanted segment from t=0 to t=5 and a curved segment near negative time; panel (b) shows phi(t)=x(-t), the mirror image of the same waveform about the vertical t=0 axis. Students should notice that every event originally at time t appears at time -t after reversal, while amplitudes are not negated.",
+      "keywords": [
+        "time reversal",
+        "signal reflection about vertical axis",
+        "x(t) to x(-t)",
+        "time-domain waveform",
+        "horizontal time flip",
+        "signal transformation"
+      ],
+      "description_model": "manual-codex-2026-05-09"
     }
   ]
 }

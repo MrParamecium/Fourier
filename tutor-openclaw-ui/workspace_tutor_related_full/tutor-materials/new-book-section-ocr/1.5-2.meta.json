@@ -1,0 +1,20 @@
+{
+  "sectionId": "1.5-2",
+  "sourcePages": [
+    "page-093",
+    "page-094",
+    "page-095"
+  ],
+  "usedPages": [
+    "page-093",
+    "page-094",
+    "page-095"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "1.5-2 Even and Odd Components of a Signal",
+  "foundEnd": true,
+  "endBeforeLine": "1.6 Systems 95",
+  "endBeforeCode": "1.6",
+  "charCount": 3163
+}

@@ -1,0 +1,275 @@
+{
+  "section_id": "1.3-1",
+  "section_title": "1.3-1 Continuous-Time and Discrete-Time Signals",
+  "difficulty": "beginner",
+  "estimated_read_minutes": 4,
+  "learning_objectives": [
+    "Distinguish continuous-time signals from discrete-time signals by looking at which time values are allowed.",
+    "Use the standard notation x(t) for continuous-time signals and x[n] for discrete-time signals.",
+    "Classify real examples such as telephone output, monthly sales, and daily stock averages."
+  ],
+  "visualization_need": {
+    "level": "static",
+    "reason": [
+      "classification_benefits_from_figure",
+      "pattern_recognition_benefits_from_figure",
+      "wikipedia_has_standard_reference_visual",
+      "wrong_vs_right_contrast_is_high_value"
+    ],
+    "recommended_assets": [
+      "wiki_figure"
+    ]
+  },
+  "visual_plan": {
+    "primary_anchor": "wiki_reference",
+    "rationale": "This section is a basic classification lesson: students must see the difference between a signal drawn over every time value and a signal defined only at separated time instants. A static reference visual with a continuous curve and a discrete stem/sample plot is enough; no parameter manipulation is required.",
+    "cram": "Use the visuals to identify the exam cue quickly: unbroken time axis means continuous-time; isolated indexed samples mean discrete-time.",
+    "standard": "Use separate clean visuals for continuous-time and discrete-time signals, then connect each to one representative real-world example.",
+    "top_score": "Use the visuals to emphasize the subtle trap: the classification depends on the time domain, not on whether the amplitudes look smooth, jumpy, large, or small."
+  },
+  "blocks": [
+    {
+      "type": "text_explanation",
+      "page": 1,
+      "instruction": "Render a minimal overview page only. Use exactly two sections. First heading: 'Section Objective' followed by one sentence: 'Learn how to tell whether a signal is continuous-time or discrete-time by checking which time values it is defined on.' Second heading: 'Concepts In This Section' followed by a short bullet list with concept names only: 'continuous-time signal', 'discrete-time signal', 'time-domain classification', 'standard notation x(t) and x[n]'. Do not add background paragraphs, examples, or expanded explanations on this page."
+    },
+    {
+      "type": "math_block",
+      "page": 2,
+      "latex": "x(t),\\quad t \\in \\mathbb{R}",
+      "explanation_instruction": "Start this page with the heading '## 1. Continuous-time signal'. Explain in 90–130 words that a continuous-time signal is specified for a continuum of time values. Define x(t) as the signal value at time t, and state that t can be any real time value in the interval being studied. Include one representative example from the OCR: telephone or video camera output. Include the exam trigger: if the signal is described for every instant of time, use continuous-time notation. Include the common misuse: do not decide continuous-time only because the graph looks smooth; the key is that time is continuous."
+    },
+    {
+      "type": "web_search_image",
+      "page": 2,
+      "search_query": "Wikimedia Commons continuous time signal plot",
+      "purpose": "Show a clean continuous-time signal as a curve drawn over a continuum of time values.",
+      "preferred_sources": [
+        "wikimedia_commons",
+        "wikipedia"
+      ],
+      "prefer_animated": false,
+      "fallback": "Use a simple generated lecture-note visual only if no suitable Wikimedia/Wikipedia curve plot is found: one smooth curve labeled x(t) with a continuous time axis t.",
+      "teaching_role": "concept_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Point to the unbroken curve and continuous time axis as the fast recognition cue.",
+        "standard": "Use the image to connect the notation x(t) with 'defined at every instant'.",
+        "top_score": "Mention that a continuous-time signal may still have sharp corners or jumps; continuity of the drawing is not the formal test."
+      }
+    },
+    {
+      "type": "math_block",
+      "page": 3,
+      "latex": "x[n],\\quad n \\in \\mathbb{Z}",
+      "explanation_instruction": "Start this page with the heading '## 2. Discrete-time signal'. Explain in 90–130 words that a discrete-time signal is specified only at separated time values, usually indexed by an integer n. Define x[n] as the sample or listed value at index n, and state that n is an integer index, not a continuously varying time variable. Include one representative example from the OCR: monthly sales, quarterly GNP, or daily stock market averages. Include the exam trigger: if data exists only at daily, monthly, quarterly, or sample-numbered instants, use discrete-time notation. Include the common misuse: discrete-time does not automatically mean the amplitudes must be only 0 and 1."
+    },
+    {
+      "type": "web_search_image",
+      "page": 3,
+      "search_query": "Wikimedia Commons discrete time signal stem plot",
+      "purpose": "Show a discrete-time signal as isolated samples or stems at integer time indices.",
+      "preferred_sources": [
+        "wikimedia_commons",
+        "wikipedia"
+      ],
+      "prefer_animated": false,
+      "fallback": "Use a simple generated lecture-note visual only if no suitable Wikimedia/Wikipedia stem plot is found: isolated vertical stems at integer n values labeled x[n], with no connecting curve.",
+      "teaching_role": "concept_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Point to separated stems or dots as the fast recognition cue for discrete-time.",
+        "standard": "Use the image to connect x[n] with values listed at integer sample indices.",
+        "top_score": "Emphasize that connecting the dots visually can be misleading unless the problem defines values between samples."
+      }
+    },
+    {
+      "type": "text_explanation",
+      "page": 4,
+      "instruction": "Start with the heading '## 3. Worked classification example'. Write a compact worked example in 110–150 words. Use three items: telephone microphone voltage, monthly sales revenue, and daily stock market average. Classify telephone microphone voltage as continuous-time because it varies over every instant of time. Classify monthly sales and daily stock averages as discrete-time because values are recorded only at separated reporting times. End with a two-line exam note: 'Ask: What time values are allowed?' and 'Do not ask first whether the amplitude looks smooth or numerical.' Keep the tone direct and practical."
+    },
+    {
+      "type": "generate_image",
+      "page": 4,
+      "tool": "openai/gpt-5.4-image-2",
+      "reason": "A custom wrong-vs-right exam-trap visual is needed to show that classification depends on allowed time values, not on whether the amplitude values look smooth. A generic Wikimedia figure may show signal shapes but will not target this specific misconception.",
+      "teaching_role": "trap_exposure",
+      "mode_specific_visual_use": {
+        "cram": "Use the visual to memorize the one-step exam test: inspect the time domain first.",
+        "standard": "Use the visual after the worked example to prevent the common smooth-vs-discrete misconception.",
+        "top_score": "Use the visual to separate time discreteness from amplitude quantization and avoid overclaiming."
+      },
+      "prompt": "Pure white clean background, minimalist lecture-notes educational diagram, exactly one knowledge point: classification depends on time values. Show two side-by-side panels. Left panel labeled 'Continuous-time: defined for every t' with a time axis t and many tiny allowed time marks under a curve x(t). Right panel labeled 'Discrete-time: defined only at listed n' with separated stems at integer indices n labeled x[n]. Add a small muted red warning box at bottom: 'Do not classify by amplitude appearance first.' Use navy, muted teal, soft gray, and muted red only. No decorative styling, no cartoon elements, no dense text, no extra examples.",
+      "style_hint": "lecture notes, academic, clean, restrained color boxes, exam-oriented, one concept only"
+    },
+    {
+      "type": "section_summary",
+      "page": 5,
+      "instruction": "Create a recap page titled '📌 Key Takeaways'. Include exactly 4 bullets. Keep each bullet under 22 words. The bullets must explicitly include the formulas/notational rules \\(x(t),\\ t\\in\\mathbb{R}\\) and \\(x[n],\\ n\\in\\mathbb{Z}\\). Include one bullet saying the classification depends on allowed time values, not amplitude appearance. Include one bullet with examples: telephone/video output is continuous-time; monthly sales/daily averages are discrete-time. End with one sentence: 'In the next signal classifications, we will separate other properties that are easy to confuse with time discreteness.'"
+    },
+    {
+      "type": "quiz_plan",
+      "page": 6,
+      "target_questions": 6,
+      "question_range": {
+        "min": 5,
+        "max": 7
+      },
+      "knowledge_points": [
+        {
+          "id": "continuous_time_definition",
+          "label": "Continuous-time signal definition and notation",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "ct_q1",
+              "type": "multiple_choice",
+              "stem": "Which description best matches a continuous-time signal?",
+              "options": [
+                "A. A signal defined only at integer sample numbers",
+                "B. A signal specified for every time value in a continuum",
+                "C. A signal whose amplitude can only be 0 or 1",
+                "D. A signal that must always be a smooth curve"
+              ],
+              "correct_option": "B",
+              "explanation": "A continuous-time signal is defined over a continuum of time values, commonly written as x(t).",
+              "wrong_option_explanations": {
+                "A": "Integer sample numbers describe a discrete-time signal.",
+                "C": "Amplitude restrictions are not the definition of continuous-time.",
+                "D": "A continuous-time signal may have jumps; smoothness is not the formal test."
+              },
+              "hint": "Focus on which time values are allowed.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "discrete_time_definition",
+          "label": "Discrete-time signal definition and notation",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "dt_q1",
+              "type": "multiple_choice",
+              "stem": "Monthly sales revenue for a company is best modeled as which kind of signal?",
+              "options": [
+                "A. Continuous-time, because money is a continuous quantity",
+                "B. Continuous-time, because each month has many days",
+                "C. Discrete-time, because the value is recorded only once per month",
+                "D. Neither, because sales data is not a signal"
+              ],
+              "correct_option": "C",
+              "explanation": "Monthly sales are indexed by separated reporting times, so the signal is discrete-time.",
+              "wrong_option_explanations": {
+                "A": "The classification is about time values, not whether the amplitude is money.",
+                "B": "The recorded values are monthly, not defined at every instant inside the month.",
+                "D": "A signal can be any quantity that carries information and varies with an independent variable."
+              },
+              "hint": "Ask when the values are actually specified.",
+              "needs_visual": false,
+              "same_point_variant": false
+            },
+            {
+              "id": "dt_q2",
+              "type": "multiple_choice",
+              "stem": "Which notation is the standard clue for a discrete-time signal?",
+              "options": [
+                "A. x(t)",
+                "B. x[n]",
+                "C. x(t, n)",
+                "D. dx/dt"
+              ],
+              "correct_option": "B",
+              "explanation": "Discrete-time signals are commonly written with square brackets and an integer index: x[n].",
+              "wrong_option_explanations": {
+                "A": "x(t) usually indicates a continuous-time signal.",
+                "C": "This mixes continuous and discrete notation without a clear definition.",
+                "D": "dx/dt is a derivative notation, not the standard notation for a discrete-time signal."
+              },
+              "hint": "Look for the integer index notation.",
+              "needs_visual": false,
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "classification_by_time_domain",
+          "label": "Classify by allowed time values, not amplitude appearance",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "domain_q1",
+              "type": "multiple_choice",
+              "stem": "A graph shows isolated stems only at n = ..., -2, -1, 0, 1, 2, ... . What is the safest classification?",
+              "options": [
+                "A. Continuous-time, because the stem heights may be real numbers",
+                "B. Discrete-time, because values are specified only at separated integer indices",
+                "C. Continuous-time, because the horizontal axis is still time",
+                "D. Digital, because every stem plot must be digital"
+              ],
+              "correct_option": "B",
+              "explanation": "Separated integer indices indicate a discrete-time signal. The amplitudes can still be real-valued.",
+              "wrong_option_explanations": {
+                "A": "Real-valued amplitudes do not make the time axis continuous.",
+                "C": "A time-related axis can still be discrete if values exist only at separated instants.",
+                "D": "Discrete-time and digital are not identical classifications."
+              },
+              "hint": "Ignore amplitude first; inspect the time axis.",
+              "needs_visual": true,
+              "visual_type": "discrete_stem_plot_visual_pattern_recognition",
+              "same_point_variant": false
+            },
+            {
+              "id": "domain_q2",
+              "type": "multiple_choice",
+              "stem": "Why is the statement 'this signal is continuous-time because its plotted curve is smooth' not always reliable?",
+              "options": [
+                "A. Because continuous-time signals cannot be smooth",
+                "B. Because smoothness of a drawing is not the definition; the allowed time values matter",
+                "C. Because all smooth curves are discrete-time signals",
+                "D. Because time-domain classification depends only on amplitude units"
+              ],
+              "correct_option": "B",
+              "explanation": "The key test is whether the signal is defined for every time value or only separated values.",
+              "wrong_option_explanations": {
+                "A": "Continuous-time signals can be smooth; they just do not have to be.",
+                "C": "A smooth curve usually suggests continuous-time, but the formal issue is the time domain.",
+                "D": "Amplitude units do not decide continuous-time versus discrete-time."
+              },
+              "hint": "The graph style can help, but the definition is about the domain.",
+              "needs_visual": true,
+              "visual_type": "wrong_vs_right_time_domain_classification_visual",
+              "same_point_variant": true
+            },
+            {
+              "id": "domain_q3",
+              "type": "short_answer",
+              "stem": "A sensor stores temperature once every second as x[0], x[1], x[2], ... . In one sentence, classify the signal and justify using notation.",
+              "ideal_answer": "It is a discrete-time signal because values are stored only at integer sample indices, so the notation x[n] is appropriate.",
+              "grading_rubric": [
+                "Must classify the signal as discrete-time",
+                "Must mention separated sample times or integer indices",
+                "Must use or correctly refer to x[n] notation"
+              ],
+              "explanation": "This checks whether the student can transfer the definition to a common sampled-data scenario.",
+              "hint": "The once-per-second storage times are separated, not a continuum.",
+              "needs_visual": false,
+              "same_point_variant": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

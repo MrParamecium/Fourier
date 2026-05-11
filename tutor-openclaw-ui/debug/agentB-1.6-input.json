@@ -1,0 +1,374 @@
+{
+  "blueprint": {
+    "section_id": "1.6",
+    "section_title": "1.6 Systems",
+    "difficulty": "intermediate",
+    "estimated_read_minutes": 6,
+    "learning_objectives": [
+      "Recognize a system as a rule that maps input signals to output signals.",
+      "Distinguish analysis from design in systems problems.",
+      "Use an RC circuit example to see why initial conditions are needed.",
+      "Identify the input data and initial-condition data required to compute a system response."
+    ],
+    "visualization_need": {
+      "level": "static",
+      "reason": [
+        "system_input_output_structure_is_easier_to_see_than_describe",
+        "textbook_has_canonical_system_block_diagram",
+        "textbook_has_canonical_RC_circuit_example",
+        "formula_to_physical_circuit_gap_needs_visual_anchor"
+      ],
+      "recommended_assets": [
+        "book_image",
+        "latex_native_visual"
+      ]
+    },
+    "visual_plan": {
+      "primary_anchor": "both",
+      "rationale": "Use the available textbook figures as the main visual anchors: the MIMO block diagram for the general system idea and Fig. 1.26 for the RC circuit response example. Use LaTeX-native formulas for the operator view and RC differential equation because the symbolic relationships are central and must be read precisely. Do not use generated images because ready-made textbook figures are available for the key visual concepts.",
+      "cram": "Use the block diagram to instantly recognize input-output system notation and the RC figure to recognize initial-condition response questions.",
+      "standard": "Use each textbook figure beside one representative formula and one worked interpretation so the student connects picture, equation, and exam use.",
+      "top_score": "Use the visuals to separate external input data from stored internal state, which is the subtle distinction behind response prediction."
+    },
+    "blocks": [
+      {
+        "type": "text_explanation",
+        "instruction": "Render Page 1 as a minimal overview only. Title it 'Section Objective'. Write exactly 2 short bullet points: first, 'Understand systems as input-output mappings.' second, 'Learn what information is needed to compute a system response.' Then add the heading 'Concepts In This Section' and list only these concept names as bullets with no explanations: 'system input and output', 'analysis versus design', 'state and initial condition', 'RC circuit response'. Do not add background paragraphs."
+      },
+      {
+        "type": "book_image",
+        "source_page": "page-095",
+        "fig_id": "MIMO system block diagram on page-095",
+        "caption_instruction": "One sentence: this figure shows a multiple-input, multiple-output system mapping several input signals to several output signals.",
+        "description_instruction": "Describe the central system block, the input arrows labeled x_1(t) through x_j(t), and the output arrows labeled y_1(t) through y_k(t). Tell students to notice that a system is treated as a rule or device that transforms input signal(s) into output signal(s), not as one specific physical object.",
+        "teaching_role": "concept_anchor",
+        "mode_specific_visual_use": {
+          "cram": "Train recognition of x(t) entering a block and y(t) leaving it.",
+          "standard": "Use the diagram as the visual definition of a system before showing the formula.",
+          "top_score": "Emphasize that one system may have multiple coupled inputs and outputs, not just a single x(t) and y(t)."
+        }
+      },
+      {
+        "type": "math_block",
+        "latex": "y(t)=\\mathcal{T}\\{x(t)\\}",
+        "explanation_instruction": "Teach this as the system-operator view. First write a heading '1. System as an input-output rule'. Explain in 90-130 words that x(t) is the input signal, y(t) is the output signal, and \\mathcal{T}\\{\\cdot\\} represents the system's rule, device, circuit, algorithm, or mathematical model. Include one minimal example: if x(t) is a microphone signal, a filter system may output y(t) with high-frequency noise reduced. State when to use this formula: whenever a problem asks what output a system produces from a given input. Exam trigger: diagrams with arrows into and out of a block. Common misuse: thinking \\mathcal{T} is multiplication by T; it is an operator acting on the whole signal."
+      },
+      {
+        "type": "text_explanation",
+        "instruction": "Write Page 3 with heading '2. Analysis versus design'. Target 100-140 words. Explain that analysis means the input and system model are given, and the task is to find the output. Design or synthesis means the desired output behavior is known, and the task is to construct or choose a system that produces it. Include one representative example: analysis asks, 'Given this RC circuit and input current x(t), find y(t).' Design asks, 'Choose a circuit so that noise is reduced while the useful signal remains.' End with an exam note: most early signals-and-systems questions are analysis questions, so students should first identify input, system rule, output, and known initial conditions."
+      },
+      {
+        "type": "book_image",
+        "source_page": "page-096",
+        "fig_id": "Fig. 1.26",
+        "caption_instruction": "One sentence: this figure shows a parallel RC circuit driven by input current x(t), with output voltage y(t) measured across the capacitor.",
+        "description_instruction": "Describe the current source x(t), the parallel resistor R and capacitor C, the capacitor voltage v_c(t), and the output voltage y(t). Tell students to notice that the capacitor voltage is both the output being measured and the stored state that affects future behavior.",
+        "teaching_role": "example_support",
+        "mode_specific_visual_use": {
+          "cram": "Recognize capacitor voltage as the stored initial condition in RC response questions.",
+          "standard": "Connect the circuit picture to the differential equation for y(t).",
+          "top_score": "Highlight that the present output depends on both the applied input and the stored capacitor energy."
+        }
+      },
+      {
+        "type": "math_block",
+        "latex": "x(t)=C\\frac{dy(t)}{dt}+\\frac{1}{R}y(t)",
+        "explanation_instruction": "Teach this on the RC example page immediately after Fig. 1.26. In 110-150 words, explain that this is Kirchhoff's current law for the parallel RC circuit: the input current x(t) splits into capacitor current C dy(t)/dt and resistor current y(t)/R. Briefly re-explain that a differential equation contains a derivative, so it describes how the output changes over time, not just its value at one instant. Define every symbol: x(t), y(t), C, R, and dy(t)/dt. Use case: when a circuit or physical system stores energy and the output evolves over time. Exam trigger: RC/RLC circuits with 'find the response'. Common misuse: solving from x(t) alone while ignoring the initial capacitor voltage."
+      },
+      {
+        "type": "math_block",
+        "latex": "y(t)=y(t_0)e^{-\\frac{t-t_0}{RC}}+\\frac{1}{C}\\int_{t_0}^{t}e^{-\\frac{t-\\tau}{RC}}x(\\tau)\\,d\\tau",
+        "explanation_instruction": "Write Page 5 with heading '3. What data is needed to compute the response'. Teach this formula as the solution form for the first-order RC response. Explain in 120-160 words that the first term is the contribution from the initial condition y(t_0), and the integral term is the contribution from the input x(\\tau) over the interval from t_0 to t. Include one minimal worked example: if x(t)=0 after t_0, then the output is y(t)=y(t_0)e^{-(t-t_0)/(RC)}, so stored capacitor voltage decays even with no new input. Exam trigger: questions asking for y(t) for t\\ge t_0. Common misuse: using only the future input and forgetting that the system may already contain stored energy at t_0."
+      },
+      {
+        "type": "text_explanation",
+        "instruction": "Write a short closing concept page titled '4. State and initial conditions'. Target 90-130 words. Explain that a state variable stores the information from the past that is still needed to predict the future response. For the RC circuit, the capacitor voltage v_c(t_0)=y(t_0) is the required initial condition. For more complex passive RLC networks, initial capacitor voltages and initial inductor currents may be needed. Include a quick check: ask the student, 'If two identical RC circuits receive the same future input x(t), but start with different capacitor voltages, must their outputs match?' Answer immediately: no, because the initial condition contributes to the response."
+      },
+      {
+        "type": "section_summary",
+        "instruction": "Create the recap page titled '📌 Key Takeaways'. Include 4 bullets, each no more than 24 words. The bullets must explicitly include these formulas: \\(y(t)=\\mathcal{T}\\{x(t)\\}\\), \\(x(t)=C\\frac{dy(t)}{dt}+\\frac{1}{R}y(t)\\), and \\(y(t)=y(t_0)e^{-\\frac{t-t_0}{RC}}+\\frac{1}{C}\\int_{t_0}^{t}e^{-\\frac{t-\\tau}{RC}}x(\\tau)\\,d\\tau\\). Also include one bullet stating that response prediction needs future input over the interval plus relevant initial conditions. End with one bridge sentence: 'Next, we classify systems by properties such as linearity, causality, and stability.'"
+      },
+      {
+        "type": "quiz_plan",
+        "target_questions": 7,
+        "question_range": {
+          "min": 6,
+          "max": 8
+        },
+        "knowledge_points": [
+          {
+            "id": "system_operator_view",
+            "label": "System as input-output mapping",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 2
+            },
+            "questions": [
+              {
+                "id": "kp1_q1",
+                "type": "multiple_choice",
+                "stem": "In the notation \\(y(t)=\\mathcal{T}\\{x(t)\\}\\), what does \\(\\mathcal{T}\\) represent?",
+                "options": [
+                  "A. A constant multiplied by the input signal",
+                  "B. The time variable of the signal",
+                  "C. The system rule or operator that maps input to output",
+                  "D. The output signal itself"
+                ],
+                "correct_option": "C",
+                "explanation": "\\(\\mathcal{T}\\) represents the system operation applied to the entire input signal \\(x(t)\\).",
+                "wrong_option_explanations": {
+                  "A": "An operator is not necessarily multiplication by a constant.",
+                  "B": "The time variable is \\(t\\), not \\(\\mathcal{T}\\).",
+                  "D": "The output is \\(y(t)\\), not \\(\\mathcal{T}\\)."
+                },
+                "hint": "Ask what object changes x(t) into y(t).",
+                "needs_visual": false,
+                "same_point_variant": true
+              },
+              {
+                "id": "kp1_q2",
+                "type": "multiple_choice",
+                "stem": "A block diagram has signals \\(x_1(t),x_2(t),\\ldots,x_j(t)\\) entering a system and \\(y_1(t),y_2(t),\\ldots,y_k(t)\\) leaving it. What is the best interpretation?",
+                "options": [
+                  "A. The diagram shows only one input and one output.",
+                  "B. The diagram shows a multiple-input, multiple-output system.",
+                  "C. The diagram shows a signal with no system model.",
+                  "D. The diagram shows that outputs must equal inputs."
+                ],
+                "correct_option": "B",
+                "explanation": "Multiple arrows entering and leaving indicate a MIMO system: several inputs are mapped to several outputs.",
+                "wrong_option_explanations": {
+                  "A": "There are several labeled input and output channels.",
+                  "C": "The central block represents the system model or rule.",
+                  "D": "A system transforms inputs; outputs do not have to equal inputs."
+                },
+                "hint": "Count the arrows entering and leaving the block.",
+                "needs_visual": true,
+                "visual_type": "textbook_mimo_block_diagram",
+                "same_point_variant": true
+              }
+            ]
+          },
+          {
+            "id": "analysis_vs_design",
+            "label": "Analysis versus design",
+            "importance": "medium",
+            "exam_weight": "medium",
+            "mastery_rule": {
+              "correct_streak_required": 1
+            },
+            "questions": [
+              {
+                "id": "kp2_q1",
+                "type": "multiple_choice",
+                "stem": "Which task is a systems analysis problem?",
+                "options": [
+                  "A. Given an input and a known system model, compute the output.",
+                  "B. Invent a system that produces a desired output behavior.",
+                  "C. Choose component values before any input is specified.",
+                  "D. Rename the input signal as the output signal."
+                ],
+                "correct_option": "A",
+                "explanation": "Analysis means the system and input are known, and the output is the unknown.",
+                "wrong_option_explanations": {
+                  "B": "That is design or synthesis.",
+                  "C": "That is closer to design, not analysis.",
+                  "D": "A system generally transforms the input; the names are not interchangeable."
+                },
+                "hint": "Analysis asks: what output does this known system produce?",
+                "needs_visual": false,
+                "same_point_variant": false
+              }
+            ]
+          },
+          {
+            "id": "rc_differential_equation",
+            "label": "RC circuit response equation",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 2
+            },
+            "questions": [
+              {
+                "id": "kp3_q1",
+                "type": "multiple_choice",
+                "stem": "For the RC circuit in this section, the equation \\(x(t)=C\\frac{dy(t)}{dt}+\\frac{1}{R}y(t)\\) says that the input current splits into which two currents?",
+                "options": [
+                  "A. Capacitor current and resistor current",
+                  "B. Two equal capacitor currents",
+                  "C. Input voltage and output voltage",
+                  "D. Past current and future current"
+                ],
+                "correct_option": "A",
+                "explanation": "The term \\(C\\frac{dy(t)}{dt}\\) is capacitor current, and \\(\\frac{1}{R}y(t)\\) is resistor current.",
+                "wrong_option_explanations": {
+                  "B": "Only one term is the capacitor current.",
+                  "C": "The equation is written in currents, not as a sum of voltages.",
+                  "D": "The terms are circuit-branch currents, not time categories."
+                },
+                "hint": "Match each term to a branch in the parallel RC circuit.",
+                "needs_visual": true,
+                "visual_type": "textbook_rc_circuit",
+                "same_point_variant": true
+              },
+              {
+                "id": "kp3_q2",
+                "type": "multiple_choice",
+                "stem": "Why is \\(x(t)=C\\frac{dy(t)}{dt}+\\frac{1}{R}y(t)\\) a differential equation?",
+                "options": [
+                  "A. It contains both input and output signals.",
+                  "B. It contains the derivative \\(\\frac{dy(t)}{dt}\\).",
+                  "C. It contains the constants R and C.",
+                  "D. It uses parentheses around t."
+                ],
+                "correct_option": "B",
+                "explanation": "A differential equation relates a function to one or more of its derivatives.",
+                "wrong_option_explanations": {
+                  "A": "Input-output relationships are not automatically differential equations.",
+                  "C": "Constants do not make an equation differential.",
+                  "D": "Function notation does not make an equation differential."
+                },
+                "hint": "Look for a rate-of-change term.",
+                "needs_visual": false,
+                "same_point_variant": true
+              }
+            ]
+          },
+          {
+            "id": "initial_condition_and_response",
+            "label": "Initial condition and response computation",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 2
+            },
+            "questions": [
+              {
+                "id": "kp4_q1",
+                "type": "multiple_choice",
+                "stem": "In the response formula \\(y(t)=y(t_0)e^{-\\frac{t-t_0}{RC}}+\\frac{1}{C}\\int_{t_0}^{t}e^{-\\frac{t-\\tau}{RC}}x(\\tau)\\,d\\tau\\), which part represents the effect of the initial condition?",
+                "options": [
+                  "A. \\(y(t_0)e^{-\\frac{t-t_0}{RC}}\\)",
+                  "B. \\(\\frac{1}{C}\\int_{t_0}^{t}e^{-\\frac{t-\\tau}{RC}}x(\\tau)\\,d\\tau\\)",
+                  "C. Only \\(x(\\tau)\\)",
+                  "D. Only \\(R C\\)"
+                ],
+                "correct_option": "A",
+                "explanation": "The factor \\(y(t_0)\\) is the starting output or capacitor voltage, and its contribution decays exponentially.",
+                "wrong_option_explanations": {
+                  "B": "The integral term represents the contribution of the input over the interval.",
+                  "C": "\\(x(\\tau)\\) is the input signal inside the integral, not the initial condition.",
+                  "D": "\\(RC\\) is the time constant, not the initial-condition term."
+                },
+                "hint": "Find the term containing \\(y(t_0)\\).",
+                "needs_visual": false,
+                "same_point_variant": true
+              },
+              {
+                "id": "kp4_q2",
+                "type": "multiple_choice",
+                "stem": "Two identical RC circuits receive the same input \\(x(t)\\) for \\(t\\ge t_0\\), but one starts with \\(y(t_0)=0\\) and the other starts with \\(y(t_0)=5\\). Must their future outputs be identical?",
+                "options": [
+                  "A. Yes, because the future input is identical.",
+                  "B. Yes, because identical circuits always have identical outputs.",
+                  "C. No, because different initial conditions contribute to the response.",
+                  "D. No, because the resistor value disappears from the equation."
+                ],
+                "correct_option": "C",
+                "explanation": "For systems with stored energy, the future response depends on both future input and initial state.",
+                "wrong_option_explanations": {
+                  "A": "The future input is not the only required data.",
+                  "B": "Identical circuits can respond differently if their stored initial energy differs.",
+                  "D": "The resistor remains in the response through the factor \\(RC\\)."
+                },
+                "hint": "Look at the term containing \\(y(t_0)\\).",
+                "needs_visual": true,
+                "visual_type": "rc_initial_condition_comparison_using_textbook_circuit",
+                "same_point_variant": true
+              },
+              {
+                "id": "kp4_q3",
+                "type": "short_answer",
+                "stem": "State the two kinds of information needed to compute the response \\(y(t)\\) for \\(t\\ge t_0\\) in the RC example.",
+                "ideal_answer": "We need the input signal over the interval from \\(t_0\\) to \\(t\\), and the relevant initial condition at \\(t_0\\), here the capacitor/output voltage \\(y(t_0)=v_c(t_0)\\).",
+                "grading_rubric": [
+                  "Must mention input over the interval from \\(t_0\\) to \\(t\\)",
+                  "Must mention the initial condition at \\(t_0\\)",
+                  "Must identify the RC initial condition as capacitor voltage or output voltage"
+                ],
+                "explanation": "This checks whether the student understands the response-data idea rather than only memorizing formulas.",
+                "hint": "One piece comes from outside the system; one piece is stored inside the system.",
+                "needs_visual": false,
+                "same_point_variant": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "existing_page_images": {
+    "page-095": "/pages/page-095.png",
+    "page-096": "/pages/page-096.png",
+    "page-097": "/pages/page-097.png"
+  },
+  "available_figures": {
+    "page-095": [
+      {
+        "fig_id": "unknown",
+        "caption": "A multiple-input, multiple-output (MIMO) system with j inputs x₁(t) through xⱼ(t) and k outputs y₁(t) through yₖ(t).",
+        "description": "The figure is a block diagram with no axes, showing a central rectangular system block. On the left, multiple input signals labeled x₁(t), x₂(t), …, xⱼ(t) enter the block with arrows pointing right; on the right, multiple output signals labeled y₁(t), y₂(t), …, yₖ(t) leave the block with arrows pointing right. The vertical dots indicate additional channels between the first and last labeled signals. Students should notice that this represents a multiple-input, multiple-output system where several time-varying inputs are mapped to several outputs."
+      }
+    ],
+    "page-096": [
+      {
+        "fig_id": "unknown",
+        "caption": "An RC circuit driven by a current source x(t) with resistor R and capacitor C in parallel, where the capacitor voltage v_c(t) serves as the state variable and y(t) is the output voltage.",
+        "description": "This figure is a circuit diagram with no coordinate axes, showing a current source labeled x(t) feeding a resistor R and capacitor C network. The capacitor voltage is labeled v_c(t) with polarity marks across C, and the output y(t) is measured as the voltage between the top and bottom right terminals with indicated plus and minus signs. The resistor and capacitor share the same two nodes, forming a parallel RC arrangement driven by the source. Students should notice that v_c(t) is the state variable and that the output voltage y(t) is taken across the same node pair as the capacitor branch."
+      }
+    ]
+  },
+  "web_sources": [
+    {
+      "index": 1,
+      "title": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Wikipedia",
+      "snippet": "changed Wikipedia&#039;s domain from wikipedia.com to wikipedia.org. After an early period of exponential growth, the growth rate of the English Wikipedia in terms"
+    },
+    {
+      "index": 2,
+      "title": "English Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/English_Wikipedia",
+      "snippet": "The English Wikipedia is the primary English-language edition of Wikipedia, an online encyclopedia. It was created by Jimmy Wales and Larry Sanger on 15 January"
+    },
+    {
+      "index": 3,
+      "title": "Wikimedia Foundation",
+      "url": "https://en.wikipedia.org/wiki/Wikimedia_Foundation",
+      "snippet": "(wikimediafoundation.org) Wikimedia site navigation (wikimedia.org) Wikimedia Foundation 2022–23 Annual Plan (draft) Wikimedia Foundation annual reports Wikimedia Foundation"
+    },
+    {
+      "index": 4,
+      "title": "Wikivoyage",
+      "url": "https://en.wikipedia.org/wiki/Wikivoyage",
+      "snippet": "the Wikimedia Foundation, the site was moved to the WMF servers in December 2012 and the whole of Wikivoyage was officially re-launched as a Wikimedia project"
+    },
+    {
+      "index": 5,
+      "title": "List of HTTP status codes",
+      "url": "https://en.wikipedia.org/wiki/List_of_HTTP_status_codes",
+      "snippet": "processing, but the processing has not been completed. The request might or might not be eventually acted upon, and may be disallowed when processing"
+    }
+  ],
+  "output_contract": {
+    "format": "single_json_object",
+    "no_markdown_fences": true,
+    "no_prose": true,
+    "compact_json_preferred": true
+  },
+  "section_specific_rules": null,
+  "summary_hint": null,
+  "exam_priority_guidance": null
+}

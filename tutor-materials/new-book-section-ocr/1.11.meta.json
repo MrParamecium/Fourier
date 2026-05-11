@@ -1,0 +1,16 @@
+{
+  "sectionId": "1.11",
+  "sourcePages": [
+    "page-126"
+  ],
+  "usedPages": [
+    "page-126"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "1.11 MATLAB: W ORKING WITH F UNCTIONS",
+  "foundEnd": true,
+  "endBeforeLine": "1.11-1 Anonymous Functions",
+  "endBeforeCode": "1.11-1",
+  "charCount": 293
+}

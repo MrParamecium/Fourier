@@ -1,0 +1,20 @@
+{
+  "sectionId": "1.9",
+  "sourcePages": [
+    "page-119",
+    "page-120",
+    "page-121"
+  ],
+  "usedPages": [
+    "page-119",
+    "page-120",
+    "page-121"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "1.9 Internal and External Descriptions of a System 119",
+  "foundEnd": true,
+  "endBeforeLine": "1.10 Internal Description: The State-Space Description 121",
+  "endBeforeCode": "1.10",
+  "charCount": 7133
+}

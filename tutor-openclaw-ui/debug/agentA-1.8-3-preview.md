@@ -1,0 +1,695 @@
+# Agent A Preview: 1.8-3 1.8-3 Electromechanical Systems
+
+- Difficulty: intermediate
+- Estimated read minutes: 5
+
+## Learning Objectives
+
+- Model an armature-controlled DC motor as a system that converts current into torque and motion.
+- Use torque balance to derive the differential equation for the motor-load system.
+- Interpret the operator form \((JD^2+BD)\theta(t)=K_Tx(t)\) as an input-output system equation.
+- Recognize how inertia, damping, and motor constant affect the output angle response.
+
+## Visualization Need
+
+```json
+{
+  "level": "interactive",
+  "reason": [
+    "formula_to_phenomenon_gap",
+    "depends_on_parameter_change",
+    "input_output_response_is_visual",
+    "student_should_manipulate_to_understand"
+  ],
+  "recommended_assets": [
+    "wiki_figure",
+    "react_canvas_demo"
+  ]
+}
+```
+
+## Visual Plan
+
+```json
+{
+  "primary_anchor": "both",
+  "rationale": "This section has two visual needs: first, students should see the electromechanical chain from current to torque to rotating load; second, they should manipulate parameters such as inertia, damping, and motor constant to connect the differential equation with system behavior. Use a Wikimedia/Wikipedia-style reference schematic first if available, then a React + Canvas demo for response intuition.",
+  "cram": "Use the visual chain to instantly recognize the exam pattern: current input creates torque, torque drives inertia and damping.",
+  "standard": "Use the reference visual plus one representative numeric example to connect the physical diagram to the ODE.",
+  "top_score": "Use parameter changes in the demo to distinguish inertia effects, damping effects, and gain effects without confusing them."
+}
+```
+
+## Planned Blocks
+
+### Block 1: `text_explanation`
+- **instruction**: Create Page 1 as a minimal overview only. Use exactly two short sections: 'Section Objective' and 'Concepts In This Section'. For 'Section Objective', write 1 sentence: this section models a DC motor as a system that converts input current into output angular motion. For 'Concepts In This Section', list concept names only as bullets: current-to-torque law; torque balance; damping and inertia; differential-equation model; operator form. Do not add background paragraphs, examples, formulas, or expanded explanations on this page.
+
+### Block 2: `web_search_image`
+- **search_query**: Wikimedia Commons DC motor schematic armature current torque load inertia damping
+- **purpose**: Show the physical structure behind the equations: an electrical input current drives motor torque, which rotates a mechanical load with inertia and viscous damping.
+- **preferred_sources**:
+```json
+[
+  "wikimedia_commons",
+  "wikipedia"
+]
+```
+- **prefer_animated**:
+```json
+false
+```
+- **fallback**: generate_image
+- **teaching_role**: concept_anchor
+- **mode_specific_visual_use**:
+```json
+{
+  "cram": "Use the diagram to memorize the chain x(t) current -> T(t) torque -> theta(t) motion.",
+  "standard": "Use the diagram before the formulas so the symbols feel tied to physical parts.",
+  "top_score": "Use the diagram to check sign conventions and distinguish input torque from damping torque."
+}
+```
+
+### Block 3: `math_block`
+- **latex**: T(t)=K_Tx(t)
+- **explanation_instruction**: Begin this knowledge page with the heading '## 1. Current creates motor torque'. Explain in 90-130 words that the motor is treated as a converter from input current \(x(t)\) to generated torque \(T(t)\). Define \(K_T\) as the motor torque constant. Say when to use this formula: whenever the problem states an armature-controlled DC motor driven by a current source. Give one minimal example: if \(K_T=3\) and \(x(t)=2\), then \(T(t)=6\). Exam trigger: phrases like 'torque is proportional to armature current'. Common misuse: do not treat \(K_T\) as a time-varying signal unless the problem explicitly says so.
+
+### Block 4: `math_block`
+- **latex**: J\ddot{\theta}(t)=T(t)-B\dot{\theta}(t)
+- **explanation_instruction**: Begin this knowledge page with the heading '## 2. Torque balance on the rotating load'. Explain in 110-150 words that the net torque equals inertia times angular acceleration. Define \(J\) as moment of inertia, \(\theta(t)\) as angular position, \(\dot{\theta}(t)\) as angular velocity, and \(\ddot{\theta}(t)\) as angular acceleration. Explain that viscous damping creates an opposing torque \(B\dot{\theta}(t)\), so it is subtracted from the driving torque. Include one representative example: if \(T=10\), \(B=2\), \(\dot{\theta}=3\), and \(J=4\), then \(4\ddot{\theta}=10-6=4\), so \(\ddot{\theta}=1\). Exam trigger: free-body diagram of a rotating load. Common misuse: adding damping torque instead of subtracting it.
+
+### Block 5: `math_block`
+- **latex**: (JD^2+BD)\theta(t)=T(t)
+- **explanation_instruction**: Begin this knowledge page with the heading '## 3. Operator form of the mechanical side'. Explain in 90-130 words that \(D\) means differentiation with respect to time, so \(D\theta(t)=\dot{\theta}(t)\) and \(D^2\theta(t)=\ddot{\theta}(t)\). Tell Agent B to explicitly rewrite the formula in words: inertia contributes a second-derivative term and damping contributes a first-derivative term. Use case: when converting a physical model into a compact system equation. Exam trigger: expressions involving \(D\), \(D^2\), inertia, and damping. Common misuse: thinking \(D\) is an ordinary algebraic number without remembering that it represents differentiation.
+
+### Block 6: `math_block`
+- **latex**: J\ddot{\theta}(t)+B\dot{\theta}(t)=K_Tx(t)
+- **explanation_instruction**: Begin this knowledge page with the heading '## 4. Final input-output differential equation'. Explain in 110-150 words that substituting \(T(t)=K_Tx(t)\) into the torque balance gives the system equation from input current \(x(t)\) to output angle \(\theta(t)\). Define each symbol again briefly: \(J\) inertia, \(B\) damping, \(K_T\) motor constant, \(x(t)\) input current, \(\theta(t)\) output angle. Include one representative worked example: for \(J=2\), \(B=5\), and \(K_T=4\), the model is \(2\ddot{\theta}(t)+5\dot{\theta}(t)=4x(t)\). Exam trigger: 'derive the differential equation relating output angle to input current'. Common misuse: forgetting to replace \(T(t)\) with \(K_Tx(t)\).
+
+### Block 7: `interactive_demo`
+- **title**: DC motor parameter response demo
+- **purpose**: Let students see how the differential equation changes the output angle response when motor constant, damping, and inertia are adjusted.
+- **teaching_role**: example_support
+- **mode_specific_visual_use**:
+```json
+{
+  "cram": "Use sliders to remember which coefficient controls torque gain, damping resistance, and sluggishness.",
+  "standard": "Use the default values as the representative example, then change one parameter at a time.",
+  "top_score": "Use the demo to compare similar-looking responses and explain which coefficient caused the difference."
+}
+```
+- **demo_spec**:
+```json
+{
+  "rendering": "React + Canvas interactive plot",
+  "input": "Use a step current input \\(x(t)=1\\) starting at \\(t=0\\).",
+  "model": "Simulate \\(J\\ddot{\\theta}(t)+B\\dot{\\theta}(t)=K_Tx(t)\\) numerically with zero initial angle and zero initial angular velocity.",
+  "controls": [
+    {
+      "name": "Motor constant \\(K_T\\)",
+      "range": "0.5 to 5",
+      "default": "2"
+    },
+    {
+      "name": "Inertia \\(J\\)",
+      "range": "0.5 to 8",
+      "default": "2"
+    },
+    {
+      "name": "Damping \\(B\\)",
+      "range": "0.2 to 8",
+      "default": "3"
+    }
+  ],
+  "visual_elements": [
+    "Plot \\(x(t)\\) as a small step-input reference graph.",
+    "Plot \\(\\theta(t)\\) as the main output curve.",
+    "Display the current equation using the selected numerical values.",
+    "Add short labels: higher \\(K_T\\) means stronger drive; higher \\(J\\) means slower acceleration; higher \\(B\\) means stronger velocity opposition."
+  ],
+  "student_tasks": [
+    "Increase \\(K_T\\) while holding \\(J\\) and \\(B\\) fixed; observe that the output grows faster.",
+    "Increase \\(J\\) while holding the others fixed; observe that the response becomes more sluggish.",
+    "Increase \\(B\\); observe that damping resists motion and reduces the velocity buildup."
+  ]
+}
+```
+- **explanation_instruction**: After the demo, write 70-100 words explaining what students should notice. Emphasize one-parameter-at-a-time reasoning. Include the exam note: if a question asks how changing \(J\), \(B\), or \(K_T\) affects behavior, connect the parameter to its term in \(J\ddot{\theta}+B\dot{\theta}=K_Tx\), not to vague intuition alone.
+
+### Block 8: `section_summary`
+- **instruction**: Create the recap page titled '📌 Key Takeaways'. Include 4 concise bullets. The bullets must explicitly include these formulas: \(T(t)=K_Tx(t)\); \(J\ddot{\theta}(t)=T(t)-B\dot{\theta}(t)\); \((JD^2+BD)\theta(t)=T(t)\); \(J\ddot{\theta}(t)+B\dot{\theta}(t)=K_Tx(t)\). Keep each bullet under 25 words if possible. End with one bridge sentence: 'Next, this kind of differential-equation model will help us analyze system behavior more generally.'
+
+### Block 9: `quiz_plan`
+- **target_questions**:
+```json
+6
+```
+- **question_range**:
+```json
+{
+  "min": 5,
+  "max": 7
+}
+```
+- **knowledge_points**:
+```json
+[
+  {
+    "id": "current_to_torque",
+    "label": "Current-to-torque law",
+    "importance": "high",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp1_q1",
+        "type": "multiple_choice",
+        "stem": "For an armature-controlled DC motor driven by current \\(x(t)\\), the generated torque is modeled as \\(T(t)=K_Tx(t)\\). If \\(K_T=4\\) and \\(x(t)=3\\), what is \\(T(t)\\)?",
+        "options": [
+          "A. 7",
+          "B. 12",
+          "C. \\(\\frac{3}{4}\\)",
+          "D. \\(4x(t)+3\\)"
+        ],
+        "correct_option": "B",
+        "explanation": "The torque is proportional to current, so \\(T=K_Tx=4\\cdot3=12\\).",
+        "wrong_option_explanations": {
+          "A": "This adds the values instead of multiplying them.",
+          "C": "This divides current by the motor constant, which is not the stated model.",
+          "D": "The problem gives a numerical current value, so the result should be numerical."
+        },
+        "hint": "Use the proportionality formula exactly: torque equals motor constant times current.",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  },
+  {
+    "id": "torque_balance",
+    "label": "Torque balance with damping and inertia",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "kp2_q1",
+        "type": "multiple_choice",
+        "stem": "Which torque-balance equation correctly represents a rotating load with inertia \\(J\\), driving torque \\(T(t)\\), and viscous damping torque \\(B\\dot{\\theta}(t)\\) opposing motion?",
+        "options": [
+          "A. \\(J\\ddot{\\theta}(t)=T(t)-B\\dot{\\theta}(t)\\)",
+          "B. \\(J\\dot{\\theta}(t)=T(t)-B\\ddot{\\theta}(t)\\)",
+          "C. \\(J\\ddot{\\theta}(t)=T(t)+B\\dot{\\theta}(t)\\)",
+          "D. \\(B\\ddot{\\theta}(t)=T(t)-J\\dot{\\theta}(t)\\)"
+        ],
+        "correct_option": "A",
+        "explanation": "Net torque equals inertia times angular acceleration, and damping opposes motion, so it is subtracted.",
+        "wrong_option_explanations": {
+          "B": "Inertia multiplies angular acceleration, not angular velocity.",
+          "C": "Damping is opposing torque in this model, so it should not be added to the driving torque.",
+          "D": "This swaps the roles of inertia and damping."
+        },
+        "hint": "Ask: which term represents angular acceleration, and which torque resists velocity?",
+        "needs_visual": true,
+        "visual_type": "structure_comparison_check",
+        "same_point_variant": true
+      },
+      {
+        "id": "kp2_q2",
+        "type": "multiple_choice",
+        "stem": "A student writes \\(J\\ddot{\\theta}(t)=T(t)+B\\dot{\\theta}(t)\\). Why is this wrong for the model in this section?",
+        "options": [
+          "A. Damping torque should oppose motion, so it is subtracted.",
+          "B. \\(J\\) should multiply \\(\\dot{\\theta}(t)\\), not \\(\\ddot{\\theta}(t)\\).",
+          "C. The motor constant \\(K_T\\) must replace \\(J\\).",
+          "D. The output angle \\(\\theta(t)\\) cannot appear in a motor model."
+        ],
+        "correct_option": "A",
+        "explanation": "Viscous damping dissipates motion, so its torque acts against the driving torque.",
+        "wrong_option_explanations": {
+          "B": "Inertia correctly multiplies angular acceleration.",
+          "C": "\\(K_T\\) relates current to torque; it does not replace inertia.",
+          "D": "The output angle is exactly the motion variable being modeled."
+        },
+        "hint": "Focus on the physical direction of the damping torque.",
+        "needs_visual": true,
+        "visual_type": "wrong_vs_right_visual_check",
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "operator_form",
+    "label": "Operator form using \\(D\\)",
+    "importance": "medium",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp3_q1",
+        "type": "multiple_choice",
+        "stem": "In the operator expression \\((JD^2+BD)\\theta(t)=T(t)\\), what does \\(D^2\\theta(t)\\) mean?",
+        "options": [
+          "A. \\(\\theta(t)^2\\)",
+          "B. \\(2\\theta(t)\\)",
+          "C. \\(\\ddot{\\theta}(t)\\)",
+          "D. \\(\\dot{\\theta}(t)^2\\)"
+        ],
+        "correct_option": "C",
+        "explanation": "\\(D\\) means differentiate with respect to time, so \\(D^2\\theta(t)\\) means the second derivative \\(\\ddot{\\theta}(t)\\).",
+        "wrong_option_explanations": {
+          "A": "The superscript on \\(D\\) means repeated differentiation, not squaring \\(\\theta\\).",
+          "B": "It does not mean multiplying the signal by 2.",
+          "D": "It is the second derivative, not the square of the first derivative."
+        },
+        "hint": "\\(D\\) is an operator, not an ordinary variable.",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  },
+  {
+    "id": "final_differential_equation",
+    "label": "Final input-output model",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "kp4_q1",
+        "type": "short_answer",
+        "stem": "Starting from \\(T(t)=K_Tx(t)\\) and \\(J\\ddot{\\theta}(t)=T(t)-B\\dot{\\theta}(t)\\), write the final differential equation relating \\(x(t)\\) to \\(\\theta(t)\\).",
+        "ideal_answer": "\\(J\\ddot{\\theta}(t)+B\\dot{\\theta}(t)=K_Tx(t)\\).",
+        "grading_rubric": [
+          "Must substitute \\(T(t)=K_Tx(t)\\).",
+          "Must move the damping term to the left side or otherwise write an equivalent equation.",
+          "Must keep \\(\\ddot{\\theta}(t)\\) with \\(J\\) and \\(\\dot{\\theta}(t)\\) with \\(B\\)."
+        ],
+        "explanation": "This is the main model produced by the section: input current on the right, output angle derivatives on the left.",
+        "hint": "Substitute for \\(T(t)\\), then collect the \\(\\theta\\)-terms on the left.",
+        "needs_visual": false,
+        "same_point_variant": true
+      },
+      {
+        "id": "kp4_q2",
+        "type": "multiple_choice",
+        "stem": "If \\(J=2\\), \\(B=5\\), and \\(K_T=4\\), which equation is the correct motor model?",
+        "options": [
+          "A. \\(2\\ddot{\\theta}(t)+5\\dot{\\theta}(t)=4x(t)\\)",
+          "B. \\(2\\dot{\\theta}(t)+5\\ddot{\\theta}(t)=4x(t)\\)",
+          "C. \\(2\\ddot{\\theta}(t)-5\\dot{\\theta}(t)=4x(t)\\)",
+          "D. \\(4\\ddot{\\theta}(t)+5\\dot{\\theta}(t)=2x(t)\\)"
+        ],
+        "correct_option": "A",
+        "explanation": "Insert the constants into \\(J\\ddot{\\theta}+B\\dot{\\theta}=K_Tx\\).",
+        "wrong_option_explanations": {
+          "B": "This swaps the inertia and damping derivative orders.",
+          "C": "After collecting terms on the left, the damping term is positive in this form.",
+          "D": "This swaps the motor constant and inertia."
+        },
+        "hint": "Match each coefficient to its original term: \\(J\\) with \\(\\ddot{\\theta}\\), \\(B\\) with \\(\\dot{\\theta}\\), \\(K_T\\) with \\(x\\).",
+        "needs_visual": false,
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "parameter_response",
+    "label": "Parameter effects in the interactive response",
+    "importance": "medium",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp5_q1",
+        "type": "multiple_choice",
+        "stem": "In the interactive demo, if \\(J\\) is increased while \\(B\\), \\(K_T\\), and the step input are held fixed, what should you mainly expect?",
+        "options": [
+          "A. The response becomes more sluggish because inertia resists angular acceleration.",
+          "B. The response instantly doubles because inertia is a gain term.",
+          "C. The damping torque disappears.",
+          "D. The input current becomes zero."
+        ],
+        "correct_option": "A",
+        "explanation": "The term \\(J\\ddot{\\theta}\\) shows that larger inertia makes angular acceleration harder for the same driving input.",
+        "wrong_option_explanations": {
+          "B": "Inertia is not a simple output gain; it resists acceleration.",
+          "C": "Damping is controlled by \\(B\\), not \\(J\\).",
+          "D": "Changing inertia does not change the input current."
+        },
+        "hint": "Look at which derivative is multiplied by \\(J\\).",
+        "needs_visual": true,
+        "visual_type": "demo_observation_check",
+        "same_point_variant": false
+      }
+    ]
+  }
+]
+```
+
+## Raw JSON
+
+```json
+{
+  "section_id": "1.8-3",
+  "section_title": "1.8-3 Electromechanical Systems",
+  "difficulty": "intermediate",
+  "estimated_read_minutes": 5,
+  "learning_objectives": [
+    "Model an armature-controlled DC motor as a system that converts current into torque and motion.",
+    "Use torque balance to derive the differential equation for the motor-load system.",
+    "Interpret the operator form \\((JD^2+BD)\\theta(t)=K_Tx(t)\\) as an input-output system equation.",
+    "Recognize how inertia, damping, and motor constant affect the output angle response."
+  ],
+  "visualization_need": {
+    "level": "interactive",
+    "reason": [
+      "formula_to_phenomenon_gap",
+      "depends_on_parameter_change",
+      "input_output_response_is_visual",
+      "student_should_manipulate_to_understand"
+    ],
+    "recommended_assets": [
+      "wiki_figure",
+      "react_canvas_demo"
+    ]
+  },
+  "visual_plan": {
+    "primary_anchor": "both",
+    "rationale": "This section has two visual needs: first, students should see the electromechanical chain from current to torque to rotating load; second, they should manipulate parameters such as inertia, damping, and motor constant to connect the differential equation with system behavior. Use a Wikimedia/Wikipedia-style reference schematic first if available, then a React + Canvas demo for response intuition.",
+    "cram": "Use the visual chain to instantly recognize the exam pattern: current input creates torque, torque drives inertia and damping.",
+    "standard": "Use the reference visual plus one representative numeric example to connect the physical diagram to the ODE.",
+    "top_score": "Use parameter changes in the demo to distinguish inertia effects, damping effects, and gain effects without confusing them."
+  },
+  "blocks": [
+    {
+      "type": "text_explanation",
+      "instruction": "Create Page 1 as a minimal overview only. Use exactly two short sections: 'Section Objective' and 'Concepts In This Section'. For 'Section Objective', write 1 sentence: this section models a DC motor as a system that converts input current into output angular motion. For 'Concepts In This Section', list concept names only as bullets: current-to-torque law; torque balance; damping and inertia; differential-equation model; operator form. Do not add background paragraphs, examples, formulas, or expanded explanations on this page."
+    },
+    {
+      "type": "web_search_image",
+      "search_query": "Wikimedia Commons DC motor schematic armature current torque load inertia damping",
+      "purpose": "Show the physical structure behind the equations: an electrical input current drives motor torque, which rotates a mechanical load with inertia and viscous damping.",
+      "preferred_sources": [
+        "wikimedia_commons",
+        "wikipedia"
+      ],
+      "prefer_animated": false,
+      "fallback": "generate_image",
+      "teaching_role": "concept_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Use the diagram to memorize the chain x(t) current -> T(t) torque -> theta(t) motion.",
+        "standard": "Use the diagram before the formulas so the symbols feel tied to physical parts.",
+        "top_score": "Use the diagram to check sign conventions and distinguish input torque from damping torque."
+      }
+    },
+    {
+      "type": "math_block",
+      "latex": "T(t)=K_Tx(t)",
+      "explanation_instruction": "Begin this knowledge page with the heading '## 1. Current creates motor torque'. Explain in 90-130 words that the motor is treated as a converter from input current \\(x(t)\\) to generated torque \\(T(t)\\). Define \\(K_T\\) as the motor torque constant. Say when to use this formula: whenever the problem states an armature-controlled DC motor driven by a current source. Give one minimal example: if \\(K_T=3\\) and \\(x(t)=2\\), then \\(T(t)=6\\). Exam trigger: phrases like 'torque is proportional to armature current'. Common misuse: do not treat \\(K_T\\) as a time-varying signal unless the problem explicitly says so."
+    },
+    {
+      "type": "math_block",
+      "latex": "J\\ddot{\\theta}(t)=T(t)-B\\dot{\\theta}(t)",
+      "explanation_instruction": "Begin this knowledge page with the heading '## 2. Torque balance on the rotating load'. Explain in 110-150 words that the net torque equals inertia times angular acceleration. Define \\(J\\) as moment of inertia, \\(\\theta(t)\\) as angular position, \\(\\dot{\\theta}(t)\\) as angular velocity, and \\(\\ddot{\\theta}(t)\\) as angular acceleration. Explain that viscous damping creates an opposing torque \\(B\\dot{\\theta}(t)\\), so it is subtracted from the driving torque. Include one representative example: if \\(T=10\\), \\(B=2\\), \\(\\dot{\\theta}=3\\), and \\(J=4\\), then \\(4\\ddot{\\theta}=10-6=4\\), so \\(\\ddot{\\theta}=1\\). Exam trigger: free-body diagram of a rotating load. Common misuse: adding damping torque instead of subtracting it."
+    },
+    {
+      "type": "math_block",
+      "latex": "(JD^2+BD)\\theta(t)=T(t)",
+      "explanation_instruction": "Begin this knowledge page with the heading '## 3. Operator form of the mechanical side'. Explain in 90-130 words that \\(D\\) means differentiation with respect to time, so \\(D\\theta(t)=\\dot{\\theta}(t)\\) and \\(D^2\\theta(t)=\\ddot{\\theta}(t)\\). Tell Agent B to explicitly rewrite the formula in words: inertia contributes a second-derivative term and damping contributes a first-derivative term. Use case: when converting a physical model into a compact system equation. Exam trigger: expressions involving \\(D\\), \\(D^2\\), inertia, and damping. Common misuse: thinking \\(D\\) is an ordinary algebraic number without remembering that it represents differentiation."
+    },
+    {
+      "type": "math_block",
+      "latex": "J\\ddot{\\theta}(t)+B\\dot{\\theta}(t)=K_Tx(t)",
+      "explanation_instruction": "Begin this knowledge page with the heading '## 4. Final input-output differential equation'. Explain in 110-150 words that substituting \\(T(t)=K_Tx(t)\\) into the torque balance gives the system equation from input current \\(x(t)\\) to output angle \\(\\theta(t)\\). Define each symbol again briefly: \\(J\\) inertia, \\(B\\) damping, \\(K_T\\) motor constant, \\(x(t)\\) input current, \\(\\theta(t)\\) output angle. Include one representative worked example: for \\(J=2\\), \\(B=5\\), and \\(K_T=4\\), the model is \\(2\\ddot{\\theta}(t)+5\\dot{\\theta}(t)=4x(t)\\). Exam trigger: 'derive the differential equation relating output angle to input current'. Common misuse: forgetting to replace \\(T(t)\\) with \\(K_Tx(t)\\)."
+    },
+    {
+      "type": "interactive_demo",
+      "title": "DC motor parameter response demo",
+      "purpose": "Let students see how the differential equation changes the output angle response when motor constant, damping, and inertia are adjusted.",
+      "teaching_role": "example_support",
+      "mode_specific_visual_use": {
+        "cram": "Use sliders to remember which coefficient controls torque gain, damping resistance, and sluggishness.",
+        "standard": "Use the default values as the representative example, then change one parameter at a time.",
+        "top_score": "Use the demo to compare similar-looking responses and explain which coefficient caused the difference."
+      },
+      "demo_spec": {
+        "rendering": "React + Canvas interactive plot",
+        "input": "Use a step current input \\(x(t)=1\\) starting at \\(t=0\\).",
+        "model": "Simulate \\(J\\ddot{\\theta}(t)+B\\dot{\\theta}(t)=K_Tx(t)\\) numerically with zero initial angle and zero initial angular velocity.",
+        "controls": [
+          {
+            "name": "Motor constant \\(K_T\\)",
+            "range": "0.5 to 5",
+            "default": "2"
+          },
+          {
+            "name": "Inertia \\(J\\)",
+            "range": "0.5 to 8",
+            "default": "2"
+          },
+          {
+            "name": "Damping \\(B\\)",
+            "range": "0.2 to 8",
+            "default": "3"
+          }
+        ],
+        "visual_elements": [
+          "Plot \\(x(t)\\) as a small step-input reference graph.",
+          "Plot \\(\\theta(t)\\) as the main output curve.",
+          "Display the current equation using the selected numerical values.",
+          "Add short labels: higher \\(K_T\\) means stronger drive; higher \\(J\\) means slower acceleration; higher \\(B\\) means stronger velocity opposition."
+        ],
+        "student_tasks": [
+          "Increase \\(K_T\\) while holding \\(J\\) and \\(B\\) fixed; observe that the output grows faster.",
+          "Increase \\(J\\) while holding the others fixed; observe that the response becomes more sluggish.",
+          "Increase \\(B\\); observe that damping resists motion and reduces the velocity buildup."
+        ]
+      },
+      "explanation_instruction": "After the demo, write 70-100 words explaining what students should notice. Emphasize one-parameter-at-a-time reasoning. Include the exam note: if a question asks how changing \\(J\\), \\(B\\), or \\(K_T\\) affects behavior, connect the parameter to its term in \\(J\\ddot{\\theta}+B\\dot{\\theta}=K_Tx\\), not to vague intuition alone."
+    },
+    {
+      "type": "section_summary",
+      "instruction": "Create the recap page titled '📌 Key Takeaways'. Include 4 concise bullets. The bullets must explicitly include these formulas: \\(T(t)=K_Tx(t)\\); \\(J\\ddot{\\theta}(t)=T(t)-B\\dot{\\theta}(t)\\); \\((JD^2+BD)\\theta(t)=T(t)\\); \\(J\\ddot{\\theta}(t)+B\\dot{\\theta}(t)=K_Tx(t)\\). Keep each bullet under 25 words if possible. End with one bridge sentence: 'Next, this kind of differential-equation model will help us analyze system behavior more generally.'"
+    },
+    {
+      "type": "quiz_plan",
+      "target_questions": 6,
+      "question_range": {
+        "min": 5,
+        "max": 7
+      },
+      "knowledge_points": [
+        {
+          "id": "current_to_torque",
+          "label": "Current-to-torque law",
+          "importance": "high",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp1_q1",
+              "type": "multiple_choice",
+              "stem": "For an armature-controlled DC motor driven by current \\(x(t)\\), the generated torque is modeled as \\(T(t)=K_Tx(t)\\). If \\(K_T=4\\) and \\(x(t)=3\\), what is \\(T(t)\\)?",
+              "options": [
+                "A. 7",
+                "B. 12",
+                "C. \\(\\frac{3}{4}\\)",
+                "D. \\(4x(t)+3\\)"
+              ],
+              "correct_option": "B",
+              "explanation": "The torque is proportional to current, so \\(T=K_Tx=4\\cdot3=12\\).",
+              "wrong_option_explanations": {
+                "A": "This adds the values instead of multiplying them.",
+                "C": "This divides current by the motor constant, which is not the stated model.",
+                "D": "The problem gives a numerical current value, so the result should be numerical."
+              },
+              "hint": "Use the proportionality formula exactly: torque equals motor constant times current.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "torque_balance",
+          "label": "Torque balance with damping and inertia",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp2_q1",
+              "type": "multiple_choice",
+              "stem": "Which torque-balance equation correctly represents a rotating load with inertia \\(J\\), driving torque \\(T(t)\\), and viscous damping torque \\(B\\dot{\\theta}(t)\\) opposing motion?",
+              "options": [
+                "A. \\(J\\ddot{\\theta}(t)=T(t)-B\\dot{\\theta}(t)\\)",
+                "B. \\(J\\dot{\\theta}(t)=T(t)-B\\ddot{\\theta}(t)\\)",
+                "C. \\(J\\ddot{\\theta}(t)=T(t)+B\\dot{\\theta}(t)\\)",
+                "D. \\(B\\ddot{\\theta}(t)=T(t)-J\\dot{\\theta}(t)\\)"
+              ],
+              "correct_option": "A",
+              "explanation": "Net torque equals inertia times angular acceleration, and damping opposes motion, so it is subtracted.",
+              "wrong_option_explanations": {
+                "B": "Inertia multiplies angular acceleration, not angular velocity.",
+                "C": "Damping is opposing torque in this model, so it should not be added to the driving torque.",
+                "D": "This swaps the roles of inertia and damping."
+              },
+              "hint": "Ask: which term represents angular acceleration, and which torque resists velocity?",
+              "needs_visual": true,
+              "visual_type": "structure_comparison_check",
+              "same_point_variant": true
+            },
+            {
+              "id": "kp2_q2",
+              "type": "multiple_choice",
+              "stem": "A student writes \\(J\\ddot{\\theta}(t)=T(t)+B\\dot{\\theta}(t)\\). Why is this wrong for the model in this section?",
+              "options": [
+                "A. Damping torque should oppose motion, so it is subtracted.",
+                "B. \\(J\\) should multiply \\(\\dot{\\theta}(t)\\), not \\(\\ddot{\\theta}(t)\\).",
+                "C. The motor constant \\(K_T\\) must replace \\(J\\).",
+                "D. The output angle \\(\\theta(t)\\) cannot appear in a motor model."
+              ],
+              "correct_option": "A",
+              "explanation": "Viscous damping dissipates motion, so its torque acts against the driving torque.",
+              "wrong_option_explanations": {
+                "B": "Inertia correctly multiplies angular acceleration.",
+                "C": "\\(K_T\\) relates current to torque; it does not replace inertia.",
+                "D": "The output angle is exactly the motion variable being modeled."
+              },
+              "hint": "Focus on the physical direction of the damping torque.",
+              "needs_visual": true,
+              "visual_type": "wrong_vs_right_visual_check",
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "operator_form",
+          "label": "Operator form using \\(D\\)",
+          "importance": "medium",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp3_q1",
+              "type": "multiple_choice",
+              "stem": "In the operator expression \\((JD^2+BD)\\theta(t)=T(t)\\), what does \\(D^2\\theta(t)\\) mean?",
+              "options": [
+                "A. \\(\\theta(t)^2\\)",
+                "B. \\(2\\theta(t)\\)",
+                "C. \\(\\ddot{\\theta}(t)\\)",
+                "D. \\(\\dot{\\theta}(t)^2\\)"
+              ],
+              "correct_option": "C",
+              "explanation": "\\(D\\) means differentiate with respect to time, so \\(D^2\\theta(t)\\) means the second derivative \\(\\ddot{\\theta}(t)\\).",
+              "wrong_option_explanations": {
+                "A": "The superscript on \\(D\\) means repeated differentiation, not squaring \\(\\theta\\).",
+                "B": "It does not mean multiplying the signal by 2.",
+                "D": "It is the second derivative, not the square of the first derivative."
+              },
+              "hint": "\\(D\\) is an operator, not an ordinary variable.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "final_differential_equation",
+          "label": "Final input-output model",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp4_q1",
+              "type": "short_answer",
+              "stem": "Starting from \\(T(t)=K_Tx(t)\\) and \\(J\\ddot{\\theta}(t)=T(t)-B\\dot{\\theta}(t)\\), write the final differential equation relating \\(x(t)\\) to \\(\\theta(t)\\).",
+              "ideal_answer": "\\(J\\ddot{\\theta}(t)+B\\dot{\\theta}(t)=K_Tx(t)\\).",
+              "grading_rubric": [
+                "Must substitute \\(T(t)=K_Tx(t)\\).",
+                "Must move the damping term to the left side or otherwise write an equivalent equation.",
+                "Must keep \\(\\ddot{\\theta}(t)\\) with \\(J\\) and \\(\\dot{\\theta}(t)\\) with \\(B\\)."
+              ],
+              "explanation": "This is the main model produced by the section: input current on the right, output angle derivatives on the left.",
+              "hint": "Substitute for \\(T(t)\\), then collect the \\(\\theta\\)-terms on the left.",
+              "needs_visual": false,
+              "same_point_variant": true
+            },
+            {
+              "id": "kp4_q2",
+              "type": "multiple_choice",
+              "stem": "If \\(J=2\\), \\(B=5\\), and \\(K_T=4\\), which equation is the correct motor model?",
+              "options": [
+                "A. \\(2\\ddot{\\theta}(t)+5\\dot{\\theta}(t)=4x(t)\\)",
+                "B. \\(2\\dot{\\theta}(t)+5\\ddot{\\theta}(t)=4x(t)\\)",
+                "C. \\(2\\ddot{\\theta}(t)-5\\dot{\\theta}(t)=4x(t)\\)",
+                "D. \\(4\\ddot{\\theta}(t)+5\\dot{\\theta}(t)=2x(t)\\)"
+              ],
+              "correct_option": "A",
+              "explanation": "Insert the constants into \\(J\\ddot{\\theta}+B\\dot{\\theta}=K_Tx\\).",
+              "wrong_option_explanations": {
+                "B": "This swaps the inertia and damping derivative orders.",
+                "C": "After collecting terms on the left, the damping term is positive in this form.",
+                "D": "This swaps the motor constant and inertia."
+              },
+              "hint": "Match each coefficient to its original term: \\(J\\) with \\(\\ddot{\\theta}\\), \\(B\\) with \\(\\dot{\\theta}\\), \\(K_T\\) with \\(x\\).",
+              "needs_visual": false,
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "parameter_response",
+          "label": "Parameter effects in the interactive response",
+          "importance": "medium",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp5_q1",
+              "type": "multiple_choice",
+              "stem": "In the interactive demo, if \\(J\\) is increased while \\(B\\), \\(K_T\\), and the step input are held fixed, what should you mainly expect?",
+              "options": [
+                "A. The response becomes more sluggish because inertia resists angular acceleration.",
+                "B. The response instantly doubles because inertia is a gain term.",
+                "C. The damping torque disappears.",
+                "D. The input current becomes zero."
+              ],
+              "correct_option": "A",
+              "explanation": "The term \\(J\\ddot{\\theta}\\) shows that larger inertia makes angular acceleration harder for the same driving input.",
+              "wrong_option_explanations": {
+                "B": "Inertia is not a simple output gain; it resists acceleration.",
+                "C": "Damping is controlled by \\(B\\), not \\(J\\).",
+                "D": "Changing inertia does not change the input current."
+              },
+              "hint": "Look at which derivative is multiplied by \\(J\\).",
+              "needs_visual": true,
+              "visual_type": "demo_observation_check",
+              "same_point_variant": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```

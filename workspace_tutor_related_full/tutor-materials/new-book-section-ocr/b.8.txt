@@ -1,0 +1,9 @@
+# Aquarius section OCR
+section_id: b.8
+source_pages: page-054, page-055, page-056, page-057, page-058
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+B.8 A PPENDIX : U SEFUL M ATHEMATICAL F ORMULAS
+     We conclude this chapter with a selection of useful mathematical facts.

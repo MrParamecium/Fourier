@@ -1,0 +1,65 @@
+# Aquarius section OCR
+section_id: 3.1
+source_pages: page-237, page-238, page-239, page-240
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+3.1 INTRODUCTION
+A discrete-time signal is basically a sequence of numbers. Such signals arise naturally in
+inherently discrete-time situations such as population studies, amortization problems, national
+income models, and radar tracking. They may also arise as a result of sampling continuous-time
+signals in sampled data systems and digital filtering. Such signals can be denoted by x[n], y[n], and
+so on, where the variable n takes integer values, and x[n] denotes the nth number in the sequence
+labeled x. In this notation, the discrete-time variable n is enclosed in square brackets instead of
+parentheses, which we have reserved for enclosing continuous-time variables, such as t.
+
+Systems whose inputs and outputs are discrete-time signals are called discrete-time systems. A
+digital computer is a familiar example of this type of system. A discrete-time signal is a sequence
+of numbers, and a discrete-time system processes a sequence of numbers x[n] to yield another
+sequence y[n] as the output.†
+
+A discrete-time signal, when obtained by uniform sampling of a continuous-time signal x(t),
+can also be expressed as x(nT), where T is the sampling interval and n, the discrete variable taking
+on integer values. Thus, x(nT) denotes the value of the signal x(t) at t = nT. The signal x(nT) is
+a sequence of numbers (sample values), and hence, by definition, is a discrete-time signal. Such
+a signal can also be denoted by the customary discrete-time notation x[n], where x[n] = x(nT). A
+typical discrete-time signal is depicted in Fig. 3.1, which shows both forms of notation. By way
+of an example, a continuous-time exponential x(t) = e^-t, when sampled every T = 0.1 seconds,
+results in a discrete-time signal x(nT) given by
+
+x(nT) = e^-nT = e^-0.1n
+
+† There may be more than one input and more than one output.
+
+237
+
+[[PAGE page-238]]
+238
+CHAPTER 3  TIME-DOMAIN ANALYSIS OF DISCRETE-TIME SYSTEMS
+
+x[n] or x(nT)
+
+−2   1   5   10   n
+−2T   T   5T   10T   t
+
+Figure 3.1  A discrete-time signal.
+
+x(t)
+Continuous to
+discrete,
+C/D
+x[n]
+Discrete-time
+system
+y[n]
+Discrete to
+continuous,
+D/C
+y(t)
+
+Figure 3.2  Processing a continuous-time signal by means of a discrete-time system.
+
+Clearly, this signal is a function of n and may be expressed as x[n]. Such representation is more convenient and will be followed throughout this book, even for signals resulting from sampling continuous-time signals.
+
+Digital filters can process continuous-time signals by discrete-time systems, using appropriate interfaces at the input and the output, as illustrated in Fig. 3.2. A continuous-time signal x(t) is first sampled to convert it into a discrete-time signal x[n], which is then processed by a discrete-time system to yield the output y[n]. A continuous-time signal y(t) is finally constructed from y[n]. We shall use the notations C/D and D/C for conversion from continuous to discrete time and from discrete to continuous time. By using the interfaces in this manner, we can use an appropriate discrete-time system to process a continuous-time signal. As we shall see later in our discussion, discrete-time systems have several advantages over continuous-time systems. For this reason, there is an accelerating trend toward processing continuous-time signals with discrete-time systems.

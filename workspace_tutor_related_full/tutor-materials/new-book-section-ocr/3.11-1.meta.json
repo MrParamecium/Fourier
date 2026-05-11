@@ -1,0 +1,20 @@
+{
+  "sectionId": "3.11-1",
+  "sourcePages": [
+    "page-306",
+    "page-307",
+    "page-308"
+  ],
+  "usedPages": [
+    "page-306",
+    "page-307",
+    "page-308"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "3.11-1 Discrete-Time Functions and Stem Plots",
+  "foundEnd": true,
+  "endBeforeLine": "3.11-2 System Responses Through Filtering",
+  "endBeforeCode": "3.11-2",
+  "charCount": 2538
+}

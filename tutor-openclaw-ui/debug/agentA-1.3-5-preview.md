@@ -1,0 +1,457 @@
+# Agent A Preview: 1.3-5 1.3-5 Deterministic and Random Signals
+
+- Difficulty: beginner
+- Estimated read minutes: 4
+
+## Learning Objectives
+
+- Distinguish deterministic signals from random signals.
+- Recognize when a signal is described by an exact formula or graph versus probabilistic quantities.
+- Use mean and mean-square descriptions as the exam trigger for random signals.
+- Remember that this book studies deterministic signals only.
+
+## Visualization Need
+
+```json
+{
+  "level": "static",
+  "reason": [
+    "classification_benefits_from_figure",
+    "pattern_recognition_benefits_from_figure",
+    "wrong_vs_right_contrast_is_high_value"
+  ],
+  "recommended_assets": [
+    "generated_image"
+  ]
+}
+```
+
+## Visual Plan
+
+```json
+{
+  "primary_anchor": "generated_image",
+  "rationale": "This short section is a classification distinction: exact known signal versus probabilistic signal. There is no textbook figure and the available web sources do not provide a clean signal-specific deterministic-versus-random waveform comparison, so one custom lecture-note comparison visual is justified.",
+  "cram": "Use the visual to recognize the exam cue quickly: exact formula or graph means deterministic; mean or mean-square description means random.",
+  "standard": "Use the visual after the formulas to connect the definitions to one representative deterministic waveform and one representative random-looking waveform.",
+  "top_score": "Use the visual to emphasize the subtle trap: a complicated-looking waveform is not automatically random if its exact rule is known."
+}
+```
+
+## Planned Blocks
+
+### Block 1: `text_explanation`
+- **instruction**: Create a minimal overview page only. Use exactly two short sections: 'Section Objective' and 'Concepts In This Section'. Under 'Section Objective', write one sentence: 'Classify signals as deterministic or random based on how completely their values are known.' Under 'Concepts In This Section', list only these concept names as bullets: deterministic signal; random signal; probabilistic description; course scope. Do not add expanded background or examples on this page.
+
+### Block 2: `math_block`
+- **latex**: x(t)=f(t)\quad\text{known exactly}
+- **explanation_instruction**: Start the page with the heading '## 1. Deterministic signal'. Explain in 80–120 words that a deterministic signal is completely known from a mathematical expression or a graph. Define \(x(t)\) as the signal value at time \(t\), and \(f(t)\) as the exact rule that tells the value. Include the use case: choose this classification when the problem gives a full formula, table, or graph with no uncertainty. Include the exam trigger: 'given exactly' or 'can be predicted precisely'. Include the common misuse: do not call a signal random just because its graph looks complicated.
+
+### Block 3: `text_explanation`
+- **instruction**: Give one representative deterministic example immediately after the formula. Use \(x(t)=3\cos(2\pi t)\). Say that once \(t\) is chosen, the value is fixed, so the signal is deterministic. Add a quick check sentence: 'If the same time \(t\) is tested again under the same rule, the answer does not change.' Keep this block to 60–90 words.
+
+### Block 4: `math_block`
+- **latex**: \mu_X(t)=E\{X(t)\}
+- **explanation_instruction**: Start the page with the heading '## 2. Random signal'. Explain in 70–100 words that a random signal is not known by exact point-by-point values; instead, it is described statistically. Define \(X(t)\) as a random signal, \(E\{\cdot\}\) as expected value or average over many possible outcomes, and \(\mu_X(t)\) as the mean value. Use this formula when the problem describes averages, probability, or uncertainty. Common misuse: do not treat \(\mu_X(t)\) as the actual waveform value in one trial.
+
+### Block 5: `math_block`
+- **latex**: E\{X^2(t)\}
+- **explanation_instruction**: Explain in 60–90 words that mean-square value is another probabilistic description of a random signal. Define \(X^2(t)\) as the squared signal value and \(E\{X^2(t)\}\) as the average squared value over possible outcomes. Mention that the textbook lists mean value and mean-squared value as examples of probabilistic descriptions. Exam trigger: if only statistical quantities are known, classify the signal as random. Common misuse: mean-square information is not the same as knowing the exact signal.
+
+### Block 6: `generate_image`
+- **tool**: openai/gpt-5.4-image-2
+- **reason**: No textbook figure is available, and the available web sources do not provide a clean signal-specific deterministic-versus-random teaching comparison. A custom one-concept comparison visual is needed to make the classification distinction immediate.
+- **teaching_role**: comparison_anchor
+- **mode_specific_visual_use**:
+```json
+{
+  "cram": "Make students instantly associate exact formula or graph with deterministic and statistical labels with random.",
+  "standard": "Support the two definitions with one clear side-by-side visual example.",
+  "top_score": "Show the trap that visual complexity alone is not the classification rule; knowledge type is the rule."
+}
+```
+- **prompt**: Pure white clean background, minimalist lecture-notes educational diagram. Create a side-by-side comparison with exactly two panels. Left panel title: 'Deterministic signal'. Show a smooth cosine waveform labeled x(t)=3 cos(2πt), with a small note: 'exact value known for every t'. Right panel title: 'Random signal'. Show a jagged noise-like waveform with a soft uncertainty band, labeled X(t), with a small note: 'described by mean / mean-square'. Add one centered bottom rule box: 'Classification depends on what is known, not how messy the graph looks.' Use navy, muted teal, soft gray, and muted red only for the trap note. No decorative elements, no cartoons, no dense text, no extra formulas, one clear reading path.
+- **style_hint**: lecture notes, academic, clean, restrained color boxes, exam-oriented, one concept only
+
+### Block 7: `text_explanation`
+- **instruction**: Create a focused page titled '## 3. The exam decision rule'. In 90–130 words, teach the classification rule as a short checklist: exact formula or complete graph means deterministic; values not precisely predictable but described by probability, mean, or mean-square means random; this book studies deterministic signals only. Include one near-miss: 'A noisy-looking plotted curve can still be deterministic if the entire curve is already specified.' End with a quick check: 'If a problem gives only \(E\{X(t)\}\), can you reconstruct the exact waveform? No — so it is random.'
+
+### Block 8: `section_summary`
+- **instruction**: Create the recap page titled '📌 Key Takeaways'. Include exactly 4 bullets, each no more than 22 words. The bullets must explicitly include these formulas: \(x(t)=f(t)\) known exactly; \(\mu_X(t)=E\{X(t)\}\); \(E\{X^2(t)\}\). Also include the course-scope point that the book deals only with deterministic signals. End with one bridge sentence: 'Next, we will continue using deterministic signals as the working model for signal analysis.'
+
+### Block 9: `quiz_plan`
+- **target_questions**:
+```json
+5
+```
+- **question_range**:
+```json
+{
+  "min": 4,
+  "max": 6
+}
+```
+- **knowledge_points**:
+```json
+[
+  {
+    "id": "deterministic_signal_definition",
+    "label": "Deterministic signal classification",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "det_q1",
+        "type": "multiple_choice",
+        "stem": "A signal is given by \\(x(t)=3\\cos(2\\pi t)\\). Which classification is correct?",
+        "options": [
+          "A. Random, because cosine signals depend on time",
+          "B. Deterministic, because the value is exactly known for every \\(t\\)",
+          "C. Random, because the signal changes continuously",
+          "D. Neither, because only constant signals are deterministic"
+        ],
+        "correct_option": "B",
+        "explanation": "The formula gives an exact value for every time \\(t\\), so the signal is deterministic.",
+        "wrong_option_explanations": {
+          "A": "Time variation does not make a signal random.",
+          "C": "Continuous change is not uncertainty; it is still exactly predictable from the formula.",
+          "D": "Deterministic signals can vary with time."
+        },
+        "hint": "Ask whether the value can be predicted exactly once \\(t\\) is chosen.",
+        "needs_visual": false,
+        "same_point_variant": true
+      },
+      {
+        "id": "det_q2",
+        "type": "multiple_choice",
+        "stem": "A plotted waveform looks irregular, but the full graph is completely specified. What should you call it?",
+        "options": [
+          "A. Random, because it looks irregular",
+          "B. Deterministic, because its physical description is completely known",
+          "C. Random, because all non-sinusoidal signals are random",
+          "D. Power signal, because irregularity implies infinite duration"
+        ],
+        "correct_option": "B",
+        "explanation": "The classification depends on whether the signal is completely known, not whether it looks simple.",
+        "wrong_option_explanations": {
+          "A": "Visual messiness is not the definition of randomness.",
+          "C": "Many non-sinusoidal signals are deterministic.",
+          "D": "This section is about deterministic versus random, not energy versus power."
+        },
+        "hint": "The keyword is 'completely specified'.",
+        "needs_visual": true,
+        "visual_type": "wrong_vs_right_visual_check",
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "random_signal_definition",
+    "label": "Random signal and probabilistic description",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "rand_q1",
+        "type": "multiple_choice",
+        "stem": "A signal's exact values cannot be predicted, but its mean \\(\\mu_X(t)=E\\{X(t)\\}\\) is known. Which statement is best?",
+        "options": [
+          "A. It is deterministic because a formula is present",
+          "B. It is random because it is described statistically rather than exactly",
+          "C. It is deterministic because mean value is the same as the waveform",
+          "D. It is neither deterministic nor random"
+        ],
+        "correct_option": "B",
+        "explanation": "Knowing a statistical average is not the same as knowing the exact signal values.",
+        "wrong_option_explanations": {
+          "A": "The formula is for a statistic, not the exact waveform.",
+          "C": "The mean is an average description, not one exact realization of the signal.",
+          "D": "A signal described probabilistically is classified as random."
+        },
+        "hint": "Mean value is a probabilistic description.",
+        "needs_visual": false,
+        "same_point_variant": true
+      },
+      {
+        "id": "rand_q2",
+        "type": "multiple_choice",
+        "stem": "Which description most strongly suggests a random signal?",
+        "options": [
+          "A. \\(x(t)=5e^{-t}u(t)\\)",
+          "B. A complete graph of \\(x(t)\\) is supplied",
+          "C. Only \\(E\\{X(t)\\}\\) and \\(E\\{X^2(t)\\}\\) are known",
+          "D. The signal has a sharp corner"
+        ],
+        "correct_option": "C",
+        "explanation": "Mean and mean-square values are probabilistic descriptions, which are the textbook cue for random signals.",
+        "wrong_option_explanations": {
+          "A": "An exact formula makes the signal deterministic.",
+          "B": "A complete graph is a complete physical description.",
+          "D": "A shape feature does not determine whether the signal is random."
+        },
+        "hint": "Look for statistics, not shape.",
+        "needs_visual": false,
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "course_scope_and_decision_rule",
+    "label": "Course scope and classification decision rule",
+    "importance": "medium",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "scope_q1",
+        "type": "short_answer",
+        "stem": "A classmate says: 'A random signal is any signal with a complicated graph.' Correct this statement in one or two sentences.",
+        "ideal_answer": "A random signal is one whose exact values cannot be predicted and are known only through probabilistic descriptions such as mean or mean-square value. A complicated graph can still be deterministic if it is completely specified.",
+        "grading_rubric": [
+          "Must reject graph complexity as the classification rule",
+          "Must mention exact predictability or complete description",
+          "Must mention probabilistic descriptions such as mean or mean-square"
+        ],
+        "explanation": "This checks the central misconception: random means uncertain, not merely messy-looking.",
+        "hint": "Focus on what is known about the signal, not how it looks.",
+        "needs_visual": true,
+        "visual_type": "generated_waveform_comparison",
+        "same_point_variant": false
+      }
+    ]
+  }
+]
+```
+
+## Raw JSON
+
+```json
+{
+  "section_id": "1.3-5",
+  "section_title": "1.3-5 Deterministic and Random Signals",
+  "difficulty": "beginner",
+  "estimated_read_minutes": 4,
+  "learning_objectives": [
+    "Distinguish deterministic signals from random signals.",
+    "Recognize when a signal is described by an exact formula or graph versus probabilistic quantities.",
+    "Use mean and mean-square descriptions as the exam trigger for random signals.",
+    "Remember that this book studies deterministic signals only."
+  ],
+  "visualization_need": {
+    "level": "static",
+    "reason": [
+      "classification_benefits_from_figure",
+      "pattern_recognition_benefits_from_figure",
+      "wrong_vs_right_contrast_is_high_value"
+    ],
+    "recommended_assets": [
+      "generated_image"
+    ]
+  },
+  "visual_plan": {
+    "primary_anchor": "generated_image",
+    "rationale": "This short section is a classification distinction: exact known signal versus probabilistic signal. There is no textbook figure and the available web sources do not provide a clean signal-specific deterministic-versus-random waveform comparison, so one custom lecture-note comparison visual is justified.",
+    "cram": "Use the visual to recognize the exam cue quickly: exact formula or graph means deterministic; mean or mean-square description means random.",
+    "standard": "Use the visual after the formulas to connect the definitions to one representative deterministic waveform and one representative random-looking waveform.",
+    "top_score": "Use the visual to emphasize the subtle trap: a complicated-looking waveform is not automatically random if its exact rule is known."
+  },
+  "blocks": [
+    {
+      "type": "text_explanation",
+      "instruction": "Create a minimal overview page only. Use exactly two short sections: 'Section Objective' and 'Concepts In This Section'. Under 'Section Objective', write one sentence: 'Classify signals as deterministic or random based on how completely their values are known.' Under 'Concepts In This Section', list only these concept names as bullets: deterministic signal; random signal; probabilistic description; course scope. Do not add expanded background or examples on this page."
+    },
+    {
+      "type": "math_block",
+      "latex": "x(t)=f(t)\\quad\\text{known exactly}",
+      "explanation_instruction": "Start the page with the heading '## 1. Deterministic signal'. Explain in 80–120 words that a deterministic signal is completely known from a mathematical expression or a graph. Define \\(x(t)\\) as the signal value at time \\(t\\), and \\(f(t)\\) as the exact rule that tells the value. Include the use case: choose this classification when the problem gives a full formula, table, or graph with no uncertainty. Include the exam trigger: 'given exactly' or 'can be predicted precisely'. Include the common misuse: do not call a signal random just because its graph looks complicated."
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Give one representative deterministic example immediately after the formula. Use \\(x(t)=3\\cos(2\\pi t)\\). Say that once \\(t\\) is chosen, the value is fixed, so the signal is deterministic. Add a quick check sentence: 'If the same time \\(t\\) is tested again under the same rule, the answer does not change.' Keep this block to 60–90 words."
+    },
+    {
+      "type": "math_block",
+      "latex": "\\mu_X(t)=E\\{X(t)\\}",
+      "explanation_instruction": "Start the page with the heading '## 2. Random signal'. Explain in 70–100 words that a random signal is not known by exact point-by-point values; instead, it is described statistically. Define \\(X(t)\\) as a random signal, \\(E\\{\\cdot\\}\\) as expected value or average over many possible outcomes, and \\(\\mu_X(t)\\) as the mean value. Use this formula when the problem describes averages, probability, or uncertainty. Common misuse: do not treat \\(\\mu_X(t)\\) as the actual waveform value in one trial."
+    },
+    {
+      "type": "math_block",
+      "latex": "E\\{X^2(t)\\}",
+      "explanation_instruction": "Explain in 60–90 words that mean-square value is another probabilistic description of a random signal. Define \\(X^2(t)\\) as the squared signal value and \\(E\\{X^2(t)\\}\\) as the average squared value over possible outcomes. Mention that the textbook lists mean value and mean-squared value as examples of probabilistic descriptions. Exam trigger: if only statistical quantities are known, classify the signal as random. Common misuse: mean-square information is not the same as knowing the exact signal."
+    },
+    {
+      "type": "generate_image",
+      "tool": "openai/gpt-5.4-image-2",
+      "reason": "No textbook figure is available, and the available web sources do not provide a clean signal-specific deterministic-versus-random teaching comparison. A custom one-concept comparison visual is needed to make the classification distinction immediate.",
+      "teaching_role": "comparison_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Make students instantly associate exact formula or graph with deterministic and statistical labels with random.",
+        "standard": "Support the two definitions with one clear side-by-side visual example.",
+        "top_score": "Show the trap that visual complexity alone is not the classification rule; knowledge type is the rule."
+      },
+      "prompt": "Pure white clean background, minimalist lecture-notes educational diagram. Create a side-by-side comparison with exactly two panels. Left panel title: 'Deterministic signal'. Show a smooth cosine waveform labeled x(t)=3 cos(2πt), with a small note: 'exact value known for every t'. Right panel title: 'Random signal'. Show a jagged noise-like waveform with a soft uncertainty band, labeled X(t), with a small note: 'described by mean / mean-square'. Add one centered bottom rule box: 'Classification depends on what is known, not how messy the graph looks.' Use navy, muted teal, soft gray, and muted red only for the trap note. No decorative elements, no cartoons, no dense text, no extra formulas, one clear reading path.",
+      "style_hint": "lecture notes, academic, clean, restrained color boxes, exam-oriented, one concept only"
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Create a focused page titled '## 3. The exam decision rule'. In 90–130 words, teach the classification rule as a short checklist: exact formula or complete graph means deterministic; values not precisely predictable but described by probability, mean, or mean-square means random; this book studies deterministic signals only. Include one near-miss: 'A noisy-looking plotted curve can still be deterministic if the entire curve is already specified.' End with a quick check: 'If a problem gives only \\(E\\{X(t)\\}\\), can you reconstruct the exact waveform? No — so it is random.'"
+    },
+    {
+      "type": "section_summary",
+      "instruction": "Create the recap page titled '📌 Key Takeaways'. Include exactly 4 bullets, each no more than 22 words. The bullets must explicitly include these formulas: \\(x(t)=f(t)\\) known exactly; \\(\\mu_X(t)=E\\{X(t)\\}\\); \\(E\\{X^2(t)\\}\\). Also include the course-scope point that the book deals only with deterministic signals. End with one bridge sentence: 'Next, we will continue using deterministic signals as the working model for signal analysis.'"
+    },
+    {
+      "type": "quiz_plan",
+      "target_questions": 5,
+      "question_range": {
+        "min": 4,
+        "max": 6
+      },
+      "knowledge_points": [
+        {
+          "id": "deterministic_signal_definition",
+          "label": "Deterministic signal classification",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "det_q1",
+              "type": "multiple_choice",
+              "stem": "A signal is given by \\(x(t)=3\\cos(2\\pi t)\\). Which classification is correct?",
+              "options": [
+                "A. Random, because cosine signals depend on time",
+                "B. Deterministic, because the value is exactly known for every \\(t\\)",
+                "C. Random, because the signal changes continuously",
+                "D. Neither, because only constant signals are deterministic"
+              ],
+              "correct_option": "B",
+              "explanation": "The formula gives an exact value for every time \\(t\\), so the signal is deterministic.",
+              "wrong_option_explanations": {
+                "A": "Time variation does not make a signal random.",
+                "C": "Continuous change is not uncertainty; it is still exactly predictable from the formula.",
+                "D": "Deterministic signals can vary with time."
+              },
+              "hint": "Ask whether the value can be predicted exactly once \\(t\\) is chosen.",
+              "needs_visual": false,
+              "same_point_variant": true
+            },
+            {
+              "id": "det_q2",
+              "type": "multiple_choice",
+              "stem": "A plotted waveform looks irregular, but the full graph is completely specified. What should you call it?",
+              "options": [
+                "A. Random, because it looks irregular",
+                "B. Deterministic, because its physical description is completely known",
+                "C. Random, because all non-sinusoidal signals are random",
+                "D. Power signal, because irregularity implies infinite duration"
+              ],
+              "correct_option": "B",
+              "explanation": "The classification depends on whether the signal is completely known, not whether it looks simple.",
+              "wrong_option_explanations": {
+                "A": "Visual messiness is not the definition of randomness.",
+                "C": "Many non-sinusoidal signals are deterministic.",
+                "D": "This section is about deterministic versus random, not energy versus power."
+              },
+              "hint": "The keyword is 'completely specified'.",
+              "needs_visual": true,
+              "visual_type": "wrong_vs_right_visual_check",
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "random_signal_definition",
+          "label": "Random signal and probabilistic description",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "rand_q1",
+              "type": "multiple_choice",
+              "stem": "A signal's exact values cannot be predicted, but its mean \\(\\mu_X(t)=E\\{X(t)\\}\\) is known. Which statement is best?",
+              "options": [
+                "A. It is deterministic because a formula is present",
+                "B. It is random because it is described statistically rather than exactly",
+                "C. It is deterministic because mean value is the same as the waveform",
+                "D. It is neither deterministic nor random"
+              ],
+              "correct_option": "B",
+              "explanation": "Knowing a statistical average is not the same as knowing the exact signal values.",
+              "wrong_option_explanations": {
+                "A": "The formula is for a statistic, not the exact waveform.",
+                "C": "The mean is an average description, not one exact realization of the signal.",
+                "D": "A signal described probabilistically is classified as random."
+              },
+              "hint": "Mean value is a probabilistic description.",
+              "needs_visual": false,
+              "same_point_variant": true
+            },
+            {
+              "id": "rand_q2",
+              "type": "multiple_choice",
+              "stem": "Which description most strongly suggests a random signal?",
+              "options": [
+                "A. \\(x(t)=5e^{-t}u(t)\\)",
+                "B. A complete graph of \\(x(t)\\) is supplied",
+                "C. Only \\(E\\{X(t)\\}\\) and \\(E\\{X^2(t)\\}\\) are known",
+                "D. The signal has a sharp corner"
+              ],
+              "correct_option": "C",
+              "explanation": "Mean and mean-square values are probabilistic descriptions, which are the textbook cue for random signals.",
+              "wrong_option_explanations": {
+                "A": "An exact formula makes the signal deterministic.",
+                "B": "A complete graph is a complete physical description.",
+                "D": "A shape feature does not determine whether the signal is random."
+              },
+              "hint": "Look for statistics, not shape.",
+              "needs_visual": false,
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "course_scope_and_decision_rule",
+          "label": "Course scope and classification decision rule",
+          "importance": "medium",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "scope_q1",
+              "type": "short_answer",
+              "stem": "A classmate says: 'A random signal is any signal with a complicated graph.' Correct this statement in one or two sentences.",
+              "ideal_answer": "A random signal is one whose exact values cannot be predicted and are known only through probabilistic descriptions such as mean or mean-square value. A complicated graph can still be deterministic if it is completely specified.",
+              "grading_rubric": [
+                "Must reject graph complexity as the classification rule",
+                "Must mention exact predictability or complete description",
+                "Must mention probabilistic descriptions such as mean or mean-square"
+              ],
+              "explanation": "This checks the central misconception: random means uncertain, not merely messy-looking.",
+              "hint": "Focus on what is known about the signal, not how it looks.",
+              "needs_visual": true,
+              "visual_type": "generated_waveform_comparison",
+              "same_point_variant": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```

@@ -1,0 +1,117 @@
+# Aquarius section OCR
+section_id: 1.6
+source_pages: page-095, page-096, page-097
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+1.6     Systems    95
+
+A M ODIFICATION FOR C OMPLEX S IGNALS
+While a complex signal can be decomposed into even and odd components, it is more common
+to decompose complex signals using conjugate symmetries. A complex signal x(t) is said to
+be conjugate-symmetric if x(t) = x∗ (−t). A conjugate-symmetric signal is even in the real part
+and odd in the imaginary part. Thus, a real conjugate-symmetric signal is an even signal. A
+signal is conjugate-antisymmetric if x(t) = −x∗ (−t). A conjugate-antisymmetric signal is odd
+in the real part and even in the imaginary part. A real conjugate-antisymmetric signal is an
+odd signal. Any signal x(t) can be decomposed into a conjugate-symmetric portion xcs (t) plus
+a conjugate-antisymmetric portion xca (t). That is,
+
+                                              x(t) = xcs (t) + xca (t)
+
+where
+                                  x(t) + x∗ (−t)                             x(t) − x∗ (−t)
+                      xcs (t) =                        and       xca (t) =
+                                        2                                          2
+The proof is similar to the one for decomposing a signal into even and odd components. As we
+shall see in later chapters, conjugate symmetries commonly occur in real-world signals and their
+transforms.
+
+
+
+1.6 S YSTEMS
+As mentioned in Sec. 1.1, systems are used to process signals to allow modification or extraction of
+additional information from the signals. A system may consist of physical components (hardware
+realization) or of an algorithm that computes the output signal from the input signal (software
+realization).
+     Roughly speaking, a physical system consists of interconnected components, which are
+characterized by their terminal (input–output) relationships. In addition, a system is governed
+by laws of interconnection. For example, in electrical systems, the terminal relationships are
+the familiar voltage-current relationships for the resistors, capacitors, inductors, transformers,
+transistors, and so on, as well as the laws of interconnection (i.e., Kirchhoff’s laws). We use these
+laws to derive mathematical equations relating the outputs to the inputs. These equations then
+represent a mathematical model of the system.
+     A system can be conveniently illustrated by a “black box” with one set of accessible terminals
+where the input variables x1 (t), x2 (t), . . . , xj (t) are applied and another set of accessible terminals
+where the output variables y1 (t), y2 (t), . . . , yk (t) are observed (Fig. 1.25).
+     The study of systems consists of three major areas: mathematical modeling, analysis, and
+design. Although we shall be dealing with mathematical modeling, our main concern is with
+
+
+x1(t)                             y1(t)
+x2(t)                             y2(t)
+  •      •                •         •
+  •      •                •         •
+  •      •                •         •
+xj (t)                            yk(t)
+                                          Figure 1.25 Representation of a system.
+
+[[PAGE page-096]]
+96   CHAPTER 1      SIGNALS AND SYSTEMS
+
+     analysis and design. The major portion of this book is devoted to the analysis problem—how to
+     determine the system outputs for the given inputs and a given mathematical model of the system
+     (or rules governing the system). To a lesser extent, we will also consider the problem of design
+     or synthesis—how to construct a system that will produce a desired set of outputs for the given
+     inputs.
+
+     D ATA N EEDED TO C OMPUTE S YSTEM R ESPONSE
+     To understand what data we need to compute a system response, consider a simple RC circuit with
+     a current source x(t) as its input (Fig. 1.26).
+         The output voltage y(t) is given by
+                                                          #
+                                                         1 t
+                                          y(t) = Rx(t) +      x(τ ) dτ                        (1.18)
+                                                         C −∞
+
+     The limits of the integral on the right-hand side are from −∞ to t because this integral represents
+     the capacitor charge due to the current x(t) flowing in the capacitor, and this charge is the result
+     of the current flowing in the capacitor from −∞. Now, Eq. (1.18) can be expressed as
+                                                     # 0                          # t
+                                                 1                            1
+                                y(t) = Rx(t) +               x(τ ) dτ +                 x(τ ) dτ
+                                                 C    −∞                      C    0
+
+     The middle term on the right-hand side is vC (0), the capacitor voltage at t = 0. Therefore,
+                                                         #
+                                                       1 t
+                              y(t) = vC (0) + Rx(t) +        x(τ ) dτ     t≥0
+                                                       C 0
+     This equation can be readily generalized as
+                                                                 # t
+                                                             1
+                               y(t) = vC (t0 ) + Rx(t) +                x(τ ) dτ           t ≥ t0          (1.19)
+                                                             C    t0
+
+     From Eq. (1.18), the output voltage y(t) at an instant t can be computed if we know the input
+     current flowing in the capacitor throughout its entire past (−∞ to t). Alternatively, if we know the
+     input current x(t) from some moment t0 onward, then, using Eq. (1.19), we can still calculate y(t)
+     for t ≥ t0 from a knowledge of the input current, provided we know vC (t0 ), the initial capacitor
+     voltage (voltage at t0 ). Thus vC (t0 ) contains all the relevant information about the circuit’s entire
+
+
+                                                                        
+                                   R
+
+
+
+                                                                      y(t)
+
+     x(t)                                 C          vc(t)
+
+                                                 
+                                                                              Figure 1.26 Example of a simple
+                                                                        
+                                                                              electrical system.
+
+[[PAGE page-097]]

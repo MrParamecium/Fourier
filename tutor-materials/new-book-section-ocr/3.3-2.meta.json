@@ -1,0 +1,18 @@
+{
+  "sectionId": "3.3-2",
+  "sourcePages": [
+    "page-246",
+    "page-247"
+  ],
+  "usedPages": [
+    "page-246",
+    "page-247"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "3.3-2 Discrete-Time Unit Step Function u[n]",
+  "foundEnd": true,
+  "endBeforeLine": "3.3-3 Discrete-Time Exponential γⁿ",
+  "endBeforeCode": "3.3-3",
+  "charCount": 2088
+}

@@ -1,0 +1,22 @@
+{
+  "sectionId": "2.4-3",
+  "sourcePages": [
+    "page-190",
+    "page-191",
+    "page-192",
+    "page-193"
+  ],
+  "usedPages": [
+    "page-190",
+    "page-191",
+    "page-192",
+    "page-193"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "2.4-3 Interconnected Systems",
+  "foundEnd": true,
+  "endBeforeLine": "2.4-4 A Very Special Function for LTIC Systems:",
+  "endBeforeCode": "2.4-4",
+  "charCount": 6349
+}

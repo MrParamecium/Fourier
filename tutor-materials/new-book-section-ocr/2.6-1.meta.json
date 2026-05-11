@@ -1,0 +1,20 @@
+{
+  "sectionId": "2.6-1",
+  "sourcePages": [
+    "page-203",
+    "page-204",
+    "page-205"
+  ],
+  "usedPages": [
+    "page-203",
+    "page-204",
+    "page-205"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "2.6-1 Dependence of System Behavior on Characteristic Modes",
+  "foundEnd": true,
+  "endBeforeLine": "2.6-2 Response Time of a System: The System Time Constant",
+  "endBeforeCode": "2.6-2",
+  "charCount": 4234
+}

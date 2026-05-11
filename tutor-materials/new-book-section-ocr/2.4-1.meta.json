@@ -1,0 +1,32 @@
+{
+  "sectionId": "2.4-1",
+  "sourcePages": [
+    "page-170",
+    "page-171",
+    "page-172",
+    "page-173",
+    "page-174",
+    "page-175",
+    "page-176",
+    "page-177",
+    "page-178"
+  ],
+  "usedPages": [
+    "page-170",
+    "page-171",
+    "page-172",
+    "page-173",
+    "page-174",
+    "page-175",
+    "page-176",
+    "page-177",
+    "page-178"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "2.4-1 The Convolution Integral",
+  "foundEnd": true,
+  "endBeforeLine": "2.4-2 Graphical Understanding of Convolution Operation",
+  "endBeforeCode": "2.4-2",
+  "charCount": 13277
+}

@@ -1,0 +1,14 @@
+# Aquarius section OCR
+section_id: b.2-2
+source_pages: page-020
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+B.2-2 Sinusoids in Terms of Exponentials
+     From Eq. (B.3), we know that ejϕ = cos ϕ + j sin ϕ and e−jϕ = cos ϕ − j sin ϕ. Adding these two
+     expressions and dividing by 2 provide an expression for cosine in terms of complex exponentials,
+     while subtracting and scaling by 2j provide an expression for sine. That is,
+                                1                                          1 jϕ
+                         cos ϕ = (ejϕ + e−jϕ )         and       sin ϕ =      (e − e−jϕ )             (B.18)
+                                2                                          2j

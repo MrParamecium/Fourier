@@ -1,0 +1,682 @@
+# Agent A Preview: 1.1-2 Signal Power
+
+- Difficulty: intermediate
+- Estimated read minutes: 7
+
+## Learning Objectives
+
+- Classify signals as energy signals or power signals using their long-term behavior.
+- Use the signal power formula as a time average of squared magnitude.
+- Compute power over one period for periodic signals.
+- Connect signal power to rms value and common sinusoidal examples.
+
+## Visualization Need
+
+```json
+{
+  "level": "interactive",
+  "reason": [
+    "formula_to_phenomenon_gap",
+    "depends_on_parameter_change",
+    "student_should_manipulate_to_understand",
+    "pattern_recognition_benefits_from_figure"
+  ],
+  "recommended_assets": [
+    "react_canvas_demo"
+  ]
+}
+```
+
+## Visual Plan
+
+```json
+{
+  "primary_anchor": "both",
+  "rationale": "Use the textbook figures because they are the canonical exam-facing contrast between finite-energy transient signals and finite-power persistent signals. Add a React Canvas demo for the time-average idea, because students understand signal power faster when they can change the averaging window and watch the average settle.",
+  "cram": "Use the visuals to recognize the trigger quickly: decays to zero suggests energy; persists periodically suggests power.",
+  "standard": "Use Figure 1.1 and the averaging demo to connect the formula to one representative classification/computation example.",
+  "top_score": "Use the demo to expose the subtle distinction between infinite total energy and finite average power."
+}
+```
+
+## Planned Blocks
+
+### Block 1: `text_explanation`
+- **instruction**: Create the first page as a compact outline only. Title it 'Section Objective' and write one sentence: 'Learn how signal power measures the long-term average size of signals whose total energy is not finite.' Then add 'Concepts In This Section' as a short bullet list with concept names only: energy signal, power signal, time-average power, periodic-signal power, rms value, sinusoid power. Do not add background paragraphs or explanations on this page.
+
+### Block 2: `book_image`
+- **source_page**: page-066
+- **fig_id**: Figure 1.1
+- **teaching_role**: comparison_anchor
+- **mode_specific_visual_use**:
+```json
+{
+  "cram": "Use the contrast to identify energy-signal versus power-signal shapes immediately.",
+  "standard": "Use the two plots as the main visual anchor before introducing formulas.",
+  "top_score": "Use the figure to stress that shape behavior at large |t| matters more than local amplitude."
+}
+```
+- **caption_instruction**: One sentence: Figure 1.1 contrasts a finite-energy transient signal with a finite-power signal that persists over time.
+- **description_instruction**: Describe the top plot as a signal that rises and dies back toward zero, so its total squared area can be finite. Describe the bottom plot as a continuing oscillatory signal, so total energy keeps accumulating but average power can still be finite. Tell students to focus on what happens as |t| becomes large.
+
+### Block 3: `math_block`
+- **latex**: E_x = \int_{-\infty}^{\infty} |x(t)|^2\,dt
+- **explanation_instruction**: Teach this as the energy formula from Eq. (1.1), used as the comparison point for signal power. Explain each symbol: \(x(t)\) is the signal, \(|x(t)|^2\) is squared magnitude, and the integral adds squared size over all time. State the exam trigger: use energy when the signal dies out as \(|t|\to\infty\). Add one minimal example: a finite pulse has finite energy because it is nonzero only over a limited interval. Common misuse: do not use signed area \(\int x(t)dt\), because positive and negative parts can cancel.
+
+### Block 4: `math_block`
+- **latex**: P_x = \lim_{T\to\infty}\frac{1}{T}\int_{-T/2}^{T/2}|x(t)|^2\,dt
+- **explanation_instruction**: Teach this as Eq. (1.2), the core formula for signal power. Explain that power is the long-term average of squared magnitude, not the total squared area. Define every symbol: \(T\) is the averaging-window length, \([-T/2,T/2]\) is the window, and the limit asks what average remains as the window becomes huge. Use it when total energy is infinite but the average squared size may settle. Exam trigger: a periodic or never-ending bounded signal. Common misuse: forgetting the factor \(1/T\), which turns the calculation back into energy.
+
+### Block 5: `interactive_demo`
+- **teaching_role**: concept_anchor
+- **demo_title**: Watch Energy Grow but Power Settle
+- **mode_specific_visual_use**:
+```json
+{
+  "cram": "Move the window slider and observe whether the average settles or keeps changing.",
+  "standard": "Use the demo after Eq. (1.2) to see why a continuing signal can have finite power.",
+  "top_score": "Compare transient and periodic cases to separate finite energy, infinite energy, and finite power."
+}
+```
+- **instruction**: Build a React + Canvas demo with two selectable signals: (1) a decaying pulse such as \(x(t)=e^{-|t|}\), and (2) a sinusoid such as \(x(t)=\cos t\). Include a slider for averaging-window length \(T\). Show the signal plot, shade the interval \([-T/2,T/2]\), and display two live values: accumulated energy \(\int_{-T/2}^{T/2}|x(t)|^2dt\) and average power \(\frac{1}{T}\int_{-T/2}^{T/2}|x(t)|^2dt\). Add a short observation prompt: 'As \(T\) grows, does the total energy settle, or does the average power settle?' Keep labels large and minimal.
+
+### Block 6: `math_block`
+- **latex**: P_x = \frac{1}{T_0}\int_{t_0}^{t_0+T_0}|x(t)|^2\,dt
+- **explanation_instruction**: Teach this as the shortcut for periodic signals. Explain that \(T_0\) is one period and \(t_0\) can be any starting time because one full period contains the same repeated pattern. Use it when the signal repeats forever. Exam trigger: the problem gives or visually shows a period. Common misuse: integrating over one period but forgetting to divide by the period length.
+
+### Block 7: `book_image`
+- **source_page**: page-067
+- **fig_id**: Fig. 1.2
+- **teaching_role**: example_support
+- **mode_specific_visual_use**:
+```json
+{
+  "cram": "Use the two shapes to decide quickly whether to compute energy or power.",
+  "standard": "Use this as the representative worked example for classification and computation.",
+  "top_score": "Notice that the decaying signal and periodic signal require different formulas even if both are bounded."
+}
+```
+- **caption_instruction**: One sentence: Fig. 1.2 compares a decaying signal measured by energy with a periodic signal measured by power.
+- **description_instruction**: For part (a), point out that the signal eventually decays to zero, so compute energy; state the textbook result \(E_x=8\). For part (b), point out that the signal repeats with period 2 and does not decay, so compute average power over one period; state the textbook result \(P_x=1/3\) and rms value \(1/\sqrt{3}\). Keep this as a representative example, not a full derivation-heavy page.
+
+### Block 8: `math_block`
+- **latex**: x_{\mathrm{rms}} = \sqrt{P_x}
+- **explanation_instruction**: Explain that rms value is the square root of signal power, so signal power is the square of rms value. Define \(x_{\mathrm{rms}}\) as root-mean-square size. Use it when the problem asks for rms after computing power, or when comparing average signal strength. Give one representative result: for \(x(t)=C\cos(\omega_0t+\theta)\), the power is \(C^2/2\), so the rms value is \(|C|/\sqrt{2}\). Common misuse: using peak amplitude \(C\) as the rms value of a sinusoid.
+
+### Block 9: `section_summary`
+- **instruction**: Create a recap page titled '📌 Key Takeaways'. Include compact bullets that explicitly show these core formulas: \(E_x=\int_{-\infty}^{\infty}|x(t)|^2dt\); \(P_x=\lim_{T\to\infty}\frac{1}{T}\int_{-T/2}^{T/2}|x(t)|^2dt\); for periodic signals, \(P_x=\frac{1}{T_0}\int_{t_0}^{t_0+T_0}|x(t)|^2dt\); \(x_{\mathrm{rms}}=\sqrt{P_x}\); for \(C\cos(\omega_0t+\theta)\), \(P_x=C^2/2\) and \(x_{\mathrm{rms}}=|C|/\sqrt{2}\). Also include the concept conclusion: decaying transient signals are usually energy-signal candidates; continuing periodic signals are power-signal candidates. End with one bridge sentence: 'Next, we will use these size measures when analyzing signals and systems more broadly.'
+
+### Block 10: `quiz_plan`
+- **target_questions**:
+```json
+7
+```
+- **question_range**:
+```json
+{
+  "min": 6,
+  "max": 8
+}
+```
+- **knowledge_points**:
+```json
+[
+  {
+    "id": "energy_vs_power_classification",
+    "label": "Classifying energy and power signals",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "kp1_q1",
+        "type": "multiple_choice",
+        "stem": "A signal decays toward zero as \\(|t|\\to\\infty\\). Which measure is usually the first candidate to check?",
+        "options": [
+          "A. Signal energy",
+          "B. Signal power only",
+          "C. Peak amplitude only",
+          "D. Phase shift"
+        ],
+        "correct_option": "A",
+        "explanation": "A signal that dies out over time may have finite total squared area, so signal energy is the natural first measure.",
+        "wrong_option_explanations": {
+          "B": "Power is usually used when total energy is infinite but the long-term average squared size is finite.",
+          "C": "Peak amplitude does not measure total or average signal size.",
+          "D": "Phase shift does not classify the signal as energy or power."
+        },
+        "hint": "Ask whether the total squared area over all time can converge.",
+        "needs_visual": true,
+        "visual_type": "textbook_figure_reference",
+        "same_point_variant": true
+      },
+      {
+        "id": "kp1_q2",
+        "type": "multiple_choice",
+        "stem": "A nonzero periodic signal continues forever and does not decay. What is typically true?",
+        "options": [
+          "A. It has finite energy and zero power.",
+          "B. It has infinite energy but may have finite power.",
+          "C. It has zero energy because positive and negative parts cancel.",
+          "D. It cannot have an rms value."
+        ],
+        "correct_option": "B",
+        "explanation": "A continuing periodic signal keeps accumulating energy forever, but its average squared magnitude over time can be finite.",
+        "wrong_option_explanations": {
+          "A": "A nonzero signal lasting forever generally does not have finite energy.",
+          "C": "Energy and power use \\(|x(t)|^2\\), so positive and negative parts do not cancel.",
+          "D": "RMS is defined from power, so periodic power signals commonly have rms values."
+        },
+        "hint": "Energy adds forever; power averages forever.",
+        "needs_visual": true,
+        "visual_type": "textbook_figure_reference",
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "power_formula",
+    "label": "Time-average power formula",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "kp2_q1",
+        "type": "multiple_choice",
+        "stem": "Which formula correctly defines signal power?",
+        "options": [
+          "A. \\(P_x=\\int_{-\\infty}^{\\infty}|x(t)|^2dt\\)",
+          "B. \\(P_x=\\lim_{T\\to\\infty}\\frac{1}{T}\\int_{-T/2}^{T/2}|x(t)|^2dt\\)",
+          "C. \\(P_x=\\int_{-T/2}^{T/2}x(t)dt\\)",
+          "D. \\(P_x=\\lim_{T\\to 0}\\frac{1}{T}\\int_{-T/2}^{T/2}|x(t)|dt\\)"
+        ],
+        "correct_option": "B",
+        "explanation": "Signal power is the long-term average of squared magnitude.",
+        "wrong_option_explanations": {
+          "A": "That is signal energy, not power.",
+          "C": "This uses signed area and omits squared magnitude and the infinite-time average.",
+          "D": "Power uses squared magnitude and averages as \\(T\\to\\infty\\), not \\(T\\to0\\)."
+        },
+        "hint": "Power means average squared size over a very long interval.",
+        "needs_visual": false,
+        "same_point_variant": true
+      },
+      {
+        "id": "kp2_q2",
+        "type": "multiple_choice",
+        "stem": "In the power formula, what is the purpose of the factor \\(1/T\\)?",
+        "options": [
+          "A. It converts the accumulated squared magnitude into a time average.",
+          "B. It makes negative and positive areas cancel.",
+          "C. It changes a voltage signal into a current signal.",
+          "D. It forces every signal to have zero power."
+        ],
+        "correct_option": "A",
+        "explanation": "The integral accumulates squared magnitude; dividing by \\(T\\) turns that accumulation into an average over the window length.",
+        "wrong_option_explanations": {
+          "B": "The formula uses \\(|x(t)|^2\\), so sign cancellation is not the point.",
+          "C": "The formula does not change the physical type of the signal.",
+          "D": "Many continuing signals have nonzero finite power."
+        },
+        "hint": "Compare total energy versus average energy per unit time.",
+        "needs_visual": true,
+        "visual_type": "interactive_demo_observation",
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "periodic_power_shortcut",
+    "label": "Power of periodic signals",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp3_q1",
+        "type": "multiple_choice",
+        "stem": "For a periodic signal with period \\(T_0\\), which computation is valid for power?",
+        "options": [
+          "A. Average \\(|x(t)|^2\\) over any one full period.",
+          "B. Integrate \\(x(t)\\) over all time without squaring.",
+          "C. Use only the maximum value of \\(x(t)\\).",
+          "D. Average over half a period no matter what the waveform looks like."
+        ],
+        "correct_option": "A",
+        "explanation": "For periodic signals, the long-term average equals the average over one full period.",
+        "wrong_option_explanations": {
+          "B": "Power uses squared magnitude, not signed area.",
+          "C": "Power depends on the whole waveform, not just the peak.",
+          "D": "Half a period is not generally enough unless symmetry specifically justifies it."
+        },
+        "hint": "One complete repeated pattern is enough.",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  },
+  {
+    "id": "rms_and_sinusoid_power",
+    "label": "RMS value and sinusoid power",
+    "importance": "high",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp4_q1",
+        "type": "multiple_choice",
+        "stem": "If \\(P_x=9\\), what is the rms value?",
+        "options": [
+          "A. \\(3\\)",
+          "B. \\(9\\)",
+          "C. \\(81\\)",
+          "D. \\(1/3\\)"
+        ],
+        "correct_option": "A",
+        "explanation": "The rms value is \\(x_{\\mathrm{rms}}=\\sqrt{P_x}=\\sqrt{9}=3\\).",
+        "wrong_option_explanations": {
+          "B": "That is the power, not the rms value.",
+          "C": "That squares the power instead of taking the square root.",
+          "D": "That takes the reciprocal incorrectly."
+        },
+        "hint": "RMS is the square root of power.",
+        "needs_visual": false,
+        "same_point_variant": false
+      },
+      {
+        "id": "kp4_q2",
+        "type": "multiple_choice",
+        "stem": "For \\(x(t)=6\\cos(\\omega_0t+\\theta)\\), what are the power and rms value?",
+        "options": [
+          "A. \\(P_x=36\\), \\(x_{\\mathrm{rms}}=6\\)",
+          "B. \\(P_x=18\\), \\(x_{\\mathrm{rms}}=3\\sqrt{2}\\)",
+          "C. \\(P_x=6\\), \\(x_{\\mathrm{rms}}=\\sqrt{6}\\)",
+          "D. \\(P_x=3\\), \\(x_{\\mathrm{rms}}=\\sqrt{3}\\)"
+        ],
+        "correct_option": "B",
+        "explanation": "A sinusoid of amplitude \\(C\\) has power \\(C^2/2\\). With \\(C=6\\), \\(P_x=36/2=18\\), so rms is \\(\\sqrt{18}=3\\sqrt{2}\\).",
+        "wrong_option_explanations": {
+          "A": "This incorrectly treats peak amplitude as rms and forgets the factor \\(1/2\\).",
+          "C": "This uses amplitude directly as power, which is not the sinusoid formula.",
+          "D": "This divides by too much."
+        },
+        "hint": "For a cosine, average \\(\\cos^2\\) over a period is \\(1/2\\).",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  },
+  {
+    "id": "representative_example_interpretation",
+    "label": "Interpreting textbook example signals",
+    "importance": "medium",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp5_q1",
+        "type": "short_answer",
+        "stem": "In Fig. 1.2, why is the decaying signal in part (a) measured by energy, while the repeating signal in part (b) is measured by power?",
+        "ideal_answer": "Part (a) decays toward zero, so its total squared area can be finite and energy is suitable. Part (b) repeats forever, so its total energy is infinite, but its average squared magnitude over one period gives finite power.",
+        "grading_rubric": [
+          "Must mention that part (a) decays toward zero",
+          "Must mention finite total squared area or finite energy for part (a)",
+          "Must mention that part (b) repeats or persists forever",
+          "Must mention average squared magnitude or one-period power for part (b)"
+        ],
+        "explanation": "This checks whether the student can connect waveform shape to the correct formula rather than memorizing formulas alone.",
+        "hint": "Look at what each signal does as time extends far left and far right.",
+        "needs_visual": true,
+        "visual_type": "textbook_figure_reference",
+        "same_point_variant": false
+      }
+    ]
+  }
+]
+```
+
+## Raw JSON
+
+```json
+{
+  "section_id": "1.1-2",
+  "section_title": "Signal Power",
+  "difficulty": "intermediate",
+  "estimated_read_minutes": 7,
+  "learning_objectives": [
+    "Classify signals as energy signals or power signals using their long-term behavior.",
+    "Use the signal power formula as a time average of squared magnitude.",
+    "Compute power over one period for periodic signals.",
+    "Connect signal power to rms value and common sinusoidal examples."
+  ],
+  "visualization_need": {
+    "level": "interactive",
+    "reason": [
+      "formula_to_phenomenon_gap",
+      "depends_on_parameter_change",
+      "student_should_manipulate_to_understand",
+      "pattern_recognition_benefits_from_figure"
+    ],
+    "recommended_assets": [
+      "react_canvas_demo"
+    ]
+  },
+  "visual_plan": {
+    "primary_anchor": "both",
+    "rationale": "Use the textbook figures because they are the canonical exam-facing contrast between finite-energy transient signals and finite-power persistent signals. Add a React Canvas demo for the time-average idea, because students understand signal power faster when they can change the averaging window and watch the average settle.",
+    "cram": "Use the visuals to recognize the trigger quickly: decays to zero suggests energy; persists periodically suggests power.",
+    "standard": "Use Figure 1.1 and the averaging demo to connect the formula to one representative classification/computation example.",
+    "top_score": "Use the demo to expose the subtle distinction between infinite total energy and finite average power."
+  },
+  "blocks": [
+    {
+      "type": "text_explanation",
+      "instruction": "Create the first page as a compact outline only. Title it 'Section Objective' and write one sentence: 'Learn how signal power measures the long-term average size of signals whose total energy is not finite.' Then add 'Concepts In This Section' as a short bullet list with concept names only: energy signal, power signal, time-average power, periodic-signal power, rms value, sinusoid power. Do not add background paragraphs or explanations on this page."
+    },
+    {
+      "type": "book_image",
+      "source_page": "page-066",
+      "fig_id": "Figure 1.1",
+      "teaching_role": "comparison_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Use the contrast to identify energy-signal versus power-signal shapes immediately.",
+        "standard": "Use the two plots as the main visual anchor before introducing formulas.",
+        "top_score": "Use the figure to stress that shape behavior at large |t| matters more than local amplitude."
+      },
+      "caption_instruction": "One sentence: Figure 1.1 contrasts a finite-energy transient signal with a finite-power signal that persists over time.",
+      "description_instruction": "Describe the top plot as a signal that rises and dies back toward zero, so its total squared area can be finite. Describe the bottom plot as a continuing oscillatory signal, so total energy keeps accumulating but average power can still be finite. Tell students to focus on what happens as |t| becomes large."
+    },
+    {
+      "type": "math_block",
+      "latex": "E_x = \\int_{-\\infty}^{\\infty} |x(t)|^2\\,dt",
+      "explanation_instruction": "Teach this as the energy formula from Eq. (1.1), used as the comparison point for signal power. Explain each symbol: \\(x(t)\\) is the signal, \\(|x(t)|^2\\) is squared magnitude, and the integral adds squared size over all time. State the exam trigger: use energy when the signal dies out as \\(|t|\\to\\infty\\). Add one minimal example: a finite pulse has finite energy because it is nonzero only over a limited interval. Common misuse: do not use signed area \\(\\int x(t)dt\\), because positive and negative parts can cancel."
+    },
+    {
+      "type": "math_block",
+      "latex": "P_x = \\lim_{T\\to\\infty}\\frac{1}{T}\\int_{-T/2}^{T/2}|x(t)|^2\\,dt",
+      "explanation_instruction": "Teach this as Eq. (1.2), the core formula for signal power. Explain that power is the long-term average of squared magnitude, not the total squared area. Define every symbol: \\(T\\) is the averaging-window length, \\([-T/2,T/2]\\) is the window, and the limit asks what average remains as the window becomes huge. Use it when total energy is infinite but the average squared size may settle. Exam trigger: a periodic or never-ending bounded signal. Common misuse: forgetting the factor \\(1/T\\), which turns the calculation back into energy."
+    },
+    {
+      "type": "interactive_demo",
+      "teaching_role": "concept_anchor",
+      "demo_title": "Watch Energy Grow but Power Settle",
+      "mode_specific_visual_use": {
+        "cram": "Move the window slider and observe whether the average settles or keeps changing.",
+        "standard": "Use the demo after Eq. (1.2) to see why a continuing signal can have finite power.",
+        "top_score": "Compare transient and periodic cases to separate finite energy, infinite energy, and finite power."
+      },
+      "instruction": "Build a React + Canvas demo with two selectable signals: (1) a decaying pulse such as \\(x(t)=e^{-|t|}\\), and (2) a sinusoid such as \\(x(t)=\\cos t\\). Include a slider for averaging-window length \\(T\\). Show the signal plot, shade the interval \\([-T/2,T/2]\\), and display two live values: accumulated energy \\(\\int_{-T/2}^{T/2}|x(t)|^2dt\\) and average power \\(\\frac{1}{T}\\int_{-T/2}^{T/2}|x(t)|^2dt\\). Add a short observation prompt: 'As \\(T\\) grows, does the total energy settle, or does the average power settle?' Keep labels large and minimal."
+    },
+    {
+      "type": "math_block",
+      "latex": "P_x = \\frac{1}{T_0}\\int_{t_0}^{t_0+T_0}|x(t)|^2\\,dt",
+      "explanation_instruction": "Teach this as the shortcut for periodic signals. Explain that \\(T_0\\) is one period and \\(t_0\\) can be any starting time because one full period contains the same repeated pattern. Use it when the signal repeats forever. Exam trigger: the problem gives or visually shows a period. Common misuse: integrating over one period but forgetting to divide by the period length."
+    },
+    {
+      "type": "book_image",
+      "source_page": "page-067",
+      "fig_id": "Fig. 1.2",
+      "teaching_role": "example_support",
+      "mode_specific_visual_use": {
+        "cram": "Use the two shapes to decide quickly whether to compute energy or power.",
+        "standard": "Use this as the representative worked example for classification and computation.",
+        "top_score": "Notice that the decaying signal and periodic signal require different formulas even if both are bounded."
+      },
+      "caption_instruction": "One sentence: Fig. 1.2 compares a decaying signal measured by energy with a periodic signal measured by power.",
+      "description_instruction": "For part (a), point out that the signal eventually decays to zero, so compute energy; state the textbook result \\(E_x=8\\). For part (b), point out that the signal repeats with period 2 and does not decay, so compute average power over one period; state the textbook result \\(P_x=1/3\\) and rms value \\(1/\\sqrt{3}\\). Keep this as a representative example, not a full derivation-heavy page."
+    },
+    {
+      "type": "math_block",
+      "latex": "x_{\\mathrm{rms}} = \\sqrt{P_x}",
+      "explanation_instruction": "Explain that rms value is the square root of signal power, so signal power is the square of rms value. Define \\(x_{\\mathrm{rms}}\\) as root-mean-square size. Use it when the problem asks for rms after computing power, or when comparing average signal strength. Give one representative result: for \\(x(t)=C\\cos(\\omega_0t+\\theta)\\), the power is \\(C^2/2\\), so the rms value is \\(|C|/\\sqrt{2}\\). Common misuse: using peak amplitude \\(C\\) as the rms value of a sinusoid."
+    },
+    {
+      "type": "section_summary",
+      "instruction": "Create a recap page titled '📌 Key Takeaways'. Include compact bullets that explicitly show these core formulas: \\(E_x=\\int_{-\\infty}^{\\infty}|x(t)|^2dt\\); \\(P_x=\\lim_{T\\to\\infty}\\frac{1}{T}\\int_{-T/2}^{T/2}|x(t)|^2dt\\); for periodic signals, \\(P_x=\\frac{1}{T_0}\\int_{t_0}^{t_0+T_0}|x(t)|^2dt\\); \\(x_{\\mathrm{rms}}=\\sqrt{P_x}\\); for \\(C\\cos(\\omega_0t+\\theta)\\), \\(P_x=C^2/2\\) and \\(x_{\\mathrm{rms}}=|C|/\\sqrt{2}\\). Also include the concept conclusion: decaying transient signals are usually energy-signal candidates; continuing periodic signals are power-signal candidates. End with one bridge sentence: 'Next, we will use these size measures when analyzing signals and systems more broadly.'"
+    },
+    {
+      "type": "quiz_plan",
+      "target_questions": 7,
+      "question_range": {
+        "min": 6,
+        "max": 8
+      },
+      "knowledge_points": [
+        {
+          "id": "energy_vs_power_classification",
+          "label": "Classifying energy and power signals",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp1_q1",
+              "type": "multiple_choice",
+              "stem": "A signal decays toward zero as \\(|t|\\to\\infty\\). Which measure is usually the first candidate to check?",
+              "options": [
+                "A. Signal energy",
+                "B. Signal power only",
+                "C. Peak amplitude only",
+                "D. Phase shift"
+              ],
+              "correct_option": "A",
+              "explanation": "A signal that dies out over time may have finite total squared area, so signal energy is the natural first measure.",
+              "wrong_option_explanations": {
+                "B": "Power is usually used when total energy is infinite but the long-term average squared size is finite.",
+                "C": "Peak amplitude does not measure total or average signal size.",
+                "D": "Phase shift does not classify the signal as energy or power."
+              },
+              "hint": "Ask whether the total squared area over all time can converge.",
+              "needs_visual": true,
+              "visual_type": "textbook_figure_reference",
+              "same_point_variant": true
+            },
+            {
+              "id": "kp1_q2",
+              "type": "multiple_choice",
+              "stem": "A nonzero periodic signal continues forever and does not decay. What is typically true?",
+              "options": [
+                "A. It has finite energy and zero power.",
+                "B. It has infinite energy but may have finite power.",
+                "C. It has zero energy because positive and negative parts cancel.",
+                "D. It cannot have an rms value."
+              ],
+              "correct_option": "B",
+              "explanation": "A continuing periodic signal keeps accumulating energy forever, but its average squared magnitude over time can be finite.",
+              "wrong_option_explanations": {
+                "A": "A nonzero signal lasting forever generally does not have finite energy.",
+                "C": "Energy and power use \\(|x(t)|^2\\), so positive and negative parts do not cancel.",
+                "D": "RMS is defined from power, so periodic power signals commonly have rms values."
+              },
+              "hint": "Energy adds forever; power averages forever.",
+              "needs_visual": true,
+              "visual_type": "textbook_figure_reference",
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "power_formula",
+          "label": "Time-average power formula",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp2_q1",
+              "type": "multiple_choice",
+              "stem": "Which formula correctly defines signal power?",
+              "options": [
+                "A. \\(P_x=\\int_{-\\infty}^{\\infty}|x(t)|^2dt\\)",
+                "B. \\(P_x=\\lim_{T\\to\\infty}\\frac{1}{T}\\int_{-T/2}^{T/2}|x(t)|^2dt\\)",
+                "C. \\(P_x=\\int_{-T/2}^{T/2}x(t)dt\\)",
+                "D. \\(P_x=\\lim_{T\\to 0}\\frac{1}{T}\\int_{-T/2}^{T/2}|x(t)|dt\\)"
+              ],
+              "correct_option": "B",
+              "explanation": "Signal power is the long-term average of squared magnitude.",
+              "wrong_option_explanations": {
+                "A": "That is signal energy, not power.",
+                "C": "This uses signed area and omits squared magnitude and the infinite-time average.",
+                "D": "Power uses squared magnitude and averages as \\(T\\to\\infty\\), not \\(T\\to0\\)."
+              },
+              "hint": "Power means average squared size over a very long interval.",
+              "needs_visual": false,
+              "same_point_variant": true
+            },
+            {
+              "id": "kp2_q2",
+              "type": "multiple_choice",
+              "stem": "In the power formula, what is the purpose of the factor \\(1/T\\)?",
+              "options": [
+                "A. It converts the accumulated squared magnitude into a time average.",
+                "B. It makes negative and positive areas cancel.",
+                "C. It changes a voltage signal into a current signal.",
+                "D. It forces every signal to have zero power."
+              ],
+              "correct_option": "A",
+              "explanation": "The integral accumulates squared magnitude; dividing by \\(T\\) turns that accumulation into an average over the window length.",
+              "wrong_option_explanations": {
+                "B": "The formula uses \\(|x(t)|^2\\), so sign cancellation is not the point.",
+                "C": "The formula does not change the physical type of the signal.",
+                "D": "Many continuing signals have nonzero finite power."
+              },
+              "hint": "Compare total energy versus average energy per unit time.",
+              "needs_visual": true,
+              "visual_type": "interactive_demo_observation",
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "periodic_power_shortcut",
+          "label": "Power of periodic signals",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp3_q1",
+              "type": "multiple_choice",
+              "stem": "For a periodic signal with period \\(T_0\\), which computation is valid for power?",
+              "options": [
+                "A. Average \\(|x(t)|^2\\) over any one full period.",
+                "B. Integrate \\(x(t)\\) over all time without squaring.",
+                "C. Use only the maximum value of \\(x(t)\\).",
+                "D. Average over half a period no matter what the waveform looks like."
+              ],
+              "correct_option": "A",
+              "explanation": "For periodic signals, the long-term average equals the average over one full period.",
+              "wrong_option_explanations": {
+                "B": "Power uses squared magnitude, not signed area.",
+                "C": "Power depends on the whole waveform, not just the peak.",
+                "D": "Half a period is not generally enough unless symmetry specifically justifies it."
+              },
+              "hint": "One complete repeated pattern is enough.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "rms_and_sinusoid_power",
+          "label": "RMS value and sinusoid power",
+          "importance": "high",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp4_q1",
+              "type": "multiple_choice",
+              "stem": "If \\(P_x=9\\), what is the rms value?",
+              "options": [
+                "A. \\(3\\)",
+                "B. \\(9\\)",
+                "C. \\(81\\)",
+                "D. \\(1/3\\)"
+              ],
+              "correct_option": "A",
+              "explanation": "The rms value is \\(x_{\\mathrm{rms}}=\\sqrt{P_x}=\\sqrt{9}=3\\).",
+              "wrong_option_explanations": {
+                "B": "That is the power, not the rms value.",
+                "C": "That squares the power instead of taking the square root.",
+                "D": "That takes the reciprocal incorrectly."
+              },
+              "hint": "RMS is the square root of power.",
+              "needs_visual": false,
+              "same_point_variant": false
+            },
+            {
+              "id": "kp4_q2",
+              "type": "multiple_choice",
+              "stem": "For \\(x(t)=6\\cos(\\omega_0t+\\theta)\\), what are the power and rms value?",
+              "options": [
+                "A. \\(P_x=36\\), \\(x_{\\mathrm{rms}}=6\\)",
+                "B. \\(P_x=18\\), \\(x_{\\mathrm{rms}}=3\\sqrt{2}\\)",
+                "C. \\(P_x=6\\), \\(x_{\\mathrm{rms}}=\\sqrt{6}\\)",
+                "D. \\(P_x=3\\), \\(x_{\\mathrm{rms}}=\\sqrt{3}\\)"
+              ],
+              "correct_option": "B",
+              "explanation": "A sinusoid of amplitude \\(C\\) has power \\(C^2/2\\). With \\(C=6\\), \\(P_x=36/2=18\\), so rms is \\(\\sqrt{18}=3\\sqrt{2}\\).",
+              "wrong_option_explanations": {
+                "A": "This incorrectly treats peak amplitude as rms and forgets the factor \\(1/2\\).",
+                "C": "This uses amplitude directly as power, which is not the sinusoid formula.",
+                "D": "This divides by too much."
+              },
+              "hint": "For a cosine, average \\(\\cos^2\\) over a period is \\(1/2\\).",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "representative_example_interpretation",
+          "label": "Interpreting textbook example signals",
+          "importance": "medium",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp5_q1",
+              "type": "short_answer",
+              "stem": "In Fig. 1.2, why is the decaying signal in part (a) measured by energy, while the repeating signal in part (b) is measured by power?",
+              "ideal_answer": "Part (a) decays toward zero, so its total squared area can be finite and energy is suitable. Part (b) repeats forever, so its total energy is infinite, but its average squared magnitude over one period gives finite power.",
+              "grading_rubric": [
+                "Must mention that part (a) decays toward zero",
+                "Must mention finite total squared area or finite energy for part (a)",
+                "Must mention that part (b) repeats or persists forever",
+                "Must mention average squared magnitude or one-period power for part (b)"
+              ],
+              "explanation": "This checks whether the student can connect waveform shape to the correct formula rather than memorizing formulas alone.",
+              "hint": "Look at what each signal does as time extends far left and far right.",
+              "needs_visual": true,
+              "visual_type": "textbook_figure_reference",
+              "same_point_variant": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```

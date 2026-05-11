@@ -1,0 +1,16 @@
+{
+  "sectionId": "1.8",
+  "sourcePages": [
+    "page-111"
+  ],
+  "usedPages": [
+    "page-111"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "1.8 System Model: Input–Output Description 111",
+  "foundEnd": true,
+  "endBeforeLine": "1.8-1 Electrical Systems",
+  "endBeforeCode": "1.8-1",
+  "charCount": 792
+}

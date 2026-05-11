@@ -1,0 +1,258 @@
+{
+  "section_id": "1.2-3",
+  "section_title": "1.2-3 Time Reversal",
+  "difficulty": "beginner",
+  "estimated_read_minutes": 6,
+  "learning_objectives": [
+    "Recognize time reversal as reflection of a signal about the vertical time axis",
+    "Use the formula \\(\\phi(t)=x(-t)\\) correctly",
+    "Sketch a time-reversed signal by mapping each event at time \\(t\\) to time \\(-t\\)",
+    "Avoid confusing time reversal \\(x(-t)\\) with amplitude reversal \\(-x(t)\\)"
+  ],
+  "visualization_need": {
+    "level": "interactive",
+    "reason": [
+      "depends_on_parameter_change",
+      "formula_to_phenomenon_gap",
+      "student_should_manipulate_to_understand",
+      "misconception_needs_visual_correction"
+    ],
+    "recommended_assets": [
+      "react_canvas_demo",
+      "textbook_figure"
+    ]
+  },
+  "visual_plan": {
+    "primary_anchor": "both",
+    "rationale": "Time reversal is easiest to understand by seeing a waveform mirror across the vertical \\(t=0\\) axis. The textbook already provides the exact canonical figures students are expected to recognize, so those figures should be used. Add one interactive React + Canvas demo because students benefit from dragging or toggling the reversal and watching points move from \\(t\\) to \\(-t\\). No generated image is needed because the textbook figures and interactive demo cover the teaching need more accurately.",
+    "cram": "Use the visuals to memorize the exam trigger: replace \\(t\\) by \\(-t\\), then mirror left-right about \\(t=0\\).",
+    "standard": "Use Figure 1.8 for the main concept, the demo for intuition, and Figure 1.9 for one representative worked example.",
+    "top_score": "Use the visuals to separate \\(x(-t)\\) from \\(-x(t)\\), and to track support intervals such as \\([-5,-1]\\to[1,5]\\)."
+  },
+  "blocks": [
+    {
+      "type": "text_explanation",
+      "instruction": "Create a minimal overview page only. Use exactly two short sections: 'Section Objective' and 'Concepts In This Section'. For Section Objective, write one sentence: 'Learn how time reversal creates \\(x(-t)\\) by reflecting a signal about the vertical time axis.' For Concepts In This Section, list only these concept names as bullets with no explanations: 'time reversal', 'vertical-axis reflection', '\\(x(-t)\\)', 'time-reversal vs amplitude reversal', 'support interval reversal'. Do not add background paragraphs or examples on this page."
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Start the first concept page with the heading '## 1. Time reversal means left-right reflection'. Explain in 100–140 words that time reversal treats the graph of \\(x(t)\\) like a rigid wire frame hinged at the vertical axis \\(t=0\\). Say that every event that happened at time \\(t\\) now appears at time \\(-t\\), while the amplitude value itself is not negated. Include one tiny example in prose: if a peak was at \\(t=3\\), after time reversal it appears at \\(t=-3\\) with the same height. End with the exam note: 'The trigger phrase is replace \\(t\\) by \\(-t\\), then mirror the graph about the vertical axis.'"
+    },
+    {
+      "type": "math_block",
+      "latex": "\\phi(t)=x(-t)",
+      "explanation_instruction": "Explain this as the core time-reversal formula. Define \\(x(t)\\) as the original signal, \\(\\phi(t)\\) as the reversed signal, and \\(-t\\) as the reflected time input. State when to use it: whenever a problem asks for the time-reversed signal or asks to sketch \\(x(-t)\\). State the common misuse: do not flip the graph across the horizontal axis; that would create \\(-x(t)\\), not \\(x(-t)\\)."
+    },
+    {
+      "type": "book_image",
+      "source_page": "page-076",
+      "fig_id": "Figure 1.8",
+      "teaching_role": "concept_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Use the figure to recognize that time reversal mirrors left-right, not up-down.",
+        "standard": "Use the two panels to connect the formula \\(\\phi(t)=x(-t)\\) to the graph transformation.",
+        "top_score": "Use the figure to track individual time locations and verify that amplitudes are preserved."
+      },
+      "caption_instruction": "One sentence: Figure 1.8 shows that \\(x(-t)\\) is obtained by reflecting \\(x(t)\\) about the vertical \\(t=0\\) axis.",
+      "description_instruction": "Describe the two panels as original \\(x(t)\\) and time-reversed \\(\\phi(t)=x(-t)\\). Point out that every feature at time \\(t\\) in the original appears at time \\(-t\\) in the reversed signal. Explicitly say that the waveform height is preserved; only the time locations change sign."
+    },
+    {
+      "type": "interactive_demo",
+      "teaching_role": "concept_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Let students toggle original/reversed and instantly see the mirror rule.",
+        "standard": "Let students drag sample points and observe how \\((t,x(t))\\) maps to \\((-t,x(t))\\).",
+        "top_score": "Let students test asymmetric signals and confirm that support intervals reverse order."
+      },
+      "instruction": "Build a React + Canvas demo titled 'Mirror the signal about \\(t=0\\)'. Show a simple asymmetric piecewise waveform on axes labeled \\(t\\) and amplitude. Include a toggle button: 'Show \\(x(t)\\)' / 'Show \\(x(-t)\\)'. Include 3 draggable marker points on the original signal. When time reversal is enabled, draw faint vertical guide lines and show each marker moving from \\((t, y)\\) to \\((-t, y)\\). Keep amplitude unchanged. Add a small note under the canvas: 'Time reversal changes time signs only: \\(t\\to -t\\). It does not change signal height.' Do not include time shifting, time scaling, or amplitude negation in this demo."
+    },
+    {
+      "type": "math_block",
+      "latex": "x(-t)=\\begin{cases}e^{-t/2},&1\\le t\\le 5\\\\0,&\\text{otherwise}\\end{cases}",
+      "explanation_instruction": "Start a second concept page with the heading '## 2. Worked example: reversing an exponential signal'. Explain that in Example 1.5 the original nonzero interval is \\(-5\\le t\\le -1\\), so after replacing \\(t\\) by \\(-t\\), the nonzero interval becomes \\(1\\le t\\le5\\). Explain the formula: the exponent \\(t/2\\) becomes \\(-t/2\\), and the support interval mirrors from negative time to positive time. Include this exam shortcut in one sentence: if a signal is nonzero on \\([a,b]\\), then \\(x(-t)\\) is nonzero on \\([-b,-a]\\). Warn that students often reverse the formula but forget to reverse the interval."
+    },
+    {
+      "type": "book_image",
+      "source_page": "page-077",
+      "fig_id": "Fig. 1.9",
+      "teaching_role": "example_support",
+      "mode_specific_visual_use": {
+        "cram": "Use the figure to memorize how \\([-5,-1]\\) becomes \\([1,5]\\).",
+        "standard": "Use the figure as the representative worked example for sketching \\(x(-t)\\).",
+        "top_score": "Use the figure to check both pieces: exponent sign change and support interval reversal."
+      },
+      "caption_instruction": "One sentence: Fig. 1.9 shows an exponential signal on negative time becoming its time-reversed version on positive time.",
+      "description_instruction": "Describe panel (a) as \\(x(t)=e^{t/2}\\) on the interval from \\(t=-5\\) to \\(t=-1\\). Describe panel (b) as \\(x(-t)=e^{-t/2}\\) on the interval from \\(t=1\\) to \\(t=5\\). Tell students to notice that the graph is mirrored across \\(t=0\\), not flipped vertically."
+    },
+    {
+      "type": "section_summary",
+      "instruction": "Create the recap page under the heading '📌 Key Takeaways'. Use 4 bullets, each ≤22 words. Include the core formulas explicitly: \\(\\phi(t)=x(-t)\\), the point mapping \\((t,x(t))\\to(-t,x(t))\\), the interval rule \\([a,b]\\to[-b,-a]\\), and the warning \\(x(-t)\\ne -x(t)\\). End with one bridge sentence: 'Next, we will use these signal operations together when sketching and interpreting transformed signals.'"
+    },
+    {
+      "type": "quiz_plan",
+      "target_questions": 6,
+      "question_range": {
+        "min": 5,
+        "max": 7
+      },
+      "knowledge_points": [
+        {
+          "id": "time_reversal_formula",
+          "label": "Meaning of \\(x(-t)\\)",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "tr_formula_q1",
+              "type": "multiple_choice",
+              "stem": "A signal \\(x(t)\\) has a peak of height 4 at \\(t=3\\). Where does that peak appear in \\(x(-t)\\)?",
+              "options": [
+                "A. At \\(t=3\\), with height \\(-4\\)",
+                "B. At \\(t=-3\\), with height 4",
+                "C. At \\(t=-3\\), with height \\(-4\\)",
+                "D. At \\(t=0\\), with height 4"
+              ],
+              "correct_option": "B",
+              "explanation": "Time reversal changes the time coordinate from \\(t\\) to \\(-t\\) but keeps the amplitude the same.",
+              "wrong_option_explanations": {
+                "A": "This flips amplitude but does not reverse time.",
+                "C": "This incorrectly reverses both time and amplitude.",
+                "D": "Time reversal does not move every point to the vertical axis."
+              },
+              "hint": "Use the point rule \\((t,x(t))\\to(-t,x(t))\\).",
+              "needs_visual": false,
+              "same_point_variant": true
+            },
+            {
+              "id": "tr_formula_q2",
+              "type": "multiple_choice",
+              "stem": "In the interactive demo, a marker at \\((t,y)=(-2,5)\\) is time-reversed. What should the reversed marker be?",
+              "options": [
+                "A. \\((2,5)\\)",
+                "B. \\((-2,-5)\\)",
+                "C. \\((2,-5)\\)",
+                "D. \\((-5,2)\\)"
+              ],
+              "correct_option": "A",
+              "explanation": "Time reversal changes only the sign of the time coordinate: \\((-2,5)\\to(2,5)\\).",
+              "wrong_option_explanations": {
+                "B": "That changes amplitude instead of time.",
+                "C": "That changes both time and amplitude; time reversal changes only time.",
+                "D": "That swaps coordinates, which is not a signal operation here."
+              },
+              "hint": "The height stays fixed; only left and right swap.",
+              "needs_visual": true,
+              "visual_type": "interactive_demo_observation",
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "vertical_vs_horizontal_reflection",
+          "label": "Time reversal vs amplitude reversal",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "axis_trap_q1",
+              "type": "multiple_choice",
+              "stem": "Which statement correctly distinguishes \\(x(-t)\\) from \\(-x(t)\\)?",
+              "options": [
+                "A. \\(x(-t)\\) reflects about the horizontal axis; \\(-x(t)\\) reflects about the vertical axis.",
+                "B. \\(x(-t)\\) reflects about the vertical axis; \\(-x(t)\\) reflects about the horizontal axis.",
+                "C. Both reflect about the vertical axis.",
+                "D. Both reflect about the horizontal axis."
+              ],
+              "correct_option": "B",
+              "explanation": "\\(x(-t)\\) reverses time, so it mirrors left-right about \\(t=0\\). \\(-x(t)\\) reverses amplitude, so it mirrors up-down about the horizontal axis.",
+              "wrong_option_explanations": {
+                "A": "This swaps the two operations.",
+                "C": "\\(-x(t)\\) changes amplitude, not time.",
+                "D": "\\(x(-t)\\) changes time, not amplitude."
+              },
+              "hint": "Look at which symbol receives the minus sign: the input \\(t\\), or the entire signal value.",
+              "needs_visual": false,
+              "same_point_variant": true
+            },
+            {
+              "id": "axis_trap_q2",
+              "type": "multiple_choice",
+              "stem": "A student sketches \\(x(-t)\\) by flipping the original graph upside down while leaving all time locations unchanged. What is wrong?",
+              "options": [
+                "A. They sketched \\(-x(t)\\), not \\(x(-t)\\).",
+                "B. They sketched \\(x(t-1)\\), not \\(x(-t)\\).",
+                "C. They sketched \\(x(2t)\\), not \\(x(-t)\\).",
+                "D. Nothing is wrong; upside-down flipping is time reversal."
+              ],
+              "correct_option": "A",
+              "explanation": "Flipping upside down is reflection across the horizontal axis, which creates \\(-x(t)\\). Time reversal must reflect across the vertical axis.",
+              "wrong_option_explanations": {
+                "B": "A time shift moves the signal left or right without mirroring it.",
+                "C": "Time scaling compresses or expands the signal, not flips it upside down.",
+                "D": "Time reversal is left-right mirroring, not up-down mirroring."
+              },
+              "hint": "Ask: did the time coordinates change sign?",
+              "needs_visual": true,
+              "visual_type": "wrong_vs_right_visual_check",
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "example_interval_reversal",
+          "label": "Reversing support intervals and formulas",
+          "importance": "high",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "interval_q1",
+              "type": "multiple_choice",
+              "stem": "If \\(x(t)\\) is nonzero only on \\([-5,-1]\\), where is \\(x(-t)\\) nonzero?",
+              "options": [
+                "A. \\([-5,-1]\\)",
+                "B. \\([1,5]\\)",
+                "C. \\([-1,5]\\)",
+                "D. \\([-5,1]\\)"
+              ],
+              "correct_option": "B",
+              "explanation": "Time reversal maps the interval \\([a,b]\\) to \\([-b,-a]\\). Therefore \\([-5,-1]\\to[1,5]\\).",
+              "wrong_option_explanations": {
+                "A": "That leaves the interval unchanged, so no time reversal happened.",
+                "C": "Only one endpoint was handled correctly.",
+                "D": "This mixes old and reversed endpoints."
+              },
+              "hint": "Reverse the signs and then put the smaller endpoint first.",
+              "needs_visual": true,
+              "visual_type": "time_domain_interval_mirror",
+              "same_point_variant": false
+            },
+            {
+              "id": "interval_q2",
+              "type": "short_answer",
+              "stem": "For \\(x(t)=e^{t/2}\\) on \\(-5\\le t\\le -1\\) and zero otherwise, write \\(x(-t)\\) and its nonzero interval.",
+              "ideal_answer": "\\(x(-t)=e^{-t/2}\\) on \\(1\\le t\\le5\\), and it is zero otherwise.",
+              "grading_rubric": [
+                "Must change \\(e^{t/2}\\) to \\(e^{-t/2}\\)",
+                "Must state the reversed interval \\(1\\le t\\le5\\)",
+                "Must indicate the signal is zero outside that interval"
+              ],
+              "explanation": "This checks both parts of the worked example: replacing \\(t\\) by \\(-t\\) in the formula and reversing the support interval.",
+              "hint": "The original input to \\(x(\\cdot)\\) must land between \\(-5\\) and \\(-1\\).",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

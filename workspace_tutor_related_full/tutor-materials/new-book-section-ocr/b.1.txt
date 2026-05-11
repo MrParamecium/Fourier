@@ -1,0 +1,19 @@
+# Aquarius section OCR
+section_id: b.1
+source_pages: page-001
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+B.1 C OMPLEX N UMBERS
+   Complex numbers are an extension of ordinary numbers and are an integral part of the modern
+   number system. Complex numbers, particularly imaginary numbers, sometimes seem mysterious
+   and unreal. This feeling of unreality derives from their unfamiliarity and novelty rather than their
+   supposed nonexistence! Mathematicians blundered in calling these numbers “imaginary,” for the
+   term immediately prejudices perception. Had these numbers been called by some other name, they
+   would have become demystified long ago, just as irrational numbers or negative numbers were.
+   Many futile attempts have been made to ascribe some physical meaning to imaginary numbers.
+   However, this effort is needless. In mathematics we assign symbols and operations any meaning
+   we wish as long as internal consistency is maintained. The history of mathematics is full of entities
+   that were unfamiliar and held in abhorrence until familiarity made them acceptable. This fact will
+   become clear from the following historical note.

@@ -1,0 +1,18 @@
+{
+  "sectionId": "b.7-3",
+  "sourcePages": [
+    "page-045",
+    "page-046"
+  ],
+  "usedPages": [
+    "page-045",
+    "page-046"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "B.7-3 Vector Operations",
+  "foundEnd": true,
+  "endBeforeLine": "B.7-4 Simple Plotting",
+  "endBeforeCode": "b.7-4",
+  "charCount": 3677
+}

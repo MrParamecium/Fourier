@@ -1,0 +1,30 @@
+{
+  "sectionId": "3.6",
+  "sourcePages": [
+    "page-270",
+    "page-271",
+    "page-272",
+    "page-273",
+    "page-274",
+    "page-275",
+    "page-276",
+    "page-277"
+  ],
+  "usedPages": [
+    "page-270",
+    "page-271",
+    "page-272",
+    "page-273",
+    "page-274",
+    "page-275",
+    "page-276",
+    "page-277"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "3.6 SYSTEM RESPONSE TO INTERNAL CONDITIONS:",
+  "foundEnd": true,
+  "endBeforeLine": "3.7 The Unit Impulse Response h[n]",
+  "endBeforeCode": "3.7",
+  "charCount": 12180
+}

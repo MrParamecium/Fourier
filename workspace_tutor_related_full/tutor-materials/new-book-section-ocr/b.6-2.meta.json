@@ -1,0 +1,24 @@
+{
+  "sectionId": "b.6-2",
+  "sourcePages": [
+    "page-038",
+    "page-039",
+    "page-040",
+    "page-041",
+    "page-042"
+  ],
+  "usedPages": [
+    "page-038",
+    "page-039",
+    "page-040",
+    "page-041",
+    "page-042"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "B.6-2 Matrix Algebra",
+  "foundEnd": true,
+  "endBeforeLine": "B.7 MATLAB: E LEMENTARY O PERATIONS",
+  "endBeforeCode": "b.7",
+  "charCount": 14492
+}

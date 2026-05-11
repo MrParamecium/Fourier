@@ -1,0 +1,359 @@
+{
+  "blueprint": {
+    "section_id": "1.3-3",
+    "section_title": "Periodic and Aperiodic Signals",
+    "difficulty": "beginner",
+    "estimated_read_minutes": 6,
+    "learning_objectives": [
+      "Recognize whether a continuous-time signal is periodic or aperiodic.",
+      "Identify the fundamental period and understand periodic extension from one period.",
+      "Use the one-period area property of periodic signals.",
+      "Distinguish causal, noncausal, everlasting, and anti-causal signals."
+    ],
+    "visualization_need": {
+      "level": "interactive",
+      "reason": [
+        "formula_to_phenomenon_gap",
+        "student_should_manipulate_to_understand",
+        "pattern_recognition_benefits_from_figure"
+      ],
+      "recommended_assets": [
+        "react_canvas_demo",
+        "textbook_figure"
+      ]
+    },
+    "visual_plan": {
+      "primary_anchor": "both",
+      "rationale": "The core periodicity test is easiest to understand by shifting a waveform and checking whether it overlaps itself. The textbook periodic-extension figure is also canonical for this section, so it should be used directly for the one-period copying idea.",
+      "cram": "Use the shift-match visual to make the exam trigger obvious: if a positive shift reproduces the whole signal, it is periodic.",
+      "standard": "Use the interactive shift test plus the textbook periodic-extension figure to connect the formula, the fundamental period, and one representative example.",
+      "top_score": "Use visuals to separate any period from the fundamental period and to catch finite-duration signals that look repetitive but are not truly periodic."
+    },
+    "blocks": [
+      {
+        "type": "text_explanation",
+        "instruction": "Create the first lesson page as a compact outline only. Use exactly two sections: 'Section Objective' and 'Concepts In This Section'. For Section Objective, write one sentence: students will learn how to recognize periodic signals and related time-support classifications. For Concepts In This Section, list concept names only: periodic signal, aperiodic signal, fundamental period, periodic extension, one-period area property, everlasting signal, causal signal, noncausal signal, anti-causal signal. Do not add background paragraphs, examples, or formulas on this page."
+      },
+      {
+        "type": "math_block",
+        "latex": "x(t)=x(t+T_0)\\quad \\text{for all }t",
+        "label": "Eq. (1.7)",
+        "explanation_instruction": "Start this page with the heading '## 1. Periodic vs. aperiodic signals'. Explain in 100–140 words that Eq. (1.7) is the exact periodicity test: shifting the signal left by \\(T_0\\) gives the same value at every time. Define \\(x(t)\\), \\(T_0>0\\), and 'for all \\(t\\)'. State that a signal is aperiodic if no positive \\(T_0\\) works. Include one minimal example: a sinusoid repeats after its period, while a one-time pulse does not. Exam trigger: look for 'repeats forever' or 'find the period'. Common misuse: checking only one matching point or one visible cycle instead of all time."
+      },
+      {
+        "type": "interactive_demo",
+        "teaching_role": "concept_anchor",
+        "mode_specific_visual_use": {
+          "cram": "Let students drag the shift until they see exact overlap or failure to overlap.",
+          "standard": "Use it immediately after Eq. (1.7) to connect the symbolic shift test to waveform overlap.",
+          "top_score": "Include a finite repeated-looking pulse train segment to show why finite repetition is not true periodicity."
+        },
+        "demo_spec": {
+          "title": "Shift-test demo for periodicity",
+          "rendering": "React + Canvas waveform demo with a clean white background and two overlaid curves.",
+          "controls": [
+            "Slider for shift value T",
+            "Toggle between periodic sinusoid, periodic square wave, finite pulse train, and single pulse",
+            "Button labeled 'Test overlap'"
+          ],
+          "visual_behavior": "Draw the original signal in navy and the shifted signal x(t+T) in muted teal. When the two curves overlap for all visible repeated time windows, show a green label 'matches for this period candidate'. When they do not overlap, show a muted red label 'not a valid period'.",
+          "student_task": "Ask students to find a valid positive shift for the sinusoid and square wave, then try and fail to find one for the single pulse.",
+          "exam_note_instruction": "Add one short note under the demo: 'A finite signal can look repetitive inside a window, but true periodicity requires the pattern to continue forever in both directions.'"
+        }
+      },
+      {
+        "type": "book_image",
+        "source_page": "page-081",
+        "fig_id": "Figure 1.13",
+        "teaching_role": "example_support",
+        "mode_specific_visual_use": {
+          "cram": "Use the shaded one-period segment as the visual clue for periodic extension questions.",
+          "standard": "Use it as the representative example: one segment of duration \\(T_0\\) generates the whole signal by copying.",
+          "top_score": "Emphasize that any one-period segment works, not only the segment starting at \\(t=0\\)."
+        },
+        "caption_instruction": "One sentence: Figure 1.13 shows how a full periodic signal is built by repeating any one-period segment end to end.",
+        "description_instruction": "Describe the two time-domain plots with highlighted one-period segments. Point out that the copied segments are placed at equal time intervals to the left and right, so the signal exists forever. Students should notice that the period is the repeat spacing, not necessarily the width of a single visible feature.",
+        "explanation_instruction": "On the same page, add the heading '## 2. Fundamental period and periodic extension'. Explain in 90–130 words that many shifts may repeat a periodic signal, but the fundamental period is the smallest positive one. Then explain periodic extension: choose any segment of length \\(T_0\\), copy it end to end forever, and the entire signal is determined. Include one representative example: if a waveform repeats every 4 seconds, then 4 seconds is a candidate period; 8 seconds also repeats, but the fundamental period is 4 seconds if no smaller positive shift works. Common trap: calling a multiple of the period the fundamental period."
+      },
+      {
+        "type": "math_block",
+        "latex": "\\int_a^{a+T_0}x(t)\\,dt=\\int_b^{b+T_0}x(t)\\,dt",
+        "explanation_instruction": "Start this page with the heading '## 3. Area over one period'. Explain in 90–130 words that for a periodic signal, the area under the curve over any interval of length \\(T_0\\) is the same, no matter where the interval starts. Define \\(a\\), \\(b\\), \\(T_0\\), and \\(x(t)\\). State when to use this: exam problems asking for an integral over one full period or comparing two one-period windows. Include one minimal example: integrating from \\(0\\) to \\(T_0\\) gives the same result as integrating from \\(3\\) to \\(3+T_0\\). Common misuse: applying the property to intervals that are not exactly one period long."
+      },
+      {
+        "type": "math_block",
+        "latex": "x(t)=0\\quad \\text{for }t<0",
+        "explanation_instruction": "Start this page with the heading '## 4. Causal, noncausal, everlasting, and anti-causal signals'. Explain in 100–150 words that this formula defines a causal signal: nothing exists before \\(t=0\\). Define \\(x(t)\\) and the condition \\(t<0\\). Give one minimal example: a signal that begins at \\(t=0\\) and continues afterward is causal. Contrast briefly: a noncausal signal has some nonzero value before \\(t=0\\); an everlasting signal exists for all time and is always noncausal; periodic signals are everlasting by definition. Exam trigger: inspect where the signal is nonzero relative to \\(t=0\\). Common misuse: assuming every noncausal signal is everlasting."
+      },
+      {
+        "type": "math_block",
+        "latex": "x(t)=0\\quad \\text{for }t\\ge 0",
+        "explanation_instruction": "Continue the same page with this separate definition for an anti-causal signal. Explain in 50–80 words that anti-causal means the signal has no value at or after \\(t=0\\), so any nonzero part must lie before \\(t=0\\). Include one minimal example: a pulse only on \\(-3<t<-1\\) is anti-causal. Common trap: confusing anti-causal with noncausal; anti-causal is a stricter condition."
+      },
+      {
+        "type": "section_summary",
+        "instruction": "Create a recap page titled '📌 Key Takeaways'. Use 5 concise bullets, each no more than 22 words. Include the formulas explicitly: \\(x(t)=x(t+T_0)\\), the one-period area identity \\(\\int_a^{a+T_0}x(t)dt=\\int_b^{b+T_0}x(t)dt\\), causal condition \\(x(t)=0\\) for \\(t<0\\), and anti-causal condition \\(x(t)=0\\) for \\(t\\ge 0\\). Include that the fundamental period is the smallest positive valid period. End with one bridge sentence: 'Next, we will use these classifications to analyze energy and power behavior of signals.'"
+      },
+      {
+        "type": "quiz_plan",
+        "target_questions": 7,
+        "question_range": {
+          "min": 6,
+          "max": 8
+        },
+        "knowledge_points": [
+          {
+            "id": "periodicity_condition",
+            "label": "Periodic vs. aperiodic signals",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 2
+            },
+            "questions": [
+              {
+                "id": "kp1_q1",
+                "type": "multiple_choice",
+                "stem": "Which statement correctly defines a periodic continuous-time signal?",
+                "options": [
+                  "A. It repeats at least once inside the visible graph window.",
+                  "B. There is some positive \\(T_0\\) such that \\(x(t)=x(t+T_0)\\) for all \\(t\\).",
+                  "C. It is nonzero only after \\(t=0\\).",
+                  "D. It has the same area over any two intervals of any length."
+                ],
+                "correct_option": "B",
+                "explanation": "A periodic signal must match itself after a positive shift \\(T_0\\) for every time \\(t\\).",
+                "wrong_option_explanations": {
+                  "A": "A visible repeated part is not enough; the equality must hold for all time.",
+                  "C": "That describes causality, not periodicity.",
+                  "D": "The equal-area property applies only over intervals of one period, not any length."
+                },
+                "hint": "Look for the phrase 'for all \\(t\\)'.",
+                "needs_visual": false,
+                "same_point_variant": true
+              },
+              {
+                "id": "kp1_q2",
+                "type": "multiple_choice",
+                "stem": "In the shift-test demo, a finite pulse train repeats three times and then becomes zero forever. Why is it not periodic?",
+                "options": [
+                  "A. Because pulse trains can never be periodic.",
+                  "B. Because the pattern does not continue forever in both time directions.",
+                  "C. Because periodic signals must be smooth.",
+                  "D. Because only sinusoids can satisfy \\(x(t)=x(t+T_0)\\)."
+                ],
+                "correct_option": "B",
+                "explanation": "True periodicity requires the shifted signal to match the original for all \\(t\\), not just inside a finite window.",
+                "wrong_option_explanations": {
+                  "A": "An infinite pulse train can be periodic.",
+                  "C": "Periodic signals may be discontinuous, such as square waves.",
+                  "D": "Many non-sinusoidal signals can be periodic."
+                },
+                "hint": "Ask whether the equality holds before and after the visible repeated part.",
+                "needs_visual": true,
+                "visual_type": "react_canvas_shift_test",
+                "same_point_variant": true
+              }
+            ]
+          },
+          {
+            "id": "fundamental_period_and_extension",
+            "label": "Fundamental period and periodic extension",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 2
+            },
+            "questions": [
+              {
+                "id": "kp2_q1",
+                "type": "multiple_choice",
+                "stem": "A signal repeats every 3 seconds. It also repeats every 6 seconds and 9 seconds. If no smaller positive shift works, what is the fundamental period?",
+                "options": [
+                  "A. 3 seconds",
+                  "B. 6 seconds",
+                  "C. 9 seconds",
+                  "D. Any positive repeat shift is automatically fundamental"
+                ],
+                "correct_option": "A",
+                "explanation": "The fundamental period is the smallest positive period.",
+                "wrong_option_explanations": {
+                  "B": "6 seconds is a period, but it is not the smallest positive one.",
+                  "C": "9 seconds is also a repeat shift, but not the fundamental period.",
+                  "D": "A signal may have many periods; only the smallest positive one is fundamental."
+                },
+                "hint": "Fundamental means smallest positive valid shift.",
+                "needs_visual": false,
+                "same_point_variant": true
+              },
+              {
+                "id": "kp2_q2",
+                "type": "multiple_choice",
+                "stem": "In Figure 1.13, what does periodic extension mean?",
+                "options": [
+                  "A. Stretching one period until it covers all time.",
+                  "B. Copying a one-period segment end to end forever in both directions.",
+                  "C. Keeping only the segment from \\(t=0\\) to \\(t=T_0\\).",
+                  "D. Making the amplitude larger every period."
+                ],
+                "correct_option": "B",
+                "explanation": "Periodic extension generates the full signal by repeating any segment of duration \\(T_0\\) endlessly.",
+                "wrong_option_explanations": {
+                  "A": "The segment is copied, not stretched.",
+                  "C": "The full periodic signal includes all repeated copies, not just one segment.",
+                  "D": "Periodic repetition keeps the same shape and amplitude pattern each period."
+                },
+                "hint": "Look at the shaded one-period segment and how it is reproduced.",
+                "needs_visual": true,
+                "visual_type": "book_figure_periodic_extension",
+                "same_point_variant": true
+              }
+            ]
+          },
+          {
+            "id": "one_period_area_property",
+            "label": "Area over any one-period interval",
+            "importance": "medium",
+            "exam_weight": "medium",
+            "mastery_rule": {
+              "correct_streak_required": 1
+            },
+            "questions": [
+              {
+                "id": "kp3_q1",
+                "type": "multiple_choice",
+                "stem": "For a periodic signal with period \\(T_0\\), which integral equality is guaranteed?",
+                "options": [
+                  "A. \\(\\int_a^{a+T_0}x(t)dt=\\int_b^{b+T_0}x(t)dt\\)",
+                  "B. \\(\\int_a^{a+2T_0}x(t)dt=\\int_b^{b+T_0}x(t)dt\\)",
+                  "C. \\(\\int_a^{b}x(t)dt=0\\) for all \\(a,b\\)",
+                  "D. \\(\\int_a^{a+T_0}x(t)dt=x(a)\\)"
+                ],
+                "correct_option": "A",
+                "explanation": "Any two intervals of exactly one-period duration have the same area under a periodic signal.",
+                "wrong_option_explanations": {
+                  "B": "The interval lengths differ, so the equality is not guaranteed.",
+                  "C": "Periodic signals do not necessarily have zero area.",
+                  "D": "An area over an interval is not generally equal to one signal value."
+                },
+                "hint": "Both integration windows must have length \\(T_0\\).",
+                "needs_visual": false,
+                "same_point_variant": false
+              }
+            ]
+          },
+          {
+            "id": "time_support_classification",
+            "label": "Causal, noncausal, everlasting, and anti-causal signals",
+            "importance": "high",
+            "exam_weight": "medium",
+            "mastery_rule": {
+              "correct_streak_required": 2
+            },
+            "questions": [
+              {
+                "id": "kp4_q1",
+                "type": "multiple_choice",
+                "stem": "Which condition defines a causal signal?",
+                "options": [
+                  "A. \\(x(t)=0\\) for \\(t<0\\)",
+                  "B. \\(x(t)=0\\) for \\(t\\ge 0\\)",
+                  "C. \\(x(t)=x(t+T_0)\\) for all \\(t\\)",
+                  "D. The signal exists for all \\(-\\infty<t<\\infty\\)"
+                ],
+                "correct_option": "A",
+                "explanation": "A causal signal has no nonzero values before \\(t=0\\).",
+                "wrong_option_explanations": {
+                  "B": "That is the anti-causal condition.",
+                  "C": "That is the periodicity condition.",
+                  "D": "That describes an everlasting signal, not causality."
+                },
+                "hint": "Causal means nothing happens before time zero.",
+                "needs_visual": false,
+                "same_point_variant": true
+              },
+              {
+                "id": "kp4_q2",
+                "type": "short_answer",
+                "stem": "A classmate says, 'Every noncausal signal must be everlasting.' Explain why this is wrong.",
+                "ideal_answer": "Noncausal only means the signal has some nonzero value before \\(t=0\\). It does not have to exist for all time. An everlasting signal exists over the entire interval \\(-\\infty<t<\\infty\\), so everlasting signals are noncausal, but not every noncausal signal is everlasting.",
+                "grading_rubric": [
+                  "Must state that noncausal means nonzero before \\(t=0\\)",
+                  "Must state that everlasting means existing for all time",
+                  "Must clearly say that everlasting implies noncausal, but noncausal does not imply everlasting"
+                ],
+                "explanation": "This checks the common one-way implication trap.",
+                "hint": "Think of a pulse that occurs before \\(t=0\\) but lasts only briefly.",
+                "needs_visual": false,
+                "same_point_variant": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "existing_page_images": {
+    "page-079": "/pages/page-079.png",
+    "page-080": "/pages/page-080.png",
+    "page-081": "/pages/page-081.png",
+    "page-082": "/pages/page-082.png"
+  },
+  "available_figures": {
+    "page-080": [
+      {
+        "fig_id": "Fig. 1.11",
+        "caption": "Examples of signals: (a) analog, continuous time; (b) digital, continuous time; (c) analog, discrete time; and (d) digital, discrete time.",
+        "description": "The figure contains four subplots with vertical axis labeled x(t) and horizontal axis labeled t, comparing signal types by value continuity and time continuity. Panel (a) shows a smooth continuous-valued curve over continuous time, (b) shows a two-level rectangular waveform over continuous time, (c) shows stem samples at discrete time instants with continuously varying amplitudes, and (d) shows stem samples at discrete time instants with quantized amplitude levels. Students should notice the distinction between analog versus digital values and continuous-time versus discrete-time indexing across the four cases."
+      }
+    ],
+    "page-081": [
+      {
+        "fig_id": "Figure 1.13",
+        "caption": "Generation of a periodic signal by periodic extension of its segment of one-period duration.",
+        "description": "The figure has two time-domain plots, labeled (a) and (b), with horizontal axis t and vertical axis x(t). Each plot shows a piecewise linear waveform consisting of a flat top followed by a downward ramp to zero, repeated by shifting one highlighted one-period segment along the time axis; marked time points include -7, -1, 0, 2, 5, 11 in (a) and -6, 0, 6, 12 in (b). The shaded regions indicate one-period segments, and students should notice how copying this segment at equal time intervals generates the full periodic signal."
+      }
+    ]
+  },
+  "web_sources": [
+    {
+      "index": 1,
+      "title": "Solar cycle",
+      "url": "https://en.wikipedia.org/wiki/Solar_cycle",
+      "snippet": "and transient aperiodic processes, governs the environment of interplanetary space by creating space weather and impacting space- and ground-based technologies"
+    },
+    {
+      "index": 2,
+      "title": "AstroSat",
+      "url": "https://en.wikipedia.org/wiki/AstroSat",
+      "snippet": "of periodic and aperiodic phenomena in X-ray binaries Studies of pulsations in X-ray pulsars Quasi-periodic oscillations, flickering, flaring, and other"
+    },
+    {
+      "index": 3,
+      "title": "Circadian rhythm",
+      "url": "https://en.wikipedia.org/wiki/Circadian_rhythm",
+      "snippet": "eclosion rhythm in Drosophila melanogaster after 600 generations in an aperiodic environment\". Die Naturwissenschaften. 86 (9): 448–449. Bibcode:1999NW"
+    },
+    {
+      "index": 4,
+      "title": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Wikipedia",
+      "snippet": "changed Wikipedia&#039;s domain from wikipedia.com to wikipedia.org. After an early period of exponential growth, the growth rate of the English Wikipedia in terms"
+    },
+    {
+      "index": 5,
+      "title": "Duga radar",
+      "url": "https://en.wikipedia.org/wiki/Duga_radar",
+      "snippet": "signal became such a nuisance that some communications receivers began including \"Woodpecker Blankers\" in their circuit designs. The unclaimed signal"
+    }
+  ],
+  "output_contract": {
+    "format": "single_json_object",
+    "no_markdown_fences": true,
+    "no_prose": true,
+    "compact_json_preferred": true
+  },
+  "section_specific_rules": null,
+  "summary_hint": null,
+  "exam_priority_guidance": null
+}

@@ -1,0 +1,22 @@
+{
+  "sectionId": "1.4-1",
+  "sourcePages": [
+    "page-083",
+    "page-084",
+    "page-085",
+    "page-086"
+  ],
+  "usedPages": [
+    "page-083",
+    "page-084",
+    "page-085",
+    "page-086"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "1.4-1 The Unit Step Function u(t)",
+  "foundEnd": true,
+  "endBeforeLine": "1.4-2 The Unit Impulse Function δ(t)",
+  "endBeforeCode": "1.4-2",
+  "charCount": 6760
+}

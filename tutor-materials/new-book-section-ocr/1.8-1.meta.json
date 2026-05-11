@@ -1,0 +1,22 @@
+{
+  "sectionId": "1.8-1",
+  "sourcePages": [
+    "page-111",
+    "page-112",
+    "page-113",
+    "page-114"
+  ],
+  "usedPages": [
+    "page-111",
+    "page-112",
+    "page-113",
+    "page-114"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "1.8-1 Electrical Systems",
+  "foundEnd": true,
+  "endBeforeLine": "1.8-2 Mechanical Systems",
+  "endBeforeCode": "1.8-2",
+  "charCount": 8708
+}

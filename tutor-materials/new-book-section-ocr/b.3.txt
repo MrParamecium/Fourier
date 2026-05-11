@@ -1,0 +1,9 @@
+# Aquarius section OCR
+section_id: b.3
+source_pages: page-020
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+B.3 S KETCHING S IGNALS
+     In this section, we discuss the sketching of a few useful signals, starting with exponentials.

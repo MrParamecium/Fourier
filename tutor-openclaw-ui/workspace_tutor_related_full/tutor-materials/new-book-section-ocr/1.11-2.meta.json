@@ -1,0 +1,20 @@
+{
+  "sectionId": "1.11-2",
+  "sourcePages": [
+    "page-128",
+    "page-129",
+    "page-130"
+  ],
+  "usedPages": [
+    "page-128",
+    "page-129",
+    "page-130"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "1.11-2 Relational Operators and the Unit Step Function",
+  "foundEnd": true,
+  "endBeforeLine": "1.11-3 Visualizing Operations on the Independent Variable",
+  "endBeforeCode": "1.11-3",
+  "charCount": 4337
+}

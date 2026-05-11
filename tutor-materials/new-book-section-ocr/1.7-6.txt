@@ -1,0 +1,12 @@
+# Aquarius section OCR
+section_id: 1.7-6
+source_pages: page-109
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+1.7-6 Analog and Digital Systems
+    Analog and digital signals are discussed in Sec. 1.3-2. A system whose input and output signals are
+    analog is an analog system; a system whose input and output signals are digital is a digital system.
+    A digital computer is an example of a digital (binary) system. Observe that a digital computer is a
+    digital as well as a discrete-time system.

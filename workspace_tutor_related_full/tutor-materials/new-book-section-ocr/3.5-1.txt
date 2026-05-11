@@ -1,0 +1,179 @@
+# Aquarius section OCR
+section_id: 3.5-1
+source_pages: page-266, page-267, page-268, page-269
+cut_start_found: yes
+cut_end_found: no
+
+--- OCR ---
+3.5-1 Recursive (Iterative) Solution of Difference Equation
+Equation (3.16) can be expressed as
+
+y[n] = −a1y[n − 1] − a2y[n − 2] − · · · − aNy[n − N]
+       + b0x[n] + b1x[n − 1] + · · · + bNx[n − N]                                    (3.17)
+
+In Eq. (3.17), y[n] is computed from 2N + 1 pieces of information; the preceding N values of the output: y[n − 1], y[n − 2], . . . , y[n − N], and the preceding N values of the input: x[n − 1], x[n − 2], . . . , x[n − N], and the present value of the input x[n]. Initially, to compute y[0], the N initial conditions y[−1], y[−2], . . . , y[−N] serve as the preceding N output values. Hence, knowing the N initial conditions and the input, we can determine recursively the entire output y[0], y[1], y[2], y[3], . . . , one value at a time. For instance, to find y[0] we set n = 0 in Eq. (3.17). The left-hand side is y[0], and the right-hand side is expressed in terms of N initial conditions y[−1], y[−2], . . . , y[−N] and the input x[0] if x[n] is causal (because of causality, other input terms x[−n] = 0). Similarly, knowing y[0] and the input, we can compute y[1] by setting n = 1 in Eq. (3.17). Knowing y[0] and y[1], we find y[2], and so on. Thus, we can use this recursive procedure to find the complete response y[0], y[1], y[2], . . . . For this reason, this equation is classed as a recursive form. This method basically reflects the manner in which a computer would solve a recursive difference equation, given the input and initial conditions. Equation (3.17) [or Eq. (3.16)] is nonrecursive if all the N − 1 coefficients ai = 0 (i = 1, 2, . . . , N − 1). In this case, it can be seen that y[n] is computed only from the input values and without using any previous outputs. Generally speaking, the recursive procedure applies only to equations in the recursive form. The recursive (iterative) procedure is demonstrated by the following examples.
+
+EXAMPLE 3.11  Iterative Solution to a First-Order Difference Equation
+
+Solve iteratively
+
+y[n] − 0.5y[n − 1] = x[n]
+
+with initial condition y[−1] = 16 and causal input x[n] = n^2u[n]. This equation can be expressed as
+
+y[n] = 0.5y[n − 1] + x[n]                                                            (3.18)
+
+[[PAGE page-267]]
+3.5  Discrete-Time System Equations                                                  267
+
+If we set n = 0 in Eq. (3.18), we obtain
+
+y[0] = 0.5y[−1] + x[0]
+= 0.5(16) + 0 = 8
+
+Now, setting n = 1 in Eq. (3.18) and using the value y[0] = 8 (computed in the first step) and
+x[1] = (1)^2 = 1, we obtain
+
+y[1] = 0.5(8) + (1)^2 = 5
+
+Next, setting n = 2 in Eq. (3.18) and using the value y[1] = 5 (computed in the previous step)
+and x[2] = (2)^2, we obtain
+
+y[2] = 0.5(5) + (2)^2 = 6.5
+
+Continuing in this way iteratively, we obtain
+
+y[3] = 0.5(6.5) + (3)^2 = 12.25
+y[4] = 0.5(12.25) + (4)^2 = 22.125
+⋮
+⋮
+
+The output y[n] is depicted in Fig. 3.17.
+
+y[n]
+8
+5
+6.5
+12.25
+0 1 2 3 4 5 n
+
+Figure 3.17  Iterative solution of a difference equation.
+
+We now present one more example of iterative solution—this time for a second-order
+equation. The iterative method can be applied to a difference equation in delay form or advance
+form. In Ex. 3.11 we considered the former. Let us now apply the iterative method to the advance
+form.
+
+EXAMPLE 3.12  Iterative Solution to a Second-Order Difference
+Equation
+
+Solve iteratively
+
+y[n + 2] − y[n + 1] + 0.24y[n] = x[n + 2] − 2x[n + 1]
+
+[[PAGE page-268]]
+268
+CHAPTER 3  TIME-DOMAIN ANALYSIS OF DISCRETE-TIME SYSTEMS
+
+with initial conditions y[-1] = 2, y[-2] = 1 and a causal input x[n] = nu[n]. The system
+equation can be expressed as
+
+y[n + 2] = y[n + 1] − 0.24y[n] + x[n + 2] − 2x[n + 1]                            (3.19)
+
+Setting n = −2 in Eq. (3.19) and then substituting y[−1] = 2, y[−2] = 1, x[0] = x[−1] = 0, we
+obtain
+
+y[0] = 2 − 0.24(1) + 0 − 0 = 1.76
+
+Setting n = −1 in Eq. (3.19) and then substituting y[0] = 1.76, y[−1] = 2, x[1] = 1, x[0] = 0,
+we obtain
+
+y[1] = 1.76 − 0.24(2) + 1 − 0 = 2.28
+
+Setting n = 0 in Eq. (3.19) and then substituting y[0] = 1.76, y[1] = 2.28, x[2] = 2, and x[1] = 1
+yield
+
+y[2] = 2.28 − 0.24(1.76) + 2 − 2(1) = 1.8576
+
+and so on.
+With MATLAB, we can readily verify and extend these recursive calculations.
+
+>> n = -2:5; y = [1,2,zeros(1,length(n)-2)]; x = [0,0,n(3:end)];
+>> for k = 1:length(n)-2,
+>>     y(k+2) = y(k+1)-0.24*y(k)+x(k+2)-2*x(k+1);
+>> end
+>> n,y
+n = -2      -1       0       1       2       3       4       5
+y =  1.0000   2.0000   1.7600   2.2800   1.8576   0.3104  -2.1354  -5.2099
+
+Note carefully the recursive nature of the computations. From the N initial conditions (and
+the input), we obtained y[0] first. Then, using this value of y[0] and the preceding N − 1 initial
+conditions (along with the input), we find y[1]. Next, using y[0], y[1] along with the past N − 2
+initial conditions and input, we obtained y[2], and so on. This method is general and can be applied
+to a recursive difference equation of any order. It is interesting that the hardware realization of
+Eq. (3.18) depicted in Fig. 3.14 (with a = 0.5) generates the solution precisely in this (iterative)
+fashion.
+
+DRILL 3.10  Iterative Solution to a Difference Equation
+
+Using the iterative method, find the first three terms of y[n] for
+
+y[n + 1] − 2y[n] = x[n]
+
+The initial condition is y[−1] = 10 and the input x[n] = 2 starting at n = 0.
+
+ANSWER
+
+y[0] = 20, y[1] = 42, and y[2] = 86
+
+[[PAGE page-269]]
+3.5  Discrete-Time System Equations                                          269
+
+We shall see in the future that the solution of a difference equation obtained in this direct
+(iterative) way is useful in many situations. Despite the many uses of this method, a closed-form
+solution of a difference equation is far more useful in the study of system behavior and its
+dependence on the input and various system parameters. For this reason we shall develop a
+systematic procedure to analyze discrete-time systems along lines similar to those used for
+continuous-time systems.
+
+OPERATOR NOTATION
+
+In difference equations, it is convenient to use operator notation similar to that used in differential
+equations for the sake of compactness. In continuous-time systems, we used the operator D to
+denote the operation of differentiation. For discrete-time systems, we shall use the operator E to
+denote the operation for advancing a sequence by one time unit. Thus,
+
+Ex[n] = x[n + 1]
+E²x[n] = x[n + 2]
+⋮
+Eᴺx[n] = x[n + N]
+
+Let us use this advance operator notation to represent several systems investigated earlier. The
+first-order difference equation of a savings account is [see Eq. (3.4)]
+
+y[n + 1] − ay[n] = x[n + 1]
+
+Using the operator notation, we can express this equation as
+
+Ey[n] − ay[n] = Ex[n]      or      (E − a)y[n] = Ex[n]
+
+Similarly, the second-order book sales estimate described by Eq. (3.6) as
+
+y[n + 2] + 1/4 y[n + 1] + 1/16 y[n] = x[n + 2]
+
+can be expressed in operator notation as
+
+(E² + 1/4 E + 1/16)y[n] = E²x[n]
+
+The general Nth-order advance-form difference equation of Eq. (3.15) can be expressed as
+
+(Eᴺ + a₁Eᴺ⁻¹ + · · · + aN−1E + aN)y[n] = (b₀Eᴺ + b₁Eᴺ⁻¹ + · · · + bN−1E + bN)x[n]
+
+or
+
+Q[E]y[n] = P[E]x[n]                                                   (3.20)
+
+where Q[E] and P[E] are Nth-order polynomial operators
+
+Q[E] = Eᴺ + a₁Eᴺ⁻¹ + · · · + aN−1E + aN
+P[E] = b₀Eᴺ + b₁Eᴺ⁻¹ + · · · + bN−1E + bN

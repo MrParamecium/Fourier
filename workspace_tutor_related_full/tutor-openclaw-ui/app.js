@@ -52,6 +52,9 @@ function shouldShowIntroLanding() {
   if (params.get(AUTH_VIEW_FLAG) === 'login' || params.has(AUTH_CALLBACK_FLAG)) {
     return false;
   }
+  if (hasPendingAuthReturnIntent()) {
+    return false;
+  }
   return true;
 }
 
@@ -79,6 +82,7 @@ function initIntroLanding() {
   if (shell) shell.classList.add('hidden');
 
   const handleEnter = () => {
+    prepareWorkspaceReturnTarget();
     hideIntroLanding(true);
     showLoginView();
   };
@@ -133,6 +137,7 @@ const CLERK_PUBLISHABLE_KEY = 'pk_test_ZHJpdmVuLXRyb2xsLTI4LmNsZXJrLmFjY291bnRzL
 const AUTH_CALLBACK_FLAG = 'auth_callback';
 const AUTH_VIEW_FLAG = 'view';
 const AUTH_RETURN_INTENT_KEY = 'aquarius-auth-return-intent';
+const AUTH_RETURN_TARGET_KEY = 'aquarius-auth-return-target';
 
 let currentUser = null;  // { uid, name, email, imageUrl }
 let userMemory  = {};    // loaded from backend after login
@@ -192,8 +197,7 @@ function setLoginButtonsBusy(isBusy) {
     'clerkGithubBtnLogin',
     'clerkGoogleBtnLogin',
     'clerkSignInBtnLogin',
-    'guestModeBtnLogin',
-    'clerkContinueSessionBtnLogin'
+    'guestModeBtnLogin'
   ].forEach((id) => {
     const el = document.getElementById(id);
     if (el) el.disabled = isBusy;
@@ -240,6 +244,14 @@ function setAuthReturnIntent(intent = 'workspace') {
   try { sessionStorage.setItem(AUTH_RETURN_INTENT_KEY, intent); } catch (_) {}
 }
 
+function peekAuthReturnIntent() {
+  try { return sessionStorage.getItem(AUTH_RETURN_INTENT_KEY) || ''; } catch (_) { return ''; }
+}
+
+function ensureAuthReturnIntent(intent = 'workspace') {
+  if (!peekAuthReturnIntent()) setAuthReturnIntent(intent);
+}
+
 function consumeAuthReturnIntent() {
   try {
     const intent = sessionStorage.getItem(AUTH_RETURN_INTENT_KEY) || '';
@@ -250,23 +262,77 @@ function consumeAuthReturnIntent() {
   }
 }
 
-async function enterWorkspaceWithExistingSession() {
-  if (!clerkInstance?.user) return false;
-  allowAuthNavigation = true;
+function setAuthReturnTarget(target) {
+  if (!target) return;
+  try { sessionStorage.setItem(AUTH_RETURN_TARGET_KEY, JSON.stringify(target)); } catch (_) {}
+}
+
+function clearAuthReturnTarget() {
+  try { sessionStorage.removeItem(AUTH_RETURN_TARGET_KEY); } catch (_) {}
+}
+
+function peekAuthReturnTarget() {
+  try {
+    const raw = sessionStorage.getItem(AUTH_RETURN_TARGET_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (_) {
+    return null;
+  }
+}
+
+function consumeAuthReturnTarget() {
+  const target = peekAuthReturnTarget();
+  try { sessionStorage.removeItem(AUTH_RETURN_TARGET_KEY); } catch (_) {}
+  return target;
+}
+
+function getFirstLearnTarget() {
+  const chapters = Array.isArray(syllabusData) ? syllabusData : [];
+  for (const chapter of chapters) {
+    const sections = Array.isArray(chapter.sections) ? chapter.sections : [];
+    for (const rawSection of sections) {
+      const section = typeof rawSection === 'string' ? { title: rawSection, subsections: [] } : rawSection;
+      const title = section.title || section.sectionTitle || '';
+      const subsections = Array.isArray(section.subsections) ? section.subsections : [];
+      if (subsections.length) {
+        return { type: 'lesson', sectionId: subsections[0], sectionTitle: subsections[0], book: currentBook };
+      }
+      if (title) return { type: 'lesson', sectionId: title, sectionTitle: title, book: currentBook };
+    }
+  }
+  return null;
+}
+
+function prepareLearnReturnTarget(target = null) {
+  setAuthReturnIntent('learn');
+  setAuthReturnTarget(target || getFirstLearnTarget());
+}
+
+function prepareWorkspaceReturnTarget() {
   setAuthReturnIntent('workspace');
-  await onUserSignedIn(clerkInstance.user);
+  clearAuthReturnTarget();
+}
+
+function continueToPendingLearnTarget() {
+  const target = consumeAuthReturnTarget();
+  if (!target) return false;
+  if (target.book && target.book !== currentBook) {
+    setBook(target.book, { preserveView: true });
+  }
+  if (target.type === 'overview' || shouldOpenSectionAsChapterOverview(target.sectionId, target.sectionTitle, target.subsections || [])) {
+    openChapterOverviewMode(target.sectionId, target.sectionTitle, target.subsections || []);
+  } else {
+    openLearnMode(target.sectionId, target.sectionTitle, target.subsections || []);
+  }
   return true;
 }
 
-function updateExistingSessionLoginAction() {
-  const continueBtn = document.getElementById('clerkContinueSessionBtnLogin');
-  if (!continueBtn) return;
-  const hasSession = Boolean(clerkInstance?.user || currentUser);
-  continueBtn.classList.toggle('hidden', !hasSession);
-  if (hasSession) {
-    const name = currentUser?.name || clerkInstance?.user?.firstName || 'your account';
-    continueBtn.querySelector('span').textContent = `Continue as ${name}`;
-  }
+async function enterWorkspaceWithExistingSession() {
+  if (!clerkInstance?.user) return false;
+  allowAuthNavigation = true;
+  ensureAuthReturnIntent('workspace');
+  await onUserSignedIn(clerkInstance.user);
+  return true;
 }
 
 async function startOAuthRedirect(provider) {
@@ -279,8 +345,12 @@ async function startOAuthRedirect(provider) {
   }
   try {
     await clerkInstance.load();
+    if (clerkInstance.user) {
+      await enterWorkspaceWithExistingSession();
+      return;
+    }
     allowAuthNavigation = true;
-    setAuthReturnIntent('workspace');
+    ensureAuthReturnIntent('workspace');
     authRedirectInProgress = true;
     document.body.classList.add('auth-redirecting');
     showLoginView();
@@ -307,7 +377,7 @@ async function startOAuthRedirect(provider) {
     if (status === 429) {
       setLoginStatus('Google / GitHub login is temporarily rate-limited by Clerk. Please wait 20-30 seconds and try again.', 'error');
     } else if (status === 400) {
-      setLoginStatus('This browser already has a sign-in session. Refresh once, then use Open Workspace again.', 'error');
+      setLoginStatus('This browser already has a sign-in session. Refresh once, then use Sign In or continue as Guest.', 'error');
     } else {
       setLoginStatus(`Could not start ${provider === 'github' ? 'GitHub' : 'Google'} login. Please try again or use Sign In below.`, 'error');
     }
@@ -319,7 +389,7 @@ async function handleAuthRedirectIfNeeded() {
   if (!clerkInstance || !isAuthCallbackRequest()) return false;
   try {
     allowAuthNavigation = true;
-    setAuthReturnIntent('workspace');
+    ensureAuthReturnIntent('workspace');
     authRedirectInProgress = true;
     document.body.classList.add('auth-redirecting');
     showLoginView();
@@ -405,27 +475,6 @@ function initLoginExperience() {
 
     directOAuth('clerkGoogleBtnLogin', 'google');
     directOAuth('clerkGithubBtnLogin', 'github');
-    const continueSessionBtn = document.getElementById('clerkContinueSessionBtnLogin');
-    if (continueSessionBtn && !continueSessionBtn.dataset.boundContinueSession) {
-      continueSessionBtn.dataset.boundContinueSession = '1';
-      continueSessionBtn.addEventListener('click', async () => {
-        if (clerkInstance && !clerkInstance.loaded) {
-          try { await clerkInstance.load(); } catch (_) {}
-        }
-        if (clerkInstance?.user) {
-          await enterWorkspaceWithExistingSession();
-        } else if (currentUser) {
-          allowAuthNavigation = true;
-          setAuthReturnIntent('workspace');
-          hideIntroLanding(true);
-          showWelcome();
-          if (!isQuizProfileComplete(userMemory)) showQuiz();
-        } else {
-          setLoginStatus('No saved sign-in session was found. Use Google, GitHub, or Sign In.', 'error');
-          updateExistingSessionLoginAction();
-        }
-      });
-    }
     relayToClerk('loginForgotBtn');
     relayToClerk('loginSignupBtn');
   }
@@ -632,7 +681,7 @@ async function initClerk() {
     clerkInstance.addListener(async (e) => {
       if (e.user) {
         hideAuthOverlay();
-        const shouldEnter = allowAuthNavigation || authRedirectInProgress;
+        const shouldEnter = allowAuthNavigation || authRedirectInProgress || hasPendingAuthReturnIntent();
         if (shouldEnter) await onUserSignedIn(e.user);
         else await syncCurrentUserWithoutNavigation(e.user);
       } else {
@@ -643,7 +692,7 @@ async function initClerk() {
     // Check immediately if already logged in or session resumed early
     if (clerkInstance.user) {
       hideAuthOverlay();
-      const shouldEnter = allowAuthNavigation || authRedirectInProgress;
+      const shouldEnter = allowAuthNavigation || authRedirectInProgress || hasPendingAuthReturnIntent();
       if (shouldEnter) await onUserSignedIn(clerkInstance.user);
       else await syncCurrentUserWithoutNavigation(clerkInstance.user);
       return;
@@ -663,7 +712,7 @@ async function initClerk() {
       return;
     }
     allowAuthNavigation = true;
-    setAuthReturnIntent('workspace');
+    ensureAuthReturnIntent('workspace');
     setLoginStatus('Opening sign-in form...', 'info');
     setLoginButtonsBusy(true);
     const targets = [
@@ -728,7 +777,7 @@ async function initClerk() {
     clerkInstance.addListener(({ user }) => {
       if (user && !currentUser) {
         hideAuthOverlay();
-        const shouldEnter = allowAuthNavigation || authRedirectInProgress;
+        const shouldEnter = allowAuthNavigation || authRedirectInProgress || hasPendingAuthReturnIntent();
         if (shouldEnter) onUserSignedIn(user);
         else syncCurrentUserWithoutNavigation(user);
       }
@@ -737,7 +786,7 @@ async function initClerk() {
 }
 
 async function onUserSignedIn(user) {
-  const navigationAllowed = allowAuthNavigation || authRedirectInProgress;
+  const navigationAllowed = allowAuthNavigation || authRedirectInProgress || hasPendingAuthReturnIntent();
   authRedirectInProgress = false;
   document.body.classList.remove('auth-redirecting');
   const authReturnIntent = consumeAuthReturnIntent();
@@ -764,13 +813,14 @@ async function onUserSignedIn(user) {
   renderUserBadge();
 
   const quizDone = isQuizProfileComplete(userMemory);
-  const shouldEnterWorkspace = navigationAllowed && authReturnIntent === 'workspace';
+  const shouldEnterWorkspace = navigationAllowed && (authReturnIntent === 'workspace' || authReturnIntent === 'learn');
 
   if (!shouldEnterWorkspace) return;
 
   hideIntroLanding(true);
+  if (authReturnIntent === 'learn' && quizDone && continueToPendingLearnTarget()) return;
   showWelcome();
-  if (!quizDone) showQuiz();
+  if (authReturnIntent === 'learn' && !quizDone) showQuiz();
 }
 
 async function syncCurrentUserWithoutNavigation(user) {
@@ -794,7 +844,6 @@ async function syncCurrentUserWithoutNavigation(user) {
   updatePreferenceSidebarSummary();
   updateLearnModeBadge(userMemory && userMemory.quiz ? userMemory.quiz.track : null);
   renderUserBadge();
-  updateExistingSessionLoginAction();
 }
 
 function startGuestMode() {
@@ -1620,6 +1669,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         updateLearnModeBadge(userMemory && userMemory.quiz ? userMemory.quiz.track : null);
         renderUserBadge();
+        if (continueToPendingLearnTarget()) return;
+        showWelcome();
       }
     });
   }
@@ -1986,6 +2037,68 @@ const mistakeDeleteBtn = document.getElementById('mistakeDeleteBtn');
 bindPreferenceControls();
 bindMistakeNotebookControls();
 
+const SIDEBAR_ACCORDION_MS = 380;
+
+function isAccordionOpen(panel) {
+  return !!panel && !panel.classList.contains('hidden') && panel.classList.contains('is-open');
+}
+
+function setAccordionOpen(panel, open) {
+  if (!panel) return;
+  const token = String(Date.now() + Math.random());
+  panel.dataset.accordionToken = token;
+  panel.style.overflow = 'hidden';
+  panel.style.pointerEvents = 'none';
+
+  if (open) {
+    panel.classList.remove('hidden');
+    panel.classList.add('is-animating');
+    panel.style.maxHeight = '0px';
+    panel.style.opacity = '0';
+    panel.style.transform = 'translateY(-6px)';
+    void panel.offsetHeight;
+    panel.classList.add('is-open');
+    panel.style.maxHeight = `${panel.scrollHeight}px`;
+    panel.style.opacity = '1';
+    panel.style.transform = 'translateY(0)';
+
+    window.setTimeout(() => {
+      if (panel.dataset.accordionToken !== token) return;
+      panel.classList.remove('is-animating');
+      panel.style.maxHeight = 'none';
+      panel.style.opacity = '';
+      panel.style.transform = '';
+      panel.style.overflow = '';
+      panel.style.pointerEvents = '';
+      panel.dataset.accordionState = 'open';
+    }, SIDEBAR_ACCORDION_MS + 40);
+    return;
+  }
+
+  panel.dataset.accordionState = 'closing';
+  panel.classList.add('is-animating');
+  panel.style.maxHeight = `${panel.scrollHeight}px`;
+  panel.style.opacity = '1';
+  panel.style.transform = 'translateY(0)';
+  void panel.offsetHeight;
+  panel.classList.remove('is-open');
+  panel.style.maxHeight = '0px';
+  panel.style.opacity = '0';
+  panel.style.transform = 'translateY(-6px)';
+
+  window.setTimeout(() => {
+    if (panel.dataset.accordionToken !== token) return;
+    panel.classList.add('hidden');
+    panel.classList.remove('is-animating');
+    panel.style.maxHeight = '';
+    panel.style.opacity = '';
+    panel.style.transform = '';
+    panel.style.overflow = '';
+    panel.style.pointerEvents = '';
+    panel.dataset.accordionState = 'closed';
+  }, SIDEBAR_ACCORDION_MS + 40);
+}
+
 if (sidebarSettingsBtn) {
   sidebarSettingsBtn.addEventListener('click', showSettingsView);
 }
@@ -2208,6 +2321,39 @@ const tutorState = {
   learnBookPages: [],
   learnWebSources: []
 };
+
+const B8_TEXTBOOK_ONLY_MARKDOWN = [
+  '## B.8 Appendix: Useful Mathematical Formulas',
+  '',
+  'This appendix is a compact formula reference. Use it as the lookup sheet for the algebra, series, calculus, and trigonometric identities that appear throughout the earlier background sections.',
+  '',
+  'Read it by formula family, not from top to bottom like a proof. First identify the kind of move you need: complex-number conversion, summation, Taylor/Maclaurin expansion, power series, trig simplification, derivative, integral, limit rule, or polynomial equation formula.',
+  '',
+  'The main exam trap is sign and condition copying. Check the plus/minus signs, whether a formula assumes a nonzero denominator, and whether the variable is in radians. For worked examples, connect these formulas back to B.1 complex numbers, B.2 sinusoids, and B.5 partial fractions.',
+  '',
+  'Switch to the **Textbook** tab for the full appendix pages.'
+].join('\n');
+
+function isB8TextbookOnlySection(sectionId = '', sectionTitle = '') {
+  return /\bB\.8\b/i.test(`${sectionId || ''} ${sectionTitle || ''}`);
+}
+
+function isB73VectorOperationsSection(sectionId = '', sectionTitle = '') {
+  const text = compactWhitespace(`${sectionId || ''} ${sectionTitle || ''}`);
+  return /\bB\.7-3\b/i.test(text) || (/Vector Operations/i.test(text) && /\bB\.7\b/i.test(text));
+}
+
+function getB8TextbookOnlyMarkdown() {
+  return B8_TEXTBOOK_ONLY_MARKDOWN;
+}
+
+function shouldOpenSectionAsChapterOverview(sectionId = '', sectionTitle = '', subsections = []) {
+  return Boolean(compactWhitespace(`${sectionId || ''} ${sectionTitle || ''}`));
+}
+
+function forceB8TextbookOnlyLesson(sectionId = '', sectionTitle = '', markdown = '') {
+  return isB8TextbookOnlySection(sectionId, sectionTitle) ? getB8TextbookOnlyMarkdown() : markdown;
+}
 
 webSourcesToggle.addEventListener('click', () => {
   const open = !webSourcesInline.classList.contains('hidden');
@@ -3659,7 +3805,7 @@ const syllabusDataNew = [
       { title: 'B.5 Partial Fraction Expansion', subsections: ['B.5-1 Method of Clearing Fractions', 'B.5-2 Heaviside Cover-Up Method', 'B.5-3 Repeated Factors of Q(x)', 'B.5-4 A Combination of Heaviside and Clearing Fractions', 'B.5-5 Improper F(x) with m=n', 'B.5-6 Modified Partial Fractions'] },
       { title: 'B.6 Vectors and Matrices', subsections: ['B.6-1 Some Definitions and Properties', 'B.6-2 Matrix Algebra'] },
       { title: 'B.7 MATLAB: Elementary Operations', subsections: ['B.7-1 MATLAB Overview', 'B.7-2 Calculator Operations', 'B.7-3 Vector Operations', 'B.7-4 Simple Plotting', 'B.7-5 Element-by-Element Operations', 'B.7-6 Matrix Operations', 'B.7-7 Partial Fraction Expansions'] },
-      { title: 'B.8 Appendix: Useful Mathematical Formulas', subsections: [] }
+      { title: 'B.8 Appendix: Useful Mathematical Formulas', subsections: ['B.8-1 Some Useful Constants', 'B.8-2 Complex Numbers', 'B.8-3 Sums', 'B.8-4 Taylor and Maclaurin Series', 'B.8-5 Power Series', 'B.8-6 Trigonometric Identities', 'B.8-7 Common Derivative Formulas', 'B.8-8 Indefinite Integrals', "B.8-9 L'Hopital's Rule", 'B.8-10 Solution of Quadratic and Cubic Equations'] }
     ]
   },
   {
@@ -3671,7 +3817,146 @@ const syllabusDataNew = [
       { title: '1.4 Some Useful Signal Models', subsections: ['1.4-1 The Unit Step Function u(t)', '1.4-2 The Unit Impulse Function δ(t)', '1.4-3 The Exponential Function e^st'] },
       { title: '1.5 Even and Odd Functions', subsections: ['1.5-1 Some Properties of Even and Odd Functions', '1.5-2 Even and Odd Components of a Signal'] },
       { title: '1.6 Systems', subsections: [] },
-      { title: '1.7 Classification of Systems', subsections: ['1.7-1 Linear and Nonlinear Systems', '1.7-2 Time-Invariant and Time-Varying Systems', '1.7-3 Instantaneous and Dynamic Systems', '1.7-4 Causal and Noncausal Systems', '1.7-5 Continuous-Time and Discrete-Time Systems', '1.7-6 Analog and Digital Systems', '1.7-7 Invertible and Noninvertible Systems', '1.7-8 Stable and Unstable Systems'] }
+      { title: '1.7 Classification of Systems', subsections: ['1.7-1 Linear and Nonlinear Systems', '1.7-2 Time-Invariant and Time-Varying Systems', '1.7-3 Instantaneous and Dynamic Systems', '1.7-4 Causal and Noncausal Systems', '1.7-5 Continuous-Time and Discrete-Time Systems', '1.7-6 Analog and Digital Systems', '1.7-7 Invertible and Noninvertible Systems', '1.7-8 Stable and Unstable Systems'] },
+      { title: '1.8 System Model: Input-Output Description', subsections: ['1.8-1 Electrical Systems', '1.8-2 Mechanical Systems', '1.8-3 Electromechanical Systems'] },
+      { title: '1.9 Internal and External Descriptions of a System', subsections: [] },
+      { title: '1.10 Internal Description: The State-Space Description', subsections: [] },
+      { title: '1.11 MATLAB: Working with Functions', subsections: ['1.11-1 Anonymous Functions', '1.11-2 Relational Operators and the Unit Step Function', '1.11-3 Visualizing Operations on the Independent Variable', '1.11-4 Numerical Integration and Estimating Signal Energy'] },
+      { title: '1.12 Summary', subsections: [] }
+    ]
+  },
+  {
+    chapter: 'Chapter 2: Time-Domain Analysis of Continuous-Time Systems',
+    sections: [
+      { title: '2.1 Introduction', subsections: [] },
+      { title: '2.2 System Response to Internal Conditions: The Zero-Input Response', subsections: ['2.2-1 Some Insights into the Zero-Input Behavior of a System'] },
+      { title: '2.3 The Unit Impulse Response h(t)', subsections: [] },
+      { title: '2.4 System Response to External Input: The Zero-State Response', subsections: ['2.4-1 The Convolution Integral', '2.4-2 Graphical Understanding of Convolution Operation', '2.4-3 Interconnected Systems', '2.4-4 A Very Special Function for LTIC Systems: The Everlasting Exponential e^st', '2.4-5 Total Response'] },
+      { title: '2.5 System Stability', subsections: ['2.5-1 External (BIBO) Stability', '2.5-2 Internal (Asymptotic) Stability', '2.5-3 Relationship Between BIBO and Asymptotic Stability'] },
+      { title: '2.6 Intuitive Insights into System Behavior', subsections: ['2.6-1 Dependence of System Behavior on Characteristic Modes', '2.6-2 Response Time of a System: The System Time Constant', '2.6-3 Time Constant and Rise Time of a System', '2.6-4 Time Constant and Filtering', '2.6-5 Time Constant and Pulse Dispersion (Spreading)', '2.6-6 Time Constant and Rate of Information Transmission', '2.6-7 The Resonance Phenomenon'] },
+      { title: '2.7 MATLAB: M-Files', subsections: ['2.7-1 Script M-Files', '2.7-2 Function M-Files', '2.7-3 For-Loops', '2.7-4 Graphical Understanding of Convolution'] },
+      { title: '2.8 Appendix: Determining the Impulse Response', subsections: [] },
+      { title: '2.9 Summary', subsections: [] }
+    ]
+  },
+  {
+    chapter: 'Chapter 3: Time-Domain Analysis of Discrete-Time Systems',
+    sections: [
+      { title: '3.1 Introduction', subsections: ['3.1-1 Size of a Discrete-Time Signal'] },
+      { title: '3.2 Useful Signal Operations', subsections: [] },
+      { title: '3.3 Some Useful Discrete-Time Signal Models', subsections: ['3.3-1 Discrete-Time Impulse Function delta[n]', '3.3-2 Discrete-Time Unit Step Function u[n]', '3.3-3 Discrete-Time Exponential gamma^n', '3.3-4 Discrete-Time Sinusoid cos(Omega n + theta)', '3.3-5 Discrete-Time Complex Exponential e^(j Omega n)'] },
+      { title: '3.4 Examples of Discrete-Time Systems', subsections: ['3.4-1 Classification of Discrete-Time Systems'] },
+      { title: '3.5 Discrete-Time System Equations', subsections: ['3.5-1 Recursive (Iterative) Solution of Difference Equation'] },
+      { title: '3.6 System Response to Internal Conditions: The Zero-Input Response', subsections: [] },
+      { title: '3.7 The Unit Impulse Response h[n]', subsections: ['3.7-1 The Closed-Form Solution of h[n]'] },
+      { title: '3.8 System Response to External Input: The Zero-State Response', subsections: ['3.8-1 Graphical Procedure for the Convolution Sum', '3.8-2 Interconnected Systems', '3.8-3 Total Response'] },
+      { title: '3.9 System Stability', subsections: ['3.9-1 External (BIBO) Stability', '3.9-2 Internal (Asymptotic) Stability', '3.9-3 Relationship Between BIBO and Asymptotic Stability'] },
+      { title: '3.10 Intuitive Insights into System Behavior', subsections: [] },
+      { title: '3.11 MATLAB: Discrete-Time Signals and Systems', subsections: ['3.11-1 Discrete-Time Functions and Stem Plots', '3.11-2 System Responses Through Filtering', '3.11-3 A Custom Filter Function', '3.11-4 Discrete-Time Convolution'] },
+      { title: '3.12 Appendix: Impulse Response for a Special Case', subsections: [] },
+      { title: '3.13 Summary', subsections: [] }
+    ]
+  },
+  {
+    chapter: 'Chapter 4: Continuous-Time System Analysis Using the Laplace Transform',
+    sections: [
+      { title: '4.1 The Laplace Transform', subsections: ['4.1-1 Finding the Inverse Transform'] },
+      { title: '4.2 Some Properties of the Laplace Transform', subsections: ['4.2-1 Time Shifting', '4.2-2 Frequency Shifting', '4.2-3 The Time-Differentiation Property', '4.2-4 The Time-Integration Property', '4.2-5 The Scaling Property', '4.2-6 Time Convolution and Frequency Convolution'] },
+      { title: '4.3 Solution of Differential and Integro-Differential Equations', subsections: ['4.3-1 Comments on Initial Conditions at 0- and at 0+', '4.3-2 Zero-State Response', '4.3-3 Stability', '4.3-4 Inverse Systems'] },
+      { title: '4.4 Analysis of Electrical Networks: The Transformed Network', subsections: ['4.4-1 Analysis of Active Circuits'] },
+      { title: '4.5 Block Diagrams', subsections: [] },
+      { title: '4.6 System Realization', subsections: ['4.6-1 Direct Form I Realization', '4.6-2 Direct Form II Realization', '4.6-3 Cascade and Parallel Realizations', '4.6-4 Transposed Realization', '4.6-5 Using Operational Amplifiers for System Realization'] },
+      { title: '4.7 Application to Feedback and Controls', subsections: ['4.7-1 Analysis of a Simple Control System'] },
+      { title: '4.8 Frequency Response of an LTIC System', subsections: ['4.8-1 Steady-State Response to Causal Sinusoidal Inputs'] },
+      { title: '4.9 Bode Plots', subsections: ['4.9-1 Constant Ka1 a2 / b1 b3', '4.9-2 Pole (or Zero) at the Origin', '4.9-3 First-Order Pole (or Zero)', '4.9-4 Second-Order Pole (or Zero)', '4.9-5 The Transfer Function from the Frequency Response'] },
+      { title: '4.10 Filter Design by Placement of Poles and Zeros of H(s)', subsections: ['4.10-1 Dependence of Frequency Response on Poles and Zeros of H(s)', '4.10-2 Lowpass Filters', '4.10-3 Bandpass Filters', '4.10-4 Notch (Bandstop) Filters', '4.10-5 Practical Filters and Their Specifications'] },
+      { title: '4.11 The Bilateral Laplace Transform', subsections: ['4.11-1 Properties of the Bilateral Laplace Transform', '4.11-2 Using the Bilateral Transform for Linear System Analysis'] },
+      { title: '4.12 MATLAB: Continuous-Time Filters', subsections: ['4.12-1 Frequency Response and Polynomial Evaluation', '4.12-2 Butterworth Filters and the Find Command', '4.12-3 Using Cascaded Second-Order Sections for Butterworth Filter Realization', '4.12-4 Chebyshev Filters'] },
+      { title: '4.13 Summary', subsections: [] }
+    ]
+  },
+  {
+    chapter: 'Chapter 5: Discrete-Time System Analysis Using the z-Transform',
+    sections: [
+      { title: '5.1 The z-Transform', subsections: ['5.1-1 Inverse Transform by Partial Fraction Expansion and Tables', '5.1-2 Inverse z-Transform by Power Series Expansion'] },
+      { title: '5.2 Some Properties of the z-Transform', subsections: ['5.2-1 Time-Shifting Properties', '5.2-2 z-Domain Scaling Property (Multiplication by gamma^n)', '5.2-3 z-Domain Differentiation Property (Multiplication by n)', '5.2-4 Time-Reversal Property', '5.2-5 Convolution Property'] },
+      { title: '5.3 z-Transform Solution of Linear Difference Equations', subsections: ['5.3-1 Zero-State Response of LTID Systems: The Transfer Function', '5.3-2 Stability', '5.3-3 Inverse Systems'] },
+      { title: '5.4 System Realization', subsections: [] },
+      { title: '5.5 Frequency Response of Discrete-Time Systems', subsections: ['5.5-1 The Periodic Nature of Frequency Response', '5.5-2 Aliasing and Sampling Rate'] },
+      { title: '5.6 Frequency Response from Pole-Zero Locations', subsections: [] },
+      { title: '5.7 Digital Processing of Analog Signals', subsections: [] },
+      { title: '5.8 The Bilateral z-Transform', subsections: ['5.8-1 Properties of the Bilateral z-Transform', '5.8-2 Using the Bilateral z-Transform for Analysis of LTID Systems'] },
+      { title: '5.9 Connecting the Laplace and z-Transforms', subsections: [] },
+      { title: '5.10 MATLAB: Discrete-Time IIR Filters', subsections: ['5.10-1 Frequency Response and Pole-Zero Plots', '5.10-2 Transformation Basics', '5.10-3 Transformation by First-Order Backward Difference', '5.10-4 Bilinear Transformation', '5.10-5 Bilinear Transformation with Prewarping', '5.10-6 Example: Butterworth Filter Transformation', '5.10-7 Problems Finding Polynomial Roots', '5.10-8 Using Cascaded Second-Order Sections to Improve Design'] },
+      { title: '5.11 Summary', subsections: [] }
+    ]
+  },
+  {
+    chapter: 'Chapter 6: Continuous-Time Signal Analysis: The Fourier Series',
+    sections: [
+      { title: '6.1 Periodic Signal Representation by Trigonometric Fourier Series', subsections: ['6.1-1 The Fourier Spectrum', '6.1-2 The Effect of Symmetry', '6.1-3 Determining the Fundamental Frequency and Period'] },
+      { title: '6.2 Existence and Convergence of the Fourier Series', subsections: ['6.2-1 Convergence of a Series', '6.2-2 The Role of Amplitude and Phase Spectra in Waveshaping'] },
+      { title: '6.3 Exponential Fourier Series', subsections: ['6.3-1 Exponential Fourier Spectra', "6.3-2 Parseval's Theorem", '6.3-3 Properties of the Fourier Series'] },
+      { title: '6.4 LTIC System Response to Periodic Inputs', subsections: [] },
+      { title: '6.5 Generalized Fourier Series: Signals as Vectors', subsections: ['6.5-1 Component of a Vector', '6.5-2 Signal Comparison and Component of a Signal', '6.5-3 Extension to Complex Signals', '6.5-4 Signal Representation by an Orthogonal Signal Set'] },
+      { title: '6.6 Numerical Computation of Dn', subsections: [] },
+      { title: '6.7 MATLAB: Fourier Series Applications', subsections: ['6.7-1 Periodic Functions and the Gibbs Phenomenon', '6.7-2 Optimization and Phase Spectra'] },
+      { title: '6.8 Summary', subsections: [] }
+    ]
+  },
+  {
+    chapter: 'Chapter 7: Continuous-Time Signal Analysis: The Fourier Transform',
+    sections: [
+      { title: '7.1 Aperiodic Signal Representation by the Fourier Integral', subsections: ['7.1-1 Physical Appreciation of the Fourier Transform'] },
+      { title: '7.2 Transforms of Some Useful Functions', subsections: ['7.2-1 Connection Between the Fourier and Laplace Transforms'] },
+      { title: '7.3 Some Properties of the Fourier Transform', subsections: [] },
+      { title: '7.4 Signal Transmission Through LTIC Systems', subsections: ['7.4-1 Signal Distortion During Transmission', '7.4-2 Bandpass Systems and Group Delay'] },
+      { title: '7.5 Ideal and Practical Filters', subsections: [] },
+      { title: '7.6 Signal Energy', subsections: [] },
+      { title: '7.7 Application to Communications: Amplitude Modulation', subsections: ['7.7-1 Double-Sideband, Suppressed-Carrier (DSB-SC) Modulation', '7.7-2 Amplitude Modulation (AM)', '7.7-3 Single-Sideband Modulation (SSB)', '7.7-4 Frequency-Division Multiplexing'] },
+      { title: '7.8 Data Truncation: Window Functions', subsections: ['7.8-1 Using Windows in Filter Design'] },
+      { title: '7.9 MATLAB: Fourier Transform Topics', subsections: ['7.9-1 The Sinc Function and the Scaling Property', "7.9-2 Parseval's Theorem and Essential Bandwidth", '7.9-3 Spectral Sampling', '7.9-4 Kaiser Window Functions'] },
+      { title: '7.10 Summary', subsections: [] }
+    ]
+  },
+  {
+    chapter: 'Chapter 8: Sampling: The Bridge from Continuous to Discrete',
+    sections: [
+      { title: '8.1 The Sampling Theorem', subsections: ['8.1-1 Practical Sampling'] },
+      { title: '8.2 Signal Reconstruction', subsections: ['8.2-1 Practical Difficulties in Signal Reconstruction', '8.2-2 Some Applications of the Sampling Theorem'] },
+      { title: '8.3 Analog-to-Digital (A/D) Conversion', subsections: [] },
+      { title: '8.4 Dual of Time Sampling: Spectral Sampling', subsections: [] },
+      { title: '8.5 Numerical Computation of the Fourier Transform: The Discrete Fourier Transform', subsections: ['8.5-1 Some Properties of the DFT', '8.5-2 Some Applications of the DFT'] },
+      { title: '8.6 The Fast Fourier Transform (FFT)', subsections: [] },
+      { title: '8.7 MATLAB: The Discrete Fourier Transform', subsections: ['8.7-1 Computing the Discrete Fourier Transform', '8.7-2 Improving the Picture with Zero Padding', '8.7-3 Quantization'] },
+      { title: '8.8 Summary', subsections: [] }
+    ]
+  },
+  {
+    chapter: 'Chapter 9: Fourier Analysis of Discrete-Time Signals',
+    sections: [
+      { title: '9.1 Discrete-Time Fourier Series (DTFS)', subsections: ['9.1-1 Periodic Signal Representation by Discrete-Time Fourier Series', '9.1-2 Fourier Spectra of a Periodic Signal x[n]'] },
+      { title: '9.2 Aperiodic Signal Representation by Fourier Integral', subsections: ['9.2-1 Nature of Fourier Spectra', '9.2-2 Connection Between the DTFT and the z-Transform'] },
+      { title: '9.3 Properties of the DTFT', subsections: [] },
+      { title: '9.4 LTI Discrete-Time System Analysis by DTFT', subsections: ['9.4-1 Distortionless Transmission', '9.4-2 Ideal and Practical Filters'] },
+      { title: '9.5 DTFT Connection with the CTFT', subsections: ['9.5-1 Use of DFT and FFT for Numerical Computation of the DTFT'] },
+      { title: '9.6 Generalization of the DTFT to the z-Transform', subsections: [] },
+      { title: '9.7 MATLAB: Working with the DTFS and the DTFT', subsections: ['9.7-1 Computing the Discrete-Time Fourier Series', '9.7-2 Measuring Code Performance', '9.7-3 FIR Filter Design by Frequency Sampling'] },
+      { title: '9.8 Summary', subsections: [] }
+    ]
+  },
+  {
+    chapter: 'Chapter 10: State-Space Analysis',
+    sections: [
+      { title: '10.1 Mathematical Preliminaries', subsections: ['10.1-1 Derivatives and Integrals of a Matrix', '10.1-2 The Characteristic Equation of a Matrix: The Cayley-Hamilton Theorem', '10.1-3 Computation of an Exponential and a Power of a Matrix'] },
+      { title: '10.2 Introduction to State Space', subsections: [] },
+      { title: '10.3 A Systematic Procedure to Determine State Equations', subsections: ['10.3-1 Electrical Circuits', '10.3-2 State Equations from a Transfer Function'] },
+      { title: '10.4 Solution of State Equations', subsections: ['10.4-1 Laplace Transform Solution of State Equations', '10.4-2 Time-Domain Solution of State Equations'] },
+      { title: '10.5 Linear Transformation of a State Vector', subsections: ['10.5-1 Diagonalization of Matrix A'] },
+      { title: '10.6 Controllability and Observability', subsections: ['10.6-1 Inadequacy of the Transfer Function Description of a System'] },
+      { title: '10.7 State-Space Analysis of Discrete-Time Systems', subsections: ['10.7-1 Solution in State Space', '10.7-2 The z-Transform Solution'] },
+      { title: '10.8 MATLAB: Toolboxes and State-Space Analysis', subsections: ['10.8-1 z-Transform Solutions to Discrete-Time, State-Space Systems', '10.8-2 Transfer Functions from State-Space Representations', '10.8-3 Controllability and Observability of Discrete-Time Systems', '10.8-4 Matrix Exponentiation and the Matrix Exponential'] },
+      { title: '10.9 Summary', subsections: [] }
     ]
   }
 ];
@@ -3779,8 +4064,8 @@ function renderSyllabus() {
       const idx = btn.getAttribute('data-idx');
       const panel = document.getElementById(`syllabus-${idx}`);
       const caret = btn.querySelector('.caret');
-      const open = panel.classList.contains('hidden');
-      panel.classList.toggle('hidden', !open);
+      const open = !isAccordionOpen(panel);
+      setAccordionOpen(panel, open);
       caret.classList.toggle('open', open);
     });
   });
@@ -3803,7 +4088,7 @@ function renderSyllabus() {
         subs = JSON.parse(rawSubs.replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&'));
       } catch(_) {}
 
-      if (subs.length > 0) {
+      if (shouldOpenSectionAsChapterOverview(section, title, subs)) {
         openChapterOverviewMode(section, title, subs);
       } else {
         openLearnMode(section, title, subs);
@@ -3817,8 +4102,8 @@ function renderSyllabus() {
       const targetId = btn.getAttribute('data-target');
       const panel = targetId ? document.getElementById(targetId) : null;
       if (!panel) return;
-      const open = panel.classList.contains('hidden');
-      panel.classList.toggle('hidden', !open);
+      const open = !isAccordionOpen(panel);
+      setAccordionOpen(panel, open);
       btn.classList.toggle('open', open);
     });
   });
@@ -3830,7 +4115,7 @@ function renderSyllabus() {
       if (!subTitle) return;
       courseSyllabus.querySelectorAll('.syllabus-subsection').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      openLearnModeKeepToc(subTitle, subTitle);
+      openLearnModeKeepToc(subTitle, subTitle, findParentOverviewContextForSubsection(subTitle, subTitle));
     });
   });
 }
@@ -3933,6 +4218,7 @@ let textbookFocusPinchDistance = 0;
 let isTextbookFocusQaOpen = false;
 let isLearnChatCollapsed = false;
 let isLearnExplainCollapsed = false;
+let learnPanelFocus = 'normal';
 let isLearnChatPopoverOpen = false;
 const learnWebToggle  = document.getElementById('learnWebToggle') || { classList: { add() {}, remove() {}, toggle() {} } };
 const learnWebBtn     = document.getElementById('learnWebBtn') || { classList: { add() {}, remove() {}, toggle() {} }, addEventListener() {} };
@@ -3951,6 +4237,1470 @@ let learnKnowledgePoints = [];
 let currentKnowledgePointIndex = 0;
 let currentFullLessonHtml = '';
 let currentLessonTrailingHtml = '';
+
+function injectStampPaginationStyles() {
+  if (document.getElementById('stampPaginationRuntimeStyle')) return;
+  const style = document.createElement('style');
+  style.id = 'stampPaginationRuntimeStyle';
+  style.textContent = `
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar {
+      display: block !important;
+      position: relative !important;
+      padding: 14px 24px !important;
+      min-height: 104px !important;
+      overflow: visible !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-toolbar-center,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .learn-toolbar-center {
+      overflow: visible !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-toolbar-center,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .learn-toolbar-center {
+      display: grid !important;
+      position: absolute !important;
+      left: 50% !important;
+      top: 50% !important;
+      transform: translate(-50%, -50%) !important;
+      width: 320px !important;
+      max-width: 100% !important;
+      grid-template-columns: 42px 220px 42px !important;
+      gap: 8px !important;
+      align-items: center !important;
+      justify-content: center !important;
+      justify-items: center !important;
+      padding: 8px 8px 12px 4px !important;
+      z-index: 40 !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn {
+      position: absolute !important;
+      left: clamp(28px, 3vw, 46px) !important;
+      top: 50% !important;
+      transform: translateY(-50%) rotate(-1.2deg) !important;
+      z-index: 45 !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn:hover,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn:hover {
+      transform: translateY(calc(-50% - 1px)) rotate(-1.2deg) !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-view-selector,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .learn-view-selector {
+      grid-column: 2 !important;
+      grid-row: 1 !important;
+      width: 220px !important;
+      min-width: 220px !important;
+      max-width: 224px !important;
+      flex: 0 0 220px !important;
+      box-sizing: border-box !important;
+      justify-self: center !important;
+      display: grid !important;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-view-btn,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .learn-view-btn {
+      min-width: 0 !important;
+      padding: 0 18px !important;
+      font-size: 15px !important;
+    }
+    #learnView .stamp-page-btn,
+    #learnView #learnExplainToolbar .stamp-page-btn.lecture-overlay-btn,
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .stamp-page-btn.lecture-overlay-btn,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .stamp-page-btn.lecture-overlay-btn {
+      position: relative !important;
+      inset: auto !important;
+      width: 40px !important;
+      min-width: 40px !important;
+      max-width: 40px !important;
+      height: 40px !important;
+      min-height: 40px !important;
+      max-height: 40px !important;
+      padding: 0 !important;
+      border-radius: 50% !important;
+      background: #fde047 !important;
+      border: 3px solid #1e293b !important;
+      color: #1e293b !important;
+      box-shadow: 3px 3px 0 #1e293b !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      cursor: pointer !important;
+      transform: none !important;
+      opacity: 1 !important;
+      filter: none !important;
+      overflow: visible !important;
+      margin: 0 5px 5px 0 !important;
+      grid-row: 1 !important;
+      pointer-events: auto !important;
+      z-index: 2 !important;
+    }
+    #learnView .stamp-page-btn.lecture-overlay-btn-left { grid-column: 1 !important; }
+    #learnView .stamp-page-btn.lecture-overlay-btn-right { grid-column: 3 !important; }
+    #learnView .stamp-page-btn::before,
+    #learnView #learnExplainToolbar .stamp-page-btn.lecture-overlay-btn::before {
+      content: "" !important;
+      position: absolute !important;
+      inset: 3px !important;
+      left: 3px !important;
+      top: 3px !important;
+      width: auto !important;
+      height: auto !important;
+      border: 2px dashed #1e293b !important;
+      border-radius: 50% !important;
+      background: transparent !important;
+      opacity: 0.3 !important;
+      transform: none !important;
+      transition: transform 0.3s ease !important;
+      pointer-events: none !important;
+    }
+    #learnView .stamp-page-btn::after,
+    #learnView #learnExplainToolbar .stamp-page-btn.lecture-overlay-btn::after {
+      content: none !important;
+      display: none !important;
+    }
+    #learnView .stamp-page-btn .lecture-overlay-btn-text { display: none !important; }
+    #learnView .stamp-page-btn .lecture-overlay-btn-icon {
+      width: auto !important;
+      height: auto !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      background: transparent !important;
+      color: transparent !important;
+      font-size: 0 !important;
+      line-height: 1 !important;
+      box-shadow: none !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      z-index: 1 !important;
+    }
+    #learnView .stamp-page-btn.lecture-overlay-btn-left .lecture-overlay-btn-icon::after {
+      content: "‹" !important;
+      color: #2563eb !important;
+      font-family: "Bricolage Grotesque", "Quicksand", sans-serif !important;
+      font-size: 27px !important;
+      font-weight: 950 !important;
+      line-height: 1 !important;
+      text-shadow: none !important;
+      transform: translateY(-1px) !important;
+    }
+    #learnView .stamp-page-btn.lecture-overlay-btn-right .lecture-overlay-btn-icon::after {
+      content: "›" !important;
+      color: #2563eb !important;
+      font-family: "Bricolage Grotesque", "Quicksand", sans-serif !important;
+      font-size: 27px !important;
+      font-weight: 950 !important;
+      line-height: 1 !important;
+      text-shadow: none !important;
+      transform: translateY(-1px) !important;
+    }
+    #learnView .stamp-page-btn:hover:not(:disabled) {
+      transform: translate(-2px, -2px) scale(1.04) !important;
+      box-shadow: 5px 5px 0 #1e293b !important;
+      background: #fff38a !important;
+    }
+    #learnView .stamp-page-btn:hover:not(:disabled)::before { transform: rotate(15deg) !important; }
+    #learnView #learnExplainToolbar .stamp-page-btn.is-flipping,
+    #learnView #learnExplainToolbar .lecture-overlay-btn-left.is-flipping,
+    #learnView #learnExplainToolbar .lecture-overlay-btn-right.is-flipping {
+      transform: translate(2px, 2px) scale(0.96) !important;
+      box-shadow: 1px 1px 0 #1e293b !important;
+      background: #fff38a !important;
+    }
+    #learnView .stamp-page-btn:active:not(:disabled) {
+      transform: translate(4px, 4px) !important;
+      box-shadow: 0 0 0 #1e293b !important;
+    }
+    #learnView .stamp-page-btn:disabled {
+      background: #f1f5f9 !important;
+      color: #94a3b8 !important;
+      border-color: #cbd5e1 !important;
+      box-shadow: 3px 3px 0 #e2e8f0 !important;
+      cursor: not-allowed !important;
+      opacity: 1 !important;
+      filter: none !important;
+    }
+    #learnView .stamp-page-btn:disabled::before { border-color: #cbd5e1 !important; }
+    #learnView .stamp-page-btn:disabled .lecture-overlay-btn-icon::after { color: #94a3b8 !important; }
+
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn,
+    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle,
+    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle {
+      position: relative !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 12px !important;
+      width: auto !important;
+      min-width: 0 !important;
+      max-width: none !important;
+      height: 52px !important;
+      min-height: 52px !important;
+      padding: 12px 24px !important;
+      border: 3px solid #1e293b !important;
+      border-radius: 12px !important;
+      background: #fdfbf7 !important;
+      color: #1e293b !important;
+      box-shadow: 4px 4px 0 #1e293b !important;
+      cursor: pointer !important;
+      overflow: visible !important;
+      font-family: "Quicksand", "Nunito", sans-serif !important;
+      transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease !important;
+      z-index: 45 !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn {
+      position: absolute !important;
+      left: clamp(28px, 3vw, 46px) !important;
+      top: 50% !important;
+      transform: translateY(-50%) rotate(2deg) !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle,
+    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle {
+      transform: rotate(2deg) !important;
+      margin: 0 auto !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn::before,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn::before,
+    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle::before,
+    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle::before {
+      content: "" !important;
+      position: absolute !important;
+      top: -12px !important;
+      left: -12px !important;
+      width: 60px !important;
+      height: 24px !important;
+      border: 0 !important;
+      border-left: 2px dashed rgba(0, 0, 0, 0.1) !important;
+      border-radius: 0 !important;
+      background: repeating-linear-gradient(90deg, #f9a8d4, #f9a8d4 6px, rgba(255,255,255,0.42) 6px, rgba(255,255,255,0.42) 12px) !important;
+      opacity: 0.9 !important;
+      mix-blend-mode: multiply !important;
+      transform: rotate(-15deg) !important;
+      pointer-events: none !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn::after,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn::after,
+    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle::after,
+    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle::after {
+      content: none !important;
+      display: none !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label,
+    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-label,
+    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-label {
+      position: relative !important;
+      z-index: 2 !important;
+      display: inline-block !important;
+      color: #1e293b !important;
+      font-size: 18px !important;
+      font-weight: 800 !important;
+      line-height: 1 !important;
+      white-space: nowrap !important;
+      letter-spacing: 0 !important;
+      text-transform: none !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label::after,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label::after,
+    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-label::after,
+    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-label::after {
+      content: "" !important;
+      position: absolute !important;
+      left: -5% !important;
+      bottom: 2px !important;
+      width: 110% !important;
+      height: 14px !important;
+      border-radius: 3px !important;
+      background: #fde047 !important;
+      transform: rotate(-2deg) !important;
+      transition: background-color 0.3s ease !important;
+      z-index: -1 !important;
+      pointer-events: none !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon,
+    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon,
+    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon {
+      position: relative !important;
+      z-index: 2 !important;
+      flex: 0 0 auto !important;
+      width: 24px !important;
+      height: 24px !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      background: transparent !important;
+      color: #1e293b !important;
+      box-shadow: none !important;
+      transition: transform 0.3s ease !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon svg,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon svg,
+    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon svg,
+    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon svg {
+      width: 24px !important;
+      height: 24px !important;
+      stroke: currentColor !important;
+      stroke-width: 4 !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn:hover,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn:hover {
+      transform: translateY(calc(-50% - 4px)) rotate(0deg) !important;
+      box-shadow: 6px 6px 0 #1e293b !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle:hover,
+    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle:hover {
+      transform: translateY(-4px) rotate(0deg) !important;
+      box-shadow: 6px 6px 0 #1e293b !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn:hover .learn-edge-toggle-label::after,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn:hover .learn-edge-toggle-label::after,
+    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle:hover .learn-edge-toggle-label::after,
+    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle:hover .learn-edge-toggle-label::after {
+      background: #6ee7b7 !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn:hover .learn-edge-toggle-icon,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn:hover .learn-edge-toggle-icon {
+      transform: translateX(6px) !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle:hover .learn-edge-toggle-icon,
+    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle:hover .learn-edge-toggle-icon {
+      transform: translateX(-6px) !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn:active,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn:active {
+      transform: translateY(calc(-50% + 4px)) rotate(0deg) !important;
+      box-shadow: 0 0 0 #1e293b !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle:active,
+    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle:active {
+      transform: translateY(4px) rotate(0deg) !important;
+      box-shadow: 0 0 0 #1e293b !important;
+    }
+
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn,
+    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle,
+    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle {
+      gap: 7px !important;
+      height: 38px !important;
+      min-height: 38px !important;
+      padding: 7px 12px !important;
+      border-width: 2px !important;
+      border-radius: 10px !important;
+      box-shadow: 3px 3px 0 #1e293b !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn {
+      left: clamp(18px, 2vw, 30px) !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn::before,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn::before,
+    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle::before,
+    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle::before {
+      top: -8px !important;
+      left: -8px !important;
+      width: 42px !important;
+      height: 16px !important;
+      background: repeating-linear-gradient(90deg, #f9a8d4, #f9a8d4 5px, rgba(255,255,255,0.42) 5px, rgba(255,255,255,0.42) 10px) !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label,
+    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-label,
+    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-label {
+      font-size: 14px !important;
+      font-weight: 800 !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label::after,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label::after,
+    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-label::after,
+    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-label::after {
+      bottom: 1px !important;
+      height: 9px !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon,
+    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon,
+    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon,
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon svg,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon svg,
+    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon svg,
+    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon svg {
+      width: 18px !important;
+      height: 18px !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon svg,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon svg,
+    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon svg,
+    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon svg {
+      stroke-width: 3.2 !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn:hover,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn:hover {
+      transform: translateY(calc(-50% - 2px)) rotate(0deg) !important;
+      box-shadow: 4px 4px 0 #1e293b !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle:hover,
+    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle:hover {
+      transform: translateY(-2px) rotate(0deg) !important;
+      box-shadow: 4px 4px 0 #1e293b !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn,
+    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle,
+    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle {
+      gap: 5px !important;
+      height: 32px !important;
+      min-height: 32px !important;
+      padding: 5px 9px !important;
+      border-width: 2px !important;
+      border-radius: 9px !important;
+      box-shadow: 2px 2px 0 #1e293b !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn {
+      left: 12px !important;
+      right: auto !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) .learn-chat-topbar,
+    #learnView #learnBody.chapter-overview-split-active .learn-chat-topbar {
+      right: 12px !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle,
+    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle {
+      margin-left: auto !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn::before,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn::before,
+    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle::before,
+    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle::before {
+      top: -6px !important;
+      left: -6px !important;
+      width: 30px !important;
+      height: 11px !important;
+      background: repeating-linear-gradient(90deg, #f9a8d4, #f9a8d4 4px, rgba(255,255,255,0.42) 4px, rgba(255,255,255,0.42) 8px) !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label,
+    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-label,
+    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-label {
+      font-size: 12px !important;
+      line-height: 1 !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label::after,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label::after,
+    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-label::after,
+    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-label::after {
+      bottom: 0 !important;
+      height: 7px !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon,
+    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon,
+    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon,
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon svg,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon svg,
+    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon svg,
+    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon svg {
+      width: 14px !important;
+      height: 14px !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn:hover,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn:hover {
+      transform: translateY(calc(-50% - 1px)) rotate(0deg) !important;
+      box-shadow: 3px 3px 0 #1e293b !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle:hover,
+    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle:hover {
+      transform: translateY(-1px) rotate(0deg) !important;
+      box-shadow: 3px 3px 0 #1e293b !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) .learn-chat-topbar,
+    #learnView #learnBody.chapter-overview-split-active .learn-chat-topbar {
+      position: absolute !important;
+      top: 18px !important;
+      left: auto !important;
+      right: 12px !important;
+      width: max-content !important;
+      min-width: 0 !important;
+      max-width: calc(100% - 24px) !important;
+      display: flex !important;
+      justify-content: flex-end !important;
+      align-items: center !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      background: transparent !important;
+      border: 0 !important;
+      border-bottom: 0 !important;
+      box-shadow: none !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      pointer-events: none !important;
+      transform: none !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) .learn-chat-topbar::before,
+    #learnView #learnBody:not(.chapter-overview-active) .learn-chat-topbar::after,
+    #learnView #learnBody.chapter-overview-split-active .learn-chat-topbar::before,
+    #learnView #learnBody.chapter-overview-split-active .learn-chat-topbar::after {
+      content: none !important;
+      display: none !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle,
+    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle {
+      position: relative !important;
+      right: auto !important;
+      left: auto !important;
+      margin: 0 !important;
+      transform: rotate(1deg) !important;
+      pointer-events: auto !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle:hover,
+    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle:hover {
+      transform: translateY(-1px) rotate(0deg) !important;
+    }
+
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-toolbar-center,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .learn-toolbar-center {
+      pointer-events: none !important;
+    }
+    #learnView #learnExplainToolbar {
+      position: relative !important;
+      z-index: 120 !important;
+      pointer-events: none !important;
+      isolation: isolate !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-view-selector,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .learn-view-selector,
+    #learnView #learnExplainToolbar .learn-view-selector {
+      position: relative !important;
+      z-index: 90 !important;
+      pointer-events: auto !important;
+      isolation: isolate !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-view-btn,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .learn-view-btn,
+    #learnView #learnExplainToolbar .learn-view-btn {
+      position: relative !important;
+      z-index: 91 !important;
+      pointer-events: auto !important;
+      cursor: pointer !important;
+    }
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left,
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-left,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-right,
+    #learnView #learnExplainToolbar .lecture-overlay-btn-left,
+    #learnView #learnExplainToolbar .lecture-overlay-btn-right,
+    #learnView #learnExplainToolbar #learnExplainToggleBtn,
+    #learnView #learnExplainToolbar #learnFocusBtn {
+      position: relative !important;
+      z-index: 80 !important;
+      pointer-events: auto !important;
+    }
+  `;
+  document.head.appendChild(style);
+  [learnKpPrevBtn, learnKpNextBtn, learnFocusPrevBtn, learnFocusNextBtn].forEach((button) => {
+    if (button) button.classList.add('stamp-page-btn');
+  });
+}
+
+injectStampPaginationStyles();
+
+function injectFinalScrapbookToolbarStyles() {
+  const style = document.createElement('style');
+  style.id = 'final-scrapbook-toolbar-flip-style';
+  style.textContent = `
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar,
+    #learnView #learnExplainToolbar {
+      position: relative !important;
+      display: grid !important;
+      grid-template-columns: 1fr auto auto auto 1fr !important;
+      align-items: center !important;
+      column-gap: 14px !important;
+      padding: 24px 28px !important;
+      min-height: 112px !important;
+      overflow: visible !important;
+    }
+
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-toolbar-center,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .learn-toolbar-center,
+    #learnView #learnExplainToolbar .learn-toolbar-center {
+      position: absolute !important;
+      left: calc(50% + 36px) !important;
+      top: 50% !important;
+      transform: translate(-50%, -50%) !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 14px !important;
+      width: auto !important;
+      max-width: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      overflow: visible !important;
+      z-index: 70 !important;
+      pointer-events: auto !important;
+    }
+
+    #learnView #learnBody:not(.chapter-overview-active) #learnViewSelector,
+    #learnView #learnBody.chapter-overview-split-active #learnViewSelector,
+    #learnView #learnViewSelector {
+      grid-column: auto !important;
+      justify-self: auto !important;
+      order: 2 !important;
+      position: relative !important;
+      z-index: 6 !important;
+      flex: 0 0 auto !important;
+    }
+
+    #learnView #learnBody:not(.chapter-overview-active) #learnToolbarPagination,
+    #learnView #learnBody.chapter-overview-split-active #learnToolbarPagination,
+    #learnView #learnToolbarPagination {
+      display: none !important;
+      order: initial !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      gap: 0 !important;
+      overflow: visible !important;
+    }
+
+    #learnView #learnExplainToolbar .learn-kp-nav,
+    #learnView #learnExplainToolbar #learnKpPrevBtn,
+    #learnView #learnExplainToolbar #learnKpNextBtn {
+      display: none !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+
+    #learnView #learnToolbarPagination .lecture-overlay-btn-left,
+    #learnView #learnBody:not(.chapter-overview-active) #learnToolbarPagination .lecture-overlay-btn-left,
+    #learnView #learnBody.chapter-overview-split-active #learnToolbarPagination .lecture-overlay-btn-left,
+    #learnView #lecturePrevOverlayBtn {
+      order: 1 !important;
+      grid-column: auto !important;
+      justify-self: auto !important;
+      box-shadow: 4px 4px 0 #1e293b !important;
+      transform: rotate(-2deg) !important;
+    }
+
+    #learnView #learnToolbarPagination .lecture-overlay-btn-right,
+    #learnView #learnBody:not(.chapter-overview-active) #learnToolbarPagination .lecture-overlay-btn-right,
+    #learnView #learnBody.chapter-overview-split-active #learnToolbarPagination .lecture-overlay-btn-right,
+    #learnView #lectureNextOverlayBtn {
+      order: 3 !important;
+      grid-column: auto !important;
+      justify-self: auto !important;
+      box-shadow: -4px 4px 0 #1e293b !important;
+      transform: rotate(2deg) !important;
+    }
+
+    #learnView #learnToolbarPagination .lecture-overlay-btn-left,
+    #learnView #learnToolbarPagination .lecture-overlay-btn-right,
+    #learnView #learnBody:not(.chapter-overview-active) #learnToolbarPagination .lecture-overlay-btn-left,
+    #learnView #learnBody:not(.chapter-overview-active) #learnToolbarPagination .lecture-overlay-btn-right,
+    #learnView #learnBody.chapter-overview-split-active #learnToolbarPagination .lecture-overlay-btn-left,
+    #learnView #learnBody.chapter-overview-split-active #learnToolbarPagination .lecture-overlay-btn-right,
+    #learnView #lecturePrevOverlayBtn,
+    #learnView #lectureNextOverlayBtn {
+      position: relative !important;
+      inset: auto !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 7px !important;
+      width: auto !important;
+      min-width: 72px !important;
+      max-width: none !important;
+      height: 36px !important;
+      min-height: 36px !important;
+      max-height: 36px !important;
+      padding: 7px 15px !important;
+      border: 3px solid #1e293b !important;
+      border-radius: 11px !important;
+      background: #fdfbf7 !important;
+      color: #1e293b !important;
+      font-family: "Quicksand", "Nunito", sans-serif !important;
+      font-size: 14px !important;
+      font-weight: 900 !important;
+      line-height: 1 !important;
+      letter-spacing: 0 !important;
+      opacity: 1 !important;
+      filter: none !important;
+      cursor: pointer !important;
+      overflow: visible !important;
+      z-index: 8 !important;
+      pointer-events: auto !important;
+    }
+
+    #learnView #learnToolbarPagination .lecture-overlay-btn-left::before,
+    #learnView #learnToolbarPagination .lecture-overlay-btn-left::after,
+    #learnView #learnToolbarPagination .lecture-overlay-btn-right::before,
+    #learnView #learnToolbarPagination .lecture-overlay-btn-right::after,
+    #learnView #learnToolbarPagination .lecture-overlay-btn-text::before,
+    #learnView #learnToolbarPagination .lecture-overlay-btn-text::after {
+      content: none !important;
+      display: none !important;
+      background: none !important;
+      border: 0 !important;
+    }
+
+    #learnView #learnToolbarPagination .lecture-overlay-btn-text {
+      display: inline-flex !important;
+      color: inherit !important;
+      background: transparent !important;
+      font-size: 14px !important;
+      font-weight: 900 !important;
+      line-height: 1 !important;
+    }
+
+    #learnView #learnToolbarPagination .lecture-overlay-btn-icon {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 14px !important;
+      height: 14px !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      color: transparent !important;
+      font-size: 0 !important;
+      line-height: 1 !important;
+      transform: none !important;
+      transition: transform 0.2s ease !important;
+    }
+
+    #learnView #learnToolbarPagination .lecture-overlay-btn-left .lecture-overlay-btn-icon::after {
+      content: "‹" !important;
+      color: #1e293b !important;
+      font-size: 24px !important;
+      font-weight: 950 !important;
+      line-height: 1 !important;
+    }
+
+    #learnView #learnToolbarPagination .lecture-overlay-btn-right .lecture-overlay-btn-icon::after {
+      content: "›" !important;
+      color: #1e293b !important;
+      font-size: 24px !important;
+      font-weight: 950 !important;
+      line-height: 1 !important;
+    }
+
+    #learnView #lecturePrevOverlayBtn:hover:not(:disabled) {
+      box-shadow: 6px 6px 0 #1e293b !important;
+      transform: translate(-2px, -2px) rotate(0deg) !important;
+    }
+
+    #learnView #lectureNextOverlayBtn:hover:not(:disabled) {
+      box-shadow: -6px 6px 0 #1e293b !important;
+      transform: translate(2px, -2px) rotate(0deg) !important;
+    }
+
+    #learnView #lecturePrevOverlayBtn:hover:not(:disabled) .lecture-overlay-btn-icon {
+      transform: translateX(-3px) !important;
+    }
+
+    #learnView #lectureNextOverlayBtn:hover:not(:disabled) .lecture-overlay-btn-icon {
+      transform: translateX(3px) !important;
+    }
+
+    #learnView #lecturePrevOverlayBtn:disabled,
+    #learnView #lectureNextOverlayBtn:disabled {
+      background: #fdfbf7 !important;
+      color: #1e293b !important;
+      border-color: #1e293b !important;
+      box-shadow: none !important;
+      transform: translateY(1px) rotate(0deg) !important;
+      cursor: not-allowed !important;
+      opacity: 0.5 !important;
+    }
+
+    #learnView #lecturePrevOverlayBtn:disabled .lecture-overlay-btn-icon::after,
+    #learnView #lectureNextOverlayBtn:disabled .lecture-overlay-btn-icon::after {
+      color: #1e293b !important;
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+injectFinalScrapbookToolbarStyles();
+
+function injectFinalPagerArrowStyles() {
+  if (document.getElementById('final-pager-arrow-style')) return;
+  const style = document.createElement('style');
+  style.id = 'final-pager-arrow-style';
+  style.textContent = `
+    #learnView #learnToolbarPagination .lecture-overlay-btn-left::before,
+    #learnView #learnToolbarPagination .lecture-overlay-btn-right::before,
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left::before,
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right::before,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-left::before,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-right::before,
+    #learnView .stamp-page-btn::before {
+      content: none !important;
+      display: none !important;
+      border: 0 !important;
+      background: transparent !important;
+      opacity: 0 !important;
+    }
+
+    #learnView #learnToolbarPagination .lecture-overlay-btn-icon,
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-icon,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-icon,
+    #learnView .stamp-page-btn .lecture-overlay-btn-icon {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 18px !important;
+      height: 18px !important;
+      color: transparent !important;
+      font-size: 0 !important;
+      line-height: 1 !important;
+      transform: none !important;
+    }
+
+    #learnView #learnToolbarPagination .lecture-overlay-btn-text,
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-text,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-text {
+      display: none !important;
+      visibility: hidden !important;
+    }
+
+    #learnView #learnToolbarPagination .lecture-overlay-btn-left .lecture-overlay-btn-icon::after,
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left .lecture-overlay-btn-icon::after,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-left .lecture-overlay-btn-icon::after,
+    #learnView .stamp-page-btn.lecture-overlay-btn-left .lecture-overlay-btn-icon::after {
+      content: "" !important;
+      width: 0 !important;
+      height: 0 !important;
+      border-top: 8px solid transparent !important;
+      border-bottom: 8px solid transparent !important;
+      border-right: 13px solid #2563eb !important;
+      border-left: 0 !important;
+      filter: drop-shadow(1px 1px 0 rgba(30, 41, 59, 0.2)) !important;
+      transform: translateX(-1px) !important;
+    }
+
+    #learnView #learnToolbarPagination .lecture-overlay-btn-right .lecture-overlay-btn-icon::after,
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right .lecture-overlay-btn-icon::after,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-right .lecture-overlay-btn-icon::after,
+    #learnView .stamp-page-btn.lecture-overlay-btn-right .lecture-overlay-btn-icon::after {
+      content: "" !important;
+      width: 0 !important;
+      height: 0 !important;
+      border-top: 8px solid transparent !important;
+      border-bottom: 8px solid transparent !important;
+      border-left: 13px solid #2563eb !important;
+      border-right: 0 !important;
+      filter: drop-shadow(1px 1px 0 rgba(30, 41, 59, 0.2)) !important;
+      transform: translateX(1px) !important;
+    }
+
+    #learnView #lecturePrevOverlayBtn:disabled .lecture-overlay-btn-icon::after,
+    #learnView #lectureNextOverlayBtn:disabled .lecture-overlay-btn-icon::after,
+    #learnView .stamp-page-btn:disabled .lecture-overlay-btn-icon::after {
+      border-left-color: #94a3b8 !important;
+      border-right-color: #94a3b8 !important;
+      filter: none !important;
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+injectFinalPagerArrowStyles();
+
+function injectFinalPagerTextArrowFix() {
+  if (document.getElementById('final-pager-text-arrow-fix')) return;
+  const style = document.createElement('style');
+  style.id = 'final-pager-text-arrow-fix';
+  style.textContent = `
+    #learnView #learnExplainToolbar .learn-toolbar-center,
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-toolbar-center,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .learn-toolbar-center {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: clamp(12px, 1.4vw, 18px) !important;
+      width: auto !important;
+      max-width: calc(100% - 96px) !important;
+      overflow: visible !important;
+    }
+
+    #learnView #lecturePrevOverlayBtn,
+    #learnView #lectureNextOverlayBtn,
+    #learnView #learnExplainToolbar #lecturePrevOverlayBtn,
+    #learnView #learnExplainToolbar #lectureNextOverlayBtn,
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar #lecturePrevOverlayBtn,
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar #lectureNextOverlayBtn,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar #lecturePrevOverlayBtn,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar #lectureNextOverlayBtn {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 5px !important;
+      width: auto !important;
+      height: 34px !important;
+      min-height: 34px !important;
+      max-height: 34px !important;
+      padding: 0 10px !important;
+      border: 2px solid #1e293b !important;
+      border-radius: 8px !important;
+      background: #ffffff !important;
+      background-image:
+        linear-gradient(rgba(30, 41, 59, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(30, 41, 59, 0.035) 1px, transparent 1px) !important;
+      background-size: 14px 14px !important;
+      color: #1e293b !important;
+      box-shadow: 2px 2px 0 #1e293b !important;
+      font-size: 11px !important;
+      font-weight: 850 !important;
+      line-height: 1 !important;
+      letter-spacing: 0 !important;
+      text-transform: lowercase !important;
+      overflow: visible !important;
+      opacity: 1 !important;
+    }
+
+    #learnView #lecturePrevOverlayBtn,
+    #learnView #learnExplainToolbar #lecturePrevOverlayBtn,
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar #lecturePrevOverlayBtn,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar #lecturePrevOverlayBtn {
+      width: auto !important;
+      min-width: 96px !important;
+      max-width: 104px !important;
+    }
+
+    #learnView #lectureNextOverlayBtn,
+    #learnView #learnExplainToolbar #lectureNextOverlayBtn,
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar #lectureNextOverlayBtn,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar #lectureNextOverlayBtn {
+      width: auto !important;
+      min-width: 70px !important;
+      max-width: 78px !important;
+    }
+
+    #learnView #lecturePrevOverlayBtn .lecture-overlay-btn-icon,
+    #learnView #lectureNextOverlayBtn .lecture-overlay-btn-icon,
+    #learnView #learnExplainToolbar #lecturePrevOverlayBtn .lecture-overlay-btn-icon,
+    #learnView #learnExplainToolbar #lectureNextOverlayBtn .lecture-overlay-btn-icon,
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar #lecturePrevOverlayBtn .lecture-overlay-btn-icon,
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar #lectureNextOverlayBtn .lecture-overlay-btn-icon,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar #lecturePrevOverlayBtn .lecture-overlay-btn-icon,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar #lectureNextOverlayBtn .lecture-overlay-btn-icon {
+      position: static !important;
+      display: inline-flex !important;
+      visibility: visible !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 12px !important;
+      min-width: 12px !important;
+      height: 12px !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      color: #1e293b !important;
+      -webkit-text-fill-color: #1e293b !important;
+      font-size: 13px !important;
+      font-weight: 950 !important;
+      line-height: 1 !important;
+      background: transparent !important;
+      border: 0 !important;
+      box-shadow: none !important;
+      transform: none !important;
+    }
+
+    #learnView #lecturePrevOverlayBtn .lecture-overlay-btn-icon::before,
+    #learnView #lecturePrevOverlayBtn .lecture-overlay-btn-icon::after,
+    #learnView #lectureNextOverlayBtn .lecture-overlay-btn-icon::before,
+    #learnView #lectureNextOverlayBtn .lecture-overlay-btn-icon::after,
+    #learnView #learnExplainToolbar #lecturePrevOverlayBtn .lecture-overlay-btn-icon::before,
+    #learnView #learnExplainToolbar #lecturePrevOverlayBtn .lecture-overlay-btn-icon::after,
+    #learnView #learnExplainToolbar #lectureNextOverlayBtn .lecture-overlay-btn-icon::before,
+    #learnView #learnExplainToolbar #lectureNextOverlayBtn .lecture-overlay-btn-icon::after {
+      content: none !important;
+      display: none !important;
+    }
+
+    #learnView #lecturePrevOverlayBtn .lecture-overlay-btn-text,
+    #learnView #lectureNextOverlayBtn .lecture-overlay-btn-text,
+    #learnView #learnExplainToolbar #lecturePrevOverlayBtn .lecture-overlay-btn-text,
+    #learnView #learnExplainToolbar #lectureNextOverlayBtn .lecture-overlay-btn-text,
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar #lecturePrevOverlayBtn .lecture-overlay-btn-text,
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar #lectureNextOverlayBtn .lecture-overlay-btn-text,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar #lecturePrevOverlayBtn .lecture-overlay-btn-text,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar #lectureNextOverlayBtn .lecture-overlay-btn-text {
+      position: static !important;
+      display: inline-flex !important;
+      visibility: visible !important;
+      width: auto !important;
+      min-width: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      color: #1e293b !important;
+      -webkit-text-fill-color: #1e293b !important;
+      opacity: 1 !important;
+      font-size: 11px !important;
+      font-weight: 850 !important;
+      line-height: 1 !important;
+      white-space: nowrap !important;
+      overflow: visible !important;
+      clip: auto !important;
+      clip-path: none !important;
+      transform: none !important;
+    }
+
+    #learnView #lecturePrevOverlayBtn:disabled,
+    #learnView #lectureNextOverlayBtn:disabled {
+      background: #f8fafc !important;
+      color: #64748b !important;
+      border-color: #1e293b !important;
+      box-shadow: none !important;
+      opacity: 0.55 !important;
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+function injectCenteredLectureToolbarStyles() {
+  if (document.getElementById('centered-lecture-toolbar-style')) return;
+  const style = document.createElement('style');
+  style.id = 'centered-lecture-toolbar-style';
+  style.textContent = `
+    #learnView #learnExplainCol {
+      position: relative !important;
+      overflow: visible !important;
+    }
+
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar,
+    #learnView #learnExplainToolbar {
+      position: relative !important;
+      display: block !important;
+      min-height: 112px !important;
+      padding: 24px clamp(18px, 3vw, 42px) !important;
+      overflow: visible !important;
+      pointer-events: none !important;
+    }
+
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-toolbar-center,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .learn-toolbar-center,
+    #learnView #learnExplainToolbar .learn-toolbar-center {
+      position: absolute !important;
+      left: 50% !important;
+      top: 50% !important;
+      right: auto !important;
+      bottom: auto !important;
+      transform: translate(-50%, -50%) !important;
+      display: grid !important;
+      grid-template-columns: minmax(88px, auto) clamp(230px, 26vw, 360px) minmax(88px, auto) !important;
+      align-items: center !important;
+      justify-content: center !important;
+      justify-items: center !important;
+      gap: clamp(14px, 1.8vw, 22px) !important;
+      width: max-content !important;
+      max-width: calc(100% - 220px) !important;
+      min-width: 0 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      overflow: visible !important;
+      z-index: 90 !important;
+      pointer-events: none !important;
+    }
+
+    #learnView #learnBody:not(.chapter-overview-active) #learnViewSelector,
+    #learnView #learnBody.chapter-overview-split-active #learnViewSelector,
+    #learnView #learnViewSelector {
+      grid-column: 2 !important;
+      order: initial !important;
+      justify-self: center !important;
+      width: clamp(230px, 26vw, 360px) !important;
+      min-width: 230px !important;
+      max-width: 360px !important;
+      flex: 0 0 auto !important;
+      pointer-events: auto !important;
+      z-index: 92 !important;
+    }
+
+    #learnView #lecturePrevOverlayBtn,
+    #learnView #lectureNextOverlayBtn,
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar #lecturePrevOverlayBtn,
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar #lectureNextOverlayBtn,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar #lecturePrevOverlayBtn,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar #lectureNextOverlayBtn {
+      order: initial !important;
+      justify-self: center !important;
+      position: relative !important;
+      left: auto !important;
+      right: auto !important;
+      top: auto !important;
+      bottom: auto !important;
+      transform: none !important;
+      pointer-events: auto !important;
+      z-index: 93 !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: auto !important;
+      min-width: 88px !important;
+      max-width: none !important;
+      height: 38px !important;
+      min-height: 38px !important;
+      max-height: 38px !important;
+      padding: 0 18px !important;
+      border: 2px solid #1e293b !important;
+      border-radius: 9px !important;
+      background: #ffffff !important;
+      background-image:
+        linear-gradient(rgba(30, 41, 59, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(30, 41, 59, 0.035) 1px, transparent 1px) !important;
+      background-size: 14px 14px !important;
+      color: #1e293b !important;
+      box-shadow: 3px 3px 0 #1e293b !important;
+      font-family: "Quicksand", "Nunito", sans-serif !important;
+      font-size: 13px !important;
+      font-weight: 850 !important;
+      line-height: 1 !important;
+      letter-spacing: 0 !important;
+      text-transform: lowercase !important;
+      opacity: 1 !important;
+      filter: none !important;
+      cursor: pointer !important;
+    }
+
+    #learnView #lecturePrevOverlayBtn { grid-column: 1 !important; }
+    #learnView #lectureNextOverlayBtn { grid-column: 3 !important; }
+
+    #learnView #learnExplainToolbar #lecturePrevOverlayBtn::before,
+    #learnView #learnExplainToolbar #lecturePrevOverlayBtn::after,
+    #learnView #learnExplainToolbar #lectureNextOverlayBtn::before,
+    #learnView #learnExplainToolbar #lectureNextOverlayBtn::after {
+      content: none !important;
+      display: none !important;
+    }
+
+    #learnView #learnExplainToolbar #lecturePrevOverlayBtn .lecture-overlay-btn-icon,
+    #learnView #learnExplainToolbar #lectureNextOverlayBtn .lecture-overlay-btn-icon {
+      display: none !important;
+      visibility: hidden !important;
+    }
+
+    #learnView #learnExplainToolbar #lecturePrevOverlayBtn .lecture-overlay-btn-text,
+    #learnView #learnExplainToolbar #lectureNextOverlayBtn .lecture-overlay-btn-text {
+      display: inline-flex !important;
+      visibility: visible !important;
+      color: inherit !important;
+      font-size: 13px !important;
+      font-weight: 850 !important;
+      line-height: 1 !important;
+      background: transparent !important;
+      white-space: nowrap !important;
+    }
+
+    #learnView #learnExplainToolbar #lecturePrevOverlayBtn:hover:not(:disabled),
+    #learnView #learnExplainToolbar #lectureNextOverlayBtn:hover:not(:disabled) {
+      background-color: #f8fafc !important;
+      box-shadow: 4px 4px 0 #1e293b !important;
+      transform: translate(-1px, -1px) !important;
+    }
+
+    #learnView #learnExplainToolbar #lecturePrevOverlayBtn:active:not(:disabled),
+    #learnView #learnExplainToolbar #lectureNextOverlayBtn:active:not(:disabled) {
+      box-shadow: 1px 1px 0 #1e293b !important;
+      transform: translate(2px, 2px) !important;
+    }
+
+    #learnView #learnExplainToolbar #lecturePrevOverlayBtn:disabled,
+    #learnView #learnExplainToolbar #lectureNextOverlayBtn:disabled {
+      background: #f8fafc !important;
+      color: #94a3b8 !important;
+      border-color: #cbd5e1 !important;
+      box-shadow: none !important;
+      cursor: not-allowed !important;
+      opacity: 0.72 !important;
+    }
+
+    #learnView #learnExplainToggleBtn.learn-explain-toggle-btn {
+      pointer-events: auto !important;
+      z-index: 94 !important;
+    }
+
+    @container lecture-panel (max-width: 720px) {
+      #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-toolbar-center,
+      #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .learn-toolbar-center,
+      #learnView #learnExplainToolbar .learn-toolbar-center {
+        grid-template-columns: 72px clamp(188px, 48cqi, 260px) 72px !important;
+        gap: 10px !important;
+        max-width: calc(100% - 112px) !important;
+      }
+
+      #learnView #learnBody:not(.chapter-overview-active) #learnViewSelector,
+      #learnView #learnBody.chapter-overview-split-active #learnViewSelector,
+      #learnView #learnViewSelector {
+        width: clamp(188px, 48cqi, 260px) !important;
+        min-width: 188px !important;
+        max-width: 260px !important;
+      }
+
+      #learnView #learnExplainToolbar #lecturePrevOverlayBtn,
+      #learnView #learnExplainToolbar #lectureNextOverlayBtn {
+        min-width: 72px !important;
+        height: 34px !important;
+        min-height: 34px !important;
+        max-height: 34px !important;
+        padding: 0 12px !important;
+        font-size: 12px !important;
+      }
+    }
+
+    #learnView #learnExplainToolbar #lecturePrevOverlayBtn .lecture-overlay-btn-text,
+    #learnView #learnExplainToolbar #lectureNextOverlayBtn .lecture-overlay-btn-text,
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar #lecturePrevOverlayBtn .lecture-overlay-btn-text,
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar #lectureNextOverlayBtn .lecture-overlay-btn-text,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar #lecturePrevOverlayBtn .lecture-overlay-btn-text,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar #lectureNextOverlayBtn .lecture-overlay-btn-text {
+      position: static !important;
+      display: inline-flex !important;
+      visibility: visible !important;
+      width: auto !important;
+      height: auto !important;
+      min-width: 0 !important;
+      min-height: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      color: #1e293b !important;
+      -webkit-text-fill-color: #1e293b !important;
+      opacity: 1 !important;
+      font-size: 13px !important;
+      font-weight: 850 !important;
+      line-height: 1 !important;
+      letter-spacing: 0 !important;
+      text-indent: 0 !important;
+      text-transform: lowercase !important;
+      white-space: nowrap !important;
+      overflow: visible !important;
+      clip: auto !important;
+      clip-path: none !important;
+      transform: none !important;
+    }
+
+    #learnView #learnExplainToolbar #lecturePrevOverlayBtn .lecture-overlay-btn-icon,
+    #learnView #learnExplainToolbar #lectureNextOverlayBtn .lecture-overlay-btn-icon,
+    #learnView #learnExplainToolbar #lecturePrevOverlayBtn .lecture-overlay-btn-icon::before,
+    #learnView #learnExplainToolbar #lecturePrevOverlayBtn .lecture-overlay-btn-icon::after,
+    #learnView #learnExplainToolbar #lectureNextOverlayBtn .lecture-overlay-btn-icon::before,
+    #learnView #learnExplainToolbar #lectureNextOverlayBtn .lecture-overlay-btn-icon::after {
+      content: none !important;
+      display: none !important;
+      visibility: hidden !important;
+    }
+
+    @container lecture-panel (max-width: 760px) {
+      #learnView #learnExplainToggleBtn.learn-explain-toggle-btn {
+        left: 12px !important;
+        width: 34px !important;
+        min-width: 34px !important;
+        max-width: 34px !important;
+        height: 34px !important;
+        min-height: 34px !important;
+        max-height: 34px !important;
+        padding: 0 !important;
+        border-radius: 9px !important;
+        overflow: visible !important;
+      }
+
+      #learnView #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label {
+        display: none !important;
+        visibility: hidden !important;
+      }
+
+      #learnView #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon,
+      #learnView #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon svg {
+        width: 16px !important;
+        height: 16px !important;
+      }
+    }
+
+    #learnView #learnExplainToolbar .learn-toolbar-center,
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-toolbar-center,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .learn-toolbar-center {
+      grid-template-columns: 64px clamp(216px, 24vw, 300px) 64px !important;
+      gap: 12px !important;
+      max-width: calc(100% - 118px) !important;
+    }
+
+    #learnView #learnViewSelector,
+    #learnView #learnBody:not(.chapter-overview-active) #learnViewSelector,
+    #learnView #learnBody.chapter-overview-split-active #learnViewSelector {
+      width: clamp(216px, 24vw, 300px) !important;
+      min-width: 216px !important;
+      max-width: 300px !important;
+    }
+
+    #learnView #learnExplainToolbar #lecturePrevOverlayBtn,
+    #learnView #learnExplainToolbar #lectureNextOverlayBtn,
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar #lecturePrevOverlayBtn,
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar #lectureNextOverlayBtn,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar #lecturePrevOverlayBtn,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar #lectureNextOverlayBtn {
+      min-width: 64px !important;
+      width: 64px !important;
+      max-width: 64px !important;
+      height: 34px !important;
+      min-height: 34px !important;
+      max-height: 34px !important;
+      padding: 0 8px !important;
+      border-width: 2px !important;
+      border-radius: 8px !important;
+      box-shadow: 2px 2px 0 #1e293b !important;
+      font-size: 11px !important;
+      overflow: hidden !important;
+    }
+
+    #learnView #learnExplainToolbar #lecturePrevOverlayBtn .lecture-overlay-btn-text,
+    #learnView #learnExplainToolbar #lectureNextOverlayBtn .lecture-overlay-btn-text,
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar #lecturePrevOverlayBtn .lecture-overlay-btn-text,
+    #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar #lectureNextOverlayBtn .lecture-overlay-btn-text,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar #lecturePrevOverlayBtn .lecture-overlay-btn-text,
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar #lectureNextOverlayBtn .lecture-overlay-btn-text,
+    #learnView #learnExplainToolbar .lecture-overlay-btn-left .lecture-overlay-btn-text,
+    #learnView #learnExplainToolbar .lecture-overlay-btn-right .lecture-overlay-btn-text {
+      display: inline-flex !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      color: #1e293b !important;
+      -webkit-text-fill-color: #1e293b !important;
+      font-size: 11px !important;
+      font-weight: 850 !important;
+      line-height: 1 !important;
+      white-space: nowrap !important;
+    }
+
+    #learnView #learnExplainToolbar #lecturePrevOverlayBtn:hover:not(:disabled),
+    #learnView #learnExplainToolbar #lectureNextOverlayBtn:hover:not(:disabled) {
+      box-shadow: 3px 3px 0 #1e293b !important;
+      transform: translate(-1px, -1px) !important;
+    }
+
+    #learnView #learnExplainToolbar #lecturePrevOverlayBtn:active:not(:disabled),
+    #learnView #learnExplainToolbar #lectureNextOverlayBtn:active:not(:disabled) {
+      box-shadow: 1px 1px 0 #1e293b !important;
+      transform: translate(1px, 1px) !important;
+    }
+
+    @container lecture-panel (max-width: 760px) {
+      #learnView #learnExplainToolbar .learn-toolbar-center,
+      #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-toolbar-center,
+      #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .learn-toolbar-center {
+        grid-template-columns: 58px clamp(188px, 47cqi, 244px) 58px !important;
+        gap: 9px !important;
+        max-width: calc(100% - 84px) !important;
+      }
+
+      #learnView #learnViewSelector,
+      #learnView #learnBody:not(.chapter-overview-active) #learnViewSelector,
+      #learnView #learnBody.chapter-overview-split-active #learnViewSelector {
+        width: clamp(188px, 47cqi, 244px) !important;
+        min-width: 188px !important;
+        max-width: 244px !important;
+      }
+
+      #learnView #learnExplainToolbar #lecturePrevOverlayBtn,
+      #learnView #learnExplainToolbar #lectureNextOverlayBtn {
+        min-width: 58px !important;
+        width: 58px !important;
+        max-width: 58px !important;
+        height: 32px !important;
+        min-height: 32px !important;
+        max-height: 32px !important;
+        padding: 0 6px !important;
+        font-size: 10px !important;
+      }
+
+      #learnView #learnExplainToolbar #lecturePrevOverlayBtn .lecture-overlay-btn-text,
+      #learnView #learnExplainToolbar #lectureNextOverlayBtn .lecture-overlay-btn-text {
+        font-size: 10px !important;
+      }
+    }
+
+    #learnView #learnExplainCol {
+      container-type: inline-size !important;
+      container-name: lecture-panel !important;
+    }
+
+    @container lecture-panel (max-width: 760px) {
+      #learnView #learnExplainToolbar .learn-toolbar-center,
+      #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-toolbar-center,
+      #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .learn-toolbar-center {
+        grid-template-columns: 84px clamp(188px, 45cqi, 228px) 58px !important;
+        gap: 8px !important;
+        max-width: calc(100% - 64px) !important;
+      }
+
+      #learnView #learnViewSelector,
+      #learnView #learnBody:not(.chapter-overview-active) #learnViewSelector,
+      #learnView #learnBody.chapter-overview-split-active #learnViewSelector {
+        width: clamp(188px, 45cqi, 228px) !important;
+        min-width: 188px !important;
+        max-width: 228px !important;
+      }
+
+      #learnView #learnExplainToolbar #lecturePrevOverlayBtn {
+        width: 84px !important;
+        min-width: 84px !important;
+        max-width: 84px !important;
+      }
+
+      #learnView #learnExplainToolbar #lectureNextOverlayBtn {
+        width: 58px !important;
+        min-width: 58px !important;
+        max-width: 58px !important;
+      }
+
+      #learnView #learnExplainToggleBtn.learn-explain-toggle-btn,
+      #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn,
+      #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn {
+        left: 12px !important;
+        width: 34px !important;
+        min-width: 34px !important;
+        max-width: 34px !important;
+        height: 34px !important;
+        min-height: 34px !important;
+        max-height: 34px !important;
+        padding: 0 !important;
+        gap: 0 !important;
+      }
+
+      #learnView #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label,
+      #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label,
+      #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label {
+        display: none !important;
+        visibility: hidden !important;
+        width: 0 !important;
+        max-width: 0 !important;
+        overflow: hidden !important;
+      }
+
+      #learnView #learnExplainToolbar #lecturePrevOverlayBtn .lecture-overlay-btn-text {
+        font-size: 10px !important;
+        transform: scaleX(0.94) !important;
+        transform-origin: center !important;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+  if (lecturePrevOverlayBtn) {
+    const text = lecturePrevOverlayBtn.querySelector('.lecture-overlay-btn-text');
+    if (text) text.textContent = 'previous';
+  }
+  if (lectureNextOverlayBtn) {
+    const text = lectureNextOverlayBtn.querySelector('.lecture-overlay-btn-text');
+    if (text) text.textContent = 'next';
+  }
+}
+
+injectCenteredLectureToolbarStyles();
+injectFinalPagerTextArrowFix();
 
 function applyLightboxTransform() {
   if (!lightboxImg) return;
@@ -4147,31 +5897,102 @@ function decorateLectureContent(root) {
   const cardTypeForHeading = (text) => {
     const t = compactWhitespace(String(text || '')).toLowerCase();
     if (!t) return '';
-    if (t.includes('example') || t.includes('worked example') || t.includes('near-miss')) return 'example';
-    if (t.includes('common mistake')) return 'warning';
-    if (t.includes('exam note') || t.includes('exam trigger')) return 'exam';
-    if (t.includes('quick reading rule')) return 'rule';
-    if (t.includes('important formulas')) return 'formula';
+    if (
+      t.includes('example')
+      || t.includes('worked example')
+      || t.includes('representative example')
+      || t.includes('minimal example')
+      || t.includes('quick example')
+      || t.includes('quick check')
+      || t.includes('interactive check')
+      || t.includes('interactive demo')
+      || t.includes('near-miss')
+    ) return 'example';
+    if (
+      t.includes('common mistake')
+      || t.includes('common misuse')
+      || t.includes('common trap')
+      || t.includes('exam trap')
+      || t === 'warning'
+      || t.includes('warning:')
+    ) return 'warning';
+    if (
+      t.includes('exam note')
+      || t.includes('exam trigger')
+      || t.includes('exam tip')
+      || t.includes('key exam habit')
+      || t.includes('key exam point')
+    ) return 'exam';
+    if (
+      t.includes('quick reading rule')
+      || t.includes('when to use it')
+      || t.includes('bridge note')
+      || t.includes('checklist')
+      || t.includes('recipe')
+    ) return 'rule';
+    if (t.includes('important formulas') || t.includes('formula') || t.includes('identity')) return 'formula';
     return '';
   };
 
-  Array.from(root.querySelectorAll('h3')).forEach((heading) => {
+  const trimLeadingWhitespace = (node) => {
+    while (node.firstChild && node.firstChild.nodeType === Node.TEXT_NODE && !node.firstChild.textContent.trim()) {
+      node.firstChild.remove();
+    }
+    if (node.firstChild && node.firstChild.nodeType === Node.TEXT_NODE) {
+      node.firstChild.textContent = node.firstChild.textContent.replace(/^[\s:：-]+/, '');
+    }
+  };
+
+  const wrapInlineCallout = (paragraph) => {
+    if (!paragraph || paragraph.closest('.lecture-note-card')) return;
+    const firstElement = paragraph.firstElementChild;
+    if (!firstElement || firstElement.tagName !== 'STRONG') return;
+    let probe = paragraph.firstChild;
+    while (probe && probe !== firstElement) {
+      if (probe.nodeType !== Node.TEXT_NODE || probe.textContent.trim()) return;
+      probe = probe.nextSibling;
+    }
+    const label = compactWhitespace(firstElement.textContent || '').replace(/[:：]\s*$/, '');
+    const type = cardTypeForHeading(label);
+    if (!type) return;
+    const parent = paragraph.parentNode;
+    if (!parent) return;
+    const card = document.createElement('section');
+    card.className = `lecture-note-card lecture-note-card-${type} lecture-note-card-compact`;
+    const heading = document.createElement('h4');
+    heading.textContent = label;
+    parent.insertBefore(card, paragraph);
+    firstElement.remove();
+    trimLeadingWhitespace(paragraph);
+    paragraph.classList.add('lecture-inline-callout-body');
+    card.appendChild(heading);
+    card.appendChild(paragraph);
+  };
+
+  const wrapHeadingCard = (heading) => {
     const type = cardTypeForHeading(heading.textContent || '');
     if (!type || heading.closest('.lecture-note-card')) return;
     const card = document.createElement('section');
     card.className = `lecture-note-card lecture-note-card-${type}`;
     const parent = heading.parentNode;
     if (!parent) return;
+    const headingLevel = Number(String(heading.tagName || '').replace(/^H/i, '')) || 3;
     parent.insertBefore(card, heading);
     card.appendChild(heading);
     let sibling = card.nextSibling;
     while (sibling) {
       const next = sibling.nextSibling;
-      if (sibling.nodeType === Node.ELEMENT_NODE && /^H[1-3]$/.test(sibling.tagName)) break;
+      if (sibling.nodeType === Node.ELEMENT_NODE && /^H[1-6]$/.test(sibling.tagName)) {
+        const siblingLevel = Number(String(sibling.tagName || '').replace(/^H/i, '')) || headingLevel;
+        if (siblingLevel <= headingLevel || cardTypeForHeading(sibling.textContent || '')) break;
+      }
       card.appendChild(sibling);
       sibling = next;
     }
-  });
+  };
+
+  Array.from(root.querySelectorAll('p')).forEach(wrapInlineCallout);
+  Array.from(root.querySelectorAll('h3, h4')).forEach(wrapHeadingCard);
 
   root.querySelectorAll('h2').forEach((h2) => {
     const next = h2.nextElementSibling;
@@ -4180,23 +6001,33 @@ function decorateLectureContent(root) {
     }
   });
 
-  const takeawayHeading = Array.from(root.querySelectorAll('h1, h2, h3')).find((node) => {
+  const isTakeawayHeadingNode = (node) => {
     const text = compactWhitespace(node.textContent || '');
     return /^📌\s*Key Takeaways$/i.test(text) || /^Key Takeaways$/i.test(text);
-  });
-  if (takeawayHeading && !root.querySelector('ol.learn-key-takeaways-list')) {
+  };
+  const takeawayHeading = Array.from(root.querySelectorAll('h1, h2, h3, p')).find(isTakeawayHeadingNode);
+  if (takeawayHeading && !root.querySelector('.lecture-note-card-summary')) {
     const takeawayNodes = [];
     let cursor = takeawayHeading.nextElementSibling;
     while (cursor) {
-      if (/^H[1-3]$/.test(cursor.tagName)) break;
+      if (/^H[1-6]$/.test(cursor.tagName)) break;
+      if (cursor.querySelector('.kc-quiz-plan, .lesson-test-banner')) break;
       const text = compactWhitespace(cursor.textContent || '');
-      if (cursor.tagName === 'P' && text && !cursor.querySelector('img, table, .kc-quiz-plan, .lesson-test-banner')) {
+      if (/^next[,.:;]\s+/i.test(text)) break;
+      if ((cursor.tagName === 'P' || cursor.tagName === 'LI') && text && !cursor.querySelector('img, table, .kc-quiz-plan, .lesson-test-banner')) {
         takeawayNodes.push(cursor);
+      }
+      if ((cursor.tagName === 'UL' || cursor.tagName === 'OL') && !cursor.querySelector('img, table, .kc-quiz-plan, .lesson-test-banner')) {
+        Array.from(cursor.children || []).forEach((child) => {
+          if (child.tagName === 'LI' && compactWhitespace(child.textContent || '')) takeawayNodes.push(child);
+        });
       }
       cursor = cursor.nextElementSibling;
     }
 
-    if (takeawayNodes.length >= 2) {
+    if (takeawayNodes.length >= 1) {
+      const summaryCard = document.createElement('section');
+      summaryCard.className = 'lecture-note-card lecture-note-card-summary';
       const list = document.createElement('ol');
       list.className = 'learn-key-takeaways-list';
       takeawayNodes.forEach((node) => {
@@ -4204,8 +6035,23 @@ function decorateLectureContent(root) {
         li.innerHTML = node.innerHTML;
         list.appendChild(li);
       });
-      takeawayHeading.parentNode.insertBefore(list, takeawayNodes[0]);
-      takeawayNodes.forEach((node) => node.remove());
+      takeawayHeading.parentNode.insertBefore(summaryCard, takeawayHeading);
+      if (/^H[1-6]$/.test(takeawayHeading.tagName)) {
+        summaryCard.appendChild(takeawayHeading);
+      } else {
+        const heading = document.createElement('h2');
+        heading.innerHTML = takeawayHeading.innerHTML;
+        summaryCard.appendChild(heading);
+        takeawayHeading.remove();
+      }
+      summaryCard.appendChild(list);
+      const removedParents = new Set();
+      takeawayNodes.forEach((node) => {
+        const parent = node.parentNode;
+        if (parent && (parent.tagName === 'UL' || parent.tagName === 'OL')) removedParents.add(parent);
+        else node.remove();
+      });
+      removedParents.forEach((node) => node.remove());
     }
   }
 
@@ -4352,6 +6198,409 @@ function getDemoControlValue(control, state) {
   return Number.isFinite(num) ? num : Number(control.default ?? control.min ?? 1);
 }
 
+const CHAPTER_ONE_DEMO_TYPES = new Set([
+  'energy_cross_term',
+  'step_window_composer',
+  'impulse_sifting',
+  'invertibility_tester'
+]);
+
+function hydrateChapterOneDemo(node, demo) {
+  const demoType = demo.demo_type || demo.demo_spec?.demo_type || '';
+  const state = Object.create(null);
+  const title = demo.title || 'Interactive check';
+  const explanation = demo.explanation || 'Move the controls and watch the formulas update.';
+
+  node.innerHTML = `
+    <section class="chapter-demo-shell chapter-demo-shell-${escapeHtml(demoType)}">
+      <div class="chapter-demo-head">
+        <div class="chapter-demo-title">${escapeHtml(title)}</div>
+        <div class="chapter-demo-subtitle">${escapeHtml(explanation)}</div>
+      </div>
+      <div class="chapter-demo-grid">
+        <div class="chapter-demo-controls"></div>
+        <div class="chapter-demo-stage">
+          <canvas class="chapter-demo-canvas"></canvas>
+        </div>
+      </div>
+      <div class="chapter-demo-readouts"></div>
+    </section>
+  `;
+
+  const controlsEl = node.querySelector('.chapter-demo-controls');
+  const readoutsEl = node.querySelector('.chapter-demo-readouts');
+  const canvas = node.querySelector('.chapter-demo-canvas');
+  const ctx = canvas && canvas.getContext ? canvas.getContext('2d') : null;
+  const shellEl = node.querySelector('.chapter-demo-shell');
+
+  const fmt = (value, digits = 2) => {
+    const num = Number(value);
+    if (!Number.isFinite(num)) return '0';
+    return Number((Math.abs(num) < 1e-9 ? 0 : num).toFixed(digits)).toString();
+  };
+  const setReadouts = (items) => {
+    readoutsEl.innerHTML = items.map((item) => `<div class="chapter-demo-readout">${item}</div>`).join('');
+  };
+  const setupCanvas = (height = 260) => {
+    if (!canvas || !ctx) return { width: 0, height: 0 };
+    const dpr = Math.max(window.devicePixelRatio || 1, 1);
+    const width = Math.max(Math.floor(canvas.parentElement?.clientWidth || canvas.clientWidth || 0), 320);
+    canvas.width = Math.floor(width * dpr);
+    canvas.height = Math.floor(height * dpr);
+    canvas.style.width = '100%';
+    canvas.style.height = `${height}px`;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, width, height);
+    return { width, height };
+  };
+  const drawAxis = (width, y, minT = -4, maxT = 6, pad = 42) => {
+    const toX = (t) => pad + ((t - minT) / (maxT - minT)) * (width - pad * 2);
+    ctx.strokeStyle = '#cbd5e1';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(pad, y);
+    ctx.lineTo(width - pad, y);
+    ctx.stroke();
+    ctx.fillStyle = '#64748b';
+    ctx.font = '600 12px Quicksand, sans-serif';
+    ctx.textAlign = 'center';
+    for (let t = minT; t <= maxT; t += 2) {
+      const x = toX(t);
+      ctx.beginPath();
+      ctx.moveTo(x, y - 4);
+      ctx.lineTo(x, y + 4);
+      ctx.stroke();
+      ctx.fillText(String(t), x, y + 20);
+    }
+    return toX;
+  };
+  const drawArrow = (x1, y1, x2, y2, color = '#2563eb', width = 3) => {
+    const angle = Math.atan2(y2 - y1, x2 - x1);
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+    ctx.lineWidth = width;
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x2, y2);
+    ctx.lineTo(x2 - 10 * Math.cos(angle - Math.PI / 6), y2 - 10 * Math.sin(angle - Math.PI / 6));
+    ctx.lineTo(x2 - 10 * Math.cos(angle + Math.PI / 6), y2 - 10 * Math.sin(angle + Math.PI / 6));
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+  };
+  const drawRoundedRect = (x, y, width, height, radius) => {
+    ctx.beginPath();
+    ctx.moveTo(x + radius, y);
+    ctx.lineTo(x + width - radius, y);
+    ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+    ctx.lineTo(x + width, y + height - radius);
+    ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+    ctx.lineTo(x + radius, y + height);
+    ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+    ctx.lineTo(x, y + radius);
+    ctx.quadraticCurveTo(x, y, x + radius, y);
+    ctx.closePath();
+  };
+  const addRange = (key, label, min, max, step, value) => {
+    state[key] = Number(value);
+    const wrap = document.createElement('label');
+    wrap.className = 'chapter-demo-control';
+    wrap.innerHTML = `
+      <span class="chapter-demo-control-label">${escapeHtml(label)}</span>
+      <span class="chapter-demo-slider-row">
+        <input type="range" min="${min}" max="${max}" step="${step}" value="${value}">
+        <strong class="chapter-demo-control-value">${fmt(value)}</strong>
+      </span>
+    `;
+    const input = wrap.querySelector('input');
+    const valueEl = wrap.querySelector('.chapter-demo-control-value');
+    input.addEventListener('input', () => {
+      state[key] = Number(input.value);
+      valueEl.textContent = fmt(state[key]);
+      render();
+    });
+    controlsEl.appendChild(wrap);
+  };
+  const addSelect = (key, label, options, value) => {
+    state[key] = value;
+    const wrap = document.createElement('label');
+    wrap.className = 'chapter-demo-control';
+    const selectHtml = options.map((option) => (
+      `<option value="${escapeHtml(option.value)}"${option.value === value ? ' selected' : ''}>${escapeHtml(option.label)}</option>`
+    )).join('');
+    wrap.innerHTML = `
+      <span class="chapter-demo-control-label">${escapeHtml(label)}</span>
+      <select class="chapter-demo-select">${selectHtml}</select>
+    `;
+    wrap.querySelector('select').addEventListener('change', (event) => {
+      state[key] = event.target.value;
+      render();
+    });
+    controlsEl.appendChild(wrap);
+  };
+
+  const renderEnergyCrossTerm = () => {
+    const { width } = setupCanvas(260);
+    const shift = Number(state.shift || 0);
+    const overlap = Math.max(0, 2 - Math.abs(shift));
+    const ex = 2;
+    const ey = 2;
+    const ePlus = ex + ey + (2 * overlap);
+    const eMinus = ex + ey - (2 * overlap);
+    const toX = drawAxis(width, 214, -4, 5);
+    const drawPulse = (from, to, y, color, label) => {
+      const x1 = toX(from);
+      const x2 = toX(to);
+      ctx.fillStyle = color;
+      ctx.globalAlpha = 0.18;
+      ctx.fillRect(x1, y - 44, x2 - x1, 44);
+      ctx.globalAlpha = 1;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 3;
+      ctx.strokeRect(x1, y - 44, x2 - x1, 44);
+      ctx.fillStyle = '#334155';
+      ctx.font = '700 13px Quicksand, sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText(label, x1 + 8, y - 50);
+    };
+    drawPulse(-1, 1, 86, '#2563eb', 'x(t)');
+    drawPulse(shift - 1, shift + 1, 154, '#f59e0b', 'y(t)');
+    if (overlap > 0) {
+      const left = Math.max(-1, shift - 1);
+      const right = Math.min(1, shift + 1);
+      ctx.fillStyle = '#10b981';
+      ctx.globalAlpha = 0.24;
+      ctx.fillRect(toX(left), 28, toX(right) - toX(left), 152);
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = '#047857';
+      ctx.font = '700 13px Quicksand, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(`overlap = ${fmt(overlap)}`, (toX(left) + toX(right)) / 2, 30);
+    }
+    setReadouts([
+      `<strong>Cross term:</strong> integral x(t)y(t) dt = ${fmt(overlap)}`,
+      `<strong>Energy sum:</strong> E[x+y] = 2 + 2 + 2(${fmt(overlap)}) = ${fmt(ePlus)}`,
+      `<strong>Energy difference:</strong> E[x-y] = 2 + 2 - 2(${fmt(overlap)}) = ${fmt(eMinus)}`
+    ]);
+  };
+
+  const renderStepWindow = () => {
+    const { width } = setupCanvas(250);
+    const a = Math.min(Number(state.start || 2), Number(state.end || 4));
+    const b = Math.max(Number(state.start || 2), Number(state.end || 4));
+    const toX = drawAxis(width, 190, -5, 6);
+    const y0 = 160;
+    const y1 = 78;
+    ctx.fillStyle = '#2563eb';
+    ctx.globalAlpha = 0.16;
+    ctx.fillRect(toX(a), y1, toX(b) - toX(a), y0 - y1);
+    ctx.globalAlpha = 1;
+    ctx.strokeStyle = '#1d4ed8';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(toX(-5), y0);
+    ctx.lineTo(toX(a), y0);
+    ctx.lineTo(toX(a), y1);
+    ctx.lineTo(toX(b), y1);
+    ctx.lineTo(toX(b), y0);
+    ctx.lineTo(toX(6), y0);
+    ctx.stroke();
+    drawArrow(toX(a), y0 + 10, toX(a), y1 + 8, '#2563eb', 2.5);
+    drawArrow(toX(b), y1 - 10, toX(b), y0 - 8, '#2563eb', 2.5);
+    ctx.fillStyle = '#334155';
+    ctx.font = '700 13px Quicksand, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(`turn on at a=${fmt(a)}`, toX(a), 42);
+    ctx.fillText(`turn off at b=${fmt(b)}`, toX(b), 222);
+    setReadouts([
+      `<strong>Window:</strong> u(t-${fmt(a)}) - u(t-${fmt(b)})`,
+      `<strong>Active interval:</strong> ${fmt(a)} <= t < ${fmt(b)}`,
+      `<strong>Reading habit:</strong> first step turns on, second step cancels it back to zero.`
+    ]);
+  };
+
+  const renderImpulseSifting = () => {
+    const { width } = setupCanvas(250);
+    const form = state.form || 't_minus_a';
+    let support = Number(state.a || 2);
+    let factor = 1;
+    let argument = `t - ${fmt(state.a || 2)}`;
+    if (form === 'a_minus_t') {
+      support = Number(state.a || 2);
+      argument = `${fmt(state.a || 2)} - t`;
+    } else if (form === 'k_t_minus_b') {
+      const k = Number(state.k || 2);
+      const b = Number(state.b || 4);
+      support = b / k;
+      factor = 1 / Math.abs(k || 1);
+      argument = `${fmt(k)}t - ${fmt(b)}`;
+    }
+    const sample = (support ** 2) + 1;
+    const integral = factor * sample;
+    const toX = drawAxis(width, 184, -4, 5);
+    const x = toX(support);
+    ctx.strokeStyle = '#f97316';
+    ctx.lineWidth = 3;
+    drawArrow(x, 178, x, 70, '#f97316', 3);
+    ctx.fillStyle = '#f97316';
+    ctx.beginPath();
+    ctx.arc(x, 70, 5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#334155';
+    ctx.font = '700 13px Quicksand, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(`support t = ${fmt(support)}`, x, 44);
+    ctx.strokeStyle = '#2563eb';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    for (let i = 0; i <= 240; i += 1) {
+      const t = -4 + (i / 240) * 9;
+      const y = 168 - Math.min((t ** 2) + 1, 14) * 6;
+      if (i === 0) ctx.moveTo(toX(t), y);
+      else ctx.lineTo(toX(t), y);
+    }
+    ctx.stroke();
+    setReadouts([
+      `<strong>Set the argument to zero:</strong> ${argument} = 0 gives t = ${fmt(support)}`,
+      `<strong>Scaling factor:</strong> 1 / |slope| = ${fmt(factor)}`,
+      `<strong>With phi(t)=t^2+1:</strong> integral phi(t) delta(${argument}) dt = ${fmt(integral)}`
+    ]);
+  };
+
+  const renderInvertibilityTester = () => {
+    const { width } = setupCanvas(250);
+    const cases = {
+      reverse: {
+        title: 'y(t) = x(-t)',
+        status: 'Invertible',
+        left: ['x(t)'],
+        right: ['y(t)'],
+        note: 'Time reversal changes the order, but no value is erased. Recover with x(t)=y(-t).'
+      },
+      affine: {
+        title: 'y(t) = x(3t-6)',
+        status: 'Invertible',
+        left: ['x(t)'],
+        right: ['y(t)'],
+        note: 'Solve s=3t-6. Then x(t)=y((t+6)/3).'
+      },
+      abs: {
+        title: 'y(t) = |x(t)|',
+        status: 'Not invertible',
+        left: ['x=3', 'x=-3'],
+        right: ['y=3'],
+        note: 'The sign is lost, so two different inputs give the same output.'
+      },
+      square: {
+        title: 'y(t) = x^2(t)',
+        status: 'Not invertible',
+        left: ['x=2', 'x=-2'],
+        right: ['y=4'],
+        note: 'Squaring collapses positive and negative values together.'
+      },
+      multiply_t: {
+        title: 'y(t) = t x(t)',
+        status: 'Not invertible',
+        left: ['x(0)=5', 'x(0)=-1'],
+        right: ['y(0)=0'],
+        note: 'At t=0, every input value is multiplied away.'
+      }
+    };
+    const item = cases[state.system] || cases.reverse;
+    const leftX = 74;
+    const rightX = width - 86;
+    const centerY = 124;
+    ctx.fillStyle = '#334155';
+    ctx.font = '800 15px Quicksand, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(item.title, width / 2, 38);
+    item.left.forEach((label, index) => {
+      const y = item.left.length === 1 ? centerY : centerY - 34 + index * 68;
+      ctx.fillStyle = '#dbeafe';
+      ctx.strokeStyle = '#2563eb';
+      ctx.lineWidth = 2;
+      drawRoundedRect(leftX - 42, y - 20, 84, 40, 8);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = '#1e3a8a';
+      ctx.font = '700 13px Quicksand, sans-serif';
+      ctx.fillText(label, leftX, y + 5);
+      drawArrow(leftX + 50, y, rightX - 55, item.right.length === 1 ? centerY : y, '#2563eb', 2.4);
+    });
+    item.right.forEach((label, index) => {
+      const y = item.right.length === 1 ? centerY : centerY - 28 + index * 56;
+      ctx.fillStyle = item.status === 'Invertible' ? '#dcfce7' : '#fee2e2';
+      ctx.strokeStyle = item.status === 'Invertible' ? '#16a34a' : '#ef4444';
+      ctx.lineWidth = 2;
+      drawRoundedRect(rightX - 46, y - 22, 92, 44, 8);
+      ctx.fill();
+      ctx.stroke();
+      ctx.fillStyle = item.status === 'Invertible' ? '#166534' : '#991b1b';
+      ctx.font = '800 13px Quicksand, sans-serif';
+      ctx.fillText(label, rightX, y + 5);
+    });
+    setReadouts([
+      `<strong>Decision:</strong> ${item.status}`,
+      `<strong>Reason:</strong> ${escapeHtml(item.note)}`
+    ]);
+  };
+
+  function render() {
+    if (!ctx) return;
+    if (shellEl) shellEl.classList.toggle('is-narrow', shellEl.clientWidth < 740);
+    if (demoType === 'energy_cross_term') renderEnergyCrossTerm();
+    else if (demoType === 'step_window_composer') renderStepWindow();
+    else if (demoType === 'impulse_sifting') renderImpulseSifting();
+    else if (demoType === 'invertibility_tester') renderInvertibilityTester();
+  }
+
+  if (demoType === 'energy_cross_term') {
+    addRange('shift', 'Shift of y(t)', -3, 3, 0.1, 0.8);
+  } else if (demoType === 'step_window_composer') {
+    addRange('start', 'Start a', -4, 4, 0.5, 2);
+    addRange('end', 'End b', -3, 5, 0.5, 4);
+  } else if (demoType === 'impulse_sifting') {
+    addSelect('form', 'Delta argument', [
+      { value: 't_minus_a', label: 'delta(t-a)' },
+      { value: 'a_minus_t', label: 'delta(a-t)' },
+      { value: 'k_t_minus_b', label: 'delta(kt-b)' }
+    ], 't_minus_a');
+    addRange('a', 'a', -3, 4, 0.5, 2);
+    addRange('k', 'k', 0.5, 4, 0.5, 2);
+    addRange('b', 'b', -4, 6, 0.5, 4);
+  } else if (demoType === 'invertibility_tester') {
+    addSelect('system', 'System', [
+      { value: 'reverse', label: 'y(t)=x(-t)' },
+      { value: 'affine', label: 'y(t)=x(3t-6)' },
+      { value: 'abs', label: 'y(t)=|x(t)|' },
+      { value: 'square', label: 'y(t)=x^2(t)' },
+      { value: 'multiply_t', label: 'y(t)=t x(t)' }
+    ], 'reverse');
+  }
+
+  let pendingFrame = 0;
+  const rerender = () => {
+    if (pendingFrame) return;
+    pendingFrame = window.requestAnimationFrame(() => {
+      pendingFrame = 0;
+      render();
+    });
+  };
+  if (window.ResizeObserver && shellEl) {
+    const observer = new ResizeObserver(rerender);
+    observer.observe(shellEl);
+    node._chapterOneDemoResizeObserver = observer;
+  }
+  window.addEventListener('resize', rerender, { passive: true });
+  render();
+}
+
 function hydrateInteractiveDemos(root) {
   if (!root) return;
   root.querySelectorAll('.kc-interactive-demo').forEach((node) => {
@@ -4360,14 +6609,598 @@ function hydrateInteractiveDemos(root) {
     if (!demo) return;
 
     const isMatrixDemo = demo.demo_type === 'matrix_multiplication_conformability';
-    const isPhasorDemo = demo.type === 'interactive_demo'
+    const demoControls = Array.isArray(demo.demo_spec?.controls) ? demo.demo_spec.controls : [];
+    const demoText = `${demo.title || ''} ${demo.content || ''} ${demo.explanation || ''} ${demo.react_code || ''}`;
+    const isComplexPlaneDemo = demo.type === 'interactive_demo'
+      && demo.demo_spec
+      && demo.demo_spec.framework === 'react_canvas'
+      && demoControls.some((control) => (control.id || control.key) === 'slider_a')
+      && demoControls.some((control) => (control.id || control.key) === 'slider_b')
+      && /complex number|rectangular|polar|complex plane/i.test(demoText)
+      && !/sinusoid|same frequency|cosine wave|phasor sum/i.test(demoText);
+    const isPhasorDemo = !isComplexPlaneDemo
+      && demo.type === 'interactive_demo'
       && demo.demo_spec
       && demo.demo_spec.framework === 'react_canvas'
       && Array.isArray(demo.demo_spec.panels)
       && demo.demo_spec.panels.some((panel) => panel.id === 'phasor_panel');
+    const isSinusoidDemo = demo.demo_type === 'sinusoid_phasor_projection'
+      || (demo.type === 'interactive_demo'
+        && /sinusoid/i.test(demoText)
+        && /phasor|amplitude|frequency|phase/i.test(demoText));
+    const chapterOneDemoType = demo.demo_type || demo.demo_spec?.demo_type || '';
+    const isChapterOneDemo = CHAPTER_ONE_DEMO_TYPES.has(chapterOneDemoType);
 
-    if (!isMatrixDemo && !isPhasorDemo) return;
+    if (!isMatrixDemo && !isComplexPlaneDemo && !isPhasorDemo && !isSinusoidDemo && !isChapterOneDemo) return;
     node.dataset.hydrated = '1';
+
+    if (isChapterOneDemo) {
+      hydrateChapterOneDemo(node, demo);
+      return;
+    }
+
+    if (isComplexPlaneDemo) {
+      const controls = demoControls;
+      const state = Object.create(null);
+      controls.forEach((control) => {
+        const key = control.id || control.key;
+        if (!key) return;
+        if (Array.isArray(control.options)) {
+          state[key] = control.default || control.options[0] || 'degrees';
+          return;
+        }
+        if (String(control.action || '').startsWith('set ')) return;
+        state[key] = Number(control.default ?? control.min ?? 0);
+      });
+      if (!Object.prototype.hasOwnProperty.call(state, 'slider_a')) state.slider_a = 3;
+      if (!Object.prototype.hasOwnProperty.call(state, 'slider_b')) state.slider_b = 4;
+      if (!Object.prototype.hasOwnProperty.call(state, 'angle_toggle')) state.angle_toggle = 'degrees';
+
+      node.innerHTML = `
+        <section class="complex-demo-shell">
+          <div class="complex-demo-head">
+            <div class="complex-demo-title">${escapeHtml(demo.title || 'Drag the complex number')}</div>
+            <div class="complex-demo-subtitle">${escapeHtml(demo.explanation || 'Connect rectangular form, magnitude, angle, and conjugate on the complex plane.')}</div>
+          </div>
+          <div class="complex-demo-intro">${decodeInlineMarkdownFragment(demo.content || '')}</div>
+          <div class="complex-demo-grid">
+            <div class="complex-demo-left">
+              <div class="complex-demo-controls"></div>
+              <div class="complex-demo-readouts"></div>
+            </div>
+            <div class="complex-demo-right">
+              <div class="complex-demo-canvas-wrap">
+                <canvas class="complex-demo-canvas"></canvas>
+              </div>
+              <div class="complex-demo-legend">
+                <span><i class="complex-demo-swatch real"></i>Real part a</span>
+                <span><i class="complex-demo-swatch imag"></i>Imaginary part jb</span>
+                <span><i class="complex-demo-swatch vector"></i>z = a + jb</span>
+                <span><i class="complex-demo-swatch conjugate"></i>z* = a - jb</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      `;
+
+      const controlsEl = node.querySelector('.complex-demo-controls');
+      const readoutsEl = node.querySelector('.complex-demo-readouts');
+      const canvas = node.querySelector('.complex-demo-canvas');
+      const ctx = canvas && canvas.getContext ? canvas.getContext('2d') : null;
+      const shellEl = node.querySelector('.complex-demo-shell');
+      const formatNum = (value) => {
+        if (!Number.isFinite(value)) return '0';
+        return Number((Math.abs(value) < 1e-9 ? 0 : value).toFixed(3)).toString();
+      };
+      const getA = () => Number(state.slider_a ?? 0);
+      const getB = () => Number(state.slider_b ?? 0);
+      const getR = () => Math.hypot(getA(), getB());
+      const getThetaRad = () => Math.atan2(getB(), getA());
+      const getThetaDeg = () => (getThetaRad() * 180) / Math.PI;
+      const formatAngle = () => (
+        state.angle_toggle === 'radians'
+          ? `${formatNum(getThetaRad())} rad`
+          : `${formatNum(getThetaDeg())}°`
+      );
+      const formatComplex = (a, b) => `${formatNum(a)} ${b < 0 ? '-' : '+'} j${formatNum(Math.abs(b))}`;
+
+      const sizeCanvas = () => {
+        if (!canvas || !ctx) return { width: 0, height: 0 };
+        const dpr = Math.max(window.devicePixelRatio || 1, 1);
+        const rect = canvas.getBoundingClientRect();
+        const width = Math.max(Math.floor(rect.width || 0), 320);
+        const height = Math.max(300, Math.min(430, Math.floor(width * 0.58)));
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        canvas.style.width = '100%';
+        canvas.style.height = `${height}px`;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        return { width, height };
+      };
+
+      const drawArrow = (x1, y1, x2, y2, color, width = 3, dashed = false) => {
+        const angle = Math.atan2(y2 - y1, x2 - x1);
+        ctx.save();
+        ctx.strokeStyle = color;
+        ctx.fillStyle = color;
+        ctx.lineWidth = width;
+        if (dashed) ctx.setLineDash([7, 6]);
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+        if (!dashed) {
+          ctx.beginPath();
+          ctx.moveTo(x2, y2);
+          ctx.lineTo(x2 - 11 * Math.cos(angle - Math.PI / 6), y2 - 11 * Math.sin(angle - Math.PI / 6));
+          ctx.lineTo(x2 - 11 * Math.cos(angle + Math.PI / 6), y2 - 11 * Math.sin(angle + Math.PI / 6));
+          ctx.closePath();
+          ctx.fill();
+        }
+        ctx.restore();
+      };
+
+      const drawComplexPlane = () => {
+        if (!ctx) return;
+        const { width, height } = sizeCanvas();
+        const a = getA();
+        const b = getB();
+        const maxCoord = Math.max(5, Math.ceil(Math.max(Math.abs(a), Math.abs(b), getR())));
+        const pad = 44;
+        const ox = width / 2;
+        const oy = height / 2;
+        const scale = Math.min((width - pad * 2) / (maxCoord * 2.2), (height - pad * 2) / (maxCoord * 2.2));
+        const px = ox + a * scale;
+        const py = oy - b * scale;
+        const cy = oy + b * scale;
+
+        ctx.clearRect(0, 0, width, height);
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, width, height);
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 1;
+        for (let x = ox % scale; x < width; x += scale) {
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, height);
+          ctx.stroke();
+        }
+        for (let y = oy % scale; y < height; y += scale) {
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(width, y);
+          ctx.stroke();
+        }
+
+        ctx.strokeStyle = '#94a3b8';
+        ctx.lineWidth = 1.7;
+        ctx.beginPath();
+        ctx.moveTo(24, oy);
+        ctx.lineTo(width - 24, oy);
+        ctx.moveTo(ox, 22);
+        ctx.lineTo(ox, height - 22);
+        ctx.stroke();
+        ctx.fillStyle = '#64748b';
+        ctx.font = '700 14px Quicksand, sans-serif';
+        ctx.fillText('Re', width - 46, oy - 10);
+        ctx.fillText('Im', ox + 10, 34);
+
+        drawArrow(ox, oy, px, oy, '#2563eb', 3);
+        drawArrow(px, oy, px, py, '#0f766e', 3);
+        drawArrow(ox, oy, px, py, '#dc2626', 3.4);
+        drawArrow(ox, oy, px, cy, '#a855f7', 2.2, true);
+
+        ctx.fillStyle = '#2563eb';
+        ctx.fillText('a', (ox + px) / 2 - 5, oy - 12);
+        ctx.fillStyle = '#0f766e';
+        ctx.fillText(`${b < 0 ? '-' : ''}jb`, px + 9, (oy + py) / 2);
+        ctx.fillStyle = '#dc2626';
+        ctx.fillText('z', (ox + px) / 2 + 10, (oy + py) / 2 - 10);
+        ctx.fillStyle = '#a855f7';
+        ctx.fillText('z*', (ox + px) / 2 + 10, (oy + cy) / 2 + 18);
+
+        ctx.fillStyle = '#0f172a';
+        ctx.beginPath();
+        ctx.arc(px, py, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#a855f7';
+        ctx.beginPath();
+        ctx.arc(px, cy, 4, 0, Math.PI * 2);
+        ctx.fill();
+      };
+
+      const renderComplexDemo = () => {
+        if (shellEl) shellEl.classList.toggle('is-narrow', shellEl.clientWidth < 760);
+        drawComplexPlane();
+        const a = getA();
+        const b = getB();
+        readoutsEl.innerHTML = `
+          <div class="complex-demo-readout"><strong>Rectangular:</strong> \\(z = ${formatComplex(a, b)}\\)</div>
+          <div class="complex-demo-readout"><strong>Polar:</strong> \\(z = ${formatNum(getR())}e^{j${formatAngle()}}\\)</div>
+          <div class="complex-demo-readout"><strong>Magnitude:</strong> \\(r = ${formatNum(getR())}\\)</div>
+          <div class="complex-demo-readout"><strong>Argument:</strong> \\(\\theta = ${formatAngle()}\\)</div>
+          <div class="complex-demo-readout"><strong>Conjugate:</strong> \\(z^* = ${formatComplex(a, -b)}\\)</div>
+        `;
+        if (window.typesetMath) window.typesetMath(node).catch(() => {});
+      };
+
+      controls.forEach((control) => {
+        const key = control.id || control.key;
+        if (!key || String(control.action || '').startsWith('set ')) return;
+        const wrap = document.createElement('label');
+        wrap.className = 'complex-demo-control';
+        const label = document.createElement('span');
+        label.className = 'complex-demo-control-label';
+        label.textContent = control.label || key;
+        wrap.appendChild(label);
+
+        if (Array.isArray(control.options)) {
+          const select = document.createElement('select');
+          select.className = 'complex-demo-select';
+          control.options.forEach((option) => {
+            const opt = document.createElement('option');
+            opt.value = option;
+            opt.textContent = option;
+            if (state[key] === option) opt.selected = true;
+            select.appendChild(opt);
+          });
+          select.addEventListener('change', () => {
+            state[key] = select.value;
+            renderComplexDemo();
+          });
+          wrap.appendChild(select);
+        } else {
+          const row = document.createElement('div');
+          row.className = 'complex-demo-slider-row';
+          const input = document.createElement('input');
+          input.type = 'range';
+          input.min = String(control.min ?? -5);
+          input.max = String(control.max ?? 5);
+          input.step = String(control.step ?? 0.1);
+          input.value = String(state[key]);
+          const value = document.createElement('span');
+          value.className = 'complex-demo-slider-value';
+          value.textContent = formatNum(state[key]);
+          input.addEventListener('input', () => {
+            state[key] = Number(input.value);
+            value.textContent = formatNum(state[key]);
+            renderComplexDemo();
+          });
+          row.appendChild(input);
+          row.appendChild(value);
+          wrap.appendChild(row);
+        }
+        controlsEl.appendChild(wrap);
+      });
+
+      controls
+        .filter((control) => String(control.action || '').startsWith('set '))
+        .forEach((control) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'complex-demo-reset';
+          btn.textContent = control.label || 'Reset';
+          btn.addEventListener('click', () => {
+            controls.forEach((item) => {
+              const key = item.id || item.key;
+              if (!key || String(item.action || '').startsWith('set ')) return;
+              if (Array.isArray(item.options)) state[key] = item.default || item.options[0] || 'degrees';
+              else state[key] = Number(item.default ?? item.min ?? 0);
+            });
+            controlsEl.querySelectorAll('.complex-demo-control').forEach((controlEl) => {
+              const label = controlEl.querySelector('.complex-demo-control-label')?.textContent || '';
+              const spec = controls.find((item) => (item.label || item.id || item.key) === label);
+              const key = spec && (spec.id || spec.key);
+              if (!key) return;
+              const input = controlEl.querySelector('input, select');
+              const value = controlEl.querySelector('.complex-demo-slider-value');
+              if (input) input.value = String(state[key]);
+              if (value) value.textContent = formatNum(state[key]);
+            });
+            renderComplexDemo();
+          });
+          controlsEl.appendChild(btn);
+        });
+
+      let pendingComplexFrame = 0;
+      const rerender = () => {
+        if (pendingComplexFrame) return;
+        pendingComplexFrame = window.requestAnimationFrame(() => {
+          pendingComplexFrame = 0;
+          renderComplexDemo();
+        });
+      };
+      if (window.ResizeObserver && shellEl) {
+        const observer = new ResizeObserver(rerender);
+        observer.observe(shellEl);
+        node._complexResizeObserver = observer;
+      }
+      window.addEventListener('resize', rerender, { passive: true });
+      renderComplexDemo();
+      return;
+    }
+
+    if (isSinusoidDemo) {
+      const state = {
+        amplitude: 2,
+        frequency: 1,
+        phase: Math.PI / 3,
+        running: true,
+        start: performance.now(),
+        pausedAt: 0
+      };
+
+      node.innerHTML = `
+        <section class="sinusoid-demo-shell">
+          <div class="sinusoid-demo-head">
+            <div>
+              <div class="sinusoid-demo-title">${escapeHtml(demo.title || 'Interactive sinusoid and phasor demo')}</div>
+              <div class="sinusoid-demo-subtitle">The rotating phasor's horizontal projection is the cosine waveform.</div>
+            </div>
+            <button type="button" class="sinusoid-demo-play" aria-label="Pause or play demo">Pause</button>
+          </div>
+          <div class="sinusoid-demo-grid">
+            <div class="sinusoid-demo-controls">
+              <label class="sinusoid-demo-control">
+                <span>C amplitude</span>
+                <input type="range" min="0.5" max="4" step="0.1" data-demo-control="amplitude" value="2">
+                <strong data-demo-value="amplitude">2</strong>
+              </label>
+              <label class="sinusoid-demo-control">
+                <span>f₀ frequency</span>
+                <input type="range" min="0.25" max="3" step="0.05" data-demo-control="frequency" value="1">
+                <strong data-demo-value="frequency">1</strong>
+              </label>
+              <label class="sinusoid-demo-control">
+                <span>θ phase</span>
+                <input type="range" min="-3.14" max="3.14" step="0.05" data-demo-control="phase" value="${Math.PI / 3}">
+                <strong data-demo-value="phase">60°</strong>
+              </label>
+              <button type="button" class="sinusoid-demo-reset">Reset</button>
+            </div>
+            <div class="sinusoid-demo-stage">
+              <canvas class="sinusoid-demo-canvas sinusoid-demo-wave"></canvas>
+              <canvas class="sinusoid-demo-canvas sinusoid-demo-phasor"></canvas>
+            </div>
+          </div>
+          <div class="sinusoid-demo-readout">
+            <div class="sinusoid-demo-formula"></div>
+            <div class="sinusoid-demo-note">Watch the red dot on the real axis. As the vector rotates, that horizontal projection becomes the red dot moving on the cosine wave.</div>
+          </div>
+        </section>
+      `;
+
+      const shell = node.querySelector('.sinusoid-demo-shell');
+      const waveCanvas = node.querySelector('.sinusoid-demo-wave');
+      const phasorCanvas = node.querySelector('.sinusoid-demo-phasor');
+      const waveCtx = waveCanvas && waveCanvas.getContext ? waveCanvas.getContext('2d') : null;
+      const phasorCtx = phasorCanvas && phasorCanvas.getContext ? phasorCanvas.getContext('2d') : null;
+      const formulaEl = node.querySelector('.sinusoid-demo-formula');
+      const playBtn = node.querySelector('.sinusoid-demo-play');
+      let lastFormulaHtml = '';
+
+      const formatValue = (value) => Number((Math.abs(value) < 1e-9 ? 0 : value).toFixed(2)).toString();
+      const formatPhase = () => `${Math.round((state.phase * 180) / Math.PI)}°`;
+      const elapsedSeconds = (now) => state.running
+        ? state.pausedAt + ((now - state.start) / 1000)
+        : state.pausedAt;
+      const sizeCanvas = (canvas, ctx, fallbackHeight) => {
+        if (!canvas || !ctx) return { width: 0, height: 0 };
+        const dpr = Math.max(window.devicePixelRatio || 1, 1);
+        const rect = canvas.getBoundingClientRect();
+        const parentWidth = canvas.parentElement ? canvas.parentElement.clientWidth : 0;
+        const width = Math.max(Math.floor(rect.width || parentWidth || 0), 180);
+        const height = fallbackHeight;
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        canvas.style.width = '100%';
+        canvas.style.height = `${height}px`;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        return { width, height };
+      };
+      const drawArrow = (ctx, x1, y1, x2, y2, color, width = 3) => {
+        const angle = Math.atan2(y2 - y1, x2 - x1);
+        ctx.strokeStyle = color;
+        ctx.fillStyle = color;
+        ctx.lineWidth = width;
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(x2, y2);
+        ctx.lineTo(x2 - 10 * Math.cos(angle - Math.PI / 6), y2 - 10 * Math.sin(angle - Math.PI / 6));
+        ctx.lineTo(x2 - 10 * Math.cos(angle + Math.PI / 6), y2 - 10 * Math.sin(angle + Math.PI / 6));
+        ctx.closePath();
+        ctx.fill();
+      };
+      const drawGrid = (ctx, width, height, left, right, top, bottom, midY) => {
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 1;
+        for (let x = left; x <= right; x += 44) {
+          ctx.beginPath();
+          ctx.moveTo(x, top);
+          ctx.lineTo(x, bottom);
+          ctx.stroke();
+        }
+        for (let y = top; y <= bottom; y += 34) {
+          ctx.beginPath();
+          ctx.moveTo(left, y);
+          ctx.lineTo(right, y);
+          ctx.stroke();
+        }
+        ctx.strokeStyle = '#94a3b8';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(left, midY);
+        ctx.lineTo(right, midY);
+        ctx.stroke();
+      };
+      const drawDemo = (now = performance.now()) => {
+        if (!node.isConnected) return;
+        const t = elapsedSeconds(now);
+        const omega = 2 * Math.PI * state.frequency;
+        const angle = omega * t + state.phase;
+        const value = state.amplitude * Math.cos(angle);
+        const period = 1 / state.frequency;
+        const phaseDeg = Math.round((state.phase * 180) / Math.PI);
+
+        if (formulaEl) {
+          const nextFormulaHtml = `\\(x(t) = ${formatValue(state.amplitude)}\\cos(2\\pi\\cdot ${formatValue(state.frequency)}t ${state.phase >= 0 ? '+' : '-'} ${Math.abs(phaseDeg)}^\\circ)\\), \\(T_0=${formatValue(period)}\\text{s}\\)`;
+          if (nextFormulaHtml !== lastFormulaHtml) {
+            lastFormulaHtml = nextFormulaHtml;
+            formulaEl.innerHTML = nextFormulaHtml;
+            if (window.typesetMath) window.typesetMath(formulaEl).catch(() => {});
+          }
+        }
+
+        if (waveCtx) {
+          const { width, height } = sizeCanvas(waveCanvas, waveCtx, 260);
+          const left = 42;
+          const right = width - 18;
+          const top = 22;
+          const bottom = height - 34;
+          const midY = (top + bottom) / 2;
+          const yScale = (bottom - top) / 8;
+          const windowSeconds = 3;
+          waveCtx.clearRect(0, 0, width, height);
+          waveCtx.fillStyle = '#ffffff';
+          waveCtx.fillRect(0, 0, width, height);
+          drawGrid(waveCtx, width, height, left, right, top, bottom, midY);
+          waveCtx.strokeStyle = '#0ea5e9';
+          waveCtx.lineWidth = 2;
+          waveCtx.beginPath();
+          for (let i = 0; i <= 360; i += 1) {
+            const localT = (i / 360) * windowSeconds;
+            const x = left + ((right - left) * i) / 360;
+            const y = midY - state.amplitude * Math.cos(omega * localT + state.phase) * yScale;
+            if (i === 0) waveCtx.moveTo(x, y);
+            else waveCtx.lineTo(x, y);
+          }
+          waveCtx.stroke();
+          const dotT = t % windowSeconds;
+          const dotX = left + ((right - left) * dotT) / windowSeconds;
+          const dotY = midY - value * yScale;
+          waveCtx.strokeStyle = '#ef4444';
+          waveCtx.setLineDash([5, 5]);
+          waveCtx.beginPath();
+          waveCtx.moveTo(dotX, midY);
+          waveCtx.lineTo(dotX, dotY);
+          waveCtx.stroke();
+          waveCtx.setLineDash([]);
+          waveCtx.fillStyle = '#ef4444';
+          waveCtx.beginPath();
+          waveCtx.arc(dotX, dotY, 6, 0, Math.PI * 2);
+          waveCtx.fill();
+          waveCtx.fillStyle = '#475569';
+          waveCtx.font = '700 13px Quicksand, sans-serif';
+          waveCtx.fillText('cosine wave', left, top + 16);
+          waveCtx.fillText('t', right - 8, midY - 8);
+          waveCtx.fillText('x(t)', left + 6, top + 2);
+        }
+
+        if (phasorCtx) {
+          const phasorRect = phasorCanvas.getBoundingClientRect();
+          const phasorHeight = Math.max(240, Math.min(300, Math.floor(phasorRect.width || 260)));
+          const { width, height } = sizeCanvas(phasorCanvas, phasorCtx, phasorHeight);
+          const cx = width / 2;
+          const cy = height / 2 + 4;
+          const radius = Math.min(width, height) * 0.32;
+          const px = cx + radius * Math.cos(angle);
+          const py = cy - radius * Math.sin(angle);
+          const projX = cx + radius * Math.cos(angle);
+          phasorCtx.clearRect(0, 0, width, height);
+          phasorCtx.fillStyle = '#ffffff';
+          phasorCtx.fillRect(0, 0, width, height);
+          phasorCtx.strokeStyle = '#dbeafe';
+          phasorCtx.lineWidth = 2;
+          phasorCtx.beginPath();
+          phasorCtx.arc(cx, cy, radius, 0, Math.PI * 2);
+          phasorCtx.stroke();
+          phasorCtx.strokeStyle = '#94a3b8';
+          phasorCtx.lineWidth = 1.5;
+          phasorCtx.beginPath();
+          phasorCtx.moveTo(cx - radius - 18, cy);
+          phasorCtx.lineTo(cx + radius + 18, cy);
+          phasorCtx.moveTo(cx, cy - radius - 18);
+          phasorCtx.lineTo(cx, cy + radius + 18);
+          phasorCtx.stroke();
+          phasorCtx.strokeStyle = '#ef4444';
+          phasorCtx.setLineDash([5, 5]);
+          phasorCtx.beginPath();
+          phasorCtx.moveTo(px, py);
+          phasorCtx.lineTo(projX, cy);
+          phasorCtx.stroke();
+          phasorCtx.setLineDash([]);
+          drawArrow(phasorCtx, cx, cy, px, py, '#1d4ed8', 3);
+          phasorCtx.fillStyle = '#ef4444';
+          phasorCtx.beginPath();
+          phasorCtx.arc(projX, cy, 6, 0, Math.PI * 2);
+          phasorCtx.fill();
+          phasorCtx.fillStyle = '#475569';
+          phasorCtx.font = '700 13px Quicksand, sans-serif';
+          phasorCtx.fillText('phasor inset', 16, 24);
+          phasorCtx.fillText('Re projection', cx - 38, cy + radius + 28);
+        }
+      };
+      const updateControlLabels = () => {
+        node.querySelector('[data-demo-value="amplitude"]').textContent = formatValue(state.amplitude);
+        node.querySelector('[data-demo-value="frequency"]').textContent = formatValue(state.frequency);
+        node.querySelector('[data-demo-value="phase"]').textContent = formatPhase();
+      };
+      node.querySelectorAll('[data-demo-control]').forEach((input) => {
+        input.addEventListener('input', () => {
+          const key = input.dataset.demoControl;
+          state[key] = Number(input.value);
+          updateControlLabels();
+          drawDemo();
+        });
+      });
+      node.querySelector('.sinusoid-demo-reset')?.addEventListener('click', () => {
+        state.amplitude = 2;
+        state.frequency = 1;
+        state.phase = Math.PI / 3;
+        node.querySelector('[data-demo-control="amplitude"]').value = String(state.amplitude);
+        node.querySelector('[data-demo-control="frequency"]').value = String(state.frequency);
+        node.querySelector('[data-demo-control="phase"]').value = String(state.phase);
+        state.start = performance.now();
+        state.pausedAt = 0;
+        updateControlLabels();
+        drawDemo();
+      });
+      playBtn?.addEventListener('click', () => {
+        if (state.running) {
+          state.pausedAt = elapsedSeconds(performance.now());
+          state.running = false;
+          playBtn.textContent = 'Play';
+        } else {
+          state.start = performance.now();
+          state.running = true;
+          playBtn.textContent = 'Pause';
+        }
+      });
+      let pendingFrame = 0;
+      const rerender = () => {
+        if (pendingFrame) return;
+        pendingFrame = window.requestAnimationFrame(() => {
+          pendingFrame = 0;
+          drawDemo();
+        });
+      };
+      if (window.ResizeObserver && shell) {
+        const observer = new ResizeObserver(rerender);
+        observer.observe(shell);
+        node._sinusoidResizeObserver = observer;
+      }
+      const tick = (now) => {
+        if (!node.isConnected) return;
+        drawDemo(now);
+        window.requestAnimationFrame(tick);
+      };
+      updateControlLabels();
+      window.requestAnimationFrame(tick);
+      return;
+    }
 
     if (isPhasorDemo) {
       const spec = demo.demo_spec || {};
@@ -4419,6 +7252,7 @@ function hydrateInteractiveDemos(root) {
       const waveCanvas = node.querySelector('.phasor-demo-wave');
       const planeCtx = planeCanvas && planeCanvas.getContext ? planeCanvas.getContext('2d') : null;
       const waveCtx = waveCanvas && waveCanvas.getContext ? waveCanvas.getContext('2d') : null;
+      const shellEl = node.querySelector('.phasor-demo-shell');
 
       const toRadians = (deg) => (deg * Math.PI) / 180;
       const formatNum = (value) => {
@@ -4440,10 +7274,16 @@ function hydrateInteractiveDemos(root) {
       const sizeCanvas = (canvas, ctx, height) => {
         if (!canvas || !ctx) return { width: 0, height: 0 };
         const dpr = Math.max(window.devicePixelRatio || 1, 1);
-        const width = Math.max(Math.floor(canvas.parentElement.clientWidth), 360);
+        const parentEl = canvas.parentElement;
+        const parentStyle = parentEl ? window.getComputedStyle(parentEl) : null;
+        const horizontalPadding = parentStyle
+          ? (parseFloat(parentStyle.paddingLeft) || 0) + (parseFloat(parentStyle.paddingRight) || 0)
+          : 0;
+        const availableWidth = Math.floor((parentEl ? parentEl.clientWidth : 0) - horizontalPadding);
+        const width = Math.max(availableWidth || 0, 160);
         canvas.width = Math.floor(width * dpr);
         canvas.height = Math.floor(height * dpr);
-        canvas.style.width = `${width}px`;
+        canvas.style.width = '100%';
         canvas.style.height = `${height}px`;
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         return { width, height };
@@ -4558,6 +7398,9 @@ function hydrateInteractiveDemos(root) {
       };
 
       const renderPhasor = () => {
+        if (shellEl) {
+          shellEl.classList.toggle('is-narrow', shellEl.clientWidth < 760);
+        }
         drawPlane();
         drawWave();
         const a = getA();
@@ -4654,7 +7497,19 @@ function hydrateInteractiveDemos(root) {
           controlsEl.appendChild(btn);
         });
 
-      const rerender = () => renderPhasor();
+      let pendingPhasorFrame = 0;
+      const rerender = () => {
+        if (pendingPhasorFrame) return;
+        pendingPhasorFrame = window.requestAnimationFrame(() => {
+          pendingPhasorFrame = 0;
+          renderPhasor();
+        });
+      };
+      if (window.ResizeObserver && shellEl) {
+        const observer = new ResizeObserver(rerender);
+        observer.observe(shellEl);
+        node._phasorResizeObserver = observer;
+      }
       window.addEventListener('resize', rerender, { passive: true });
       renderPhasor();
       return;
@@ -4895,6 +7750,36 @@ function compactWhitespace(value) {
   return String(value || '').replace(/\s+/g, ' ').trim();
 }
 
+function parseSectionTitleParts(value, fallbackCode = '', fallbackTitle = '') {
+  const raw = compactWhitespace(value);
+  const fallback = compactWhitespace(fallbackCode);
+  const fallbackParsed = fallback && fallback !== raw
+    ? parseSectionTitleParts(fallback, '', '')
+    : null;
+  const codeMatch = raw.match(/^((?:[A-Za-z]\.)?\d+(?:[.\-]\d+)*)(?=\s|$|[-:：–—])/);
+  if (codeMatch) {
+    const code = codeMatch[1];
+    const title = raw
+      .slice(code.length)
+      .replace(/^\s*(?:[-:：–—]\s*)?/, '')
+      .trim();
+    return {
+      code,
+      title: title || compactWhitespace(fallbackTitle) || code
+    };
+  }
+  if (fallbackParsed && fallbackParsed.code) {
+    return {
+      code: fallbackParsed.code,
+      title: raw || compactWhitespace(fallbackTitle) || fallbackParsed.title || fallbackParsed.code
+    };
+  }
+  return {
+    code: fallback || '',
+    title: raw || compactWhitespace(fallbackTitle) || fallback || ''
+  };
+}
+
 // Lesson rendering rules enforced on the client so the first overview stays concise
 // and visually distinct concepts do not collapse into one merged presentation block.
 const LESSON_RENDER_RULES = Object.freeze({
@@ -4944,6 +7829,27 @@ function normalizeOverviewConceptLabel(value) {
     .trim();
 
   return compactWhitespace(trimmed || text);
+}
+
+function inferLessonChunkTitle(chunkHtml, fallbackTitle = 'Core Lesson', chunkIndex = 0) {
+  const temp = document.createElement('div');
+  temp.innerHTML = chunkHtml || '';
+  const text = compactWhitespace(temp.textContent || '');
+  const heading = Array.from(temp.querySelectorAll('h1, h2, h3')).find((node) => compactWhitespace(node.textContent || ''));
+  if (heading) return compactWhitespace(heading.textContent || '');
+  if (/a\s*:\s*b\s*:\s*c|0\s*:\s*2\s*:\s*11|colon notation|stop value|termination value/i.test(text)) {
+    return '1. Colon notation creates stored vectors';
+  }
+  if (/w_k|cube roots|three unique cube roots|k\s*=\s*0\s*:\s*2|exp\(1j/i.test(text)) {
+    return '2. Vectorize the cube roots';
+  }
+  if (/f\(1\)|indexing starts|first stored|function input|storage position|k\(5\)/i.test(text)) {
+    return '3. Index position is not function input';
+  }
+  if (/sampled sinusoid|time vector|0\.2\/500|10\s*hz|sinusoidal signal|frequency in hertz/i.test(text)) {
+    return '4. Build a sampled sinusoid vector';
+  }
+  return `${fallbackTitle || 'Core Lesson'} ${chunkIndex + 1}`;
 }
 
 function buildInlineMatrixVisual(kind = 'diagonal') {
@@ -5194,9 +8100,15 @@ function parseLessonKnowledgePoints(html) {
   const toHtml = (node) => node.outerHTML || node.textContent || '';
   const getNodeText = (node) => compactWhitespace(node?.textContent || '').trim();
 
+  const isSectionTitleHeading = (node) => {
+    if (!node || node.nodeType !== Node.ELEMENT_NODE || node.tagName !== 'H1') return false;
+    const text = getNodeText(node);
+    return /^(?:[A-Z]\.?\d+|\d+)(?:[-.]\d+)*\s+/.test(text);
+  };
+
   const isPrimaryKnowledgeHeading = (node) => {
     if (!node || node.nodeType !== Node.ELEMENT_NODE) return false;
-    if (!/^H[1-2]$/.test(node.tagName)) return false;
+    if (node.tagName !== 'H2') return false;
     const text = getNodeText(node);
     return /^\d+[.)]\s+/.test(text) || /^[A-Z]\d+(?:[-.]\d+)*\s+/.test(text);
   };
@@ -5236,6 +8148,81 @@ function parseLessonKnowledgePoints(html) {
     return Boolean(text);
   };
 
+  const estimateLessonNodeWeight = (node) => {
+    if (!node) return 0;
+    if (node.nodeType === Node.TEXT_NODE) {
+      return compactWhitespace(node.textContent || '').length / 420;
+    }
+    if (node.nodeType !== Node.ELEMENT_NODE) return 0;
+    const textLength = compactWhitespace(node.textContent || '').length;
+    let weight = Math.max(0.2, textLength / 420);
+    const tag = node.tagName || '';
+    if (/^H[1-6]$/.test(tag)) weight += 0.35;
+    if (node.classList.contains('math-block') || tag === 'PRE') weight += 1.2;
+    if (node.querySelector && node.querySelector('img, .lesson-img')) weight += 2.3;
+    if (tag === 'UL' || tag === 'OL') weight += Math.min(1.8, Array.from(node.children || []).length * 0.35);
+    if (node.querySelector && node.querySelector('table, details, .kc-container')) weight += 1.6;
+    return weight;
+  };
+
+  const isMajorLessonSplitAnchor = (node) => {
+    if (!node || node.nodeType !== Node.ELEMENT_NODE) return false;
+    if (node.classList.contains('math-block')) {
+      const text = compactWhitespace(node.textContent || '');
+      if (!text || text.length < 6) return false;
+      if (/^f\s*\(\s*0\s*\)\s*=/.test(text)) return false;
+      return true;
+    }
+    if (/^H[2-3]$/.test(node.tagName || '')) return true;
+    return false;
+  };
+
+  const splitAutoKnowledgePoint = (point) => {
+    if (!point || point.type !== 'knowledge' || !point.autoSplit) return [point];
+    const temp = document.createElement('div');
+    temp.innerHTML = point.html || '';
+    const children = Array.from(temp.childNodes);
+    if (children.length < 8) return [point];
+
+    const chunks = [];
+    let chunkNodes = [];
+    let chunkWeight = 0;
+
+    const flushChunk = () => {
+      const html = chunkNodes.map(toHtml).join('').trim();
+      if (hasMeaningfulKnowledgeBody(html)) chunks.push(html);
+      chunkNodes = [];
+      chunkWeight = 0;
+    };
+
+    children.forEach((node) => {
+      const shouldSplitBefore = isMajorLessonSplitAnchor(node)
+        && chunkNodes.length > 0
+        && chunkWeight >= 3.8;
+      if (shouldSplitBefore) flushChunk();
+      chunkNodes.push(node.cloneNode(true));
+      chunkWeight += estimateLessonNodeWeight(node);
+    });
+    flushChunk();
+
+    if (chunks.length <= 1) return [point];
+
+    return chunks.map((chunkHtml, chunkIndex) => ({
+      ...point,
+      autoSplit: false,
+      title: inferLessonChunkTitle(chunkHtml, point.title, chunkIndex),
+      html: chunkHtml
+    }));
+  };
+
+  const addParsedPoint = (point) => {
+    splitAutoKnowledgePoint(point).forEach((entry) => {
+      const cleanEntry = { ...entry };
+      delete cleanEntry.autoSplit;
+      points.push(cleanEntry);
+    });
+  };
+
   const pushCurrent = () => {
     if (!current) return;
     const content = current.parts.join('').trim();
@@ -5244,12 +8231,13 @@ function parseLessonKnowledgePoints(html) {
       || current.type === 'summary'
       || current.type === 'quiz'
       || hasMeaningfulKnowledgeBody(content);
-    if (content && plain && shouldKeep) points.push({
+    if (content && plain && shouldKeep) addParsedPoint({
       type: current.type || 'knowledge',
       label: current.label || 'Knowledge Point',
       title: current.title,
       headingTag: current.headingTag || 'h2',
-      html: content
+      html: content,
+      autoSplit: Boolean(current.autoSplit)
     });
     current = null;
   };
@@ -5291,6 +8279,7 @@ function parseLessonKnowledgePoints(html) {
 
     introNodes.forEach((node) => {
       if (!node || node.nodeType !== Node.ELEMENT_NODE) return;
+      if (isSectionTitleHeading(node)) return;
       const text = compactWhitespace(node.textContent || '');
       const html = node.outerHTML || node.textContent || '';
       const isObjectiveNode = !foundObjective && /^>?\s*Section Objective[:：]?\s*(.+)$/i.test(text);
@@ -5334,12 +8323,13 @@ function parseLessonKnowledgePoints(html) {
     if (keepRemainderAsKnowledge) {
       const remainderHtml = remainderNodes.join('').trim();
       if (hasMeaningfulKnowledgeBody(remainderHtml)) {
-        points.push({
+        addParsedPoint({
           type: 'knowledge',
           label: 'Knowledge Point',
           title: 'Core Lesson',
           headingTag: 'h2',
-          html: remainderHtml
+          html: remainderHtml,
+          autoSplit: true
         });
       }
     } else {
@@ -5389,6 +8379,11 @@ function parseLessonKnowledgePoints(html) {
       return;
     }
 
+    if (current && current.type === 'summary') {
+      current.parts.push(toHtml(node));
+      return;
+    }
+
     if (!sawPrimaryHeading) {
       introNodes.push(node.cloneNode(true));
       return;
@@ -5400,7 +8395,8 @@ function parseLessonKnowledgePoints(html) {
         label: 'Knowledge Point',
         title: 'Knowledge Point',
         headingTag: 'h2',
-        parts: []
+        parts: [],
+        autoSplit: true
       };
     }
     current.parts.push(toHtml(node));
@@ -5424,7 +8420,7 @@ function parseLessonKnowledgePoints(html) {
         html: content
       };
       if (existingSummaryIndex >= 0) points[existingSummaryIndex] = normalizedSummary;
-      else points.push(normalizedSummary);
+      else addParsedPoint(normalizedSummary);
     }
   }
 
@@ -5435,7 +8431,7 @@ function parseLessonKnowledgePoints(html) {
   // Add the quiz page at the very end
   const quizHtml = quizParts.join('').trim();
   if (quizHtml) {
-    points.push({ type: 'quiz', label: 'Quiz', title: 'Knowledge Check', html: quizHtml });
+    addParsedPoint({ type: 'quiz', label: 'Quiz', title: 'Knowledge Check', html: quizHtml });
   }
 
   return {
@@ -5444,14 +8440,58 @@ function parseLessonKnowledgePoints(html) {
   };
 }
 
+function isBadLessonPageTitle(title) {
+  const text = compactWhitespace(title || '');
+  if (!text) return true;
+  if (/\\(sin|left|right|frac|pi|cdot|texttt|begin|end|quad|sqrt|exp|big|sum|int)\b/i.test(text)) return true;
+  if (/[\{\}\\]/.test(text)) return true;
+  if (/\$\$|\$|\\\(|\\\)/.test(text)) return true;
+  if (/=\s*\\?[a-z]+/i.test(text) && text.length > 24) return true;
+  return false;
+}
+
+function getLessonPageDisplayTitle(block, index) {
+  if (!block || block.type !== 'knowledge') return '';
+  const title = compactWhitespace(block.title || '');
+  if (!title || /^Knowledge Point$/i.test(title) || /^Core Lesson$/i.test(title) || isBadLessonPageTitle(title)) {
+    const inferred = inferLessonChunkTitle(block.html || '', '', index);
+    if (inferred && !/^Core Lesson\s+\d+$/i.test(inferred)) return inferred;
+    return `${index + 1}. Knowledge Point`;
+  }
+  return title;
+}
+
+function stripDuplicatePageHeading(innerHtml, displayTitle) {
+  const html = String(innerHtml || '');
+  const normalizedTitle = compactWhitespace(String(displayTitle || '').replace(/<[^>]+>/g, ''));
+  if (!html || !normalizedTitle) return html;
+  const temp = document.createElement('div');
+  temp.innerHTML = html;
+  const children = Array.from(temp.children || []);
+  const firstHeading = children.find((child) => {
+    if (child.classList && (child.classList.contains('kc-visual-plan') || child.classList.contains('kc-visual-meta'))) return false;
+    return /^H[1-3]$/.test(child.tagName || '');
+  });
+  if (firstHeading && compactWhitespace(firstHeading.textContent || '') === normalizedTitle) {
+    firstHeading.remove();
+  }
+  return temp.innerHTML;
+}
+
 function buildLessonPageFrameHtml(innerHtml, block, index, total) {
   const rawType = compactWhitespace(block?.type || 'lesson').toLowerCase().replace(/[^a-z0-9_-]+/g, '-');
   const pageLabel = `${index + 1} / ${Math.max(total || 1, 1)}`;
   const extraHtml = String(block?.extraHtml || '').trim();
+  const displayTitle = getLessonPageDisplayTitle(block, index);
+  const pageBodyHtml = displayTitle ? stripDuplicatePageHeading(innerHtml, displayTitle) : String(innerHtml || '');
+  const titleHtml = displayTitle
+    ? `<header class="lesson-page-heading"><h2>${inlineFormat(displayTitle)}</h2></header>`
+    : '';
   return `
     <article class="lesson-page-frame lesson-page-frame-${rawType}" data-lesson-page="${index + 1}">
+      ${titleHtml}
       <div class="lesson-page-content">
-        ${innerHtml || '<p class="ghost">No explanation available.</p>'}
+        ${pageBodyHtml || '<p class="ghost">No explanation available.</p>'}
       </div>
       ${extraHtml ? `<div class="lesson-page-extra">${extraHtml}</div>` : ''}
       <div class="lesson-page-footer" aria-label="Lesson page ${pageLabel}">
@@ -5619,6 +8659,161 @@ function setLearnLessonContent(fullHtml, options = {}) {
   }
 }
 
+function getOverviewPreludeFallbackTitle(markdownHeading = '', index = 0) {
+  const text = compactWhitespace(String(markdownHeading || '')
+    .replace(/^#{1,6}\s+/, '')
+    .replace(/^\d+[.)]\s+/, '')
+    .replace(/^[A-Z]\d+(?:[-.]\d+)*\s+/, '')
+    .replace(/[*_`#]/g, ''));
+  return text || `Chapter note ${index + 1}`;
+}
+
+function buildOverviewPreludePointsFromMarkdown(markdown = '', chooserHtml = '') {
+  const source = String(markdown || '').trim();
+  if (!source) return [];
+
+  const lines = source.split(/\r?\n/);
+  const introLines = [];
+  const chunks = [];
+  let current = null;
+  const isPrimaryHeading = (line) => /^##\s+(?:\d+[.)]\s+|[A-Z]\d+(?:[-.]\d+)*\s+)/i.test(String(line || '').trim());
+
+  lines.forEach((line) => {
+    if (isPrimaryHeading(line)) {
+      if (current && current.lines.length) chunks.push(current);
+      current = {
+        title: getOverviewPreludeFallbackTitle(line, chunks.length),
+        lines: [line]
+      };
+      return;
+    }
+    if (current) current.lines.push(line);
+    else introLines.push(line);
+  });
+  if (current && current.lines.length) chunks.push(current);
+
+  if (!chunks.length) return [];
+
+  const points = [];
+  const introHtmlRaw = markdownToHtml(introLines.join('\n'));
+  const introMount = document.createElement('div');
+  introMount.innerHTML = introHtmlRaw;
+  const overviewHtml = buildLessonOverviewHtml(Array.from(introMount.childNodes)) || introHtmlRaw;
+  const introText = compactWhitespace(introMount.textContent || '');
+
+  if (introText || introMount.querySelector('img, .kc-visual-plan, .kc-visual-meta, .math-block, table')) {
+    points.push({
+      type: 'overview',
+      label: 'Overview',
+      title: 'Section Overview',
+      html: overviewHtml,
+      extraHtml: chooserHtml
+    });
+  }
+
+  chunks.forEach((chunk, idx) => {
+    const html = markdownToHtml(chunk.lines.join('\n'));
+    const temp = document.createElement('div');
+    temp.innerHTML = html;
+    if (!compactWhitespace(temp.textContent || '') && !temp.querySelector('img, .math-block, table, .kc-visual-meta, .kc-container')) return;
+    points.push({
+      type: 'knowledge',
+      label: 'Knowledge Point',
+      title: chunk.title || `Chapter note ${idx + 1}`,
+      headingTag: 'h2',
+      html
+    });
+  });
+
+  if (points.length > 1) {
+    points.push({
+      type: 'quiz',
+      label: 'Quiz',
+      title: 'Knowledge Check',
+      html: buildLessonTestBannerHtml()
+    });
+  }
+
+  return points.length > 1 ? points : [];
+}
+
+function ensureOverviewPreludePagination(markdown = '', chooserHtml = '') {
+  if (_learnLayoutMode !== 'overview_lesson' || learnKnowledgePoints.length > 1) return false;
+  const fallbackPoints = buildOverviewPreludePointsFromMarkdown(markdown, chooserHtml);
+  if (fallbackPoints.length <= 1) return false;
+  learnKnowledgePoints = fallbackPoints;
+  currentLessonTrailingHtml = '';
+  currentKnowledgePointIndex = 0;
+  return true;
+}
+
+function moveLearnKnowledgePoint(delta) {
+  if (!learnKnowledgePoints.length) return false;
+  const nextIndex = Math.max(0, Math.min(currentKnowledgePointIndex + delta, learnKnowledgePoints.length - 1));
+  if (nextIndex === currentKnowledgePointIndex) return false;
+  currentKnowledgePointIndex = nextIndex;
+  renderCurrentKnowledgePoint();
+  return true;
+}
+
+function animateLectureNavButton(delta) {
+  const button = delta < 0 ? lecturePrevOverlayBtn : lectureNextOverlayBtn;
+  if (!button) return;
+  button.classList.remove('is-flipping');
+  void button.offsetWidth;
+  button.classList.add('is-flipping');
+  window.setTimeout(() => button.classList.remove('is-flipping'), 180);
+}
+
+function getLectureOverlayDeltaFromEvent(event) {
+  const target = event.target && event.target.closest
+    ? event.target.closest('#lecturePrevOverlayBtn, #lectureNextOverlayBtn')
+    : null;
+  if (target) return target.id === 'lecturePrevOverlayBtn' ? -1 : 1;
+
+  const pointX = Number(event.clientX);
+  const pointY = Number(event.clientY);
+  if (!Number.isFinite(pointX) || !Number.isFinite(pointY)) return 0;
+
+  const candidates = [
+    { button: lecturePrevOverlayBtn, delta: -1 },
+    { button: lectureNextOverlayBtn, delta: 1 }
+  ];
+  for (const { button, delta } of candidates) {
+    if (!button || button.classList.contains('hidden') || button.disabled) continue;
+    const rect = button.getBoundingClientRect();
+    const pad = 8;
+    if (
+      pointX >= rect.left - pad
+      && pointX <= rect.right + pad
+      && pointY >= rect.top - pad
+      && pointY <= rect.bottom + pad
+    ) {
+      return delta;
+    }
+  }
+  return 0;
+}
+
+let lastLectureOverlayNavAt = 0;
+
+function handleLectureOverlayNavEvent(event) {
+  const delta = getLectureOverlayDeltaFromEvent(event);
+  if (!delta) return;
+  const now = Date.now();
+  if (event.type === 'click' && now - lastLectureOverlayNavAt < 350) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    return;
+  }
+  const moved = moveLearnKnowledgePoint(delta);
+  if (!moved) return;
+  animateLectureNavButton(delta);
+  lastLectureOverlayNavAt = now;
+  event.preventDefault();
+  event.stopImmediatePropagation();
+}
+
 function buildLessonTestBannerHtml() {
   return `
     <div class="lesson-test-banner" id="testBannerCard" style="margin-top: 40px; padding: 24px; background: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%); border-radius: 12px; border: 1px solid #E2E8F0; text-align: center; margin-bottom: 40px;">
@@ -5668,16 +8863,175 @@ function closeLearnFocusMode() {
   document.body.style.overflow = '';
 }
 
-function applyLearnChatCollapsedState() {
+function setChapterOverviewLayoutActive(active) {
+  const isOverviewLesson = _learnLayoutMode === 'overview_lesson';
+  if (learnBody) {
+    learnBody.classList.toggle('chapter-overview-active', Boolean(active) && !isOverviewLesson);
+    learnBody.classList.toggle('chapter-overview-split-active', Boolean(active) && isOverviewLesson);
+  }
+  if (!active) return;
+
+  if (!isOverviewLesson) learnPanelFocus = 'normal';
+  isLearnChatCollapsed = false;
+  isLearnExplainCollapsed = false;
+  isLearnChatPopoverOpen = false;
+
   const shell = learnBody || document.getElementById('learnBody');
-  if (shell) shell.classList.toggle('chat-collapsed', isLearnChatCollapsed);
+  if (shell) {
+    if (isOverviewLesson) {
+      shell.dataset.panelFocus = learnPanelFocus || 'normal';
+    } else {
+      delete shell.dataset.panelFocus;
+    }
+    shell.classList.remove('chat-collapsed', 'explain-collapsed');
+    if (!isOverviewLesson) shell.classList.remove('panel-normal', 'panel-lecture-wide', 'panel-lecture-full', 'panel-qa-wide', 'panel-qa-full');
+    const learnBodyInner = shell.querySelector?.('.learn-body-inner');
+    if (learnBodyInner) {
+      learnBodyInner.style.removeProperty('grid-template-columns');
+      learnBodyInner.dataset.customSplit = '';
+    }
+  }
+  if (learnExplainColEl) {
+    learnExplainColEl.classList.remove('hidden');
+    learnExplainColEl.style.display = '';
+    if (!isOverviewLesson) {
+      learnExplainColEl.style.flex = '1 1 100%';
+      learnExplainColEl.style.width = '100%';
+      learnExplainColEl.style.maxWidth = '100%';
+      learnExplainColEl.style.borderRight = 'none';
+    } else {
+      learnExplainColEl.style.flex = '';
+      learnExplainColEl.style.width = '';
+      learnExplainColEl.style.maxWidth = '';
+      learnExplainColEl.style.borderRight = '1px solid var(--border)';
+    }
+  }
+  if (learnBookColEl) learnBookColEl.style.display = 'none';
+  if (learnChatColPanel) learnChatColPanel.style.display = isOverviewLesson ? '' : 'none';
+  if (learnResizerPanel) learnResizerPanel.style.display = isOverviewLesson ? '' : 'none';
+  if (isOverviewLesson) applyLearnPanelFocusState();
+  if (learnChatRestoreBtn) learnChatRestoreBtn.classList.add('hidden');
+  if (learnChatFab) learnChatFab.classList.add('hidden');
+  if (learnChatPopover) learnChatPopover.classList.add('hidden');
+}
+
+function applyLearnPanelFocusState() {
+  const shell = learnBody || document.getElementById('learnBody');
+  if (!shell) return;
+  const isOverviewLayout = _learnLayoutMode === 'overview';
+  const states = ['normal', 'lecture-wide', 'lecture-full', 'qa-wide', 'qa-full'];
+  const normalized = states.includes(learnPanelFocus) ? learnPanelFocus : 'normal';
+  learnPanelFocus = normalized;
+  shell.dataset.panelFocus = normalized;
+  states.forEach(state => shell.classList.toggle(`panel-${state}`, normalized === state));
+  shell.classList.remove('chat-collapsed', 'explain-collapsed');
+
+  isLearnChatCollapsed = false;
+  isLearnExplainCollapsed = false;
+
+  const learnBodyInner = shell.querySelector?.('.learn-body-inner');
+  if (learnBodyInner) {
+    learnBodyInner.style.removeProperty('grid-template-columns');
+    learnBodyInner.dataset.customSplit = '';
+  }
+
+  if (isOverviewLayout) {
+    setChapterOverviewLayoutActive(true);
+    return;
+  }
+
+  if (learnExplainColEl) {
+    learnExplainColEl.classList.remove('hidden');
+    learnExplainColEl.style.display = '';
+  }
   if (learnChatColPanel) {
-    learnChatColPanel.classList.toggle('hidden', isLearnChatCollapsed);
-    learnChatColPanel.style.display = isLearnChatCollapsed ? 'none' : '';
+    learnChatColPanel.classList.remove('hidden');
+    learnChatColPanel.style.display = '';
   }
   if (learnResizerPanel) {
-    learnResizerPanel.classList.toggle('hidden', isLearnChatCollapsed);
-    learnResizerPanel.style.display = isLearnChatCollapsed ? 'none' : '';
+    learnResizerPanel.classList.remove('hidden');
+    learnResizerPanel.style.display = '';
+  }
+  if (learnBookColEl) learnBookColEl.style.display = 'none';
+
+  const setButtonCopy = (btn, label, title) => {
+    if (!btn) return;
+    const labelEl = btn.querySelector?.('.learn-edge-toggle-label');
+    if (labelEl) labelEl.textContent = label;
+    btn.title = title;
+    btn.setAttribute('aria-label', title);
+    btn.classList.toggle('is-maxed', normalized.endsWith('-full'));
+  };
+
+  if (normalized === 'lecture-wide') {
+    setButtonCopy(learnExplainToggleBtn, 'Full Lecture', 'Make lecture full screen');
+    setButtonCopy(learnFocusBtn, 'More Q&A', 'Give Q&A more space');
+  } else if (normalized === 'lecture-full') {
+    setButtonCopy(learnExplainToggleBtn, 'Reset', 'Return to split view');
+    setButtonCopy(learnFocusBtn, 'More Q&A', 'Give Q&A more space');
+  } else if (normalized === 'qa-wide') {
+    setButtonCopy(learnExplainToggleBtn, 'More Lecture', 'Give lecture more space');
+    setButtonCopy(learnFocusBtn, 'Full Q&A', 'Make Q&A full screen');
+  } else if (normalized === 'qa-full') {
+    setButtonCopy(learnExplainToggleBtn, 'More Lecture', 'Give lecture more space');
+    setButtonCopy(learnFocusBtn, 'Reset', 'Return to split view');
+  } else {
+    setButtonCopy(learnExplainToggleBtn, 'More Lecture', 'Give lecture more space');
+    setButtonCopy(learnFocusBtn, 'More Q&A', 'Give Q&A more space');
+  }
+
+  if (learnExplainRestoreBtn) learnExplainRestoreBtn.classList.add('hidden');
+  if (learnChatRestoreBtn) learnChatRestoreBtn.classList.add('hidden');
+  if (learnChatFab) learnChatFab.classList.add('hidden');
+  if (learnChatPopover) learnChatPopover.classList.add('hidden');
+  isLearnChatPopoverOpen = false;
+  requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
+}
+
+function advanceLearnPanelFocus(side) {
+  if (side === 'lecture') {
+    learnPanelFocus = learnPanelFocus === 'lecture-wide'
+      ? 'lecture-full'
+      : (learnPanelFocus === 'lecture-full' ? 'normal' : 'lecture-wide');
+  } else if (side === 'qa') {
+    learnPanelFocus = learnPanelFocus === 'qa-wide'
+      ? 'qa-full'
+      : (learnPanelFocus === 'qa-full' ? 'normal' : 'qa-wide');
+  } else {
+    learnPanelFocus = 'normal';
+  }
+  applyLearnPanelFocusState();
+}
+
+function applyLearnChatCollapsedState() {
+  const shell = learnBody || document.getElementById('learnBody');
+  const isOverviewLayout = _learnLayoutMode === 'overview';
+  if (isOverviewLayout || learnPanelFocus !== 'normal') {
+    applyLearnPanelFocusState();
+    return;
+  }
+  if (shell) shell.classList.toggle('chat-collapsed', isLearnChatCollapsed);
+  const learnBodyInner = shell?.querySelector?.('.learn-body-inner');
+  if (learnBodyInner) {
+    if (isLearnChatCollapsed) {
+      learnBodyInner.style.removeProperty('grid-template-columns');
+      learnBodyInner.dataset.customSplit = '';
+    } else {
+      try {
+        const savedRatio = parseFloat(localStorage.getItem('aquarius-learn-split') || '');
+        if (Number.isFinite(savedRatio) && typeof window.applyLearnSplit === 'function') {
+          window.applyLearnSplit(savedRatio);
+        }
+      } catch (_) {}
+    }
+  }
+  if (learnChatColPanel) {
+    learnChatColPanel.classList.remove('hidden');
+    learnChatColPanel.style.display = '';
+  }
+  if (learnResizerPanel) {
+    learnResizerPanel.classList.remove('hidden');
+    learnResizerPanel.style.display = '';
   }
 
   const buttonTitle = isLearnChatCollapsed ? 'Show Q&A panel' : 'Hide Q&A panel';
@@ -5692,6 +9046,7 @@ function applyLearnChatCollapsedState() {
   syncBtn(lectureFocusOverlayBtn);
   syncBtn(learnFocusBtn);
 
+  if (isLearnChatCollapsed) resetLearnChatFabPosition();
   if (learnChatFab) learnChatFab.classList.toggle('hidden', !isLearnChatCollapsed || isLearnChatPopoverOpen);
   if (learnChatRestoreBtn) learnChatRestoreBtn.classList.toggle('hidden', !isLearnChatCollapsed);
   if (!isLearnChatCollapsed && learnChatPopover) learnChatPopover.classList.add('hidden');
@@ -5713,13 +9068,21 @@ function toggleLearnChatPanel(forceOpen = null) {
 }
 
 function applyLearnExplainCollapsedState() {
+  const isOverviewLayout = _learnLayoutMode === 'overview';
+  if (isOverviewLayout || learnPanelFocus !== 'normal') {
+    applyLearnPanelFocusState();
+    return;
+  }
   const shell = learnBody || document.getElementById('learnBody');
   if (shell) shell.classList.toggle('explain-collapsed', isLearnExplainCollapsed);
-  if (learnExplainColEl) learnExplainColEl.classList.toggle('hidden', isLearnExplainCollapsed);
-  if (learnBookColEl) learnBookColEl.style.display = isLearnExplainCollapsed ? 'none' : (_learnLayoutMode === 'overview' ? 'none' : '');
+  if (learnExplainColEl) {
+    learnExplainColEl.classList.remove('hidden');
+    learnExplainColEl.style.display = '';
+  }
+  if (learnBookColEl) learnBookColEl.style.display = 'none';
   if (learnResizerPanel) {
-    learnResizerPanel.classList.toggle('hidden', isLearnExplainCollapsed || isLearnChatCollapsed);
-    learnResizerPanel.style.display = (isLearnExplainCollapsed || isLearnChatCollapsed) ? 'none' : '';
+    learnResizerPanel.classList.remove('hidden');
+    learnResizerPanel.style.display = '';
   }
 
   const buttonTitle = isLearnExplainCollapsed ? 'Show lecture panel' : 'Hide lecture panel';
@@ -5771,31 +9134,34 @@ function resetLearnChatFabPosition() {
   learnChatFab.style.bottom = '28px';
   learnChatFab.style.width = '';
   learnChatFab.style.height = '';
+  delete learnChatFab.dataset.dragJustEnded;
 }
 
 function enableFloatingDrag(handle, target, defaults = { right: 28, bottom: 28 }, options = {}) {
   if (!handle || !target) return;
   const threshold = Number(options.threshold || 5);
+  const isInteractiveDragTarget = (node) => Boolean(node?.closest?.(
+    'button, a, input, textarea, select, option, label, [role="button"], [data-no-drag]'
+  ));
   let dragging = false;
   let moved = false;
   let offsetX = 0;
   let offsetY = 0;
   let startX = 0;
   let startY = 0;
+  let startRect = null;
 
   handle.addEventListener('mousedown', (e) => {
     if (e.button !== 0) return;
+    if (isInteractiveDragTarget(e.target)) return;
     dragging = true;
     moved = false;
     startX = e.clientX;
     startY = e.clientY;
     const rect = target.getBoundingClientRect();
+    startRect = rect;
     offsetX = e.clientX - rect.left;
     offsetY = e.clientY - rect.top;
-    target.style.width = `${rect.width}px`;
-    target.style.height = `${rect.height}px`;
-    target.style.bottom = 'auto';
-    target.style.right = 'auto';
     e.preventDefault();
   });
 
@@ -5806,6 +9172,14 @@ function enableFloatingDrag(handle, target, defaults = { right: 28, bottom: 28 }
       const dy = Math.abs(e.clientY - startY);
       if (dx < threshold && dy < threshold) return;
       moved = true;
+      if (startRect) {
+        target.style.width = `${startRect.width}px`;
+        target.style.height = `${startRect.height}px`;
+        target.style.left = `${startRect.left}px`;
+        target.style.top = `${startRect.top}px`;
+        target.style.bottom = 'auto';
+        target.style.right = 'auto';
+      }
     }
     const maxLeft = window.innerWidth - target.offsetWidth - 12;
     const maxTop = window.innerHeight - target.offsetHeight - 12;
@@ -5826,6 +9200,7 @@ function enableFloatingDrag(handle, target, defaults = { right: 28, bottom: 28 }
     }
     dragging = false;
     moved = false;
+    startRect = null;
   });
 
   target.addEventListener('click', (e) => {
@@ -6135,7 +9510,42 @@ let learnSectionId = '';
 let learnSectionTitle = '';
 let learnWebData = [];
 let learnAbort = null;
+let learnRequestSeq = 0;
 let splashShowDelayTimer = null;
+let learnParentOverviewContext = null;
+
+function clearLearnRenderedContent(message = 'Preparing lesson...') {
+  currentFullLessonHtml = '';
+  currentLessonTrailingHtml = '';
+  learnKnowledgePoints = [];
+  currentKnowledgePointIndex = 0;
+  if (learnExplainContent) {
+    learnExplainContent.innerHTML = message
+      ? `<div class="lesson-transition-blank"><p class="ghost">${escapeHtml(message)}</p></div>`
+      : '';
+    delete learnExplainContent.dataset.lectureDecorated;
+  }
+  if (learnExplainScroll) {
+    learnExplainScroll.scrollTop = 0;
+    learnExplainScroll.scrollLeft = 0;
+  }
+  if (learnKpTitle) learnKpTitle.textContent = '';
+  if (learnKpPrevBtn) learnKpPrevBtn.disabled = true;
+  if (learnKpNextBtn) learnKpNextBtn.disabled = true;
+  if (lecturePrevOverlayBtn) lecturePrevOverlayBtn.disabled = true;
+  if (lectureNextOverlayBtn) lectureNextOverlayBtn.disabled = true;
+  if (learnLecturePageIndicator) learnLecturePageIndicator.textContent = '';
+  if (learnFocusContent) learnFocusContent.innerHTML = '';
+  if (learnFocusPageIndicator) learnFocusPageIndicator.textContent = '';
+}
+
+function isCurrentLearnRequest(requestSeq, sectionId, sectionTitle, allowedModes = null) {
+  const modeOk = !allowedModes || allowedModes.includes(_learnLayoutMode);
+  return requestSeq === learnRequestSeq
+    && sectionId === learnSectionId
+    && sectionTitle === learnSectionTitle
+    && modeOk;
+}
 
 // ── Splash stage control ──────────────────────────────────────────────────
 let splashTimer = null;
@@ -6379,16 +9789,17 @@ function renderLearnWebSection(webSources) {
 }
 
 // Open Learn Mode without touching the right TOC (used when clicking sub-items in TOC)
-async function openLearnModeKeepToc(sectionId, sectionTitle) {
-  return openLearnMode(sectionId, sectionTitle, null /* null = keep existing TOC */);
+async function openLearnModeKeepToc(sectionId, sectionTitle, parentOverviewContext = null) {
+  const parentContext = parentOverviewContext || learnParentOverviewContext || findParentOverviewContextForSubsection(sectionId, sectionTitle);
+  return openLearnMode(sectionId, sectionTitle, null /* null = keep existing TOC */, { parentOverviewContext: parentContext });
 }
 
 function getSectionPreview(sectionId, sectionTitle) {
   const previewsSource = currentBook === 'new'
     ? (typeof SECTION_PREVIEWS_NEW !== 'undefined' ? SECTION_PREVIEWS_NEW : SECTION_PREVIEWS)
     : SECTION_PREVIEWS;
-  const codeMatch = (sectionId || sectionTitle || '').match(/^([A-Za-z]?\.?\d+(?:[.\-]\d+)*)/);
-  const sectionCode = codeMatch ? codeMatch[1] : null;
+  const parsed = parseSectionTitleParts(sectionTitle || sectionId, sectionId || sectionTitle, '');
+  const sectionCode = parsed.code || null;
   return previewsSource[sectionTitle] || previewsSource[sectionId]
     || (sectionCode ? previewsSource[sectionCode] : null)
     || SECTION_PREVIEWS[sectionTitle] || SECTION_PREVIEWS[sectionId]
@@ -6396,12 +9807,70 @@ function getSectionPreview(sectionId, sectionTitle) {
     || null;
 }
 
+function findSyllabusSubsections(sectionTitle = '') {
+  const target = String(sectionTitle || '').trim();
+  if (!target) return [];
+  for (const chapter of syllabusData || []) {
+    const sections = (chapter.sections || []).map(s => typeof s === 'string' ? { title: s, subsections: [] } : s);
+    const match = sections.find(sec => sec && sec.title === target);
+    if (match && Array.isArray(match.subsections)) return match.subsections;
+  }
+  return [];
+}
+
+function createOverviewContext(sectionId = '', sectionTitle = '', subsections = []) {
+  return {
+    sectionId,
+    sectionTitle,
+    subsections: Array.isArray(subsections) ? [...subsections] : []
+  };
+}
+
+function findParentOverviewContextForSubsection(sectionId = '', sectionTitle = '') {
+  const targetId = String(sectionId || '').trim();
+  const targetTitle = String(sectionTitle || '').trim();
+  if (!targetId && !targetTitle) return null;
+  for (const chapter of syllabusData || []) {
+    const sections = (chapter.sections || []).map(s => typeof s === 'string' ? { title: s, subsections: [] } : s);
+    for (const sec of sections) {
+      const subs = Array.isArray(sec.subsections) ? sec.subsections : [];
+      const match = subs.some(sub => {
+        const raw = String(sub || '').trim();
+        const parsed = parseSectionTitleParts(raw);
+        return raw === targetId
+          || raw === targetTitle
+          || (parsed.code && (parsed.code === targetId || parsed.code === targetTitle));
+      });
+      if (match) return createOverviewContext(sec.title, sec.title, subs);
+    }
+  }
+  return null;
+}
+
+function getOverviewLessonEntries(sectionId = '', sectionTitle = '', subsections = [], includeParentLesson = true) {
+  const entries = [];
+  if (includeParentLesson) {
+    entries.push({
+      title: sectionTitle || sectionId,
+      isParentLesson: true
+    });
+  }
+  (Array.isArray(subsections) ? subsections : []).forEach(subTitle => {
+    entries.push({
+      title: subTitle,
+      isParentLesson: false
+    });
+  });
+  return entries;
+}
+
 function getOverviewSummaryHtml(sectionId, sectionTitle, subsections = [], options = {}) {
   const preview = getSectionPreview(sectionId, sectionTitle) || {};
   const summary = preview.en || preview.zh || 'This chapter gives you the key ideas first, then breaks them into smaller pieces below.';
-  const emoji = preview.emoji || '📘';
-  const refs = Number.isFinite(preview.refs) ? preview.refs : null;
-  const sectionCountLabel = `${subsections.length || 0} path${subsections.length === 1 ? '' : 's'}`;
+  const rawTitle = String(sectionTitle || '').trim();
+  const parsedSection = parseSectionTitleParts(rawTitle, sectionId || 'Chapter', rawTitle);
+  const sectionCodeLabel = parsedSection.code || sectionId || 'Chapter';
+  const sectionName = parsedSection.title || rawTitle;
   const hasPreludePanel = Boolean(options.preludeHtml || options.preludeLoading);
   const shellClass = hasPreludePanel ? 'chapter-overview-shell chapter-overview-shell-with-prelude' : 'chapter-overview-shell';
   const preludeHtml = options.preludeHtml
@@ -6410,44 +9879,45 @@ function getOverviewSummaryHtml(sectionId, sectionTitle, subsections = [], optio
   const preludeStatusHtml = options.preludeLoading
     ? `<section class="chapter-overview-prelude chapter-overview-prelude-loading" id="chapterOverviewPreludeStatus">Preparing chapter notes...</section>`
     : '';
-  const cardsHtml = subsections.map((subTitle, idx) => {
-    const subPreview = getSectionPreview(subTitle, subTitle) || {};
-    const subSummary = subPreview.en || subPreview.zh || 'Open this subsection to view the full explanation and textbook pages.';
-    const subEmoji = subPreview.emoji || '•';
+  const entries = getOverviewLessonEntries(sectionId, sectionTitle, subsections, options.includeParentLesson !== false);
+  const cardsHtml = entries.map((entry, idx) => {
+    const entryTitle = typeof entry === 'string' ? entry : entry.title;
+    const isParentLesson = Boolean(entry && typeof entry === 'object' && entry.isParentLesson);
+    const parsedSub = parseOverviewSubsectionTitle(entryTitle, idx);
     return `
-      <button class="chapter-overview-subcard" data-sublesson-title="${escapeHtml(subTitle)}">
-        <div class="chapter-overview-subcard-top">
-          <div class="chapter-overview-subcard-title-wrap">
-            <span class="chapter-overview-subcard-emoji">${escapeHtml(subEmoji)}</span>
-            <div class="chapter-overview-subcard-title">${escapeHtml(subTitle)}</div>
-          </div>
-          <div class="chapter-overview-subcard-index">${idx + 1}</div>
-        </div>
-        <div class="chapter-overview-subcard-summary">${escapeHtml(subSummary)}</div>
+      <button class="chapter-overview-subcard chapter-overview-subrow" type="button" data-sublesson-title="${escapeHtml(entryTitle)}"${isParentLesson ? ' data-parent-lesson="true"' : ''}>
+        <span class="chapter-overview-subcard-marker">${escapeHtml(parsedSub.code)}</span>
+        <span class="chapter-overview-subcard-copy">
+          <span class="chapter-overview-subcard-title">${escapeHtml(parsedSub.title)}</span>
+        </span>
+        <span class="chapter-overview-open-cue">Start</span>
       </button>
     `;
   }).join('');
 
   const heroHtml = hasPreludePanel ? '' : `
-      <div class="chapter-overview-hero">
-        <div class="chapter-overview-hero-main">
-          <div class="chapter-overview-eyebrow">Chapter Map</div>
-          <div class="chapter-overview-title-row">
-            <div class="chapter-overview-emoji">${escapeHtml(emoji)}</div>
-            <h1 class="chapter-overview-title">${escapeHtml(sectionTitle)}</h1>
+      <div class="chapter-overview-map">
+        <section class="chapter-overview-hero">
+          <div class="chapter-overview-hero-main">
+            <div class="chapter-overview-kicker">
+              <span class="chapter-overview-code">${escapeHtml(sectionCodeLabel)}</span>
+            </div>
+            <h1 class="chapter-overview-title">${escapeHtml(sectionName || rawTitle)}</h1>
+            <p class="chapter-overview-summary">${escapeHtml(summary)}</p>
           </div>
-          <p class="chapter-overview-summary">${escapeHtml(summary)}</p>
-        </div>
-        <div class="chapter-overview-side">
-          <div class="chapter-overview-meter">
-            <span class="chapter-overview-meter-label">Study route</span>
-            <strong>${escapeHtml(sectionCountLabel)}</strong>
+        </section>
+
+        <section class="chapter-overview-list-block chapter-overview-list-block-side">
+          <div class="chapter-overview-list-head">
+            <div>
+              <div class="chapter-overview-list-eyebrow">Study sequence</div>
+              <h2 class="chapter-overview-list-title">Subsections</h2>
+            </div>
           </div>
-          <div class="chapter-overview-badges">
-            ${refs ? `<span class="chapter-overview-badge">${refs} textbook refs</span>` : ''}
-            <span class="chapter-overview-badge">lecture first</span>
+          <div class="chapter-overview-grid">
+            ${cardsHtml}
           </div>
-        </div>
+        </section>
       </div>
   `;
 
@@ -6457,45 +9927,61 @@ function getOverviewSummaryHtml(sectionId, sectionTitle, subsections = [], optio
 
       <div id="chapterOverviewPreludeMount">${preludeHtml || preludeStatusHtml}</div>
 
-      <section class="chapter-overview-list-block">
+      ${hasPreludePanel ? `<section class="chapter-overview-list-block chapter-overview-list-block-side">
         <div class="chapter-overview-list-head">
-          <div class="chapter-overview-list-eyebrow">Subsections</div>
-          <h2 class="chapter-overview-list-title">Choose your next piece</h2>
+          <div>
+            <div class="chapter-overview-list-eyebrow">Study sequence</div>
+            <h2 class="chapter-overview-list-title">Subsections</h2>
+          </div>
         </div>
         <div class="chapter-overview-grid">
           ${cardsHtml}
         </div>
-      </section>
+      </section>` : ''}
     </section>
   `;
 }
 
 function buildOverviewSubsectionCardsHtml(subsections = []) {
-  return subsections.map((subTitle, idx) => {
-    const subPreview = getSectionPreview(subTitle, subTitle) || {};
-    const subSummary = subPreview.en || subPreview.zh || 'Open this subsection to view the full explanation and textbook pages.';
-    const subEmoji = subPreview.emoji || '•';
+  return subsections.map((entry, idx) => {
+    const entryTitle = typeof entry === 'string' ? entry : entry.title;
+    const isParentLesson = Boolean(entry && typeof entry === 'object' && entry.isParentLesson);
+    const parsedSub = parseOverviewSubsectionTitle(entryTitle, idx);
     return `
-      <button class="chapter-overview-subcard" data-sublesson-title="${escapeHtml(subTitle)}">
-        <div class="chapter-overview-subcard-top">
-          <div class="chapter-overview-subcard-title-wrap">
-            <span class="chapter-overview-subcard-emoji">${escapeHtml(subEmoji)}</span>
-            <div class="chapter-overview-subcard-title">${escapeHtml(subTitle)}</div>
-          </div>
-          <div class="chapter-overview-subcard-index">${idx + 1}</div>
-        </div>
-        <div class="chapter-overview-subcard-summary">${escapeHtml(subSummary)}</div>
+      <button class="chapter-overview-subcard chapter-overview-subrow" type="button" data-sublesson-title="${escapeHtml(entryTitle)}"${isParentLesson ? ' data-parent-lesson="true"' : ''}>
+        <span class="chapter-overview-subcard-marker">${escapeHtml(parsedSub.code)}</span>
+        <span class="chapter-overview-subcard-copy">
+          <span class="chapter-overview-subcard-title">${escapeHtml(parsedSub.title)}</span>
+        </span>
+        <span class="chapter-overview-open-cue">Start</span>
       </button>
     `;
   }).join('');
+}
+
+function parseOverviewSubsectionTitle(subTitle, idx = 0) {
+  const parsed = parseSectionTitleParts(subTitle);
+  if (!parsed.code) {
+    const raw = compactWhitespace(subTitle);
+    return {
+      code: String(idx + 1).padStart(2, '0'),
+      title: raw || `Subsection ${idx + 1}`
+    };
+  }
+  return {
+    code: parsed.code,
+    title: parsed.title || parsed.code
+  };
 }
 
 function buildOverviewSubsectionChooserHtml(subsections = []) {
   return `
     <section class="chapter-overview-list-block chapter-overview-list-block-inline">
       <div class="chapter-overview-list-head">
-        <div class="chapter-overview-list-eyebrow">Subsections</div>
-        <h2 class="chapter-overview-list-title">Choose your next piece</h2>
+        <div>
+          <div class="chapter-overview-list-eyebrow">Study sequence</div>
+          <h2 class="chapter-overview-list-title">Subsections</h2>
+        </div>
       </div>
       <div class="chapter-overview-grid">
         ${buildOverviewSubsectionCardsHtml(subsections)}
@@ -6506,6 +9992,8 @@ function buildOverviewSubsectionChooserHtml(subsections = []) {
 
 function renderChapterOverviewContent(sectionId, sectionTitle, subsections = [], options = {}) {
   if (!learnExplainContent) return;
+  _learnLayoutMode = options && options.preludeHtml ? 'overview_lesson' : 'overview';
+  setChapterOverviewLayoutActive(true);
   learnKnowledgePoints = [];
   currentLessonTrailingHtml = '';
   currentKnowledgePointIndex = 0;
@@ -6535,8 +10023,10 @@ function renderChapterOverviewContent(sectionId, sectionTitle, subsections = [],
 }
 
 async function loadChapterOverviewPrelude(sectionId, sectionTitle, subsections = []) {
+  const requestSeq = learnRequestSeq;
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 12000);
+  const canWriteOverview = () => isCurrentLearnRequest(requestSeq, sectionId, sectionTitle, ['overview', 'overview_lesson']);
   try {
     const res = await fetch(`${API_BASE}/api/section`, {
       method: 'POST',
@@ -6553,40 +10043,91 @@ async function loadChapterOverviewPrelude(sectionId, sectionTitle, subsections =
       })
     });
     clearTimeout(timeout);
+    if (!canWriteOverview()) return;
     if (!res.ok) throw new Error(`overview request failed: ${res.status}`);
     const data = await res.json();
-    if (!data || !data.hasPrelude) {
-      renderChapterOverviewContent(sectionId, sectionTitle, subsections);
-      return;
-    }
-    if (data.lesson) {
-      const chooserHtml = buildOverviewSubsectionChooserHtml(subsections);
-      const lessonHtml = `${markdownToHtml(data.lesson)}${buildLessonTestBannerHtml()}`;
-      _learnLayoutMode = 'overview_lesson';
-      _setLearnMode('lecture');
-      setLearnLessonContent(lessonHtml);
-      if (learnKnowledgePoints.length) {
-        learnKnowledgePoints = learnKnowledgePoints.map((point, idx) => (
-          idx === 0 ? { ...point, extraHtml: chooserHtml } : point
-        ));
-        currentKnowledgePointIndex = 0;
-        renderCurrentKnowledgePoint();
-      } else {
-        renderChapterOverviewContent(sectionId, sectionTitle, subsections, {
-          preludeHtml: lessonHtml
-        });
-      }
-      return;
-    }
-    renderChapterOverviewContent(sectionId, sectionTitle, subsections, {
-      preludeHtml: '<div class="chapter-overview-prelude-missing">Chapter notes need generation before they can appear here.</div>'
-    });
+    if (!canWriteOverview()) return;
+    renderChapterOverviewContent(sectionId, sectionTitle, subsections);
   } catch (err) {
     clearTimeout(timeout);
+    if (!canWriteOverview()) return;
     console.warn('[ChapterOverview] prelude load failed:', err);
-    renderChapterOverviewContent(sectionId, sectionTitle, subsections, {
-      preludeHtml: '<div class="chapter-overview-prelude-missing">Chapter notes could not load. Refresh the page and try again.</div>'
+    renderChapterOverviewContent(sectionId, sectionTitle, subsections);
+  }
+}
+
+async function openChapterParentLessonFromOverview(sectionId, sectionTitle, subsections = []) {
+  if (learnAbort) learnAbort.abort();
+  const requestSeq = ++learnRequestSeq;
+  const controller = new AbortController();
+  learnAbort = controller;
+  const parentContext = createOverviewContext(sectionId, sectionTitle, subsections);
+  learnSectionId = sectionId;
+  learnSectionTitle = sectionTitle;
+  learnParentOverviewContext = parentContext;
+  learnPages = [];
+  learnPageIndex = 0;
+  learnWebData = [];
+  currentBookPageIndex = 0;
+  _learnLayoutMode = 'lesson';
+  setChapterOverviewLayoutActive(false);
+  _setLearnMode('lecture');
+  learnTitle.textContent = sectionTitle;
+  clearLearnRenderedContent('Preparing lesson...');
+  setLearnLoading(true);
+  if (learnExplainScroll) learnExplainScroll.scrollTop = 0;
+
+  const tocItems = [{ title: sectionTitle, depth: 1, anchor: '' }];
+  (Array.isArray(subsections) ? subsections : []).forEach(sub => tocItems.push({ title: sub, depth: 2, anchor: '' }));
+  buildToc(tocItems);
+
+  const canWriteParentLesson = () => isCurrentLearnRequest(requestSeq, sectionId, sectionTitle, ['lesson']);
+  const renderParentLessonMarkdown = (markdown = '', data = {}) => {
+    learnBody.classList.remove('hidden');
+    learnPages = data.bookPages || learnPages;
+    tutorState.learnSectionId = learnSectionId;
+    tutorState.learnSectionTitle = learnSectionTitle;
+    tutorState.learnLessonMarkdown = markdown || '';
+    tutorState.learnBookPages = data.bookPages || [];
+    tutorState.learnWebSources = data.webSources || [];
+    renderLearnPages();
+    setLearnLessonContent(`${markdownToHtml(markdown || 'No explanation available.')}${buildLessonTestBannerHtml()}`);
+    if (learnChatContent) learnChatContent.innerHTML = '';
+    updateLearnChatEmptyState();
+    renderLearnWebSources(data.webSources || []);
+    renderLearnWebSection(data.webSources || []);
+  };
+  try {
+    const res = await fetch(`${API_BASE}/api/section`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      signal: controller.signal,
+      body: JSON.stringify({
+        sectionId,
+        sectionTitle,
+        mode: 'overview',
+        language: 'en',
+        uid: getUid(),
+        bookSource: currentBook,
+        profileOverride: userMemory && userMemory.quiz ? { ...userMemory.quiz } : undefined
+      })
     });
+    if (!canWriteParentLesson()) return;
+    if (!res.ok) throw new Error(`overview lesson request failed: ${res.status}`);
+    const data = await res.json();
+    if (!canWriteParentLesson()) return;
+    if (data && data.hasPrelude && data.lesson) {
+      renderParentLessonMarkdown(data.lesson, data);
+      return;
+    }
+    controller.abort();
+    return openLearnMode(sectionId, sectionTitle, null, { parentOverviewContext: parentContext });
+  } catch (err) {
+    if (err.name === 'AbortError') return;
+    if (!canWriteParentLesson()) return;
+    return openLearnMode(sectionId, sectionTitle, null, { parentOverviewContext: parentContext });
+  } finally {
+    if (canWriteParentLesson()) setLearnLoading(false);
   }
 }
 
@@ -6596,7 +10137,12 @@ function bindOverviewSubsectionCards() {
     btn.addEventListener('click', () => {
       const subTitle = btn.getAttribute('data-sublesson-title');
       if (!subTitle) return;
-      openLearnModeKeepToc(subTitle, subTitle);
+      if (btn.getAttribute('data-parent-lesson') === 'true') {
+        openChapterParentLessonFromOverview(learnSectionId, learnSectionTitle, findSyllabusSubsections(learnSectionTitle));
+        return;
+      }
+      const parentContext = createOverviewContext(learnSectionId, learnSectionTitle, findSyllabusSubsections(learnSectionTitle));
+      openLearnModeKeepToc(subTitle, subTitle, parentContext);
     });
   });
 }
@@ -6620,19 +10166,22 @@ if (learnChatContent && learnChatEmptyState) {
 function openChapterOverviewMode(sectionId, sectionTitle, subsections = []) {
   console.log('[openChapterOverviewMode]', { sectionId, sectionTitle, subsectionCount: subsections.length, currentBook });
   if (learnAbort) learnAbort.abort();
+  learnRequestSeq += 1;
   closeTextbookFocusMode();
   learnSectionId = sectionId;
   learnSectionTitle = sectionTitle;
+  learnParentOverviewContext = null;
   learnPages = [];
   learnPageIndex = 0;
   learnWebData = [];
   currentBookPageIndex = 0;
   _learnLayoutMode = 'overview';
+  setChapterOverviewLayoutActive(true);
   _setLearnMode('lecture');
 
   learnTitle.textContent = sectionTitle;
   updateLearnModeBadge(userMemory && userMemory.quiz ? userMemory.quiz.track : null);
-  resetLearnKnowledgePointState();
+  clearLearnRenderedContent('');
   showLearnView();
   if (learnIntroCard) learnIntroCard.classList.add('hidden');
   if (learnBody) learnBody.classList.remove('hidden');
@@ -6646,28 +10195,33 @@ function openChapterOverviewMode(sectionId, sectionTitle, subsections = []) {
   subsections.forEach(sub => tocItems.push({ title: sub, depth: 2, anchor: '' }));
   buildToc(tocItems);
 
-  renderChapterOverviewContent(sectionId, sectionTitle, subsections, { preludeLoading: true });
+  renderChapterOverviewContent(sectionId, sectionTitle, subsections);
   loadChapterOverviewPrelude(sectionId, sectionTitle, subsections);
   if (learnExplainScroll) learnExplainScroll.scrollTop = 0;
 }
 
-async function openLearnMode(sectionId, sectionTitle, subsections = []) {
+async function openLearnMode(sectionId, sectionTitle, subsections = [], options = {}) {
   console.log('[openLearnMode]', { sectionId, sectionTitle, currentBook });
   if (learnAbort) learnAbort.abort();
+  learnRequestSeq += 1;
   closeTextbookFocusMode();
   learnSectionId = sectionId;
   learnSectionTitle = sectionTitle;
+  learnParentOverviewContext = options.parentOverviewContext || (
+    subsections === null ? findParentOverviewContextForSubsection(sectionId, sectionTitle) : null
+  );
   learnPages = [];
   learnPageIndex = 0;
   learnWebData = [];
   currentBookPageIndex = 0; // Fixed pagination resets to 0
   _learnLayoutMode = 'lesson';
+  setChapterOverviewLayoutActive(false);
   _setLearnMode('lecture');
 
   learnTitle.textContent = sectionTitle;
   updateLearnModeBadge(userMemory && userMemory.quiz ? userMemory.quiz.track : null);
   if(learnIntroCard) learnIntroCard.classList.add('hidden');
-  resetLearnKnowledgePointState();
+  clearLearnRenderedContent('Preparing lesson...');
   showLearnView();
   // Bypass intro card: auto-start lesson immediately
   if (typeof startLesson === 'function') startLesson({ silent: true });
@@ -6733,7 +10287,8 @@ async function openLearnMode(sectionId, sectionTitle, subsections = []) {
             e.stopPropagation();
             tocNav.querySelectorAll('.toc-item').forEach(b => b.classList.remove('active'));
             tocBtn.classList.add('active');
-            openLearnModeKeepToc(subTitle, subTitle);
+            const parentContext = createOverviewContext(sectionId, sectionTitle, subsections);
+            openLearnModeKeepToc(subTitle, subTitle, parentContext);
           });
         }
       });
@@ -6743,6 +10298,9 @@ async function openLearnMode(sectionId, sectionTitle, subsections = []) {
 
 async function startLesson(options = {}) {
   const silent = Boolean(options && options.silent);
+  const requestSeq = ++learnRequestSeq;
+  const requestSectionId = learnSectionId;
+  const requestSectionTitle = learnSectionTitle;
   learnIntroCard.classList.add('hidden');
   let splashVisible = false;
   if (splashShowDelayTimer) clearTimeout(splashShowDelayTimer);
@@ -6765,8 +10323,8 @@ async function startLesson(options = {}) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        sectionId: learnSectionId,
-        sectionTitle: learnSectionTitle,
+        sectionId: requestSectionId,
+        sectionTitle: requestSectionTitle,
         mode: 'lesson',
         language: 'en',
         uid: getUid(),
@@ -6776,6 +10334,9 @@ async function startLesson(options = {}) {
       }),
       signal: learnAbort.signal
     });
+    if (requestSeq !== learnRequestSeq || requestSectionId !== learnSectionId || requestSectionTitle !== learnSectionTitle) {
+      return;
+    }
     if (splashShowDelayTimer) {
       clearTimeout(splashShowDelayTimer);
       splashShowDelayTimer = null;
@@ -6783,6 +10344,13 @@ async function startLesson(options = {}) {
     if (splashVisible) setSplashStage(4); // charts / rendering
     const data = await res.json();
     hideSplash();
+    if (isB8TextbookOnlySection(learnSectionId, learnSectionTitle)) {
+      data.lesson = getB8TextbookOnlyMarkdown();
+      data.formulaAppendix = true;
+    }
+    if (requestSeq !== learnRequestSeq || requestSectionId !== learnSectionId || requestSectionTitle !== learnSectionTitle) {
+      return;
+    }
 
     learnBody.classList.remove('hidden');
     learnPages = data.bookPages || learnPages;
@@ -6800,6 +10368,14 @@ async function startLesson(options = {}) {
 
     // Add the "Start Test" bottom section
     const isFormulaAppendixLesson = Boolean(data && data.formulaAppendix);
+    if (isCacheMissLesson) {
+      const fallbackSubsections = findSyllabusSubsections(requestSectionTitle);
+      if (fallbackSubsections.length) {
+        const parentContext = createOverviewContext(requestSectionId, requestSectionTitle, fallbackSubsections);
+        openLearnModeKeepToc(fallbackSubsections[0], fallbackSubsections[0], parentContext);
+        return;
+      }
+    }
     const lessonHtml = isCacheMissLesson
       ? `<p class="ghost">${escapeHtml(data.lesson || 'This section has not been prepared yet.')}</p>`
       : markdownToHtml(data.lesson || 'No explanation available.');
@@ -6825,6 +10401,7 @@ async function startLesson(options = {}) {
   } catch (err) {
     hideSplash();
     if (err.name === 'AbortError') return;
+    if (!isCurrentLearnRequest(requestSeq, requestSectionId, requestSectionTitle, ['lesson'])) return;
     learnBody.classList.remove('hidden');
     learnExplainContent.innerHTML = `<div class="error-box"><strong>Failed to load lesson</strong><p>${escapeHtml(err.message)}</p></div>`;
   }
@@ -6837,14 +10414,31 @@ function closeLearnMode() {
   closeTextbookFocusMode();
   resetLearnKnowledgePointState();
   _learnLayoutMode = 'lesson';
+  learnParentOverviewContext = null;
+  setChapterOverviewLayoutActive(false);
   _setLearnMode('lecture');
   _textbookZoomed = false;
   showWelcome();
   clearToc();
 }
 
+function handleLearnBack() {
+  if (learnAbort) learnAbort.abort();
+  hideSplash();
+  closeLearnFocusMode();
+  closeTextbookFocusMode();
+  resetLearnKnowledgePointState();
+  if (_learnLayoutMode === 'lesson' && learnParentOverviewContext) {
+    const target = learnParentOverviewContext;
+    learnParentOverviewContext = null;
+    openChapterOverviewMode(target.sectionId, target.sectionTitle, target.subsections || []);
+    return;
+  }
+  closeLearnMode();
+}
+
 // Learn mode events
-learnClose.addEventListener('click', closeLearnMode);
+learnClose.addEventListener('click', handleLearnBack);
 learnStartBtn.addEventListener('click', startLesson);
 
 // ── LECTURE vs TEXTBOOK SWITCH ──
@@ -6864,15 +10458,16 @@ let _sectionPageMap = {};
 let _sectionDisplayPageMap = {};
 let _sectionPageAnchorMap = {};
 let _textbookStartRatio = 0;
-fetch(API_BASE + '/section-page-map-new.json?v=1778144200', { cache: 'no-store' })
+const SECTION_PAGE_MAP_VERSION = '1778524413';
+fetch(API_BASE + `/section-page-map-new.json?v=${SECTION_PAGE_MAP_VERSION}`, { cache: 'no-store' })
   .then(r => r.json())
   .then(d => { _sectionPageMap = d; })
   .catch(() => {});
-fetch(API_BASE + '/section-page-map-display-new.json?v=1778144200', { cache: 'no-store' })
+fetch(API_BASE + `/section-page-map-display-new.json?v=${SECTION_PAGE_MAP_VERSION}`, { cache: 'no-store' })
   .then(r => r.json())
   .then(d => { _sectionDisplayPageMap = d; })
   .catch(() => {});
-fetch(API_BASE + '/section-page-anchor-new.json?v=1778144200', { cache: 'no-store' })
+fetch(API_BASE + `/section-page-anchor-new.json?v=${SECTION_PAGE_MAP_VERSION}`, { cache: 'no-store' })
   .then(r => r.json())
   .then(d => { _sectionPageAnchorMap = d; })
   .catch(() => {});
@@ -6911,7 +10506,7 @@ function syncInlineTextbookViewportToStart(options = {}) {
 
 function _setLearnMode(mode) {
   _learnViewMode = mode;
-  const isOverviewLayout = _learnLayoutMode === 'overview' || _learnLayoutMode === 'overview_lesson';
+  const isOverviewLayout = _learnLayoutMode === 'overview';
   const isLessonLikeLayout = _learnLayoutMode === 'lesson' || _learnLayoutMode === 'overview_lesson';
   const isOverviewOnlyLayout = _learnLayoutMode === 'overview';
   _setTabActive(mode === 'textbook' ? _btnTextbook : _btnLecture, mode === 'textbook' ? _btnLecture : _btnTextbook);
@@ -6934,9 +10529,9 @@ function _setLearnMode(mode) {
     _tocSidebar.classList.toggle('textbook-mode', mode === 'textbook');
   }
   if (learnExplainToggleBtn) {
-    const toggleCopy = mode === 'textbook' ? 'Hide Notes' : 'Hide';
-    learnExplainToggleBtn.title = mode === 'textbook' ? 'Hide lecture notes' : 'Hide lecture panel';
-    learnExplainToggleBtn.setAttribute('aria-label', mode === 'textbook' ? 'Hide lecture notes' : 'Hide lecture panel');
+    const toggleCopy = mode === 'textbook' ? 'More Notes' : 'More Lecture';
+    learnExplainToggleBtn.title = mode === 'textbook' ? 'Give notes more space' : 'Give lecture more space';
+    learnExplainToggleBtn.setAttribute('aria-label', mode === 'textbook' ? 'Give notes more space' : 'Give lecture more space');
     if (learnExplainToggleLabel) learnExplainToggleLabel.textContent = toggleCopy;
   }
   if (learnExplainRestoreBtn) {
@@ -6946,12 +10541,12 @@ function _setLearnMode(mode) {
     if (learnExplainRestoreLabel) learnExplainRestoreLabel.textContent = restoreCopy;
   }
   if (learnExplainToolbarEl) learnExplainToolbarEl.style.display = isOverviewOnlyLayout ? 'none' : '';
-  if (learnBookColEl) learnBookColEl.style.display = isOverviewLayout ? 'none' : '';
+  if (learnBookColEl) learnBookColEl.style.display = 'none';
   if (learnChatColPanel) {
-    learnChatColPanel.style.display = (isOverviewLayout || isLearnChatCollapsed) ? 'none' : '';
+    learnChatColPanel.style.display = isOverviewLayout ? 'none' : '';
   }
   if (learnResizerPanel) {
-    learnResizerPanel.style.display = (isOverviewLayout || isLearnChatCollapsed || isLearnExplainCollapsed) ? 'none' : '';
+    learnResizerPanel.style.display = isOverviewLayout ? 'none' : '';
   }
   if (learnExplainColEl) {
     learnExplainColEl.style.flex = isOverviewLayout ? '1' : '5.5';
@@ -6963,8 +10558,13 @@ function _setLearnMode(mode) {
       learnExplainColEl.style.borderRight = '1px solid var(--border)';
     }
   }
-  if (!isOverviewLayout && learnChatColPanel && !isLearnChatCollapsed) {
-    if (isLearnExplainCollapsed) {
+  if (!isOverviewLayout && learnChatColPanel) {
+    if (learnPanelFocus !== 'normal') {
+      learnChatColPanel.style.flex = '';
+      learnChatColPanel.style.width = '';
+      learnChatColPanel.style.minWidth = '';
+      learnChatColPanel.style.maxWidth = '';
+    } else if (isLearnExplainCollapsed) {
       learnChatColPanel.style.flex = '1 1 auto';
       learnChatColPanel.style.width = '100%';
       learnChatColPanel.style.minWidth = '0';
@@ -6981,7 +10581,7 @@ function _setLearnMode(mode) {
   if (lecturePrevOverlayBtn) lecturePrevOverlayBtn.classList.toggle('hidden', mode !== 'lecture' || !isLessonLikeLayout);
   if (lectureNextOverlayBtn) lectureNextOverlayBtn.classList.toggle('hidden', mode !== 'lecture' || !isLessonLikeLayout);
   if (lectureFocusOverlayBtn) lectureFocusOverlayBtn.classList.add('hidden');
-  applyLearnChatCollapsedState();
+  applyLearnPanelFocusState();
 }
 
 if (_btnLecture && _btnTextbook) {
@@ -7008,15 +10608,13 @@ function loadTextbookPages() {
   const codeMatch = rawId.match(/^([A-Za-z]?\.?\d+(?:[.\-]\d+)*)/);
   const code = codeMatch ? codeMatch[1].toLowerCase() : rawId.toLowerCase().trim();
 
-  // Lookup pages in pre-loaded map
-  const pageNames =
-    _sectionDisplayPageMap[code] ||
+  // Lookup display pages first. This file is the source of truth for the Textbook tab.
+  const pageNames = _sectionDisplayPageMap[code] ||
     _sectionDisplayPageMap[rawId.toLowerCase()] ||
     _sectionPageMap[code] ||
     _sectionPageMap[rawId.toLowerCase()] ||
     [];
-  const pageAnchor =
-    _sectionPageAnchorMap[code] ||
+  const pageAnchor = _sectionPageAnchorMap[code] ||
     _sectionPageAnchorMap[rawId.toLowerCase()] ||
     null;
   const startRatio = Number(pageAnchor?.startRatio || 0);
@@ -7033,7 +10631,12 @@ function loadTextbookPages() {
     return;
   }
 
-  const urls = pageNames.map(pn => API_BASE + '/pages/' + pn + '.png');
+  const urls = pageNames.map((pn) => {
+    const name = String(pn || '').trim();
+    if (/^https?:\/\//i.test(name) || name.startsWith('/')) return name;
+    const filename = /\.(png|jpe?g|webp)$/i.test(name) ? name : name + '.png';
+    return API_BASE + '/pages/' + filename;
+  });
   _renderTextbookPages(urls, { startRatio });
 }
 
@@ -7086,27 +10689,33 @@ lightboxClose.addEventListener('click', () => closeLightbox());
 lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
 if (learnKpPrevBtn) {
   learnKpPrevBtn.addEventListener('click', () => {
-    if (currentKnowledgePointIndex > 0) {
-      currentKnowledgePointIndex -= 1;
-      renderCurrentKnowledgePoint();
-    }
+    moveLearnKnowledgePoint(-1);
   });
 }
 if (learnKpNextBtn) {
   learnKpNextBtn.addEventListener('click', () => {
-    if (currentKnowledgePointIndex < learnKnowledgePoints.length - 1) {
-      currentKnowledgePointIndex += 1;
-      renderCurrentKnowledgePoint();
-    }
+    moveLearnKnowledgePoint(1);
   });
 }
-if (lecturePrevOverlayBtn) lecturePrevOverlayBtn.addEventListener('click', () => learnKpPrevBtn?.click());
-if (lectureNextOverlayBtn) lectureNextOverlayBtn.addEventListener('click', () => learnKpNextBtn?.click());
-if (lectureFocusOverlayBtn) lectureFocusOverlayBtn.addEventListener('click', () => toggleLearnChatPanel());
-if (learnFocusBtn) learnFocusBtn.addEventListener('click', () => toggleLearnChatPanel());
-if (learnExplainToggleBtn) learnExplainToggleBtn.addEventListener('click', () => toggleLearnExplainPanel());
-if (learnExplainRestoreBtn) learnExplainRestoreBtn.addEventListener('click', () => toggleLearnExplainPanel(true));
-if (learnChatRestoreBtn) learnChatRestoreBtn.addEventListener('click', () => toggleLearnChatPanel(true));
+if (lecturePrevOverlayBtn) {
+  lecturePrevOverlayBtn.addEventListener('click', (event) => {
+    event.preventDefault();
+    if (moveLearnKnowledgePoint(-1)) animateLectureNavButton(-1);
+  });
+}
+if (lectureNextOverlayBtn) {
+  lectureNextOverlayBtn.addEventListener('click', (event) => {
+    event.preventDefault();
+    if (moveLearnKnowledgePoint(1)) animateLectureNavButton(1);
+  });
+}
+document.addEventListener('pointerdown', handleLectureOverlayNavEvent, true);
+document.addEventListener('click', handleLectureOverlayNavEvent, true);
+if (lectureFocusOverlayBtn) lectureFocusOverlayBtn.addEventListener('click', () => advanceLearnPanelFocus('qa'));
+if (learnFocusBtn) learnFocusBtn.addEventListener('click', () => advanceLearnPanelFocus('qa'));
+if (learnExplainToggleBtn) learnExplainToggleBtn.addEventListener('click', () => advanceLearnPanelFocus('lecture'));
+if (learnExplainRestoreBtn) learnExplainRestoreBtn.addEventListener('click', () => advanceLearnPanelFocus('lecture'));
+if (learnChatRestoreBtn) learnChatRestoreBtn.addEventListener('click', () => advanceLearnPanelFocus('qa'));
 
 if (learnChatFab) {
   learnChatFab.addEventListener('click', () => {
@@ -7117,7 +10726,8 @@ if (learnChatFab) {
 
 if (learnChatPopoverDockBtn) {
   learnChatPopoverDockBtn.addEventListener('click', () => {
-    toggleLearnChatPanel(true);
+    learnPanelFocus = 'qa-wide';
+    applyLearnPanelFocusState();
     setLearnChatPopoverOpen(false);
   });
 }
@@ -7128,7 +10738,6 @@ if (learnChatPopoverCloseBtn) {
   });
 }
 
-enableFloatingDrag(learnChatFab, learnChatFab, { right: 28, bottom: 28 });
 enableFloatingDrag(learnChatPopoverHead, learnChatPopover, { right: 28, bottom: 110 });
 enableFloatingDrag(textbookFocusQaHead, textbookFocusQaPanel, null);
 if (learnFocusClose) learnFocusClose.addEventListener('click', closeLearnFocusMode);
@@ -9127,8 +12736,8 @@ function toggleSyllabusPanel(forceOpen = null) {
   if (!sidebarSyllabusPanel) return;
   const nextOpen = typeof forceOpen === 'boolean'
     ? forceOpen
-    : sidebarSyllabusPanel.classList.contains('hidden');
-  sidebarSyllabusPanel.classList.toggle('hidden', !nextOpen);
+    : !isAccordionOpen(sidebarSyllabusPanel);
+  setAccordionOpen(sidebarSyllabusPanel, nextOpen);
   if (nextOpen) toggleRecentPanel(false);
   updateSidebarNavActive(nextOpen ? 'syllabus' : null);
 }
@@ -9137,8 +12746,8 @@ function toggleRecentPanel(forceOpen = null) {
   if (!sidebarRecentPanel) return;
   const nextOpen = typeof forceOpen === 'boolean'
     ? forceOpen
-    : sidebarRecentPanel.classList.contains('hidden');
-  sidebarRecentPanel.classList.toggle('hidden', !nextOpen);
+    : !isAccordionOpen(sidebarRecentPanel);
+  setAccordionOpen(sidebarRecentPanel, nextOpen);
   if (nextOpen) toggleSyllabusPanel(false);
   updateSidebarNavActive(nextOpen ? 'recent' : null);
 }
@@ -9187,7 +12796,6 @@ function showLoginView() {
   setLoginButtonsBusy(false);
   setLoginStatus('');
   initLoginExperience();
-  updateExistingSessionLoginAction();
 }
 
 function updateSidebarNavActive(key) {
@@ -9341,7 +12949,7 @@ function buildTocFromContent(containerEl) {
         const subTitle = btn.dataset.lessonTitle || btn.textContent.trim();
         tocNav.querySelectorAll('.toc-item.depth-2:not(.content-anchor)').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        openLearnModeKeepToc(subTitle, subTitle);
+        openLearnModeKeepToc(subTitle, subTitle, learnParentOverviewContext || findParentOverviewContextForSubsection(subTitle, subTitle));
       });
     });
   }
@@ -9890,19 +13498,41 @@ setTimeout(() => {
   const appContainer = document.querySelector('.app');
   const leftSidebar = document.getElementById('leftSidebar');
   const tocSidebar = document.getElementById('tocSidebar');
+  const notifySidebarLayoutChange = () => {
+    requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
+    window.setTimeout(() => window.dispatchEvent(new Event('resize')), 560);
+  };
+  const setWorkspaceSidebarCollapsed = (collapsed) => {
+    if (!appContainer || !leftSidebar) return;
+    if (collapsed) {
+      requestAnimationFrame(() => {
+        leftSidebar.classList.add('collapsed');
+        if (tocSidebar) tocSidebar.classList.add('collapsed');
+        appContainer.classList.add('sidebar-collapsed');
+        notifySidebarLayoutChange();
+      });
+      return;
+    }
+    leftSidebar.classList.add('collapsed');
+    if (tocSidebar) tocSidebar.classList.add('collapsed');
+    appContainer.classList.add('sidebar-collapsed');
+    leftSidebar.getBoundingClientRect();
+    requestAnimationFrame(() => {
+      appContainer.classList.remove('sidebar-collapsed');
+      if (tocSidebar) tocSidebar.classList.remove('collapsed');
+      leftSidebar.classList.remove('collapsed');
+      notifySidebarLayoutChange();
+    });
+  };
 
   if (menuToggleBtn && leftSidebar) {
     menuToggleBtn.addEventListener('click', () => {
-      leftSidebar.classList.add('collapsed');
-      if (tocSidebar) tocSidebar.classList.add('collapsed');
-      appContainer.classList.add('sidebar-collapsed');
+      setWorkspaceSidebarCollapsed(true);
     });
   }
   if (floatToggleBtn && leftSidebar) {
     floatToggleBtn.addEventListener('click', () => {
-      leftSidebar.classList.remove('collapsed');
-      if (tocSidebar) tocSidebar.classList.remove('collapsed');
-      appContainer.classList.remove('sidebar-collapsed');
+      setWorkspaceSidebarCollapsed(false);
     });
   }
 }, 500);
@@ -9914,45 +13544,121 @@ const learnChatCol = document.getElementById('learnChatCol');
 let isResizing = false;
 
 if (learnResizer && learnExplainCol && learnChatCol) {
-  const DEFAULT_CHAT_WIDTH = 420;
-  if (!isLearnExplainCollapsed) {
-    learnChatCol.style.flex = `0 0 ${DEFAULT_CHAT_WIDTH}px`;
-    learnChatCol.style.width = `${DEFAULT_CHAT_WIDTH}px`;
-    learnChatCol.style.minWidth = `${DEFAULT_CHAT_WIDTH}px`;
-    learnChatCol.style.maxWidth = `${DEFAULT_CHAT_WIDTH}px`;
-  }
+  const LEARN_LAYOUT_KEY = 'aquarius-learn-split';
+  const learnBodyInner = learnResizer.closest('.learn-body-inner') || learnExplainCol.parentElement;
+  const MIN_EXPLAIN_WIDTH = 420;
+  const MIN_CHAT_WIDTH = 320;
+  const DEFAULT_CHAT_RATIO = 0.45;
+  const DEFAULT_SPLIT_VERSION = '2026-05-10-55-45';
+  try {
+    const storedVersion = localStorage.getItem(`${LEARN_LAYOUT_KEY}-version`);
+    if (storedVersion !== DEFAULT_SPLIT_VERSION) {
+      localStorage.setItem(LEARN_LAYOUT_KEY, String(DEFAULT_CHAT_RATIO));
+      localStorage.setItem(`${LEARN_LAYOUT_KEY}-version`, DEFAULT_SPLIT_VERSION);
+    }
+  } catch (_) {}
 
-  learnResizer.addEventListener('mousedown', (e) => {
+  const resizeFollowupInput = () => {
+    const input = document.getElementById('learnFollowupInput');
+    if (input) autoResize(input);
+  };
+
+  const applyLearnSplit = (chatRatio) => {
+    if (!learnBodyInner) return;
+    if (isLearnChatCollapsed || isLearnExplainCollapsed || learnPanelFocus !== 'normal' || window.matchMedia('(max-width: 900px)').matches) {
+      learnBodyInner.style.removeProperty('grid-template-columns');
+      learnBodyInner.dataset.customSplit = '';
+      return;
+    }
+    const boundedChatRatio = Math.max(0.24, Math.min(0.56, Number(chatRatio) || DEFAULT_CHAT_RATIO));
+    const rect = learnBodyInner.getBoundingClientRect();
+    const resizerWidth = learnResizer.offsetWidth || 10;
+    const availableWidth = Math.max(0, rect.width - resizerWidth);
+    if (!availableWidth) return;
+
+    let chatWidth = Math.round(availableWidth * boundedChatRatio);
+    chatWidth = Math.max(MIN_CHAT_WIDTH, Math.min(chatWidth, availableWidth - MIN_EXPLAIN_WIDTH));
+    const explainWidth = Math.max(MIN_EXPLAIN_WIDTH, availableWidth - chatWidth);
+    const shell = learnBody || document.getElementById('learnBody');
+
+    learnBodyInner.style.setProperty(
+      'grid-template-columns',
+      `minmax(0, ${explainWidth}px) ${resizerWidth}px minmax(${MIN_CHAT_WIDTH}px, ${chatWidth}px)`,
+      'important'
+    );
+    learnBodyInner.dataset.customSplit = 'true';
+    if (shell) {
+      shell.style.setProperty('--learn-explain-basis', `${explainWidth}px`);
+      shell.style.setProperty('--learn-chat-basis', `${chatWidth}px`);
+    }
+    learnExplainCol.style.removeProperty('width');
+    learnExplainCol.style.removeProperty('max-width');
+    learnExplainCol.style.removeProperty('flex');
+    learnChatCol.style.removeProperty('width');
+    learnChatCol.style.removeProperty('max-width');
+    learnChatCol.style.removeProperty('flex');
+    resizeFollowupInput();
+  };
+  window.applyLearnSplit = applyLearnSplit;
+
+  try {
+    const savedRatio = parseFloat(localStorage.getItem(LEARN_LAYOUT_KEY) || '');
+    if (Number.isFinite(savedRatio)) applyLearnSplit(savedRatio);
+  } catch (_) {}
+
+  const startResize = (e) => {
+    if (window.matchMedia('(max-width: 900px)').matches) return;
+    if (learnPanelFocus !== 'normal') {
+      learnPanelFocus = 'normal';
+      applyLearnPanelFocusState();
+    }
     isResizing = true;
     document.body.style.cursor = 'col-resize';
+    document.body.classList.add('learn-resizing');
+    if (learnResizer.setPointerCapture && e.pointerId != null) {
+      try { learnResizer.setPointerCapture(e.pointerId); } catch (_) {}
+    }
     e.preventDefault();
-  });
+  };
 
-  document.addEventListener('mousemove', (e) => {
+  const moveResize = (e) => {
     if (!isResizing) return;
-    const containerWidth = learnExplainCol.parentElement.offsetWidth;
-    let newWidth = e.clientX - learnExplainCol.getBoundingClientRect().left;
-    if (newWidth < 360) newWidth = 360;
-    if (newWidth > containerWidth - 360) newWidth = containerWidth - 360;
+    const rect = learnBodyInner.getBoundingClientRect();
+    const resizerWidth = learnResizer.offsetWidth || 10;
+    const availableWidth = Math.max(0, rect.width - resizerWidth);
+    if (!availableWidth) return;
 
-    learnExplainCol.style.flex = 'none';
-    learnExplainCol.style.width = newWidth + 'px';
-    learnChatCol.style.flex = '1';
-    learnChatCol.style.width = 'auto';
-    learnChatCol.style.minWidth = '360px';
-    learnChatCol.style.maxWidth = '';
+    let explainWidth = e.clientX - rect.left;
+    explainWidth = Math.max(MIN_EXPLAIN_WIDTH, Math.min(explainWidth, availableWidth - MIN_CHAT_WIDTH));
+    const chatWidth = availableWidth - explainWidth;
+    const chatRatio = chatWidth / availableWidth;
+    applyLearnSplit(chatRatio);
+    try { localStorage.setItem(LEARN_LAYOUT_KEY, String(chatRatio)); } catch (_) {}
+  };
 
-    learnFollowupInput.style.width = '100%';
-    autoResize(document.getElementById('learnFollowupInput'));
-  });
-
-  document.addEventListener('mouseup', () => {
+  const stopResize = () => {
     if (isResizing) {
       isResizing = false;
       document.body.style.cursor = 'default';
-      learnFollowupInput.style.width = '';
-      autoResize(document.getElementById('learnFollowupInput'));
+      document.body.classList.remove('learn-resizing');
+      resizeFollowupInput();
     }
+  };
+
+  learnResizer.addEventListener('pointerdown', startResize);
+  document.addEventListener('pointermove', moveResize);
+  document.addEventListener('pointerup', stopResize);
+  document.addEventListener('pointercancel', stopResize);
+  window.addEventListener('resize', () => {
+    if (window.matchMedia('(max-width: 900px)').matches) {
+      learnBodyInner.style.removeProperty('grid-template-columns');
+      learnBodyInner.dataset.customSplit = '';
+      return;
+    }
+    try {
+      const savedRatio = parseFloat(localStorage.getItem(LEARN_LAYOUT_KEY) || '');
+      if (Number.isFinite(savedRatio)) applyLearnSplit(savedRatio);
+    } catch (_) {}
   });
 }
 
@@ -10054,7 +13760,8 @@ function loadRecentConversations() {
     try {
       return (JSON.parse(saved) || []).map(session => ({
         ...session,
-        timestamp: normalizeRecentConversationTimestamp(session.timestamp)
+        timestamp: normalizeRecentConversationTimestamp(session.timestamp),
+        lessonMarkdown: forceB8TextbookOnlyLesson(session.sectionId, session.sectionTitle, session.lessonMarkdown || '')
       }));
     } catch(e) {}
   }
@@ -10064,7 +13771,8 @@ function loadRecentConversations() {
 function saveRecentConversations(sessions) {
   localStorage.setItem('tutorRecentSessions', JSON.stringify(Array.isArray(sessions) ? sessions.map(session => ({
     ...session,
-    timestamp: normalizeRecentConversationTimestamp(session.timestamp)
+    timestamp: normalizeRecentConversationTimestamp(session.timestamp),
+    lessonMarkdown: forceB8TextbookOnlyLesson(session.sectionId, session.sectionTitle, session.lessonMarkdown || '')
   })) : []));
 }
 
@@ -10361,7 +14069,11 @@ window.loadHistoricalSession = function(timestamp) {
 
     tutorState.learnSectionId = session.sectionId || '';
     tutorState.learnSectionTitle = session.sectionTitle || 'Saved Conversation';
-    tutorState.learnLessonMarkdown = session.lessonMarkdown || '';
+    tutorState.learnLessonMarkdown = forceB8TextbookOnlyLesson(
+      tutorState.learnSectionId,
+      tutorState.learnSectionTitle,
+      session.lessonMarkdown || ''
+    );
     tutorState.learnBookPages = Array.isArray(session.bookPages) ? session.bookPages : [];
     tutorState.learnWebSources = Array.isArray(session.webSources) ? session.webSources : [];
     tutorState.learnHistory = JSON.parse(JSON.stringify(session.history || []));

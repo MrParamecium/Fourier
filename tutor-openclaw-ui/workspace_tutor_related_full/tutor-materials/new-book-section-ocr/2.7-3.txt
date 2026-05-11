@@ -1,0 +1,92 @@
+# Aquarius section OCR
+section_id: 2.7-3
+source_pages: page-215, page-216, page-217
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+2.7-3 For-Loops
+Real resistors and capacitors never exactly equal their nominal values. Suppose that the circuit
+components are measured as R1 = 10.322 kΩ, R2 = 9.952 kΩ, R3 = 10.115 kΩ, C1 = 1.120 nF, and
+C2 = 1.320 μF. These values are consistent with the 10 and 25% tolerance resistor and capacitor
+values commonly and readily available. CH2MP2.m uses these component values to calculate the
+new values of λ.
+
+[[PAGE page-216]]
+216      CHAPTER 2   TIME-DOMAIN ANALYSIS OF CONTINUOUS-TIME SYSTEMS
+
+>>  lambda = CH2MP2([10322,9592,10115],[1.12e-9, 1.32e-6])
+    lambda = 1.0e+003 *
+        -0.1136 + 2.6113i
+        -0.1136 - 2.6113i
+
+Now the natural modes oscillate at 2611.3 rad/s or about 416 Hz. Decay to 25% amplitude is
+expected in t = ln0.25/(-113.6) ≈ 0.012 second. These values, which differ significantly from
+the nominal values of 503 Hz and t ≈ 0.01 second, warrant a more formal investigation of the
+effect of component variations on the locations of the characteristic roots.
+
+It is sensible to look at three values for each component: the nominal value, a low value, and
+a high value. Low and high values are based on component tolerances. For example, a 10% 1 kΩ
+resistor could have an expected low value of 1000(1 - 0.1) = 900 Ω and an expected high value
+of 1000(1 + 0.1) = 1100 Ω. For the five passive components in the design, 3^5 = 243 permutations
+are possible.
+
+Using either CH2MP1.m or CH2MP2.m to solve each of the 243 cases would be very tedious and
+boring. For-loops help automate repetitive tasks such as this. In MATLAB, the general structure
+of a for statement is
+
+for variable = expression, statement, ..., statement, end
+
+Five nested for-loops, one for each passive component, are required for the present example.
+
+% CH2MP3.m : Chapter 2, MATLAB Program 3
+% Script M-file determines characteristic roots over a range of component
+% values.
+
+% Pre-allocate memory for all computed roots:
+lambda = zeros(2,243);
+% Initialize index to identify each permutation:
+p=0;
+for R1 = 1e4*[0.9,1.0,1.1],
+    for R2 = 1e4*[0.9,1.0,1.1],
+        for R3 = 1e4*[0.9,1.0,1.1],
+            for C1 = 1e-9*[0.75,1.0,1.25],
+                for C2 = 1e-6*[0.75,1.0,1.25],
+                    p = p+1;
+                    lambda(:,p) = CH2MP2([R1 R2 R3],[C1 C2]);
+                end
+            end
+        end
+    end
+end
+
+plot(real(lambda(:)),imag(lambda(:)),'kx',...
+    real(lambda(:,1)),imag(lambda(:,1)),'kv',...
+    real(lambda(:,end)),imag(lambda(:,end)),'k^')
+xlabel('Real'),ylabel('Imaginary')
+legend('Char. Roots','Min. Val. Roots','Max. Val. Roots','Location','West');
+
+[[PAGE page-217]]
+2.7  MATLAB: M-Files  217
+
+5000
+
+Imaginary
+
+0
+
+−5000
+−240   −220   −200   −180   −160   −140   −120   −100
+Real
+
+×   Char. Roots
+▽   Min. Val. Roots
+△   Max. Val. Roots
+
+Figure 2.26  Effect of component values on characteristic root locations.
+
+The command lambda = zeros(2,243) preallocates a 2 × 243 array to store the computed roots. When necessary, MATLAB performs dynamic memory allocation, so this command is not strictly necessary. However, preallocation significantly improves script execution speed. Notice also that it would be nearly useless to call script CH2MP1 from within the nested loop; script file parameters cannot be changed during execution.
+
+The plot instruction is quite long. Long commands can be broken across several lines by terminating intermediate lines with three dots (...). The three dots tell MATLAB to continue the present command to the next line. Black x’s locate roots of each permutation. The command lambda(:) vectorizes the 2 × 243 matrix lambda into a 486 × 1 vector. This is necessary in this case to ensure that a proper legend is generated. Because of loop order, permutation p = 1 corresponds to the case of all components at the smallest values and permutation p = 243 corresponds to the case of all components at the largest values. This information is used to separately highlight the minimum and maximum cases using down-triangles (▽) and up-triangles (△), respectively. In addition to terminating each for loop, end is used to indicate the final index along a particular dimension, which eliminates the need to remember the particular size of a variable. An overloaded function, such as end, serves multiple uses and is typically interpreted based on context.
+
+The graphical results provided by CH2MP3 are shown in Fig. 2.26. Between extremes, root oscillations vary from 365 to 745 Hz and decay times to 25% amplitude vary from 6.2 to 12.7 ms. Clearly, this circuit’s behavior is quite sensitive to ordinary component variations.

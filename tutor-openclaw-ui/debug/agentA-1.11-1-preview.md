@@ -1,0 +1,472 @@
+# Agent A Preview: 1.11-1 1.11-1 Anonymous Functions
+
+- Difficulty: beginner
+- Estimated read minutes: 6
+
+## Learning Objectives
+
+- Define a MATLAB anonymous function from a mathematical formula.
+- Evaluate an anonymous function at a single input or a vector of inputs.
+- Recognize why plotting an oscillatory function requires enough sample points.
+- Use element-wise MATLAB operators correctly when function inputs may be vectors.
+
+## Visualization Need
+
+```json
+{
+  "level": "static",
+  "reason": [
+    "pattern_recognition_benefits_from_figure",
+    "misconception_needs_visual_correction",
+    "one_stable_visual_representation_is_helpful"
+  ],
+  "recommended_assets": [
+    "textbook_figure",
+    "latex_native_formula"
+  ]
+}
+```
+
+## Visual Plan
+
+```json
+{
+  "primary_anchor": "both",
+  "rationale": "This section is mostly code-and-formula based, so LaTeX/code-native displays should teach the anonymous-function structure. The available textbook figure is the best visual anchor for the sampling-resolution trap because it directly compares the wrong coarse plot with the correct fine plot.",
+  "cram": "Use the visual to instantly recognize the exam trap: too few sample points can hide oscillations.",
+  "standard": "Use the formula-code pairing for the main idea, then use the textbook plot comparison as the representative example.",
+  "top_score": "Use the plot comparison to stress the distinction between the true function and the sampled plot drawn from chosen input points."
+}
+```
+
+## Planned Blocks
+
+### Block 1: `text_explanation`
+- **instruction**: Render Page 1 as a minimal overview only. Use exactly two short sections: 'Section Objective' and 'Concepts In This Section'. Under Section Objective, write one sentence: 'Learn how MATLAB anonymous functions turn formulas into reusable functions that can be evaluated and plotted.' Under Concepts In This Section, list concept names only as bullets: anonymous function syntax; input arguments; scalar evaluation; vector evaluation; plot sampling resolution. Do not add background paragraphs.
+
+### Block 2: `math_block`
+- **latex**: f(t)=e^{-t}\cos(2\pi t)
+- **explanation_instruction**: Start Page 2 with heading '## 1. From a formula to an anonymous function'. Explain in 90–130 words that this is the mathematical function being represented in MATLAB. Then show the MATLAB line exactly as code: `f = @(t) exp(-t).*cos(2*pi*t);`. Explain that `@` creates the anonymous function, `(t)` names the input argument, `exp(-t)` represents \(e^{-t}\), and `cos(2*pi*t)` represents \(\cos(2\pi t)\). Say when to use this: when a formula must be reused for many input values. Exam trigger: 'define, evaluate, or plot a function in MATLAB.' Common misuse: forgetting the dot in `.*` when vector inputs are possible.
+
+### Block 3: `text_explanation`
+- **instruction**: Continue Page 2 with one representative worked example. Show the code `t = 0; f(t)` and `f(0)`, both returning `ans = 1`. Explain in 70–100 words why this matches the formula: \(e^0=1\) and \(\cos(0)=1\), so \(f(0)=1\). Include a quick exam note: the input name `t` inside `@(t)` is local to the function and is not the same as a workspace variable just because it has the same name. Keep the tone direct and practical.
+
+### Block 4: `math_block`
+- **latex**: f(\mathbf{t})=\bigl[f(t_1),f(t_2),\ldots,f(t_n)\bigr]
+- **explanation_instruction**: Start Page 3 with heading '## 2. Vector inputs evaluate many points at once'. Explain in 90–130 words that if the input is a vector, MATLAB applies the anonymous function to each element and returns a vector of output values. Use the textbook example `t = (-2:2);`, meaning \([-2,-1,0,1,2]\). State that the output is approximately `[7.3891 2.7183 1.0000 0.3679 0.1353]`. Explain each symbol in the formula: \(\mathbf{t}\) is the input vector, \(t_k\) is one input value, and \(f(t_k)\) is the corresponding output. Common misuse: using `*` instead of `.*` when element-wise multiplication is needed.
+
+### Block 5: `book_image`
+- **source_page**: page-127
+- **fig_id**: Figure 1.46 and Figure 1.47
+- **caption_instruction**: One sentence: These two plots show how coarse versus fine sampling changes the plotted appearance of the same function.
+- **description_instruction**: Describe the top plot as using only `t = (-2:2)`, which misses the oscillations and falsely looks simple. Describe the bottom plot as using `t = (-2:0.01:2)`, which reveals the damped cosine oscillations. Tell students to notice that the mathematical function did not change; only the number of sampled input points changed.
+- **teaching_role**: trap_exposure
+- **mode_specific_visual_use**:
+```json
+{
+  "cram": "Memorize the visual warning: too few points can produce a misleading plot.",
+  "standard": "Compare the two plots and connect each one to its MATLAB input vector.",
+  "top_score": "Use the figure to separate true function behavior from the plotting artifact caused by sparse samples."
+}
+```
+
+### Block 6: `math_block`
+- **latex**: \Delta t=\frac{T}{100}=0.01
+- **explanation_instruction**: Start Page 4 with heading '## 3. Choose enough sample points for plotting'. Explain in 100–140 words that \(\cos(2\pi t)\) completes one oscillation per unit of \(t\), so its period is \(T=1\). The textbook chooses 100 points per oscillation, giving spacing \(\Delta t=0.01\) and MATLAB vector `t = (-2:0.01:2);`. Explain symbols: \(T\) is the period and \(\Delta t\) is the spacing between plotted input values. Use case: plotting oscillatory functions. Exam trigger: a plot looks too smooth, too straight, or misses expected oscillations. Common misuse: assuming MATLAB plots the true continuous curve automatically instead of connecting sampled values.
+
+### Block 7: `section_summary`
+- **instruction**: Create the recap page titled '📌 Key Takeaways'. Include exactly 4 bullets, each ≤25 words, and include the core formulas/code explicitly: \(f(t)=e^{-t}\cos(2\pi t)\); `f = @(t) exp(-t).*cos(2*pi*t);`; \(f(\mathbf{t})=[f(t_1),\ldots,f(t_n)]\); \(\Delta t=T/100=0.01\). End with one bridge sentence: 'Next, you will use these function-building ideas to represent standard signals more efficiently.'
+
+### Block 8: `quiz_plan`
+- **target_questions**:
+```json
+5
+```
+- **question_range**:
+```json
+{
+  "min": 4,
+  "max": 5
+}
+```
+- **knowledge_points**:
+```json
+[
+  {
+    "id": "anonymous_function_syntax",
+    "label": "Anonymous function syntax",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "q1",
+        "type": "multiple_choice",
+        "stem": "Which MATLAB line correctly defines \\(f(t)=e^{-t}\\cos(2\\pi t)\\) as an anonymous function that can accept vector inputs?",
+        "options": [
+          "A. `f = @(t) exp(-t).*cos(2*pi*t);`",
+          "B. `f(t) = exp(-t)*cos(2*pi*t);`",
+          "C. `f = @(t) e^(-t).*cos(2*pi*t);`",
+          "D. `f = @t exp(-t).*cos(2*pi*t);`"
+        ],
+        "correct_option": "A",
+        "explanation": "Option A uses `@(t)` to define the input argument and uses `.*` so vector inputs are handled element by element.",
+        "wrong_option_explanations": {
+          "B": "This is not MATLAB anonymous-function syntax and uses `*` instead of element-wise multiplication.",
+          "C": "MATLAB uses `exp(-t)`, not `e^(-t)`, for the exponential function.",
+          "D": "The input argument must be written inside parentheses as `@(t)`."
+        },
+        "hint": "Look for both `@(t)` and element-wise multiplication.",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  },
+  {
+    "id": "scalar_evaluation",
+    "label": "Scalar evaluation",
+    "importance": "medium",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "q2",
+        "type": "multiple_choice",
+        "stem": "For \\(f(t)=e^{-t}\\cos(2\\pi t)\\), what should `f(0)` return?",
+        "options": [
+          "A. 0",
+          "B. 1",
+          "C. \\(2\\pi\\)",
+          "D. \\(-1\\)"
+        ],
+        "correct_option": "B",
+        "explanation": "At \\(t=0\\), \\(e^0=1\\) and \\(\\cos(0)=1\\), so \\(f(0)=1\\).",
+        "wrong_option_explanations": {
+          "A": "Neither factor is zero at \\(t=0\\).",
+          "C": "\\(2\\pi\\) appears inside the cosine argument, but it is not the output.",
+          "D": "\\(\\cos(0)=1\\), not \\(-1\\)."
+        },
+        "hint": "Evaluate each factor at \\(t=0\\).",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  },
+  {
+    "id": "vector_evaluation",
+    "label": "Vector input behavior",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "q3",
+        "type": "multiple_choice",
+        "stem": "If `t = (-2:2);`, what does MATLAB use as the input vector?",
+        "options": [
+          "A. `[-2 -1 0 1 2]`",
+          "B. `[-2 2]`",
+          "C. `[-2 0 2]`",
+          "D. `[-2 -0.01 0 0.01 2]`"
+        ],
+        "correct_option": "A",
+        "explanation": "The colon expression `-2:2` uses the default step size of 1, producing every integer from -2 through 2.",
+        "wrong_option_explanations": {
+          "B": "This lists only the endpoints, not the full colon-generated vector.",
+          "C": "This skips -1 and 1 even though the default step is 1.",
+          "D": "A step of 0.01 must be explicitly written as `-2:0.01:2`."
+        },
+        "hint": "If no step size is written, MATLAB uses a step of 1.",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  },
+  {
+    "id": "sampling_resolution_plotting",
+    "label": "Sampling resolution for plots",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "q4",
+        "type": "multiple_choice",
+        "stem": "Observe the textbook comparison of Figure 1.46 and Figure 1.47. Why does the top plot fail to show the expected oscillations?",
+        "options": [
+          "A. The function formula is wrong in the top plot.",
+          "B. The top plot uses too few sampled input points.",
+          "C. The cosine term disappears when MATLAB plots vectors.",
+          "D. The exponential factor prevents all oscillation."
+        ],
+        "correct_option": "B",
+        "explanation": "The top plot samples only at integer values from -2 to 2, so it misses the peaks, troughs, and sign changes between those points.",
+        "wrong_option_explanations": {
+          "A": "The same function is used; the sampling vector changes.",
+          "C": "MATLAB does not remove the cosine term.",
+          "D": "The exponential changes the envelope, but the cosine still oscillates."
+        },
+        "hint": "Ask what changed between the two plots: the formula or the input vector?",
+        "needs_visual": true,
+        "visual_type": "textbook_figure_comparison",
+        "same_point_variant": false
+      },
+      {
+        "id": "q5",
+        "type": "short_answer",
+        "stem": "The function contains \\(\\cos(2\\pi t)\\), so one oscillation has period \\(T=1\\). If you want 100 points per oscillation, what MATLAB vector should you use from \\(-2\\) to \\(2\\)?",
+        "ideal_answer": "`t = (-2:0.01:2);` because \\(\\Delta t=T/100=1/100=0.01\\).",
+        "grading_rubric": [
+          "Must give the MATLAB vector with endpoints -2 and 2.",
+          "Must use step size 0.01.",
+          "Must connect 0.01 to 100 points per period."
+        ],
+        "explanation": "This checks whether the student can convert the sampling rule into the actual MATLAB colon expression.",
+        "hint": "Use the form `start:step:stop`.",
+        "needs_visual": false,
+        "same_point_variant": true
+      }
+    ]
+  }
+]
+```
+
+## Raw JSON
+
+```json
+{
+  "section_id": "1.11-1",
+  "section_title": "1.11-1 Anonymous Functions",
+  "difficulty": "beginner",
+  "estimated_read_minutes": 6,
+  "learning_objectives": [
+    "Define a MATLAB anonymous function from a mathematical formula.",
+    "Evaluate an anonymous function at a single input or a vector of inputs.",
+    "Recognize why plotting an oscillatory function requires enough sample points.",
+    "Use element-wise MATLAB operators correctly when function inputs may be vectors."
+  ],
+  "visualization_need": {
+    "level": "static",
+    "reason": [
+      "pattern_recognition_benefits_from_figure",
+      "misconception_needs_visual_correction",
+      "one_stable_visual_representation_is_helpful"
+    ],
+    "recommended_assets": [
+      "textbook_figure",
+      "latex_native_formula"
+    ]
+  },
+  "visual_plan": {
+    "primary_anchor": "both",
+    "rationale": "This section is mostly code-and-formula based, so LaTeX/code-native displays should teach the anonymous-function structure. The available textbook figure is the best visual anchor for the sampling-resolution trap because it directly compares the wrong coarse plot with the correct fine plot.",
+    "cram": "Use the visual to instantly recognize the exam trap: too few sample points can hide oscillations.",
+    "standard": "Use the formula-code pairing for the main idea, then use the textbook plot comparison as the representative example.",
+    "top_score": "Use the plot comparison to stress the distinction between the true function and the sampled plot drawn from chosen input points."
+  },
+  "blocks": [
+    {
+      "type": "text_explanation",
+      "instruction": "Render Page 1 as a minimal overview only. Use exactly two short sections: 'Section Objective' and 'Concepts In This Section'. Under Section Objective, write one sentence: 'Learn how MATLAB anonymous functions turn formulas into reusable functions that can be evaluated and plotted.' Under Concepts In This Section, list concept names only as bullets: anonymous function syntax; input arguments; scalar evaluation; vector evaluation; plot sampling resolution. Do not add background paragraphs."
+    },
+    {
+      "type": "math_block",
+      "latex": "f(t)=e^{-t}\\cos(2\\pi t)",
+      "explanation_instruction": "Start Page 2 with heading '## 1. From a formula to an anonymous function'. Explain in 90–130 words that this is the mathematical function being represented in MATLAB. Then show the MATLAB line exactly as code: `f = @(t) exp(-t).*cos(2*pi*t);`. Explain that `@` creates the anonymous function, `(t)` names the input argument, `exp(-t)` represents \\(e^{-t}\\), and `cos(2*pi*t)` represents \\(\\cos(2\\pi t)\\). Say when to use this: when a formula must be reused for many input values. Exam trigger: 'define, evaluate, or plot a function in MATLAB.' Common misuse: forgetting the dot in `.*` when vector inputs are possible."
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Continue Page 2 with one representative worked example. Show the code `t = 0; f(t)` and `f(0)`, both returning `ans = 1`. Explain in 70–100 words why this matches the formula: \\(e^0=1\\) and \\(\\cos(0)=1\\), so \\(f(0)=1\\). Include a quick exam note: the input name `t` inside `@(t)` is local to the function and is not the same as a workspace variable just because it has the same name. Keep the tone direct and practical."
+    },
+    {
+      "type": "math_block",
+      "latex": "f(\\mathbf{t})=\\bigl[f(t_1),f(t_2),\\ldots,f(t_n)\\bigr]",
+      "explanation_instruction": "Start Page 3 with heading '## 2. Vector inputs evaluate many points at once'. Explain in 90–130 words that if the input is a vector, MATLAB applies the anonymous function to each element and returns a vector of output values. Use the textbook example `t = (-2:2);`, meaning \\([-2,-1,0,1,2]\\). State that the output is approximately `[7.3891 2.7183 1.0000 0.3679 0.1353]`. Explain each symbol in the formula: \\(\\mathbf{t}\\) is the input vector, \\(t_k\\) is one input value, and \\(f(t_k)\\) is the corresponding output. Common misuse: using `*` instead of `.*` when element-wise multiplication is needed."
+    },
+    {
+      "type": "book_image",
+      "source_page": "page-127",
+      "fig_id": "Figure 1.46 and Figure 1.47",
+      "caption_instruction": "One sentence: These two plots show how coarse versus fine sampling changes the plotted appearance of the same function.",
+      "description_instruction": "Describe the top plot as using only `t = (-2:2)`, which misses the oscillations and falsely looks simple. Describe the bottom plot as using `t = (-2:0.01:2)`, which reveals the damped cosine oscillations. Tell students to notice that the mathematical function did not change; only the number of sampled input points changed.",
+      "teaching_role": "trap_exposure",
+      "mode_specific_visual_use": {
+        "cram": "Memorize the visual warning: too few points can produce a misleading plot.",
+        "standard": "Compare the two plots and connect each one to its MATLAB input vector.",
+        "top_score": "Use the figure to separate true function behavior from the plotting artifact caused by sparse samples."
+      }
+    },
+    {
+      "type": "math_block",
+      "latex": "\\Delta t=\\frac{T}{100}=0.01",
+      "explanation_instruction": "Start Page 4 with heading '## 3. Choose enough sample points for plotting'. Explain in 100–140 words that \\(\\cos(2\\pi t)\\) completes one oscillation per unit of \\(t\\), so its period is \\(T=1\\). The textbook chooses 100 points per oscillation, giving spacing \\(\\Delta t=0.01\\) and MATLAB vector `t = (-2:0.01:2);`. Explain symbols: \\(T\\) is the period and \\(\\Delta t\\) is the spacing between plotted input values. Use case: plotting oscillatory functions. Exam trigger: a plot looks too smooth, too straight, or misses expected oscillations. Common misuse: assuming MATLAB plots the true continuous curve automatically instead of connecting sampled values."
+    },
+    {
+      "type": "section_summary",
+      "instruction": "Create the recap page titled '📌 Key Takeaways'. Include exactly 4 bullets, each ≤25 words, and include the core formulas/code explicitly: \\(f(t)=e^{-t}\\cos(2\\pi t)\\); `f = @(t) exp(-t).*cos(2*pi*t);`; \\(f(\\mathbf{t})=[f(t_1),\\ldots,f(t_n)]\\); \\(\\Delta t=T/100=0.01\\). End with one bridge sentence: 'Next, you will use these function-building ideas to represent standard signals more efficiently.'"
+    },
+    {
+      "type": "quiz_plan",
+      "target_questions": 5,
+      "question_range": {
+        "min": 4,
+        "max": 5
+      },
+      "knowledge_points": [
+        {
+          "id": "anonymous_function_syntax",
+          "label": "Anonymous function syntax",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "q1",
+              "type": "multiple_choice",
+              "stem": "Which MATLAB line correctly defines \\(f(t)=e^{-t}\\cos(2\\pi t)\\) as an anonymous function that can accept vector inputs?",
+              "options": [
+                "A. `f = @(t) exp(-t).*cos(2*pi*t);`",
+                "B. `f(t) = exp(-t)*cos(2*pi*t);`",
+                "C. `f = @(t) e^(-t).*cos(2*pi*t);`",
+                "D. `f = @t exp(-t).*cos(2*pi*t);`"
+              ],
+              "correct_option": "A",
+              "explanation": "Option A uses `@(t)` to define the input argument and uses `.*` so vector inputs are handled element by element.",
+              "wrong_option_explanations": {
+                "B": "This is not MATLAB anonymous-function syntax and uses `*` instead of element-wise multiplication.",
+                "C": "MATLAB uses `exp(-t)`, not `e^(-t)`, for the exponential function.",
+                "D": "The input argument must be written inside parentheses as `@(t)`."
+              },
+              "hint": "Look for both `@(t)` and element-wise multiplication.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "scalar_evaluation",
+          "label": "Scalar evaluation",
+          "importance": "medium",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "q2",
+              "type": "multiple_choice",
+              "stem": "For \\(f(t)=e^{-t}\\cos(2\\pi t)\\), what should `f(0)` return?",
+              "options": [
+                "A. 0",
+                "B. 1",
+                "C. \\(2\\pi\\)",
+                "D. \\(-1\\)"
+              ],
+              "correct_option": "B",
+              "explanation": "At \\(t=0\\), \\(e^0=1\\) and \\(\\cos(0)=1\\), so \\(f(0)=1\\).",
+              "wrong_option_explanations": {
+                "A": "Neither factor is zero at \\(t=0\\).",
+                "C": "\\(2\\pi\\) appears inside the cosine argument, but it is not the output.",
+                "D": "\\(\\cos(0)=1\\), not \\(-1\\)."
+              },
+              "hint": "Evaluate each factor at \\(t=0\\).",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "vector_evaluation",
+          "label": "Vector input behavior",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "q3",
+              "type": "multiple_choice",
+              "stem": "If `t = (-2:2);`, what does MATLAB use as the input vector?",
+              "options": [
+                "A. `[-2 -1 0 1 2]`",
+                "B. `[-2 2]`",
+                "C. `[-2 0 2]`",
+                "D. `[-2 -0.01 0 0.01 2]`"
+              ],
+              "correct_option": "A",
+              "explanation": "The colon expression `-2:2` uses the default step size of 1, producing every integer from -2 through 2.",
+              "wrong_option_explanations": {
+                "B": "This lists only the endpoints, not the full colon-generated vector.",
+                "C": "This skips -1 and 1 even though the default step is 1.",
+                "D": "A step of 0.01 must be explicitly written as `-2:0.01:2`."
+              },
+              "hint": "If no step size is written, MATLAB uses a step of 1.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "sampling_resolution_plotting",
+          "label": "Sampling resolution for plots",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "q4",
+              "type": "multiple_choice",
+              "stem": "Observe the textbook comparison of Figure 1.46 and Figure 1.47. Why does the top plot fail to show the expected oscillations?",
+              "options": [
+                "A. The function formula is wrong in the top plot.",
+                "B. The top plot uses too few sampled input points.",
+                "C. The cosine term disappears when MATLAB plots vectors.",
+                "D. The exponential factor prevents all oscillation."
+              ],
+              "correct_option": "B",
+              "explanation": "The top plot samples only at integer values from -2 to 2, so it misses the peaks, troughs, and sign changes between those points.",
+              "wrong_option_explanations": {
+                "A": "The same function is used; the sampling vector changes.",
+                "C": "MATLAB does not remove the cosine term.",
+                "D": "The exponential changes the envelope, but the cosine still oscillates."
+              },
+              "hint": "Ask what changed between the two plots: the formula or the input vector?",
+              "needs_visual": true,
+              "visual_type": "textbook_figure_comparison",
+              "same_point_variant": false
+            },
+            {
+              "id": "q5",
+              "type": "short_answer",
+              "stem": "The function contains \\(\\cos(2\\pi t)\\), so one oscillation has period \\(T=1\\). If you want 100 points per oscillation, what MATLAB vector should you use from \\(-2\\) to \\(2\\)?",
+              "ideal_answer": "`t = (-2:0.01:2);` because \\(\\Delta t=T/100=1/100=0.01\\).",
+              "grading_rubric": [
+                "Must give the MATLAB vector with endpoints -2 and 2.",
+                "Must use step size 0.01.",
+                "Must connect 0.01 to 100 points per period."
+              ],
+              "explanation": "This checks whether the student can convert the sampling rule into the actual MATLAB colon expression.",
+              "hint": "Use the form `start:step:stop`.",
+              "needs_visual": false,
+              "same_point_variant": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```

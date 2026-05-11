@@ -1,0 +1,18 @@
+{
+  "sectionId": "2.5-2",
+  "sourcePages": [
+    "page-198",
+    "page-199"
+  ],
+  "usedPages": [
+    "page-198",
+    "page-199"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "2.5-2 Internal (Asymptotic) Stability",
+  "foundEnd": true,
+  "endBeforeLine": "2.5-3 Relationship Between BIBO and Asymptotic Stability",
+  "endBeforeCode": "2.5-3",
+  "charCount": 3870
+}

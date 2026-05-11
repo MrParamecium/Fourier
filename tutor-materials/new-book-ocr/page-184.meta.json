@@ -1,0 +1,23 @@
+{
+  "chapter": "2",
+  "section": null,
+  "subsection": null,
+  "title": "Figure 2.9 Convolution of x(t) and g(t).",
+  "summary": "This page consists primarily of Figure 2.9, which graphically illustrates the convolution of x(t) and g(t). The subfigures show x(t), g(t), the flipped signal g(-τ), shifted versions g(t-τ) for t ≥ 0 and t < 0, and the resulting output c(t).",
+  "keywords": [
+    "Figure 2.9",
+    "convolution",
+    "x(t)",
+    "g(t)",
+    "g(-τ)",
+    "g(t-τ)",
+    "c(t)",
+    "continuous-time systems",
+    "graphical convolution"
+  ],
+  "has_math": true,
+  "page_type": "figure",
+  "book_page": "page-184",
+  "figures": [],
+  "metadata_model": "openrouter:openai/gpt-5.4"
+}

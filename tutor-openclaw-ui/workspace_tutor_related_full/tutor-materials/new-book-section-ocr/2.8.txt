@@ -1,0 +1,124 @@
+# Aquarius section OCR
+section_id: 2.8
+source_pages: page-219, page-220, page-221
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+2.8   MATLAB: M-Files                                                                 219
+
+h(τ) [solid], x(t−τ) [dashed], h(τ)×(t−τ) [gray]
+
+2
+0
+−2
+−1   −0.5   0   0.5   1   1.5   2   2.5   3   3.5   4
+τ
+
+y(t) = ∫ h(τ)x(t−τ) dτ
+
+2
+1
+0
+−1
+−1   −0.5   0   0.5   1   1.5   2   2.5   3   3.5   4
+t
+
+Figure 2.27  Graphical convolution at step t = 0.75 second.
+
+h(τ) [solid], x(t−τ) [dashed], h(τ)×(t−τ) [gray]
+
+2
+0
+−2
+−1   −0.5   0   0.5   1   1.5   2   2.5   3   3.5   4
+τ
+
+y(t) = ∫ h(τ)x(t−τ) dτ
+
+2
+1
+0
+−1
+−1   −0.5   0   0.5   1   1.5   2   2.5   3   3.5   4
+t
+
+Figure 2.28  Graphical convolution at step t = 2.25 seconds.
+
+command forces MATLAB to update the graphics window for each loop iteration. Although slow,
+this creates an animation-like effect. Replacing drawnow with the pause command allows users
+to manually step through the convolution process. The pause command still forces the graphics
+window to update, but the program will not continue until a key is pressed.
+
+[[PAGE page-220]]
+220
+CHAPTER 2  TIME-DOMAIN ANALYSIS OF CONTINUOUS-TIME SYSTEMS
+
+h(τ) [solid], x(t−τ) [dashed], h(τ)x(t−τ) [gray]
+
+2
+0
+−2
+−1  −0.5  0  0.5  1  1.5  2  2.5  3  3.5  4
+τ
+
+2
+1
+0
+−1
+−1  −0.5  0  0.5  1  1.5  2  2.5  3  3.5  4
+y(t)=∫ h(τ)x(t−τ)
+ dτ
+t
+
+Figure 2.29  Graphical convolution at step t = 2.85 seconds.
+
+2.8 APPENDIX: DETERMINING THE IMPULSE RESPONSE
+
+In Eq. (2.13), we showed that for an LTIC system S specified by Eq. (2.11), the unit impulse response h(t) can be expressed as
+
+h(t) = b0δ(t) + characteristic modes				(2.51)
+
+To determine the characteristic mode terms in Eq. (2.51), let us consider a system S0 whose input x(t) and the corresponding output w(t) are related by
+
+Q(D)w(t) = x(t)				(2.52)
+
+Observe that both the systems S and S0 have the same characteristic polynomial; namely, Q(λ), and, consequently, the same characteristic modes. Moreover, S0 is the same as S with P(D) = 1, that is, b0 = 0. Therefore, according to Eq. (2.51), the impulse response of S0 consists of characteristic mode terms only without an impulse at t = 0. Let us denote this impulse response of S0 by yn(t). Observe that yn(t) consists of characteristic modes of S and therefore may be viewed as a zero-input response of S. Now yn(t) is the response of S0 to input δ(t). Therefore, according to Eq. (2.52),
+
+Q(D)yn(t) = δ(t)
+
+or
+
+(D^N + a1D^(N−1) + ··· + aN−1D + aN)yn(t) = δ(t)
+
+or
+
+yn^(N)(t) + a1y_n^(N−1)(t) + ··· + aN−1y_n^(1)(t) + aNy_n(t) = δ(t)
+
+[[PAGE page-221]]
+where y_n^(k)(t) represents the kth derivative of y_n(t). The right-hand side contains a single impulse term, δ(t). This is possible only if y_n^(N-1)(t) has a unit jump discontinuity at t = 0, so that y_n^(N)(t) = δ(t). Moreover, the lower-order terms cannot have any jump discontinuity because this would mean the presence of the derivatives of δ(t). Therefore y_n(0) = y_n^(1)(0) = ··· = y_n^(N-2)(0) = 0
+(no discontinuity at t = 0), and the N initial conditions on y_n(t) are
+
+y_n(0) = y_n^(1)(0) = ··· = y_n^(N-2)(0) = 0    and    y_n^(N-1)(0) = 1 (2.53)
+
+This discussion means that y_n(t) is the zero-input response of the system S subject to initial conditions [Eq. (2.53)].
+We now show that for the same input x(t) to both systems, S and S_0, their respective outputs y(t) and w(t) are related by
+
+y(t) = P(D)w(t) (2.54)
+
+To prove this result, we operate on both sides of Eq. (2.52) by P(D) to obtain
+
+Q(D)P(D)w(t) = P(D)x(t)
+
+Comparison of this equation with Eq. (2.2) leads immediately to Eq. (2.54).
+Now if the input x(t) = δ(t), the output of S_0 is y_n(t), and the output of S, according to Eq. (2.54), is P(D)y_n(t). This output is h(t), the unit impulse response of S. Note, however, that because it is an impulse response of a causal system S_0, the function y_n(t) is causal. To incorporate this fact we must represent this function as y_n(t)u(t). Now it follows that h(t), the unit impulse response of the system S, is given by
+
+h(t) = P(D)[y_n(t)u(t)] (2.55)
+
+where y_n(t) is a linear combination of the characteristic modes of the system subject to initial conditions (2.53).
+The right-hand side of Eq. (2.55) is a linear combination of the derivatives of y_n(t)u(t). Evaluating these derivatives is clumsy and inconvenient because of the presence of u(t). The derivatives will generate an impulse and its derivatives at the origin. Fortunately when M ≤ N [Eq. (2.11)], we can avoid this difficulty by using the observation in Eq. (2.51), which asserts that at t = 0 (the origin), h(t) = b_0δ(t). Therefore, we need not bother to find h(t) at the origin. This simplification means that instead of deriving P(D)[y_n(t)u(t)], we can derive P(D)y_n(t) and add to it the term b_0δ(t) so that
+
+h(t) = b_0δ(t) + P(D)y_n(t)      t ≥ 0
+     = b_0δ(t) + [P(D)y_n(t)]u(t)
+
+This expression is valid when M ≤ N [the form given in Eq. (2.11)]. When M > N, Eq. (2.55) should be used.

@@ -1,0 +1,718 @@
+# Agent A Preview: 1.7-4 1.7-4 Causal and Noncausal Systems
+
+- Difficulty: intermediate
+- Estimated read minutes: 7
+
+## Learning Objectives
+
+- Define causal, noncausal, physical, and anticipative systems using input time dependence.
+- Recognize whether a system uses present, past, or future input values.
+- Use time-shift formulas such as x(t-2), x(t+2), x(-t), and y(t+1)=x(t) to decide causality.
+- Explain why noncausal systems can still be useful with prerecorded data, spatial variables, or output delay.
+
+## Visualization Need
+
+```json
+{
+  "level": "interactive",
+  "reason": [
+    "depends_on_parameter_change",
+    "formula_to_phenomenon_gap",
+    "student_should_manipulate_to_understand",
+    "misconception_needs_visual_correction"
+  ],
+  "recommended_assets": [
+    "textbook_figure",
+    "react_canvas_demo",
+    "latex_native_formula"
+  ]
+}
+```
+
+## Visual Plan
+
+```json
+{
+  "primary_anchor": "both",
+  "rationale": "Use the textbook Figure 1.30 as the canonical static visual because it directly shows an input, a noncausal output that starts before the input, and the delayed causal version. Add a React/Canvas time-shift demo because causality is often confused when students see expressions like x(t+1), x(t-1), x(-t), or y(t+1)=x(t). Do not use generated images because the textbook already provides the main diagram and symbolic/interactive rendering is more precise for time-shift logic.",
+  "cram": "Use visuals to quickly spot red-flag future dependence: any required input time greater than the output time.",
+  "standard": "Use Figure 1.30 and one time-shift demo to connect the definition, a representative example, and exam-style decisions.",
+  "top_score": "Use the demo to distinguish subtle cases such as y(t+1)=x(t), time reversal, and delay-based realization."
+}
+```
+
+## Planned Blocks
+
+### Block 1: `text_explanation`
+- **instruction**: Render Page 1 as a compact outline only. Title it 'Section Objective' and write one sentence: 'Decide whether a system can operate in real time by checking whether its output needs future input values.' Then title a second short list 'Concepts In This Section' and list only these concept names, with no explanations: causal system; noncausal system; future input dependence; time-shift causality test; delayed realization.
+
+### Block 2: `math_block`
+- **latex**: y(t_0)\text{ is causal only if it depends on }x(t)\text{ for }t\le t_0.
+- **explanation_instruction**: Start the page with the heading '## 1. Causal means: no future input'. Explain in 100–130 words that at output time \(t_0\), a real-time system may use present input \(x(t_0)\) and past input values \(x(t)\) with \(t<t_0\), but not future values with \(t>t_0\). Define every symbol: \(y(t_0)\) is the output now, \(x(t)\) is the input at time \(t\), and \(t_0\) is the decision time. Include one minimal example: \(y(t)=x(t)+x(t-1)\) is causal. Exam trigger: check whether the formula asks for input at a time larger than the output time. Common misuse: thinking that any delay is noncausal; delays are usually causal because they use past input.
+
+### Block 3: `book_image`
+- **source_page**: page-105
+- **fig_id**: Figure 1.30
+- **teaching_role**: concept_anchor
+- **mode_specific_visual_use**:
+```json
+{
+  "cram": "Use the early output pulse as the instant visual cue for noncausality.",
+  "standard": "Connect each waveform to the equation and notice which output happens before the input exists.",
+  "top_score": "Use the delayed waveform to see how an anticipative system can be realized after waiting."
+}
+```
+- **caption_instruction**: One sentence: Figure 1.30 shows an input pulse, a noncausal output that starts before the input, and a delayed output that becomes causal.
+- **description_instruction**: Describe the three plots in 2–3 sentences. Emphasize that the input pulse occurs from t=0 to t=1, while the output in part (b) includes a pulse from t=-2 to t=-1 before the input is applied. Then point out that part (c) shifts the output right so that no response occurs before the needed input is available.
+
+### Block 4: `math_block`
+- **latex**: y(t)=x(t-2)+x(t+2)\qquad\text{(1.26)}
+- **explanation_instruction**: Start the page with the heading '## 2. A future term makes the system noncausal'. Explain in 110–150 words. Say that \(x(t-2)\) is safe because it asks for the input 2 seconds before time \(t\), but \(x(t+2)\) is the problem because it asks for the input 2 seconds after time \(t\). Tie this directly to Figure 1.30: the output can start before the input pulse begins because the equation is using future knowledge. State when to use this formula: when an exam asks whether a time-shifted input-output rule is physically realizable in real time. Common misuse: treating both \(t-2\) and \(t+2\) as just 'shifts' without asking whether the required input time is in the future.
+
+### Block 5: `interactive_demo`
+- **demo_id**: causality_time_shift_tester
+- **teaching_role**: exam_pattern_anchor
+- **mode_specific_visual_use**:
+```json
+{
+  "cram": "Use the red highlighted future sample to decide causal versus noncausal fast.",
+  "standard": "Move the time marker and connect each formula to the input sample it requires.",
+  "top_score": "Test tricky cases like reflection and equations written with shifted output time."
+}
+```
+- **instruction**: Build a React + Canvas demo titled 'Causality Time-Shift Tester'. Show a simple input waveform x(t) on a horizontal time axis and a movable vertical marker labeled 'output time t'. Provide selectable rules: y(t)=x(t-a), y(t)=x(t+a), y(t)=x(-t), and y(t+a)=x(t). Include a slider for a from 0 to 3. When a rule is selected, draw an arrow from output time t to the input time required by the rule. Color the arrow green if the required input time is ≤ the output time and red if it is > the output time. For y(t+a)=x(t), also show the rewritten form y(s)=x(s-a) after substituting s=t+a. Add a one-line status label: 'Causal: uses present/past input only' or 'Noncausal: needs future input'. Keep the demo visually clean and lecture-note styled; no decorative graphics.
+
+### Block 6: `math_block`
+- **latex**: y(t+1)=x(t)
+- **explanation_instruction**: Start the page with the heading '## 3. Worked example: do not judge before aligning the output time'. Use Example 1.13 as the representative worked example. Target 130–160 words. Explain that \(y(t)=x(-t)\) is noncausal because a future impulse can appear as an earlier output after reflection; \(y(t)=x(t+1)\) is noncausal because output at \(t\) needs input at \(t+1\). Then focus on the displayed formula: rewrite it by setting \(s=t+1\), so \(y(s)=x(s-1)\). This output at time \(s\) uses input one second in the past, so it is causal. Exam note: if the output side is shifted, rewrite the equation until it is in the form \(y(\text{output time})=x(\text{input time})\). Common trap: seeing \(+1\) and automatically calling it noncausal.
+
+### Block 7: `math_block`
+- **latex**: \hat{y}(t)=y(t-5)=\int_{t-10}^{t}x(\tau)\,d\tau
+- **explanation_instruction**: Start the page with the heading '## 4. Noncausal systems can still matter if delay is allowed'. Explain in 120–160 words. First state that the drill system \(y(t)=\int_{t-5}^{t+5}x(\tau)\,d\tau\) is noncausal because output at time \(t\) needs input values up to \(t+5\), which are future values. Then explain the displayed delayed version: if we wait 5 seconds and output \(\hat y(t)=y(t-5)\), the newest input needed is only \(x(t)\), so the delayed system is causal. Define \(\tau\) as the integration variable. Also mention the two reasons noncausal systems are studied: prerecorded data can make future samples available, and non-time variables such as space do not have the same real-time causality restriction. Common misuse: saying noncausal means useless; it means not directly real-time unless data or delay makes it possible.
+
+### Block 8: `section_summary`
+- **instruction**: Create a recap page titled '📌 Key Takeaways'. Include 4 bullets, each ≤24 words, and include formulas explicitly. Required formulas: \(y(t_0)\) causal only if it depends on \(x(t)\) for \(t\le t_0\); \(y(t)=x(t-2)+x(t+2)\) is noncausal because of \(x(t+2)\); \(y(t+1)=x(t)\Rightarrow y(s)=x(s-1)\) is causal; \(\hat y(t)=y(t-5)=\int_{t-10}^{t}x(\tau)d\tau\) is the delayed causal version of \(y(t)=\int_{t-5}^{t+5}x(\tau)d\tau\). End with one bridge sentence: 'Next, use causality together with other system properties to classify systems faster and more accurately.'
+
+### Block 9: `quiz_plan`
+- **target_questions**:
+```json
+7
+```
+- **question_range**:
+```json
+{
+  "min": 6,
+  "max": 8
+}
+```
+- **knowledge_points**:
+```json
+[
+  {
+    "id": "causal_definition",
+    "label": "Causal systems use present and past input only",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "causal_def_q1",
+        "type": "multiple_choice",
+        "stem": "At time t0, which input values may a causal real-time system use?",
+        "options": [
+          "A. Only x(t0), never past values",
+          "B. x(t) for t ≤ t0",
+          "C. x(t) for t ≥ t0",
+          "D. Any x(t), as long as the formula is linear"
+        ],
+        "correct_option": "B",
+        "explanation": "A causal system can depend on present and past input values, but not future input values.",
+        "wrong_option_explanations": {
+          "A": "Memory is allowed in causal systems; past values are not forbidden.",
+          "C": "This includes future values, which breaks real-time causality.",
+          "D": "Linearity does not decide causality; time dependence does."
+        },
+        "hint": "Ask: what input values are already available at time t0?",
+        "needs_visual": false,
+        "same_point_variant": false
+      },
+      {
+        "id": "causal_def_q2",
+        "type": "multiple_choice",
+        "stem": "Which system is definitely causal?",
+        "options": [
+          "A. y(t)=x(t+3)",
+          "B. y(t)=x(t)+x(t-2)",
+          "C. y(t)=x(2-t)",
+          "D. y(t)=x(t+1)+x(t-1)"
+        ],
+        "correct_option": "B",
+        "explanation": "The output uses the present input x(t) and a past input x(t-2), so it is causal.",
+        "wrong_option_explanations": {
+          "A": "x(t+3) is a future input value.",
+          "C": "For many t values, 2−t can be greater than t, so the system can require future input.",
+          "D": "The x(t+1) term requires future input."
+        },
+        "hint": "Look for any input time greater than the output time t.",
+        "needs_visual": false,
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "figure_130_noncausal_pattern",
+    "label": "Visual recognition of noncausal output before input",
+    "importance": "high",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "fig130_q1",
+        "type": "multiple_choice",
+        "stem": "In Figure 1.30, why does the output in part (b) prove noncausality?",
+        "options": [
+          "A. The output has two pulses instead of one",
+          "B. One output pulse occurs before the input pulse is applied",
+          "C. The output pulse height is 1",
+          "D. The input pulse lasts only one second"
+        ],
+        "correct_option": "B",
+        "explanation": "A real-time causal system cannot produce an output before the input information needed for that output is available.",
+        "wrong_option_explanations": {
+          "A": "Multiple pulses can be causal or noncausal depending on timing.",
+          "C": "Amplitude does not determine causality.",
+          "D": "Pulse duration alone does not determine causality."
+        },
+        "hint": "Compare the first time where x(t) is nonzero with the first time where y(t) is nonzero.",
+        "needs_visual": true,
+        "visual_type": "book_figure_Figure_1.30",
+        "same_point_variant": false
+      }
+    ]
+  },
+  {
+    "id": "equation_126_future_term",
+    "label": "Equation (1.26) contains one past term and one future term",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "eq126_q1",
+        "type": "multiple_choice",
+        "stem": "For y(t)=x(t−2)+x(t+2), which term makes the system noncausal?",
+        "options": [
+          "A. x(t−2), because it is delayed",
+          "B. x(t+2), because it requires future input",
+          "C. Both terms, because any shift breaks causality",
+          "D. Neither term, because the system is just adding two samples"
+        ],
+        "correct_option": "B",
+        "explanation": "At time t, x(t+2) is not known yet in real-time operation.",
+        "wrong_option_explanations": {
+          "A": "x(t−2) is a past input value, so it is allowed in a causal system.",
+          "C": "Past shifts are allowed; future shifts are the problem.",
+          "D": "Addition does not remove the future dependence."
+        },
+        "hint": "At output time t, which input sample has not happened yet?",
+        "needs_visual": false,
+        "same_point_variant": false
+      },
+      {
+        "id": "eq126_q2",
+        "type": "multiple_choice",
+        "stem": "A system has y(t)=x(t−4)+2x(t). Which statement is correct?",
+        "options": [
+          "A. It is causal because it uses past and present input only",
+          "B. It is noncausal because x(t−4) is shifted",
+          "C. It is noncausal because the coefficient 2 changes the input",
+          "D. It is causal only if x(t) is a rectangular pulse"
+        ],
+        "correct_option": "A",
+        "explanation": "Both x(t−4) and x(t) are available at time t, so the system is causal.",
+        "wrong_option_explanations": {
+          "B": "A delay uses past input and does not break causality.",
+          "C": "Changing amplitude does not determine causality.",
+          "D": "Causality is a property of the system rule, not a specific input shape."
+        },
+        "hint": "A shifted term is not automatically bad; identify whether it is past or future.",
+        "needs_visual": false,
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "shifted_output_example",
+    "label": "Rewrite shifted-output equations before judging causality",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "shifted_output_q1",
+        "type": "multiple_choice",
+        "stem": "For y(t+1)=x(t), which conclusion is correct?",
+        "options": [
+          "A. Noncausal, because +1 appears in y(t+1)",
+          "B. Causal, because rewriting with s=t+1 gives y(s)=x(s−1)",
+          "C. Noncausal, because x(t) is always future input",
+          "D. Causal only if x(t) is an impulse"
+        ],
+        "correct_option": "B",
+        "explanation": "After aligning the output time as s, the required input is x(s−1), which is one second in the past.",
+        "wrong_option_explanations": {
+          "A": "The +1 is on the output side, so you must rewrite before judging.",
+          "C": "x(t) is not future relative to the original output time t+1.",
+          "D": "The decision does not depend on a special input shape."
+        },
+        "hint": "Rename the actual output time first.",
+        "needs_visual": true,
+        "visual_type": "interactive_demo_observation",
+        "same_point_variant": false
+      },
+      {
+        "id": "shifted_output_q2",
+        "type": "short_answer",
+        "stem": "Rewrite y(t+2)=x(t−1) in the form y(s)=x(____), then decide whether it is causal.",
+        "ideal_answer": "Let s=t+2, so t=s−2. Then y(s)=x(s−3). It is causal because the output at time s uses input from three seconds earlier.",
+        "grading_rubric": [
+          "Must define s as the actual output time t+2",
+          "Must correctly substitute t=s−2",
+          "Must obtain y(s)=x(s−3)",
+          "Must state that the system is causal because it uses past input"
+        ],
+        "explanation": "This checks whether the student can handle equations where the output time is not written as y(t).",
+        "hint": "Set s equal to the time inside y( ).",
+        "needs_visual": false,
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "delayed_realization",
+    "label": "Noncausal systems can be realized with output delay",
+    "importance": "medium",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "delay_realization_q1",
+        "type": "multiple_choice",
+        "stem": "The system y(t)=∫ from t−5 to t+5 of x(τ)dτ is noncausal. Which delayed output is causal?",
+        "options": [
+          "A. ŷ(t)=y(t+5)=∫ from t to t+10 of x(τ)dτ",
+          "B. ŷ(t)=y(t−5)=∫ from t−10 to t of x(τ)dτ",
+          "C. ŷ(t)=y(t)=∫ from t−5 to t+5 of x(τ)dτ",
+          "D. ŷ(t)=−y(t)"
+        ],
+        "correct_option": "B",
+        "explanation": "Delaying the output by 5 seconds shifts the integration window so the newest required input is x(t), not a future value.",
+        "wrong_option_explanations": {
+          "A": "This advances the output and still requires future input.",
+          "C": "This is the original noncausal system.",
+          "D": "Changing the sign does not remove future dependence."
+        },
+        "hint": "The upper integration limit must be no greater than the current output time.",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  },
+  {
+    "id": "why_study_noncausal",
+    "label": "Noncausal systems are useful with prerecorded data or non-time variables",
+    "importance": "medium",
+    "exam_weight": "low",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "why_study_q1",
+        "type": "multiple_choice",
+        "stem": "Which situation can make a noncausal system practically meaningful?",
+        "options": [
+          "A. Real-time control where future input is unknown",
+          "B. Prerecorded signal processing where future samples are already stored",
+          "C. Any system with a nonlinear equation",
+          "D. Any system with no memory"
+        ],
+        "correct_option": "B",
+        "explanation": "If the full input record is already available, future samples relative to a chosen time t can be accessed from storage.",
+        "wrong_option_explanations": {
+          "A": "Real-time operation cannot know future input values.",
+          "C": "Nonlinearity is unrelated to whether future input is available.",
+          "D": "A memoryless system can be causal, but that does not explain noncausal usefulness."
+        },
+        "hint": "Ask whether the system has to operate live or can use stored data.",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  }
+]
+```
+
+## Raw JSON
+
+```json
+{
+  "section_id": "1.7-4",
+  "section_title": "1.7-4 Causal and Noncausal Systems",
+  "difficulty": "intermediate",
+  "estimated_read_minutes": 7,
+  "learning_objectives": [
+    "Define causal, noncausal, physical, and anticipative systems using input time dependence.",
+    "Recognize whether a system uses present, past, or future input values.",
+    "Use time-shift formulas such as x(t-2), x(t+2), x(-t), and y(t+1)=x(t) to decide causality.",
+    "Explain why noncausal systems can still be useful with prerecorded data, spatial variables, or output delay."
+  ],
+  "visualization_need": {
+    "level": "interactive",
+    "reason": [
+      "depends_on_parameter_change",
+      "formula_to_phenomenon_gap",
+      "student_should_manipulate_to_understand",
+      "misconception_needs_visual_correction"
+    ],
+    "recommended_assets": [
+      "textbook_figure",
+      "react_canvas_demo",
+      "latex_native_formula"
+    ]
+  },
+  "visual_plan": {
+    "primary_anchor": "both",
+    "rationale": "Use the textbook Figure 1.30 as the canonical static visual because it directly shows an input, a noncausal output that starts before the input, and the delayed causal version. Add a React/Canvas time-shift demo because causality is often confused when students see expressions like x(t+1), x(t-1), x(-t), or y(t+1)=x(t). Do not use generated images because the textbook already provides the main diagram and symbolic/interactive rendering is more precise for time-shift logic.",
+    "cram": "Use visuals to quickly spot red-flag future dependence: any required input time greater than the output time.",
+    "standard": "Use Figure 1.30 and one time-shift demo to connect the definition, a representative example, and exam-style decisions.",
+    "top_score": "Use the demo to distinguish subtle cases such as y(t+1)=x(t), time reversal, and delay-based realization."
+  },
+  "blocks": [
+    {
+      "type": "text_explanation",
+      "instruction": "Render Page 1 as a compact outline only. Title it 'Section Objective' and write one sentence: 'Decide whether a system can operate in real time by checking whether its output needs future input values.' Then title a second short list 'Concepts In This Section' and list only these concept names, with no explanations: causal system; noncausal system; future input dependence; time-shift causality test; delayed realization."
+    },
+    {
+      "type": "math_block",
+      "latex": "y(t_0)\\text{ is causal only if it depends on }x(t)\\text{ for }t\\le t_0.",
+      "explanation_instruction": "Start the page with the heading '## 1. Causal means: no future input'. Explain in 100–130 words that at output time \\(t_0\\), a real-time system may use present input \\(x(t_0)\\) and past input values \\(x(t)\\) with \\(t<t_0\\), but not future values with \\(t>t_0\\). Define every symbol: \\(y(t_0)\\) is the output now, \\(x(t)\\) is the input at time \\(t\\), and \\(t_0\\) is the decision time. Include one minimal example: \\(y(t)=x(t)+x(t-1)\\) is causal. Exam trigger: check whether the formula asks for input at a time larger than the output time. Common misuse: thinking that any delay is noncausal; delays are usually causal because they use past input."
+    },
+    {
+      "type": "book_image",
+      "source_page": "page-105",
+      "fig_id": "Figure 1.30",
+      "teaching_role": "concept_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Use the early output pulse as the instant visual cue for noncausality.",
+        "standard": "Connect each waveform to the equation and notice which output happens before the input exists.",
+        "top_score": "Use the delayed waveform to see how an anticipative system can be realized after waiting."
+      },
+      "caption_instruction": "One sentence: Figure 1.30 shows an input pulse, a noncausal output that starts before the input, and a delayed output that becomes causal.",
+      "description_instruction": "Describe the three plots in 2–3 sentences. Emphasize that the input pulse occurs from t=0 to t=1, while the output in part (b) includes a pulse from t=-2 to t=-1 before the input is applied. Then point out that part (c) shifts the output right so that no response occurs before the needed input is available."
+    },
+    {
+      "type": "math_block",
+      "latex": "y(t)=x(t-2)+x(t+2)\\qquad\\text{(1.26)}",
+      "explanation_instruction": "Start the page with the heading '## 2. A future term makes the system noncausal'. Explain in 110–150 words. Say that \\(x(t-2)\\) is safe because it asks for the input 2 seconds before time \\(t\\), but \\(x(t+2)\\) is the problem because it asks for the input 2 seconds after time \\(t\\). Tie this directly to Figure 1.30: the output can start before the input pulse begins because the equation is using future knowledge. State when to use this formula: when an exam asks whether a time-shifted input-output rule is physically realizable in real time. Common misuse: treating both \\(t-2\\) and \\(t+2\\) as just 'shifts' without asking whether the required input time is in the future."
+    },
+    {
+      "type": "interactive_demo",
+      "demo_id": "causality_time_shift_tester",
+      "teaching_role": "exam_pattern_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Use the red highlighted future sample to decide causal versus noncausal fast.",
+        "standard": "Move the time marker and connect each formula to the input sample it requires.",
+        "top_score": "Test tricky cases like reflection and equations written with shifted output time."
+      },
+      "instruction": "Build a React + Canvas demo titled 'Causality Time-Shift Tester'. Show a simple input waveform x(t) on a horizontal time axis and a movable vertical marker labeled 'output time t'. Provide selectable rules: y(t)=x(t-a), y(t)=x(t+a), y(t)=x(-t), and y(t+a)=x(t). Include a slider for a from 0 to 3. When a rule is selected, draw an arrow from output time t to the input time required by the rule. Color the arrow green if the required input time is ≤ the output time and red if it is > the output time. For y(t+a)=x(t), also show the rewritten form y(s)=x(s-a) after substituting s=t+a. Add a one-line status label: 'Causal: uses present/past input only' or 'Noncausal: needs future input'. Keep the demo visually clean and lecture-note styled; no decorative graphics."
+    },
+    {
+      "type": "math_block",
+      "latex": "y(t+1)=x(t)",
+      "explanation_instruction": "Start the page with the heading '## 3. Worked example: do not judge before aligning the output time'. Use Example 1.13 as the representative worked example. Target 130–160 words. Explain that \\(y(t)=x(-t)\\) is noncausal because a future impulse can appear as an earlier output after reflection; \\(y(t)=x(t+1)\\) is noncausal because output at \\(t\\) needs input at \\(t+1\\). Then focus on the displayed formula: rewrite it by setting \\(s=t+1\\), so \\(y(s)=x(s-1)\\). This output at time \\(s\\) uses input one second in the past, so it is causal. Exam note: if the output side is shifted, rewrite the equation until it is in the form \\(y(\\text{output time})=x(\\text{input time})\\). Common trap: seeing \\(+1\\) and automatically calling it noncausal."
+    },
+    {
+      "type": "math_block",
+      "latex": "\\hat{y}(t)=y(t-5)=\\int_{t-10}^{t}x(\\tau)\\,d\\tau",
+      "explanation_instruction": "Start the page with the heading '## 4. Noncausal systems can still matter if delay is allowed'. Explain in 120–160 words. First state that the drill system \\(y(t)=\\int_{t-5}^{t+5}x(\\tau)\\,d\\tau\\) is noncausal because output at time \\(t\\) needs input values up to \\(t+5\\), which are future values. Then explain the displayed delayed version: if we wait 5 seconds and output \\(\\hat y(t)=y(t-5)\\), the newest input needed is only \\(x(t)\\), so the delayed system is causal. Define \\(\\tau\\) as the integration variable. Also mention the two reasons noncausal systems are studied: prerecorded data can make future samples available, and non-time variables such as space do not have the same real-time causality restriction. Common misuse: saying noncausal means useless; it means not directly real-time unless data or delay makes it possible."
+    },
+    {
+      "type": "section_summary",
+      "instruction": "Create a recap page titled '📌 Key Takeaways'. Include 4 bullets, each ≤24 words, and include formulas explicitly. Required formulas: \\(y(t_0)\\) causal only if it depends on \\(x(t)\\) for \\(t\\le t_0\\); \\(y(t)=x(t-2)+x(t+2)\\) is noncausal because of \\(x(t+2)\\); \\(y(t+1)=x(t)\\Rightarrow y(s)=x(s-1)\\) is causal; \\(\\hat y(t)=y(t-5)=\\int_{t-10}^{t}x(\\tau)d\\tau\\) is the delayed causal version of \\(y(t)=\\int_{t-5}^{t+5}x(\\tau)d\\tau\\). End with one bridge sentence: 'Next, use causality together with other system properties to classify systems faster and more accurately.'"
+    },
+    {
+      "type": "quiz_plan",
+      "target_questions": 7,
+      "question_range": {
+        "min": 6,
+        "max": 8
+      },
+      "knowledge_points": [
+        {
+          "id": "causal_definition",
+          "label": "Causal systems use present and past input only",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "causal_def_q1",
+              "type": "multiple_choice",
+              "stem": "At time t0, which input values may a causal real-time system use?",
+              "options": [
+                "A. Only x(t0), never past values",
+                "B. x(t) for t ≤ t0",
+                "C. x(t) for t ≥ t0",
+                "D. Any x(t), as long as the formula is linear"
+              ],
+              "correct_option": "B",
+              "explanation": "A causal system can depend on present and past input values, but not future input values.",
+              "wrong_option_explanations": {
+                "A": "Memory is allowed in causal systems; past values are not forbidden.",
+                "C": "This includes future values, which breaks real-time causality.",
+                "D": "Linearity does not decide causality; time dependence does."
+              },
+              "hint": "Ask: what input values are already available at time t0?",
+              "needs_visual": false,
+              "same_point_variant": false
+            },
+            {
+              "id": "causal_def_q2",
+              "type": "multiple_choice",
+              "stem": "Which system is definitely causal?",
+              "options": [
+                "A. y(t)=x(t+3)",
+                "B. y(t)=x(t)+x(t-2)",
+                "C. y(t)=x(2-t)",
+                "D. y(t)=x(t+1)+x(t-1)"
+              ],
+              "correct_option": "B",
+              "explanation": "The output uses the present input x(t) and a past input x(t-2), so it is causal.",
+              "wrong_option_explanations": {
+                "A": "x(t+3) is a future input value.",
+                "C": "For many t values, 2−t can be greater than t, so the system can require future input.",
+                "D": "The x(t+1) term requires future input."
+              },
+              "hint": "Look for any input time greater than the output time t.",
+              "needs_visual": false,
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "figure_130_noncausal_pattern",
+          "label": "Visual recognition of noncausal output before input",
+          "importance": "high",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "fig130_q1",
+              "type": "multiple_choice",
+              "stem": "In Figure 1.30, why does the output in part (b) prove noncausality?",
+              "options": [
+                "A. The output has two pulses instead of one",
+                "B. One output pulse occurs before the input pulse is applied",
+                "C. The output pulse height is 1",
+                "D. The input pulse lasts only one second"
+              ],
+              "correct_option": "B",
+              "explanation": "A real-time causal system cannot produce an output before the input information needed for that output is available.",
+              "wrong_option_explanations": {
+                "A": "Multiple pulses can be causal or noncausal depending on timing.",
+                "C": "Amplitude does not determine causality.",
+                "D": "Pulse duration alone does not determine causality."
+              },
+              "hint": "Compare the first time where x(t) is nonzero with the first time where y(t) is nonzero.",
+              "needs_visual": true,
+              "visual_type": "book_figure_Figure_1.30",
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "equation_126_future_term",
+          "label": "Equation (1.26) contains one past term and one future term",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "eq126_q1",
+              "type": "multiple_choice",
+              "stem": "For y(t)=x(t−2)+x(t+2), which term makes the system noncausal?",
+              "options": [
+                "A. x(t−2), because it is delayed",
+                "B. x(t+2), because it requires future input",
+                "C. Both terms, because any shift breaks causality",
+                "D. Neither term, because the system is just adding two samples"
+              ],
+              "correct_option": "B",
+              "explanation": "At time t, x(t+2) is not known yet in real-time operation.",
+              "wrong_option_explanations": {
+                "A": "x(t−2) is a past input value, so it is allowed in a causal system.",
+                "C": "Past shifts are allowed; future shifts are the problem.",
+                "D": "Addition does not remove the future dependence."
+              },
+              "hint": "At output time t, which input sample has not happened yet?",
+              "needs_visual": false,
+              "same_point_variant": false
+            },
+            {
+              "id": "eq126_q2",
+              "type": "multiple_choice",
+              "stem": "A system has y(t)=x(t−4)+2x(t). Which statement is correct?",
+              "options": [
+                "A. It is causal because it uses past and present input only",
+                "B. It is noncausal because x(t−4) is shifted",
+                "C. It is noncausal because the coefficient 2 changes the input",
+                "D. It is causal only if x(t) is a rectangular pulse"
+              ],
+              "correct_option": "A",
+              "explanation": "Both x(t−4) and x(t) are available at time t, so the system is causal.",
+              "wrong_option_explanations": {
+                "B": "A delay uses past input and does not break causality.",
+                "C": "Changing amplitude does not determine causality.",
+                "D": "Causality is a property of the system rule, not a specific input shape."
+              },
+              "hint": "A shifted term is not automatically bad; identify whether it is past or future.",
+              "needs_visual": false,
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "shifted_output_example",
+          "label": "Rewrite shifted-output equations before judging causality",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "shifted_output_q1",
+              "type": "multiple_choice",
+              "stem": "For y(t+1)=x(t), which conclusion is correct?",
+              "options": [
+                "A. Noncausal, because +1 appears in y(t+1)",
+                "B. Causal, because rewriting with s=t+1 gives y(s)=x(s−1)",
+                "C. Noncausal, because x(t) is always future input",
+                "D. Causal only if x(t) is an impulse"
+              ],
+              "correct_option": "B",
+              "explanation": "After aligning the output time as s, the required input is x(s−1), which is one second in the past.",
+              "wrong_option_explanations": {
+                "A": "The +1 is on the output side, so you must rewrite before judging.",
+                "C": "x(t) is not future relative to the original output time t+1.",
+                "D": "The decision does not depend on a special input shape."
+              },
+              "hint": "Rename the actual output time first.",
+              "needs_visual": true,
+              "visual_type": "interactive_demo_observation",
+              "same_point_variant": false
+            },
+            {
+              "id": "shifted_output_q2",
+              "type": "short_answer",
+              "stem": "Rewrite y(t+2)=x(t−1) in the form y(s)=x(____), then decide whether it is causal.",
+              "ideal_answer": "Let s=t+2, so t=s−2. Then y(s)=x(s−3). It is causal because the output at time s uses input from three seconds earlier.",
+              "grading_rubric": [
+                "Must define s as the actual output time t+2",
+                "Must correctly substitute t=s−2",
+                "Must obtain y(s)=x(s−3)",
+                "Must state that the system is causal because it uses past input"
+              ],
+              "explanation": "This checks whether the student can handle equations where the output time is not written as y(t).",
+              "hint": "Set s equal to the time inside y( ).",
+              "needs_visual": false,
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "delayed_realization",
+          "label": "Noncausal systems can be realized with output delay",
+          "importance": "medium",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "delay_realization_q1",
+              "type": "multiple_choice",
+              "stem": "The system y(t)=∫ from t−5 to t+5 of x(τ)dτ is noncausal. Which delayed output is causal?",
+              "options": [
+                "A. ŷ(t)=y(t+5)=∫ from t to t+10 of x(τ)dτ",
+                "B. ŷ(t)=y(t−5)=∫ from t−10 to t of x(τ)dτ",
+                "C. ŷ(t)=y(t)=∫ from t−5 to t+5 of x(τ)dτ",
+                "D. ŷ(t)=−y(t)"
+              ],
+              "correct_option": "B",
+              "explanation": "Delaying the output by 5 seconds shifts the integration window so the newest required input is x(t), not a future value.",
+              "wrong_option_explanations": {
+                "A": "This advances the output and still requires future input.",
+                "C": "This is the original noncausal system.",
+                "D": "Changing the sign does not remove future dependence."
+              },
+              "hint": "The upper integration limit must be no greater than the current output time.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "why_study_noncausal",
+          "label": "Noncausal systems are useful with prerecorded data or non-time variables",
+          "importance": "medium",
+          "exam_weight": "low",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "why_study_q1",
+              "type": "multiple_choice",
+              "stem": "Which situation can make a noncausal system practically meaningful?",
+              "options": [
+                "A. Real-time control where future input is unknown",
+                "B. Prerecorded signal processing where future samples are already stored",
+                "C. Any system with a nonlinear equation",
+                "D. Any system with no memory"
+              ],
+              "correct_option": "B",
+              "explanation": "If the full input record is already available, future samples relative to a chosen time t can be accessed from storage.",
+              "wrong_option_explanations": {
+                "A": "Real-time operation cannot know future input values.",
+                "C": "Nonlinearity is unrelated to whether future input is available.",
+                "D": "A memoryless system can be causal, but that does not explain noncausal usefulness."
+              },
+              "hint": "Ask whether the system has to operate live or can use stored data.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```

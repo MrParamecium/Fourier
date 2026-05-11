@@ -1,0 +1,593 @@
+# Aquarius section OCR
+section_id: 2.4-2
+source_pages: page-178, page-179, page-180, page-181, page-182, page-183, page-184, page-185, page-186, page-187, page-188, page-189, page-190
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+2.4-2 Graphical Understanding of Convolution Operation
+The convolution operation can be grasped readily through a graphical interpretation of the convolution integral. Such an understanding is helpful in evaluating the convolution integral of more complex signals. In addition, graphical convolution allows us to grasp visually or mentally the convolution integral’s result, which can be of great help in sampling, filtering, and many other problems. Finally, many signals have no exact mathematical description, so they can be described only graphically. If two such signals are to be convolved, we have no choice but to perform their convolution graphically.
+
+We shall now explain the convolution operation by convolving the signals x(t) and g(t), illustrated in Figs. 2.7a and 2.7b, respectively. If c(t) is the convolution of x(t) with g(t), then
+
+c(t) = ∫_{-∞}^{∞} x(τ)g(t - τ) dτ
+
+One of the crucial points to remember here is that this integration is performed with respect to τ so that t is just a parameter (like a constant). This consideration is especially important when we sketch the graphical representations of the functions x(τ) and g(t - τ). Both these functions should be sketched as functions of τ, not of t.
+
+The function x(τ) is identical to x(t), with τ replacing t (Fig. 2.7c). Therefore, x(t) and x(τ) will have the same graphical representations. Similar remarks apply to g(t) and g(τ) (Fig. 2.7d).
+
+To appreciate what g(t - τ) looks like, let us start with the function g(τ) (Fig. 2.7d). Time reversal of this function (reflection about the vertical axis τ = 0) yields g(-τ) (Fig. 2.7e). Let us denote this function by φ(τ):
+
+φ(τ) = g(-τ)
+
+Now φ(τ) shifted by t seconds is φ(τ - t), given by
+
+φ(τ - t) = g[-(τ - t)] = g(t - τ)
+
+Therefore, we first time-reverse g(τ) to obtain g(-τ) and then time-shift g(-τ) by t to obtain g(t - τ). For positive t, the shift is to the right (Fig. 2.7f); for negative t, the shift is to the left (Figs. 2.7g, 2.7h).
+
+The preceding discussion gives us a graphical interpretation of the functions x(τ) and g(t - τ). The convolution c(t) is the area under the product of these two functions. Thus, to compute c(t) at some positive instant t = t1, we first obtain g(-τ) by inverting g(τ) about the vertical axis. Next, we right-shift or delay g(-τ) by t1 to obtain g(t1 - τ) (Fig. 2.7f), and then we multiply this function by x(τ), giving us the product x(τ)g(t1 - τ) (shaded portion in Fig. 2.7f). The area A1 under this product is c(t1), the value of c(t) at t = t1. We can therefore plot c(t1) = A1 on a curve describing c(t), as shown in Fig. 2.7i. The area under the product x(τ)g(-τ) in Fig. 2.7e is c(0), the value of the convolution for t = 0 (at the origin).
+
+[[PAGE page-179]]
+2.4  System Response to External Input: The Zero-State Response  179
+
+x(t)
+1
+−1  0  t
+(a)
+
+g(t)
+2
+−2  0  t
+(b)
+
+x(τ)
+1
+−1  0  τ
+(c)
+
+g(τ)
+2
+−2  0  τ
+(d)
+
+g(−τ)
+1
+x(τ)
+−1  0  2  τ
+(e)
+
+g(t − τ)
+t = t1 > 0
+1
+A1
+0  2  2 + t1  τ
+t1
+x(τ)
+(f)
+
+g(t − τ)
+t = t2 < 0
+1
+A2
+0  2 + t2  2  τ
+t2
+x(τ)
+(g)
+
+g(t − τ)
+t = t3 < −3
+2 + t3  −1  0  τ
+t = t3 < −3
+x(τ)
+(h)
+
+c(t)
+A2
+A1
+t3  −3  t2  0  t1  τ
+(i)
+
+Figure 2.7  Graphical explanation of the convolution operation.
+
+[[PAGE page-180]]
+180    CHAPTER 2    TIME-DOMAIN ANALYSIS OF CONTINUOUS-TIME SYSTEMS
+
+A similar procedure is followed in computing the value of c(t) at t = t2, where t2 is negative (Fig. 2.7g). In this case, the function g(-τ) is shifted by a negative amount (that is, left-shifted) to obtain g(t2 - τ). Multiplication of this function with x(τ) yields the product x(τ)g(t2 - τ). The area under this product is c(t2) = A2, giving us another point on the curve c(t) at t = t2 (Fig. 2.7i). This procedure can be repeated for all values of t, from -∞ to ∞. The result will be a curve describing c(t) for all time t. Note that when t ≤ -3, x(τ) and g(t - τ) do not overlap (see Fig. 2.7h); therefore, c(t) = 0 for t ≤ -3.
+
+SUMMARY OF THE GRAPHICAL PROCEDURE
+The procedure for graphical convolution can be summarized as follows:
+
+1. Keep the function x(τ) fixed.
+2. Visualize the function g(τ) as a rigid wire frame, and rotate (or invert) this frame about the vertical axis (τ = 0) to obtain g(-τ).
+3. Shift the inverted frame along the τ axis by t0 seconds. The shifted frame now represents g(t0 - τ).
+4. The area under the product of x(τ) and g(t0 - τ) (the shifted frame) is c(t0), the value of the convolution at t = t0.
+5. Repeat this procedure, shifting the frame by different values (positive and negative) to obtain c(t) for all values of t.
+
+The graphical procedure discussed here appears very complicated and discouraging at first reading. Indeed, some people claim that convolution has driven many electrical engineering undergraduates to contemplate theology either for salvation or as an alternative career (IEEE Spectrum, March 1991, p. 60). Actually, the bark of convolution is worse than its bite. In graphical convolution, we need to determine the area under the product x(τ)g(t - τ) for all values of t from -∞ to ∞. However, a mathematical description of x(τ)g(t - τ) is generally valid over a range
+
+MAKE LOVE
+NOT ♥
+CONVOLUTION
+
+CONVOLUTION
+STINKS
+
+WE SHALL
+OVERCOME
+CONVOLUTION
+
+DOWN
+WITH
+CONVOLUTION
+
+DEAN
+OF
+ENGINEERING
+
+Convolution: Its bark is worse than its bite!
+
+[[PAGE page-181]]
+2.4  System Response to External Input: The Zero-State Response                                                                 181
+
+of t. Therefore, repeating the procedure for every value of t amounts to repeating it only a few
+times for different ranges of t.
+
+We can also use the commutative property of convolution to our advantage by computing
+x(t) ∗ g(t) or g(t) ∗ x(t), whichever is simpler. As a rule of thumb, convolution computations are
+simplified if we choose to invert (time-reverse) the simpler of the two functions. For example, if
+the mathematical description of g(t) is simpler than that of x(t), then x(t) ∗ g(t) will be easier to
+compute than g(t) ∗ x(t). In contrast, if the mathematical description of x(t) is simpler, the reverse
+will be true.
+
+We shall demonstrate graphical convolution with the following examples. Let us start by using
+this graphical method to rework Ex. 2.8.
+
+EXAMPLE 2.10  Graphical Convolution of Two Causal Functions
+
+Determine graphically y(t) = x(t) ∗ h(t) for x(t) = e^(−t)u(t) and h(t) = e^(−2t)u(t).
+
+In Figs. 2.8a and 2.8b we have x(t) and h(t), respectively; and Fig. 2.8c shows x(τ) and h(−τ)
+as functions of τ. The function h(t − τ) is now obtained by shifting h(−τ) by t. If t is positive,
+the shift is to the right (delay); if t is negative, the shift is to the left (advance). Figure 2.8d
+shows that for negative t, h(t − τ) [obtained by left-shifting h(−τ)] does not overlap x(τ), and
+the product x(τ)h(t − τ) = 0, so that
+
+y(t) = 0      t < 0
+
+Figure 2.8e shows the situation for t ≥ 0. Here x(τ) and h(t − τ) do overlap, but the product is
+nonzero only over the interval 0 ≤ τ ≤ t (shaded interval). Therefore,
+
+y(t) = ∫_0^t x(τ)h(t − τ) dτ      t ≥ 0
+
+All we need to do now is substitute correct expressions for x(τ) and h(t − τ) in this integral.
+From Figs. 2.8a and 2.8b, it is clear that the segments of x(t) and g(t) to be used in this
+convolution (Fig. 2.8e) are described by
+
+x(t) = e^(−t)      and      h(t) = e^(−2t)
+
+Therefore,
+
+x(τ) = e^(−τ)      and      h(t − τ) = e^(−2(t−τ))
+
+Consequently,
+
+y(t) = ∫_0^t e^(−τ)e^(−2(t−τ)) dτ = e^(−2t) ∫_0^t e^τ dτ = e^(−t) − e^(−2t)      t ≥ 0
+
+Moreover, y(t) = 0 for t < 0 so that
+
+y(t) = (e^(−t) − e^(−2t))u(t)
+
+[[PAGE page-182]]
+182
+CHAPTER 2  TIME-DOMAIN ANALYSIS OF CONTINUOUS-TIME SYSTEMS
+
+x(t)
+1
+e^{-t}
+0
+t
+(a)
+
+h(t)
+1
+e^{-2t}
+0
+t
+(b)
+
+h(-τ)
+1
+x(τ)
+0
+τ
+(c)
+
+h(t - τ)
+1
+x(τ)
+t < 0
+t
+0
+τ
+(d)
+
+1
+t ≥ 0
+h(t - τ)
+x(τ)
+0
+t
+τ
+(e)
+
+y(t)
+0
+t
+(f)
+
+Figure 2.8  Convolution of x(t) and h(t).
+
+[[PAGE page-183]]
+2.4  System Response to External Input: The Zero-State Response  183
+
+EXAMPLE 2.11  Graphical Convolution: Causal Function and
+Two-Sided Function
+
+Find c(t) = x(t) * g(t) for the signals depicted in Figs. 2.9a and 2.9b.
+
+Since x(t) is simpler than g(t), it is easier to evaluate g(t) * x(t) than x(t) * g(t). However, we shall intentionally take the more difficult route and evaluate x(t) * g(t).
+From x(t) and g(t) (Figs. 2.9a and 2.9b, respectively), observe that g(t) is composed of two segments. As a result, it can be described as
+
+g(t) = { 2e^{-t}      segment A
+       { -2e^{2t}     segment B
+
+Therefore,
+
+g(t - τ) = { 2e^{-(t-τ)}      segment A
+           { -2e^{2(t-τ)}     segment B
+
+The segment of x(t) that is used in convolution is x(t) = 1 so that x(τ) = 1. Figure 2.9c shows x(τ) and g(-τ).
+To compute c(t) for t ≥ 0, we right-shift g(-τ) to obtain g(t - τ), as illustrated in Fig. 2.9d. Clearly, g(t - τ) overlaps with x(τ) over the shaded interval, that is, over the range τ ≥ 0; segment A overlaps with x(τ) over the interval (0, t), while segment B overlaps with x(τ) over (t, ∞). Remembering that x(τ) = 1, we have
+
+c(t) = ∫₀^∞ x(τ)g(t - τ) dτ
+     = ∫₀^t 2e^{-(t-τ)} dτ + ∫ₜ^∞ -2e^{2(t-τ)} dτ
+     = 2(1 - e^{-t}) - 1 = 1 - 2e^{-t}          t ≥ 0
+
+Figure 2.9e shows the situation for t < 0. Here the overlap is over the shaded interval, that is, over the range τ ≥ 0, where only the segment B of g(t) is involved. Therefore,
+
+c(t) = ∫₀^∞ x(τ)g(t - τ) dτ = ∫₀^∞ -2e^{2(t-τ)} dτ = -e^{2t}          t ≤ 0
+
+Therefore,
+
+c(t) = { 1 - 2e^{-t}     t ≥ 0
+       { -e^{2t}         t ≤ 0
+
+Figure 2.9f shows a plot of c(t).
+
+[[PAGE page-184]]
+184  CHAPTER 2  TIME-DOMAIN ANALYSIS OF CONTINUOUS-TIME SYSTEMS
+
+x(t)
+1
+0
+t
+(a)
+
+g(t)
+2
+2e^{-t}
+Segment A
+0
+t
+Segment B
+-2e^{2t}
+-2
+(b)
+
+g(-\tau)
+A
+x(\tau)
+0
+\tau
+B
+(c)
+
+g(t-\tau)
+A
+1
+0
+t
+x(\tau)
+\tau
+t \ge 0
+B
+(d)
+
+g(t-\tau)
+A
+1
+t
+0
+x(\tau)
+\tau
+t < 0
+B
+(e)
+
+c(t)
+1
+0
+t
+-1
+(f)
+
+Figure 2.9  Convolution of x(t) and g(t).
+
+[[PAGE page-185]]
+2.4  System Response to External Input: The Zero-State Response  185
+
+EXAMPLE 2.12  Graphical Convolution of Two Finite-Duration
+Functions
+
+Find x(t) ∗ g(t) for the functions x(t) and g(t) shown in Figs. 2.10a and 2.10b.
+
+Here, x(t) has a simpler mathematical description than that of g(t), so it is preferable to
+time-reverse x(t). Hence, we shall determine g(t) ∗ x(t) rather than x(t) ∗ g(t). Thus,
+
+c(t) = g(t) ∗ x(t) = \int_{-\infty}^{\infty} g(\tau)x(t - \tau)\,d\tau
+
+First, we determine the expressions for the segments of x(t) and g(t) used in finding c(t).
+According to Figs. 2.10a and 2.10b, these segments can be expressed as
+
+x(t) = 1        and        g(t) = \frac{1}{3}t
+
+so that
+
+x(t - \tau) = 1        and        g(\tau) = \frac{1}{3}\tau
+
+Figure 2.10c shows g(\tau) and x(-\tau), whereas Fig. 2.10d shows g(\tau) and x(t − \tau), which is
+x(-\tau) shifted by t. Because the edges of x(-\tau) are at \tau = −1 and 1, the edges of x(t − \tau) are
+at −1 + t and 1 + t. The two functions overlap over the interval (0, 1 + t) (shaded interval) so
+that
+
+c(t) = \int_{0}^{1+t} g(\tau)x(t - \tau)\,d\tau = \int_{0}^{1+t} \frac{1}{3}\tau\,d\tau = \frac{1}{6}(t + 1)^2      −1 \le t \le 1      (2.32)
+
+This situation, depicted in Fig. 2.10d, is valid only for −1 \le t \le 1. For t \ge 1 but \le 2, the
+situation is as illustrated in Fig. 2.10e. The two functions overlap only over the range −1 + t
+to 1 + t (shaded interval). Note that the expressions for g(\tau) and x(t − \tau) do not change; only
+the range of integration changes. Therefore,
+
+c(t) = \int_{-1+t}^{1+t} \frac{1}{3}\tau\,d\tau = \frac{2}{3}t      1 \le t \le 2      (2.33)
+
+Also note that the expressions in Eqs. (2.32) and (2.33) both apply at t = 1, the transition point
+between their respective ranges. We can readily verify that both expressions yield a value of
+2/3 at t = 1 so that c(1) = 2/3. The continuity of c(t) at transition points indicates a high
+probability of a correct answer. Continuity of c(t) at transition points is assured as long as x(t)
+and g(t) contain no impulse functions.
+
+For t \ge 2 but \le 4, the situation is as shown in Fig. 2.10f. The functions g(\tau) and x(t − \tau)
+overlap over the interval from −1 + t to 3 (shaded interval) so that
+
+c(t) = \int_{-1+t}^{3} \frac{1}{3}\tau\,d\tau = −\frac{1}{6}(t^2 − 2t − 8)      2 \le t \le 4      (2.34)
+
+[[PAGE page-186]]
+186
+CHAPTER 2  TIME-DOMAIN ANALYSIS OF CONTINUOUS-TIME SYSTEMS
+
+1   x(t)
+−1   0   1   t
+(a)
+
+g(t)
+1
+0   3   t
+(b)
+
+x(−τ)
+1
+g(τ)
+−1   0   1   τ
+(c)
+
+x(t−τ)
+1
+g(τ)
+−1 + t   0   1 + t   3   τ
+−1 ≤ t ≤ 1
+(d)
+
+1
+x(t−τ)
+g(τ)
+−1 + t   1 + t   3   τ
+1 ≤ t ≤ 2
+(e)
+
+1
+x(t−τ)
+g(τ)
+0   −1 + t   3   1 + t   τ
+2 ≤ t ≤ 4
+(f)
+
+1
+g(τ)
+0   −1 + t   1 + t
+x(t−τ)   t ≥ 4
+(g)
+
+x(t−τ)
+1
+−1 + t   1 + t   0
+g(τ)
+t < −1
+τ
+(h)
+
+c(t)
+4/3
+2/3
+(2/3)t
+−(1/6)(t^2 − 2t − 8)
+(1/6)(t + 1)^2
+−1   0   1   2   3   4
+t
+(i)
+
+Figure 2.10  Convolution of x(t) and g(t).
+
+[[PAGE page-187]]
+2.4  System Response to External Input: The Zero-State Response                                                                 187
+
+Both Eqs. (2.33) and (2.34) apply at the transition point t = 2. We can readily verify that
+c(2) = 4/3 when either of these expressions is used.
+
+For t ≥ 4, x(t − τ) has been shifted so far to the right that it no longer overlaps with g(τ)
+as depicted in Fig. 2.10g. Consequently,
+
+c(t) = 0              t ≥ 4
+
+We now turn our attention to negative values of t. We have already determined c(t) up to
+t = −1. For t < −1, there is no overlap between the two functions, as illustrated in Fig. 2.10h,
+so that
+
+c(t) = 0              t ≤ −1
+
+Combining our results, we see that
+
+                ⎧  1/6 (t + 1)^2            −1 ≤ t < 1
+                ⎪
+c(t) =          ⎨  2/3 t                    1 ≤ t < 2
+                ⎪  −1/6 (t^2 − 2t − 8)     2 ≤ t < 4
+                ⎩  0                        otherwise
+
+Figure 2.10i plots c(t) according to this expression.
+
+THE WIDTH OF CONVOLVED FUNCTIONS
+The widths (durations) of x(t), g(t), and c(t) in Ex. 2.12 (Fig. 2.10) are 2, 3, and 5, respectively.
+Note that the width of c(t) in this case is the sum of the widths of x(t) and g(t). This observation
+is not a coincidence. Using the concept of graphical convolution, we can readily see that if x(t)
+and g(t) have the finite widths of T1 and T2 respectively, then the width of c(t) is equal to T1 + T2.
+The reason is that the time it takes for a signal of width (duration) T1 to completely pass another
+signal of width (duration) T2 so that they become non-overlapping is T1 + T2. When the two signals
+become non-overlapping, the convolution goes to zero.
+
+DRILL 2.10  Interchanging Convolution Order
+Rework Ex. 2.11 by evaluating g(t) ∗ x(t).
+
+DRILL 2.11  Showing Commutability Using Two Causal Signals
+Use graphical convolution to show that x(t) ∗ g(t) = g(t) ∗ x(t) = c(t) in Fig. 2.11.
+
+[[PAGE page-188]]
+188
+CHAPTER 2  TIME-DOMAIN ANALYSIS OF CONTINUOUS-TIME SYSTEMS
+
+x(t)
+1
+et
+*
+g(t)
+1
+=
+c(t)
+1
+1 − e−t
+0
+t
+0
+t
+0
+t
+
+Figure 2.11  Convolution of causal signals x(t) and g(t).
+
+DRILL 2.12  Showing Commutability Using a Causal Signal and
+an Anticausal Signal
+Repeat Drill 2.11 for the functions in Fig. 2.12.
+
+x(t)
+1
+e−t
+*
+g(t)
+1
+=
+c(t)
+1
+e−t
+0
+t
+0
+t
+0
+t
+
+Figure 2.12  Convolution of causal x(t) and anticausal g(t).
+
+DRILL 2.13  Showing Commutability Using Shifted Signals
+Repeat Drill 2.11 for the functions in Fig. 2.13.
+
+x(t)
+1
+g(t)
+1
+c(t)
+*
+=
+0
+T
+t
+−T
+0
+t
+0
+t
+
+Figure 2.13  Convolution of shifted signals x(t) and g(t).
+
+[[PAGE page-189]]
+2.4  System Response to External Input: The Zero-State Response  189
+
+THE PHANTOM OF THE SIGNALS AND SYSTEMS OPERA
+In the study of signals and systems we often come across some signals such as an impulse, which cannot be generated in practice and have never been sighted by anyone.† One wonders why we even consider such idealized signals. The answer should be clear from our discussion so far in this chapter. Even if the impulse function has no physical existence, we can compute the system response h(t) to this phantom input according to the procedure in Sec. 2.3, and knowing h(t), we can compute the system response to any arbitrary input. The concept of impulse response, therefore, provides an effective intermediary for computing system response to an arbitrary input. In addition, the impulse response h(t) itself provides a great deal of information and insight about the system behavior. In Sec. 2.6 we show that the knowledge of impulse response provides much valuable information, such as the response time, pulse dispersion, and filtering properties of the system. Many other useful insights about the system behavior can be obtained by inspection of h(t).
+
+Similarly, in frequency-domain analysis (discussed in later chapters), we use an everlasting exponential (or sinusoid) to determine system response. An everlasting exponential (or sinusoid), too, is a phantom, which nobody has ever seen and which has no physical existence. But it provides another effective intermediary for computing the system response to an arbitrary input. Moreover, the system response to everlasting exponential (or sinusoid) provides valuable information and insight regarding the system’s behavior. Clearly, idealized impulses and everlasting sinusoids are friendly and helpful spirits.
+
+Interestingly, the unit impulse and the everlasting exponential (or sinusoid) are the dual of each other in the time-frequency duality, to be studied in Ch. 7. Actually, the time-domain and the frequency-domain methods of analysis are the dual of each other.
+
+WHY CONVOLUTION? AN INTUITIVE EXPLANATION OF
+SYSTEM RESPONSE
+On the surface, it appears rather strange that the response of linear systems (those gentlest of the gentle systems) should be given by such a tortuous operation of convolution, where one signal is fixed and the other is inverted and shifted. To understand this odd behavior, consider a hypothetical impulse response h(t) that decays linearly with time (Fig. 2.14a). This response is strongest at t = 0, the moment the impulse is applied, and it decays linearly at future instants so that one second later (at t = 1 and beyond), it ceases to exist. This means that the closer the impulse input is to an instant t, the stronger is its response at t.
+
+Now consider the input x(t) shown in Fig. 2.14b. To compute the system response, we break the input into rectangular pulses and approximate these pulses with impulses. Generally, the response of a causal system at some instant t will be determined by all the impulse components of the input before t. Each of these impulse components will have different weight in determining the response at the instant t, depending on its proximity to t. As seen earlier, the closer the impulse is to t, the stronger is its influence at t. The impulse at t has the greatest weight (unity) in determining
+
+† The late Prof. S. J. Mason, the inventor of signal flow graph techniques, used to tell a story of a student frustrated with the impulse function. The student said, “The unit impulse is a thing that is so small you can’t see it, except at one place (the origin), where it is so big you can’t see it. In other words, you can’t see it at all; at least I can’t!” [2].
+
+[[PAGE page-190]]
+190
+CHAPTER 2  TIME-DOMAIN ANALYSIS OF CONTINUOUS-TIME SYSTEMS
+
+h(t)
+0
+1
+t
+
+x(τ)
+h(t − τ)
+t − 1
+t
+1 second
+τ
+
+(a)
+(b)
+
+Figure 2.14  Intuitive explanation of convolution.
+
+the response at t. The weight decreases linearly for all impulses before t until the instant t − 1.
+The input before t − 1 has no influence (zero weight). Thus, to determine the system response
+at t, we must assign a linearly decreasing weight to impulses occurring before t, as shown in
+Fig. 2.14b. This weighting function is precisely the function h(t − τ). The system response at t is
+then determined not by the input x(τ) but by the weighted input x(τ)h(t − τ), and the summation
+of all these weighted inputs is the convolution integral.

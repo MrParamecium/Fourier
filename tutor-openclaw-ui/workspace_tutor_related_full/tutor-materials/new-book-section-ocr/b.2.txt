@@ -1,0 +1,121 @@
+# Aquarius section OCR
+section_id: b.2
+source_pages: page-016, page-017, page-018
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+B.2 S INUSOIDS
+     Consider the sinusoid
+                                            x(t) = C cos (2πf0 t + θ )                                (B.13)
+     We know that
+                              cos ϕ = cos (ϕ + 2nπ )       n = 0, ±1, ±2, ±3, . . .
+     Therefore, cos ϕ repeats itself for every change of 2π in the angle ϕ. For the sinusoid in Eq. (B.13),
+     the angle 2πf0 t + θ changes by 2π when t changes by 1/f0 . Clearly, this sinusoid repeats every 1/f0
+     seconds. As a result, there are f0 repetitions per second. This is the frequency of the sinusoid, and
+     the repetition interval T0 given by
+                                                           1
+                                                     T0 =                                            (B.14)
+                                                          f0
+     is the period. For the sinusoid in Eq. (B.13), C is the amplitude, f0 is the frequency (in hertz), and
+     θ is the phase. Let us consider two special cases of this sinusoid when θ = 0 and θ = −π/2 as
+     follows:
+                                        x(t) = C cos 2πf0 t    (θ = 0)
+     and
+                          x(t) = C cos (2πf0 t − π/2) = C sin 2πf0 t        (θ = −π/2)
+          The angle or phase can be expressed in units of degrees or radians. Although the radian is the
+     proper unit, in this book we shall often use the degree unit because students generally have a better
+     feel for the relative magnitudes of angles expressed in degrees rather than in radians. For example,
+     we relate better to the angle 24◦ than to 0.419 radian. Remember, however, when in doubt, use the
+     radian unit and, above all, be consistent. In other words, in a given problem or an expression, do
+     not mix the two units.
+          It is convenient to use the variable ω0 (radian frequency) to express 2πf0 :
+
+                                                   ω0 = 2πf0                                          (B.15)
+
+     With this notation, the sinusoid in Eq. (B.13) can be expressed as
+
+                                             x(t) = C cos (ω0 t + θ )
+
+     in which the period T0 and frequency ω0 are given by [see Eqs. (B.14) and (B.15)]
+
+                                            1     2π                            2π
+                                  T0 =          =           and          ω0 =
+                                         ω0 /2π   ω0                            T0
+
+     Although we shall often refer to ω0 as the frequency of the signal cos (ω0 t + θ ), it should be clearly
+     understood that ω0 is the radian frequency; the hertzian frequency of this sinusoid is f0 = ω0 /2π ).
+          The signals C cos ω0 t and C sin ω0 t are illustrated in Figs. B.6a and B.6b, respectively. A
+     general sinusoid C cos (ω0 t+θ ) can be readily sketched by shifting the signal C cos ω0 t in Fig. B.6a
+     by the appropriate amount. Consider, for example,
+
+                                            x(t) = C cos (ω0 t − 60◦ )
+
+[[PAGE page-017]]
+B.2 Sinusoids        17
+
+                                               C
+                                                           C cos v0 t            T0  1  2p
+                                                                                          v0
+                                                                                      f0
+
+
+                           T0                                              T0
+        T0                 2                                               2
+                                               0                                           t        T0
+
+
+
+
+                                                   (a)
+
+                                                               C sin v0t
+                                               C
+
+
+
+
+        T0                T0                       0                      T0         t            T0
+                            2                                               2
+
+
+
+
+                                                   (b)
+
+                                  C cos v0 t   C         60
+                                                                           C cos (v0 t  60)
+
+
+
+
+                                               0         T0                                     t
+                                                         6
+                                                           T0
+                                                           4
+
+                                                   (c)
+      Figure B.6 Sketching a sinusoid.
+
+
+
+This signal can be obtained by shifting (delaying) the signal C cos ω0 t (Fig. B.6a) to the right by a
+phase (angle) of 60◦ . We know that a sinusoid undergoes a 360◦ change of phase (or angle) in one
+cycle. A quarter-cycle segment corresponds to a 90◦ change of angle. We therefore shift (delay)
+the signal in Fig. B.6a by two-thirds of a quarter-cycle segment to obtain C cos (ω0 t − 60◦ ), as
+shown in Fig. B.6c.
+     Observe that if we delay C cos ω0 t in Fig. B.6a by a quarter-cycle (angle of 90◦ or π/2
+radians), we obtain the signal C sin ω0 t, depicted in Fig. B.6b. This verifies the well-known
+trigonometric identity
+
+                                   C cos (ω0 t − π/2) = C sin ω0 t
+
+[[PAGE page-018]]
+18   CHAPTER B        BACKGROUND
+
+     Alternatively, if we advance C sin ω0 t by a quarter-cycle, we obtain C cos ω0 t. Therefore,
+
+                                          C sin (ω0 t + π/2) = C cos ω0 t
+
+     These observations mean that sin ω0 t lags cos ω0 t by 90◦ (π/2 radians) and that cos ω0 t leads
+     sin ω0 t by 90◦ .

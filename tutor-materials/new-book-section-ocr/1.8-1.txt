@@ -1,0 +1,186 @@
+# Aquarius section OCR
+section_id: 1.8-1
+source_pages: page-111, page-112, page-113, page-114
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+1.8-1 Electrical Systems
+    To construct a system model, we must study the relationships between different variables in
+    the system. In electrical systems, for example, we must determine a satisfactory model for the
+    voltage-current relationship of each element, such as Ohm’s law for a resistor. In addition, we
+    must determine the various constraints on voltages and currents when several electrical elements
+    are interconnected. These are the laws of interconnection—the well-known Kirchhoff laws for
+    voltage and current (KVL and KCL). From all these equations, we eliminate unwanted variables
+    to obtain equation(s) relating the desired output variable(s) to the input(s). The following examples
+    demonstrate the procedure of deriving input–output relationships for some LTI electrical systems.
+
+
+
+E X A M P L E 1.16 Input–Output Equation of a Series RLC Circuit
+
+    For the series RLC circuit of Fig. 1.34, find the input–output equation relating the input voltage
+    x(t) to the output current (loop current) y(t).
+
+
+
+                    L1H          R3
+
+                                                        
+
+
+      x(t)                 y(t)                        vC (t)
+                                                   1
+                                              C 2F
+
+                                                        
+                                                                Figure 1.34 Circuit for Ex. 1.16.
+
+
+
+
+    Application of Kirchhoff’s voltage law around the loop yields
+
+                                        vL (t) + vR (t) + vC (t) = x(t)
+
+[[PAGE page-112]]
+112   CHAPTER 1        SIGNALS AND SYSTEMS
+
+      By using the voltage-current laws of each element (inductor, resistor, and capacitor), we can
+      express this equation as                      # t
+                                  dy(t)
+                                        + 3y(t) + 2     y(τ ) dτ = x(t)                       (1.27)
+                                    dt               −∞
+
+      Differentiating both sides of this equation, we obtain
+
+                                          d2 y(t)    dy(t)           dx(t)
+                                                  +3       + 2y(t) =                                        (1.28)
+                                           dt2        dt              dt
+          This differential equation is the input–output relationship between the output y(t) and the
+      input x(t).
+
+
+
+          It proves convenient to use a compact notation D for the differential operator d/dt. This
+      notation can be repeatedly applied. Thus,
+
+                       dy(t)                  d2 y(t)                             dN y(t)
+                             ≡ Dy(t),                 ≡ D2 y(t),       . . .,             ≡ DN y(t)
+                        dt                     dt2                                 dtN
+
+      With this notation, Eq. (1.28) can be expressed as
+
+                                               (D2 + 3D + 2)y(t) = Dx(t)                                       (1.29)
+
+           The differential operator is the inverse of the integral operator, so we can use the operator 1/D
+      to represent integration.†
+                                               # t
+                                                                1
+                                                    y(τ ) dτ ≡ y(t)
+                                                −∞              D
+
+
+      † Use of operator 1/D for integration generates some subtle mathematical difficulties because the operators
+      D and 1/D do not commute. For instance, we know that D(1/D) = 1 because
+                                                      # t           !
+                                                 d
+                                                            y(τ ) dτ = y(t)
+                                                 dt    −∞
+
+      However, (1/D)D is not necessarily unity. Use of Cramer’s rule in solving simultaneous integro-differential
+      equations will always result in cancellation of operators 1/D and D. This procedure may yield erroneous
+      results when the factor D occurs in the numerator as well as in the denominator. This happens, for instance,
+      in circuits with all-inductor loops or all-capacitor cut sets. To eliminate this problem, avoid the integral
+      operation in system equations so that the resulting equations are differential rather than integro-differential.
+      In electrical circuits, this can be done by using charge (instead of current) variables in loops containing
+      capacitors and choosing current variables for loops without capacitors. In the literature this problem of
+      commutativity of D and 1/D is largely ignored. As mentioned earlier, such a procedure gives erroneous results
+      only in special systems, such as the circuits with all-inductor loops or all-capacitor cut sets. Fortunately such
+      systems constitute a very small fraction of the systems we deal with. For further discussion of this topic and
+      a correct method of handling problems involving integrals, see [4].
+
+[[PAGE page-113]]
+1.8 System Model: Input–Output Description        113
+
+    Consequently, Eq. (1.27) can be expressed as
+
+                                                                 2
+                                                   D+3+            y(t) = x(t)
+                                                                 D
+    Multiplying both sides by D to differentiate the expression, we obtain
+
+                                                 (D2 + 3D + 2)y(t) = Dx(t)
+
+    which is identical to Eq. (1.29).
+         Recall that Eq. (1.29) is not an algebraic equation, and D2 +3D+2 is not an algebraic term that
+    multiplies y(t); it is an operator that operates on y(t). It means that we must perform the following
+    operations on y(t): take the second derivative of y(t) and add to it 3 times the first derivative of
+    y(t) and 2 times y(t). Clearly, a polynomial in D multiplied by y(t) represents a certain differential
+    operation on y(t).
+
+
+
+E X A M P L E 1.17 Input–Output Equation of a Series RC Circuit
+
+    Using operator notation, find the equation relating input to output for the series RC circuit of
+    Fig. 1.35 if the input is the voltage x(t) and output is
+            (a) the loop current i(t)
+            (b) the capacitor voltage y(t)
+
+                     R  15
+
+                                                    
+
+
+     x(t)                i(t)                       y(t)
+                                             1
+                                      C 5F
+
+                                                    
+                                                            Figure 1.35 Circuit for Ex. 1.17
+
+
+            (a) The loop equation for the circuit is
+                                                           # t
+                                                       1
+                                         R i(t) +                 i(τ ) dτ = x(t)
+                                                       C    −∞
+
+    or                                                     # t
+                                         15 i(t) + 5              i(τ ) dτ = x(t)
+                                                            −∞
+
+    With operator notation, this equation can be expressed as
+                                                              5
+                                                  15 i(t) +     i(t) = x(t)                        (1.30)
+                                                              D
+
+[[PAGE page-114]]
+114   CHAPTER 1      SIGNALS AND SYSTEMS
+
+           (b) Multiplying both sides of Eq. (1.30) by D (i.e., differentiating the equation), we obtain
+
+                                            (15D + 5) i(t) = Dx(t)
+
+      Using the fact that i(t) = C dy(t)
+                                    dt
+                                         = 15 Dy(t), simple substitution yields
+
+                                                (3D + 1)y(t) = x(t)                               (1.31)
+
+
+
+
+       D R I L L 1.17 Input–Output Equation of a Series RLC Circuit with
+       Inductor Voltage as Output
+       If the inductor voltage vL (t) is taken as the output, show that the RLC circuit in Fig. 1.34 has an
+       input–output equation of (D2 + 3D + 2)vL (t) = D2 x(t).
+
+
+
+
+       D R I L L 1.18 Input–Output Equation of a Series RC Circuit with
+       Capacitor Voltage as Output
+       If the capacitor voltage vC (t) is taken as the output, show that the RLC circuit in Fig. 1.34 has
+       an input–output equation of (D2 + 3D + 2)vC (t) = 2x(t).

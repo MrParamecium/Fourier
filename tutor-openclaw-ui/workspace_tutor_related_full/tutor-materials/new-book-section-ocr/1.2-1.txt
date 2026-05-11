@@ -1,0 +1,127 @@
+# Aquarius section OCR
+section_id: 1.2-1
+source_pages: page-071, page-072, page-073
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+1.2-1 Time Shifting
+Consider a signal x(t) (Fig. 1.4a) and the same signal delayed by T seconds (Fig. 1.4b), which we
+shall denote by φ(t). Whatever happens in x(t) (Fig. 1.4a) at some instant t also happens in φ(t)
+(Fig. 1.4b) T seconds later at the instant t + T. Therefore
+
+                               φ(t + T) = x(t)       and         φ(t) = x(t − T)
+
+Therefore, to time-shift a signal by T, we replace t with t − T. Thus x(t − T) represents
+x(t) time-shifted by T seconds. If T is positive, the shift is to the right (delay), as in
+Fig. 1.4b. If T is negative, the shift is to the left (advance), as in Fig. 1.4c. Clearly, x(t − 2)
+is x(t) delayed (right-shifted) by 2 seconds, and x(t + 2) is x(t) advanced (left-shifted) by
+2 seconds.
+
+
+
+                            x(t)
+
+
+
+
+                      0                          t
+                      (a)
+                            f(t)  x(t  T )
+
+
+
+
+                      0                          t
+               T
+                      (b)
+                            x(t  T )
+
+
+
+
+                      0                          t
+          T
+                      (c)                                  Figure 1.4 Time-shifting a signal.
+
+[[PAGE page-072]]
+72       CHAPTER 1       SIGNALS AND SYSTEMS
+
+
+     E X A M P L E 1.3 Time Shifting
+
+         An exponential function x(t) = e−2t shown in Fig. 1.5a is delayed by 1 second. Sketch and
+         mathematically describe the delayed function. Repeat the problem with x(t) advanced by 1
+         second.
+
+
+
+                                     x(t)
+                                            1
+                                                    e2t
+
+
+
+                                            0                    1    t
+
+                                                           (a)
+
+
+                                x(t  1)        1
+                                                                     e2(t1)
+
+
+
+                                            0                    1                  t
+
+                                                           (b)
+
+
+                                       1        x(t  1)
+                          e2(t1)
+
+
+
+                   1                       0                         t
+
+                                                           (c)
+         Figure 1.5 (a) Signal x(t). (b) Signal x(t) delayed by 1 second. (c) Signal x(t) advanced by 1 second.
+
+
+
+
+         The function x(t) can be described mathematically as
+                                                    −2t
+                                                    e        t≥0
+                                            x(t) =                                                          (1.5)
+                                                    0        t<0
+
+         Let xd (t) represent the function x(t) delayed (right-shifted) by 1 second, as illustrated in
+         Fig. 1.5b. This function is x(t − 1); its mathematical description can be obtained from x(t)
+
+[[PAGE page-073]]
+1.2   Some Useful Signal Operations            73
+
+by replacing t with t − 1 in Eq. (1.5). Thus,
+                                          −2(t−1)
+                                          e             t − 1 ≥ 0 or t ≥ 1
+                     xd (t) = x(t − 1) =
+                                          0             t − 1 < 0 or t < 1
+
+Let xa (t) represent the function x(t) advanced (left-shifted) by 1 second, as depicted in
+Fig. 1.5c. This function is x(t + 1); its mathematical description can be obtained from x(t)
+by replacing t with t + 1 in Eq. (1.5). Thus,
+                                         −2(t+1)
+                                         e         t + 1 ≥ 0 or t ≥ −1
+                   xa (t) = x(t + 1) =
+                                         0         t + 1 < 0 or t < −1
+
+
+
+
+ D R I L L 1.4 Working with Time Delay and Time Advance
+ Write a mathematical description of the signal x3 (t) in Fig. 1.3c. Next, delay this signal by
+ 2 seconds. Sketch the delayed signal. Show that this delayed signal xd (t) can be described
+ mathematically as xd (t) = 2(t − 2) for 2 ≤ t ≤ 3, and equal to 0 otherwise. Now repeat the
+ procedure with the signal advanced (left-shifted) by 1 second. Show that this advanced signal
+ xa (t) can be described as xa (t) = 2(t + 1) for −1 ≤ t ≤ 0, and 0 otherwise.

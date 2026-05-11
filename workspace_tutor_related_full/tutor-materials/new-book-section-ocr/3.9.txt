@@ -1,0 +1,12 @@
+# Aquarius section OCR
+section_id: 3.9
+source_pages: page-298, page-299, page-300, page-301, page-302, page-303, page-304, page-305
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+3.9 SYSTEM STABILITY
+The concepts and criteria for the BIBO (external) stability and internal (asymptotic) stability
+for discrete-time systems are identical to those corresponding to continuous-time systems. The
+comments in Sec. 2.5 for LTIC systems concerning the distinction between external and internal
+stability are also valid for LTID systems. Let us begin with external (BIBO) stability.

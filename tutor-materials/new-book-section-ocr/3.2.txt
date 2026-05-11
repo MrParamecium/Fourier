@@ -1,0 +1,167 @@
+# Aquarius section OCR
+section_id: 3.2
+source_pages: page-240, page-241, page-242, page-243, page-244, page-245
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+3.2 USEFUL SIGNAL OPERATIONS
+
+Signal operations for shifting, and scaling, as discussed for continuous-time signals also apply,
+with some modifications, to discrete-time signals.
+
+SHIFTING
+
+Consider a signal x[n] (Fig. 3.4a) and the same signal delayed (right-shifted) by 5 units (Fig. 3.4b),
+which we shall denote by x_s[n].† Using the argument employed for a similar operation in
+continuous-time signals (Sec. 1.2), we obtain
+
+x_s[n] = x[n − 5]
+
+Therefore, to shift a sequence by M units (M integer), we replace n with n − M. Thus x[n − M]
+represents x[n] shifted by M units. If M is positive, the shift is to the right (delay). If M is negative,
+the shift is to the left (advance). Accordingly, x[n − 5] is x[n] delayed (right-shifted) by 5 units,
+and x[n + 5] is x[n] advanced (left-shifted) by 5 units.
+
+† The terms “delay” and “advance” are meaningful only when the independent variable is time. For other
+independent variables, such as frequency or distance, it is more appropriate to refer to the “right shift” and
+“left shift” of a sequence.
+
+[[PAGE page-241]]
+3.2  Useful Signal Operations                                                            241
+
+x[n]
+1
+(0.9)^n
+0 3 6 8 10 15 n →
+(a)
+
+1
+x_s[n] = x[n - 5]
+(0.9)^{n-5}
+0 8 10 12 15 n →
+(b)
+
+1
+x_r[n] = x[-n]
+(0.9)^{-n}
+-10 -6 -3 0 6 15 n →
+(c)
+
+1
+x[k - n]    for k = 5
+(0.9)^{k-n}
+-10 -5 -3 0 2 6 15 n →
+(d)
+
+Figure 3.4  Shifting and time reversal of a signal.
+
+DRILL 3.2  Left-Shift Operation
+
+Show that x[n] in Fig. 3.4a left-shifted by 3 units can be expressed as 0.729(0.9)^n for 0 ≤ n ≤ 7,
+and zero otherwise. Sketch the shifted signal.
+
+[[PAGE page-242]]
+242
+CHAPTER 3  TIME-DOMAIN ANALYSIS OF DISCRETE-TIME SYSTEMS
+
+DRILL 3.3  Right-Shift Operation
+Show that x[−k − n] can be obtained from x[n] by first right-shifting x[n] by k units and then time-reversing this shifted signal.
+
+TIME REVERSAL
+To time-reverse x[n] in Fig. 3.4a, we rotate x[n] about the vertical axis to obtain the time-reversed signal xr[n] shown in Fig. 3.4c. Using the argument employed for a similar operation in continuous-time signals (Sec. 1.2), we obtain
+
+xr[n] = x[−n]
+
+Therefore, to time-reverse a signal, we replace n with −n so that x[−n] is the time-reversed x[n]. For example, if x[n] = (0.9)^n for 3 ≤ n ≤ 10, then xr[n] = (0.9)^−n for 3 ≤ −n ≤ 10; that is, −3 ≥ n ≥ −10, as shown in Fig. 3.4c.
+The origin n = 0 is the anchor point, which remains unchanged under time-reversal operation because at n = 0, x[n] = x[−n] = x[0]. Note that while the reversal of x[n] about the vertical axis is x[−n], the reversal of x[n] about the horizontal axis is −x[n].
+
+EXAMPLE 3.2  Time Reversal and Shifting
+
+In the convolution operation, discussed later, we need to find the function x[k − n] from x[n].
+
+This can be done in two steps: (i) time-reverse the signal x[n] to obtain x[−n]; (ii) now, right-shift x[−n] by k. Recall that right-shifting is accomplished by replacing n with n − k. Hence, right-shifting x[−n] by k units is x[−(n − k)] = x[k − n]. Figure 3.4d shows x[5 − n], obtained this way. We first time-reverse x[n] to obtain x[−n] in Fig. 3.4c. Next, we shift x[−n] by k = 5 to obtain x[k − n] = x[5 − n], as shown in Fig. 3.4d.
+In this particular example, the order of the two operations employed is interchangeable. We can first left-shift x[k] to obtain x[n + 5]. Next, we time-reverse x[n + 5] to obtain x[−n + 5] = x[5 − n]. The reader is encouraged to verify that this procedure yields the same result, as in Fig. 3.4d.
+
+DRILL 3.4  Time Reversal
+Sketch the signal x[n] = e^−0.5n for −3 ≤ n ≤ 2, and zero otherwise. Sketch the corresponding time-reversed signal and show that it can be expressed as xr[n] = e^0.5n for −2 ≤ n ≤ 3.
+
+[[PAGE page-243]]
+3.2  Useful Signal Operations                                                                 243
+
+SAMPLING RATE ALTERATION: DOWNSAMPLING,
+UPSAMPLING, AND INTERPOLATION
+
+Alteration of the sampling rate is somewhat similar to time-scaling in continuous-time signals.
+Consider a signal x[n] compressed by factor M. Compressing a signal x[n] by factor M yields
+x_d[n] given by
+
+x_d[n] = x[Mn]
+
+Because of the restriction that discrete-time signals are defined only for integer values of the
+argument, we must restrict M to integer values. The values of x[Mn] at n = 0, 1, 2, 3, . . . are x[0],
+x[M], x[2M], x[3M], . . . . This means x[Mn] selects every Mth sample of x[n] and deletes all the
+samples in between. It reduces the number of samples by factor M. If x[n] is obtained by sampling
+a continuous-time signal, this operation implies reducing the sampling rate by factor M. For this
+reason, this operation is commonly called downsampling. Figure 3.5a shows a signal x[n] and
+Fig. 3.5b shows the signal x[2n], which is obtained by deleting odd-numbered samples of x[n].†
+
+In the continuous-time case, time compression merely speeds up the signal without loss of any
+data. In contrast, downsampling x[n] generally causes loss of data. Under certain conditions—for
+example, if x[n] is the result of oversampling some continuous-time signal—then x_d[n] may still
+retain the complete information about x[n].
+
+An interpolated signal is generated in two steps; first, we expand x[n] by an integer factor L
+to obtain the expanded signal x_e[n], as
+
+x_e[n] = { x[n/L]   n = 0, ±L ± 2L, . . .
+         { 0        otherwise                                                         (3.2)
+
+To understand this expression, consider a simple case of expanding x[n] by a factor 2 (L = 2).
+When n is odd, n/2 is noninteger, and x_e[n] = 0. That is, x_e[1] = x_e[3] = x_e[5], . . . are all zero,
+as depicted in Fig. 3.5c. Moreover, n/2 is integer for even n, and the values of x_e[n] = x[n/2] for
+n = 0, 2, 4, 6, . . . are x[0], x[1], x[2], x[3], . . . , as shown in Fig. 3.5c. In general, for n = 0, 1, 2, . . . ,
+x_e[n] is given by the sequence
+
+x[0], 0, 0, . . . , 0, 0, x[1], 0, 0, . . . , 0, 0, x[2], 0, 0, . . . , 0, 0, . . .
+      ⏞────────────⏟      ⏞────────────⏟      ⏞────────────⏟
+         L − 1 zeros          L − 1 zeros          L − 1 zeros
+
+Thus, the sampling rate of x_e[n] is L times that of x[n]. Hence, this operation is commonly called
+upsampling. The upsampled signal x_e[n] contains all the data of x[n], although in an expanded
+form.
+
+In the expanded signal in Fig. 3.5c, the missing (zero-valued) odd-numbered samples can
+be reconstructed from the non-zero-valued samples by using some suitable interpolation formula.
+Figure 3.5d shows such an interpolated signal x_i[n], where the missing samples are constructed
+by using an interpolating filter. The optimum interpolating filter is usually an ideal lowpass
+
+† Odd-numbered samples of x[n] can be retained (and even-numbered samples deleted) by using the
+transformation x_d[n] = x[2n + 1].
+
+[[PAGE page-244]]
+244
+CHAPTER 3  TIME-DOMAIN ANALYSIS OF DISCRETE-TIME SYSTEMS
+
+x[n]
+(a)
+
+x_d[n]
+x_d[n] = x[2n]
+Downsampling
+(b)
+
+x_e[n]
+x_e[n] = x\!\left[\frac{n}{2}\right]
+Upsampling
+(c)
+
+x_i[n]
+Interpolation
+(d)
+
+Figure 3.5  Compression (downsampling) and expansion (upsampling, interpolation) of a signal.
+
+filter, which is realizable only approximately. In practice, we may use an interpolation that is nonoptimum but realizable. The process of filtering to interpolate the zero-valued samples is called interpolation. Since the interpolated data are computed from the existing data, interpolation does not result in gain of information. While further discussion of interpolation is beyond our scope, Drill 3.5 and Prob. 3.11-10 introduce the idea of linear interpolation.
+
+[[PAGE page-245]]

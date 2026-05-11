@@ -1,0 +1,24 @@
+{
+  "sectionId": "3.3-3",
+  "sourcePages": [
+    "page-247",
+    "page-248",
+    "page-249",
+    "page-250",
+    "page-251"
+  ],
+  "usedPages": [
+    "page-247",
+    "page-248",
+    "page-249",
+    "page-250",
+    "page-251"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "3.3-3 Discrete-Time Exponential γⁿ",
+  "foundEnd": true,
+  "endBeforeLine": "3.3-4 Discrete-Time Sinusoid cos (Ωn + θ)",
+  "endBeforeCode": "3.3-4",
+  "charCount": 6421
+}

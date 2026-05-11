@@ -1,0 +1,28 @@
+{
+  "sectionId": "3.8-1",
+  "sourcePages": [
+    "page-288",
+    "page-289",
+    "page-290",
+    "page-291",
+    "page-292",
+    "page-293",
+    "page-294"
+  ],
+  "usedPages": [
+    "page-288",
+    "page-289",
+    "page-290",
+    "page-291",
+    "page-292",
+    "page-293",
+    "page-294"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "3.8-1 Graphical Procedure for the Convolution Sum",
+  "foundEnd": true,
+  "endBeforeLine": "3.8-2 Interconnected Systems",
+  "endBeforeCode": "3.8-2",
+  "charCount": 7037
+}

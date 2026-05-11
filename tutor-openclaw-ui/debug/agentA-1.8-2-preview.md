@@ -1,0 +1,589 @@
+# Agent A Preview: 1.8-2 Mechanical Systems
+
+- Difficulty: intermediate
+- Estimated read minutes: 8
+
+## Learning Objectives
+
+- Recognize mass, spring, and dashpot laws for one-dimensional translational mechanical systems.
+- Use a free-body diagram to derive an input-output differential equation.
+- Translate the same modeling logic from translational motion to rotational motion.
+
+## Visualization Need
+
+```json
+{
+  "level": "static",
+  "reason": [
+    "mechanical_force_directions_benefit_from_figure",
+    "free_body_diagram_is_exam_critical",
+    "textbook_has_canonical_figures",
+    "wrong_sign_errors_need_visual_correction"
+  ],
+  "recommended_assets": [
+    "textbook_figure",
+    "latex_native_formula_visual"
+  ]
+}
+```
+
+## Visual Plan
+
+```json
+{
+  "primary_anchor": "both",
+  "rationale": "Use the textbook figures as the main visual anchors because the section is built around recognizing mechanical elements, drawing free-body diagrams, and matching the exact notation used in the examples. Use LaTeX-native formula blocks for the terminal laws and differential equations. Do not use GPTImage2 because the available textbook figures already provide the canonical diagrams for this section.",
+  "cram": "Use the figures to quickly identify element type, force direction, and the differential-equation pattern.",
+  "standard": "Use each figure beside one representative formula so students connect the physical diagram to the model.",
+  "top_score": "Use the diagrams to notice sign conventions, equivalent physical layouts, and translational-to-rotational analogies."
+}
+```
+
+## Planned Blocks
+
+### Block 1: `text_explanation`
+- **instruction**: Render Page 1 as a minimal overview only. Include exactly these two parts and no expanded introduction: 1) Section Objective: 'Model simple mechanical systems by turning forces, torques, displacements, and rotations into differential equations.' 2) Concepts In This Section: bullet list with concept names only: 'translational elements', 'free-body diagrams', 'mass-spring-damper input-output equation', 'rotational mechanical analogy'.
+
+### Block 2: `book_image`
+- **source_page**: page-115
+- **fig_id**: Figure 1.36
+- **teaching_role**: concept_anchor
+- **mode_specific_visual_use**:
+```json
+{
+  "cram": "Memorize which element connects force to acceleration, displacement, or velocity.",
+  "standard": "Use the three panels to attach each physical element to its terminal equation.",
+  "top_score": "Notice that the same input-output notation can represent different physical laws depending on the element."
+}
+```
+- **caption_instruction**: Write one sentence under the heading '## 1. Translational Elements': mass, spring, and dashpot are the three basic one-dimensional mechanical modeling blocks.
+- **description_instruction**: Describe the three panels separately. Panel (a) shows a mass M where force produces acceleration. Panel (b) shows a spring K where force depends on displacement. Panel (c) shows a dashpot B where force depends on velocity. End by telling students that exams often begin by asking them to identify which law each element contributes.
+
+### Block 3: `math_block`
+- **latex**: \begin{cases}x_M(t)=M\ddot{y}(t)\\x_K(t)=K y(t)\\x_B(t)=B\dot{y}(t)\end{cases}
+- **explanation_instruction**: Teach this as the terminal-law page for translational elements. Explain in 100–140 words: \(x(t)\) is the force applied through an element, \(y(t)\) is displacement, \(\dot y(t)\) is velocity, and \(\ddot y(t)\) is acceleration. State when to use each law: mass uses acceleration, spring uses displacement, dashpot uses velocity. Include the operator notation reminder that \(D y(t)=\dot y(t)\) and \(D^2 y(t)=\ddot y(t)\). Add one minimal example: if a dashpot has coefficient \(B\) and velocity \(\dot y(t)\), its force contribution is \(B\dot y(t)\). Exam trigger: a diagram with M, K, B attached to the same moving point. Common misuse: using \(Ky(t)\) for a dashpot or \(B\dot y(t)\) for a spring.
+
+### Block 4: `book_image`
+- **source_page**: page-115
+- **fig_id**: Fig. 1.37
+- **teaching_role**: example_support
+- **mode_specific_visual_use**:
+```json
+{
+  "cram": "Focus on the free-body diagram and memorize the sign pattern: input force positive, restoring forces negative.",
+  "standard": "Use the figure as the worked example for deriving the mass-spring-damper equation.",
+  "top_score": "Compare panels (a) and (b) to see that different physical layouts can produce the same mathematical model."
+}
+```
+- **caption_instruction**: Write one sentence under the heading '## 2. Free-Body Diagram for a Mass-Spring-Damper System': Fig. 1.37 turns the physical system into forces acting on the mass.
+- **description_instruction**: Explain that the input force \(x(t)\) pushes the mass in the positive direction while the spring force \(Ky(t)\) and damping force \(B\dot y(t)\) oppose the motion. Point out that panels (a) and (b) are equivalent physical layouts, and panel (c) is the diagram students should use to write Newton's second law. End with an exam note: the most common mistake is giving the spring or damper force the same sign as the applied input force.
+
+### Block 5: `math_block`
+- **latex**: \left(MD^2+BD+K\right)y(t)=x(t)
+- **explanation_instruction**: Teach this as the representative worked example from Example 1.18. Start from the verbal force balance: net force on the mass equals mass times acceleration. Explain that the applied input is \(x(t)\), the mass term is \(M\ddot y(t)\), the damping term is \(B\dot y(t)\), and the spring term is \(Ky(t)\). Then show how collecting terms gives the displayed operator equation. Include one quick check: if \(B=0\), the system loses the velocity-dependent damping term and becomes \((MD^2+K)y(t)=x(t)\). Exam trigger: a mass connected to a spring and dashpot with force input and displacement output. Common misuse: forgetting that \(D^2\) acts on \(y(t)\), not on \(M\).
+
+### Block 6: `book_image`
+- **source_page**: page-117
+- **fig_id**: Figure 1.38
+- **teaching_role**: concept_anchor
+- **mode_specific_visual_use**:
+```json
+{
+  "cram": "Recognize torque input, angular displacement output, and rotational damping as the same modeling pattern as force systems.",
+  "standard": "Use the airplane roll example to transfer translational modeling ideas to rotational motion.",
+  "top_score": "Track which angle is input deflection and which angle is output roll; do not confuse θ(t) with φ(t)."
+}
+```
+- **caption_instruction**: Write one sentence under the heading '## 3. Rotational Mechanical Systems': the airplane roll example models torque, angular position, angular velocity, and angular acceleration.
+- **description_instruction**: Describe the aileron deflection angle θ(t) as the control input and the roll angle φ(t) as the output. Explain that the ailerons create a torque proportional to θ(t), while air friction produces a damping torque proportional to φ̇(t). Add an exam note: rotational systems use the same structure as translational systems, but force becomes torque and mass becomes moment of inertia.
+
+### Block 7: `math_block`
+- **latex**: J\ddot{\phi}(t)=c\theta(t)-B\dot{\phi}(t)
+- **explanation_instruction**: Explain this rotational equation in 100–140 words. \(J\) is moment of inertia about the roll axis, \(\phi(t)\) is the airplane roll angle, \(\ddot\phi(t)\) is angular acceleration, \(	heta(t)\) is aileron deflection, \(c\theta(t)\) is the torque generated by the ailerons, and \(B\dot\phi(t)\) is the damping torque from air friction. Use the translational analogy: \(M\ddot y\) becomes \(J\ddot\phi\), force becomes torque, and velocity damping \(B\dot y\) becomes angular-velocity damping \(B\dot\phi\). Exam trigger: a rotating body with torque input and angular output. Common misuse: treating \(	heta(t)\) and \(\phi(t)\) as the same angle.
+
+### Block 8: `section_summary`
+- **instruction**: Create a recap page titled '📌 Key Takeaways'. Include exactly 4 bullets, each ≤25 words, and include the core formulas explicitly. Bullets must cover: translational terminal laws \(x_M(t)=M\ddot y(t)\), \(x_K(t)=Ky(t)\), \(x_B(t)=B\dot y(t)\); mass-spring-damper equation \((MD^2+BD+K)y(t)=x(t)\); rotational roll equation \(J\ddot\phi(t)=c\theta(t)-B\dot\phi(t)\); and the force-to-torque analogy. End with one sentence: 'Next, use these input-output equations to analyze system behavior from the differential equation itself.'
+
+### Block 9: `quiz_plan`
+- **target_questions**:
+```json
+7
+```
+- **question_range**:
+```json
+{
+  "min": 6,
+  "max": 8
+}
+```
+- **knowledge_points**:
+```json
+[
+  {
+    "id": "translational_element_laws",
+    "label": "Mass, spring, and dashpot terminal laws",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "kp1_q1",
+        "type": "multiple_choice",
+        "stem": "A translational dashpot has damping coefficient \\(B\\) and relative velocity \\(\\dot y(t)\\). Which force law matches the dashpot?",
+        "options": [
+          "A. \\(x(t)=M\\ddot y(t)\\)",
+          "B. \\(x(t)=Ky(t)\\)",
+          "C. \\(x(t)=B\\dot y(t)\\)",
+          "D. \\(x(t)=BD^2y(t)\\)"
+        ],
+        "correct_option": "C",
+        "explanation": "A linear dashpot creates force proportional to relative velocity, so its law is \\(x(t)=B\\dot y(t)=BDy(t)\\).",
+        "wrong_option_explanations": {
+          "A": "That is the mass law; mass connects force to acceleration.",
+          "B": "That is the spring law; spring force depends on displacement.",
+          "D": "The dashpot uses first derivative \\(D\\), not second derivative \\(D^2\\)."
+        },
+        "hint": "Dashpots resist velocity, not displacement or acceleration.",
+        "needs_visual": false,
+        "same_point_variant": true
+      },
+      {
+        "id": "kp1_q2",
+        "type": "multiple_choice",
+        "stem": "Using Figure 1.36, which matching is correct?",
+        "options": [
+          "A. Mass → displacement law, spring → velocity law, dashpot → acceleration law",
+          "B. Mass → acceleration law, spring → displacement law, dashpot → velocity law",
+          "C. Mass → velocity law, spring → acceleration law, dashpot → displacement law",
+          "D. All three elements use the same force law"
+        ],
+        "correct_option": "B",
+        "explanation": "The three basic translational elements are distinguished by what force is proportional to: acceleration for mass, displacement for spring, and velocity for dashpot.",
+        "wrong_option_explanations": {
+          "A": "This reverses all three physical meanings.",
+          "C": "This assigns the derivative order incorrectly.",
+          "D": "The whole point of the model is that each element contributes a different law."
+        },
+        "hint": "Ask what physical quantity each element resists or stores.",
+        "needs_visual": true,
+        "visual_type": "book_figure:Figure 1.36",
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "mass_spring_damper_equation",
+    "label": "Free-body diagram and mass-spring-damper input-output equation",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "kp2_q1",
+        "type": "multiple_choice",
+        "stem": "In the Figure 1.37 free-body diagram, the applied force \\(x(t)\\) acts positive. Which pair of forces opposes the mass displacement and velocity?",
+        "options": [
+          "A. \\(Ky(t)\\) and \\(B\\dot y(t)\\)",
+          "B. \\(M\\ddot y(t)\\) and \\(x(t)\\)",
+          "C. \\(K\\dot y(t)\\) and \\(By(t)\\)",
+          "D. \\(MDy(t)\\) and \\(KD^2y(t)\\)"
+        ],
+        "correct_option": "A",
+        "explanation": "The spring force \\(Ky(t)\\) opposes displacement, and the dashpot force \\(B\\dot y(t)\\) opposes velocity.",
+        "wrong_option_explanations": {
+          "B": "The mass term is the inertial response, and \\(x(t)\\) is the applied input force.",
+          "C": "This swaps the spring and dashpot dependencies.",
+          "D": "These derivative orders do not match the physical elements."
+        },
+        "hint": "Look for the restoring forces drawn opposite to \\(x(t)\\).",
+        "needs_visual": true,
+        "visual_type": "book_figure:Fig. 1.37",
+        "same_point_variant": true
+      },
+      {
+        "id": "kp2_q2",
+        "type": "multiple_choice",
+        "stem": "For the mass-spring-damper system in Example 1.18, which input-output equation is correct after collecting terms?",
+        "options": [
+          "A. \\((MD^2+BD+K)y(t)=x(t)\\)",
+          "B. \\((M+B+K)y(t)=x(t)\\)",
+          "C. \\((MD+BD^2+K)y(t)=x(t)\\)",
+          "D. \\((MD^2-BD-K)y(t)=x(t)\\)"
+        ],
+        "correct_option": "A",
+        "explanation": "Mass contributes \\(MD^2y(t)\\), damping contributes \\(BDy(t)\\), and the spring contributes \\(Ky(t)\\), so the collected equation is \\((MD^2+BD+K)y(t)=x(t)\\).",
+        "wrong_option_explanations": {
+          "B": "This ignores derivative order, which is essential in differential equations.",
+          "C": "This swaps the derivative orders for mass and damping.",
+          "D": "After moving restoring-force terms to the left side, their coefficients become positive."
+        },
+        "hint": "Mass uses \\(D^2\\), dashpot uses \\(D\\), spring uses no derivative.",
+        "needs_visual": false,
+        "same_point_variant": true
+      },
+      {
+        "id": "kp2_q3",
+        "type": "short_answer",
+        "stem": "A student writes \\(M\\ddot y(t)=B\\dot y(t)+Ky(t)+x(t)\\) for Figure 1.37. Explain the sign mistake.",
+        "ideal_answer": "The spring and dashpot forces oppose the positive displacement and velocity of the mass, so they should appear as \\(-Ky(t)\\) and \\(-B\\dot y(t)\\) in the force balance. The correct Newton equation is \\(M\\ddot y(t)=-B\\dot y(t)-Ky(t)+x(t)\\), which collects to \\((MD^2+BD+K)y(t)=x(t)\\).",
+        "grading_rubric": [
+          "Must state that spring and dashpot forces oppose the motion",
+          "Must identify the signs of \\(Ky(t)\\) and \\(B\\dot y(t)\\) as negative in the force balance",
+          "Must connect the corrected balance to the collected input-output form"
+        ],
+        "explanation": "This tests whether the student understands the free-body diagram rather than only memorizing the final equation.",
+        "hint": "Look at the force arrows in the free-body diagram.",
+        "needs_visual": true,
+        "visual_type": "book_figure:Fig. 1.37",
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "rotational_mechanical_analogy",
+    "label": "Rotational motion analogy and airplane roll equation",
+    "importance": "medium",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp3_q1",
+        "type": "multiple_choice",
+        "stem": "In the airplane roll model, which statement correctly identifies the input and output variables?",
+        "options": [
+          "A. Input: roll angle \\(φ(t)\\); output: aileron deflection \\(θ(t)\\)",
+          "B. Input: aileron deflection \\(θ(t)\\); output: roll angle \\(φ(t)\\)",
+          "C. Input: damping coefficient \\(B\\); output: moment of inertia \\(J\\)",
+          "D. Input: angular acceleration \\(φ̈(t)\\); output: torque constant \\(c\\)"
+        ],
+        "correct_option": "B",
+        "explanation": "The aileron deflection \\(θ(t)\\) generates torque, and the airplane roll angle \\(φ(t)\\) is the resulting output motion.",
+        "wrong_option_explanations": {
+          "A": "This reverses the control input and the motion output.",
+          "C": "\\(B\\) and \\(J\\) are parameters, not signal input and output.",
+          "D": "Angular acceleration is part of the response equation, not the commanded input."
+        },
+        "hint": "The control surface is the cause; the roll angle is the effect.",
+        "needs_visual": true,
+        "visual_type": "book_figure:Figure 1.38",
+        "same_point_variant": false
+      },
+      {
+        "id": "kp3_q2",
+        "type": "multiple_choice",
+        "stem": "Which rotational equation matches the airplane roll model described in the section?",
+        "options": [
+          "A. \\(J\\ddot{\\phi}(t)=c\\theta(t)-B\\dot{\\phi}(t)\\)",
+          "B. \\(M\\ddot y(t)=c\\theta(t)-B\\dot y(t)\\)",
+          "C. \\(J\\dot{\\phi}(t)=c\\dot{\\theta}(t)-B\\phi(t)\\)",
+          "D. \\(K\\phi(t)=c\\theta(t)+B\\dot{\\phi}(t)\\)"
+        ],
+        "correct_option": "A",
+        "explanation": "Moment of inertia times angular acceleration equals the applied aileron torque minus the damping torque.",
+        "wrong_option_explanations": {
+          "B": "This mixes translational mass notation with rotational variables.",
+          "C": "The inertia term should use angular acceleration, not angular velocity.",
+          "D": "There is no torsional spring term \\(K\\phi(t)\\) in the airplane roll equation shown here."
+        },
+        "hint": "Rotational inertia uses \\(J\\ddot{\\phi}(t)\\).",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  }
+]
+```
+
+## Raw JSON
+
+```json
+{
+  "section_id": "1.8-2",
+  "section_title": "Mechanical Systems",
+  "difficulty": "intermediate",
+  "estimated_read_minutes": 8,
+  "learning_objectives": [
+    "Recognize mass, spring, and dashpot laws for one-dimensional translational mechanical systems.",
+    "Use a free-body diagram to derive an input-output differential equation.",
+    "Translate the same modeling logic from translational motion to rotational motion."
+  ],
+  "visualization_need": {
+    "level": "static",
+    "reason": [
+      "mechanical_force_directions_benefit_from_figure",
+      "free_body_diagram_is_exam_critical",
+      "textbook_has_canonical_figures",
+      "wrong_sign_errors_need_visual_correction"
+    ],
+    "recommended_assets": [
+      "textbook_figure",
+      "latex_native_formula_visual"
+    ]
+  },
+  "visual_plan": {
+    "primary_anchor": "both",
+    "rationale": "Use the textbook figures as the main visual anchors because the section is built around recognizing mechanical elements, drawing free-body diagrams, and matching the exact notation used in the examples. Use LaTeX-native formula blocks for the terminal laws and differential equations. Do not use GPTImage2 because the available textbook figures already provide the canonical diagrams for this section.",
+    "cram": "Use the figures to quickly identify element type, force direction, and the differential-equation pattern.",
+    "standard": "Use each figure beside one representative formula so students connect the physical diagram to the model.",
+    "top_score": "Use the diagrams to notice sign conventions, equivalent physical layouts, and translational-to-rotational analogies."
+  },
+  "blocks": [
+    {
+      "type": "text_explanation",
+      "instruction": "Render Page 1 as a minimal overview only. Include exactly these two parts and no expanded introduction: 1) Section Objective: 'Model simple mechanical systems by turning forces, torques, displacements, and rotations into differential equations.' 2) Concepts In This Section: bullet list with concept names only: 'translational elements', 'free-body diagrams', 'mass-spring-damper input-output equation', 'rotational mechanical analogy'."
+    },
+    {
+      "type": "book_image",
+      "source_page": "page-115",
+      "fig_id": "Figure 1.36",
+      "teaching_role": "concept_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Memorize which element connects force to acceleration, displacement, or velocity.",
+        "standard": "Use the three panels to attach each physical element to its terminal equation.",
+        "top_score": "Notice that the same input-output notation can represent different physical laws depending on the element."
+      },
+      "caption_instruction": "Write one sentence under the heading '## 1. Translational Elements': mass, spring, and dashpot are the three basic one-dimensional mechanical modeling blocks.",
+      "description_instruction": "Describe the three panels separately. Panel (a) shows a mass M where force produces acceleration. Panel (b) shows a spring K where force depends on displacement. Panel (c) shows a dashpot B where force depends on velocity. End by telling students that exams often begin by asking them to identify which law each element contributes."
+    },
+    {
+      "type": "math_block",
+      "latex": "\\begin{cases}x_M(t)=M\\ddot{y}(t)\\\\x_K(t)=K y(t)\\\\x_B(t)=B\\dot{y}(t)\\end{cases}",
+      "explanation_instruction": "Teach this as the terminal-law page for translational elements. Explain in 100–140 words: \(x(t)\) is the force applied through an element, \(y(t)\) is displacement, \(\dot y(t)\) is velocity, and \(\ddot y(t)\) is acceleration. State when to use each law: mass uses acceleration, spring uses displacement, dashpot uses velocity. Include the operator notation reminder that \(D y(t)=\\dot y(t)\) and \(D^2 y(t)=\\ddot y(t)\). Add one minimal example: if a dashpot has coefficient \(B\) and velocity \(\dot y(t)\), its force contribution is \(B\\dot y(t)\). Exam trigger: a diagram with M, K, B attached to the same moving point. Common misuse: using \(Ky(t)\) for a dashpot or \(B\\dot y(t)\) for a spring."
+    },
+    {
+      "type": "book_image",
+      "source_page": "page-115",
+      "fig_id": "Fig. 1.37",
+      "teaching_role": "example_support",
+      "mode_specific_visual_use": {
+        "cram": "Focus on the free-body diagram and memorize the sign pattern: input force positive, restoring forces negative.",
+        "standard": "Use the figure as the worked example for deriving the mass-spring-damper equation.",
+        "top_score": "Compare panels (a) and (b) to see that different physical layouts can produce the same mathematical model."
+      },
+      "caption_instruction": "Write one sentence under the heading '## 2. Free-Body Diagram for a Mass-Spring-Damper System': Fig. 1.37 turns the physical system into forces acting on the mass.",
+      "description_instruction": "Explain that the input force \(x(t)\) pushes the mass in the positive direction while the spring force \(Ky(t)\) and damping force \(B\\dot y(t)\) oppose the motion. Point out that panels (a) and (b) are equivalent physical layouts, and panel (c) is the diagram students should use to write Newton's second law. End with an exam note: the most common mistake is giving the spring or damper force the same sign as the applied input force."
+    },
+    {
+      "type": "math_block",
+      "latex": "\\left(MD^2+BD+K\\right)y(t)=x(t)",
+      "explanation_instruction": "Teach this as the representative worked example from Example 1.18. Start from the verbal force balance: net force on the mass equals mass times acceleration. Explain that the applied input is \(x(t)\), the mass term is \(M\\ddot y(t)\), the damping term is \(B\\dot y(t)\), and the spring term is \(Ky(t)\). Then show how collecting terms gives the displayed operator equation. Include one quick check: if \(B=0\), the system loses the velocity-dependent damping term and becomes \((MD^2+K)y(t)=x(t)\). Exam trigger: a mass connected to a spring and dashpot with force input and displacement output. Common misuse: forgetting that \(D^2\) acts on \(y(t)\), not on \(M\)."
+    },
+    {
+      "type": "book_image",
+      "source_page": "page-117",
+      "fig_id": "Figure 1.38",
+      "teaching_role": "concept_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Recognize torque input, angular displacement output, and rotational damping as the same modeling pattern as force systems.",
+        "standard": "Use the airplane roll example to transfer translational modeling ideas to rotational motion.",
+        "top_score": "Track which angle is input deflection and which angle is output roll; do not confuse \u03b8(t) with \u03c6(t)."
+      },
+      "caption_instruction": "Write one sentence under the heading '## 3. Rotational Mechanical Systems': the airplane roll example models torque, angular position, angular velocity, and angular acceleration.",
+      "description_instruction": "Describe the aileron deflection angle \u03b8(t) as the control input and the roll angle \u03c6(t) as the output. Explain that the ailerons create a torque proportional to \u03b8(t), while air friction produces a damping torque proportional to \u03c6\u0307(t). Add an exam note: rotational systems use the same structure as translational systems, but force becomes torque and mass becomes moment of inertia."
+    },
+    {
+      "type": "math_block",
+      "latex": "J\\ddot{\\phi}(t)=c\\theta(t)-B\\dot{\\phi}(t)",
+      "explanation_instruction": "Explain this rotational equation in 100–140 words. \(J\) is moment of inertia about the roll axis, \(\phi(t)\) is the airplane roll angle, \(\ddot\\phi(t)\) is angular acceleration, \(\theta(t)\) is aileron deflection, \(c\\theta(t)\) is the torque generated by the ailerons, and \(B\\dot\\phi(t)\) is the damping torque from air friction. Use the translational analogy: \(M\\ddot y\) becomes \(J\\ddot\\phi\), force becomes torque, and velocity damping \(B\\dot y\) becomes angular-velocity damping \(B\\dot\\phi\). Exam trigger: a rotating body with torque input and angular output. Common misuse: treating \(\theta(t)\) and \(\phi(t)\) as the same angle."
+    },
+    {
+      "type": "section_summary",
+      "instruction": "Create a recap page titled '📌 Key Takeaways'. Include exactly 4 bullets, each ≤25 words, and include the core formulas explicitly. Bullets must cover: translational terminal laws \(x_M(t)=M\\ddot y(t)\), \(x_K(t)=Ky(t)\), \(x_B(t)=B\\dot y(t)\); mass-spring-damper equation \((MD^2+BD+K)y(t)=x(t)\); rotational roll equation \(J\\ddot\\phi(t)=c\\theta(t)-B\\dot\\phi(t)\); and the force-to-torque analogy. End with one sentence: 'Next, use these input-output equations to analyze system behavior from the differential equation itself.'"
+    },
+    {
+      "type": "quiz_plan",
+      "target_questions": 7,
+      "question_range": {
+        "min": 6,
+        "max": 8
+      },
+      "knowledge_points": [
+        {
+          "id": "translational_element_laws",
+          "label": "Mass, spring, and dashpot terminal laws",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp1_q1",
+              "type": "multiple_choice",
+              "stem": "A translational dashpot has damping coefficient \(B\) and relative velocity \(\dot y(t)\). Which force law matches the dashpot?",
+              "options": [
+                "A. \(x(t)=M\\ddot y(t)\)",
+                "B. \(x(t)=Ky(t)\)",
+                "C. \(x(t)=B\\dot y(t)\)",
+                "D. \(x(t)=BD^2y(t)\)"
+              ],
+              "correct_option": "C",
+              "explanation": "A linear dashpot creates force proportional to relative velocity, so its law is \(x(t)=B\\dot y(t)=BDy(t)\).",
+              "wrong_option_explanations": {
+                "A": "That is the mass law; mass connects force to acceleration.",
+                "B": "That is the spring law; spring force depends on displacement.",
+                "D": "The dashpot uses first derivative \(D\), not second derivative \(D^2\)."
+              },
+              "hint": "Dashpots resist velocity, not displacement or acceleration.",
+              "needs_visual": false,
+              "same_point_variant": true
+            },
+            {
+              "id": "kp1_q2",
+              "type": "multiple_choice",
+              "stem": "Using Figure 1.36, which matching is correct?",
+              "options": [
+                "A. Mass \u2192 displacement law, spring \u2192 velocity law, dashpot \u2192 acceleration law",
+                "B. Mass \u2192 acceleration law, spring \u2192 displacement law, dashpot \u2192 velocity law",
+                "C. Mass \u2192 velocity law, spring \u2192 acceleration law, dashpot \u2192 displacement law",
+                "D. All three elements use the same force law"
+              ],
+              "correct_option": "B",
+              "explanation": "The three basic translational elements are distinguished by what force is proportional to: acceleration for mass, displacement for spring, and velocity for dashpot.",
+              "wrong_option_explanations": {
+                "A": "This reverses all three physical meanings.",
+                "C": "This assigns the derivative order incorrectly.",
+                "D": "The whole point of the model is that each element contributes a different law."
+              },
+              "hint": "Ask what physical quantity each element resists or stores.",
+              "needs_visual": true,
+              "visual_type": "book_figure:Figure 1.36",
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "mass_spring_damper_equation",
+          "label": "Free-body diagram and mass-spring-damper input-output equation",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp2_q1",
+              "type": "multiple_choice",
+              "stem": "In the Figure 1.37 free-body diagram, the applied force \(x(t)\) acts positive. Which pair of forces opposes the mass displacement and velocity?",
+              "options": [
+                "A. \(Ky(t)\) and \(B\\dot y(t)\)",
+                "B. \(M\\ddot y(t)\) and \(x(t)\)",
+                "C. \(K\\dot y(t)\) and \(By(t)\)",
+                "D. \(MDy(t)\) and \(KD^2y(t)\)"
+              ],
+              "correct_option": "A",
+              "explanation": "The spring force \(Ky(t)\) opposes displacement, and the dashpot force \(B\\dot y(t)\) opposes velocity.",
+              "wrong_option_explanations": {
+                "B": "The mass term is the inertial response, and \(x(t)\) is the applied input force.",
+                "C": "This swaps the spring and dashpot dependencies.",
+                "D": "These derivative orders do not match the physical elements."
+              },
+              "hint": "Look for the restoring forces drawn opposite to \(x(t)\).",
+              "needs_visual": true,
+              "visual_type": "book_figure:Fig. 1.37",
+              "same_point_variant": true
+            },
+            {
+              "id": "kp2_q2",
+              "type": "multiple_choice",
+              "stem": "For the mass-spring-damper system in Example 1.18, which input-output equation is correct after collecting terms?",
+              "options": [
+                "A. \((MD^2+BD+K)y(t)=x(t)\)",
+                "B. \((M+B+K)y(t)=x(t)\)",
+                "C. \((MD+BD^2+K)y(t)=x(t)\)",
+                "D. \((MD^2-BD-K)y(t)=x(t)\)"
+              ],
+              "correct_option": "A",
+              "explanation": "Mass contributes \(MD^2y(t)\), damping contributes \(BDy(t)\), and the spring contributes \(Ky(t)\), so the collected equation is \((MD^2+BD+K)y(t)=x(t)\).",
+              "wrong_option_explanations": {
+                "B": "This ignores derivative order, which is essential in differential equations.",
+                "C": "This swaps the derivative orders for mass and damping.",
+                "D": "After moving restoring-force terms to the left side, their coefficients become positive."
+              },
+              "hint": "Mass uses \(D^2\), dashpot uses \(D\), spring uses no derivative.",
+              "needs_visual": false,
+              "same_point_variant": true
+            },
+            {
+              "id": "kp2_q3",
+              "type": "short_answer",
+              "stem": "A student writes \(M\\ddot y(t)=B\\dot y(t)+Ky(t)+x(t)\) for Figure 1.37. Explain the sign mistake.",
+              "ideal_answer": "The spring and dashpot forces oppose the positive displacement and velocity of the mass, so they should appear as \(-Ky(t)\) and \(-B\\dot y(t)\) in the force balance. The correct Newton equation is \(M\\ddot y(t)=-B\\dot y(t)-Ky(t)+x(t)\), which collects to \((MD^2+BD+K)y(t)=x(t)\).",
+              "grading_rubric": [
+                "Must state that spring and dashpot forces oppose the motion",
+                "Must identify the signs of \(Ky(t)\) and \(B\\dot y(t)\) as negative in the force balance",
+                "Must connect the corrected balance to the collected input-output form"
+              ],
+              "explanation": "This tests whether the student understands the free-body diagram rather than only memorizing the final equation.",
+              "hint": "Look at the force arrows in the free-body diagram.",
+              "needs_visual": true,
+              "visual_type": "book_figure:Fig. 1.37",
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "rotational_mechanical_analogy",
+          "label": "Rotational motion analogy and airplane roll equation",
+          "importance": "medium",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp3_q1",
+              "type": "multiple_choice",
+              "stem": "In the airplane roll model, which statement correctly identifies the input and output variables?",
+              "options": [
+                "A. Input: roll angle \(\u03c6(t)\); output: aileron deflection \(\u03b8(t)\)",
+                "B. Input: aileron deflection \(\u03b8(t)\); output: roll angle \(\u03c6(t)\)",
+                "C. Input: damping coefficient \(B\); output: moment of inertia \(J\)",
+                "D. Input: angular acceleration \(\u03c6\u0308(t)\); output: torque constant \(c\)"
+              ],
+              "correct_option": "B",
+              "explanation": "The aileron deflection \(\u03b8(t)\) generates torque, and the airplane roll angle \(\u03c6(t)\) is the resulting output motion.",
+              "wrong_option_explanations": {
+                "A": "This reverses the control input and the motion output.",
+                "C": "\(B\) and \(J\) are parameters, not signal input and output.",
+                "D": "Angular acceleration is part of the response equation, not the commanded input."
+              },
+              "hint": "The control surface is the cause; the roll angle is the effect.",
+              "needs_visual": true,
+              "visual_type": "book_figure:Figure 1.38",
+              "same_point_variant": false
+            },
+            {
+              "id": "kp3_q2",
+              "type": "multiple_choice",
+              "stem": "Which rotational equation matches the airplane roll model described in the section?",
+              "options": [
+                "A. \(J\\ddot{\\phi}(t)=c\\theta(t)-B\\dot{\\phi}(t)\)",
+                "B. \(M\\ddot y(t)=c\\theta(t)-B\\dot y(t)\)",
+                "C. \(J\\dot{\\phi}(t)=c\\dot{\\theta}(t)-B\\phi(t)\)",
+                "D. \(K\\phi(t)=c\\theta(t)+B\\dot{\\phi}(t)\)"
+              ],
+              "correct_option": "A",
+              "explanation": "Moment of inertia times angular acceleration equals the applied aileron torque minus the damping torque.",
+              "wrong_option_explanations": {
+                "B": "This mixes translational mass notation with rotational variables.",
+                "C": "The inertia term should use angular acceleration, not angular velocity.",
+                "D": "There is no torsional spring term \(K\\phi(t)\) in the airplane roll equation shown here."
+              },
+              "hint": "Rotational inertia uses \(J\\ddot{\\phi}(t)\).",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```

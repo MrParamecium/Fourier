@@ -1,0 +1,18 @@
+{
+  "sectionId": "3.11-4",
+  "sourcePages": [
+    "page-311",
+    "page-312"
+  ],
+  "usedPages": [
+    "page-311",
+    "page-312"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "3.11-4 Discrete-Time Convolution",
+  "foundEnd": false,
+  "endBeforeLine": "",
+  "endBeforeCode": "",
+  "charCount": 2715
+}

@@ -1,0 +1,30 @@
+# Aquarius section OCR
+section_id: 1.8-3
+source_pages: page-118, page-119
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+1.8-3 Electromechanical Systems
+      A wide variety of electromechanical systems is used to convert electrical signals into mechanical
+      motion (mechanical energy) and vice versa. Here we consider a rather simple example of an
+      armature-controlled dc motor driven by a current source x(t), as shown in Fig. 1.40a. The torque
+      T (t) generated in the motor is proportional to the armature current x(t). Therefore,
+
+                                                       T (t) = KT x(t)
+
+      where KT is a constant of the motor. This torque drives a mechanical load whose free-body diagram
+      is shown in Fig. 1.40b. The viscous damping (with coefficient B) dissipates a torque Bθ̇ (t). If J is
+      the moment of inertia of the load (including the rotor of the motor), then the net torque T (t)−Bθ̇ (t)
+      must be equal to J θ̈ (t):
+                                              J θ̈ (t) = T (t) − Bθ̇ (t)
+      Thus,
+                                            (JD2 + BD)θ (t) = T (t) = KT x(t)
+      which in conventional form can be expressed as
+
+                                                  d2 θ (t)    dθ (t)
+                                              J        2
+                                                           +B        = KT x(t)                        (1.32)
+                                                   dt          dt
+
+[[PAGE page-119]]

@@ -1,0 +1,377 @@
+{
+  "blueprint": {
+    "section_id": "1.7-2",
+    "section_title": "1.7-2 Time-Invariant and Time-Varying Systems",
+    "difficulty": "intermediate",
+    "estimated_read_minutes": 7,
+    "learning_objectives": [
+      "State the time-invariance test using a delayed input and delayed output.",
+      "Recognize when a system is time-varying because its rule explicitly depends on time.",
+      "Use the delay-commutation test on simple systems such as multiplication by a unit step and differentiation.",
+      "Connect constant-coefficient differential equations with LTI systems."
+    ],
+    "visualization_need": {
+      "level": "interactive",
+      "reason": [
+        "depends_on_parameter_change",
+        "formula_to_phenomenon_gap",
+        "student_should_manipulate_to_understand",
+        "input_output_response_is_visual"
+      ],
+      "recommended_assets": [
+        "book_figure",
+        "react_canvas_demo"
+      ]
+    },
+    "visual_plan": {
+      "primary_anchor": "both",
+      "rationale": "The textbook already provides the canonical delay-commutation diagram for time invariance, so that figure should be used as the static anchor. Because students often confuse 'shift the input' with 'shift the output,' an interactive delay demo is also needed so they can vary T and directly compare the two paths.",
+      "cram": "Use the visuals to memorize the exam trigger: input delay must produce the same output delay.",
+      "standard": "Use Fig. 1.28 plus one interactive delay test to connect the definition, formula, and representative examples.",
+      "top_score": "Use the demo to expose subtle failures where a time-dependent multiplier changes the output amplitude as well as shifting it."
+    },
+    "blocks": [
+      {
+        "type": "text_explanation",
+        "instruction": "Create the first page as a compact outline only. Use exactly two short sections: 'Section Objective' and 'Concepts In This Section'. Under 'Section Objective', write one sentence: 'Decide whether a system behaves the same after a time shift, or whether its rule changes with time.' Under 'Concepts In This Section', list concept names only: time-invariant system; time-varying system; delay-commutation test; constant-coefficient LTI system; representative time-invariance tests. Do not add examples, background, or expanded explanations on this page."
+      },
+      {
+        "type": "text_explanation",
+        "instruction": "Start a new knowledge-point page with the heading '## 1. Time Invariance Means Delay Does Not Change the Rule'. Explain in 90–130 words that a system is time-invariant when the same input shape, delayed by T seconds, produces the same output shape delayed by T seconds. Say explicitly that the system's parameters do not change with time. Use the phrase 'the system does not care where the signal is placed on the time axis.' Include one representative example: if an audio processing system is time-invariant, delaying the audio input by 2 seconds delays the processed audio by 2 seconds, without changing the processing itself. End with the exam note: 'On exams, test whether delay and the system can be swapped without changing the final signal.'"
+      },
+      {
+        "type": "math_block",
+        "latex": "x(t) \\xrightarrow{\\,S\\,} y(t) \\quad \\Longrightarrow \\quad x(t-T) \\xrightarrow{\\,S\\,} y(t-T)",
+        "explanation_instruction": "Explain this as the core time-invariance formula. Define S as the system, x(t) as the original input, y(t) as the original output, and T as the delay. State when to use it: whenever a problem asks whether a system is time invariant. State the exam trigger: compare 'delay input then apply S' with 'apply S then delay output'. State the common misuse: students often delay only x(t) but forget that every occurrence of t in the output must shift consistently when delaying the output."
+      },
+      {
+        "type": "book_image",
+        "source_page": "page-102",
+        "fig_id": "Fig. 1.28",
+        "caption_instruction": "Write one sentence: 'Fig. 1.28 shows the time-invariance test: delaying the input before the system must match delaying the output after the system.'",
+        "description_instruction": "Describe the two signal paths clearly: one path sends x(t) through system S and then delays y(t), while the other delays x(t) first and then sends it through S. Point out that for a time-invariant system, both paths end at y(t−T). Tell students to notice that the waveform shape is preserved and only its time location shifts.",
+        "teaching_role": "concept_anchor",
+        "mode_specific_visual_use": {
+          "cram": "Use the two-path diagram as the fastest recognition pattern for time invariance questions.",
+          "standard": "Use the figure to connect the verbal definition with the delay formula.",
+          "top_score": "Use the figure to check whether the system and delay truly commute, not merely whether both expressions contain x(t−T)."
+        }
+      },
+      {
+        "type": "interactive_demo",
+        "title": "Delay-Then-System vs System-Then-Delay Tester",
+        "teaching_role": "concept_anchor",
+        "purpose": "Let students manipulate the delay T and compare the two time-invariance test paths visually.",
+        "implementation_instruction": "Build a React + Canvas demo with two horizontal lanes. Lane A is 'apply system, then delay output'. Lane B is 'delay input, then apply system'. Use a simple input pulse or triangular waveform. Include a slider for T from 0 to 4 seconds. Include a system selector with two options: 'time-invariant gain: y(t)=2x(t)' and 'time-varying gain: y(t)=e^{-t}x(t)'. For the time-invariant gain, the final waveforms in both lanes should overlap. For the time-varying gain, the final waveforms should not overlap because the multiplier depends on the actual time t. Add a small status label: 'Paths match: time-invariant' or 'Paths differ: time-varying'.",
+        "student_prompt": "Move T and switch between the two systems. Watch whether the final waveforms overlap. If they overlap for every T, the system passes the time-invariance test.",
+        "mode_specific_visual_use": {
+          "cram": "Focus on the overlap/no-overlap result as the exam shortcut.",
+          "standard": "Use one value of T to compare both systems and explain why one passes and one fails.",
+          "top_score": "Vary T and notice that time-varying systems can fail because amplitude changes with absolute time, not only because the signal shifts."
+        }
+      },
+      {
+        "type": "text_explanation",
+        "instruction": "Start a new knowledge-point page with the heading '## 2. Time-Varying Systems Depend on the Clock'. Explain in 90–130 words that a time-varying system has a rule or parameter that changes with t. Use the textbook example S[x](t)=e^{-t}x(t): even if the input shape is merely delayed, the multiplier e^{-t} is evaluated at the current clock time, so the output is not just a delayed copy of the old output. Include a quick exam warning: 'Seeing x(t−T) in both paths is not enough; compare the entire output expression.' Keep the tone direct and exam-oriented."
+      },
+      {
+        "type": "math_block",
+        "latex": "e^{-(t-T)}x(t-T) \\ne e^{-t}x(t-T)",
+        "explanation_instruction": "Explain that the left side is the delayed version of the original output for the system y(t)=e^{-t}x(t), while the right side is the output obtained after delaying the input first and then applying the system. Define T as the delay and t as the current time. State when to use this comparison: when the system rule contains an explicit time-dependent factor. State the exam trigger: a coefficient like e^{-t}, t, cos(t), or u(t) multiplying the input often signals time variation. State the common misuse: stopping after both sides contain x(t−T) and ignoring the extra coefficient."
+      },
+      {
+        "type": "text_explanation",
+        "instruction": "Start a new knowledge-point page with the heading '## 3. Representative Test: Two Systems'. Give a concise worked example based on Example 1.11. Use two mini-cases. Case A: For y(t)=x(t)u(t), choose x(t)=1 and delay T=1. Explain that delaying the output gives u(t−1), but delaying the input first still gives u(t), so the paths differ; the system is time-varying. Case B: For y(t)=d x(t)/dt, explain that delaying first gives d[x(t−T)]/dt=x'(t−T), and delaying the original derivative also gives x'(t−T); the system is time-invariant. Keep the explanation 140–180 words. End with the quick check: 'If you can find one counterexample, the system is not time-invariant.'"
+      },
+      {
+        "type": "section_summary",
+        "instruction": "Create a recap page titled '📌 Key Takeaways'. Use 4 bullet points, each ≤25 words. Include the core formulas explicitly: (1) x(t) →S y(t) implies x(t−T) →S y(t−T); (2) for time-varying y(t)=e^{-t}x(t), e^{-(t−T)}x(t−T) ≠ e^{-t}x(t−T); (3) constant coefficients in the differential-equation system model indicate LTI behavior; (4) one counterexample proves a system is time-varying. End with one bridge sentence: 'Next, use these classification tests together to recognize broader system types quickly.'"
+      },
+      {
+        "type": "quiz_plan",
+        "target_questions": 7,
+        "question_range": {
+          "min": 6,
+          "max": 8
+        },
+        "knowledge_points": [
+          {
+            "id": "time_invariance_definition",
+            "label": "Time-invariance delay property",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 2
+            },
+            "questions": [
+              {
+                "id": "ti_def_q1",
+                "type": "multiple_choice",
+                "stem": "A system is time-invariant if x(t) produces y(t). Which result must occur when the input is changed to x(t−T)?",
+                "options": [
+                  "A. The output must be y(t)+T",
+                  "B. The output must be y(t−T)",
+                  "C. The output must be y(T−t)",
+                  "D. The output must be x(t−T)y(t)"
+                ],
+                "correct_option": "B",
+                "explanation": "Time invariance means delaying the input by T delays the output by the same T.",
+                "wrong_option_explanations": {
+                  "A": "Adding T to amplitude is not a time delay.",
+                  "C": "y(T−t) is a time reversal plus shift, not a simple delay.",
+                  "D": "Time invariance does not multiply the input and output together."
+                },
+                "hint": "A delay replaces t by t−T.",
+                "needs_visual": false,
+                "same_point_variant": true
+              },
+              {
+                "id": "ti_def_q2",
+                "type": "multiple_choice",
+                "stem": "In the two-path time-invariance test, what must match?",
+                "options": [
+                  "A. The original input and original output",
+                  "B. The delayed input and original output",
+                  "C. The final outputs from both paths",
+                  "D. The values of T and t"
+                ],
+                "correct_option": "C",
+                "explanation": "The test compares the final result after 'system then delay' with the final result after 'delay then system'.",
+                "wrong_option_explanations": {
+                  "A": "Input and output usually have different shapes or amplitudes.",
+                  "B": "That compares different stages of the test.",
+                  "D": "T is a chosen delay, while t is the running time variable."
+                },
+                "hint": "Look at the outputs at the ends of the two paths.",
+                "needs_visual": true,
+                "visual_type": "book_figure",
+                "same_point_variant": true
+              }
+            ]
+          },
+          {
+            "id": "time_varying_clock_dependence",
+            "label": "Explicit time dependence",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 2
+            },
+            "questions": [
+              {
+                "id": "tv_clock_q1",
+                "type": "multiple_choice",
+                "stem": "For the system y(t)=e^{-t}x(t), why does the system fail the time-invariance test?",
+                "options": [
+                  "A. Because x(t−T) is not a valid delayed input",
+                  "B. Because e^{-(t−T)}x(t−T) and e^{-t}x(t−T) are generally different",
+                  "C. Because every exponential system is nonlinear",
+                  "D. Because time invariance requires y(t)=x(t)"
+                ],
+                "correct_option": "B",
+                "explanation": "The two test paths give different exponential factors, so the final outputs do not match.",
+                "wrong_option_explanations": {
+                  "A": "x(t−T) is exactly how a delayed input is represented.",
+                  "C": "The issue here is time variation, not automatically nonlinearity.",
+                  "D": "A time-invariant system can scale, filter, or differentiate; it does not need y(t)=x(t)."
+                },
+                "hint": "Compare the entire output expression, not just the input term.",
+                "needs_visual": false,
+                "same_point_variant": true
+              },
+              {
+                "id": "tv_clock_q2",
+                "type": "multiple_choice",
+                "stem": "Which feature is the strongest warning sign that a system may be time-varying?",
+                "options": [
+                  "A. A constant multiplier such as 5x(t)",
+                  "B. A derivative such as dx(t)/dt",
+                  "C. A coefficient that explicitly depends on t, such as t x(t)",
+                  "D. An output named y(t)"
+                ],
+                "correct_option": "C",
+                "explanation": "A coefficient that changes with the clock time t often makes the system time-varying.",
+                "wrong_option_explanations": {
+                  "A": "A constant multiplier does not change with time.",
+                  "B": "Differentiation can be time-invariant because it commutes with delay.",
+                  "D": "y(t) is just standard output notation."
+                },
+                "hint": "Ask whether the rule changes as the clock moves.",
+                "needs_visual": false,
+                "same_point_variant": true
+              }
+            ]
+          },
+          {
+            "id": "representative_system_tests",
+            "label": "Testing example systems",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 2
+            },
+            "questions": [
+              {
+                "id": "rep_test_q1",
+                "type": "multiple_choice",
+                "stem": "The system y(t)=x(t)u(t) is best classified as:",
+                "options": [
+                  "A. Time-invariant, because u(t) is a standard signal",
+                  "B. Time-varying, because the multiplier u(t) is tied to the fixed time origin",
+                  "C. Time-invariant, because x(t) is not changed",
+                  "D. Time-varying only when x(t)=0"
+                ],
+                "correct_option": "B",
+                "explanation": "The unit step u(t) turns the input on based on absolute time, so shifting the input does not simply shift the output.",
+                "wrong_option_explanations": {
+                  "A": "Being a standard signal does not make the system time-invariant.",
+                  "C": "The multiplier u(t) modifies the input based on clock time.",
+                  "D": "The classification is about the system rule, not only the zero input."
+                },
+                "hint": "Check whether the switching point moves with the delayed input.",
+                "needs_visual": true,
+                "visual_type": "wrong_vs_right_signal_comparison",
+                "same_point_variant": true
+              },
+              {
+                "id": "rep_test_q2",
+                "type": "multiple_choice",
+                "stem": "The system y(t)=d x(t)/dt is time-invariant because:",
+                "options": [
+                  "A. Differentiating a delayed input gives x'(t−T), matching the delayed derivative output",
+                  "B. Differentiation removes all delays",
+                  "C. Derivatives are always zero after a delay",
+                  "D. The output does not depend on the input"
+                ],
+                "correct_option": "A",
+                "explanation": "The derivative operation commutes with a time delay: d[x(t−T)]/dt = x'(t−T).",
+                "wrong_option_explanations": {
+                  "B": "The delay remains inside the derivative result.",
+                  "C": "A delayed signal can have a nonzero derivative.",
+                  "D": "The derivative output depends directly on the input waveform."
+                },
+                "hint": "Differentiate x(t−T) with respect to t.",
+                "needs_visual": false,
+                "same_point_variant": true
+              }
+            ]
+          },
+          {
+            "id": "lti_constant_coefficients",
+            "label": "Constant-coefficient LTI systems",
+            "importance": "medium",
+            "exam_weight": "medium",
+            "mastery_rule": {
+              "correct_streak_required": 1
+            },
+            "questions": [
+              {
+                "id": "lti_coeff_q1",
+                "type": "multiple_choice",
+                "stem": "A linear differential-equation system is LTI when its coefficients a_i and b_i are:",
+                "options": [
+                  "A. Functions of time",
+                  "B. Constants",
+                  "C. Equal to the input x(t)",
+                  "D. Always zero"
+                ],
+                "correct_option": "B",
+                "explanation": "The textbook states that a linear differential-equation system is LTI when the coefficients are constants.",
+                "wrong_option_explanations": {
+                  "A": "Time-dependent coefficients make the system linear time-varying.",
+                  "C": "Coefficients are parameters, not the input signal itself.",
+                  "D": "Coefficients do not need to be zero; they need to be constant."
+                },
+                "hint": "LTI means linear and time-invariant.",
+                "needs_visual": false,
+                "same_point_variant": false
+              }
+            ]
+          },
+          {
+            "id": "demo_observation",
+            "label": "Visual overlap test",
+            "importance": "medium",
+            "exam_weight": "medium",
+            "mastery_rule": {
+              "correct_streak_required": 1
+            },
+            "questions": [
+              {
+                "id": "demo_obs_q1",
+                "type": "short_answer",
+                "stem": "In the interactive demo, the final waveforms overlap for y(t)=2x(t) but not for y(t)=e^{-t}x(t). What conclusion should you draw?",
+                "ideal_answer": "The system y(t)=2x(t) is time-invariant because delaying before or after the system gives the same final waveform. The system y(t)=e^{-t}x(t) is time-varying because the time-dependent multiplier makes the two final outputs different.",
+                "grading_rubric": [
+                  "Must identify y(t)=2x(t) as time-invariant",
+                  "Must identify y(t)=e^{-t}x(t) as time-varying",
+                  "Must connect overlap/no-overlap to the two-path delay test",
+                  "Must mention the time-dependent multiplier for the failing case"
+                ],
+                "explanation": "This checks whether the student can interpret the visual test rather than only memorize formulas.",
+                "hint": "Overlapping final outputs mean the delay and system commute.",
+                "needs_visual": true,
+                "visual_type": "interactive_demo_observation",
+                "same_point_variant": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "existing_page_images": {
+    "page-102": "/pages/page-102.png",
+    "page-103": "/pages/page-103.png"
+  },
+  "available_figures": {
+    "page-102": [
+      {
+        "fig_id": "Fig. 1.28",
+        "caption": "Illustration of the time-invariance property showing that for a time-invariant system, delaying the output y(t) by T seconds is equivalent to first delaying the input x(t) by T seconds and then passing it through the system S.",
+        "description": "The figure illustrates time invariance using both signal plots and block diagrams. The plotted graphs have horizontal axis t and vertical signal labels x(t), y(t), x(t−T), and y(t−T); the delayed signals keep the same shapes but are shifted right by T, marked on the time axis. The block diagrams compare two equivalent paths: x(t) passing through system S and then a delay T seconds, versus delaying x(t) first and then applying S, with both producing y(t−T). Students should notice that for a time-invariant system, delaying the input or delaying the output gives the same shifted result."
+      }
+    ]
+  },
+  "web_sources": [
+    {
+      "index": 1,
+      "title": "Dynamical system",
+      "url": "https://en.wikipedia.org/wiki/Dynamical_system",
+      "snippet": "mathematics, physics, engineering and systems theory, a dynamical system is the description of how a system evolves in time. For example, an astronomer can"
+    },
+    {
+      "index": 2,
+      "title": "Pluto",
+      "url": "https://en.wikipedia.org/wiki/Pluto",
+      "snippet": "March 7, 2021. Retrieved August 19, 2021. \"HUBBLE REVEALS SURFACE OF PLUTO FOR FIRST TIME\". HubbleSite.org. Space Telescope Science Institute. March 7, 1996"
+    },
+    {
+      "index": 3,
+      "title": "Milankovitch cycles",
+      "url": "https://en.wikipedia.org/wiki/Milankovitch_cycles",
+      "snippet": "the orbit, the semi-major axis is invariant. The orbital period (the length of a sidereal year) is also invariant, because according to Kepler&#039;s third"
+    },
+    {
+      "index": 4,
+      "title": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Wikipedia",
+      "snippet": "changed Wikipedia&#039;s domain from wikipedia.com to wikipedia.org. After an early period of exponential growth, the growth rate of the English Wikipedia in terms"
+    },
+    {
+      "index": 5,
+      "title": "Duga radar",
+      "url": "https://en.wikipedia.org/wiki/Duga_radar",
+      "snippet": "signal became such a nuisance that some communications receivers began including \"Woodpecker Blankers\" in their circuit designs. The unclaimed signal"
+    }
+  ],
+  "output_contract": {
+    "format": "single_json_object",
+    "no_markdown_fences": true,
+    "no_prose": true,
+    "compact_json_preferred": true
+  },
+  "section_specific_rules": null,
+  "summary_hint": null,
+  "exam_priority_guidance": null
+}

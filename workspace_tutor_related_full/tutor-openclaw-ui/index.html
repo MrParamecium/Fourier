@@ -66,8 +66,8 @@
       }
     }
   </script>
-  <link rel="stylesheet" href="style.css?v=1778145900">
-  <link rel="icon" type="image/svg+xml" href="aquarius-logo.svg?v=1778143500">
+  <link rel="stylesheet" href="style.css?v=1778524463">
+  <link rel="icon" type="image/jpeg" href="aquarius-logo.jpg?v=1778524463">
 
   <style>
     .cute-btn-primary {
@@ -336,7 +336,9 @@
       flex: 0 0 48px;
       display: block;
       margin-top: -4px;
-      filter: drop-shadow(0 2px 0 rgba(30, 41, 59, 0.18));
+      object-fit: contain;
+      border-radius: 999px;
+      filter: none;
     }
 
     .intro-landing-new .scrap-logo-copy {
@@ -418,6 +420,7 @@
     .intro-landing-new .scrap-hero-copy {
       position: relative;
       padding-right: 18px;
+      animation: hero-copy-rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
 
     .intro-landing-new .scrap-hero-scribble {
@@ -469,6 +472,20 @@
       border-radius: 16px;
       font-size: 1.2rem;
       box-shadow: 4px 4px 0px #1E293B;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .intro-landing-new .scrap-cta-dark::after,
+    .intro-landing-new #introHeroExploreBtn::after {
+      content: "";
+      position: absolute;
+      inset: -60% auto -60% -30%;
+      width: 28%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
+      transform: rotate(18deg);
+      animation: cta-glint 4.8s ease-in-out infinite;
+      pointer-events: none;
     }
 
     .intro-landing-new .scrap-hero-note {
@@ -481,6 +498,7 @@
     .intro-landing-new .scrap-collage {
       position: relative;
       min-height: 520px;
+      animation: hero-collage-rise 1s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
     }
 
     .intro-landing-new .scrap-polaroid,
@@ -531,6 +549,7 @@
       box-shadow: 2px 4px 16px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(15, 23, 42, 0.02);
       transform: rotate(-2deg);
       z-index: 1;
+      animation: float-window 7s ease-in-out infinite;
     }
 
     .intro-landing-new .scrap-window-dots {
@@ -566,6 +585,21 @@
     .intro-landing-new .scrap-bubble.ai {
       background: #dbeafe;
       border: 1px solid #bfdbfe;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .intro-landing-new .scrap-bubble.ai::after {
+      content: "";
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 8px;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #38bdf8, #10b981);
+      transform-origin: left;
+      animation: answer-load 4.4s ease-in-out infinite;
     }
 
     .intro-landing-new .scrap-sticky {
@@ -698,82 +732,446 @@
       transform: rotate(2deg);
     }
 
-    .intro-landing-new .scrap-pipeline {
-      margin-top: 28px;
-      background: #0F172A;
-      border: 4px solid #1E293B;
-      border-radius: 40px;
-      padding: 48px 42px;
-      box-shadow: 0 30px 60px rgba(15, 23, 42, 0.18);
-      color: #fff;
+    .intro-landing-new .scrap-proof-section {
       position: relative;
       overflow: hidden;
     }
 
-    .intro-landing-new .scrap-pipeline::after {
+    .intro-landing-new .scrap-proof-section::before {
       content: "";
       position: absolute;
-      top: 18px;
-      right: 18px;
-      width: 180px;
-      height: 180px;
-      opacity: 0.18;
+      inset: 72px auto auto 8%;
+      width: 160px;
+      height: 160px;
       background:
-        linear-gradient(45deg, transparent 46%, #fff 46%, #fff 54%, transparent 54%),
-        linear-gradient(-45deg, transparent 46%, #fff 46%, #fff 54%, transparent 54%);
+        linear-gradient(90deg, rgba(125, 211, 252, 0.7) 50%, rgba(255,255,255,0.45) 50%);
+      background-size: 20px 20px;
+      clip-path: polygon(8% 18%, 100% 0, 91% 78%, 0 100%);
+      opacity: 0.38;
+      transform: rotate(-12deg);
+      animation: proof-orbit 12s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .intro-landing-new .scrap-proof-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(280px, 0.88fr) minmax(360px, 1.12fr);
+      gap: 44px;
+      align-items: center;
+    }
+
+    .intro-landing-new .proof-card {
+      position: relative;
+      min-height: 340px;
+      padding: 34px;
+      border-radius: 4px;
+      background: #fff;
+      border: 2px solid #1E293B;
+      box-shadow: 4px 4px 0 #1E293B;
+      overflow: visible;
+      isolation: isolate;
+    }
+
+    .intro-landing-new .proof-card::after {
+      content: none;
+    }
+
+    .intro-landing-new .proof-card-muted {
+      padding: 42px 34px 38px 48px;
+      background-color: #fff;
+      background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 27px, rgba(147, 197, 253, 0.56) 28px);
+      transform: rotate(-2.4deg);
+      filter: saturate(0.75);
+    }
+
+    .intro-landing-new .proof-card-muted::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 42px;
+      width: 2px;
+      background: rgba(248, 113, 113, 0.42);
+      pointer-events: none;
+    }
+
+    .intro-landing-new .proof-card-muted::after {
+      content: "";
+      position: absolute;
+      left: 13px;
+      top: 24px;
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      background: #FDFBF7;
+      box-shadow:
+        0 76px 0 #FDFBF7,
+        0 152px 0 #FDFBF7,
+        0 228px 0 #FDFBF7;
+      border: 2px solid rgba(30, 41, 59, 0.12);
+    }
+
+    .intro-landing-new .proof-card-live {
+      padding: 42px 44px 132px;
+      background: #FDFBF7;
+      border: 2px solid #1E293B;
+      box-shadow: 8px 8px 0 #1E293B, 0 24px 48px rgba(15, 23, 42, 0.1);
+      transform: rotate(1deg);
+      animation: proof-card-breathe 6s ease-in-out infinite;
+    }
+
+    .intro-landing-new .proof-card-live::before {
+      content: "";
+      position: absolute;
+      top: -16px;
+      left: 52%;
+      width: 148px;
+      height: 32px;
+      background: repeating-linear-gradient(-45deg, rgba(110, 231, 183, 0.82), rgba(110, 231, 183, 0.82) 10px, rgba(255,255,255,0.5) 10px, rgba(255,255,255,0.5) 20px);
+      border: 1px solid rgba(30, 41, 59, 0.12);
+      transform: translateX(-50%) rotate(1deg);
+      box-shadow: 0 3px 10px rgba(15, 23, 42, 0.08);
+      z-index: 2;
+    }
+
+    .intro-landing-new .proof-topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+      font-family: "DM Mono", monospace;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(30, 41, 59, 0.56);
+    }
+
+    .intro-landing-new .proof-stamp {
+      display: inline-block;
+      padding: 5px 10px;
+      border: 2px solid currentColor;
+      border-radius: 999px;
+      color: #0f766e;
+      font-family: "DM Mono", monospace;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transform: rotate(-2deg);
+    }
+
+    .intro-landing-new .proof-question {
+      margin: 0 0 18px;
+      padding: 0 0 0 24px;
+      border-radius: 0;
+      background: transparent;
+      border: none;
+      color: #334155;
+      font-family: "Caveat", cursive;
+      font-size: 1.9rem;
+      font-weight: 700;
+      line-height: 28px;
+    }
+
+    .intro-landing-new .proof-answer-ghost {
+      margin: 0 0 26px;
+      padding-left: 24px;
+      color: rgba(100, 116, 139, 0.76);
+      font-family: "Caveat", cursive;
+      font-size: 1.65rem;
+      font-weight: 700;
+      line-height: 28px;
+    }
+
+    .intro-landing-new .proof-answer-ghost span {
+      background-image: linear-gradient(transparent 56%, rgba(248, 113, 113, 0.26) 56%);
+    }
+
+    .intro-landing-new .proof-red-note {
+      position: absolute;
+      right: 22px;
+      bottom: 30px;
+      max-width: 190px;
+      color: #EF4444;
+      font-family: "Caveat", cursive;
+      font-size: 1.75rem;
+      font-weight: 700;
+      line-height: 1;
+      transform: rotate(-7deg);
+    }
+
+    .intro-landing-new .proof-red-note::before {
+      content: "";
+      position: absolute;
+      left: -18px;
+      top: -15px;
+      width: 96px;
+      height: 34px;
+      border-top: 3px solid #EF4444;
+      border-radius: 50%;
+      transform: rotate(16deg);
+      opacity: 0.75;
+    }
+
+    .intro-landing-new .proof-context-box {
+      margin-bottom: 16px;
+      padding: 0 0 18px;
+      background: transparent;
+      border-bottom: 2px solid #1E293B;
+    }
+
+    .intro-landing-new .proof-context-label {
+      display: block;
+      margin-bottom: 9px;
+      font-family: "DM Mono", monospace;
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: #047857;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .intro-landing-new .proof-context-title {
+      margin: 0;
+      font-family: "Source Serif 4", Georgia, serif;
+      font-size: clamp(1.45rem, 2.15vw, 2rem);
+      line-height: 1.16;
+      letter-spacing: 0;
+      color: #1E293B;
+    }
+
+    .intro-landing-new .proof-book-copy {
+      position: relative;
+      margin: 18px 0 0;
+      padding: 8px 118px 0 0;
+      color: #334155;
+      font-family: "Source Serif 4", Georgia, serif;
+      font-size: 1.08rem;
+      line-height: 1.62;
+    }
+
+    .intro-landing-new .proof-book-copy strong {
+      background-image: linear-gradient(transparent 60%, rgba(253, 224, 71, 0.62) 60%);
+      color: #111827;
+      font-weight: 800;
+    }
+
+    .intro-landing-new .proof-margin-note {
+      position: absolute;
+      top: 132px;
+      right: 28px;
+      width: 96px;
+      padding: 8px 0;
+      border-top: 2px solid rgba(37, 99, 235, 0.55);
+      border-bottom: 2px solid rgba(37, 99, 235, 0.55);
+      color: #2563EB;
+      font-family: "Caveat", cursive;
+      font-size: 1.35rem;
+      font-weight: 700;
+      line-height: 1;
+      text-align: center;
+      transform: rotate(5deg);
+    }
+
+    .intro-landing-new .proof-page-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .intro-landing-new .proof-page-tabs span {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 12px;
+      border-radius: 0;
+      background: #fff;
+      border: 1px solid #CBD5E1;
+      border-bottom: 3px solid #CBD5E1;
+      font-family: "DM Mono", monospace;
+      font-size: 0.76rem;
+      font-weight: 800;
+      color: #475569;
+      transform: rotate(var(--tab-tilt, -1deg));
+    }
+
+    .intro-landing-new .proof-response {
+      position: absolute;
+      right: 28px;
+      bottom: -24px;
+      width: min(360px, calc(100% - 56px));
+      margin-top: 0;
+      padding: 18px 20px 20px;
+      border-radius: 0;
+      background: #FDE047;
+      color: #1E293B;
+      border: 2px solid #1E293B;
+      box-shadow: 4px 4px 0 #1E293B;
+      transform: rotate(-3deg);
+    }
+
+    .intro-landing-new .proof-response p {
+      margin: 0;
+      font-family: "Caveat", cursive;
+      font-size: 1.65rem;
+      font-weight: 700;
+      line-height: 1.15;
+    }
+
+    .intro-landing-new .proof-response strong {
+      color: #2563EB;
+    }
+
+    .intro-landing-new .scrap-pipeline {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 24px;
+      background:
+        linear-gradient(90deg, rgba(203, 213, 225, 0.32) 1px, transparent 1px),
+        linear-gradient(rgba(203, 213, 225, 0.32) 1px, transparent 1px),
+        #F8FAFC;
+      background-size: 28px 28px;
+      border: 2px solid rgba(30, 41, 59, 0.2);
+      box-shadow: 6px 6px 0 #1E293B, 0 24px 42px rgba(15, 23, 42, 0.1);
+      color: #1E293B;
+      position: relative;
+      overflow: visible;
+    }
+
+    .intro-landing-new .scrap-pipeline::before {
+      content: "";
+      position: absolute;
+      top: -18px;
+      left: 8%;
+      width: 180px;
+      height: 36px;
+      background: repeating-linear-gradient(90deg, rgba(147, 197, 253, 0.76), rgba(147, 197, 253, 0.76) 14px, rgba(255,255,255,0.52) 14px, rgba(255,255,255,0.52) 28px);
+      border: 1px solid rgba(30, 41, 59, 0.12);
+      transform: rotate(-3deg);
+      box-shadow: 0 3px 8px rgba(15, 23, 42, 0.08);
+    }
+
+    .intro-landing-new .scrap-pipeline::after {
+      content: "study pipeline";
+      position: absolute;
+      right: 26px;
+      top: -28px;
+      color: #2563EB;
+      font-family: "Caveat", cursive;
+      font-size: 2rem;
+      font-weight: 700;
+      transform: rotate(4deg);
     }
 
     .intro-landing-new .scrap-pipeline-grid {
       position: relative;
       z-index: 1;
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(320px, 0.9fr);
-      gap: 46px;
-      align-items: center;
+      grid-template-columns: minmax(260px, 0.7fr) minmax(520px, 1.3fr);
+      gap: 34px;
+      align-items: stretch;
     }
 
     .intro-landing-new .scrap-pipeline-copy h2 {
       margin: 0 0 18px;
       font-family: "Bricolage Grotesque", sans-serif;
-      font-size: clamp(2.5rem, 4vw, 4.2rem);
+      font-size: clamp(2.4rem, 3.8vw, 4rem);
       line-height: 1.05;
-      letter-spacing: -0.05em;
+      letter-spacing: 0;
     }
 
     .intro-landing-new .scrap-pipeline-copy p {
       margin: 0;
-      color: rgba(226, 232, 240, 0.82);
+      color: #475569;
       font-size: 1.12rem;
       line-height: 1.8;
       font-weight: 700;
     }
 
+    .intro-landing-new .scrap-pipeline-label,
+    .intro-landing-new .scrap-footer-eyebrow {
+      display: inline-flex;
+      margin-bottom: 16px;
+      padding: 7px 12px;
+      border: 2px solid #1E293B;
+      background: #FDE047;
+      box-shadow: 3px 3px 0 #1E293B;
+      font-family: "DM Mono", monospace;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transform: rotate(-1deg);
+    }
+
     .intro-landing-new .scrap-agent-stack {
       position: relative;
-      min-height: 290px;
+      min-height: 350px;
+      display: grid;
+      grid-template-columns: minmax(145px, 1fr) 48px minmax(145px, 1fr) 48px minmax(145px, 1fr);
+      gap: 12px;
+      align-items: center;
     }
 
     .intro-landing-new .scrap-agent-card {
-      position: absolute;
-      width: 210px;
+      position: relative;
+      min-height: 246px;
       padding: 18px;
       border: 2px solid #1E293B;
       box-shadow: 4px 4px 0px #1E293B;
       color: #1E293B;
+      overflow: visible;
     }
 
-    .intro-landing-new .scrap-agent-card.a {
-      top: 0;
-      left: 0;
+    .intro-landing-new .scrap-agent-card::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: -16px;
+      width: 98px;
+      height: 28px;
+      background: rgba(255, 255, 255, 0.62);
+      border: 1px solid rgba(30, 41, 59, 0.1);
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+      transform: translateX(-50%) rotate(var(--tape-tilt, -3deg));
+      backdrop-filter: blur(2px);
+    }
+
+    .intro-landing-new .scrap-agent-card.read {
       background: #fff;
-      transform: rotate(-5deg);
+      transform: rotate(-2deg);
+      font-family: "Source Serif 4", Georgia, serif;
     }
 
-    .intro-landing-new .scrap-agent-card.b {
-      right: 0;
-      bottom: 0;
-      background: #F9A8D4;
-      transform: rotate(4deg);
+    .intro-landing-new .scrap-agent-card.plan {
+      background:
+        linear-gradient(to bottom, rgba(248, 113, 113, 0.58) 0 4px, transparent 4px 100%),
+        repeating-linear-gradient(to bottom, #FFFBEB 0, #FFFBEB 29px, rgba(96, 165, 250, 0.34) 30px);
+      transform: rotate(2deg);
+      --tape-tilt: 4deg;
+    }
+
+    .intro-landing-new .scrap-agent-card.teach {
+      background: #FDFBF7;
+      transform: rotate(-1deg);
+      --tape-tilt: -5deg;
+    }
+
+    .intro-landing-new .scrap-agent-card.teach::after {
+      content: "A";
+      position: absolute;
+      right: 20px;
+      bottom: 18px;
+      color: #EF4444;
+      font-family: "Caveat", cursive;
+      font-size: 3rem;
+      font-weight: 700;
+      transform: rotate(-9deg);
     }
 
     .intro-landing-new .scrap-agent-id {
@@ -800,38 +1198,85 @@
     }
 
     .intro-landing-new .scrap-agent-arrow {
+      position: relative;
+      width: 48px;
+      height: 32px;
+      justify-self: center;
+      color: #2563EB;
+      transform: rotate(-5deg);
+      z-index: 2;
+    }
+
+    .intro-landing-new .scrap-agent-arrow::before {
+      content: "";
       position: absolute;
-      left: 34%;
-      top: 34%;
-      width: 130px;
-      height: 130px;
-      color: #FDE047;
-      z-index: 0;
+      inset: 5px 10px 8px 0;
+      border-bottom: 3px dashed currentColor;
+      border-radius: 50%;
+    }
+
+    .intro-landing-new .scrap-agent-arrow::after {
+      content: "";
+      position: absolute;
+      right: 5px;
+      top: 11px;
+      width: 14px;
+      height: 14px;
+      border-right: 3px solid currentColor;
+      border-top: 3px solid currentColor;
+      transform: rotate(45deg);
     }
 
     .intro-landing-new .scrap-footer {
-      margin-top: 48px;
-      padding: 110px 24px 56px;
-      background: #fff;
-      border-top: 1px solid rgba(148, 163, 184, 0.25);
+      margin-top: 72px;
+      padding: 44px 24px 72px;
+      background:
+        linear-gradient(90deg, rgba(203, 213, 225, 0.26) 1px, transparent 1px),
+        linear-gradient(rgba(203, 213, 225, 0.26) 1px, transparent 1px),
+        #F8FAFC;
+      background-size: 28px 28px;
       position: relative;
     }
 
     .intro-landing-new .scrap-footer::before {
       content: "";
       position: absolute;
-      top: -10px;
+      top: -9px;
       left: 0;
       right: 0;
-      height: 10px;
+      height: 18px;
       background-size: 20px 20px;
-      background-image: radial-gradient(circle at 10px 0, transparent 12px, #fff 13px);
+      background-image: radial-gradient(circle at 10px 0, transparent 12px, #F8FAFC 13px);
     }
 
     .intro-landing-new .scrap-footer-inner {
-      max-width: 720px;
+      max-width: 1060px;
       margin: 0 auto;
-      text-align: center;
+      position: relative;
+      padding: 44px;
+      background: #fff;
+      border: 2px solid #1E293B;
+      box-shadow: 7px 7px 0 #1E293B, 0 22px 42px rgba(15, 23, 42, 0.1);
+      transform: rotate(-0.4deg);
+    }
+
+    .intro-landing-new .scrap-footer-inner::before {
+      content: "";
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      width: 220px;
+      height: 34px;
+      background: repeating-linear-gradient(90deg, rgba(253, 224, 71, 0.76), rgba(253, 224, 71, 0.76) 14px, rgba(255,255,255,0.52) 14px, rgba(255,255,255,0.52) 28px);
+      transform: translateX(-50%) rotate(2deg);
+      border: 1px solid rgba(30, 41, 59, 0.12);
+    }
+
+    .intro-landing-new .scrap-footer-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 300px;
+      gap: 42px;
+      align-items: center;
     }
 
     .intro-landing-new .scrap-footer h2 {
@@ -839,14 +1284,13 @@
       font-family: "Bricolage Grotesque", sans-serif;
       font-size: clamp(3rem, 5vw, 4.8rem);
       line-height: 1;
-      letter-spacing: -0.05em;
+      letter-spacing: 0;
     }
 
     .intro-landing-new .scrap-footer p {
-      margin: 0 auto 36px;
-      max-width: 620px;
+      margin: 0 0 32px;
+      max-width: 600px;
       color: rgba(30, 41, 59, 0.72);
-      font-size: 1.2rem;
       line-height: 1.7;
       font-weight: 700;
     }
@@ -859,6 +1303,58 @@
       border-radius: 20px;
       font-size: 1.35rem;
       box-shadow: 4px 4px 0px #1E293B;
+    }
+
+    .intro-landing-new .scrap-footer-checklist {
+      position: relative;
+      padding: 26px 24px;
+      background:
+        repeating-linear-gradient(to bottom, #FDFBF7 0, #FDFBF7 31px, rgba(96, 165, 250, 0.24) 32px);
+      border: 2px solid #1E293B;
+      box-shadow: 4px 4px 0 #1E293B;
+      transform: rotate(2deg);
+    }
+
+    .intro-landing-new .scrap-footer-grade {
+      position: absolute;
+      right: -14px;
+      top: -28px;
+      color: #EF4444;
+      font-family: "Caveat", cursive;
+      font-size: 4.8rem;
+      font-weight: 700;
+      transform: rotate(10deg);
+    }
+
+    .intro-landing-new .scrap-footer-checklist h3 {
+      margin: 0 0 18px;
+      font-family: "DM Mono", monospace;
+      font-size: 0.8rem;
+      color: #64748B;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .intro-landing-new .scrap-footer-checklist ul {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font-weight: 800;
+      color: #334155;
+    }
+
+    .intro-landing-new .scrap-footer-checklist li::before {
+      content: "";
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      margin-right: 10px;
+      border: 2px solid #2563EB;
+      border-radius: 3px;
+      background: linear-gradient(135deg, transparent 0 44%, #10B981 44% 58%, transparent 58%);
+      transform: rotate(-4deg);
     }
 
     .intro-landing-new .scrap-footer-meta {
@@ -875,9 +1371,60 @@
       50% { transform: translateY(-10px) rotate(calc(var(--scrap-rotate, 0deg) + 2deg)); }
     }
 
+    @keyframes hero-copy-rise {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes hero-collage-rise {
+      from { opacity: 0; transform: translateY(24px) scale(0.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes float-window {
+      0%, 100% { transform: translateY(0) rotate(-2deg); }
+      50% { transform: translateY(-8px) rotate(-1deg); }
+    }
+
+    @keyframes answer-load {
+      0%, 18% { transform: scaleX(0); opacity: 0.4; }
+      46%, 74% { transform: scaleX(1); opacity: 1; }
+      100% { transform: scaleX(1); opacity: 0.4; }
+    }
+
+    @keyframes cta-glint {
+      0%, 46% { transform: translateX(0) rotate(18deg); opacity: 0; }
+      58% { opacity: 1; }
+      78%, 100% { transform: translateX(520%) rotate(18deg); opacity: 0; }
+    }
+
+    @keyframes proof-orbit {
+      0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.7; }
+      50% { transform: translate3d(-80px, 70px, 0) scale(1.12); opacity: 1; }
+    }
+
+    @keyframes proof-card-breathe {
+      0%, 100% { transform: translateY(0) rotate(0.4deg); }
+      50% { transform: translateY(-5px) rotate(0deg); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .intro-landing-new .proof-card,
+      .intro-landing-new .proof-card::after,
+      .intro-landing-new .scrap-proof-section::before,
+      .intro-landing-new .scrap-hero-copy,
+      .intro-landing-new .scrap-collage,
+      .intro-landing-new .scrap-window,
+      .intro-landing-new .scrap-bubble.ai::after,
+      .intro-landing-new #introHeroExploreBtn::after {
+        animation: none !important;
+      }
+    }
+
     @media (max-width: 1100px) {
       .intro-landing-new .scrap-hero-grid,
       .intro-landing-new .scrap-compare-grid,
+      .intro-landing-new .scrap-proof-grid,
       .intro-landing-new .scrap-pipeline-grid,
       .intro-landing-new .scrap-agent-grid {
         grid-template-columns: 1fr;
@@ -935,6 +1482,62 @@
         padding: 36px 20px;
         border-radius: 28px;
       }
+
+      .intro-landing-new .scrap-agent-stack,
+      .intro-landing-new .scrap-footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .intro-landing-new .scrap-agent-stack {
+        min-height: auto;
+        gap: 18px;
+      }
+
+      .intro-landing-new .scrap-agent-card {
+        min-height: auto;
+      }
+
+      .intro-landing-new .scrap-agent-arrow {
+        width: 44px;
+        height: 44px;
+        transform: rotate(90deg);
+      }
+
+      .intro-landing-new .scrap-footer-inner {
+        padding: 28px 22px;
+      }
+
+      .intro-landing-new .scrap-footer-checklist {
+        transform: rotate(-1deg);
+      }
+
+      .intro-landing-new .proof-card {
+        min-height: auto;
+        padding: 22px;
+      }
+
+      .intro-landing-new .proof-card-live {
+        padding-bottom: 24px;
+      }
+
+      .intro-landing-new .proof-book-copy {
+        padding-right: 0;
+      }
+
+      .intro-landing-new .proof-margin-note,
+      .intro-landing-new .proof-response,
+      .intro-landing-new .proof-red-note {
+        position: relative;
+        inset: auto;
+        width: auto;
+        max-width: none;
+        margin-top: 18px;
+      }
+
+      .intro-landing-new .proof-response {
+        right: auto;
+        bottom: auto;
+      }
     }
   </style>
 </head>
@@ -946,22 +1549,9 @@
     <nav id="introNavbar" class="fixed w-full z-50 top-0 pointer-events-none">
       <div class="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between pointer-events-auto">
         <!-- Logo 像是一张贴纸 -->
-        <div class="bg-white px-4 py-2 border-2 border-ink shadow-chunky -rotate-2 hover:rotate-0 transition-transform cursor-pointer flex items-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" class="scrap-logo-mark" aria-hidden="true">
-            <rect x="26" y="26" width="116" height="116" rx="28" fill="#1E293B"></rect>
-            <g transform="rotate(-5 80 80)">
-              <rect x="20" y="20" width="116" height="116" rx="28" fill="#FDFBF7" stroke="#1E293B" stroke-width="6"></rect>
-              <rect x="42" y="58" width="76" height="28" rx="14" fill="#FDE047" opacity="0.8" transform="rotate(-3 80 72)"></rect>
-              <path d="M 40 60 Q 52 42 64 60 T 88 60 T 112 60" fill="none" stroke="#1E293B" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"></path>
-              <path d="M 40 90 Q 52 72 64 90 T 88 90 T 112 90" fill="none" stroke="#0EA5E9" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"></path>
-              <path d="M 112 28 Q 116 38 126 38 Q 116 38 112 48 Q 112 38 102 38 Q 112 38 112 28 Z" fill="#F9A8D4" stroke="#1E293B" stroke-width="4" stroke-linejoin="round"></path>
-            </g>
-            <g transform="rotate(-18 35 25)">
-              <rect x="0" y="0" width="60" height="22" fill="#7DD3FC" opacity="0.9"></rect>
-              <path d="M 0 0 L 60 0 M 0 22 L 60 22" stroke="#1E293B" stroke-width="2" stroke-dasharray="4 4" opacity="0.5"></path>
-            </g>
-          </svg>
-          <span class="font-title font-bold text-xl tracking-tight">Aquarius</span>
+        <div class="bg-white pr-5 pl-2 py-2 border-2 border-ink shadow-chunky -rotate-2 hover:rotate-0 transition-transform cursor-pointer flex items-center gap-3">
+          <img src="aquarius-logo.jpg?v=1778524463" class="scrap-logo-mark" alt="" aria-hidden="true">
+          <span class="font-title font-bold text-2xl tracking-tight text-ink mt-1">Aquarius</span>
         </div>
 
         <button id="introGetStartedBtn" class="bg-highlighter-yellow text-ink border-2 border-ink px-6 py-2 font-bold font-title text-lg shadow-chunky hover:-translate-y-1 hover:shadow-chunky-hover active:translate-y-1 active:shadow-none transition-all rotate-1" type="button">
@@ -1034,115 +1624,118 @@
     </header>
 
     <!-- 特性：对比 (不对称布局) -->
-    <section class="py-24 px-6 relative z-20">
+    <section class="py-24 px-6 relative z-20 scrap-proof-section">
       <div class="max-w-6xl mx-auto">
         <div class="text-center mb-20">
-          <h2 class="font-title text-4xl md:text-5xl font-bold mb-4">No more <span class="highlight-pink">AI Hallucinations.</span></h2>
-          <p class="font-hand text-2xl text-slate-500">We ground everything in your actual syllabus.</p>
+          <h2 class="font-title text-4xl md:text-5xl font-bold mb-4">Grounded in <span class="highlight-pink">your actual pages.</span></h2>
+          <p class="font-hand text-2xl text-slate-500">Same scrapbook energy, but the answer has a paper trail.</p>
         </div>
 
-        <div class="grid md:grid-cols-2 gap-16 items-start">
-          <!-- Bad Example: 揉皱的纸 -->
-          <div class="relative bg-white border border-slate-200 p-8 shadow-paper rotate-2 flex flex-col justify-between h-full">
-            <div class="tape tape-pattern-1 -top-3 -left-4 -rotate-[25deg]"></div>
-            <div>
-              <div class="font-mono text-red-500 font-bold mb-4 flex items-center gap-2">
-                <span class="text-xl">❌</span> GENERIC CHATBOT
-              </div>
-              <p class="text-slate-400 font-body leading-relaxed line-through decoration-red-400 decoration-2">
-                The frequency response is defined by an arbitrary equation that I just invented because I lack the context of your specific textbook chapter...
-              </p>
+        <div class="scrap-proof-grid">
+          <div class="proof-card proof-card-muted">
+            <div class="proof-topline">
+              <span>looseleaf guess</span>
             </div>
-            <div class="font-hand text-3xl text-red-500 mt-8 -rotate-3 border-t-2 border-red-200 pt-4">Wait, is this even on the exam?!</div>
+            <p class="proof-question">Explain the frequency response for this week's signals unit.</p>
+            <p class="proof-answer-ghost">
+              <span>Maybe Fourier? Maybe filters? It sounds plausible, but nothing is tied to the exact chapter.</span>
+            </p>
+            <div class="proof-red-note">where is this in the book?</div>
           </div>
 
-          <!-- Good Example: 整洁的卡片 -->
-          <div class="relative bg-white border-2 border-ink p-8 shadow-chunky -rotate-1 flex flex-col justify-between h-full">
-            <div class="pin" style="left: 90%;"></div>
-            <div>
-              <div class="font-mono text-emerald-600 font-bold mb-4 flex items-center gap-2">
-                <span class="text-xl">✅</span> AQUARIUS TUTOR
-              </div>
-              <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl mb-4">
-                <span class="font-bold text-ink">Syllabus Context:</span> Chapter 3.2 - Continuous-Time Fourier Series.
-              </div>
-              <p class="text-ink font-body font-semibold leading-relaxed">
-                According to your textbook (Lathi, p.184), the exact formula you need is the Trigonometric Fourier Series. Let's look at the official diagram.
-              </p>
+          <div class="proof-card proof-card-live">
+            <div class="proof-topline">
+              <span>Aquarius page pull</span>
+              <span class="proof-stamp">source locked</span>
             </div>
-            <div class="font-hand text-3xl text-blue-600 mt-8 rotate-2">Exactly what the professor taught! 💯</div>
+            <div class="proof-context-box">
+              <span class="proof-context-label">matched in your syllabus</span>
+              <p class="proof-context-title">Chapter 3.2 · Continuous-Time Fourier Series</p>
+            </div>
+            <p class="proof-book-copy">
+              The answer starts from the exact section your course points to: <strong>periodic signals are represented as weighted sinusoids</strong>, then Aquarius opens the matching textbook figure before writing the explanation.
+            </p>
+            <div class="proof-margin-note">Lathi p.184<br>Fig. 3.2</div>
+            <div class="proof-page-tabs" aria-label="attached source trail">
+              <span style="--tab-tilt: -1.5deg;">syllabus</span>
+              <span style="--tab-tilt: 1deg;">OCR page</span>
+              <span style="--tab-tilt: -0.5deg;">figure map</span>
+            </div>
+            <div class="proof-response">
+              <p><strong>Start here:</strong> the figure is not decoration; it is the outline Aquarius follows.</p>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 特性：多智能体管线 (视觉隐喻：黑板上的流程图) -->
+    <!-- 特性：多智能体管线 -->
     <section class="py-24 px-6 relative mt-12">
-      <!-- 夸张的虚线背景框 -->
-      <div class="max-w-6xl mx-auto bg-slate-900 rounded-[40px] p-10 md:p-20 relative shadow-2xl overflow-hidden border-4 border-ink">
-        <!-- 内部装饰 -->
-        <div class="absolute top-0 right-0 p-8 opacity-20 pointer-events-none">
-          <svg width="200" height="200" viewBox="0 0 100 100"><path d="M10,10 L90,90 M90,10 L10,90" stroke="white" stroke-width="2"></path></svg>
-        </div>
-
-        <div class="relative z-10 text-white flex flex-col md:flex-row gap-16 items-center">
-          <div class="flex-1">
-            <h2 class="font-title text-4xl md:text-5xl font-bold mb-6 text-white leading-tight">
-              A Multi-Agent <br>
-              <span class="text-highlighter-yellow">Teaching Pipeline.</span>
+      <div class="scrap-pipeline">
+        <div class="scrap-pipeline-grid">
+          <div class="scrap-pipeline-copy">
+            <span class="scrap-pipeline-label">multi-agent desk</span>
+            <h2>
+              A Teaching Pipeline<br>
+              <span class="highlight-yellow">you can inspect.</span>
             </h2>
-            <p class="text-slate-300 text-lg mb-8 font-body">
-              Aquarius uses two brains. Agent A reads the textbook and plans the lesson structure. Agent B takes that blueprint and explains it to you patiently. If the plan fails, it stops instead of lying.
+            <p>
+              Aquarius does not just “answer.” It reads the exact page, turns it into a lesson card, then checks the explanation against what you actually need to practice.
             </p>
           </div>
 
-          <!-- 纸片拼贴：Agent A 和 Agent B -->
-          <div class="flex-1 relative w-full h-[300px]">
-            <!-- Agent A -->
-            <div class="absolute top-0 left-0 bg-white text-ink p-4 border-2 border-ink shadow-chunky rotate-[-5deg] w-48 z-20">
-              <div class="font-mono text-xs text-slate-400 mb-2 border-b border-slate-200 pb-1">AGENT 01</div>
-              <div class="font-title font-bold text-lg mb-1">The Planner</div>
-              <div class="text-sm font-body">Extracts formulas &amp; figures.</div>
-            </div>
-
-            <!-- 手绘弯曲箭头 -->
-            <svg class="absolute top-[30%] left-[35%] w-32 h-32 text-highlighter-yellow z-10 overflow-visible" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round">
-              <path d="M 10,10 Q 50,-20 80,40" stroke-dasharray="8 8"></path>
-              <path d="M 70,30 L 80,40 L 70,50"></path>
-            </svg>
-
-            <!-- Agent B -->
-            <div class="absolute bottom-0 right-0 bg-highlighter-pink text-ink p-4 border-2 border-ink shadow-chunky rotate-[4deg] w-48 z-20">
-              <div class="font-mono text-xs text-ink/50 mb-2 border-b border-ink/20 pb-1">AGENT 02</div>
-              <div class="font-title font-bold text-lg mb-1">The Tutor</div>
-              <div class="text-sm font-body">Writes student-friendly explanations.</div>
-            </div>
+          <div class="scrap-agent-stack" aria-label="Aquarius teaching pipeline">
+            <article class="scrap-agent-card read">
+              <div class="scrap-agent-id">STEP 01 · TEXTBOOK</div>
+              <div class="scrap-agent-title">Read the source</div>
+              <p>Figures, equations, OCR pages, and syllabus nodes get pulled into one grounded packet.</p>
+            </article>
+            <span class="scrap-agent-arrow" aria-hidden="true"></span>
+            <article class="scrap-agent-card plan">
+              <div class="scrap-agent-id">STEP 02 · PLAN</div>
+              <div class="scrap-agent-title">Make the lesson card</div>
+              <p>Key points are ordered like a study guide, with traps and formulas marked before writing.</p>
+            </article>
+            <span class="scrap-agent-arrow" aria-hidden="true"></span>
+            <article class="scrap-agent-card teach">
+              <div class="scrap-agent-id">STEP 03 · CHECK</div>
+              <div class="scrap-agent-title">Teach, then test</div>
+              <p>The explanation becomes practice, not a floating paragraph you have to trust blindly.</p>
+            </article>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Footer 撕裂的笔记本页面 -->
-    <footer class="mt-32 relative">
-      <!-- 撕边效果顶栏 -->
-      <div class="w-full h-8 bg-white torn-edge z-10 relative border-t border-slate-200"></div>
+    <footer class="scrap-footer">
+      <div class="scrap-footer-inner">
+        <div class="scrap-footer-grid">
+          <div>
+            <span class="scrap-footer-eyebrow">last page before the exam</span>
+            <h2>Aces Your Exams.</h2>
+            <p class="font-hand text-3xl text-slate-500">Your memory, your textbook, one workspace.</p>
 
-      <div class="bg-white pt-24 pb-12 px-6 border-b-8 border-ink">
-        <div class="max-w-3xl mx-auto text-center relative">
-          <div class="tape tape-pattern-2 top-0 left-1/2 -translate-x-1/2 rotate-1 mb-8 w-40 h-10 relative"></div>
+            <button id="introFooterCtaBtn" class="bg-tape-green text-ink border-4 border-ink px-10 py-5 font-bold font-title text-2xl rounded-2xl shadow-chunky hover:translate-y-1 hover:shadow-none transition-all w-full md:w-auto" type="button">
+              Create Free Account
+            </button>
 
-          <h2 class="font-title text-5xl md:text-6xl font-bold text-ink mb-6">Aces Your Exams.</h2>
-          <p class="font-hand text-3xl text-slate-500 mb-12">Your memory, your textbook, one workspace.</p>
+            <div class="scrap-footer-meta">
+              © 2026 Aquarius AI Lab. Built with blood, sweat &amp; textbooks.
+            </div>
+          </div>
 
-          <button id="introFooterCtaBtn" class="bg-tape-green text-ink border-4 border-ink px-10 py-5 font-bold font-title text-2xl rounded-2xl shadow-chunky hover:translate-y-1 hover:shadow-none transition-all w-full md:w-auto" type="button">
-            Create Free Account 🎒
-          </button>
-
-          <div class="mt-20 font-mono text-xs text-slate-400 font-bold uppercase tracking-widest">
-            © 2026 Aquarius AI Lab. Built with blood, sweat &amp; textbooks.
+          <aside class="scrap-footer-checklist" aria-label="exam prep checklist">
+            <div class="scrap-footer-grade">A+</div>
+            <h3>before test day</h3>
+            <ul>
+              <li>Lecture mapped</li>
+              <li>Book figures checked</li>
+              <li>Weak spots practiced</li>
+            </ul>
+          </aside>
           </div>
         </div>
-      </div>
     </footer>
   </div>
   
@@ -1150,7 +1743,6 @@
     <aside class="sidebar" id="leftSidebar" style="display:flex; flex-direction:column; min-height:0; height:100vh;">
       <div class="sidebar-journal-decor sidebar-journal-tape" aria-hidden="true"></div>
       <div class="sidebar-journal-decor sidebar-journal-hole-line" aria-hidden="true"></div>
-      <div class="sidebar-journal-decor sidebar-journal-scribble" aria-hidden="true">study map</div>
       <div class="sidebar-top">
         <div class="logo">
           <button class="menu-toggle" id="menuToggleBtn" title="Toggle Sidebar">
@@ -1161,20 +1753,7 @@
             </svg>
           </button>
           <div class="logo-icon logo-icon-brand" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" class="aquarius-sticker-svg">
-              <rect x="26" y="26" width="116" height="116" rx="28" fill="#1E293B"></rect>
-              <g transform="rotate(-5 80 80)">
-                <rect x="20" y="20" width="116" height="116" rx="28" fill="#FDFBF7" stroke="#1E293B" stroke-width="6"></rect>
-                <rect x="42" y="58" width="76" height="28" rx="14" fill="#FDE047" opacity="0.8" transform="rotate(-3 80 72)"></rect>
-                <path d="M 40 60 Q 52 42 64 60 T 88 60 T 112 60" fill="none" stroke="#1E293B" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"></path>
-                <path d="M 40 90 Q 52 72 64 90 T 88 90 T 112 90" fill="none" stroke="#0EA5E9" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"></path>
-                <path d="M 112 28 Q 116 38 126 38 Q 116 38 112 48 Q 112 38 102 38 Q 112 38 112 28 Z" fill="#F9A8D4" stroke="#1E293B" stroke-width="4" stroke-linejoin="round"></path>
-              </g>
-              <g transform="rotate(-18 35 25)">
-                <rect x="0" y="0" width="60" height="22" fill="#7DD3FC" opacity="0.9"></rect>
-                <path d="M 0 0 L 60 0 M 0 22 L 60 22" stroke="#1E293B" stroke-width="2" stroke-dasharray="4 4" opacity="0.5"></path>
-              </g>
-            </svg>
+            <img src="aquarius-logo.jpg?v=1778524463" class="aquarius-sticker-svg" alt="">
           </div>
           <div class="logo-text logo-text-brand">Aquarius</div>
         </div>
@@ -1277,7 +1856,6 @@
       </div>
 
       <div class="sidebar-footer" id="sidebarFooter">
-        <div class="sidebar-journal-decor sidebar-journal-footer-note" aria-hidden="true">keep going</div>
         <button class="sidebar-settings-btn" id="sidebarSettingsBtn" type="button">
           <span class="sidebar-settings-icon">
             <span aria-hidden="true">⚙️</span>
@@ -1286,7 +1864,7 @@
         </button>
         <div class="sidebar-version-row">
           <span class="sidebar-version-dot"></span>
-          <span>v1.0.0</span>
+          <span>v1.1.0</span>
         </div>
       </div>
     </aside>
@@ -1327,7 +1905,6 @@
           </div>
           
           <div class="journal-hero-copy" style="flex:1; display:flex; flex-direction:column; align-items:flex-start; text-align:left;">
-            <div class="journal-mini-label" aria-hidden="true">today's study page</div>
           
             <h1 style="font-family:'Inter', sans-serif; font-size:42px; font-weight:700; color:var(--text-primary); letter-spacing:-1px; margin:0 0 16px; line-height:1.2;">
               Linear Systems & Signals
@@ -1378,7 +1955,6 @@
           <input type="file" id="fileInputMain" accept="image/*,.pdf" style="display:none">
 
           <div class="chips" id="quickChips" style="margin-top: 16px;"></div>
-          <div class="journal-side-note" aria-hidden="true">Tip: ask for one theorem, one example, or one exam trap.</div>
           </div>
         </div>
       </div>
@@ -1442,7 +2018,7 @@
             <span class="learn-badge" id="learnModeBadge">LEARNING MODE</span>
             <h2 class="learn-title" id="learnTitle">Section Title</h2>
           </div>
-          <button class="learn-close" id="learnClose">✕ Exit</button>
+          <button class="learn-close" id="learnClose">Back</button>
         </div>
 
         <div class="learn-intro-card" id="learnIntroCard">
@@ -1487,23 +2063,23 @@
 
             <div class="learn-explain-col" id="learnExplainCol" style="border-right: 1px solid var(--border);">
               <div class="learn-explain-toolbar" id="learnExplainToolbar">
-                <button class="learn-mini-toggle learn-explain-toggle-btn learn-explain-corner-toggle" id="learnExplainToggleBtn" title="Hide lecture panel" aria-label="Hide lecture panel">
+                <button class="learn-mini-toggle learn-explain-toggle-btn learn-explain-corner-toggle" id="learnExplainToggleBtn" title="More lecture" aria-label="More lecture">
                   <span class="learn-edge-toggle-icon" aria-hidden="true">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/><path d="M5 5v14"/></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.45" stroke-linecap="round" stroke-linejoin="round"><path d="M7 6l6 6-6 6"/><path d="M13 6l6 6-6 6"/></svg>
                   </span>
-                  <span class="learn-edge-toggle-label" id="learnExplainToggleLabel">Hide</span>
+                  <span class="learn-edge-toggle-label" id="learnExplainToggleLabel">More Lecture</span>
                 </button>
                 <div class="learn-toolbar-center">
                   <button class="lecture-overlay-btn lecture-overlay-btn-left" id="lecturePrevOverlayBtn" title="Previous knowledge point" aria-label="Previous knowledge point">
                     <span class="lecture-overlay-btn-icon">←</span>
-                    <span class="lecture-overlay-btn-text">Previous</span>
+                    <span class="lecture-overlay-btn-text">previous</span>
                   </button>
                   <div class="learn-view-selector" id="learnViewSelector">
                   <button class="learn-view-btn active" id="btnLectureView">Lecture</button>
                   <button class="learn-view-btn" id="btnTextbookView">Textbook</button>
                 </div>
                   <button class="lecture-overlay-btn lecture-overlay-btn-right" id="lectureNextOverlayBtn" title="Next knowledge point" aria-label="Next knowledge point">
-                    <span class="lecture-overlay-btn-text">Next</span>
+                    <span class="lecture-overlay-btn-text">next</span>
                     <span class="lecture-overlay-btn-icon">→</span>
                   </button>
                 </div>
@@ -1521,12 +2097,12 @@
                 <div class="learn-explain-body" id="learnExplainContent">
                   <p class="ghost">Lesson is being prepared...</p>
                 </div>
-                                <div class="learn-explain-bottom-rail" id="learnExplainBottomRail">
-                  <div class="learn-lecture-page-indicator" id="learnLecturePageIndicator">1 / 1</div>
-                </div>
                 <div class="learn-book-pages carousel hidden" id="learnBookOverlay" style="position:absolute; top:0; left:0; right:0; bottom:0; background: transparent; z-index:10; overflow-y:auto; flex-direction:column; align-items:center;">
                     <div style="padding:40px; text-align:center; color:#64748B;">Textbook page loading...</div>
                 </div>
+              </div>
+              <div class="learn-explain-bottom-rail" id="learnExplainBottomRail">
+                <div class="learn-lecture-page-indicator" id="learnLecturePageIndicator">1 / 1</div>
               </div>
             </div>
 
@@ -1534,10 +2110,10 @@
 
             <div class="learn-chat-col" id="learnChatCol">
               <div class="learn-chat-topbar">
-                <button class="learn-mini-toggle learn-chat-corner-toggle" id="learnFocusBtn" title="Hide Q&A panel" aria-label="Hide Q&A panel">
-                  <span class="learn-edge-toggle-label">Hide</span>
+                <button class="learn-mini-toggle learn-chat-corner-toggle" id="learnFocusBtn" title="More Q&A" aria-label="More Q&A">
+                  <span class="learn-edge-toggle-label">More Q&A</span>
                   <span class="learn-edge-toggle-icon" aria-hidden="true">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/><path d="M19 19V5"/></svg>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.45" stroke-linecap="round" stroke-linejoin="round"><path d="M17 6l-6 6 6 6"/><path d="M11 6l-6 6 6 6"/></svg>
                   </span>
                 </button>
               </div>
@@ -1552,20 +2128,21 @@
                 <div class="learn-chat-history" id="learnChatContent">
                   </div>
                 <div class="learn-chat-empty-state" id="learnChatEmptyState" aria-hidden="true">
-                  <div class="learn-chat-paper-clip" aria-hidden="true"></div>
-                  <div class="learn-chat-empty-kicker">page notes</div>
-                  <div class="learn-chat-empty-icon">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M12 3l1.8 3.6 4 .6-2.9 2.8.7 4-3.6-1.9L8.4 14l.7-4-2.9-2.8 4-.6L12 3z"/>
-                      <path d="M5 19h14"/>
+                  <div class="learn-chat-empty-bubble" aria-hidden="true">
+                    <svg viewBox="0 0 64 64" focusable="false">
+                      <path class="bubble-shadow" d="M16 49c-5-5-8-11-8-18C8 17 19 7 33 7s23 9 23 22-10 22-24 22c-3 0-6-.4-9-1.4L13 57l3-8z"/>
+                      <path class="bubble-face" d="M15 45c-4-4-6-9-6-15C9 18 19 9 33 9s22 8 22 20-10 20-23 20c-3 0-6-.4-9-1.3L14 55l1-10z"/>
+                      <circle cx="25" cy="29" r="3.1"/>
+                      <circle cx="33" cy="29" r="3.1"/>
+                      <circle cx="41" cy="29" r="3.1"/>
                     </svg>
                   </div>
-                  <div class="learn-chat-empty-title">Ask about this page</div>
-                  <div class="learn-chat-empty-copy">Drop a formula, screenshot, or confusing line here.</div>
+                  <div class="learn-chat-empty-title">Ask this page</div>
+                  <div class="learn-chat-empty-copy">Formula, screenshot, or confusing line.</div>
                   <div class="learn-chat-empty-prompts" aria-hidden="true">
-                    <span>formula</span>
-                    <span>screenshot</span>
-                    <span>exam trap</span>
+                    <span>Formula</span>
+                    <span>Screenshot</span>
+                    <span>Exam trap</span>
                   </div>
                 </div>
               </div>
@@ -1576,7 +2153,7 @@
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
                   </button>
                   <textarea class="learn-followup-input" id="learnFollowupInput"
-                    placeholder="Have a question? Ask here…" rows="1"></textarea>
+                    placeholder="start a question" rows="1" wrap="off"></textarea>
                   
                   <select id="answerLengthToggleLearn" class="select-css" title="Explanation Style" style="background: transparent; border: 1px solid transparent; font-size: 12px; font-weight: 500; font-family: 'Inter', sans-serif;  cursor: pointer; outline: none; appearance: none; -webkit-appearance: none; padding: 4px 6px; border-radius: 4px;">
                     <option value="fast">Fast</option>
@@ -1604,14 +2181,14 @@
           </div>
           <button class="learn-side-restore learn-side-restore-explain hidden" id="learnExplainRestoreBtn" type="button" title="Show lecture panel" aria-label="Show lecture panel">
             <span class="learn-edge-toggle-icon" aria-hidden="true">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/><path d="M19 19V5"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.45" stroke-linecap="round" stroke-linejoin="round"><path d="M7 6l6 6-6 6"/><path d="M13 6l6 6-6 6"/></svg>
             </span>
             <span class="learn-edge-toggle-label" id="learnExplainRestoreLabel">Show</span>
           </button>
           <button class="learn-side-restore learn-side-restore-chat hidden" id="learnChatRestoreBtn" type="button" title="Show Q&A panel" aria-label="Show Q&A panel">
             <span class="learn-edge-toggle-label">Show</span>
             <span class="learn-edge-toggle-icon" aria-hidden="true">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/><path d="M5 5v14"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.45" stroke-linecap="round" stroke-linejoin="round"><path d="M17 6l-6 6 6 6"/><path d="M11 6l-6 6 6 6"/></svg>
             </span>
           </button>
           <button class="learn-chat-fab hidden" id="learnChatFab" type="button" title="Open Q&A assistant" aria-label="Open Q&A assistant">
@@ -1646,7 +2223,7 @@
                     </svg>
                   </button>
                 </div>
-                <textarea class="learn-followup-input" id="learnFollowupInputPopover" placeholder="Ask here…" rows="1"></textarea>
+                <textarea class="learn-followup-input" id="learnFollowupInputPopover" placeholder="start a question" rows="1" wrap="off"></textarea>
                 <button class="learn-followup-send" id="learnFollowupBtnPopover" disabled>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="22" y1="2" x2="11" y2="13"></line>
@@ -1742,7 +2319,7 @@
                     <h2 class="settings-page-card-title">Version</h2>
                   </div>
                 </div>
-                <div class="settings-page-version">Aquarius Tutor Agent <span>v1.0.0</span></div>
+                <div class="settings-page-version">Aquarius Tutor Agent <span>v1.1.0</span></div>
               </section>
             </div>
           </div>
@@ -2082,31 +2659,44 @@
           <div class="login-status-label">AQUARIUS // SYSTEM SECURE</div>
         </div>
         <div class="login-shell">
+          <div class="login-desk-collage login-desk-collage-left" aria-hidden="true">
+            <div class="login-map-card">
+              <div class="login-map-pin pin-a"></div>
+              <div class="login-map-pin pin-b"></div>
+              <div class="login-map-pin pin-c"></div>
+              <div class="login-map-pin pin-d"></div>
+              <svg class="login-map-line" viewBox="0 0 220 170" aria-hidden="true">
+                <path d="M38 54 C78 28 92 116 128 88 S168 38 188 118" fill="none" stroke="currentColor" stroke-width="8" stroke-linecap="round" stroke-dasharray="14 14"/>
+              </svg>
+              <div class="login-map-caption">study route</div>
+            </div>
+            <div class="login-scrap-note login-scrap-note-blue">source locked</div>
+            <div class="login-practice-log">
+              <span>practice log</span>
+              <i></i>
+              <i></i>
+              <i></i>
+            </div>
+          </div>
+          <div class="login-desk-collage login-desk-collage-right" aria-hidden="true">
+            <div class="login-sticky-note">
+              <span>Today</span>
+              <strong>ask better</strong>
+              <em>then test it</em>
+            </div>
+            <div class="login-mini-ticket">
+              <span>01</span>
+              <b>read</b>
+              <b>solve</b>
+              <b>remember</b>
+            </div>
+          </div>
           <div class="login-tilt-wrapper">
-            <div class="login-handwriting">Start your journey!</div>
             <section class="login-card tilt-element" id="loginCard">
-              <div class="login-washi-tape" aria-hidden="true"></div>
-              <div class="login-status-pill">
-                <div class="login-status-dot"></div>
-                <span>Online</span>
-              </div>
               <div class="login-card-stage" id="loginCustomStage">
               <div class="login-card-header">
                 <div class="login-brand-mark login-brand-mark-aurora">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" class="aquarius-glow" aria-label="Aquarius">
-                    <rect x="26" y="26" width="116" height="116" rx="28" fill="#1E293B"></rect>
-                    <g transform="rotate(-5 80 80)">
-                      <rect x="20" y="20" width="116" height="116" rx="28" fill="#FDFBF7" stroke="#1E293B" stroke-width="6"></rect>
-                      <rect x="42" y="58" width="76" height="28" rx="14" fill="#FDE047" opacity="0.8" transform="rotate(-3 80 72)"></rect>
-                      <path d="M 40 60 Q 52 42 64 60 T 88 60 T 112 60" fill="none" stroke="#1E293B" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"></path>
-                      <path d="M 40 90 Q 52 72 64 90 T 88 90 T 112 90" fill="none" stroke="#0EA5E9" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"></path>
-                      <path d="M 112 28 Q 116 38 126 38 Q 116 38 112 48 Q 112 38 102 38 Q 112 38 112 28 Z" fill="#F9A8D4" stroke="#1E293B" stroke-width="4" stroke-linejoin="round"></path>
-                    </g>
-                    <g transform="rotate(-18 35 25)">
-                      <rect x="0" y="0" width="60" height="22" fill="#7DD3FC" opacity="0.9"></rect>
-                      <path d="M 0 0 L 60 0 M 0 22 L 60 22" stroke="#1E293B" stroke-width="2" stroke-dasharray="4 4" opacity="0.5"></path>
-                    </g>
-                  </svg>
+                  <img src="aquarius-logo.jpg?v=1778524463" class="aquarius-glow" alt="Aquarius">
                 </div>
                 <h1 class="login-card-title">Welcome to <span class="text-gradient-aurora">Aquarius</span></h1>
                 <p class="login-card-subtitle">Your journey of endless exploration awaits.</p>
@@ -2114,10 +2704,6 @@
 
               <div class="login-form-actions" id="loginAuthActions">
                 <div id="loginStatusMessage" class="login-status-message hidden" role="status" aria-live="polite"></div>
-                <button id="clerkContinueSessionBtnLogin" class="login-submit-btn btn-shine hidden" type="button">
-                  <span>Continue to Workspace</span>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                </button>
                 <button id="clerkGithubBtnLogin" class="login-sso-btn" type="button">
                   <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <path d="M12 .5C5.648.5.5 5.648.5 12A11.5 11.5 0 0 0 8.36 22.95c.575.105.785-.25.785-.555 0-.275-.01-1.005-.015-1.975-3.18.69-3.85-1.53-3.85-1.53-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.695.08-.695 1.15.08 1.755 1.18 1.755 1.18 1.02 1.75 2.675 1.245 3.325.95.105-.74.4-1.245.725-1.53-2.54-.29-5.215-1.27-5.215-5.655 0-1.25.445-2.275 1.175-3.08-.12-.29-.51-1.46.11-3.045 0 0 .96-.305 3.145 1.175A10.92 10.92 0 0 1 12 6.03c.975.005 1.96.13 2.88.38 2.18-1.48 3.14-1.175 3.14-1.175.625 1.585.235 2.755.115 3.045.735.805 1.175 1.83 1.175 3.08 0 4.395-2.68 5.36-5.235 5.645.41.355.775 1.055.775 2.125 0 1.535-.015 2.775-.015 3.15 0 .31.205.665.79.55A11.5 11.5 0 0 0 23.5 12C23.5 5.648 18.352.5 12 .5Z"/>
@@ -2195,7 +2781,7 @@
       <p style="font-size:16px;color:#64748b;margin:0 0 32px;font-weight:600;">Your answers help the AI tutor explain things exactly how you learn best.</p>
       <div id="quizSteps"></div>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-top:32px;">
-        <div style="font-family:'Quicksand',sans-serif;font-weight:700;font-size:15px;color:#94a3b8;"><span id="quizStepNum">1</span> / 5</div>
+        <div id="quizPageIndicator"><span id="quizStepNum">1</span> / 5</div>
         <button id="quizNextBtn" style="padding: 10px 24px; background: #38bdf8; color: #fff; border: 2px solid #0284c7; border-radius: 14px; font-family: 'Quicksand', sans-serif; font-size: 15px; font-weight: 800; cursor: pointer; box-shadow: 0 4px 0px #0284c7; transition: all 0.15s;" onmouseover="if(!this.disabled){this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 0px #0284c7';}" onmouseout="if(!this.disabled){this.style.transform='none';this.style.boxShadow='0 4px 0px #0284c7';}" disabled>Next →</button>
       </div>
     </div>
@@ -2419,6 +3005,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <script src="config.js?v=1778188600"></script>
-  <script src="app.js?v=1778188600"></script>
+  <script src="app.js?v=1778524463"></script>
 </body>
 </html>

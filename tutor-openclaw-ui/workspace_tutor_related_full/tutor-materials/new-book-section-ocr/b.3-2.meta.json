@@ -1,0 +1,18 @@
+{
+  "sectionId": "b.3-2",
+  "sourcePages": [
+    "page-022",
+    "page-023"
+  ],
+  "usedPages": [
+    "page-022",
+    "page-023"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "B.3-2 The Exponentially Varying Sinusoid",
+  "foundEnd": true,
+  "endBeforeLine": "B.4 Cramer’s Rule 23",
+  "endBeforeCode": "b.4",
+  "charCount": 2872
+}

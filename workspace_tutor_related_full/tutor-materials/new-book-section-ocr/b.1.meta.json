@@ -1,0 +1,16 @@
+{
+  "sectionId": "b.1",
+  "sourcePages": [
+    "page-001"
+  ],
+  "usedPages": [
+    "page-001"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "B.1 C OMPLEX N UMBERS",
+  "foundEnd": true,
+  "endBeforeLine": "B.1-1 A Historical Note",
+  "endBeforeCode": "b.1-1",
+  "charCount": 1054
+}

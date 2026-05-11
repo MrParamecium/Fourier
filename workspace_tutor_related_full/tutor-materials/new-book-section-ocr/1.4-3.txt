@@ -1,0 +1,116 @@
+# Aquarius section OCR
+section_id: 1.4-3
+source_pages: page-089, page-090, page-091
+cut_start_found: yes
+cut_end_found: no
+
+--- OCR ---
+1.4-3 The Exponential Function est
+Another important function in the area of signals and systems is the exponential signal est , where
+s is complex in general, given by
+                                           s = σ + jω
+
+
+† Singularity functions were defined by late Prof. S. J. Mason as follows. A singularity is a point at which a
+function does not possess a derivative. Each of the singularity functions (or if not the function itself, then the
+function differentiated a finite number of times) has a singular point at the origin and is zero elsewhere [2].
+
+[[PAGE page-090]]
+90   CHAPTER 1       SIGNALS AND SYSTEMS
+
+     Therefore,
+                                    est = e(σ +jω)t = eσ t ejωt = eσ t (cos ωt + j sin ωt)                 (1.13)
+     Since s∗ = σ − jω (the conjugate of s), then
+                                    ∗
+                                  es t = e(σ −jω)t = eσ t e−jωt = eσ t (cos ωt − j sin ωt)
+
+     and
+                                                                                ∗
+                                                      eσ t cos ωt = 12 (est + es t )                       (1.14)
+     A comparison of Eq. (1.13) with Euler’s formula shows that est is a generalization of the function
+     ejωt , where the frequency variable jω is generalized to a complex variable s = σ + jω. For this
+     reason, we designate the variable s as the complex frequency. In fact, function est encompasses a
+     large class of functions. The following functions are either special cases of or can be expressed in
+     terms of est :
+           1. A constant k = ke0t    (s = 0)
+           2. A monotonic exponential eσ t     (ω = 0, s = σ )
+           3. A sinusoid cos ωt     (σ = 0, s = ±jω)
+           4. An exponentially varying sinusoid eσ t cos ωt    (s = σ ± jω)
+     These functions are illustrated in Fig. 1.21.
+         The complex frequency s can be conveniently represented on a complex frequency plane (s
+     plane), as depicted in Fig. 1.22. The horizontal axis is the real axis (σ axis), and the vertical
+     axis is the imaginary axis (ω axis). The absolute value of the imaginary part of s is |ω| (the
+
+
+
+                             e st
+                                            s0                                              s0
+                                                                                                       t
+                                        sv0
+                                          s0
+                                                  t
+
+                            (a)                                                        (b)
+
+
+
+                          s0                                                           s0
+                                              t
+
+                                                                                                   t
+
+
+
+
+                            (c)                                                        (d)
+            Figure 1.21 Sinusoids of complex frequency σ + jω.
+
+[[PAGE page-091]]
+1.4   Some Useful Signal Models   91
+
+
+                Left half-plane                                           Right half-plane
+
+
+
+
+                                                      Imaginary axis jv
+
+
+
+
+                   Exponentially decreasing signals                           Exponentially increasing signals
+                                                                                                                   Real axis
+
+                                                                                                                       s
+
+
+
+
+      Figure 1.22 Complex frequency plane.
+
+
+
+radian frequency), which indicates the frequency of oscillation of est ; the real part σ (the neper
+frequency) gives information about the rate of increase or decrease of the amplitude of est . For
+signals whose complex frequencies lie on the real axis (σ axis, where ω = 0), the frequency
+of oscillation is zero. Consequently these signals are monotonically increasing or decreasing
+exponentials (Fig. 1.21a). For signals whose frequencies lie on the imaginary axis (ω axis, where
+σ = 0), eσ t = 1. Therefore, these signals are conventional sinusoids with constant amplitude
+(Fig. 1.21b). The case s = 0 (σ = ω = 0) corresponds to a constant (dc) signal because e0t = 1.
+For the signals illustrated in Figs. 1.21c and 1.21d, both σ and ω are nonzero; the frequency s is
+complex and does not lie on either axis. The signal in Fig. 1.21c decays exponentially. Therefore,
+σ is negative, and s lies to the left of the imaginary axis. In contrast, the signal in Fig. 1.21d
+grows exponentially. Therefore, σ is positive, and s lies to the right of the imaginary axis. Thus
+the s plane (Fig. 1.21) can be separated into two parts: the left half-plane (LHP) corresponding to
+exponentially decaying signals and the right half-plane (RHP) corresponding to exponentially
+growing signals. The imaginary axis separates the two regions and corresponds to signals of
+constant amplitude.
+     An exponentially growing sinusoid e2t cos 5t, for example, can be expressed as a linear
+combination of exponentials e(2+j5)t and e(2−j5)t with complex frequencies 2 + j5 and 2 − j5,
+respectively, which lie in the RHP. An exponentially decaying sinusoid e−2t cos 5t can be expressed
+as a linear combination of exponentials e(−2+j5)t and e(−2−j5)t with complex frequencies −2 + j5
+and −2 − j5, respectively, which lie in the LHP. A constant-amplitude sinusoid cos 5t can be
+expressed as a linear combination of exponentials ej5t and e−j5t with complex frequencies ±j5,
+which lie on the imaginary axis. Observe that the monotonic exponentials e±2t are also generalized
+sinusoids with complex frequencies ±2.

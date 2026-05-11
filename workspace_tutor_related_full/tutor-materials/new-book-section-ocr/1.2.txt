@@ -1,0 +1,15 @@
+# Aquarius section OCR
+section_id: 1.2
+source_pages: page-071
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+1.2   Some Useful Signal Operations     71
+
+
+1.2 S OME U SEFUL S IGNAL O PERATIONS
+We discuss here three useful signal operations: shifting, scaling, and inversion. Since the
+independent variable in our signal description is time, these operations are discussed as time
+shifting, time scaling, and time reversal (inversion). However, this discussion is valid for functions
+having independent variables other than time (e.g., frequency or distance).

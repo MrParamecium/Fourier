@@ -1,0 +1,22 @@
+# Aquarius section OCR
+section_id: 2.6-5
+source_pages: page-209
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+2.6-5 Time Constant and Pulse Dispersion (Spreading)
+In general, the transmission of a pulse through a system causes pulse dispersion (or spreading).
+Therefore, the output pulse is generally wider than the input pulse. This system behavior can have
+serious consequences in communication systems in which information is transmitted by pulse
+amplitudes. Dispersion (or spreading) causes interference or overlap with neighboring pulses,
+thereby distorting pulse amplitudes and introducing errors in the received information.
+
+Earlier we saw that if an input x(t) is a pulse of width T_x, then T_y, the width of the output
+y(t), is
+
+T_y = T_x + T_h
+
+This result shows that an input pulse spreads out (disperses) as it passes through a system. Since
+T_h is also the system’s time constant or rise time, the amount of spread in the pulse is equal to the
+time constant (or rise time) of the system.

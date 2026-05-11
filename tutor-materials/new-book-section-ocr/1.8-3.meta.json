@@ -1,0 +1,18 @@
+{
+  "sectionId": "1.8-3",
+  "sourcePages": [
+    "page-118",
+    "page-119"
+  ],
+  "usedPages": [
+    "page-118",
+    "page-119"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "1.8-3 Electromechanical Systems",
+  "foundEnd": true,
+  "endBeforeLine": "1.9 Internal and External Descriptions of a System 119",
+  "endBeforeCode": "1.9",
+  "charCount": 1391
+}

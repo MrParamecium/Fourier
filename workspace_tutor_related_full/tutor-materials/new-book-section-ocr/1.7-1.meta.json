@@ -1,0 +1,24 @@
+{
+  "sectionId": "1.7-1",
+  "sourcePages": [
+    "page-097",
+    "page-098",
+    "page-099",
+    "page-100",
+    "page-101"
+  ],
+  "usedPages": [
+    "page-097",
+    "page-098",
+    "page-099",
+    "page-100",
+    "page-101"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "1.7-1 Linear and Nonlinear Systems",
+  "foundEnd": false,
+  "endBeforeLine": "",
+  "endBeforeCode": "",
+  "charCount": 12651
+}

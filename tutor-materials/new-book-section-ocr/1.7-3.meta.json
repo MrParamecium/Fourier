@@ -1,0 +1,18 @@
+{
+  "sectionId": "1.7-3",
+  "sourcePages": [
+    "page-103",
+    "page-104"
+  ],
+  "usedPages": [
+    "page-103",
+    "page-104"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "1.7-3 Instantaneous and Dynamic Systems",
+  "foundEnd": true,
+  "endBeforeLine": "1.7-4 Causal and Noncausal Systems",
+  "endBeforeCode": "1.7-4",
+  "charCount": 2901
+}

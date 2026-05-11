@@ -1,0 +1,568 @@
+# Agent A Preview: 1.7-6 Analog and Digital Systems
+
+- Difficulty: beginner
+- Estimated read minutes: 4
+
+## Learning Objectives
+
+- Classify a system as analog or digital from its input and output signal types.
+- Recognize why a digital computer is both a digital system and a discrete-time system.
+- Avoid confusing discrete-time systems with digital systems.
+
+## Visualization Need
+
+```json
+{
+  "level": "static",
+  "reason": [
+    "classification_benefits_from_figure",
+    "pattern_recognition_benefits_from_figure",
+    "wikipedia_has_standard_reference_visual"
+  ],
+  "recommended_assets": [
+    "wiki_figure"
+  ]
+}
+```
+
+## Visual Plan
+
+```json
+{
+  "primary_anchor": "wiki_reference",
+  "rationale": "This section is a classification lesson. A clean analog-vs-digital waveform reference image helps students instantly see the difference between continuously varying signals and digital-level signals. There is no textbook figure available on page-109, and the main visual need is standard rather than custom, so Wikipedia/Wikimedia should be used before any generated image.",
+  "cram": "Use the visual to recognize exam wording: continuous input/output means analog; digital-level input/output means digital.",
+  "standard": "Use the visual to connect the definition to one representative system example.",
+  "top_score": "Use the visual to separate digital from merely discrete-time, since discrete-time does not automatically mean digital."
+}
+```
+
+## Planned Blocks
+
+### Block 1: `text_explanation`
+- **instruction**: Render page 1 as a minimal overview only. Use exactly two short sections: 'Section Objective' and 'Concepts In This Section'. Under 'Section Objective', write one sentence: 'Learn to classify systems as analog or digital based on the types of signals at their input and output.' Under 'Concepts In This Section', list only these concept names as bullets: 'analog system', 'digital system', 'digital computer', 'digital vs discrete-time'. Do not add background paragraphs, examples, formulas, or exam tips on this page.
+
+### Block 2: `math_block`
+- **latex**: \text{Analog system:}\quad x(t)\ \xrightarrow{\ \mathcal{T}\ }\ y(t)
+- **explanation_instruction**: Start this concept page with the heading '## 1. Analog System'. Explain in 90-130 words that an analog system is defined by signal type: both the input and output are analog signals. Explain that \(x(t)\) is the input signal, \(y(t)\) is the output signal, \(t\) represents continuous time, and \(\mathcal{T}\) represents the system. State when to use this formula: when a problem describes continuously varying physical signals such as voltage, sound pressure, or temperature. Include one minimal example: 'An audio amplifier with analog voltage input and analog voltage output is an analog system.' End with the common misuse: do not classify a system by whether it is electronic; classify it by the input and output signal types.
+
+### Block 3: `web_search_image`
+- **search_query**: Wikimedia Commons analog signal digital signal comparison waveform continuous discrete levels
+- **purpose**: Show a clean side-by-side visual comparison of an analog waveform and a digital waveform so students can visually connect signal type to system classification.
+- **preferred_sources**:
+```json
+[
+  "wikimedia_commons",
+  "wikipedia"
+]
+```
+- **prefer_animated**:
+```json
+false
+```
+- **fallback**: generate_image
+- **teaching_role**: comparison_anchor
+- **mode_specific_visual_use**:
+```json
+{
+  "cram": "Use the image as a fast recognition cue: smooth continuous waveform versus level-based digital waveform.",
+  "standard": "Use the image immediately after the analog-system definition to prepare for the digital-system definition.",
+  "top_score": "Use the image to notice that digital means values come from allowed levels, not just that time is sampled."
+}
+```
+
+### Block 4: `math_block`
+- **latex**: \text{Digital system:}\quad x[n]\ \xrightarrow{\ \mathcal{T}\ }\ y[n]
+- **explanation_instruction**: Start this concept page with the heading '## 2. Digital System'. Explain in 90-130 words that a digital system has digital signals at both input and output. Explain that \(x[n]\) and \(y[n]\) use the index \(n\), which marks discrete sample positions rather than continuous time. Explain that digital signals take values from a discrete set of allowed levels, often binary levels. State the exam trigger: if both input and output are described as bit streams, sequences, digital samples, or binary data, classify the system as digital. Include one representative example: 'A calculator that receives key presses as digital codes and produces digital display data is a digital system.' End with the trap: a system with only the output digital is not classified as a digital system by this definition unless both input and output are digital.
+
+### Block 5: `math_block`
+- **latex**: \mathcal{A}=\{0,1\}
+- **explanation_instruction**: Start this concept page with the heading '## 3. Binary Digital Computer'. Explain in 80-120 words that a digital computer is a digital system, and in the common binary case its signal alphabet is \(\mathcal{A}=\{0,1\}\). Define \(\mathcal{A}\) as the set of allowed signal values, and explain that \(0\) and \(1\) are symbols or levels used to encode information. State when to use this formula: when the problem says binary, bits, logic levels, or computer data. Include the quick example: 'A memory cell storing one bit has an allowed value of either 0 or 1.' End with the common misuse: binary does not mean the system can have only two total messages; long strings of 0s and 1s can represent many messages.
+
+### Block 6: `math_block`
+- **latex**: \text{digital}\Rightarrow\text{discrete-time}
+- **explanation_instruction**: Start this concept page with the heading '## 4. Digital vs Discrete-Time'. Explain in 90-140 words that the textbook notes a digital computer is both a digital system and a discrete-time system. Explain the arrow carefully: digital signals are handled at discrete sample or clock positions, so a digital system is also discrete-time. Then give the exam warning that the reverse classification should not be assumed automatically: a discrete-time signal can still have continuously valued amplitudes, so it may be discrete-time without being digital. Include one near-miss example: 'A sampled temperature sequence with real-valued amplitudes is discrete-time, but not necessarily digital unless the amplitudes are quantized into allowed levels.' End with a quick check sentence: 'Ask two questions: are times indexed, and are amplitudes restricted to allowed levels?'
+
+### Block 7: `section_summary`
+- **instruction**: Render this as the second-to-last recap page with the heading '📌 Key Takeaways'. Include exactly four bullets. Each bullet must be 20 words or fewer and must include these formulas explicitly where relevant: \(x(t)\xrightarrow{\mathcal{T}}y(t)\) for analog systems, \(x[n]\xrightarrow{\mathcal{T}}y[n]\) for digital systems, \(\mathcal{A}=\{0,1\}\) for binary digital systems, and \(\text{digital}\Rightarrow\text{discrete-time}\). End with one sentence: 'Next, use these labels whenever a problem asks you to classify a system from its input and output signals.'
+
+### Block 8: `quiz_plan`
+- **target_questions**:
+```json
+6
+```
+- **question_range**:
+```json
+{
+  "min": 5,
+  "max": 7
+}
+```
+- **knowledge_points**:
+```json
+[
+  {
+    "id": "analog_system_definition",
+    "label": "Analog system classification",
+    "importance": "high",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "analog_q1",
+        "type": "multiple_choice",
+        "stem": "A system receives a continuously varying microphone voltage and outputs a continuously varying speaker voltage. How should it be classified?",
+        "options": [
+          "A. Analog system",
+          "B. Digital system",
+          "C. Binary system",
+          "D. Not a system, because the signals are physical"
+        ],
+        "correct_option": "A",
+        "explanation": "Both the input and output are analog signals, so the system is analog.",
+        "wrong_option_explanations": {
+          "B": "Digital requires digital input and digital output, not continuously varying voltages.",
+          "C": "Binary means values are restricted to two symbols or levels, usually 0 and 1.",
+          "D": "Physical signals can absolutely be inputs and outputs of systems."
+        },
+        "hint": "Classify by the signal types at the input and output.",
+        "needs_visual": false,
+        "same_point_variant": false
+      },
+      {
+        "id": "analog_q2_visual",
+        "type": "multiple_choice",
+        "stem": "In a side-by-side waveform visual, the left signal is a smooth continuously varying curve and the right signal jumps between fixed levels. Which signal is the analog signal?",
+        "options": [
+          "A. The smooth continuously varying curve",
+          "B. The level-jumping signal",
+          "C. Both, because both change with time",
+          "D. Neither, because analog signals cannot be drawn"
+        ],
+        "correct_option": "A",
+        "explanation": "An analog signal varies continuously, so the smooth curve is the analog signal.",
+        "wrong_option_explanations": {
+          "B": "A level-jumping signal is the usual visual cue for digital or quantized behavior.",
+          "C": "Changing with time is not enough; the value behavior matters.",
+          "D": "Analog signals are commonly represented with continuous waveforms."
+        },
+        "hint": "Look for continuous variation, not fixed allowed levels.",
+        "needs_visual": true,
+        "visual_type": "analog_vs_digital_waveform_comparison",
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "digital_system_definition",
+    "label": "Digital system classification",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "digital_q1",
+        "type": "multiple_choice",
+        "stem": "A system receives a sequence of bits and outputs another sequence of bits. Which classification best fits the textbook definition?",
+        "options": [
+          "A. Analog system",
+          "B. Digital system",
+          "C. Continuous-time system only",
+          "D. Memoryless system"
+        ],
+        "correct_option": "B",
+        "explanation": "The input and output are both digital signals, so the system is digital.",
+        "wrong_option_explanations": {
+          "A": "Analog systems require analog input and analog output.",
+          "C": "A bit sequence is indexed discretely, not continuously in time.",
+          "D": "The problem gives no information about memory; it only gives signal type."
+        },
+        "hint": "Bits are digital signal values.",
+        "needs_visual": false,
+        "same_point_variant": false
+      },
+      {
+        "id": "digital_q2_trap",
+        "type": "multiple_choice",
+        "stem": "A sensor receives an analog temperature signal and outputs a stream of digital numbers. Based strictly on this section's definition, why is calling the whole system a digital system potentially unsafe?",
+        "options": [
+          "A. Because the input is not digital",
+          "B. Because digital systems cannot process temperature",
+          "C. Because the output is not digital",
+          "D. Because all sensors are analog systems"
+        ],
+        "correct_option": "A",
+        "explanation": "This section defines a digital system as one whose input and output signals are digital. Here only the output is digital.",
+        "wrong_option_explanations": {
+          "B": "Digital systems can process encoded temperature data.",
+          "C": "The output is explicitly described as digital numbers.",
+          "D": "A sensor's classification depends on signal types, not the word sensor."
+        },
+        "hint": "Check both sides of the system block.",
+        "needs_visual": false,
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "binary_digital_computer",
+    "label": "Digital computer and binary alphabet",
+    "importance": "medium",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "binary_q1",
+        "type": "multiple_choice",
+        "stem": "For a binary digital computer, what does \\(\\mathcal{A}=\\{0,1\\}\\) represent?",
+        "options": [
+          "A. The two allowed signal symbols or levels",
+          "B. The only two programs the computer can run",
+          "C. The input and output times",
+          "D. The real and imaginary parts of a signal"
+        ],
+        "correct_option": "A",
+        "explanation": "\\(\\mathcal{A}\\) is the alphabet of allowed digital values; binary uses 0 and 1.",
+        "wrong_option_explanations": {
+          "B": "Binary symbols can be arranged in long strings to represent many programs and messages.",
+          "C": "The set \\(\\{0,1\\}\\) describes values, not time indices.",
+          "D": "This section is about signal classification, not complex numbers."
+        },
+        "hint": "An alphabet is a set of allowed symbols.",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  },
+  {
+    "id": "digital_vs_discrete_time",
+    "label": "Digital versus discrete-time",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "dt_q1",
+        "type": "multiple_choice",
+        "stem": "Which statement is the safest interpretation of \\(\\text{digital}\\Rightarrow\\text{discrete-time}\\)?",
+        "options": [
+          "A. Every digital system is also discrete-time",
+          "B. Every discrete-time system is digital",
+          "C. Every analog system is digital",
+          "D. Digital systems have continuous-valued amplitudes only"
+        ],
+        "correct_option": "A",
+        "explanation": "Digital signals are handled at discrete sample or clock positions, so digital systems are discrete-time.",
+        "wrong_option_explanations": {
+          "B": "A discrete-time signal can have real-valued amplitudes and may not be digital.",
+          "C": "Analog and digital are different classifications based on signal type.",
+          "D": "Digital amplitudes are restricted to allowed levels."
+        },
+        "hint": "The arrow gives one direction only.",
+        "needs_visual": false,
+        "same_point_variant": false
+      },
+      {
+        "id": "dt_q2_short",
+        "type": "short_answer",
+        "stem": "A sampled temperature sequence is recorded at integer times \\(n=0,1,2,\\ldots\\), but each sample can be any real number. Explain why it is discrete-time but not necessarily digital.",
+        "ideal_answer": "It is discrete-time because the samples are indexed by integer positions. It is not necessarily digital because the amplitudes are not restricted to a discrete alphabet of allowed values.",
+        "grading_rubric": [
+          "Must mention integer or discrete sample positions",
+          "Must mention real-valued or unrestricted amplitudes",
+          "Must distinguish discrete-time from digital"
+        ],
+        "explanation": "This checks the main exam trap: time discreteness alone does not guarantee digital signal values.",
+        "hint": "Ask separately: how is time indexed, and what values can the signal take?",
+        "needs_visual": false,
+        "same_point_variant": true
+      }
+    ]
+  }
+]
+```
+
+## Raw JSON
+
+```json
+{
+  "section_id": "1.7-6",
+  "section_title": "Analog and Digital Systems",
+  "difficulty": "beginner",
+  "estimated_read_minutes": 4,
+  "learning_objectives": [
+    "Classify a system as analog or digital from its input and output signal types.",
+    "Recognize why a digital computer is both a digital system and a discrete-time system.",
+    "Avoid confusing discrete-time systems with digital systems."
+  ],
+  "visualization_need": {
+    "level": "static",
+    "reason": [
+      "classification_benefits_from_figure",
+      "pattern_recognition_benefits_from_figure",
+      "wikipedia_has_standard_reference_visual"
+    ],
+    "recommended_assets": [
+      "wiki_figure"
+    ]
+  },
+  "visual_plan": {
+    "primary_anchor": "wiki_reference",
+    "rationale": "This section is a classification lesson. A clean analog-vs-digital waveform reference image helps students instantly see the difference between continuously varying signals and digital-level signals. There is no textbook figure available on page-109, and the main visual need is standard rather than custom, so Wikipedia/Wikimedia should be used before any generated image.",
+    "cram": "Use the visual to recognize exam wording: continuous input/output means analog; digital-level input/output means digital.",
+    "standard": "Use the visual to connect the definition to one representative system example.",
+    "top_score": "Use the visual to separate digital from merely discrete-time, since discrete-time does not automatically mean digital."
+  },
+  "blocks": [
+    {
+      "type": "text_explanation",
+      "instruction": "Render page 1 as a minimal overview only. Use exactly two short sections: 'Section Objective' and 'Concepts In This Section'. Under 'Section Objective', write one sentence: 'Learn to classify systems as analog or digital based on the types of signals at their input and output.' Under 'Concepts In This Section', list only these concept names as bullets: 'analog system', 'digital system', 'digital computer', 'digital vs discrete-time'. Do not add background paragraphs, examples, formulas, or exam tips on this page."
+    },
+    {
+      "type": "math_block",
+      "latex": "\\text{Analog system:}\\quad x(t)\\ \\xrightarrow{\\ \\mathcal{T}\\ }\\ y(t)",
+      "explanation_instruction": "Start this concept page with the heading '## 1. Analog System'. Explain in 90-130 words that an analog system is defined by signal type: both the input and output are analog signals. Explain that \\(x(t)\\) is the input signal, \\(y(t)\\) is the output signal, \\(t\\) represents continuous time, and \\(\\mathcal{T}\\) represents the system. State when to use this formula: when a problem describes continuously varying physical signals such as voltage, sound pressure, or temperature. Include one minimal example: 'An audio amplifier with analog voltage input and analog voltage output is an analog system.' End with the common misuse: do not classify a system by whether it is electronic; classify it by the input and output signal types."
+    },
+    {
+      "type": "web_search_image",
+      "search_query": "Wikimedia Commons analog signal digital signal comparison waveform continuous discrete levels",
+      "purpose": "Show a clean side-by-side visual comparison of an analog waveform and a digital waveform so students can visually connect signal type to system classification.",
+      "preferred_sources": [
+        "wikimedia_commons",
+        "wikipedia"
+      ],
+      "prefer_animated": false,
+      "fallback": "generate_image",
+      "teaching_role": "comparison_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Use the image as a fast recognition cue: smooth continuous waveform versus level-based digital waveform.",
+        "standard": "Use the image immediately after the analog-system definition to prepare for the digital-system definition.",
+        "top_score": "Use the image to notice that digital means values come from allowed levels, not just that time is sampled."
+      }
+    },
+    {
+      "type": "math_block",
+      "latex": "\\text{Digital system:}\\quad x[n]\\ \\xrightarrow{\\ \\mathcal{T}\\ }\\ y[n]",
+      "explanation_instruction": "Start this concept page with the heading '## 2. Digital System'. Explain in 90-130 words that a digital system has digital signals at both input and output. Explain that \\(x[n]\\) and \\(y[n]\\) use the index \\(n\\), which marks discrete sample positions rather than continuous time. Explain that digital signals take values from a discrete set of allowed levels, often binary levels. State the exam trigger: if both input and output are described as bit streams, sequences, digital samples, or binary data, classify the system as digital. Include one representative example: 'A calculator that receives key presses as digital codes and produces digital display data is a digital system.' End with the trap: a system with only the output digital is not classified as a digital system by this definition unless both input and output are digital."
+    },
+    {
+      "type": "math_block",
+      "latex": "\\mathcal{A}=\\{0,1\\}",
+      "explanation_instruction": "Start this concept page with the heading '## 3. Binary Digital Computer'. Explain in 80-120 words that a digital computer is a digital system, and in the common binary case its signal alphabet is \\(\\mathcal{A}=\\{0,1\\}\\). Define \\(\\mathcal{A}\\) as the set of allowed signal values, and explain that \\(0\\) and \\(1\\) are symbols or levels used to encode information. State when to use this formula: when the problem says binary, bits, logic levels, or computer data. Include the quick example: 'A memory cell storing one bit has an allowed value of either 0 or 1.' End with the common misuse: binary does not mean the system can have only two total messages; long strings of 0s and 1s can represent many messages."
+    },
+    {
+      "type": "math_block",
+      "latex": "\\text{digital}\\Rightarrow\\text{discrete-time}",
+      "explanation_instruction": "Start this concept page with the heading '## 4. Digital vs Discrete-Time'. Explain in 90-140 words that the textbook notes a digital computer is both a digital system and a discrete-time system. Explain the arrow carefully: digital signals are handled at discrete sample or clock positions, so a digital system is also discrete-time. Then give the exam warning that the reverse classification should not be assumed automatically: a discrete-time signal can still have continuously valued amplitudes, so it may be discrete-time without being digital. Include one near-miss example: 'A sampled temperature sequence with real-valued amplitudes is discrete-time, but not necessarily digital unless the amplitudes are quantized into allowed levels.' End with a quick check sentence: 'Ask two questions: are times indexed, and are amplitudes restricted to allowed levels?'"
+    },
+    {
+      "type": "section_summary",
+      "instruction": "Render this as the second-to-last recap page with the heading '📌 Key Takeaways'. Include exactly four bullets. Each bullet must be 20 words or fewer and must include these formulas explicitly where relevant: \\(x(t)\\xrightarrow{\\mathcal{T}}y(t)\\) for analog systems, \\(x[n]\\xrightarrow{\\mathcal{T}}y[n]\\) for digital systems, \\(\\mathcal{A}=\\{0,1\\}\\) for binary digital systems, and \\(\\text{digital}\\Rightarrow\\text{discrete-time}\\). End with one sentence: 'Next, use these labels whenever a problem asks you to classify a system from its input and output signals.'"
+    },
+    {
+      "type": "quiz_plan",
+      "target_questions": 6,
+      "question_range": {
+        "min": 5,
+        "max": 7
+      },
+      "knowledge_points": [
+        {
+          "id": "analog_system_definition",
+          "label": "Analog system classification",
+          "importance": "high",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "analog_q1",
+              "type": "multiple_choice",
+              "stem": "A system receives a continuously varying microphone voltage and outputs a continuously varying speaker voltage. How should it be classified?",
+              "options": [
+                "A. Analog system",
+                "B. Digital system",
+                "C. Binary system",
+                "D. Not a system, because the signals are physical"
+              ],
+              "correct_option": "A",
+              "explanation": "Both the input and output are analog signals, so the system is analog.",
+              "wrong_option_explanations": {
+                "B": "Digital requires digital input and digital output, not continuously varying voltages.",
+                "C": "Binary means values are restricted to two symbols or levels, usually 0 and 1.",
+                "D": "Physical signals can absolutely be inputs and outputs of systems."
+              },
+              "hint": "Classify by the signal types at the input and output.",
+              "needs_visual": false,
+              "same_point_variant": false
+            },
+            {
+              "id": "analog_q2_visual",
+              "type": "multiple_choice",
+              "stem": "In a side-by-side waveform visual, the left signal is a smooth continuously varying curve and the right signal jumps between fixed levels. Which signal is the analog signal?",
+              "options": [
+                "A. The smooth continuously varying curve",
+                "B. The level-jumping signal",
+                "C. Both, because both change with time",
+                "D. Neither, because analog signals cannot be drawn"
+              ],
+              "correct_option": "A",
+              "explanation": "An analog signal varies continuously, so the smooth curve is the analog signal.",
+              "wrong_option_explanations": {
+                "B": "A level-jumping signal is the usual visual cue for digital or quantized behavior.",
+                "C": "Changing with time is not enough; the value behavior matters.",
+                "D": "Analog signals are commonly represented with continuous waveforms."
+              },
+              "hint": "Look for continuous variation, not fixed allowed levels.",
+              "needs_visual": true,
+              "visual_type": "analog_vs_digital_waveform_comparison",
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "digital_system_definition",
+          "label": "Digital system classification",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "digital_q1",
+              "type": "multiple_choice",
+              "stem": "A system receives a sequence of bits and outputs another sequence of bits. Which classification best fits the textbook definition?",
+              "options": [
+                "A. Analog system",
+                "B. Digital system",
+                "C. Continuous-time system only",
+                "D. Memoryless system"
+              ],
+              "correct_option": "B",
+              "explanation": "The input and output are both digital signals, so the system is digital.",
+              "wrong_option_explanations": {
+                "A": "Analog systems require analog input and analog output.",
+                "C": "A bit sequence is indexed discretely, not continuously in time.",
+                "D": "The problem gives no information about memory; it only gives signal type."
+              },
+              "hint": "Bits are digital signal values.",
+              "needs_visual": false,
+              "same_point_variant": false
+            },
+            {
+              "id": "digital_q2_trap",
+              "type": "multiple_choice",
+              "stem": "A sensor receives an analog temperature signal and outputs a stream of digital numbers. Based strictly on this section's definition, why is calling the whole system a digital system potentially unsafe?",
+              "options": [
+                "A. Because the input is not digital",
+                "B. Because digital systems cannot process temperature",
+                "C. Because the output is not digital",
+                "D. Because all sensors are analog systems"
+              ],
+              "correct_option": "A",
+              "explanation": "This section defines a digital system as one whose input and output signals are digital. Here only the output is digital.",
+              "wrong_option_explanations": {
+                "B": "Digital systems can process encoded temperature data.",
+                "C": "The output is explicitly described as digital numbers.",
+                "D": "A sensor's classification depends on signal types, not the word sensor."
+              },
+              "hint": "Check both sides of the system block.",
+              "needs_visual": false,
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "binary_digital_computer",
+          "label": "Digital computer and binary alphabet",
+          "importance": "medium",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "binary_q1",
+              "type": "multiple_choice",
+              "stem": "For a binary digital computer, what does \\(\\mathcal{A}=\\{0,1\\}\\) represent?",
+              "options": [
+                "A. The two allowed signal symbols or levels",
+                "B. The only two programs the computer can run",
+                "C. The input and output times",
+                "D. The real and imaginary parts of a signal"
+              ],
+              "correct_option": "A",
+              "explanation": "\\(\\mathcal{A}\\) is the alphabet of allowed digital values; binary uses 0 and 1.",
+              "wrong_option_explanations": {
+                "B": "Binary symbols can be arranged in long strings to represent many programs and messages.",
+                "C": "The set \\(\\{0,1\\}\\) describes values, not time indices.",
+                "D": "This section is about signal classification, not complex numbers."
+              },
+              "hint": "An alphabet is a set of allowed symbols.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "digital_vs_discrete_time",
+          "label": "Digital versus discrete-time",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "dt_q1",
+              "type": "multiple_choice",
+              "stem": "Which statement is the safest interpretation of \\(\\text{digital}\\Rightarrow\\text{discrete-time}\\)?",
+              "options": [
+                "A. Every digital system is also discrete-time",
+                "B. Every discrete-time system is digital",
+                "C. Every analog system is digital",
+                "D. Digital systems have continuous-valued amplitudes only"
+              ],
+              "correct_option": "A",
+              "explanation": "Digital signals are handled at discrete sample or clock positions, so digital systems are discrete-time.",
+              "wrong_option_explanations": {
+                "B": "A discrete-time signal can have real-valued amplitudes and may not be digital.",
+                "C": "Analog and digital are different classifications based on signal type.",
+                "D": "Digital amplitudes are restricted to allowed levels."
+              },
+              "hint": "The arrow gives one direction only.",
+              "needs_visual": false,
+              "same_point_variant": false
+            },
+            {
+              "id": "dt_q2_short",
+              "type": "short_answer",
+              "stem": "A sampled temperature sequence is recorded at integer times \\(n=0,1,2,\\ldots\\), but each sample can be any real number. Explain why it is discrete-time but not necessarily digital.",
+              "ideal_answer": "It is discrete-time because the samples are indexed by integer positions. It is not necessarily digital because the amplitudes are not restricted to a discrete alphabet of allowed values.",
+              "grading_rubric": [
+                "Must mention integer or discrete sample positions",
+                "Must mention real-valued or unrestricted amplitudes",
+                "Must distinguish discrete-time from digital"
+              ],
+              "explanation": "This checks the main exam trap: time discreteness alone does not guarantee digital signal values.",
+              "hint": "Ask separately: how is time indexed, and what values can the signal take?",
+              "needs_visual": false,
+              "same_point_variant": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```

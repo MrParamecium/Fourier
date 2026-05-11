@@ -1,0 +1,24 @@
+{
+  "sectionId": "b.1-1",
+  "sourcePages": [
+    "page-001",
+    "page-002",
+    "page-003",
+    "page-004",
+    "page-005"
+  ],
+  "usedPages": [
+    "page-001",
+    "page-002",
+    "page-003",
+    "page-004",
+    "page-005"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "B.1-1 A Historical Note",
+  "foundEnd": true,
+  "endBeforeLine": "B.1-2 Algebra of Complex Numbers",
+  "endBeforeCode": "b.1-2",
+  "charCount": 10346
+}

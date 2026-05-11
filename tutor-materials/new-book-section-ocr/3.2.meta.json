@@ -1,0 +1,26 @@
+{
+  "sectionId": "3.2",
+  "sourcePages": [
+    "page-240",
+    "page-241",
+    "page-242",
+    "page-243",
+    "page-244",
+    "page-245"
+  ],
+  "usedPages": [
+    "page-240",
+    "page-241",
+    "page-242",
+    "page-243",
+    "page-244",
+    "page-245"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "3.2 USEFUL SIGNAL OPERATIONS",
+  "foundEnd": true,
+  "endBeforeLine": "3.3 Some Useful Discrete-Time Signal Models 245",
+  "endBeforeCode": "3.3",
+  "charCount": 7557
+}

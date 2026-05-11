@@ -1,0 +1,16 @@
+{
+  "sectionId": "3.3-5",
+  "sourcePages": [
+    "page-252"
+  ],
+  "usedPages": [
+    "page-252"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "3.3-5 Discrete-Time Complex Exponential e^{jΩn}",
+  "foundEnd": false,
+  "endBeforeLine": "",
+  "endBeforeCode": "",
+  "charCount": 1685
+}

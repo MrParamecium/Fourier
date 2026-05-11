@@ -1,0 +1,30 @@
+{
+  "sectionId": "2.5",
+  "sourcePages": [
+    "page-196",
+    "page-197",
+    "page-198",
+    "page-199",
+    "page-200",
+    "page-201",
+    "page-202",
+    "page-203"
+  ],
+  "usedPages": [
+    "page-196",
+    "page-197",
+    "page-198",
+    "page-199",
+    "page-200",
+    "page-201",
+    "page-202",
+    "page-203"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "2.5 SYSTEM STABILITY",
+  "foundEnd": true,
+  "endBeforeLine": "2.5-1 External (BIBO) Stability",
+  "endBeforeCode": "2.5-1",
+  "charCount": 228
+}

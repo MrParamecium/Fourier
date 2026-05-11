@@ -1,0 +1,583 @@
+# Aquarius section OCR
+section_id: b.1-2
+source_pages: page-005, page-006, page-007, page-008, page-009, page-010, page-011, page-012, page-013, page-014, page-015
+cut_start_found: yes
+cut_end_found: no
+
+--- OCR ---
+B.1-2 Algebra of Complex Numbers
+A complex number (a, b) or a + jb can be represented graphically by a point whose Cartesian
+coordinates are (a, b) in a complex plane (Fig. B.2). Let us denote this complex number by z so
+that
+                                            z = a + jb                                    (B.1)
+
+This representation is the Cartesian (or rectangular) form of complex number z. The numbers a
+and b (the abscissa and the ordinate) of z are the real part and the imaginary part, respectively, of
+z. They are also expressed as
+
+                                    Re z = a       and      Im z = b
+
+Note that in this plane all real numbers lie on the horizontal axis, and all imaginary numbers lie on
+the vertical axis.
+
+
+ Imaginary
+             b             z
+                 r
+                 u
+                          a     Real
+                                          Figure B.2 Representation of a number in the complex
+         b                z*             plane.
+
+
+
+    Complex numbers may also be expressed in terms of polar coordinates. If (r, θ ) are the polar
+coordinates of a point z = a + jb (see Fig. B.2), then
+
+                                  a = r cos θ      and      b = r sin θ
+
+Consequently,
+                         z = a + jb = r cos θ + jr sin θ = r(cos θ + j sin θ )                 (B.2)
+
+    Euler’s formula states that
+                                          ejθ = cos θ + j sin θ                                (B.3)
+
+[[PAGE page-006]]
+6   CHAPTER B       BACKGROUND
+
+    To prove Euler’s formula, we use a Maclaurin series to expand ejθ , cos θ , and sin θ :
+
+                                       (jθ )2 (jθ )3 (jθ )4 (jθ )5 (jθ )6
+                          ejθ = 1 + jθ +     +      +      +      +       +· · ·
+                                         2!     3!     4!     5!     6!
+                                       θ2    θ3 θ4     θ5 θ6
+                             = 1 + jθ − − j + + j − − · · ·
+                                       2!     3! 4!     5! 6!
+                                   θ2 θ4 θ6 θ8
+                       cos θ = 1 − + − + · · ·
+                                    2! 4! 6! 8!
+                                    θ3 θ5 θ7
+                       sin θ = θ − + − + · · ·
+                                    3! 5! 7!
+    Clearly, it follows that ejθ = cos θ + j sin θ . Using Eq. (B.3) in Eq. (B.2) yields
+
+                                                     z = rejθ                                       (B.4)
+
+    This representation is the polar form of complex number z.
+         Summarizing, a complex number can be expressed in rectangular form a + jb or polar form
+    rejθ with                                                  √
+                                 a = r cos θ              r = a2 + b2
+                                                 and                                        (B.5)
+                                  b = r sin θ             θ = tan−1 ba
+    Observe that r is the distance of the point z from the origin. For this reason, r is also called the
+    magnitude (or absolute value) of z and is denoted by |z|. Similarly, θ is called the angle of z and is
+    denoted by  z. Therefore, we can also write polar form of Eq. (B.4) as
+                                           
+                                  z = |z|ej z      where |z| = r and  z = θ
+
+    Using polar form, we see that the reciprocal of a complex number is given by
+                                         1   1   1       1  
+                                           =    = e−jθ = e−j z
+                                         z rejθ  r      |z|
+
+    C ONJUGATE OF A C OMPLEX N UMBER
+    We define z∗ , the conjugate of z = a + jb, as
+                                                                     
+                                        z∗ = a − jb = re−jθ = |z|e−j z                              (B.6)
+
+    The graphical representations of a number z and its conjugate z∗ are depicted in Fig. B.2. Observe
+    that z∗ is a mirror image of z about the horizontal axis. To find the conjugate of any number, we
+    need only replace j with −j in that number (which is the same as changing the sign of its angle).
+         The sum of a complex number and its conjugate is a real number equal to twice the real part
+    of the number:
+                                 z + z∗ = (a + jb) + (a − jb) = 2a = 2 Re z
+    Thus, we see that the real part of complex number z can be computed as
+                                                          z + z∗
+                                                 Re z =                                             (B.7)
+                                                            2
+
+[[PAGE page-007]]
+B.1 Complex Numbers          7
+
+Similarly, the imaginary part of complex number z can be computed as
+
+                                                           z − z∗
+                                                  Im z =                                             (B.8)
+                                                             2j
+
+   The product of a complex number z and its conjugate is a real number |z|2 , the square of the
+magnitude of the number:
+                                                  
+                               zz∗ = |z|ej z |z|e−j z = |z|2                               (B.9)
+
+U NDERSTANDING S OME U SEFUL I DENTITIES
+In a complex plane, rejθ represents a point at a distance r from the origin and at an angle θ with
+the horizontal axis, as shown in Fig. B.3a. For example, the number −1 is at a unit distance from
+the origin and has an angle π or −π (more generally, π plus any integer multiple of 2π ), as seen
+from Fig. B.3b. Therefore,
+                                   −1 = ej(π+2πn)      n integer
+The number 1, on the other hand, is also at a unit distance from the origin, but has an angle 0 (more
+generally, 0 plus any integer multiple of 2π ). Therefore,
+
+                                           1 = ej2πn         n integer                              (B.10)
+
+ The number j is at a unit distance from the origin and its angle is π2 (more generally, π2 plus any
+integer multiple of 2π ), as seen from Fig. B.3b. Therefore,
+                                               π
+                                       j = ej( 2 +2πn)         n integer
+
+Similarly,
+                                                   π
+                                     −j = ej(− 2 +2πn)          n integer
+Notice that the angle of any complex number is only known within an integer multiple of 2π .
+     This discussion shows the usefulness of the graphic picture of rejθ . This picture is also helpful
+in several other applications. For example, to determine the limit of e(α+jω)t as t → ∞, we note
+that
+                                        e(α+jω)t = eαt ejωt
+
+
+                   Im                                                          j   Im
+                                   re ju
+
+                           r
+                                                                           p         p2
+                               u
+                                             Re               1         p                1   Re
+                                                                                    p2
+
+
+
+                                                                           j
+
+                         (a)                                                       (b)
+                                                                              jθ
+      Figure B.3 Understanding some useful identities in terms of re .
+
+[[PAGE page-008]]
+8       CHAPTER B       BACKGROUND
+
+        Now the magnitude of ejωt is unity regardless of the value of ω or t because ejωt = rejθ with r = 1.
+        Therefore, eαt determines the behavior of e(α+jω)t as t → ∞ and
+                                                                 
+                                         (α+jω)t        αt jωt    0      α<0
+                                    lim e        = lim e e =
+                                   t→∞             t→∞             ∞     α>0
+
+        In future discussions, you will find it very useful to remember rejθ as a number at a distance r from
+        the origin and at an angle θ with the horizontal axis of the complex plane.
+
+        A WARNING A BOUT C OMPUTING A NGLES WITH C ALCULATORS
+        From the Cartesian form a + jb, we can readily compute the polar form rejθ [see Eq. (B.5)].
+        Calculators provide ready conversion of rectangular into polar and vice versa. However, if a
+        calculator computes an angle of a complex number by using an inverse tangent function θ =
+        tan−1 (b/a), proper attention must be paid to the quadrant in which the number is located. For
+        instance, θ corresponding to the number −2 − j3 is tan−1 (−3/−2). This result is not the same
+        as tan−1 (3/2). The former is −123.7◦ , whereas the latter is 56.3◦ . A calculator cannot make
+        this distinction and can give a correct answer only for angles in the first and fourth quadrants.†
+        A calculator will read tan−1 (−3/−2) as tan−1 (3/2), which is clearly wrong. When you are
+        computing inverse trigonometric functions, if the angle appears in the second or third quadrant,
+        the answer of the calculator is off by 180◦ . The correct answer is obtained by adding or subtracting
+        180◦ to the value found with the calculator (either adding or subtracting yields the correct answer).
+        For this reason, it is advisable to draw the point in the complex plane and determine the quadrant
+        in which the point lies. This issue will be clarified by the following examples.
+
+
+    E X A M P L E B.1 Cartesian to Polar Form
+
+        Express the following numbers in polar form: (a) 2+j3, (b) −2+j1, (c) −2−j3, and (d) 1−j3.
+
+
+             (a)                                        √                          
+                                |z| =        22 + 32 =       13          z = tan−1 32 = 56.3◦
+        In this case the number is in the first quadrant, and a calculator will give the correct value of
+        56.3◦ . Therefore (see Fig. B.4a), we can write
+                                                        √        ◦
+                                               2 + j3 = 13 ej56.3
+
+             (b)                                        √                         1
+                             |z| =       (−2)2 + 12 =     5              z = tan−1 −2 = 153.4◦
+        In this case the angle is in the second quadrant (see Fig. B.4b), and therefore the answer
+        given by the calculator, tan−1 (1/−2) = −26.6◦ , is off by 180◦ . The correct answer is
+
+
+
+        † Calculators with two-argument inverse tangent functions will correctly compute angles.
+
+[[PAGE page-009]]
+B.1 Complex Numbers             9
+
+  (−26.6 ± 180)◦ = 153.4◦ or −206.6◦ . Both values are correct because they represent the same
+  angle. It is a common practice to choose an angle whose numerical value is less than 180◦ .
+  Such a value is called the principal value of the angle, which in this case is 153.4◦ . Therefore,
+                                                   √        ◦
+                                        −2 + j1 = 5ej153.4
+
+          (c)                                               √                                
+                             |z| =        (−2)2 + (−3)2 =        13                z = tan−1 −3
+                                                                                              −2
+                                                                                                 = −123.7◦
+  In this case the angle appears in the third quadrant (see Fig. B.4c), and therefore the answer
+  obtained by the calculator (tan−1 (−3/−2) = 56.3◦ ) is off by 180◦ . The correct answer is
+  (56.3 ± 180)◦ = 236.3◦ or −123.7◦ . We choose the principal value −123.7◦ so that (see
+  Fig. B.4c)                                     √          ◦
+                                      −2 − j3 = 13e−j123.7
+          (d)                                         √                                     
+                                  |z| =    12 + (−3)2 = 10                        z = tan−1 −3
+                                                                                             1
+                                                                                                = −71.6◦
+  In this case the angle appears in the fourth quadrant (see Fig. B.4d), and therefore the answer
+  given by the calculator, tan−1 (−3/1) = −71.6◦ , is correct (see Fig. B.4d):
+                                                 √         ◦
+                                        1 − j3 = 10e−j71.6
+
+
+
+Im                                                                    Im
+
+  3                      2  j3
+
+      13
+                                              2  j1                          1
+                                                                  5
+          56.3                                                                    153.4
+                     2             Re               2                                 Re
+
+                  (a)                                             (b)
+
+
+Im    2                           Re                   Im        1                    Re
+                              123.7                         71.6
+                13
+
+
+                                                             10
+                           3                           3
+2  j3
+                                                                                             Figure B.4 From Cartesian to
+                  (c)                                             (d)                        polar form.
+
+[[PAGE page-010]]
+10       CHAPTER B     BACKGROUND
+
+               We can easily verify these results using the MATLAB abs and angle commands. To
+         obtain units of degrees, we must multiply the radian result of the angle command by
+         180
+          π
+             . Furthermore, the angle command correctly computes angles for all four quadrants of
+         √ complex
+         the            plane. To provide an example, let us use MATLAB to verify that −2 + j1 =
+                     ◦                ◦
+            5e j153.4 = 2.2361e j153.4 .
+
+         >>   abs(-2+1j)
+              ans = 2.2361
+         >>   angle(-2+1j)*180/pi
+              ans = 153.4349
+
+         One can also use the cart2pol command to convert Cartesian to polar coordinates. Readers,
+         particularly those who are unfamiliar with MATLAB, will benefit by reading the overview in
+         Sec. B.7.
+
+
+
+
+     E X A M P L E B.2 Polar to Cartesian Form
+
+         Represent the following numbers in the complex plane and express them in Cartesian form:
+         (a) 2ejπ/3 , (b) 4e−j3π/4 , (c) 2ejπ/2 , (d) 3e−j3π , (e) 2ej4π , and (f) 2e−j4π .
+
+                                                     √
+         (a) 2ejπ/3 = 2(cos π/3 + j sin π/3) = 1 + j 3 √ (see√Fig. B.5a)
+         (b) 4e−j3π/4 = 4(cos 3π /4 − j sin 3π /4) = −2 2 − j2 2        (see Fig. B.5b)
+         (c) 2ejπ/2 = 2(cos π/2 + j sin π/2) = 2(0 + j1) = j2     (see Fig. B.5c)
+         (d) 3e−j3π = 3(cos 3π − j sin 3π ) = 3(−1 + j0) = −3       (see Fig. B.5d)
+         (e) 2ej4π = 2(cos 4π + j sin 4π ) = 2(1 + j0) = 2    (see Fig. B.5e)
+         (f) 2e−j4π = 2(cos 4π − j sin 4π ) = 2(1 − j0) = 2    (see Fig. B.5f)
+              We can readily verify these results using MATLAB. First, we use the exp function to
+         represent a number in polar form. Next, we use the real and imag commands to determine
+         the real and imaginary components of that number.
+                                                         √    To provide an example, let us use MATLAB
+         to verify the result of part (a): 2ejπ/3 = 1 + j 3 = 1 + j1.7321.
+
+         >>   real(2*exp(1j*pi/3))
+              ans = 1.0000
+         >>   imag(2*exp(1j*pi/3))
+              ans = 1.7321
+
+         Since MATLAB defaults to Cartesian form, we could have verified the entire result in one step.
+
+         >>   2*exp(1j*pi/3)
+              ans = 1.0000 + 1.7321i
+
+         One can also use the pol2cart command to convert polar to Cartesian coordinates.
+
+[[PAGE page-011]]
+B.1 Complex Numbers   11
+
+
+ Im                                       2 2           Im              Re
+                                                                  3p
+                                                                
+  3                  2e jp3                                       4
+                                                     4
+        2
+
+            p                                                  2 2
+            3                             4ejp3
+                 1               Re
+
+                 (a)                                     (b)
+
+
+            Im                                           Im
+                     2e jp2  j2
+                                                                         Re
+
+                                         3ej3p  3               3p
+                       p
+                       2
+                                 Re
+
+                 (c)                                     (d)
+
+
+                Im                                  Im
+                                                          4p
+                  4p
+                                 Re                                      Re
+                           2e j4p  2                          2ej4p  2
+
+
+
+                 (e)                                     (f)
+Figure B.5 From polar to Cartesian form.
+
+
+
+
+  A RITHMETICAL O PERATIONS , P OWERS ,
+  AND R OOTS OF C OMPLEX N UMBERS
+ To conveniently perform addition and subtraction, complex numbers should be expressed in
+ Cartesian form. Thus, if
+                                                         ◦
+                                    z1 = 3 + j4 = 5ej53.1
+
+ and
+                                                               √              ◦
+                                              z2 = 2 + j3 =        13ej56.3
+
+ then
+                                        z1 + z2 = (3 + j4) + (2 + j3) = 5 + j7
+
+[[PAGE page-012]]
+12       CHAPTER B      BACKGROUND
+
+         If z1 and z2 are given in polar form, we would need to convert them into Cartesian form for the
+         purpose of adding (or subtracting). Multiplication and division, however, can be carried out in
+         either Cartesian or polar form, although the latter proves to be much more convenient. This is
+         because if z1 and z2 are expressed in polar form as
+
+                                          z1 = r1 ejθ1          and       z2 = r2 ejθ2
+
+         then
+                                         z1 z2 = (r1 ejθ1 )(r2 ejθ2 ) = r1 r2 ej(θ1 +θ2 )
+
+         and
+                                                   z1 r1 ejθ1  r1
+                                                     =        = ej(θ1 −θ2 )
+                                                   z2 r2 ejθ2  r2
+         Moreover,
+                                                     zn = (rejθ )n = rn ejnθ
+
+         and
+                                               z1/n = (rejθ )1/n = r1/n ejθ/n                                  (B.11)
+
+         This shows that the operations of multiplication, division, powers, and roots can be carried out
+         with remarkable ease when the numbers are in polar form.
+             Strictly speaking, there are n values for z1/n (the nth root of z). To find all the n roots, we
+         reexamine Eq. (B.11):
+                                                   1/n
+                  z1/n = [rejθ ]1/n = rej(θ+2πk)         = r1/n ej(θ+2πk)/n       k = 0, 1, 2, . . . , n − 1   (B.12)
+
+         The value of z1/n given in Eq. (B.11) is the principal value of z1/n , obtained by taking the nth root
+         of the principal value of z, which corresponds to the case k = 0 in Eq. (B.12).
+
+
+
+     E X A M P L E B.3 Multiplication and Division of Complex Numbers
+
+         Using both polar and Cartesian forms, determine z1 z2 and z1 /z2 for the numbers
+                                               ◦                            √        ◦
+                          z1 = 3 + j4 = 5ej53.1     and      z2 = 2 + j3 = 13ej56.3
+
+
+
+         Multiplication: Cartesian Form
+
+                             z1 z2 = (3 + j4)(2 + j3) = (6 − 12) + j(8 + 9) = −6 + j17
+
+         Multiplication: Polar Form
+                                                     ◦   √ j56.3◦     √         ◦
+                                    z1 z2 = (5ej53.1 )     13e       = 5 13ej109.4
+
+[[PAGE page-013]]
+B.1 Complex Numbers                     13
+
+    Division: Cartesian Form
+                                                   z1 3 + j4
+                                                     =
+                                                   z2 2 + j3
+    To eliminate the complex number in the denominator, we multiply both the numerator and the
+    denominator of the right-hand side by 2 − j3, the denominator’s conjugate. This yields
+
+                          z1 (3 + j4)(2 − j3) 18 − j1 18 − j1 18      1
+                            =                =        =      =    −j
+                          z2 (2 + j3)(2 − j3) 22 + 32   13     13    13
+    Division: Polar Form
+                                           ◦
+                            z1   5ej53.1       5       ◦     ◦     5      ◦
+                               =√           = √ ej(53.1 −56.3 ) = √ e−j3.2
+                            z2    13ej56.3◦    13                  13
+    It is clear from this example that multiplication and division are easier to accomplish in polar
+    form than in Cartesian form.
+          These results are also easily verified using MATLAB. To provide one example, let us use
+    Cartesian forms in MATLAB to verify that z1 z2 = −6 + j17.
+    >>    z1 = 3+4j; z2 = 2+3j;
+    >>    z1*z2
+          ans = -6.0000 + 17.0000i
+                                                                                                              ◦
+    As a second example, let us use polar forms in MATLAB to verify that z1 /z2 = 1.3868e−j3.2 .
+    Since MATLAB generally expects angles be represented in the natural units of radians, we
+    must use appropriate conversion factors in moving between degrees and radians (and vice
+    versa).
+    >>    z1 = 5*exp(1j*53.1*pi/180); z2 = sqrt(13)*exp(1j*56.3*pi/180);
+    >>    abs(z1/z2)
+          ans = 1.3868
+    >>    angle(z1/z2)*180/pi
+          ans = -3.2000
+
+
+
+
+E X A M P L E B.4 Working with Complex Numbers
+                                                                                                         √
+    For z1 = 2ejπ/4 and z2 = 8ejπ/3 , find the following: (a) 2z1 − z2 , (b) 1/z1 , (c) z1 /z22 , and (d) 3 z2 .
+
+
+        (a) Since subtraction cannot be performed directly in polar form, we convert z1 and z2 to
+    Cartesian form:
+                                                 π         π              √      √
+                              z1 = 2ejπ/4 = 2 cos  + j sin            =       2+j 2
+                                                 4         4
+                                                 π         π                  √
+                              z2 = 8ejπ/3 = 8 cos + j sin             = 4 + j4 3
+                                                 3         3
+
+[[PAGE page-014]]
+14       CHAPTER B      BACKGROUND
+
+         Therefore,
+                         √    √        √   √       √       √ 
+             2z1 − z2 = 2 2 + j 2 − 4 + j4 3 = 2 2 − 4 + j 2 2 − 4 3 = −1.17 − j4.1
+
+             (b)
+                                             1    1    1
+                                               = jπ/4 = e−jπ/4
+                                             z1 2e     2
+             (c)
+                            z1   2ejπ/4      2ejπ/4  1                1
+                               =          =         = ej(π/4−2π /3) = e−j(5π /12)
+                            z2 (8e )
+                             2     jπ/3 2   64ej2π/3 32              32
+             (d) There are three cube roots of 8ej(π/3) = 8ej(π/3+2πk) , k = 0, 1, 2.
+                                                                             ⎧ jπ /9
+                                                                           ⎨ 2e        k=0
+                 √
+                                                 = 81/3 ej[(6πk+π )/3]
+                                             1/3                        1/3
+                                                                            = 2ej7π /9
+                          1/3
+                  3
+                    z2 = z2 = 8ej(π/3+2πk)                                               k=1
+                                                                             ⎩ j13π /9
+                                                                                 2e      k=2
+
+         The value corresponding to k = 0 is termed the principal value.
+
+
+
+
+     E X A M P L E B.5 Standard Forms of Complex Numbers
+
+         Consider X(ω), a complex function of a real variable ω:
+                                                          2 + jω
+                                                X(ω) =
+                                                         3 + j4ω
+
+
+             (a) Express X(ω) in Cartesian form, and find its real and imaginary parts.
+             (b) Express X(ω) in polar form, and find its magnitude |X(ω)| and angle  X(ω).
+
+
+              (a) To obtain the real and imaginary parts of X(ω), we must eliminate imaginary terms
+         in the denominator of X(ω). This is readily done by multiplying both the numerator and the
+         denominator of X(ω) by 3 − j4ω, the conjugate of the denominator 3 + j4ω so that
+
+                             (2 + jω)(3 − j4ω)   (6 + 4ω2 ) − j5ω    6 + 4ω2       5ω
+                   X(ω) =                      =                  =          −j
+                            (3 + j4ω)(3 − j4ω)      9 + 16ω2        9 + 16ω2    9 + 16ω2
+         This is the Cartesian form of X(ω). Clearly, the real and imaginary parts Xr (ω) and Xi (ω) are
+         given by
+                                         6 + 4ω2                           −5ω
+                               Xr (ω) =                and      Xi (ω) =
+                                        9 + 16ω 2                        9 + 16ω2
+
+[[PAGE page-015]]
+B.1 Complex Numbers     15
+
+     (b)
+                        √                         
+                                        −1
+               2 + jω      4 + ω2 ej tan (ω/2)       4 + ω2 j[tan−1 (ω/2)−tan−1 (4ω/3)]
+       X(ω) =         =√                        =            e
+              3 + j4ω                    −1
+                         9 + 16ω2 ej tan (4ω/3)     9 + 16ω2
+
+This is the polar representation of X(ω). Observe that
+                      
+                         4 + ω2                              ω         4ω
+            |X(ω)| =                  and      X(ω) = tan−1   − tan−1
+                        9 + 16ω2                             2          3
+
+
+
+
+L OGARITHMS OF C OMPLEX N UMBERS
+To take the natural logarithm of a complex number z, we first express z in general polar form as
+
+                               z = rejθ = rej(θ±2πk)            k = 0, 1, 2, 3, . . .
+
+Taking the natural logarithm, we see that
+                                      
+                   ln z = ln rej(θ±2πk) = ln r ± j(θ + 2π k)                k = 0, 1, 2, 3, . . .
+
+The value of ln z for k = 0 is called the principal value of ln z and is denoted by Ln z. In this way,
+we see that
+
+                       ln 1 = ln(1e±j2πk ) = ±j2π k              k = 0, 1, 2, 3, . . .
+                                     ±jπ(2k+1)
+                   ln(−1) = ln[1e              ] = ±j(2k + 1)π         k = 0, 1, 2, 3, . . .
+                                  jπ(1±4k)/2      π(1 ± 4k)
+                       ln j = ln e              =j                  k = 0, 1, 2, 3, . . .
+                                                        2
+                         jj = ej ln j = e−π(1±4k)/2     k = 0, 1, 2, 3, . . .
+
+In all of these cases, setting k = 0 yields the principal value of the expression.
+     We can further our logarithm skills by noting that the familiar properties of logarithms hold
+for complex arguments. Therefore, we have
+
+                                        log(z1 z2 ) = log z1 + log z2
+                                       log(z1 /z2 ) = log z1 − log z2
+                                           a(z1 +z2 ) = az1 × az2
+                                                 zc = ec ln z
+                                                 az = ez ln a

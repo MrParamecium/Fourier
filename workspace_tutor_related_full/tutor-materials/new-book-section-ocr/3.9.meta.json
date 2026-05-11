@@ -1,0 +1,30 @@
+{
+  "sectionId": "3.9",
+  "sourcePages": [
+    "page-298",
+    "page-299",
+    "page-300",
+    "page-301",
+    "page-302",
+    "page-303",
+    "page-304",
+    "page-305"
+  ],
+  "usedPages": [
+    "page-298",
+    "page-299",
+    "page-300",
+    "page-301",
+    "page-302",
+    "page-303",
+    "page-304",
+    "page-305"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "3.9 SYSTEM STABILITY",
+  "foundEnd": true,
+  "endBeforeLine": "3.9-1 External (BIBO) Stability",
+  "endBeforeCode": "3.9-1",
+  "charCount": 394
+}

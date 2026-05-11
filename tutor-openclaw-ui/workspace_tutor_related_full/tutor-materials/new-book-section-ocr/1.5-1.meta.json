@@ -1,0 +1,18 @@
+{
+  "sectionId": "1.5-1",
+  "sourcePages": [
+    "page-092",
+    "page-093"
+  ],
+  "usedPages": [
+    "page-092",
+    "page-093"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "1.5-1 Some Properties of Even and Odd Functions",
+  "foundEnd": true,
+  "endBeforeLine": "1.5-2 Even and Odd Components of a Signal",
+  "endBeforeCode": "1.5-2",
+  "charCount": 1735
+}

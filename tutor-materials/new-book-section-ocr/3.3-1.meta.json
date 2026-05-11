@@ -1,0 +1,18 @@
+{
+  "sectionId": "3.3-1",
+  "sourcePages": [
+    "page-245",
+    "page-246"
+  ],
+  "usedPages": [
+    "page-245",
+    "page-246"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "3.3-1 Discrete-Time Impulse Function δ[n]",
+  "foundEnd": true,
+  "endBeforeLine": "3.3-2 Discrete-Time Unit Step Function u[n]",
+  "endBeforeCode": "3.3-2",
+  "charCount": 751
+}

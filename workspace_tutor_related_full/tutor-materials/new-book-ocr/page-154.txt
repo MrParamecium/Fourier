@@ -1,0 +1,36 @@
+154    CHAPTER 2    TIME-DOMAIN ANALYSIS OF CONTINUOUS-TIME SYSTEMS
+
+In this case the root λ repeats twice. Observe that the characteristic modes in this case are e^{λt} and te^{λt}. Continuing this pattern, we can show that for the differential equation
+
+(D − λ)^r y_0(t) = 0
+
+the characteristic modes are e^{λt}, te^{λt}, t^2e^{λt}, · · · , t^{r−1}e^{λt}, and that the solution is
+
+y_0(t) = (c_1 + c_2t + · · · + c_rt^{r−1})e^{λt}
+
+Consequently, for a system with the characteristic polynomial
+
+Q(λ) = (λ − λ_1)^r(λ − λ_{r+1}) · · · (λ − λ_N)
+
+the characteristic modes are e^{λ_1t}, te^{λ_1t}, · · · , t^{r−1}e^{λ_1t}, e^{λ_{r+1}t}, · · · , e^{λ_Nt} and the solution is
+
+y_0(t) = (c_1 + c_2t + · · · + c_rt^{r−1})e^{λ_1t} + c_{r+1}e^{λ_{r+1}t} + · · · + c_Ne^{λ_Nt}
+
+COMPLEX ROOTS
+The procedure for handling complex roots is the same as that for real roots. For complex roots, the usual procedure leads to complex characteristic modes and the complex form of solution. However, it is possible to avoid the complex form altogether by selecting a real-form of solution, as described next.
+
+For a real system, complex roots must occur in pairs of conjugates if the coefficients of the characteristic polynomial Q(λ) are to be real. Therefore, if α + jβ is a characteristic root, α − jβ must also be a characteristic root. The zero-input response corresponding to this pair of complex conjugate roots is
+
+y_0(t) = c_1e^{(α+jβ)t} + c_2e^{(α−jβ)t}                                                    (2.7)
+
+For a real system, the response y_0(t) must also be real. This is possible only if c_1 and c_2 are conjugates. Let
+
+c_1 = (c/2)e^{jθ}    and    c_2 = (c/2)e^{−jθ}
+
+This yields
+
+y_0(t) = (c/2)e^{jθ}e^{(α+jβ)t} + (c/2)e^{−jθ}e^{(α−jβ)t}
+      = (c/2)e^{αt}[e^{j(βt+θ)} + e^{−j(βt+θ)}]
+      = ce^{αt} cos (βt + θ)                                                                    (2.8)
+
+Therefore, the zero-input response corresponding to complex conjugate roots α ± jβ can be expressed in a complex form [Eq. (2.7)] or a real form [Eq. (2.8)].

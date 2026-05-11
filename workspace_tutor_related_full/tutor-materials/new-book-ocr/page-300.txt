@@ -1,0 +1,30 @@
+300
+CHAPTER 3  TIME-DOMAIN ANALYSIS OF DISCRETE-TIME SYSTEMS
+
+Complex plane
+
+(a)
+
+(b)
+
+(c)
+
+(d)
+
+n →
+
+n →
+
+n →
+
+n →
+
+n →
+
+n →
+
+n →
+
+n →
+
+Figure 3.27  Characteristic roots locations and the corresponding characteristic modes.

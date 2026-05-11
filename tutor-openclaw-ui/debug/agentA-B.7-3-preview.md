@@ -1,28 +1,30 @@
 # Agent A Preview: B.7-3 B.7-3 Vector Operations
 
-- Difficulty: intermediate
-- Estimated read minutes: 7
+- Difficulty: beginner
+- Estimated read minutes: 6
 
 ## Learning Objectives
 
-- Create MATLAB row vectors using colon notation.
-- Use vectorized expressions to evaluate many values at once.
-- Distinguish MATLAB indices from the independent variable of a function.
-- Represent a sinusoid by evaluating it over a time vector.
+- Create evenly spaced MATLAB row vectors using colon notation.
+- Use vector operations to evaluate many values of a formula at once.
+- Use vectorized complex exponentials to compute roots of an equation.
+- Distinguish MATLAB indexing from the independent variable of a function.
+- Represent and evaluate a sampled sinusoid using a time vector.
 
 ## Visualization Need
 
 ```json
 {
-  "level": "static",
+  "level": "interactive",
   "reason": [
-    "pattern_recognition_benefits_from_figure",
-    "misconception_needs_visual_correction",
-    "wrong_vs_right_contrast_is_high_value"
+    "depends_on_parameter_change",
+    "formula_to_phenomenon_gap",
+    "student_should_manipulate_to_understand",
+    "pattern_recognition_benefits_from_figure"
   ],
   "recommended_assets": [
-    "generated_image",
-    "latex_native_visuals"
+    "wiki_figure",
+    "react_canvas_demo"
   ]
 }
 ```
@@ -31,115 +33,83 @@
 
 ```json
 {
-  "primary_anchor": "generated_image",
-  "rationale": "The OCR section has no textbook figures, and the available web sources do not provide a relevant MATLAB colon-notation or indexing teaching diagram. The core ideas are symbolic and structural, so LaTeX blocks carry the definitions and formulas. Two generated lecture-note visuals are justified only for custom teaching needs: seeing colon notation as stored vector entries, and correcting the common f(1) indexing mistake.",
-  "cram": "Use visuals to identify colon notation, vector entries, and index traps quickly.",
-  "standard": "Use visuals to connect each formula to one representative MATLAB example.",
-  "top_score": "Use visuals to expose subtle mistakes: termination values may be excluded, and indices are not function inputs."
+  "primary_anchor": "both",
+  "rationale": "This section is mostly symbolic MATLAB syntax, so LaTeX-native formulas should carry the definitions. A Wikimedia complex-plane roots visual should support geometric recognition of complex roots, and a React + Canvas demo should show how a time vector samples a sinusoid. No textbook figures are available, and GPTImage2 is not needed because the important visuals are either canonical or dynamic.",
+  "cram": "Use the visuals to instantly recognize colon-vector output, root locations on the complex plane, and MATLAB index-versus-time traps.",
+  "standard": "Use the complex-plane reference and sinusoid sampling demo to connect one representative example to the formulas.",
+  "top_score": "Use the visuals to notice termination-value exclusions, one-based indexing, and the difference between sample number and independent-variable value."
 }
 ```
 
 ## Planned Blocks
 
 ### Block 1: `text_explanation`
-- **page**:
-```json
-1
-```
-- **instruction**: Render a minimal overview page only. Use the heading 'Section Objective' followed by one sentence: 'Learn how MATLAB uses vectors to compute many values at once, and how to avoid confusing vector indices with function inputs.' Then add the heading 'Concepts In This Section' and list only these concept names as bullets: colon notation, vectorized complex roots, MATLAB indexing, sampled sinusoid. Do not add background paragraphs or explanations on this page.
+- **instruction**: Create Page 1 as a minimal overview only. Use the heading 'Section Objective' followed by one sentence: 'Learn how MATLAB vectors let one expression compute many values at once.' Then add the heading 'Concepts In This Section' and list only these concept names as bullets: colon notation, vectorized complex roots, MATLAB indexing, sampled sinusoids. Do not add background paragraphs, examples, or expanded explanations on this page.
 
 ### Block 2: `math_block`
-- **page**:
-```json
-2
-```
-- **page_heading**: ## 1. Colon notation creates evenly spaced row vectors
-- **latex**: \texttt{a:b:c}
-- **explanation_instruction**: Teach this as the core pattern for creating a MATLAB row vector. Explain that \(a\) is the first value, \(b\) is the step size, and \(c\) is the stopping limit. State that MATLAB keeps adding the step while the next value does not pass the termination value, so \(c\) does not have to appear in the final vector. Include the representative example \(\texttt{0:2:11}\), which produces \([0,2,4,6,8,10]\). Mention that if the step is omitted, MATLAB assumes step size 1, so \(\texttt{0:11}\) counts by ones. Exam trigger: any problem asking for evenly spaced values or a vector grid. Common misuse: assuming the termination value must always appear.
+- **latex**: a:b:c \;\longrightarrow\; [a,\; a+b,\; a+2b,\; \ldots]
+- **explanation_instruction**: Start a new page with the heading '## 1. Creating row vectors with colon notation'. Explain in 100–140 words that MATLAB's colon notation creates a row vector by starting at \(a\), repeatedly adding step size \(b\), and stopping before the next value would pass \(c\). State that \(a\) is the initial value, \(b\) is the step size, and \(c\) is the termination value. Include the representative example \(0:2:11\) producing \([0,2,4,6,8,10]\), and explicitly note that 11 is not included because the step lands on 10 and the next value would be 12. Mention that if \(b\) is omitted, MATLAB assumes a step size of 1, so \(0:11\) gives every integer from 0 through 11. Exam trigger: use this when a problem asks for evenly spaced vector entries. Common misuse: assuming the termination value always appears.
 
-### Block 3: `generate_image`
-- **page**:
+### Block 3: `math_block`
+- **latex**: w_k = e^{j\left(\frac{\pi}{N}+\frac{2\pi k}{N}\right)}
+- **explanation_instruction**: Start a new page with the heading '## 2. Vectorized complex roots'. Explain in 100–150 words that solving \(w^N=-1\) can be done by using a vector of integer values \(k=0,1,\ldots,N-1\) instead of solving one root at a time. Define \(N\) as the number of roots, \(k\) as the integer root index, and \(j\) as MATLAB's complex-axis marker; in MATLAB code, use \(1j\). Give the section's representative cube-root example: for \(N=3\), use \(k=0:2\) and \(w=\exp(1j*(\pi/3+2\pi k/3))\), producing the three roots \(0.5+0.8660i\), \(-1\), and \(0.5-0.8660i\). Exam trigger: use this when roots are evenly spaced around the unit circle. Common misuse: using too many or nonconsecutive \(k\)-values and then counting repeated roots.
+
+### Block 4: `web_search_image`
+- **search_query**: Wikimedia Commons cube roots of minus one complex plane unit circle
+- **purpose**: Show the three cube roots of -1 as points evenly spaced on the unit circle in the complex plane.
+- **preferred_sources**:
 ```json
-2
+[
+  "wikimedia_commons",
+  "wikipedia"
+]
 ```
-- **tool**: openai/gpt-5.4-image-2
-- **reason**: No textbook figure or relevant Wikipedia/Wikimedia visual is available for MATLAB colon notation, and the teaching need is a custom symbolic-to-vector-entry diagram.
+- **prefer_animated**:
+```json
+false
+```
+- **fallback**: skip if no accurate Wikimedia or Wikipedia roots-of-unity visual is found
 - **teaching_role**: concept_anchor
 - **mode_specific_visual_use**:
 ```json
 {
-  "cram": "Make the colon pattern and excluded endpoint obvious at a glance.",
-  "standard": "Connect \\(\\texttt{0:2:11}\\) to the stored vector entries step by step.",
-  "top_score": "Emphasize why 11 is a stopping limit, not guaranteed output."
+  "cram": "Use the image to recognize that roots are equally spaced around the unit circle.",
+  "standard": "Use the image after the formula to connect the three MATLAB outputs to their complex-plane locations.",
+  "top_score": "Use the image to emphasize that different valid consecutive \\(k\\)-sets can list the same unique roots in a different order."
 }
 ```
-- **prompt**: Pure white clean background, minimalist lecture-notes educational diagram, one knowledge point only: MATLAB colon notation a:b:c. Show the expression '0:2:11' on the left, then an arrow to a row of six simple boxes labeled 0, 2, 4, 6, 8, 10. Above the expression, label a = start, b = step, c = stop limit. Show a small muted red note near 11: '11 is not included because the next step would pass it.' Use restrained navy, muted teal, soft gray, and muted red only for the warning note. No decorative styling, no code editor frame, no extra examples.
-
-### Block 4: `math_block`
-- **page**:
-```json
-3
-```
-- **page_heading**: ## 2. Vectorized expressions evaluate many complex roots at once
-- **latex**: w_k=e^{j\left(\frac{\pi}{3}+\frac{2\pi k}{3}\right)},\quad k=0,1,2
-- **explanation_instruction**: Explain that this formula gives the three unique cube roots of \(-1\) because \(-1=e^{j(\pi+2\pi k)}\), and taking the cube root divides the angle by 3. Define \(w_k\) as one root, \(j\) as the imaginary unit used by MATLAB as \(1j\), and \(k\) as the integer vector selecting the different angles. Include the MATLAB line \(\texttt{k = 0:2; w = exp(1j*(pi/3 + 2*pi*k/3))}\). State the representative outputs: \(0.5+0.8660i\), \(-1\), and \(0.5-0.8660i\). Exam trigger: a formula is evaluated for several consecutive integer values. Common misuse: using a loop mentally when one vector expression already evaluates all entries.
 
 ### Block 5: `math_block`
-- **page**:
-```json
-4
-```
-- **page_heading**: ## 3. MATLAB indices are positions, not input values
-- **latex**: \texttt{f(1)}\ne f(t)\big|_{t=1}
-- **explanation_instruction**: Make this the main warning page. Explain that MATLAB indexing starts at 1, so \(\texttt{x(1)}\) means 'the first stored element of vector x.' It does not mean the mathematical function value at input 1. Use the OCR example: if \(\texttt{k = 0:99}\), then \(\texttt{k(5)}\) is 4 because the fifth stored entry is 4. For the roots vector, \(\texttt{w(5)}\) corresponds to \(k=4\), not \(k=5\). Exam trigger: any expression that looks like \(\texttt{f(1)}\), \(\texttt{w(5)}\), or \(\texttt{x(98:100)}\). Common misuse: reading MATLAB parentheses as ordinary function notation.
+- **latex**: f(1)_{\text{MATLAB index}} \ne f(t)\big|_{t=1}
+- **explanation_instruction**: Start a new page with the heading '## 3. MATLAB indexing is not function input notation'. Explain in 110–150 words that MATLAB indices are positive integers starting at 1, so \(w(5)\) means 'the fifth stored element of vector \(w\).' Use the section example: if \(k=0:99\), then the fifth element corresponds to \(k=4\), not \(k=5\). Include the check \(k(5)=4\). Explain that this is why \(f(1)\) in MATLAB means the first sample of vector \(f\), while standard math notation \(f(1)\) usually means the function value at input \(t=1\). Exam trigger: when a question asks for an element of a vector, read the number as an index unless it explicitly asks for a function value at a variable. Common misuse: treating sample index 1 as time \(t=1\).
 
-### Block 6: `generate_image`
-- **page**:
-```json
-4
-```
-- **tool**: openai/gpt-5.4-image-2
-- **reason**: A custom wrong-vs-right indexing correction is needed; no textbook or Wikimedia asset accurately targets the MATLAB f(1) versus mathematical f(1) misconception.
-- **teaching_role**: trap_exposure
+### Block 6: `math_block`
+- **latex**: t = 0:\frac{0.2}{500}:0.2-\frac{0.2}{500}
+- **explanation_instruction**: Start a new page with the heading '## 4. Building a time vector for a sampled signal'. Explain in 90–130 words that this MATLAB command creates 500 evenly spaced time values over the interval \(0\le t<0.2\). Clarify that the step size is \(0.2/500\), so the vector starts at 0 but stops one step before 0.2. Say explicitly that subtracting \(0.2/500\) from the endpoint prevents MATLAB from including an extra endpoint sample. Representative example: the first time value is \(t(1)=0\), so any vectorized signal evaluated on this \(t\)-vector has its first sample at time zero. Exam trigger: use this pattern when a problem requests a fixed number of uniformly spaced samples on a half-open interval. Common misuse: writing \(0:0.2/500:0.2\) and accidentally creating 501 samples.
+
+### Block 7: `math_block`
+- **latex**: f(t)=\sin\left(2\pi\cdot 10t+\frac{\pi}{6}\right)
+- **explanation_instruction**: Continue the same sinusoid page after the time-vector formula. Explain in 80–120 words that MATLAB evaluates this formula at every entry of the vector \(t\) when writing \(f=\sin(2*pi*10*t+pi/6)\). Define 10 as the frequency in hertz, \(2\pi\cdot 10t\) as the angle accumulated over time, and \(\pi/6\) as the phase offset. Include the representative check: because \(t(1)=0\), the first stored value is \(f(1)=\sin(\pi/6)=0.5000\). Exam trigger: use vectorized evaluation when one formula must be computed at many sample times. Common misuse: reading MATLAB \(f(1)\) as \(f(t)\) at \(t=1\).
+
+### Block 8: `interactive_demo`
+- **demo_type**: react_canvas_demo
+- **title**: Sample a sinusoid with a MATLAB time vector
+- **teaching_role**: example_support
+- **instruction**: Create an interactive React + Canvas demo on the same sinusoid page. Show a clean coordinate plot of \(f(t)=\sin(2\pi\cdot 10t+\pi/6)\) over \(0\le t<0.2\). Overlay sample dots generated by the MATLAB-style vector \(t=0:T/N:T-T/N\), with default \(T=0.2\) and \(N=500\). Include controls for sample count \(N\) with presets 20, 50, 100, 500, and a toggle labeled 'show endpoint mistake' that switches to \(t=0:T/N:T\). Display a small readout for number of samples, first sample \(f(1)\), last time value, and whether the endpoint \(0.2\) is included. Keep the visual white-background, restrained, and lecture-note clean.
+- **what_to_notice_instruction**: Below the demo, write three bullets: the vector index starts at 1; the first sample is at \(t=0\), not \(t=1\); including the endpoint creates one extra sample.
 - **mode_specific_visual_use**:
 ```json
 {
-  "cram": "Spot the index-versus-input trap instantly.",
-  "standard": "Use the side-by-side contrast to remember that MATLAB positions start at 1.",
-  "top_score": "Notice that vector index and independent variable usually differ."
+  "cram": "Focus on the endpoint mistake and the index-versus-time readout.",
+  "standard": "Use the sliders to connect the formula, time vector, and plotted samples.",
+  "top_score": "Use low sample counts to see how sample density changes the visual representation without changing the underlying sinusoid formula."
 }
 ```
-- **prompt**: Pure white clean background, minimalist lecture-notes educational diagram, one knowledge point only: MATLAB index versus mathematical function input. Create a two-column wrong-vs-right visual. Left column title in muted red: 'Wrong reading'. Show 'f(1)' interpreted as 'function value at t = 1' with a red X. Right column title in muted teal: 'Correct MATLAB reading'. Show a row vector with positions 1, 2, 3, 4 under boxes and values f(t_1), f(t_2), f(t_3), f(t_4) inside boxes; highlight position 1 and label it 'first stored sample'. Include one small note: 'Index = storage position, not time value.' Low-saturation academic palette, clean linework, no extra examples, no code editor interface.
-
-### Block 7: `math_block`
-- **page**:
-```json
-5
-```
-- **page_heading**: ## 4. A time vector represents many sample points
-- **latex**: \texttt{t = 0:0.2/500:0.2-0.2/500}
-- **explanation_instruction**: Explain that this MATLAB line creates 500 uniformly spaced time samples over \(0\le t<0.2\). Define \(0\) as the first time value, \(0.2/500\) as the spacing between samples, and \(0.2-0.2/500\) as the last included time so the vector stops just before 0.2. State why this matters: for a 10 Hz sinusoid, one period is 0.1 seconds, so the interval from 0 to just under 0.2 seconds covers two cycles. Exam trigger: creating a sample grid over an interval. Common misuse: ending at 0.2 and accidentally changing the intended sample count or endpoint behavior.
-
-### Block 8: `math_block`
-- **page**:
-```json
-5
-```
-- **latex**: f(t)=\sin\left(2\pi\cdot10t+\frac{\pi}{6}\right)
-- **explanation_instruction**: Teach this as the representative signal evaluated at every entry of the vector \(t\). Define 10 as the frequency in hertz, \(2\pi\cdot10\) as the angular frequency, and \(\pi/6\) as the phase shift. Explain that MATLAB evaluates \(\texttt{f = sin(2*pi*10*t + pi/6)}\) element by element across the whole vector \(t\), producing a vector of sampled signal values. Include the quick check: at \(t=0\), \(f(0)=\sin(\pi/6)=0.5\), and in MATLAB this first stored value is accessed as \(\texttt{f(1)}\).
 
 ### Block 9: `section_summary`
-- **page**:
-```json
-6
-```
-- **instruction**: Create a recap page titled '📌 Key Takeaways'. Include exactly 4 concise bullets, each no more than 22 words, and include the core formulas explicitly: \(\texttt{a:b:c}\), \(w_k=e^{j(\pi/3+2\pi k/3)}\), \(\texttt{f(1)}\ne f(t)|_{t=1}\), \(f(t)=\sin(2\pi\cdot10t+\pi/6)\). End with one sentence: 'Next, use the same vector mindset to perform larger MATLAB operations efficiently.'
+- **instruction**: Create the recap page titled '📌 Key Takeaways'. Include exactly 5 bullets, each ≤24 words. The bullets must explicitly include these formulas: \(a:b:c\to[a,a+b,a+2b,\ldots]\); \(w_k=e^{j(\pi/N+2\pi k/N)}\); \(f(1)_{\text{MATLAB index}}\ne f(t)|_{t=1}\); \(t=0:0.2/500:0.2-0.2/500\); and \(f(t)=\sin(2\pi\cdot10t+\pi/6)\). End with one sentence: 'Next, these vector skills make it easier to generate and inspect signals efficiently.'
 
 ### Block 10: `quiz_plan`
-- **page**:
-```json
-7
-```
 - **target_questions**:
 ```json
 7
@@ -156,7 +126,7 @@
 [
   {
     "id": "colon_notation",
-    "label": "MATLAB colon notation",
+    "label": "MATLAB colon notation for row vectors",
     "importance": "high",
     "exam_weight": "high",
     "mastery_rule": {
@@ -166,52 +136,51 @@
       {
         "id": "colon_q1",
         "type": "multiple_choice",
-        "stem": "What vector does MATLAB create from \\(\\texttt{0:2:11}\\)?",
+        "stem": "What vector does MATLAB create from the command k = 0:2:11?",
         "options": [
-          "A. \\([0,2,4,6,8,10]\\)",
-          "B. \\([0,2,4,6,8,10,11]\\)",
-          "C. \\([0,1,2,3,4,5,6,7,8,9,10,11]\\)",
-          "D. \\([2,4,6,8,10]\\)"
+          "A. [0, 2, 4, 6, 8, 10]",
+          "B. [0, 2, 4, 6, 8, 10, 11]",
+          "C. [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]",
+          "D. [2, 4, 6, 8, 10]"
         ],
         "correct_option": "A",
-        "explanation": "MATLAB starts at 0 and adds 2 until the next step would pass 11, so the final included value is 10.",
+        "explanation": "The vector starts at 0 and adds 2 repeatedly. It stops at 10 because the next value, 12, would pass 11.",
         "wrong_option_explanations": {
-          "B": "The stop value is a limit, not guaranteed to be included.",
-          "C": "This would be \\(\\texttt{0:11}\\), where the omitted step defaults to 1.",
-          "D": "The start value 0 is included."
+          "B": "The termination value is included only if the step lands on it exactly.",
+          "C": "That would be 0:11, where MATLAB assumes a step size of 1.",
+          "D": "The starting value 0 is included."
         },
-        "hint": "Keep adding the step size 2 without passing the stop value.",
-        "needs_visual": true,
-        "visual_type": "generated_static_colon_vector_boxes",
-        "same_point_variant": true
+        "hint": "Start at 0, add 2 each time, and stop before passing 11.",
+        "needs_visual": false,
+        "same_point_variant": false
       },
       {
         "id": "colon_q2",
         "type": "multiple_choice",
-        "stem": "Which MATLAB expression creates \\([11, 7.6667, 4.3333, 1.0000]\\) approximately?",
+        "stem": "Which command creates [11.0000, 7.6667, 4.3333, 1.0000]?",
         "options": [
-          "A. \\(\\texttt{11:-10/3:0}\\)",
-          "B. \\(\\texttt{11:10/3:0}\\)",
-          "C. \\(\\texttt{0:-10/3:11}\\)",
-          "D. \\(\\texttt{11:0:-10/3}\\)"
+          "A. k = 11:-10/3:0",
+          "B. k = 11:10/3:0",
+          "C. k = 0:-10/3:11",
+          "D. k = 11:-3:0"
         ],
         "correct_option": "A",
-        "explanation": "The vector starts at 11 and uses the negative step \\(-10/3\\), stopping before it would pass 0.",
+        "explanation": "The values decrease from 11 by \\(10/3\\) each step: 11, 7.6667, 4.3333, 1.0000.",
         "wrong_option_explanations": {
           "B": "A positive step cannot move from 11 down toward 0.",
           "C": "This starts at 0, not 11.",
-          "D": "The middle value is the step size; a zero step is invalid for this purpose."
+          "D": "A step of -3 gives 11, 8, 5, 2, not the listed values."
         },
-        "hint": "The format is start : step : stop.",
+        "hint": "The entries are decreasing, so the step must be negative.",
         "needs_visual": false,
         "same_point_variant": true
       }
     ]
   },
   {
-    "id": "vectorized_complex_roots",
-    "label": "Vectorized complex roots",
-    "importance": "medium",
+    "id": "vectorized_roots",
+    "label": "Vectorized computation of complex roots",
+    "importance": "high",
     "exam_weight": "medium",
     "mastery_rule": {
       "correct_streak_required": 1
@@ -220,29 +189,51 @@
       {
         "id": "roots_q1",
         "type": "multiple_choice",
-        "stem": "In \\(w_k=e^{j(\\pi/3+2\\pi k/3)}\\), why does MATLAB use \\(\\texttt{k = 0:2}\\)?",
+        "stem": "To compute the three unique roots of \\(w^3=-1\\) using \\(w=\\exp(1j*(\\pi/3+2\\pi k/3))\\), which MATLAB vector for k is appropriate?",
         "options": [
-          "A. It supplies three consecutive integer values to produce the three unique cube roots.",
-          "B. It supplies two values because the notation ends at 2.",
-          "C. It forces the roots to be real numbers only.",
-          "D. It makes MATLAB ignore the complex exponential."
+          "A. k = 0:2",
+          "B. k = 1:3",
+          "C. k = 0:3",
+          "D. k = 0:0.2:1"
         ],
         "correct_option": "A",
-        "explanation": "\\(\\texttt{0:2}\\) means \\([0,1,2]\\), giving three values of \\(k\\) and therefore three roots.",
+        "explanation": "Three consecutive integer values are needed. The textbook uses k = 0:2, which gives k = 0, 1, 2.",
         "wrong_option_explanations": {
-          "B": "The vector \\(\\texttt{0:2}\\) includes 0, 1, and 2.",
-          "C": "Two of the cube roots are complex.",
-          "D": "MATLAB evaluates the complex exponential using \\(\\texttt{1j}\\)."
+          "B": "This can produce the same unique roots in a shifted order, but it does not match the section's representative MATLAB setup.",
+          "C": "This gives four k-values, causing a repeated root.",
+          "D": "These are not consecutive integers and do not represent the root index correctly."
         },
-        "hint": "Remember the omitted step size defaults to 1.",
+        "hint": "For three unique roots, use exactly three consecutive integer values.",
         "needs_visual": false,
         "same_point_variant": false
+      },
+      {
+        "id": "roots_q2",
+        "type": "multiple_choice",
+        "stem": "Observe a complex-plane plot showing three roots of \\(w^3=-1\\). Which visual pattern should the correct roots have?",
+        "options": [
+          "A. Three points equally spaced on the unit circle",
+          "B. Three points equally spaced on the real axis",
+          "C. Three points with different distances from the origin",
+          "D. Three points all in the first quadrant"
+        ],
+        "correct_option": "A",
+        "explanation": "The roots of \\(w^3=-1\\) have magnitude 1 and are separated by equal angular spacing.",
+        "wrong_option_explanations": {
+          "B": "Only one of the listed roots is purely real.",
+          "C": "All three roots lie on the unit circle, so they have the same magnitude.",
+          "D": "The roots appear in different directions around the complex plane."
+        },
+        "hint": "Complex exponential roots usually appear as points around a circle.",
+        "needs_visual": true,
+        "visual_type": "wiki_complex_plane_roots_reference",
+        "same_point_variant": true
       }
     ]
   },
   {
     "id": "matlab_indexing",
-    "label": "MATLAB indexing versus function notation",
+    "label": "MATLAB indexing versus function input",
     "importance": "high",
     "exam_weight": "high",
     "mastery_rule": {
@@ -252,54 +243,46 @@
       {
         "id": "index_q1",
         "type": "multiple_choice",
-        "stem": "If \\(\\texttt{k = 0:99}\\), what is \\(\\texttt{k(5)}\\)?",
+        "stem": "If k = 0:99, what is k(5) in MATLAB?",
         "options": [
-          "A. 4",
-          "B. 5",
+          "A. 5",
+          "B. 4",
           "C. 0",
           "D. 99"
         ],
-        "correct_option": "A",
-        "explanation": "MATLAB indices count storage positions starting at 1. The fifth stored value in \\([0,1,2,3,4,\\ldots]\\) is 4.",
+        "correct_option": "B",
+        "explanation": "MATLAB indices start at 1. The first element is 0, so the fifth element is 4.",
         "wrong_option_explanations": {
-          "B": "That confuses the index position with the stored value.",
-          "C": "0 is the first stored value, so it is \\(\\texttt{k(1)}\\).",
-          "D": "99 is the last stored value, not the fifth."
+          "A": "This confuses the index number with the stored value.",
+          "C": "0 is the first element, not the fifth.",
+          "D": "99 is the last element."
         },
-        "hint": "Write out the first five entries and count positions.",
-        "needs_visual": true,
-        "visual_type": "generated_static_index_position_boxes",
-        "same_point_variant": true
+        "hint": "Count: k(1)=0, k(2)=1, k(3)=2.",
+        "needs_visual": false,
+        "same_point_variant": false
       },
       {
         "id": "index_q2",
-        "type": "multiple_choice",
-        "stem": "A classmate says \\(\\texttt{f(1)}\\) in MATLAB always means the mathematical value \\(f(t)\\) at \\(t=1\\). What is the best correction?",
-        "options": [
-          "A. \\(\\texttt{f(1)}\\) means the first stored element of vector \\(f\\), not necessarily the value at \\(t=1\\).",
-          "B. \\(\\texttt{f(1)}\\) means the final stored element of vector \\(f\\).",
-          "C. \\(\\texttt{f(1)}\\) is illegal MATLAB syntax.",
-          "D. \\(\\texttt{f(1)}\\) means the first derivative of \\(f\\)."
+        "type": "short_answer",
+        "stem": "A classmate says MATLAB f(1) means the function value at t = 1. Explain why that is wrong in this section's sampled-signal example.",
+        "ideal_answer": "In MATLAB, f(1) means the first stored element of the vector f. In the sampled-signal example, the first time value is t(1)=0, so f(1) is f(t) evaluated at t=0, not at t=1.",
+        "grading_rubric": [
+          "Must state that MATLAB f(1) is an index operation.",
+          "Must state that the first sample corresponds to t(1)=0.",
+          "Must distinguish MATLAB vector syntax from standard function notation."
         ],
-        "correct_option": "A",
-        "explanation": "In MATLAB, parentheses after a vector name access stored positions. They do not automatically represent mathematical function inputs.",
-        "wrong_option_explanations": {
-          "B": "Index 1 refers to the first element, not the final element.",
-          "C": "\\(\\texttt{f(1)}\\) is legal if \\(f\\) has at least one element.",
-          "D": "MATLAB indexing is unrelated to derivative notation here."
-        },
-        "hint": "Ask whether the parentheses are being used by MATLAB or by handwritten math notation.",
-        "needs_visual": true,
-        "visual_type": "wrong_vs_right_visual_check",
+        "explanation": "This checks the main indexing trap from the section.",
+        "hint": "Ask whether the number inside parentheses is an index or a function input.",
+        "needs_visual": false,
         "same_point_variant": true
       }
     ]
   },
   {
     "id": "sampled_sinusoid",
-    "label": "Vector representation of a sinusoid",
+    "label": "Vectorized sampled sinusoid",
     "importance": "high",
-    "exam_weight": "medium",
+    "exam_weight": "high",
     "mastery_rule": {
       "correct_streak_required": 1
     },
@@ -307,38 +290,46 @@
       {
         "id": "sinusoid_q1",
         "type": "multiple_choice",
-        "stem": "For \\(f(t)=\\sin(2\\pi\\cdot10t+\\pi/6)\\), what is the frequency?",
+        "stem": "For t = 0:0.2/500:0.2-0.2/500, how many time samples are intended?",
         "options": [
-          "A. 10 Hz",
-          "B. \\(2\\pi\\) Hz",
-          "C. \\(\\pi/6\\) Hz",
-          "D. 500 Hz"
+          "A. 500",
+          "B. 501",
+          "C. 499",
+          "D. 0.2"
         ],
         "correct_option": "A",
-        "explanation": "The standard sinusoid form is \\(\\sin(2\\pi f t+\\phi)\\), so the frequency is 10 Hz.",
+        "explanation": "The interval length is divided into 500 steps, and the endpoint is excluded so the vector contains 500 samples.",
         "wrong_option_explanations": {
-          "B": "\\(2\\pi\\) converts cycles to radians; it is not the frequency here.",
-          "C": "\\(\\pi/6\\) is the phase shift.",
-          "D": "500 is the number of sample points in the time vector, not the sinusoid frequency."
+          "B": "That would happen if the endpoint 0.2 were included using 0:0.2/500:0.2.",
+          "C": "The construction includes the first sample at 0 and stops one step before 0.2.",
+          "D": "0.2 is the interval length, not the number of samples."
         },
-        "hint": "Match the formula to \\(\\sin(2\\pi f t+\\phi)\\).",
-        "needs_visual": false,
+        "hint": "The expression subtracts one step from the endpoint to avoid an extra sample.",
+        "needs_visual": true,
+        "visual_type": "demo_endpoint_observation",
         "same_point_variant": false
       },
       {
         "id": "sinusoid_q2",
-        "type": "short_answer",
-        "stem": "Why does the line \\(\\texttt{t = 0:0.2/500:0.2-0.2/500}\\) stop at \\(0.2-0.2/500\\) instead of exactly \\(0.2\\)?",
-        "ideal_answer": "It creates 500 uniformly spaced samples over \\(0\\le t<0.2\\). Stopping one step before 0.2 avoids including the endpoint as an extra sample and keeps the intended sample count.",
-        "grading_rubric": [
-          "Must state that the samples cover \\(0\\le t<0.2\\)",
-          "Must identify \\(0.2/500\\) as the sample spacing",
-          "Must explain that stopping before 0.2 helps preserve the intended 500 samples"
+        "type": "multiple_choice",
+        "stem": "Using \\(f(t)=\\sin(2\\pi\\cdot10t+\\pi/6)\\) and the time vector whose first value is \\(t(1)=0\\), what is MATLAB f(1)?",
+        "options": [
+          "A. 0.5000",
+          "B. 0",
+          "C. 1.0000",
+          "D. \\(\\sin(20\\pi+\\pi/6)\\)"
         ],
-        "explanation": "This checks whether the student understands the time vector as a sampled grid, not just a string of MATLAB syntax.",
-        "hint": "Think about whether both endpoints should be included when spacing is fixed.",
-        "needs_visual": false,
-        "same_point_variant": false
+        "correct_option": "A",
+        "explanation": "The first sample uses t=0, so f(1)=sin(pi/6)=0.5000.",
+        "wrong_option_explanations": {
+          "B": "The phase offset \\(\\pi/6\\) makes the value nonzero at t=0.",
+          "C": "\\(\\sin(\\pi/6)=0.5\\), not 1.",
+          "D": "That expression corresponds to t=1, but MATLAB f(1) is the first vector element, not t=1."
+        },
+        "hint": "Use the first stored time value, not the number inside f(1) as a time.",
+        "needs_visual": true,
+        "visual_type": "demo_first_sample_observation",
+        "same_point_variant": true
       }
     ]
   }
@@ -351,108 +342,101 @@
 {
   "section_id": "B.7-3",
   "section_title": "B.7-3 Vector Operations",
-  "source_integrity_note": "The provided OCR pages identify this section as B.7-3 Vector Operations, not Matrix Addition, so the lesson blueprint follows the OCR content.",
-  "difficulty": "intermediate",
-  "estimated_read_minutes": 7,
+  "difficulty": "beginner",
+  "estimated_read_minutes": 6,
   "learning_objectives": [
-    "Create MATLAB row vectors using colon notation.",
-    "Use vectorized expressions to evaluate many values at once.",
-    "Distinguish MATLAB indices from the independent variable of a function.",
-    "Represent a sinusoid by evaluating it over a time vector."
+    "Create evenly spaced MATLAB row vectors using colon notation.",
+    "Use vector operations to evaluate many values of a formula at once.",
+    "Use vectorized complex exponentials to compute roots of an equation.",
+    "Distinguish MATLAB indexing from the independent variable of a function.",
+    "Represent and evaluate a sampled sinusoid using a time vector."
   ],
   "visualization_need": {
-    "level": "static",
+    "level": "interactive",
     "reason": [
-      "pattern_recognition_benefits_from_figure",
-      "misconception_needs_visual_correction",
-      "wrong_vs_right_contrast_is_high_value"
+      "depends_on_parameter_change",
+      "formula_to_phenomenon_gap",
+      "student_should_manipulate_to_understand",
+      "pattern_recognition_benefits_from_figure"
     ],
     "recommended_assets": [
-      "generated_image",
-      "latex_native_visuals"
+      "wiki_figure",
+      "react_canvas_demo"
     ]
   },
   "visual_plan": {
-    "primary_anchor": "generated_image",
-    "rationale": "The OCR section has no textbook figures, and the available web sources do not provide a relevant MATLAB colon-notation or indexing teaching diagram. The core ideas are symbolic and structural, so LaTeX blocks carry the definitions and formulas. Two generated lecture-note visuals are justified only for custom teaching needs: seeing colon notation as stored vector entries, and correcting the common f(1) indexing mistake.",
-    "cram": "Use visuals to identify colon notation, vector entries, and index traps quickly.",
-    "standard": "Use visuals to connect each formula to one representative MATLAB example.",
-    "top_score": "Use visuals to expose subtle mistakes: termination values may be excluded, and indices are not function inputs."
+    "primary_anchor": "both",
+    "rationale": "This section is mostly symbolic MATLAB syntax, so LaTeX-native formulas should carry the definitions. A Wikimedia complex-plane roots visual should support geometric recognition of complex roots, and a React + Canvas demo should show how a time vector samples a sinusoid. No textbook figures are available, and GPTImage2 is not needed because the important visuals are either canonical or dynamic.",
+    "cram": "Use the visuals to instantly recognize colon-vector output, root locations on the complex plane, and MATLAB index-versus-time traps.",
+    "standard": "Use the complex-plane reference and sinusoid sampling demo to connect one representative example to the formulas.",
+    "top_score": "Use the visuals to notice termination-value exclusions, one-based indexing, and the difference between sample number and independent-variable value."
   },
   "blocks": [
     {
       "type": "text_explanation",
-      "page": 1,
-      "instruction": "Render a minimal overview page only. Use the heading 'Section Objective' followed by one sentence: 'Learn how MATLAB uses vectors to compute many values at once, and how to avoid confusing vector indices with function inputs.' Then add the heading 'Concepts In This Section' and list only these concept names as bullets: colon notation, vectorized complex roots, MATLAB indexing, sampled sinusoid. Do not add background paragraphs or explanations on this page."
+      "instruction": "Create Page 1 as a minimal overview only. Use the heading 'Section Objective' followed by one sentence: 'Learn how MATLAB vectors let one expression compute many values at once.' Then add the heading 'Concepts In This Section' and list only these concept names as bullets: colon notation, vectorized complex roots, MATLAB indexing, sampled sinusoids. Do not add background paragraphs, examples, or expanded explanations on this page."
     },
     {
       "type": "math_block",
-      "page": 2,
-      "page_heading": "## 1. Colon notation creates evenly spaced row vectors",
-      "latex": "\\texttt{a:b:c}",
-      "explanation_instruction": "Teach this as the core pattern for creating a MATLAB row vector. Explain that \\(a\\) is the first value, \\(b\\) is the step size, and \\(c\\) is the stopping limit. State that MATLAB keeps adding the step while the next value does not pass the termination value, so \\(c\\) does not have to appear in the final vector. Include the representative example \\(\\texttt{0:2:11}\\), which produces \\([0,2,4,6,8,10]\\). Mention that if the step is omitted, MATLAB assumes step size 1, so \\(\\texttt{0:11}\\) counts by ones. Exam trigger: any problem asking for evenly spaced values or a vector grid. Common misuse: assuming the termination value must always appear."
+      "latex": "a:b:c \\;\\longrightarrow\\; [a,\\; a+b,\\; a+2b,\\; \\ldots]",
+      "explanation_instruction": "Start a new page with the heading '## 1. Creating row vectors with colon notation'. Explain in 100–140 words that MATLAB's colon notation creates a row vector by starting at \\(a\\), repeatedly adding step size \\(b\\), and stopping before the next value would pass \\(c\\). State that \\(a\\) is the initial value, \\(b\\) is the step size, and \\(c\\) is the termination value. Include the representative example \\(0:2:11\\) producing \\([0,2,4,6,8,10]\\), and explicitly note that 11 is not included because the step lands on 10 and the next value would be 12. Mention that if \\(b\\) is omitted, MATLAB assumes a step size of 1, so \\(0:11\\) gives every integer from 0 through 11. Exam trigger: use this when a problem asks for evenly spaced vector entries. Common misuse: assuming the termination value always appears."
     },
     {
-      "type": "generate_image",
-      "page": 2,
-      "tool": "openai/gpt-5.4-image-2",
-      "reason": "No textbook figure or relevant Wikipedia/Wikimedia visual is available for MATLAB colon notation, and the teaching need is a custom symbolic-to-vector-entry diagram.",
+      "type": "math_block",
+      "latex": "w_k = e^{j\\left(\\frac{\\pi}{N}+\\frac{2\\pi k}{N}\\right)}",
+      "explanation_instruction": "Start a new page with the heading '## 2. Vectorized complex roots'. Explain in 100–150 words that solving \\(w^N=-1\\) can be done by using a vector of integer values \\(k=0,1,\\ldots,N-1\\) instead of solving one root at a time. Define \\(N\\) as the number of roots, \\(k\\) as the integer root index, and \\(j\\) as MATLAB's complex-axis marker; in MATLAB code, use \\(1j\\). Give the section's representative cube-root example: for \\(N=3\\), use \\(k=0:2\\) and \\(w=\\exp(1j*(\\pi/3+2\\pi k/3))\\), producing the three roots \\(0.5+0.8660i\\), \\(-1\\), and \\(0.5-0.8660i\\). Exam trigger: use this when roots are evenly spaced around the unit circle. Common misuse: using too many or nonconsecutive \\(k\\)-values and then counting repeated roots."
+    },
+    {
+      "type": "web_search_image",
+      "search_query": "Wikimedia Commons cube roots of minus one complex plane unit circle",
+      "purpose": "Show the three cube roots of -1 as points evenly spaced on the unit circle in the complex plane.",
+      "preferred_sources": [
+        "wikimedia_commons",
+        "wikipedia"
+      ],
+      "prefer_animated": false,
+      "fallback": "skip if no accurate Wikimedia or Wikipedia roots-of-unity visual is found",
       "teaching_role": "concept_anchor",
       "mode_specific_visual_use": {
-        "cram": "Make the colon pattern and excluded endpoint obvious at a glance.",
-        "standard": "Connect \\(\\texttt{0:2:11}\\) to the stored vector entries step by step.",
-        "top_score": "Emphasize why 11 is a stopping limit, not guaranteed output."
-      },
-      "prompt": "Pure white clean background, minimalist lecture-notes educational diagram, one knowledge point only: MATLAB colon notation a:b:c. Show the expression '0:2:11' on the left, then an arrow to a row of six simple boxes labeled 0, 2, 4, 6, 8, 10. Above the expression, label a = start, b = step, c = stop limit. Show a small muted red note near 11: '11 is not included because the next step would pass it.' Use restrained navy, muted teal, soft gray, and muted red only for the warning note. No decorative styling, no code editor frame, no extra examples."
+        "cram": "Use the image to recognize that roots are equally spaced around the unit circle.",
+        "standard": "Use the image after the formula to connect the three MATLAB outputs to their complex-plane locations.",
+        "top_score": "Use the image to emphasize that different valid consecutive \\(k\\)-sets can list the same unique roots in a different order."
+      }
     },
     {
       "type": "math_block",
-      "page": 3,
-      "page_heading": "## 2. Vectorized expressions evaluate many complex roots at once",
-      "latex": "w_k=e^{j\\left(\\frac{\\pi}{3}+\\frac{2\\pi k}{3}\\right)},\\quad k=0,1,2",
-      "explanation_instruction": "Explain that this formula gives the three unique cube roots of \\(-1\\) because \\(-1=e^{j(\\pi+2\\pi k)}\\), and taking the cube root divides the angle by 3. Define \\(w_k\\) as one root, \\(j\\) as the imaginary unit used by MATLAB as \\(1j\\), and \\(k\\) as the integer vector selecting the different angles. Include the MATLAB line \\(\\texttt{k = 0:2; w = exp(1j*(pi/3 + 2*pi*k/3))}\\). State the representative outputs: \\(0.5+0.8660i\\), \\(-1\\), and \\(0.5-0.8660i\\). Exam trigger: a formula is evaluated for several consecutive integer values. Common misuse: using a loop mentally when one vector expression already evaluates all entries."
+      "latex": "f(1)_{\\text{MATLAB index}} \\ne f(t)\\big|_{t=1}",
+      "explanation_instruction": "Start a new page with the heading '## 3. MATLAB indexing is not function input notation'. Explain in 110–150 words that MATLAB indices are positive integers starting at 1, so \\(w(5)\\) means 'the fifth stored element of vector \\(w\\).' Use the section example: if \\(k=0:99\\), then the fifth element corresponds to \\(k=4\\), not \\(k=5\\). Include the check \\(k(5)=4\\). Explain that this is why \\(f(1)\\) in MATLAB means the first sample of vector \\(f\\), while standard math notation \\(f(1)\\) usually means the function value at input \\(t=1\\). Exam trigger: when a question asks for an element of a vector, read the number as an index unless it explicitly asks for a function value at a variable. Common misuse: treating sample index 1 as time \\(t=1\\)."
     },
     {
       "type": "math_block",
-      "page": 4,
-      "page_heading": "## 3. MATLAB indices are positions, not input values",
-      "latex": "\\texttt{f(1)}\\ne f(t)\\big|_{t=1}",
-      "explanation_instruction": "Make this the main warning page. Explain that MATLAB indexing starts at 1, so \\(\\texttt{x(1)}\\) means 'the first stored element of vector x.' It does not mean the mathematical function value at input 1. Use the OCR example: if \\(\\texttt{k = 0:99}\\), then \\(\\texttt{k(5)}\\) is 4 because the fifth stored entry is 4. For the roots vector, \\(\\texttt{w(5)}\\) corresponds to \\(k=4\\), not \\(k=5\\). Exam trigger: any expression that looks like \\(\\texttt{f(1)}\\), \\(\\texttt{w(5)}\\), or \\(\\texttt{x(98:100)}\\). Common misuse: reading MATLAB parentheses as ordinary function notation."
+      "latex": "t = 0:\\frac{0.2}{500}:0.2-\\frac{0.2}{500}",
+      "explanation_instruction": "Start a new page with the heading '## 4. Building a time vector for a sampled signal'. Explain in 90–130 words that this MATLAB command creates 500 evenly spaced time values over the interval \\(0\\le t<0.2\\). Clarify that the step size is \\(0.2/500\\), so the vector starts at 0 but stops one step before 0.2. Say explicitly that subtracting \\(0.2/500\\) from the endpoint prevents MATLAB from including an extra endpoint sample. Representative example: the first time value is \\(t(1)=0\\), so any vectorized signal evaluated on this \\(t\\)-vector has its first sample at time zero. Exam trigger: use this pattern when a problem requests a fixed number of uniformly spaced samples on a half-open interval. Common misuse: writing \\(0:0.2/500:0.2\\) and accidentally creating 501 samples."
     },
     {
-      "type": "generate_image",
-      "page": 4,
-      "tool": "openai/gpt-5.4-image-2",
-      "reason": "A custom wrong-vs-right indexing correction is needed; no textbook or Wikimedia asset accurately targets the MATLAB f(1) versus mathematical f(1) misconception.",
-      "teaching_role": "trap_exposure",
+      "type": "math_block",
+      "latex": "f(t)=\\sin\\left(2\\pi\\cdot 10t+\\frac{\\pi}{6}\\right)",
+      "explanation_instruction": "Continue the same sinusoid page after the time-vector formula. Explain in 80–120 words that MATLAB evaluates this formula at every entry of the vector \\(t\\) when writing \\(f=\\sin(2*pi*10*t+pi/6)\\). Define 10 as the frequency in hertz, \\(2\\pi\\cdot 10t\\) as the angle accumulated over time, and \\(\\pi/6\\) as the phase offset. Include the representative check: because \\(t(1)=0\\), the first stored value is \\(f(1)=\\sin(\\pi/6)=0.5000\\). Exam trigger: use vectorized evaluation when one formula must be computed at many sample times. Common misuse: reading MATLAB \\(f(1)\\) as \\(f(t)\\) at \\(t=1\\)."
+    },
+    {
+      "type": "interactive_demo",
+      "demo_type": "react_canvas_demo",
+      "title": "Sample a sinusoid with a MATLAB time vector",
+      "teaching_role": "example_support",
+      "instruction": "Create an interactive React + Canvas demo on the same sinusoid page. Show a clean coordinate plot of \\(f(t)=\\sin(2\\pi\\cdot 10t+\\pi/6)\\) over \\(0\\le t<0.2\\). Overlay sample dots generated by the MATLAB-style vector \\(t=0:T/N:T-T/N\\), with default \\(T=0.2\\) and \\(N=500\\). Include controls for sample count \\(N\\) with presets 20, 50, 100, 500, and a toggle labeled 'show endpoint mistake' that switches to \\(t=0:T/N:T\\). Display a small readout for number of samples, first sample \\(f(1)\\), last time value, and whether the endpoint \\(0.2\\) is included. Keep the visual white-background, restrained, and lecture-note clean.",
+      "what_to_notice_instruction": "Below the demo, write three bullets: the vector index starts at 1; the first sample is at \\(t=0\\), not \\(t=1\\); including the endpoint creates one extra sample.",
       "mode_specific_visual_use": {
-        "cram": "Spot the index-versus-input trap instantly.",
-        "standard": "Use the side-by-side contrast to remember that MATLAB positions start at 1.",
-        "top_score": "Notice that vector index and independent variable usually differ."
-      },
-      "prompt": "Pure white clean background, minimalist lecture-notes educational diagram, one knowledge point only: MATLAB index versus mathematical function input. Create a two-column wrong-vs-right visual. Left column title in muted red: 'Wrong reading'. Show 'f(1)' interpreted as 'function value at t = 1' with a red X. Right column title in muted teal: 'Correct MATLAB reading'. Show a row vector with positions 1, 2, 3, 4 under boxes and values f(t_1), f(t_2), f(t_3), f(t_4) inside boxes; highlight position 1 and label it 'first stored sample'. Include one small note: 'Index = storage position, not time value.' Low-saturation academic palette, clean linework, no extra examples, no code editor interface."
-    },
-    {
-      "type": "math_block",
-      "page": 5,
-      "page_heading": "## 4. A time vector represents many sample points",
-      "latex": "\\texttt{t = 0:0.2/500:0.2-0.2/500}",
-      "explanation_instruction": "Explain that this MATLAB line creates 500 uniformly spaced time samples over \\(0\\le t<0.2\\). Define \\(0\\) as the first time value, \\(0.2/500\\) as the spacing between samples, and \\(0.2-0.2/500\\) as the last included time so the vector stops just before 0.2. State why this matters: for a 10 Hz sinusoid, one period is 0.1 seconds, so the interval from 0 to just under 0.2 seconds covers two cycles. Exam trigger: creating a sample grid over an interval. Common misuse: ending at 0.2 and accidentally changing the intended sample count or endpoint behavior."
-    },
-    {
-      "type": "math_block",
-      "page": 5,
-      "latex": "f(t)=\\sin\\left(2\\pi\\cdot10t+\\frac{\\pi}{6}\\right)",
-      "explanation_instruction": "Teach this as the representative signal evaluated at every entry of the vector \\(t\\). Define 10 as the frequency in hertz, \\(2\\pi\\cdot10\\) as the angular frequency, and \\(\\pi/6\\) as the phase shift. Explain that MATLAB evaluates \\(\\texttt{f = sin(2*pi*10*t + pi/6)}\\) element by element across the whole vector \\(t\\), producing a vector of sampled signal values. Include the quick check: at \\(t=0\\), \\(f(0)=\\sin(\\pi/6)=0.5\\), and in MATLAB this first stored value is accessed as \\(\\texttt{f(1)}\\)."
+        "cram": "Focus on the endpoint mistake and the index-versus-time readout.",
+        "standard": "Use the sliders to connect the formula, time vector, and plotted samples.",
+        "top_score": "Use low sample counts to see how sample density changes the visual representation without changing the underlying sinusoid formula."
+      }
     },
     {
       "type": "section_summary",
-      "page": 6,
-      "instruction": "Create a recap page titled '📌 Key Takeaways'. Include exactly 4 concise bullets, each no more than 22 words, and include the core formulas explicitly: \\(\\texttt{a:b:c}\\), \\(w_k=e^{j(\\pi/3+2\\pi k/3)}\\), \\(\\texttt{f(1)}\\ne f(t)|_{t=1}\\), \\(f(t)=\\sin(2\\pi\\cdot10t+\\pi/6)\\). End with one sentence: 'Next, use the same vector mindset to perform larger MATLAB operations efficiently.'"
+      "instruction": "Create the recap page titled '📌 Key Takeaways'. Include exactly 5 bullets, each ≤24 words. The bullets must explicitly include these formulas: \\(a:b:c\\to[a,a+b,a+2b,\\ldots]\\); \\(w_k=e^{j(\\pi/N+2\\pi k/N)}\\); \\(f(1)_{\\text{MATLAB index}}\\ne f(t)|_{t=1}\\); \\(t=0:0.2/500:0.2-0.2/500\\); and \\(f(t)=\\sin(2\\pi\\cdot10t+\\pi/6)\\). End with one sentence: 'Next, these vector skills make it easier to generate and inspect signals efficiently.'"
     },
     {
       "type": "quiz_plan",
-      "page": 7,
       "target_questions": 7,
       "question_range": {
         "min": 6,
@@ -461,7 +445,7 @@
       "knowledge_points": [
         {
           "id": "colon_notation",
-          "label": "MATLAB colon notation",
+          "label": "MATLAB colon notation for row vectors",
           "importance": "high",
           "exam_weight": "high",
           "mastery_rule": {
@@ -471,52 +455,51 @@
             {
               "id": "colon_q1",
               "type": "multiple_choice",
-              "stem": "What vector does MATLAB create from \\(\\texttt{0:2:11}\\)?",
+              "stem": "What vector does MATLAB create from the command k = 0:2:11?",
               "options": [
-                "A. \\([0,2,4,6,8,10]\\)",
-                "B. \\([0,2,4,6,8,10,11]\\)",
-                "C. \\([0,1,2,3,4,5,6,7,8,9,10,11]\\)",
-                "D. \\([2,4,6,8,10]\\)"
+                "A. [0, 2, 4, 6, 8, 10]",
+                "B. [0, 2, 4, 6, 8, 10, 11]",
+                "C. [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]",
+                "D. [2, 4, 6, 8, 10]"
               ],
               "correct_option": "A",
-              "explanation": "MATLAB starts at 0 and adds 2 until the next step would pass 11, so the final included value is 10.",
+              "explanation": "The vector starts at 0 and adds 2 repeatedly. It stops at 10 because the next value, 12, would pass 11.",
               "wrong_option_explanations": {
-                "B": "The stop value is a limit, not guaranteed to be included.",
-                "C": "This would be \\(\\texttt{0:11}\\), where the omitted step defaults to 1.",
-                "D": "The start value 0 is included."
+                "B": "The termination value is included only if the step lands on it exactly.",
+                "C": "That would be 0:11, where MATLAB assumes a step size of 1.",
+                "D": "The starting value 0 is included."
               },
-              "hint": "Keep adding the step size 2 without passing the stop value.",
-              "needs_visual": true,
-              "visual_type": "generated_static_colon_vector_boxes",
-              "same_point_variant": true
+              "hint": "Start at 0, add 2 each time, and stop before passing 11.",
+              "needs_visual": false,
+              "same_point_variant": false
             },
             {
               "id": "colon_q2",
               "type": "multiple_choice",
-              "stem": "Which MATLAB expression creates \\([11, 7.6667, 4.3333, 1.0000]\\) approximately?",
+              "stem": "Which command creates [11.0000, 7.6667, 4.3333, 1.0000]?",
               "options": [
-                "A. \\(\\texttt{11:-10/3:0}\\)",
-                "B. \\(\\texttt{11:10/3:0}\\)",
-                "C. \\(\\texttt{0:-10/3:11}\\)",
-                "D. \\(\\texttt{11:0:-10/3}\\)"
+                "A. k = 11:-10/3:0",
+                "B. k = 11:10/3:0",
+                "C. k = 0:-10/3:11",
+                "D. k = 11:-3:0"
               ],
               "correct_option": "A",
-              "explanation": "The vector starts at 11 and uses the negative step \\(-10/3\\), stopping before it would pass 0.",
+              "explanation": "The values decrease from 11 by \\(10/3\\) each step: 11, 7.6667, 4.3333, 1.0000.",
               "wrong_option_explanations": {
                 "B": "A positive step cannot move from 11 down toward 0.",
                 "C": "This starts at 0, not 11.",
-                "D": "The middle value is the step size; a zero step is invalid for this purpose."
+                "D": "A step of -3 gives 11, 8, 5, 2, not the listed values."
               },
-              "hint": "The format is start : step : stop.",
+              "hint": "The entries are decreasing, so the step must be negative.",
               "needs_visual": false,
               "same_point_variant": true
             }
           ]
         },
         {
-          "id": "vectorized_complex_roots",
-          "label": "Vectorized complex roots",
-          "importance": "medium",
+          "id": "vectorized_roots",
+          "label": "Vectorized computation of complex roots",
+          "importance": "high",
           "exam_weight": "medium",
           "mastery_rule": {
             "correct_streak_required": 1
@@ -525,29 +508,51 @@
             {
               "id": "roots_q1",
               "type": "multiple_choice",
-              "stem": "In \\(w_k=e^{j(\\pi/3+2\\pi k/3)}\\), why does MATLAB use \\(\\texttt{k = 0:2}\\)?",
+              "stem": "To compute the three unique roots of \\(w^3=-1\\) using \\(w=\\exp(1j*(\\pi/3+2\\pi k/3))\\), which MATLAB vector for k is appropriate?",
               "options": [
-                "A. It supplies three consecutive integer values to produce the three unique cube roots.",
-                "B. It supplies two values because the notation ends at 2.",
-                "C. It forces the roots to be real numbers only.",
-                "D. It makes MATLAB ignore the complex exponential."
+                "A. k = 0:2",
+                "B. k = 1:3",
+                "C. k = 0:3",
+                "D. k = 0:0.2:1"
               ],
               "correct_option": "A",
-              "explanation": "\\(\\texttt{0:2}\\) means \\([0,1,2]\\), giving three values of \\(k\\) and therefore three roots.",
+              "explanation": "Three consecutive integer values are needed. The textbook uses k = 0:2, which gives k = 0, 1, 2.",
               "wrong_option_explanations": {
-                "B": "The vector \\(\\texttt{0:2}\\) includes 0, 1, and 2.",
-                "C": "Two of the cube roots are complex.",
-                "D": "MATLAB evaluates the complex exponential using \\(\\texttt{1j}\\)."
+                "B": "This can produce the same unique roots in a shifted order, but it does not match the section's representative MATLAB setup.",
+                "C": "This gives four k-values, causing a repeated root.",
+                "D": "These are not consecutive integers and do not represent the root index correctly."
               },
-              "hint": "Remember the omitted step size defaults to 1.",
+              "hint": "For three unique roots, use exactly three consecutive integer values.",
               "needs_visual": false,
               "same_point_variant": false
+            },
+            {
+              "id": "roots_q2",
+              "type": "multiple_choice",
+              "stem": "Observe a complex-plane plot showing three roots of \\(w^3=-1\\). Which visual pattern should the correct roots have?",
+              "options": [
+                "A. Three points equally spaced on the unit circle",
+                "B. Three points equally spaced on the real axis",
+                "C. Three points with different distances from the origin",
+                "D. Three points all in the first quadrant"
+              ],
+              "correct_option": "A",
+              "explanation": "The roots of \\(w^3=-1\\) have magnitude 1 and are separated by equal angular spacing.",
+              "wrong_option_explanations": {
+                "B": "Only one of the listed roots is purely real.",
+                "C": "All three roots lie on the unit circle, so they have the same magnitude.",
+                "D": "The roots appear in different directions around the complex plane."
+              },
+              "hint": "Complex exponential roots usually appear as points around a circle.",
+              "needs_visual": true,
+              "visual_type": "wiki_complex_plane_roots_reference",
+              "same_point_variant": true
             }
           ]
         },
         {
           "id": "matlab_indexing",
-          "label": "MATLAB indexing versus function notation",
+          "label": "MATLAB indexing versus function input",
           "importance": "high",
           "exam_weight": "high",
           "mastery_rule": {
@@ -557,54 +562,46 @@
             {
               "id": "index_q1",
               "type": "multiple_choice",
-              "stem": "If \\(\\texttt{k = 0:99}\\), what is \\(\\texttt{k(5)}\\)?",
+              "stem": "If k = 0:99, what is k(5) in MATLAB?",
               "options": [
-                "A. 4",
-                "B. 5",
+                "A. 5",
+                "B. 4",
                 "C. 0",
                 "D. 99"
               ],
-              "correct_option": "A",
-              "explanation": "MATLAB indices count storage positions starting at 1. The fifth stored value in \\([0,1,2,3,4,\\ldots]\\) is 4.",
+              "correct_option": "B",
+              "explanation": "MATLAB indices start at 1. The first element is 0, so the fifth element is 4.",
               "wrong_option_explanations": {
-                "B": "That confuses the index position with the stored value.",
-                "C": "0 is the first stored value, so it is \\(\\texttt{k(1)}\\).",
-                "D": "99 is the last stored value, not the fifth."
+                "A": "This confuses the index number with the stored value.",
+                "C": "0 is the first element, not the fifth.",
+                "D": "99 is the last element."
               },
-              "hint": "Write out the first five entries and count positions.",
-              "needs_visual": true,
-              "visual_type": "generated_static_index_position_boxes",
-              "same_point_variant": true
+              "hint": "Count: k(1)=0, k(2)=1, k(3)=2.",
+              "needs_visual": false,
+              "same_point_variant": false
             },
             {
               "id": "index_q2",
-              "type": "multiple_choice",
-              "stem": "A classmate says \\(\\texttt{f(1)}\\) in MATLAB always means the mathematical value \\(f(t)\\) at \\(t=1\\). What is the best correction?",
-              "options": [
-                "A. \\(\\texttt{f(1)}\\) means the first stored element of vector \\(f\\), not necessarily the value at \\(t=1\\).",
-                "B. \\(\\texttt{f(1)}\\) means the final stored element of vector \\(f\\).",
-                "C. \\(\\texttt{f(1)}\\) is illegal MATLAB syntax.",
-                "D. \\(\\texttt{f(1)}\\) means the first derivative of \\(f\\)."
+              "type": "short_answer",
+              "stem": "A classmate says MATLAB f(1) means the function value at t = 1. Explain why that is wrong in this section's sampled-signal example.",
+              "ideal_answer": "In MATLAB, f(1) means the first stored element of the vector f. In the sampled-signal example, the first time value is t(1)=0, so f(1) is f(t) evaluated at t=0, not at t=1.",
+              "grading_rubric": [
+                "Must state that MATLAB f(1) is an index operation.",
+                "Must state that the first sample corresponds to t(1)=0.",
+                "Must distinguish MATLAB vector syntax from standard function notation."
               ],
-              "correct_option": "A",
-              "explanation": "In MATLAB, parentheses after a vector name access stored positions. They do not automatically represent mathematical function inputs.",
-              "wrong_option_explanations": {
-                "B": "Index 1 refers to the first element, not the final element.",
-                "C": "\\(\\texttt{f(1)}\\) is legal if \\(f\\) has at least one element.",
-                "D": "MATLAB indexing is unrelated to derivative notation here."
-              },
-              "hint": "Ask whether the parentheses are being used by MATLAB or by handwritten math notation.",
-              "needs_visual": true,
-              "visual_type": "wrong_vs_right_visual_check",
+              "explanation": "This checks the main indexing trap from the section.",
+              "hint": "Ask whether the number inside parentheses is an index or a function input.",
+              "needs_visual": false,
               "same_point_variant": true
             }
           ]
         },
         {
           "id": "sampled_sinusoid",
-          "label": "Vector representation of a sinusoid",
+          "label": "Vectorized sampled sinusoid",
           "importance": "high",
-          "exam_weight": "medium",
+          "exam_weight": "high",
           "mastery_rule": {
             "correct_streak_required": 1
           },
@@ -612,38 +609,46 @@
             {
               "id": "sinusoid_q1",
               "type": "multiple_choice",
-              "stem": "For \\(f(t)=\\sin(2\\pi\\cdot10t+\\pi/6)\\), what is the frequency?",
+              "stem": "For t = 0:0.2/500:0.2-0.2/500, how many time samples are intended?",
               "options": [
-                "A. 10 Hz",
-                "B. \\(2\\pi\\) Hz",
-                "C. \\(\\pi/6\\) Hz",
-                "D. 500 Hz"
+                "A. 500",
+                "B. 501",
+                "C. 499",
+                "D. 0.2"
               ],
               "correct_option": "A",
-              "explanation": "The standard sinusoid form is \\(\\sin(2\\pi f t+\\phi)\\), so the frequency is 10 Hz.",
+              "explanation": "The interval length is divided into 500 steps, and the endpoint is excluded so the vector contains 500 samples.",
               "wrong_option_explanations": {
-                "B": "\\(2\\pi\\) converts cycles to radians; it is not the frequency here.",
-                "C": "\\(\\pi/6\\) is the phase shift.",
-                "D": "500 is the number of sample points in the time vector, not the sinusoid frequency."
+                "B": "That would happen if the endpoint 0.2 were included using 0:0.2/500:0.2.",
+                "C": "The construction includes the first sample at 0 and stops one step before 0.2.",
+                "D": "0.2 is the interval length, not the number of samples."
               },
-              "hint": "Match the formula to \\(\\sin(2\\pi f t+\\phi)\\).",
-              "needs_visual": false,
+              "hint": "The expression subtracts one step from the endpoint to avoid an extra sample.",
+              "needs_visual": true,
+              "visual_type": "demo_endpoint_observation",
               "same_point_variant": false
             },
             {
               "id": "sinusoid_q2",
-              "type": "short_answer",
-              "stem": "Why does the line \\(\\texttt{t = 0:0.2/500:0.2-0.2/500}\\) stop at \\(0.2-0.2/500\\) instead of exactly \\(0.2\\)?",
-              "ideal_answer": "It creates 500 uniformly spaced samples over \\(0\\le t<0.2\\). Stopping one step before 0.2 avoids including the endpoint as an extra sample and keeps the intended sample count.",
-              "grading_rubric": [
-                "Must state that the samples cover \\(0\\le t<0.2\\)",
-                "Must identify \\(0.2/500\\) as the sample spacing",
-                "Must explain that stopping before 0.2 helps preserve the intended 500 samples"
+              "type": "multiple_choice",
+              "stem": "Using \\(f(t)=\\sin(2\\pi\\cdot10t+\\pi/6)\\) and the time vector whose first value is \\(t(1)=0\\), what is MATLAB f(1)?",
+              "options": [
+                "A. 0.5000",
+                "B. 0",
+                "C. 1.0000",
+                "D. \\(\\sin(20\\pi+\\pi/6)\\)"
               ],
-              "explanation": "This checks whether the student understands the time vector as a sampled grid, not just a string of MATLAB syntax.",
-              "hint": "Think about whether both endpoints should be included when spacing is fixed.",
-              "needs_visual": false,
-              "same_point_variant": false
+              "correct_option": "A",
+              "explanation": "The first sample uses t=0, so f(1)=sin(pi/6)=0.5000.",
+              "wrong_option_explanations": {
+                "B": "The phase offset \\(\\pi/6\\) makes the value nonzero at t=0.",
+                "C": "\\(\\sin(\\pi/6)=0.5\\), not 1.",
+                "D": "That expression corresponds to t=1, but MATLAB f(1) is the first vector element, not t=1."
+              },
+              "hint": "Use the first stored time value, not the number inside f(1) as a time.",
+              "needs_visual": true,
+              "visual_type": "demo_first_sample_observation",
+              "same_point_variant": true
             }
           ]
         }

@@ -1,0 +1,26 @@
+{
+  "sectionId": "3.5",
+  "sourcePages": [
+    "page-265",
+    "page-266",
+    "page-267",
+    "page-268",
+    "page-269",
+    "page-270"
+  ],
+  "usedPages": [
+    "page-265",
+    "page-266",
+    "page-267",
+    "page-268",
+    "page-269",
+    "page-270"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "3.5 Discrete-Time System Equations 265",
+  "foundEnd": true,
+  "endBeforeLine": "3.5-1 Recursive (Iterative) Solution of Difference Equation",
+  "endBeforeCode": "3.5-1",
+  "charCount": 3610
+}

@@ -1,0 +1,470 @@
+# Aquarius section OCR
+section_id: 2.2
+source_pages: page-151, page-152, page-153, page-154, page-155, page-156, page-157, page-158, page-159, page-160, page-161, page-162, page-163
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+2.2  System Response to Internal Conditions: The Zero-Input Response  151
+
+an LTIC system specified by Eq. (2.1) acts as an (M − N)th-order differentiator. A differentiator
+represents an unstable system because a bounded input like the step input results in an unbounded
+output, δ(t). Second, noise is enhanced by a differentiator. Noise is a wideband signal containing
+components of all frequencies from 0 to a very high frequency approaching ∞.† Hence, noise
+contains a significant amount of rapidly varying components. We know that the derivative of any
+rapidly varying signal is high. Therefore, any system specified by Eq. (2.1) in which M > N will
+magnify the high-frequency components of noise through differentiation. It is entirely possible for
+noise to be magnified so much that it swamps the desired system output even if the noise signal at
+the system’s input is tolerably small. Hence, practical systems generally use M ≤ N. For the rest
+of this text we assume implicitly that M ≤ N. For the sake of generality, we shall assume M = N
+in Eq. (2.1).
+
+In Ch. 1, we demonstrated that a system described by Eq. (2.2) is linear. Therefore, its
+response can be expressed as the sum of two components: the zero-input response and the
+zero-state response (decomposition property).‡ Therefore,
+
+total response = zero-input response + zero-state response
+
+The zero-input response is the system output when the input x(t) = 0, and thus it is the result of
+internal system conditions (such as energy storages, initial conditions) alone. It is independent of
+the external input x(t). In contrast, the zero-state response is the system output to the external input
+x(t) when the system is in zero state, meaning the absence of all internal energy storages: that is,
+all initial conditions are zero.
+
+2.2  SYSTEM RESPONSE TO INTERNAL CONDITIONS:
+THE ZERO-INPUT RESPONSE
+
+The zero-input response y0(t) is the solution of Eq. (2.2) when the input x(t) = 0 so that
+
+Q(D)y0(t) = 0
+
+† Noise is any undesirable signal, natural or manufactured, that interferes with the desired signals in the
+system. Some of the sources of noise are the electromagnetic radiation from stars, the random motion of
+electrons in system components, interference from nearby radio and television stations, transients produced
+by automobile ignition systems, and fluorescent lighting.
+‡ We can verify readily that the system described by Eq. (2.2) has the decomposition property. If y0(t) is the
+zero-input response, then, by definition,
+
+Q(D)y0(t) = 0
+
+If y(t) is the zero-state response, then y(t) is the solution of
+
+Q(D)y(t) = P(D)x(t)
+
+subject to zero initial conditions (zero-state). Adding these two equations, we have
+
+Q(D)[y0(t) + y(t)] = P(D)x(t)
+
+Clearly, y0(t) + y(t) is the general solution of Eq. (2.2).
+
+[[PAGE page-152]]
+152
+CHAPTER 2  TIME-DOMAIN ANALYSIS OF CONTINUOUS-TIME SYSTEMS
+
+or
+
+(D^N + a_1D^{N-1} + ··· + a_{N-1}D + a_N)y_0(t) = 0                                                            (2.3)
+
+A solution to this equation can be obtained systematically [1]. However, we will take a shortcut by using heuristic reasoning. Equation (2.3) shows that a linear combination of y_0(t) and its N successive derivatives is zero, not at some values of t, but for all t. Such a result is possible if and only if y_0(t) and all its N successive derivatives are of the same form. Otherwise their sum can never add to zero for all values of t. We know that only an exponential function e^{λt} has this property. So let us assume that
+
+y_0(t) = ce^{λt}
+
+is a solution to Eq. (2.3). Then
+
+Dy_0(t) = \frac{dy_0(t)}{dt} = cλe^{λt}
+D^2y_0(t) = \frac{d^2y_0(t)}{dt^2} = cλ^2e^{λt}
+⋮
+D^Ny_0(t) = \frac{d^Ny_0(t)}{dt^N} = cλ^Ne^{λt}
+
+Substituting these results in Eq. (2.3), we obtain
+
+c(λ^N + a_1λ^{N-1} + ··· + a_{N-1}λ + a_N)e^{λt} = 0
+
+For a nontrivial solution of this equation,
+
+λ^N + a_1λ^{N-1} + ··· + a_{N-1}λ + a_N = 0                                                            (2.4)
+
+This result means that ce^{λt} is indeed a solution of Eq. (2.3), provided λ satisfies Eq. (2.4). Note that the polynomial in Eq. (2.4) is identical to the polynomial Q(D) in Eq. (2.3), with λ replacing D. Therefore, Eq. (2.4) can be expressed as
+
+Q(λ) = 0
+
+Expressing Q(λ) in factorized form, we obtain
+
+Q(λ) = (λ - λ_1)(λ - λ_2) ··· (λ - λ_N) = 0                                                            (2.5)
+
+Clearly, λ has N solutions: λ_1, λ_2, . . . , λ_N, assuming that all λ_i are distinct. Consequently, Eq. (2.3) has N possible solutions: c_1e^{λ_1t}, c_2e^{λ_2t}, ··· , c_Ne^{λ_Nt}, with c_1, c_2, . . . , c_N as arbitrary constants. We
+
+[[PAGE page-153]]
+2.2  System Response to Internal Conditions: The Zero-Input Response  153
+
+can readily show that a general solution is given by the sum of these N solutions† so that
+
+y₀(t) = c₁e^{λ₁t} + c₂e^{λ₂t} + ··· + c_Ne^{λ_Nt}                                              (2.6)
+
+where c₁, c₂, . . . , c_N are arbitrary constants determined by N constraints (the auxiliary conditions) on the solution.
+
+Observe that the polynomial Q(λ), which is characteristic of the system, has nothing to do with the input. For this reason the polynomial Q(λ) is called the characteristic polynomial of the system. The equation
+
+Q(λ) = 0
+
+is called the characteristic equation of the system. Equation (2.5) clearly indicates that λ₁, λ₂, . . . , λ_N are the roots of the characteristic equation; consequently, they are called the characteristic roots of the system. The terms characteristic values, eigenvalues, and natural frequencies are also used for characteristic roots. ‡ The exponentials e^{λ_it} (i = 1, 2, . . . , n) in the zero-input response are the characteristic modes (also known as natural modes or simply as modes) of the system. There is a characteristic mode for each characteristic root of the system, and the zero-input response is a linear combination of the characteristic modes of the system.
+
+An LTIC system’s characteristic modes comprise its single most important attribute. Characteristic modes not only determine the zero-input response but also play an important role in determining the zero-state response. In other words, the entire behavior of a system is dictated primarily by its characteristic modes. In the rest of this chapter we shall see the pervasive presence of characteristic modes in every aspect of system behavior.
+
+REPEATED ROOTS
+
+The solution of Eq. (2.3) as given in Eq. (2.6) assumes that the N characteristic roots λ₁, λ₂, . . . , λ_N are distinct. If there are repeated roots (same root occurring more than once), the form of the solution is modified slightly. By direct substitution we can show that the solution of the equation
+
+(D − λ)²y₀(t) = 0
+
+is given by
+
+y₀(t) = (c₁ + c₂t)e^{λt}
+
+† To prove this assertion, assume that y₁(t), y₂(t), . . . , y_N(t) are all solutions of Eq. (2.3). Then
+
+Q(D)y₁(t) = 0
+Q(D)y₂(t) = 0
+⋮
+Q(D)y_N(t) = 0
+
+Multiplying these equations by c₁, c₂, . . . , c_N, respectively, and adding them together yield
+
+Q(D)[c₁y₁(t) + c₂y₂(t) + ··· + c_Ny_N(t)] = 0
+
+This result shows that c₁y₁(t) + c₂y₂(t) + ··· + c_Ny_N(t) is also a solution of the homogeneous equation [Eq. (2.3)].
+‡ Eigenvalue is German for “characteristic value.”
+
+[[PAGE page-154]]
+154    CHAPTER 2    TIME-DOMAIN ANALYSIS OF CONTINUOUS-TIME SYSTEMS
+
+In this case the root λ repeats twice. Observe that the characteristic modes in this case are e^{λt} and te^{λt}. Continuing this pattern, we can show that for the differential equation
+
+(D − λ)^r y_0(t) = 0
+
+the characteristic modes are e^{λt}, te^{λt}, t^2e^{λt}, · · · , t^{r−1}e^{λt}, and that the solution is
+
+y_0(t) = (c_1 + c_2t + · · · + c_rt^{r−1})e^{λt}
+
+Consequently, for a system with the characteristic polynomial
+
+Q(λ) = (λ − λ_1)^r(λ − λ_{r+1}) · · · (λ − λ_N)
+
+the characteristic modes are e^{λ_1t}, te^{λ_1t}, · · · , t^{r−1}e^{λ_1t}, e^{λ_{r+1}t}, · · · , e^{λ_Nt} and the solution is
+
+y_0(t) = (c_1 + c_2t + · · · + c_rt^{r−1})e^{λ_1t} + c_{r+1}e^{λ_{r+1}t} + · · · + c_Ne^{λ_Nt}
+
+COMPLEX ROOTS
+The procedure for handling complex roots is the same as that for real roots. For complex roots, the usual procedure leads to complex characteristic modes and the complex form of solution. However, it is possible to avoid the complex form altogether by selecting a real-form of solution, as described next.
+
+For a real system, complex roots must occur in pairs of conjugates if the coefficients of the characteristic polynomial Q(λ) are to be real. Therefore, if α + jβ is a characteristic root, α − jβ must also be a characteristic root. The zero-input response corresponding to this pair of complex conjugate roots is
+
+y_0(t) = c_1e^{(α+jβ)t} + c_2e^{(α−jβ)t}                                                    (2.7)
+
+For a real system, the response y_0(t) must also be real. This is possible only if c_1 and c_2 are conjugates. Let
+
+c_1 = (c/2)e^{jθ}    and    c_2 = (c/2)e^{−jθ}
+
+This yields
+
+y_0(t) = (c/2)e^{jθ}e^{(α+jβ)t} + (c/2)e^{−jθ}e^{(α−jβ)t}
+      = (c/2)e^{αt}[e^{j(βt+θ)} + e^{−j(βt+θ)}]
+      = ce^{αt} cos (βt + θ)                                                                    (2.8)
+
+Therefore, the zero-input response corresponding to complex conjugate roots α ± jβ can be expressed in a complex form [Eq. (2.7)] or a real form [Eq. (2.8)].
+
+[[PAGE page-155]]
+2.2  System Response to Internal Conditions: The Zero-Input Response                                                                 155
+
+EXAMPLE 2.1  Finding the Zero-Input Response
+
+Find y0(t), the zero-input response of the response for an LTIC system described by
+
+(a) the simple-root system (D^2 + 3D + 2)y(t) = Dx(t) with initial conditions y0(0) = 0
+    and ẏ0(0) = −5.
+
+(b) the repeated-root system (D^2 + 6D + 9)y(t) = (3D + 5)x(t) with initial conditions
+    y0(0) = 3 and ẏ0(0) = −7.
+
+(c) the complex-root system (D^2 + 4D + 40)y(t) = (D + 2)x(t) with initial conditions
+    y0(0) = 2 and ẏ0(0) = 16.78.
+
+(a) Note that y0(t), being the zero-input response (x(t) = 0), is the solution of (D^2 + 3D +
+2)y0(t) = 0. The characteristic polynomial of the system is λ^2 + 3λ + 2. The characteristic
+equation of the system is therefore λ^2 + 3λ + 2 = (λ + 1)(λ + 2) = 0. The characteristic roots
+of the system are λ1 = −1 and λ2 = −2, and the characteristic modes of the system are e^−t and
+e^−2t. Consequently, the zero-input response is
+
+y0(t) = c1e^−t + c2e^−2t
+
+Differentiating this expression, we obtain
+
+ẏ0(t) = −c1e^−t − 2c2e^−2t
+
+To determine the constants c1 and c2, we set t = 0 in the equations for y0(t) and ẏ0(t) and
+substitute the initial conditions y0(0) = 0 and ẏ0(0) = −5, yielding
+
+0 = c1 + c2
+−5 = −c1 − 2c2
+
+Solving these two simultaneous equations in two unknowns for c1 and c2 yields
+
+c1 = −5      and      c2 = 5
+
+Therefore,
+
+y0(t) = −5e^−t + 5e^−2t                                                                 (2.9)
+
+This is the zero-input response of y(t). Because y0(t) is present at t = 0−, we are justified in
+assuming that it exists for t ≥ 0.†
+
+(b) The characteristic polynomial is λ^2 + 6λ + 9 = (λ + 3)^2, and its characteristic roots
+are λ1 = −3, λ2 = −3 (repeated roots). Consequently, the characteristic modes of the system
+are e^−3t and te^−3t. The zero-input response, being a linear combination of the characteristic
+modes, is given by
+
+y0(t) = (c1 + c2t)e^−3t
+
+† y0(t) may be present even before t = 0−. However, we can be sure of its presence only from t = 0−
+onward.
+
+[[PAGE page-156]]
+156
+CHAPTER 2  TIME-DOMAIN ANALYSIS OF CONTINUOUS-TIME SYSTEMS
+
+We can find the arbitrary constants c1 and c2 from the initial conditions y0(0) = 3 and
+ẏ0(0) = −7 following the procedure in part (a). The reader can show that c1 = 3 and c2 = 2.
+Hence,
+
+y0(t) = (3 + 2t)e−3t      t ≥ 0
+
+(c) The characteristic polynomial is λ2 + 4λ + 40 = (λ + 2 − j6)(λ + 2 + j6). The
+characteristic roots are −2 ± j6.† The solution can be written either in the complex form
+[Eq. (2.7)] or in the real form [Eq. (2.8)]. The complex form is y0(t) = c1eλ1t + c2eλ2t, where
+λ1 = −2+j6 and λ2 = −2−j6. Since α = −2 and β = 6, the real-form solution is [see Eq. (2.8)]
+
+y0(t) = ce−2t cos (6t + θ)
+
+Differentiating this expression, we obtain
+
+ẏ0(t) = −2ce−2t cos (6t + θ) − 6ce−2t sin (6t + θ)
+
+To determine the constants c and θ, we set t = 0 in the equations for y0(t) and ẏ0(t) and
+substitute the initial conditions y0(0) = 2 and ẏ0(0) = 16.78, yielding
+
+2 = c cos θ
+16.78 = −2c cos θ − 6c sin θ
+
+Solution of these two simultaneous equations in two unknowns c cos θ and c sin θ yields
+
+c cos θ = 2      and      c sin θ = −3.463
+
+Squaring and then adding these two equations yield
+
+c2 = (2)2 + (−3.464)2 = 16 ⟹ c = 4
+
+Next, dividing c sin θ = −3.463 by c cos θ = 2 yields
+
+tan θ = −3.463/2
+
+and
+
+θ = tan−1(−3.463/2) = −π/3
+
+Therefore,
+
+y0(t) = 4e−2t cos (6t − π/3)
+
+For the plot of y0(t), refer again to Fig. B.11c.
+
+† The complex conjugate roots of a second-order polynomial can be determined by using the formula in
+Sec. B.8-10 or by expressing the polynomial as a sum of two squares. The latter can be accomplished by
+completing the square with the first two terms, as follows:
+
+λ2 + 4λ + 40 = (λ2 + 4λ + 4) + 36 = (λ + 2)2 + (6)2 = (λ + 2 − j6)(λ + 2 + j6)
+
+[[PAGE page-157]]
+2.2  System Response to Internal Conditions: The Zero-Input Response                                                                 157
+
+EXAMPLE 2.2  Using MATLAB to Find Polynomial Roots
+
+Find the roots λ1 and λ2 of the polynomial λ^2 + 4λ + k for three values of k: (a) k = 3, (b)
+k = 4, and (c) k = 40.
+
+(a)
+
+>>  r = roots([1 4 3]).’
+    r = -3  -1
+
+For k = 3, the polynomial roots are therefore λ1 = −3 and λ2 = −1.
+(b)
+
+>>  r = roots([1 4 4]).’
+    r = -2  -2
+
+For k = 4, the polynomial roots are therefore λ1 = λ2 = −2.
+(c)
+
+>>  r = roots([1 4 40]).’
+    r = -2.00+6.00i  -2.00-6.00i
+
+For k = 40, the polynomial roots are therefore λ1 = −2 + j6 and λ2 = −2 − j6.
+
+EXAMPLE 2.3  Using MATLAB to Find the Zero-Input Response
+
+Consider an LTIC system specified by the differential equation
+
+(D^2 + 4D + k)y(t) = (3D + 5)x(t)
+
+Using initial conditions y0(0) = 3 and ẏ0(0) = −7, apply MATLAB’s dsolve command to
+determine the zero-input response when: (a) k = 3, (b) k = 4, and (c) k = 40.
+
+(a)
+
+>>  y_0 = dsolve(’D2y+4*Dy+3*y=0’,’y(0)=3’,’Dy(0)=-7’,’t’)
+    y_0 = 1/exp(t) + 2/exp(3*t)
+
+For k = 3, the zero-input response is therefore y0(t) = e^−t + 2e^−3t.
+(b)
+
+>>  y_0 = dsolve(’D2y+4*Dy+4*y=0’,’y(0)=3’,’Dy(0)=-7’,’t’)
+    y_0 = 3/exp(2*t) - t/exp(2*t)
+
+[[PAGE page-158]]
+158    CHAPTER 2    TIME-DOMAIN ANALYSIS OF CONTINUOUS-TIME SYSTEMS
+
+For k = 4, the zero-input response is therefore y0(t) = 3e^-2t - te^-2t.
+(c)
+
+>>  y_0 = dsolve('D2y+4*Dy+40*y=0','y(0)=3','Dy(0)=-7','t')
+    y_0 = (3*cos(6*t))/exp(2*t) - sin(6*t)/(6*exp(2*t))
+
+For k = 40, the zero-input response is therefore y0(t) = 3e^-2t cos (6t) - (1/6)e^-2t sin (6t).
+
+DRILL 2.1  Finding the Zero-Input Response of a First-Order
+System
+Find the zero-input response of an LTIC system described by (D + 5)y(t) = x(t) if the initial
+condition is y(0) = 5.
+
+ANSWER
+
+y0(t) = 5e^-5t      t ≥ 0
+
+DRILL 2.2  Finding the Zero-Input Response of a Second-Order
+System
+Letting y0(0) = 1 and ẏ0(0) = 4, solve
+
+(D^2 + 2D)y0(t) = 0
+
+ANSWER
+
+y0(t) = 3 - 2e^-2t      t ≥ 0
+
+PRACTICAL INITIAL CONDITIONS AND THE MEANING OF 0^- AND 0^+
+In Ex. 2.1 the initial conditions y0(0) and ẏ0(0) were supplied. In practical problems, we must
+derive such conditions from the physical situation. For instance, in an RLC circuit, we may be
+given the conditions (initial capacitor voltages, initial inductor currents, etc.).
+From this information, we need to derive y0(0), ẏ0(0), . . . for the desired variable as
+demonstrated in the next example.
+In much of our discussion, the input is assumed to start at t = 0, unless otherwise mentioned.
+Hence, t = 0 is the reference point. The conditions immediately before t = 0 (just before the input
+is applied) are the conditions at t = 0^-, and those immediately after t = 0 (just after the input is
+applied) are the conditions at t = 0^+ (compare this with the historical time frames BCE and CE). In
+
+[[PAGE page-159]]
+2.2  System Response to Internal Conditions: The Zero-Input Response  159
+
+practice, we are likely to know the initial conditions at t = 0− rather than at t = 0+. The two sets of conditions are generally different, although in some cases they may be identical.
+
+The total response y(t) consists of two components: the zero-input response y0(t) [response due to the initial conditions alone with x(t) = 0] and the zero-state response resulting from the input alone with all initial conditions zero. At t = 0−, the total response y(t) consists solely of the zero-input response y0(t) because the input has not started yet. Hence the initial conditions on y(t) are identical to those of y0(t). Thus, y(0−) = y0(0−), ẏ(0−) = ẏ0(0−), and so on. Moreover, y0(t) is the response due to initial conditions alone and does not depend on the input x(t). Hence, application of the input at t = 0 does not affect y0(t). This means the initial conditions on y0(t) at t = 0− and 0+ are identical; that is, y0(0−), ẏ0(0−), ... are identical to y0(0+), ẏ0(0+), ..., respectively. It is clear that for y0(t), there is no distinction between the initial conditions at t = 0−, 0, and 0+. They are all the same. But this is not the case with the total response y(t), which consists of both the zero-input and zero-state responses. Thus, in general, y(0−) ≠ y(0+), ẏ(0−) ≠ ẏ(0+), and so on.
+
+EXAMPLE 2.4  Consideration of Initial Conditions
+
+A voltage x(t) = 10e−3tu(t) is applied at the input of the RLC circuit illustrated in Fig. 2.2a. Find the loop current y(t) for t ≥ 0 if the initial inductor current is zero [y(0−) = 0] and the initial capacitor voltage is 5 volts [vC(0−) = 5].
+
+The differential (loop) equation relating y(t) to x(t) was derived in Eq. (1.29) as
+
+(D^2 + 3D + 2)y(t) = Dx(t)
+
+The zero-state component of y(t) resulting from the input x(t), assuming that all initial conditions are zero, that is, y(0−) = vC(0−) = 0, will be obtained later in Ex. 2.9. In this example we shall find the zero-input response y0(t). For this purpose, we need two initial conditions, y0(0) and ẏ0(0). These conditions can be derived from the given initial conditions, y(0−) = 0 and vC(0−) = 5, as follows. Recall that y0(t) is the loop current when the input terminals are shorted so that the input x(t) = 0 (zero-input), as depicted in Fig. 2.2b. We now compute y0(0) and ẏ0(0), the values of the loop current and its derivative at t = 0, from the initial values of the inductor current and the capacitor voltage. Remember that the inductor current cannot change instantaneously in the absence of an impulsive voltage. Similarly, the capacitor voltage cannot change instantaneously in the absence of an impulsive current. Therefore, when the input terminals are shorted at t = 0, the inductor current is still zero and the capacitor voltage is still 5 volts. Thus,
+
+y0(0) = 0
+
+[[PAGE page-160]]
+160     CHAPTER 2   TIME-DOMAIN ANALYSIS OF CONTINUOUS-TIME SYSTEMS
+
+1 H        3 Ω                 1 H        3 Ω
+x(t)       y(t)      +         y0(t)      +
+                     vC(t)                 vC(t)
+                     −                     −
+           1/2 F                              1/2 F
+(a)                                    (b)
+
+Figure 2.1  Circuits for Ex. 2.4.
+
+To determine y0(0), we use the loop equation for the circuit in Fig. 2.2b. Because the voltage across the inductor is L(dy0/dt) or ẏ0(t), this equation can be written as follows:
+
+ẏ0(t) + 3y0(t) + vC(t) = 0
+
+Setting t = 0, we obtain
+
+ẏ0(0) + 3y0(0) + vC(0) = 0
+
+But y0(0) = 0 and vC(0) = 5. Consequently,
+
+ẏ0(0) = −5
+
+Therefore, the desired initial conditions are
+
+y0(0) = 0      and      ẏ0(0) = −5
+
+Thus, the problem reduces to finding y0(t), the zero-input component of y(t) of the system specified by the equation (D^2 + 3D + 2)y(t) = Dx(t), when the initial conditions are y0(0) = 0 and ẏ0(0) = −5. We have already solved this problem in Ex. 2.1a, where we found
+
+y0(t) = −5e^(−t) + 5e^(−2t)      t ≥ 0
+
+This is the zero-input component of the loop current y(t).
+
+It is interesting to find the initial conditions at t = 0− and 0+ for the total response y(t). Let us compare y(0−) and ẏ(0−) with y(0+) and ẏ(0+). The two pairs can be compared by writing the loop equation for the circuit in Fig. 2.2a at t = 0− and t = 0+. The only difference between the two situations is that at t = 0−, the input x(t) = 0, whereas at t = 0+, the input x(t) = 10 [because x(t) = 10e^(−3t)]. Hence, the two loop equations are
+
+ẏ(0−) + 3y(0−) + vC(0−) = 0
+ẏ(0+) + 3y(0+) + vC(0+) = 10
+
+[[PAGE page-161]]
+2.2  System Response to Internal Conditions: The Zero-Input Response  161
+
+The loop current y(0+) = y(0−) = 0 because it cannot change instantaneously in the absence
+of impulsive voltage. The same is true of the capacitor voltage. Hence, vC(0+) = vC(0−) = 5.
+Substituting these values in the foregoing equations, we obtain ẏ(0−) = −5 and ẏ(0+) = 5.
+Thus,
+
+y(0−) = 0, ẏ(0−) = −5   and   y(0+) = 0, ẏ(0+) = 5   (2.10)
+
+DRILL 2.3  Zero-Input Response of an RC Circuit
+In the circuit in Fig. 2.2a, the inductance L = 0 and the initial capacitor voltage vC(0) = 30
+volts. Show that the zero-input component of the loop current is given by y0(t) = −10e^(−2t/3) for
+t ≥ 0.
+
+INDEPENDENCE OF THE ZERO-INPUT AND ZERO-STATE RESPONSES
+In Ex. 2.4 we computed the zero-input component without using the input x(t). The zero-state
+response can be computed from the knowledge of the input x(t) alone; the initial conditions
+are assumed to be zero (system in zero state). The two components of the system response (the
+zero-input and zero-state responses) are independent of each other. The two worlds of zero-input
+response and zero-state response coexist side by side, neither one knowing or caring what the
+other is doing. For each component, the other is totally irrelevant.
+
+ROLE OF AUXILIARY CONDITIONS IN SOLUTION OF
+DIFFERENTIAL EQUATIONS
+The solution of a differential equation requires additional pieces of information (the auxiliary
+conditions). Why? We now show heuristically why a differential equation does not, in general,
+have a unique solution unless some additional constraints (or conditions) on the solution are
+known.
+
+Differentiation operation is not invertible unless one piece of information about y(t) is given.
+To get back y(t) from dy/dt, we must know one piece of information, such as y(0). Thus,
+differentiation is an irreversible (noninvertible) operation during which certain information is
+lost. To invert this operation, one piece of information about y(t) must be provided to restore
+the original y(t). Using a similar argument, we can show that, given d^2y/dt^2, we can determine
+y(t) uniquely only if two additional pieces of information (constraints) about y(t) are given.
+In general, to determine y(t) uniquely from its Nth derivative, we need N additional pieces of
+information (constraints) about y(t). These constraints are also called auxiliary conditions. When
+these conditions are given at t = 0, they are called initial conditions.

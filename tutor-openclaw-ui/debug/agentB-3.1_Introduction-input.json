@@ -1,0 +1,366 @@
+{
+  "blueprint": {
+    "section_id": "3.1 Introduction",
+    "section_title": "3.1 Introduction",
+    "difficulty": "beginner",
+    "estimated_read_minutes": 5,
+    "learning_objectives": [
+      "Recognize a discrete-time signal as a sequence of numbers indexed by integers.",
+      "Distinguish continuous-time notation \\(x(t)\\) from discrete-time notation \\(x[n]\\).",
+      "Understand that a discrete-time system maps an input sequence \\(x[n]\\) to an output sequence \\(y[n]\\).",
+      "Connect uniform sampling of \\(x(t)\\) to the discrete-time identity \\(x[n]=x(nT)\\).",
+      "Apply the section's representative sampling example \\(x(t)=e^{-t}\\) with \\(T=0.1\\)."
+    ],
+    "visualization_need": {
+      "level": "interactive",
+      "reason": [
+        "formula_to_phenomenon_gap",
+        "depends_on_parameter_change",
+        "student_should_manipulate_to_understand",
+        "pattern_recognition_benefits_from_figure"
+      ],
+      "recommended_assets": [
+        "wiki_figure",
+        "react_canvas_demo"
+      ]
+    },
+    "visual_plan": {
+      "primary_anchor": "both",
+      "rationale": "This section introduces notation and the visual idea of sampling. The exact definitions are best taught with LaTeX, while a standard stem-plot reference and a small interactive sampling demo make the difference between continuous-time curves and discrete-time sequences immediately visible. No textbook figure crop is available, so do not use a page screenshot.",
+      "cram": "Use the stem plot and sampling demo to quickly identify whether a problem is asking about \\(x(t)\\), \\(x[n]\\), or \\(x(nT)\\).",
+      "standard": "Use the visuals to connect the formula \\(x[n]=x(nT)\\) to one representative sampled exponential example.",
+      "top_score": "Use the demo to notice that changing \\(T\\) changes which continuous-time points become the sequence, while the index \\(n\\) remains integer-valued."
+    },
+    "blocks": [
+      {
+        "type": "text_explanation",
+        "instruction": "Create the first lesson page as a compact outline only. Include exactly two short sections: 'Section Objective' and 'Concepts In This Section'. Under 'Section Objective', write one sentence: 'Understand how discrete-time signals are represented, processed by systems, and obtained by sampling continuous-time signals.' Under 'Concepts In This Section', list only these concept names as bullets: discrete-time signal, integer index \\(n\\), square-bracket notation \\(x[n]\\), discrete-time system, uniform sampling, sampling interval \\(T\\). Do not add examples, background paragraphs, exam tips, or expanded explanations on this page."
+      },
+      {
+        "type": "math_block",
+        "latex": "x[n], \\qquad n \\in \\mathbb{Z}",
+        "explanation_instruction": "Start a new concept page with the heading '## 1. Discrete-time signals are sequences'. Explain in 90–130 words that a discrete-time signal is a sequence of numbers, not a smooth curve. State that \\(n\\) is an integer index such as \\(...,-2,-1,0,1,2,...\\), and \\(x[n]\\) means 'the value of sequence \\(x\\) at index \\(n\\)'. Include one minimal concrete example: if \\(x[0]=3\\), \\(x[1]=5\\), and \\(x[2]=4\\), then the sequence begins 3, 5, 4. Explain symbol meanings, when to use this notation, the exam trigger 'values listed at integer indices', and the common misuse: writing \\(x(t)\\) when the variable is an integer index. Avoid advanced signal-processing terminology."
+      },
+      {
+        "type": "web_search_image",
+        "search_query": "Wikimedia Commons discrete-time signal stem plot sequence samples",
+        "purpose": "Show a clean stem plot of a discrete-time signal so students see that values exist at separated integer indices rather than along a continuous curve.",
+        "preferred_sources": [
+          "wikimedia_commons",
+          "wikipedia"
+        ],
+        "prefer_animated": false,
+        "fallback": "generate_image",
+        "teaching_role": "concept_anchor",
+        "mode_specific_visual_use": {
+          "cram": "Use the vertical stems as the fast recognition cue for a discrete-time sequence.",
+          "standard": "Use the figure to connect \\(x[n]\\) with indexed sample values.",
+          "top_score": "Use the separated stems to emphasize that the graph does not imply values between integer indices."
+        }
+      },
+      {
+        "type": "math_block",
+        "latex": "x[n] \\;\\longrightarrow\\; \\text{discrete-time system} \\;\\longrightarrow\\; y[n]",
+        "explanation_instruction": "Start a new concept page with the heading '## 2. A discrete-time system processes a sequence'. Explain in 80–120 words that a discrete-time system takes an input sequence \\(x[n]\\) and produces an output sequence \\(y[n]\\). Use a digital computer as the familiar example, matching the textbook. Clarify that the system acts on numbers indexed by integers, not on a continuously varying signal. Include one representative example without computation: a system could take daily temperatures \\(x[n]\\) and output a smoothed daily temperature sequence \\(y[n]\\). Explain when to use this input-output picture, the exam trigger 'input sequence produces output sequence', and the common misuse: thinking \\(y[n]\\) is one number instead of an entire output sequence."
+      },
+      {
+        "type": "math_block",
+        "latex": "x[n] = x(nT)",
+        "explanation_instruction": "Start a new concept page with the heading '## 3. Sampling turns \\(x(t)\\) into \\(x[n]\\)'. Explain in 100–150 words that if a continuous-time signal \\(x(t)\\) is sampled every \\(T\\) seconds, the discrete-time value at index \\(n\\) is the value of the original signal at time \\(t=nT\\). Define every symbol: \\(x(t)\\) is the continuous-time signal, \\(T\\) is the sampling interval, \\(n\\) is an integer, \\(x(nT)\\) is the sampled value, and \\(x[n]\\) is the discrete-time notation for that value. Include the exam trigger 'sampled every \\(T\\) seconds' and the common misuse: treating \\(n\\) as seconds instead of an index. Keep the tone foundational."
+      },
+      {
+        "type": "interactive_demo",
+        "title": "Sampling a continuous-time curve",
+        "teaching_role": "concept_anchor",
+        "purpose": "Let students see how a smooth curve becomes a discrete-time sequence when values are taken only at \\(t=nT\\).",
+        "demo_spec": {
+          "rendering": "React + Canvas",
+          "layout": "Show one coordinate panel. Draw a smooth continuous curve \\(x(t)=e^{-t}\\) in light gray. Overlay sampled points and vertical stems at \\(t=nT\\) in navy. Label the horizontal axis \\(t\\) and show small integer labels \\(n=0,1,2,...\\) near the sample points.",
+          "controls": [
+            {
+              "name": "Sampling interval T",
+              "type": "slider",
+              "min": 0.1,
+              "max": 1,
+              "step": 0.1,
+              "default": 0.2
+            }
+          ],
+          "student_task": "Ask the student to move \\(T\\) and notice that larger \\(T\\) gives fewer sampled points over the same time window, while the index \\(n\\) still counts samples as integers.",
+          "what_to_notice": [
+            "The gray curve is \\(x(t)\\), which exists for continuous time.",
+            "The navy stems are the discrete-time sequence values.",
+            "\\(x[n]\\) is shorthand for the sample taken at \\(t=nT\\)."
+          ]
+        },
+        "mode_specific_visual_use": {
+          "cram": "Use the slider to memorize the exam trigger: sampling interval \\(T\\) means evaluate at \\(t=nT\\).",
+          "standard": "Use the demo to understand why \\(x[n]=x(nT)\\) is a notation bridge, not a new signal formula from nowhere.",
+          "top_score": "Use the demo to separate the index \\(n\\), sample time \\(nT\\), and sample value \\(x(nT)\\)."
+        }
+      },
+      {
+        "type": "math_block",
+        "latex": "x(nT)=e^{-nT}",
+        "explanation_instruction": "Continue the sampling page with the textbook's representative example. Explain in 70–100 words that the continuous-time signal is \\(x(t)=e^{-t}\\). Sampling means substitute \\(t=nT\\), so \\(e^{-t}\\) becomes \\(e^{-nT}\\). State that this is not a new exponential law; it is direct substitution of the sample time. Include the symbol meanings, when to use this formula, and the common trap: substituting \\(n\\) for \\(t\\) and forgetting the factor \\(T\\)."
+      },
+      {
+        "type": "math_block",
+        "latex": "x(nT)=e^{-0.1n}",
+        "explanation_instruction": "Finish the example by setting \\(T=0.1\\) seconds. Explain in 60–90 words that because the sampling interval is \\(0.1\\), the sample time is \\(t=0.1n\\), so \\(x(nT)=e^{-0.1n}\\). Include one quick check: at \\(n=0\\), the value is \\(e^0=1\\); at \\(n=1\\), the value is \\(e^{-0.1}\\). State the exam note: always substitute the given \\(T\\) before simplifying the discrete-time expression."
+      },
+      {
+        "type": "section_summary",
+        "instruction": "Create a recap page titled '📌 Key Takeaways'. Include exactly 4 bullets, each ≤25 words, and include the core formulas explicitly. Required formulas to include: \\(x[n],\\; n\\in\\mathbb{Z}\\); \\(x[n]=x(nT)\\); \\(x(nT)=e^{-nT}\\); \\(x(nT)=e^{-0.1n}\\) for \\(T=0.1\\). Also include the input-output idea \\(x[n]\\to\\text{system}\\to y[n]\\). End with one bridge sentence: 'Next, we will use these basic discrete-time ideas to analyze how systems respond to input sequences.'"
+      },
+      {
+        "type": "quiz_plan",
+        "target_questions": 6,
+        "question_range": {
+          "min": 5,
+          "max": 7
+        },
+        "knowledge_points": [
+          {
+            "id": "discrete_time_signal_definition",
+            "label": "Discrete-time signal as an indexed sequence",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 2
+            },
+            "questions": [
+              {
+                "id": "kp1_q1",
+                "type": "multiple_choice",
+                "stem": "Which description best matches a discrete-time signal?",
+                "options": [
+                  "A. A smooth curve defined for every real value of time",
+                  "B. A sequence of numbers indexed by integer values",
+                  "C. A single number produced by a digital computer",
+                  "D. A continuous signal that cannot be sampled"
+                ],
+                "correct_option": "B",
+                "explanation": "A discrete-time signal is a sequence of values indexed by integers such as \\(n=0,1,2,...\\).",
+                "wrong_option_explanations": {
+                  "A": "That describes a continuous-time signal, usually written with parentheses such as \\(x(t)\\).",
+                  "C": "A sequence contains many indexed values, not just one number.",
+                  "D": "Sampling is one common way to create a discrete-time signal."
+                },
+                "hint": "Look for integer-indexed values.",
+                "needs_visual": false,
+                "same_point_variant": true
+              },
+              {
+                "id": "kp1_q2",
+                "type": "multiple_choice",
+                "stem": "In the notation \\(x[n]\\), what does \\(n\\) represent?",
+                "options": [
+                  "A. Any real-valued time variable",
+                  "B. The sampling interval",
+                  "C. An integer index into the sequence",
+                  "D. The output of the system"
+                ],
+                "correct_option": "C",
+                "explanation": "\\(n\\) is an integer index. It tells which entry of the sequence is being referenced.",
+                "wrong_option_explanations": {
+                  "A": "A real-valued time variable is usually written as \\(t\\), not \\(n\\).",
+                  "B": "The sampling interval is \\(T\\), not \\(n\\).",
+                  "D": "The output sequence is usually written \\(y[n]\\)."
+                },
+                "hint": "The square brackets are the clue.",
+                "needs_visual": false,
+                "same_point_variant": true
+              }
+            ]
+          },
+          {
+            "id": "notation_difference",
+            "label": "Square brackets versus parentheses",
+            "importance": "high",
+            "exam_weight": "medium",
+            "mastery_rule": {
+              "correct_streak_required": 1
+            },
+            "questions": [
+              {
+                "id": "kp2_q1",
+                "type": "multiple_choice",
+                "stem": "Which notation is the best match for a continuous-time signal?",
+                "options": [
+                  "A. \\(x[n]\\)",
+                  "B. \\(x(t)\\)",
+                  "C. \\(y[n]\\)",
+                  "D. \\(nT\\)"
+                ],
+                "correct_option": "B",
+                "explanation": "The textbook reserves parentheses for continuous-time variables such as \\(t\\), so \\(x(t)\\) is continuous-time notation.",
+                "wrong_option_explanations": {
+                  "A": "\\(x[n]\\) is discrete-time notation.",
+                  "C": "\\(y[n]\\) is also discrete-time notation, usually for an output sequence.",
+                  "D": "\\(nT\\) is a sample time, not the signal notation itself."
+                },
+                "hint": "Continuous-time uses \\(t\\).",
+                "needs_visual": false,
+                "same_point_variant": false
+              }
+            ]
+          },
+          {
+            "id": "discrete_time_system",
+            "label": "Discrete-time system input and output",
+            "importance": "medium",
+            "exam_weight": "medium",
+            "mastery_rule": {
+              "correct_streak_required": 1
+            },
+            "questions": [
+              {
+                "id": "kp3_q1",
+                "type": "multiple_choice",
+                "stem": "A discrete-time system takes \\(x[n]\\) and produces \\(y[n]\\). What are \\(x[n]\\) and \\(y[n]\\)?",
+                "options": [
+                  "A. One input number and one output number",
+                  "B. Two continuous-time curves",
+                  "C. An input sequence and an output sequence",
+                  "D. The sampling interval and sample time"
+                ],
+                "correct_option": "C",
+                "explanation": "A discrete-time system processes a whole input sequence \\(x[n]\\) to produce a whole output sequence \\(y[n]\\).",
+                "wrong_option_explanations": {
+                  "A": "Each notation refers to a sequence, not just one isolated number.",
+                  "B": "The square brackets indicate discrete-time signals, not continuous-time curves.",
+                  "D": "The sampling interval is \\(T\\), and the sample time is \\(nT\\)."
+                },
+                "hint": "Think input sequence \\(\\to\\) system \\(\\to\\) output sequence.",
+                "needs_visual": true,
+                "visual_type": "simple_input_output_block_diagram",
+                "same_point_variant": false
+              }
+            ]
+          },
+          {
+            "id": "sampling_identity",
+            "label": "Uniform sampling identity",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 2
+            },
+            "questions": [
+              {
+                "id": "kp4_q1",
+                "type": "multiple_choice",
+                "stem": "A continuous-time signal \\(x(t)\\) is sampled every \\(T\\) seconds. Which formula correctly connects the sampled sequence to the original signal?",
+                "options": [
+                  "A. \\(x[n]=x(nT)\\)",
+                  "B. \\(x[n]=x(T/n)\\)",
+                  "C. \\(x(t)=x[nT]\\)",
+                  "D. \\(x[n]=T x(n)\\)"
+                ],
+                "correct_option": "A",
+                "explanation": "Uniform sampling evaluates the continuous-time signal at sample times \\(t=nT\\), so \\(x[n]=x(nT)\\).",
+                "wrong_option_explanations": {
+                  "B": "Sampling uses \\(nT\\), not \\(T/n\\).",
+                  "C": "This mixes continuous-time and discrete-time notation incorrectly.",
+                  "D": "Sampling does not mean multiplying the signal value by \\(T\\)."
+                },
+                "hint": "The sample time is index times interval.",
+                "needs_visual": false,
+                "same_point_variant": true
+              },
+              {
+                "id": "kp4_q2",
+                "type": "multiple_choice",
+                "stem": "Observe a sampling demo: when the sampling interval \\(T\\) is increased, what happens over the same time window?",
+                "options": [
+                  "A. More sample points appear because the index \\(n\\) increases faster",
+                  "B. Fewer sample points appear because the samples are farther apart in time",
+                  "C. The continuous-time curve disappears",
+                  "D. The values stop being a sequence"
+                ],
+                "correct_option": "B",
+                "explanation": "Larger \\(T\\) means sample times \\(t=nT\\) are spaced farther apart, so fewer samples fit in the same time window.",
+                "wrong_option_explanations": {
+                  "A": "Increasing \\(T\\) spaces samples farther apart, not closer together.",
+                  "C": "The original continuous-time curve still exists; sampling only selects points from it.",
+                  "D": "The sampled values are still indexed by integers, so they still form a sequence."
+                },
+                "hint": "Watch the horizontal spacing between stems.",
+                "needs_visual": true,
+                "visual_type": "interactive_demo_observation",
+                "same_point_variant": true
+              }
+            ]
+          },
+          {
+            "id": "sampled_exponential_example",
+            "label": "Representative sampled exponential",
+            "importance": "medium",
+            "exam_weight": "medium",
+            "mastery_rule": {
+              "correct_streak_required": 1
+            },
+            "questions": [
+              {
+                "id": "kp5_q1",
+                "type": "short_answer",
+                "stem": "Given \\(x(t)=e^{-t}\\) and sampling interval \\(T=0.1\\), write the sampled signal \\(x(nT)\\). Show the substitution step.",
+                "ideal_answer": "Since sampling uses \\(t=nT\\), \\(x(nT)=e^{-nT}\\). With \\(T=0.1\\), \\(x(nT)=e^{-0.1n}\\).",
+                "grading_rubric": [
+                  "Must state or use \\(t=nT\\)",
+                  "Must write \\(x(nT)=e^{-nT}\\)",
+                  "Must substitute \\(T=0.1\\) to get \\(e^{-0.1n}\\)",
+                  "Must not omit the factor \\(T\\)"
+                ],
+                "explanation": "This checks whether the student understands sampling as substitution into the continuous-time expression.",
+                "hint": "Replace every \\(t\\) with \\(nT\\), then plug in \\(T=0.1\\).",
+                "needs_visual": false,
+                "same_point_variant": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "existing_page_images": {
+    "page-237": "/pages/page-237.png"
+  },
+  "available_figures": {},
+  "web_sources": [
+    {
+      "index": 1,
+      "title": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Wikipedia",
+      "snippet": "changed Wikipedia&#039;s domain from wikipedia.com to wikipedia.org. After an early period of exponential growth, the growth rate of the English Wikipedia in terms"
+    },
+    {
+      "index": 2,
+      "title": "History of Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/History_of_Wikipedia",
+      "snippet": "4, 2026. \"Wikipedia.org Site Info\". Alexa Internet. Archived from the original on July 6, 2016. Retrieved July 7, 2016. \"Wikipedia.org Site Info\". Alexa"
+    },
+    {
+      "index": 3,
+      "title": "Wikifunctions",
+      "url": "https://en.wikipedia.org/wiki/Wikifunctions",
+      "snippet": "December 2020 following a naming contest. Wikifunctions is the first Wikimedia project to launch since Wikidata in 2012. After three years of development"
+    },
+    {
+      "index": 4,
+      "title": "Information",
+      "url": "https://en.wikipedia.org/wiki/Information",
+      "snippet": "information is that it is subject to interpretation and processing. The derivation of information from a signal or message may be thought of as the resolution"
+    }
+  ],
+  "output_contract": {
+    "format": "single_json_object",
+    "no_markdown_fences": true,
+    "no_prose": true,
+    "compact_json_preferred": true
+  },
+  "section_specific_rules": "section_specific_rules:\n- This section is a conceptual introduction, not a full computational drill.\n- Use exam-priority guidance only as a light weighting signal.\n- Keep the core identity of the section intact; do not let worked examples or trap warnings dominate the lesson.\n- Include at most one representative worked example unless the OCR strongly suggests more.",
+  "summary_hint": null,
+  "exam_priority_guidance": null
+}

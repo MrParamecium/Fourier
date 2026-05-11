@@ -1,0 +1,704 @@
+# Agent A Preview: 1.11-4 Numerical Integration and Estimating Signal Energy
+
+- Difficulty: intermediate
+- Estimated read minutes: 7
+
+## Learning Objectives
+
+- Compute signal energy from the integral of squared magnitude.
+- Use rectangular numerical integration to approximate signal energy.
+- Understand how decreasing the time step improves the approximation.
+- Use MATLAB-style adaptive quadrature to estimate energy more accurately.
+- Recognize the integrand and limits needed for more complex energy calculations.
+
+## Visualization Need
+
+```json
+{
+  "level": "interactive",
+  "reason": [
+    "depends_on_parameter_change",
+    "formula_to_phenomenon_gap",
+    "student_should_manipulate_to_understand",
+    "misconception_needs_visual_correction"
+  ],
+  "recommended_assets": [
+    "react_canvas_demo"
+  ]
+}
+```
+
+## Visual Plan
+
+```json
+{
+  "primary_anchor": "react_demo",
+  "rationale": "The key idea is not a static signal picture; it is how sampled rectangle areas approximate the continuous energy integral and how the estimate changes when the time step changes. A React Canvas demo is more useful than a generated image because students need to manipulate Δt and see the rectangles converge toward the exact area.",
+  "cram": "Use the demo to recognize the exam pattern: square the signal, choose limits, multiply samples by Δt, and sum.",
+  "standard": "Use the demo to connect the formula, the MATLAB sum command, and one representative signal-energy example.",
+  "top_score": "Use the demo to notice approximation error, endpoint effects, and why adaptive quadrature avoids choosing a fixed Δt."
+}
+```
+
+## Planned Blocks
+
+### Block 1: `text_explanation`
+- **instruction**: Render Page 1 as a compact outline only. Include exactly two sections: 'Section Objective' and 'Concepts In This Section'. Under 'Section Objective', write one sentence: 'Estimate signal energy by replacing difficult integrals with accurate numerical calculations.' Under 'Concepts In This Section', list only these concept names as bullets with no explanations: signal energy integral; rectangular approximation; time-step accuracy; MATLAB sum method; adaptive quadrature with quad; energy of a more complex signal.
+
+### Block 2: `math_block`
+- **latex**: E_x = \int_{-\infty}^{\infty} |x(t)|^2\,dt
+- **explanation_instruction**: Start Page 2 with the heading '## 1. Signal energy is area under squared magnitude'. Explain in 90–130 words that energy is computed by squaring the signal magnitude and integrating over time. Define \(E_x\), \(x(t)\), \(|x(t)|^2\), and \(dt\). State when to use it: whenever the question asks for total energy of a continuous-time signal. Exam trigger: words like 'energy of the signal' or 'estimate energy numerically'. Common misuse: integrating \(x(t)\) instead of \(|x(t)|^2\), or using the wrong time interval. Include one minimal example sentence: if a signal is zero outside \([0,1)\), the infinite limits collapse to \(0\) through \(1\).
+
+### Block 3: `math_block`
+- **latex**: x(t)=e^{-t}\bigl(u(t)-u(t-1)\bigr)
+- **explanation_instruction**: Start Page 3 with the heading '## 2. Example signal: an exponential windowed to one second'. Explain in 80–120 words that \(u(t)-u(t-1)\) acts like an on/off window: the signal is active for \(0\le t<1\) and zero elsewhere. Briefly remind the student that \(u(t)\) is a unit step: it turns on at \(t=0\). Define each symbol. Use case: this form tells you the integration limits before doing any computation. Common misuse: forgetting the window and integrating \(e^{-2t}\) to infinity. Keep the tone practical and exam-focused.
+
+### Block 4: `math_block`
+- **latex**: E_x = \int_{0}^{1} e^{-2t}\,dt
+- **explanation_instruction**: Continue Page 3. Explain in 60–90 words why the integrand becomes \(e^{-2t}\): energy uses \(|x(t)|^2\), and \((e^{-t})^2=e^{-2t}\) on the active interval. State that the limits are \(0\) to \(1\) because of the window. Exam trigger: if the signal contains unit-step differences, first find where it is nonzero, then square it. Common trap: using \(e^{-t}\) instead of \(e^{-2t}\).
+
+### Block 5: `math_block`
+- **latex**: E_x = \frac{1}{2}\bigl(1-e^{-2}\bigr)\approx 0.4323
+- **explanation_instruction**: Finish Page 3 with a concise representative result. Explain in 50–80 words that this is the analytical benchmark used to judge numerical estimates. Mention that numerical integration is useful both when the integral is hard and when you want to verify an analytical answer. Common misuse: treating a numerical approximation as exact without checking the step size or error.
+
+### Block 6: `interactive_demo`
+- **title**: Rectangular approximation of signal energy
+- **teaching_role**: concept_anchor
+- **mode_specific_visual_use**:
+```json
+{
+  "cram": "Make the rectangle-sum pattern instantly recognizable: sample, square, multiply by Δt, add.",
+  "standard": "Show how the MATLAB sum estimate changes as Δt is reduced for the example signal.",
+  "top_score": "Highlight why coarse rectangles overestimate or underestimate and why convergence matters."
+}
+```
+- **instruction**: Start Page 4 with the heading '## 3. Rectangular approximation: turn the integral into a sum'. Build a React + Canvas demo. Plot the curve \(|x(t)|^2=e^{-2t}\) over \(0\le t\le1\). Overlay left-endpoint rectangles whose widths are controlled by a slider labeled 'time step Δt'. Provide slider values 0.1, 0.05, 0.01, and 0.001. Display three live readouts: 'rectangle estimate', 'exact energy = 0.4323', and 'relative error'. As Δt decreases, rectangles become thinner and the estimate approaches 0.4323. Include a small note below the demo: 'This is what the MATLAB sum command is doing visually.'
+- **controls**:
+```json
+[
+  {
+    "name": "Δt",
+    "type": "discrete_slider",
+    "values": [
+      0.1,
+      0.05,
+      0.01,
+      0.001
+    ],
+    "default": 0.01
+  }
+]
+```
+- **visual_behavior**: Use a white background, navy curve for \(e^{-2t}\), muted teal translucent rectangles, and a thin gray x-axis from 0 to 1. Keep labels minimal: t, |x(t)|², Δt, estimate, exact value, relative error.
+- **caption_instruction**: One sentence: 'Rectangular approximation estimates energy by summing the areas of thin rectangles under the squared signal.'
+
+### Block 7: `math_block`
+- **latex**: E_x \approx \sum_{k} |x(t_k)|^2\,\Delta t
+- **explanation_instruction**: Continue Page 4. Explain in 90–130 words how this formula matches the demo and the MATLAB command. Define \(t_k\) as sample times and \(\Delta t\) as the uniform spacing. State when to use it: when approximating an energy integral from sampled values. Include the representative MATLAB-style example in prose: with \(\Delta t=0.01\), using \(\texttt{sum(x(t).*x(t)*0.01)}\) gives about \(0.4367\), close to \(0.4323\). Exam trigger: a problem gives samples or asks for numerical energy. Common misuse: forgetting to multiply by \(\Delta t\), which makes the answer scale incorrectly.
+
+### Block 8: `text_explanation`
+- **instruction**: Start Page 5 with the heading '## 4. Adaptive quadrature: a better numerical integration tool'. Explain in 100–140 words that rectangular approximation is easy to visualize but not the best method. MATLAB's \(\texttt{quad}\) uses recursive adaptive Simpson quadrature, so it refines the calculation where needed instead of using one fixed \(\Delta t\). State the required inputs clearly: a function for the integrand, the lower limit, and the upper limit. Include the representative example: define \(\texttt{x_squared = @(t) x(t).*x(t)}\), then compute \(\texttt{quad(x_squared,0,1)}\), giving \(0.4323\). Exam note: \(\texttt{quad}\) integrates the squared signal function, not the original signal. Common trap: passing \(x(t)\) instead of \(x(t)^2\).
+
+### Block 9: `math_block`
+- **latex**: E_g = \int_{0}^{\infty} e^{-2t}\cos^2(2\pi t)\,dt
+- **explanation_instruction**: Start Page 6 with the heading '## 5. More complex signals use the same energy recipe'. Explain in 90–130 words that the method does not change when the signal looks more complicated: identify \(|g(t)|^2\), set the correct limits, and integrate numerically if the closed form is inconvenient. Define \(E_g\), \(e^{-2t}\), and \(\cos^2(2\pi t)\). Use case: damped oscillatory signals whose algebra is annoying but whose energy can be estimated directly in MATLAB. Exam trigger: a decaying sinusoid or product of exponential and trigonometric terms. Common misuse: integrating \(g(t)\) instead of \(g^2(t)\), or stopping at one period even though the decay continues to infinity.
+
+### Block 10: `section_summary`
+- **instruction**: Create the recap page titled '📌 Key Takeaways'. Include 4–5 bullets, each no more than 22 words. The recap must explicitly include these formulas: \(E_x=\int_{-\infty}^{\infty}|x(t)|^2dt\), \(E_x\approx\sum_k |x(t_k)|^2\Delta t\), \(x(t)=e^{-t}(u(t)-u(t-1))\), \(E_x=\frac12(1-e^{-2})\approx0.4323\), and \(E_g=\int_0^\infty e^{-2t}\cos^2(2\pi t)dt\). Also include one bullet contrasting rectangular approximation with adaptive quadrature. End with one sentence: 'Next, use these numerical tools whenever the energy integral is difficult or when you want to verify an analytical result.'
+
+### Block 11: `quiz_plan`
+- **target_questions**:
+```json
+7
+```
+- **question_range**:
+```json
+{
+  "min": 6,
+  "max": 8
+}
+```
+- **knowledge_points**:
+```json
+[
+  {
+    "id": "energy_integral_definition",
+    "label": "Signal energy integral",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "kp1_q1",
+        "type": "multiple_choice",
+        "stem": "Which expression correctly defines the energy of a continuous-time signal \\(x(t)\\)?",
+        "options": [
+          "A. \\(E_x=\\int_{-\\infty}^{\\infty}x(t)\\,dt\\)",
+          "B. \\(E_x=\\int_{-\\infty}^{\\infty}|x(t)|^2\\,dt\\)",
+          "C. \\(E_x=\\sum_k x(t_k)\\)",
+          "D. \\(E_x=\\int_0^1 |x(t)|\\,dt\\)"
+        ],
+        "correct_option": "B",
+        "explanation": "Signal energy is the integral of squared magnitude over all time.",
+        "wrong_option_explanations": {
+          "A": "This integrates the signal itself, not its squared magnitude.",
+          "C": "A raw sum of samples is not continuous-time energy and is missing \\(\\Delta t\\).",
+          "D": "Energy uses squared magnitude, not absolute magnitude, and the limits depend on the signal."
+        },
+        "hint": "Energy is always based on a squared quantity.",
+        "needs_visual": false,
+        "same_point_variant": true
+      },
+      {
+        "id": "kp1_q2",
+        "type": "multiple_choice",
+        "stem": "A student computes \\(\\int x(t)\\,dt\\) when asked for signal energy. What is the main mistake?",
+        "options": [
+          "A. They forgot to square the magnitude of the signal.",
+          "B. They used integration instead of summation.",
+          "C. They used too small a time step.",
+          "D. They should have integrated only positive values of \\(x(t)\\)."
+        ],
+        "correct_option": "A",
+        "explanation": "Energy is computed from \\(|x(t)|^2\\), not from \\(x(t)\\) itself.",
+        "wrong_option_explanations": {
+          "B": "Continuous-time energy is naturally an integral; integration is not the problem.",
+          "C": "No time step is involved in the analytical integral.",
+          "D": "The issue is not sign selection; squaring handles sign and magnitude."
+        },
+        "hint": "Look for the missing operation in the energy definition.",
+        "needs_visual": false,
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "windowed_exponential_limits",
+    "label": "Finding limits from unit-step windows",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp2_q1",
+        "type": "multiple_choice",
+        "stem": "For \\(x(t)=e^{-t}(u(t)-u(t-1))\\), why does the energy integral use limits \\(0\\) to \\(1\\)?",
+        "options": [
+          "A. Because \\(e^{-t}\\) is only defined between 0 and 1.",
+          "B. Because \\(u(t)-u(t-1)\\) makes the signal nonzero only on \\([0,1)\\).",
+          "C. Because every energy integral must use one second of data.",
+          "D. Because \\(e^{-2t}\\) becomes zero at \\(t=1\\)."
+        ],
+        "correct_option": "B",
+        "explanation": "The unit-step difference acts like a window that turns the signal on at \\(t=0\\) and off at \\(t=1\\).",
+        "wrong_option_explanations": {
+          "A": "The exponential is defined for all real \\(t\\).",
+          "C": "Energy limits come from the signal support, not a fixed one-second rule.",
+          "D": "\\(e^{-2t}\\) is small at \\(t=1\\), but not zero."
+        },
+        "hint": "Focus on the step functions, not the exponential.",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  },
+  {
+    "id": "analytic_energy_example",
+    "label": "Analytical benchmark for the example",
+    "importance": "medium",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp3_q1",
+        "type": "multiple_choice",
+        "stem": "For \\(x(t)=e^{-t}(u(t)-u(t-1))\\), what is the correct integrand for energy on the active interval?",
+        "options": [
+          "A. \\(e^{-t}\\)",
+          "B. \\(e^{-2t}\\)",
+          "C. \\(e^{2t}\\)",
+          "D. \\(|e^{-t}|\\)"
+        ],
+        "correct_option": "B",
+        "explanation": "Energy squares the signal magnitude, so \\((e^{-t})^2=e^{-2t}\\).",
+        "wrong_option_explanations": {
+          "A": "This is the original signal, not the squared signal.",
+          "C": "Squaring \\(e^{-t}\\) does not flip the sign in the exponent.",
+          "D": "Absolute value alone is not enough; energy uses squared magnitude."
+        },
+        "hint": "Square the exponential term.",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  },
+  {
+    "id": "rectangular_approximation",
+    "label": "Rectangular numerical integration",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "kp4_q1",
+        "type": "multiple_choice",
+        "stem": "In the rectangular approximation \\(E_x\\approx\\sum_k |x(t_k)|^2\\Delta t\\), what does multiplying by \\(\\Delta t\\) do?",
+        "options": [
+          "A. It squares the signal samples.",
+          "B. It converts each sample height into a rectangle area.",
+          "C. It removes numerical error completely.",
+          "D. It chooses the integration limits automatically."
+        ],
+        "correct_option": "B",
+        "explanation": "Each term \\(|x(t_k)|^2\\Delta t\\) is the area of one rectangle under the squared-signal curve.",
+        "wrong_option_explanations": {
+          "A": "The squaring is already done by \\(|x(t_k)|^2\\).",
+          "C": "Rectangular approximation still has error unless the limit is exact.",
+          "D": "The limits must be chosen from the signal support or problem statement."
+        },
+        "hint": "Height times width equals area.",
+        "needs_visual": true,
+        "visual_type": "demo_observation_check",
+        "same_point_variant": true
+      },
+      {
+        "id": "kp4_q2",
+        "type": "multiple_choice",
+        "stem": "Observe the rectangular approximation demo. When \\(\\Delta t\\) is reduced from 0.01 to 0.001, what should happen to the estimate for the example signal?",
+        "options": [
+          "A. It should generally move closer to the exact value \\(0.4323\\).",
+          "B. It should become exactly zero because rectangles get thinner.",
+          "C. It should become ten times larger because there are ten times more rectangles.",
+          "D. It should stop depending on the squared signal."
+        ],
+        "correct_option": "A",
+        "explanation": "Smaller rectangles usually reduce approximation error, so the estimate approaches the exact energy.",
+        "wrong_option_explanations": {
+          "B": "Each rectangle is thinner, but there are more of them; the total area does not vanish.",
+          "C": "There are more rectangles, but each has smaller width \\(\\Delta t\\).",
+          "D": "The entire method is still based on \\(|x(t)|^2\\)."
+        },
+        "hint": "More, thinner rectangles approximate the curve better.",
+        "needs_visual": true,
+        "visual_type": "demo_observation_check",
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "adaptive_quadrature",
+    "label": "Using quad for energy estimation",
+    "importance": "medium",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp5_q1",
+        "type": "multiple_choice",
+        "stem": "To estimate \\(E_x\\) using \\(\\texttt{quad}\\), which function should be passed as the integrand?",
+        "options": [
+          "A. \\(x(t)\\)",
+          "B. \\(x(t)^2\\) or \\(|x(t)|^2\\)",
+          "C. \\(u(t)-u(t-1)\\) only",
+          "D. The time vector \\(t=0:0.01:1\\)"
+        ],
+        "correct_option": "B",
+        "explanation": "\\(\\texttt{quad}\\) should integrate the energy integrand, which is the squared magnitude of the signal.",
+        "wrong_option_explanations": {
+          "A": "This would integrate the signal itself, not its energy density.",
+          "C": "The window alone omits the exponential amplitude.",
+          "D": "\\(\\texttt{quad}\\) does not require a fixed time vector."
+        },
+        "hint": "The integrand must match the energy formula.",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  },
+  {
+    "id": "complex_signal_energy",
+    "label": "Energy of a more complex signal",
+    "importance": "medium",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp6_q1",
+        "type": "short_answer",
+        "stem": "For \\(E_g=\\int_0^\\infty e^{-2t}\\cos^2(2\\pi t)\\,dt\\), explain what the numerical integration method needs before it can compute the energy.",
+        "ideal_answer": "It needs the squared-signal integrand \\(e^{-2t}\\cos^2(2\\pi t)\\), the lower limit \\(0\\), and the upper limit \\(\\infty\\) or a suitable numerical handling of that infinite limit.",
+        "grading_rubric": [
+          "Must identify the integrand as the squared-signal expression.",
+          "Must mention the lower limit \\(0\\).",
+          "Must mention the upper limit \\(\\infty\\) or explain how the decaying tail is handled numerically.",
+          "Must not say to integrate \\(g(t)\\) without squaring."
+        ],
+        "explanation": "The same energy recipe applies to more complicated signals: square magnitude, set limits, integrate.",
+        "hint": "List the three things any numerical integrator needs: function, start, and stop.",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  }
+]
+```
+
+## Raw JSON
+
+```json
+{
+  "section_id": "1.11-4",
+  "section_title": "Numerical Integration and Estimating Signal Energy",
+  "difficulty": "intermediate",
+  "estimated_read_minutes": 7,
+  "learning_objectives": [
+    "Compute signal energy from the integral of squared magnitude.",
+    "Use rectangular numerical integration to approximate signal energy.",
+    "Understand how decreasing the time step improves the approximation.",
+    "Use MATLAB-style adaptive quadrature to estimate energy more accurately.",
+    "Recognize the integrand and limits needed for more complex energy calculations."
+  ],
+  "visualization_need": {
+    "level": "interactive",
+    "reason": [
+      "depends_on_parameter_change",
+      "formula_to_phenomenon_gap",
+      "student_should_manipulate_to_understand",
+      "misconception_needs_visual_correction"
+    ],
+    "recommended_assets": [
+      "react_canvas_demo"
+    ]
+  },
+  "visual_plan": {
+    "primary_anchor": "react_demo",
+    "rationale": "The key idea is not a static signal picture; it is how sampled rectangle areas approximate the continuous energy integral and how the estimate changes when the time step changes. A React Canvas demo is more useful than a generated image because students need to manipulate Δt and see the rectangles converge toward the exact area.",
+    "cram": "Use the demo to recognize the exam pattern: square the signal, choose limits, multiply samples by Δt, and sum.",
+    "standard": "Use the demo to connect the formula, the MATLAB sum command, and one representative signal-energy example.",
+    "top_score": "Use the demo to notice approximation error, endpoint effects, and why adaptive quadrature avoids choosing a fixed Δt."
+  },
+  "blocks": [
+    {
+      "type": "text_explanation",
+      "instruction": "Render Page 1 as a compact outline only. Include exactly two sections: 'Section Objective' and 'Concepts In This Section'. Under 'Section Objective', write one sentence: 'Estimate signal energy by replacing difficult integrals with accurate numerical calculations.' Under 'Concepts In This Section', list only these concept names as bullets with no explanations: signal energy integral; rectangular approximation; time-step accuracy; MATLAB sum method; adaptive quadrature with quad; energy of a more complex signal."
+    },
+    {
+      "type": "math_block",
+      "latex": "E_x = \\int_{-\\infty}^{\\infty} |x(t)|^2\\,dt",
+      "explanation_instruction": "Start Page 2 with the heading '## 1. Signal energy is area under squared magnitude'. Explain in 90–130 words that energy is computed by squaring the signal magnitude and integrating over time. Define \\(E_x\\), \\(x(t)\\), \\(|x(t)|^2\\), and \\(dt\\). State when to use it: whenever the question asks for total energy of a continuous-time signal. Exam trigger: words like 'energy of the signal' or 'estimate energy numerically'. Common misuse: integrating \\(x(t)\\) instead of \\(|x(t)|^2\\), or using the wrong time interval. Include one minimal example sentence: if a signal is zero outside \\([0,1)\\), the infinite limits collapse to \\(0\\) through \\(1\\)."
+    },
+    {
+      "type": "math_block",
+      "latex": "x(t)=e^{-t}\\bigl(u(t)-u(t-1)\\bigr)",
+      "explanation_instruction": "Start Page 3 with the heading '## 2. Example signal: an exponential windowed to one second'. Explain in 80–120 words that \\(u(t)-u(t-1)\\) acts like an on/off window: the signal is active for \\(0\\le t<1\\) and zero elsewhere. Briefly remind the student that \\(u(t)\\) is a unit step: it turns on at \\(t=0\\). Define each symbol. Use case: this form tells you the integration limits before doing any computation. Common misuse: forgetting the window and integrating \\(e^{-2t}\\) to infinity. Keep the tone practical and exam-focused."
+    },
+    {
+      "type": "math_block",
+      "latex": "E_x = \\int_{0}^{1} e^{-2t}\\,dt",
+      "explanation_instruction": "Continue Page 3. Explain in 60–90 words why the integrand becomes \\(e^{-2t}\\): energy uses \\(|x(t)|^2\\), and \\((e^{-t})^2=e^{-2t}\\) on the active interval. State that the limits are \\(0\\) to \\(1\\) because of the window. Exam trigger: if the signal contains unit-step differences, first find where it is nonzero, then square it. Common trap: using \\(e^{-t}\\) instead of \\(e^{-2t}\\)."
+    },
+    {
+      "type": "math_block",
+      "latex": "E_x = \\frac{1}{2}\\bigl(1-e^{-2}\\bigr)\\approx 0.4323",
+      "explanation_instruction": "Finish Page 3 with a concise representative result. Explain in 50–80 words that this is the analytical benchmark used to judge numerical estimates. Mention that numerical integration is useful both when the integral is hard and when you want to verify an analytical answer. Common misuse: treating a numerical approximation as exact without checking the step size or error."
+    },
+    {
+      "type": "interactive_demo",
+      "title": "Rectangular approximation of signal energy",
+      "teaching_role": "concept_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Make the rectangle-sum pattern instantly recognizable: sample, square, multiply by Δt, add.",
+        "standard": "Show how the MATLAB sum estimate changes as Δt is reduced for the example signal.",
+        "top_score": "Highlight why coarse rectangles overestimate or underestimate and why convergence matters."
+      },
+      "instruction": "Start Page 4 with the heading '## 3. Rectangular approximation: turn the integral into a sum'. Build a React + Canvas demo. Plot the curve \\(|x(t)|^2=e^{-2t}\\) over \\(0\\le t\\le1\\). Overlay left-endpoint rectangles whose widths are controlled by a slider labeled 'time step Δt'. Provide slider values 0.1, 0.05, 0.01, and 0.001. Display three live readouts: 'rectangle estimate', 'exact energy = 0.4323', and 'relative error'. As Δt decreases, rectangles become thinner and the estimate approaches 0.4323. Include a small note below the demo: 'This is what the MATLAB sum command is doing visually.'",
+      "controls": [
+        {
+          "name": "Δt",
+          "type": "discrete_slider",
+          "values": [
+            0.1,
+            0.05,
+            0.01,
+            0.001
+          ],
+          "default": 0.01
+        }
+      ],
+      "visual_behavior": "Use a white background, navy curve for \\(e^{-2t}\\), muted teal translucent rectangles, and a thin gray x-axis from 0 to 1. Keep labels minimal: t, |x(t)|², Δt, estimate, exact value, relative error.",
+      "caption_instruction": "One sentence: 'Rectangular approximation estimates energy by summing the areas of thin rectangles under the squared signal.'"
+    },
+    {
+      "type": "math_block",
+      "latex": "E_x \\approx \\sum_{k} |x(t_k)|^2\\,\\Delta t",
+      "explanation_instruction": "Continue Page 4. Explain in 90–130 words how this formula matches the demo and the MATLAB command. Define \\(t_k\\) as sample times and \\(\\Delta t\\) as the uniform spacing. State when to use it: when approximating an energy integral from sampled values. Include the representative MATLAB-style example in prose: with \\(\\Delta t=0.01\\), using \\(\\texttt{sum(x(t).*x(t)*0.01)}\\) gives about \\(0.4367\\), close to \\(0.4323\\). Exam trigger: a problem gives samples or asks for numerical energy. Common misuse: forgetting to multiply by \\(\\Delta t\\), which makes the answer scale incorrectly."
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Start Page 5 with the heading '## 4. Adaptive quadrature: a better numerical integration tool'. Explain in 100–140 words that rectangular approximation is easy to visualize but not the best method. MATLAB's \\(\\texttt{quad}\\) uses recursive adaptive Simpson quadrature, so it refines the calculation where needed instead of using one fixed \\(\\Delta t\\). State the required inputs clearly: a function for the integrand, the lower limit, and the upper limit. Include the representative example: define \\(\\texttt{x_squared = @(t) x(t).*x(t)}\\), then compute \\(\\texttt{quad(x_squared,0,1)}\\), giving \\(0.4323\\). Exam note: \\(\\texttt{quad}\\) integrates the squared signal function, not the original signal. Common trap: passing \\(x(t)\\) instead of \\(x(t)^2\\)."
+    },
+    {
+      "type": "math_block",
+      "latex": "E_g = \\int_{0}^{\\infty} e^{-2t}\\cos^2(2\\pi t)\\,dt",
+      "explanation_instruction": "Start Page 6 with the heading '## 5. More complex signals use the same energy recipe'. Explain in 90–130 words that the method does not change when the signal looks more complicated: identify \\(|g(t)|^2\\), set the correct limits, and integrate numerically if the closed form is inconvenient. Define \\(E_g\\), \\(e^{-2t}\\), and \\(\\cos^2(2\\pi t)\\). Use case: damped oscillatory signals whose algebra is annoying but whose energy can be estimated directly in MATLAB. Exam trigger: a decaying sinusoid or product of exponential and trigonometric terms. Common misuse: integrating \\(g(t)\\) instead of \\(g^2(t)\\), or stopping at one period even though the decay continues to infinity."
+    },
+    {
+      "type": "section_summary",
+      "instruction": "Create the recap page titled '📌 Key Takeaways'. Include 4–5 bullets, each no more than 22 words. The recap must explicitly include these formulas: \\(E_x=\\int_{-\\infty}^{\\infty}|x(t)|^2dt\\), \\(E_x\\approx\\sum_k |x(t_k)|^2\\Delta t\\), \\(x(t)=e^{-t}(u(t)-u(t-1))\\), \\(E_x=\\frac12(1-e^{-2})\\approx0.4323\\), and \\(E_g=\\int_0^\\infty e^{-2t}\\cos^2(2\\pi t)dt\\). Also include one bullet contrasting rectangular approximation with adaptive quadrature. End with one sentence: 'Next, use these numerical tools whenever the energy integral is difficult or when you want to verify an analytical result.'"
+    },
+    {
+      "type": "quiz_plan",
+      "target_questions": 7,
+      "question_range": {
+        "min": 6,
+        "max": 8
+      },
+      "knowledge_points": [
+        {
+          "id": "energy_integral_definition",
+          "label": "Signal energy integral",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp1_q1",
+              "type": "multiple_choice",
+              "stem": "Which expression correctly defines the energy of a continuous-time signal \\(x(t)\\)?",
+              "options": [
+                "A. \\(E_x=\\int_{-\\infty}^{\\infty}x(t)\\,dt\\)",
+                "B. \\(E_x=\\int_{-\\infty}^{\\infty}|x(t)|^2\\,dt\\)",
+                "C. \\(E_x=\\sum_k x(t_k)\\)",
+                "D. \\(E_x=\\int_0^1 |x(t)|\\,dt\\)"
+              ],
+              "correct_option": "B",
+              "explanation": "Signal energy is the integral of squared magnitude over all time.",
+              "wrong_option_explanations": {
+                "A": "This integrates the signal itself, not its squared magnitude.",
+                "C": "A raw sum of samples is not continuous-time energy and is missing \\(\\Delta t\\).",
+                "D": "Energy uses squared magnitude, not absolute magnitude, and the limits depend on the signal."
+              },
+              "hint": "Energy is always based on a squared quantity.",
+              "needs_visual": false,
+              "same_point_variant": true
+            },
+            {
+              "id": "kp1_q2",
+              "type": "multiple_choice",
+              "stem": "A student computes \\(\\int x(t)\\,dt\\) when asked for signal energy. What is the main mistake?",
+              "options": [
+                "A. They forgot to square the magnitude of the signal.",
+                "B. They used integration instead of summation.",
+                "C. They used too small a time step.",
+                "D. They should have integrated only positive values of \\(x(t)\\)."
+              ],
+              "correct_option": "A",
+              "explanation": "Energy is computed from \\(|x(t)|^2\\), not from \\(x(t)\\) itself.",
+              "wrong_option_explanations": {
+                "B": "Continuous-time energy is naturally an integral; integration is not the problem.",
+                "C": "No time step is involved in the analytical integral.",
+                "D": "The issue is not sign selection; squaring handles sign and magnitude."
+              },
+              "hint": "Look for the missing operation in the energy definition.",
+              "needs_visual": false,
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "windowed_exponential_limits",
+          "label": "Finding limits from unit-step windows",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp2_q1",
+              "type": "multiple_choice",
+              "stem": "For \\(x(t)=e^{-t}(u(t)-u(t-1))\\), why does the energy integral use limits \\(0\\) to \\(1\\)?",
+              "options": [
+                "A. Because \\(e^{-t}\\) is only defined between 0 and 1.",
+                "B. Because \\(u(t)-u(t-1)\\) makes the signal nonzero only on \\([0,1)\\).",
+                "C. Because every energy integral must use one second of data.",
+                "D. Because \\(e^{-2t}\\) becomes zero at \\(t=1\\)."
+              ],
+              "correct_option": "B",
+              "explanation": "The unit-step difference acts like a window that turns the signal on at \\(t=0\\) and off at \\(t=1\\).",
+              "wrong_option_explanations": {
+                "A": "The exponential is defined for all real \\(t\\).",
+                "C": "Energy limits come from the signal support, not a fixed one-second rule.",
+                "D": "\\(e^{-2t}\\) is small at \\(t=1\\), but not zero."
+              },
+              "hint": "Focus on the step functions, not the exponential.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "analytic_energy_example",
+          "label": "Analytical benchmark for the example",
+          "importance": "medium",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp3_q1",
+              "type": "multiple_choice",
+              "stem": "For \\(x(t)=e^{-t}(u(t)-u(t-1))\\), what is the correct integrand for energy on the active interval?",
+              "options": [
+                "A. \\(e^{-t}\\)",
+                "B. \\(e^{-2t}\\)",
+                "C. \\(e^{2t}\\)",
+                "D. \\(|e^{-t}|\\)"
+              ],
+              "correct_option": "B",
+              "explanation": "Energy squares the signal magnitude, so \\((e^{-t})^2=e^{-2t}\\).",
+              "wrong_option_explanations": {
+                "A": "This is the original signal, not the squared signal.",
+                "C": "Squaring \\(e^{-t}\\) does not flip the sign in the exponent.",
+                "D": "Absolute value alone is not enough; energy uses squared magnitude."
+              },
+              "hint": "Square the exponential term.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "rectangular_approximation",
+          "label": "Rectangular numerical integration",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp4_q1",
+              "type": "multiple_choice",
+              "stem": "In the rectangular approximation \\(E_x\\approx\\sum_k |x(t_k)|^2\\Delta t\\), what does multiplying by \\(\\Delta t\\) do?",
+              "options": [
+                "A. It squares the signal samples.",
+                "B. It converts each sample height into a rectangle area.",
+                "C. It removes numerical error completely.",
+                "D. It chooses the integration limits automatically."
+              ],
+              "correct_option": "B",
+              "explanation": "Each term \\(|x(t_k)|^2\\Delta t\\) is the area of one rectangle under the squared-signal curve.",
+              "wrong_option_explanations": {
+                "A": "The squaring is already done by \\(|x(t_k)|^2\\).",
+                "C": "Rectangular approximation still has error unless the limit is exact.",
+                "D": "The limits must be chosen from the signal support or problem statement."
+              },
+              "hint": "Height times width equals area.",
+              "needs_visual": true,
+              "visual_type": "demo_observation_check",
+              "same_point_variant": true
+            },
+            {
+              "id": "kp4_q2",
+              "type": "multiple_choice",
+              "stem": "Observe the rectangular approximation demo. When \\(\\Delta t\\) is reduced from 0.01 to 0.001, what should happen to the estimate for the example signal?",
+              "options": [
+                "A. It should generally move closer to the exact value \\(0.4323\\).",
+                "B. It should become exactly zero because rectangles get thinner.",
+                "C. It should become ten times larger because there are ten times more rectangles.",
+                "D. It should stop depending on the squared signal."
+              ],
+              "correct_option": "A",
+              "explanation": "Smaller rectangles usually reduce approximation error, so the estimate approaches the exact energy.",
+              "wrong_option_explanations": {
+                "B": "Each rectangle is thinner, but there are more of them; the total area does not vanish.",
+                "C": "There are more rectangles, but each has smaller width \\(\\Delta t\\).",
+                "D": "The entire method is still based on \\(|x(t)|^2\\)."
+              },
+              "hint": "More, thinner rectangles approximate the curve better.",
+              "needs_visual": true,
+              "visual_type": "demo_observation_check",
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "adaptive_quadrature",
+          "label": "Using quad for energy estimation",
+          "importance": "medium",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp5_q1",
+              "type": "multiple_choice",
+              "stem": "To estimate \\(E_x\\) using \\(\\texttt{quad}\\), which function should be passed as the integrand?",
+              "options": [
+                "A. \\(x(t)\\)",
+                "B. \\(x(t)^2\\) or \\(|x(t)|^2\\)",
+                "C. \\(u(t)-u(t-1)\\) only",
+                "D. The time vector \\(t=0:0.01:1\\)"
+              ],
+              "correct_option": "B",
+              "explanation": "\\(\\texttt{quad}\\) should integrate the energy integrand, which is the squared magnitude of the signal.",
+              "wrong_option_explanations": {
+                "A": "This would integrate the signal itself, not its energy density.",
+                "C": "The window alone omits the exponential amplitude.",
+                "D": "\\(\\texttt{quad}\\) does not require a fixed time vector."
+              },
+              "hint": "The integrand must match the energy formula.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "complex_signal_energy",
+          "label": "Energy of a more complex signal",
+          "importance": "medium",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp6_q1",
+              "type": "short_answer",
+              "stem": "For \\(E_g=\\int_0^\\infty e^{-2t}\\cos^2(2\\pi t)\\,dt\\), explain what the numerical integration method needs before it can compute the energy.",
+              "ideal_answer": "It needs the squared-signal integrand \\(e^{-2t}\\cos^2(2\\pi t)\\), the lower limit \\(0\\), and the upper limit \\(\\infty\\) or a suitable numerical handling of that infinite limit.",
+              "grading_rubric": [
+                "Must identify the integrand as the squared-signal expression.",
+                "Must mention the lower limit \\(0\\).",
+                "Must mention the upper limit \\(\\infty\\) or explain how the decaying tail is handled numerically.",
+                "Must not say to integrate \\(g(t)\\) without squaring."
+              ],
+              "explanation": "The same energy recipe applies to more complicated signals: square magnitude, set limits, integrate.",
+              "hint": "List the three things any numerical integrator needs: function, start, and stop.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```

@@ -1,0 +1,403 @@
+{
+  "blueprint": {
+    "section_id": "1.10",
+    "section_title": "1.10 Internal Description: The State-Space Description",
+    "difficulty": "intermediate",
+    "estimated_read_minutes": 7,
+    "learning_objectives": [
+      "Define state variables as the smallest set of internal variables needed to determine all system signals.",
+      "Distinguish state equations from output equations.",
+      "Read a state-space model as simultaneous first-order differential equations.",
+      "Recognize the basic meaning of controllability and observability from system structure."
+    ],
+    "visualization_need": {
+      "level": "static",
+      "reason": [
+        "classification_benefits_from_figure",
+        "pattern_recognition_benefits_from_figure",
+        "misconception_needs_visual_correction",
+        "one stable circuit or block-diagram representation is more useful than parameter manipulation here"
+      ],
+      "recommended_assets": [
+        "textbook_figure",
+        "latex_native_equation_visual"
+      ]
+    },
+    "visual_plan": {
+      "primary_anchor": "both",
+      "rationale": "Use textbook figures because this section is exam-facing and the book already provides the canonical circuit and block-diagram representations students are expected to recognize. Use LaTeX-native formulas for the state vector, state equations, and output equations because the core ideas are symbolic and structural. Do not use GPTImage2 because ready-made textbook figures are available and accurate.",
+      "cram": "Use the figures to identify state variables, inputs, outputs, controllability, and observability quickly.",
+      "standard": "Use each figure beside one representative formula so the student connects circuit structure to state-space equations.",
+      "top_score": "Use the figures to notice hidden internal modes, missing input paths, and outputs that fail to reveal a state."
+    },
+    "blocks": [
+      {
+        "type": "text_explanation",
+        "instruction": "Render Page 1 as a minimal overview only. Use exactly two short sections. First heading: \"Section Objective\". Write one sentence: \"Learn how a system can be described internally by state variables, state equations, and output equations.\" Second heading: \"Concepts In This Section\". List only these concept names as bullets, with no explanations: state variables; state equations; output equations; first-order system representation; controllability; observability."
+      },
+      {
+        "type": "text_explanation",
+        "instruction": "Start a new page with the heading \"## 1. State variables: the internal description\". Explain that a state variable is an internal quantity that stores the system's memory. For circuits, emphasize that capacitor voltage or charge and inductor current or flux are natural state variables because capacitors and inductors store energy. Include one representative example: in the textbook network, q1 is tied to the capacitor and q2 is tied to the inductor, so solving q1(t) and q2(t) lets us compute the rest of the circuit signals. Target 90–130 words. End with this exam note: \"Exam trigger: when a circuit contains capacitors or inductors, first look for state variables at the energy-storage elements.\""
+      },
+      {
+        "type": "math_block",
+        "latex": "\\mathbf{q}(t)=\\begin{bmatrix}q_1(t)\\\\q_2(t)\\\\\\vdots\\\\q_N(t)\\end{bmatrix}",
+        "explanation_instruction": "Explain that this column vector collects all state variables. Define N as the system order, q_k(t) as the kth state variable, and \\(\\mathbf{q}(t)\\) as the internal memory of the system. State when to use it: whenever several first-order state equations are written compactly. Common misuse: do not list every circuit voltage or current as a state; choose the smallest independent set that determines the rest."
+      },
+      {
+        "type": "book_image",
+        "source_page": "page-122",
+        "fig_id": "Fig. 1.43",
+        "teaching_role": "concept_anchor",
+        "mode_specific_visual_use": {
+          "cram": "Point directly to the capacitor and inductor labels as the fastest way to choose states.",
+          "standard": "Use the circuit to connect q1 and q2 to physical energy-storage elements before writing equations.",
+          "top_score": "Ask which labeled voltages and currents are outputs rather than independent states."
+        },
+        "caption_instruction": "One sentence: this figure shows a circuit where capacitor and inductor variables are chosen as natural state variables.",
+        "description_instruction": "Describe the input x(t), the capacitor branch labeled q1(t), and the inductor-related variable q2(t). Tell students to notice that the state variables are attached to energy-storage elements, while other voltages and currents can be computed after the states are known."
+      },
+      {
+        "type": "text_explanation",
+        "instruction": "Start a new page with the heading \"## 2. State equations and output equations\". Explain the two-layer idea: state equations describe how the internal variables change with time, while output equations describe how measured or requested signals are computed from the state and input. Briefly contrast this with input-output descriptions: an Nth-order system can be represented by one Nth-order differential equation, but state-space represents the same system by N simultaneous first-order differential equations. Target 100–140 words. Include the quick check: \"If an equation contains \\(\\dot q\\), it is usually part of the state equation; if it computes \\(y(t)\\), it is usually an output equation.\""
+      },
+      {
+        "type": "math_block",
+        "latex": "\\dot{\\mathbf{q}}(t)=\\mathbf{A}\\mathbf{q}(t)+\\mathbf{B}x(t)",
+        "explanation_instruction": "Explain this as the standard linear state equation for a single-input system. Define \\(\\dot{\\mathbf{q}}(t)\\) as the time derivative of the state vector, \\(\\mathbf{A}\\) as the internal dynamics matrix, \\(\\mathbf{B}\\) as the input-coupling matrix, and \\(x(t)\\) as the input. Use case: write this when the system's future state depends linearly on its present state and input. Exam trigger: simultaneous first-order differential equations. Common misuse: do not treat this as the output equation; it predicts state evolution."
+      },
+      {
+        "type": "math_block",
+        "latex": "y(t)=\\mathbf{C}\\mathbf{q}(t)+D x(t)",
+        "explanation_instruction": "Explain this as the standard linear output equation. Define \\(y(t)\\) as the observed output, \\(\\mathbf{C}\\) as the state-to-output mapping, and \\(D\\) as the direct input-to-output term. Use case: after solving the state equations, compute the requested output. Exam trigger: a problem asks for voltage, current, or response after states are known. Common misuse: solving only the output equation without first solving or understanding the state dynamics."
+      },
+      {
+        "type": "math_block",
+        "latex": "\\dot{\\mathbf{q}}(t)=\\begin{bmatrix}-1.5&-1\\\\0.5&-2.5\\end{bmatrix}\\mathbf{q}(t)+\\begin{bmatrix}1\\\\0\\end{bmatrix}x(t)\\quad\\text{(1.34)}",
+        "explanation_instruction": "Teach this as the representative worked example from Example 1.20. State that it is the compact matrix form of the two simultaneous first-order equations \\(\\dot q_1=-1.5q_1-q_2+x\\) and \\(\\dot q_2=0.5q_1-2.5q_2\\). Explain that the first row tells how the capacitor-related state changes and the second row tells how the inductor-related state changes. Common mistake: reading the matrix entries as outputs; they are coefficients controlling state change."
+      },
+      {
+        "type": "book_image",
+        "source_page": "page-121",
+        "fig_id": "Figure 1.42",
+        "teaching_role": "comparison_anchor",
+        "mode_specific_visual_use": {
+          "cram": "Use arrow connectivity to decide quickly whether an internal subsystem is controllable or observable.",
+          "standard": "Compare the two block diagrams to see the difference between influencing a state and measuring a state.",
+          "top_score": "Look for hidden internal paths that affect the system but are missing from either the input path or output path."
+        },
+        "caption_instruction": "One sentence: this figure contrasts uncontrollable and unobservable system structures.",
+        "description_instruction": "Describe panel (a) as showing an internal subsystem that is not properly driven by the input path, which motivates uncontrollability. Describe panel (b) as showing an internal subsystem whose behavior is not visible in the output path, which motivates unobservability. Tell students to focus on arrows from x(t) into internal blocks and arrows from internal blocks toward y(t)."
+      },
+      {
+        "type": "math_block",
+        "latex": "\\dot q(t)=-0.5q(t)\\quad\\text{(1.36)}",
+        "explanation_instruction": "Explain this as the state equation from Example 1.21 for a circuit described as neither controllable nor observable. Define \\(q(t)\\) as the capacitor-state variable and \\(\\dot q(t)\\) as its rate of change. Emphasize the key observation: the input \\(x(t)\\) does not appear in this state equation, so the input cannot control that state. Exam trigger: if the state equation has no input term affecting a state, suspect lack of controllability. Common misuse: assuming a system is controllable just because an input source exists somewhere in the circuit."
+      },
+      {
+        "type": "section_summary",
+        "instruction": "Create a recap page titled \"📌 Key Takeaways\". Include exactly 5 bullets, each concise but complete. The bullets must explicitly include these formulas: \\(\\mathbf{q}(t)=[q_1(t)\\ q_2(t)\\ \\cdots\\ q_N(t)]^T\\), \\(\\dot{\\mathbf{q}}(t)=\\mathbf{A}\\mathbf{q}(t)+\\mathbf{B}x(t)\\), \\(y(t)=\\mathbf{C}\\mathbf{q}(t)+Dx(t)\\), Example (1.34), and Example (1.36). Explain in the bullets that state equations describe internal evolution and output equations compute measured signals. End with one sentence: \"Next, you will use state-space thinking to model and analyze more complex systems efficiently.\""
+      },
+      {
+        "type": "quiz_plan",
+        "target_questions": 7,
+        "question_range": {
+          "min": 6,
+          "max": 8
+        },
+        "knowledge_points": [
+          {
+            "id": "state_variable_definition",
+            "label": "State variables as internal memory",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 2
+            },
+            "questions": [
+              {
+                "id": "kp1_q1",
+                "type": "multiple_choice",
+                "stem": "In a circuit, which components most directly suggest natural state variables?",
+                "options": [
+                  "A. Resistors only",
+                  "B. Capacitors and inductors",
+                  "C. Ideal wires only",
+                  "D. Output terminals only"
+                ],
+                "correct_option": "B",
+                "explanation": "Capacitors and inductors store energy, so their voltage, charge, current, or flux often represent system memory.",
+                "wrong_option_explanations": {
+                  "A": "Resistors dissipate energy but do not store independent memory.",
+                  "C": "Ideal wires impose connections but do not store energy.",
+                  "D": "Output terminals show what is measured, not necessarily what stores the system state."
+                },
+                "hint": "Look for energy-storage elements.",
+                "needs_visual": false,
+                "same_point_variant": false
+              },
+              {
+                "id": "kp1_q2",
+                "type": "multiple_choice",
+                "stem": "A circuit has two independent energy-storage elements. In the usual state-space approach, what should you expect?",
+                "options": [
+                  "A. One second-order input-output equation can often be replaced by two first-order state equations.",
+                  "B. Two independent storage elements mean the output must be zero.",
+                  "C. The state vector must include every resistor current.",
+                  "D. State-space cannot be used for circuits with more than one storage element."
+                ],
+                "correct_option": "A",
+                "explanation": "An Nth-order system is represented by N simultaneous first-order state equations.",
+                "wrong_option_explanations": {
+                  "B": "Storage elements do not imply zero output.",
+                  "C": "The state vector should be a minimal independent set, not every possible signal.",
+                  "D": "State-space is especially useful for higher-order systems."
+                },
+                "hint": "Connect number of independent states to system order.",
+                "needs_visual": false,
+                "same_point_variant": true
+              }
+            ]
+          },
+          {
+            "id": "state_vs_output_equations",
+            "label": "State equations versus output equations",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 2
+            },
+            "questions": [
+              {
+                "id": "kp2_q1",
+                "type": "multiple_choice",
+                "stem": "Which equation is the state equation?",
+                "options": [
+                  "A. \\(\\dot{\\mathbf{q}}(t)=\\mathbf{A}\\mathbf{q}(t)+\\mathbf{B}x(t)\\)",
+                  "B. \\(y(t)=\\mathbf{C}\\mathbf{q}(t)+Dx(t)\\)",
+                  "C. \\(R=V/I\\)",
+                  "D. \\(p(t)=v(t)i(t)\\)"
+                ],
+                "correct_option": "A",
+                "explanation": "The state equation contains \\(\\dot{\\mathbf{q}}(t)\\), so it describes how the internal state changes over time.",
+                "wrong_option_explanations": {
+                  "B": "This is the output equation; it computes the observed output.",
+                  "C": "This is Ohm's law, not a state-space evolution equation.",
+                  "D": "This is instantaneous power, not a state equation."
+                },
+                "hint": "Look for the derivative of the state vector.",
+                "needs_visual": false,
+                "same_point_variant": false
+              },
+              {
+                "id": "kp2_q2",
+                "type": "multiple_choice",
+                "stem": "After solving the state equations for \\(\\mathbf{q}(t)\\), what do output equations let you do?",
+                "options": [
+                  "A. Compute requested signals such as voltages, currents, or \\(y(t)\\)",
+                  "B. Eliminate all state variables permanently",
+                  "C. Prove the input is always zero",
+                  "D. Convert every nonlinear system into a linear one"
+                ],
+                "correct_option": "A",
+                "explanation": "Output equations express measured or requested signals in terms of the state and input.",
+                "wrong_option_explanations": {
+                  "B": "State variables are still central; output equations use them.",
+                  "C": "The output equation does not force the input to be zero.",
+                  "D": "State-space can describe nonlinear systems, but the output equation does not automatically linearize them."
+                },
+                "hint": "State first, output second.",
+                "needs_visual": false,
+                "same_point_variant": true
+              }
+            ]
+          },
+          {
+            "id": "example_134_interpretation",
+            "label": "Reading the matrix state equation in Example 1.20",
+            "importance": "medium",
+            "exam_weight": "medium",
+            "mastery_rule": {
+              "correct_streak_required": 1
+            },
+            "questions": [
+              {
+                "id": "kp3_q1",
+                "type": "multiple_choice",
+                "stem": "For Example (1.34), \\(\\dot{\\mathbf{q}}=\\begin{bmatrix}-1.5&-1\\\\0.5&-2.5\\end{bmatrix}\\mathbf{q}+\\begin{bmatrix}1\\\\0\\end{bmatrix}x\\). Which state equation is represented by the second row?",
+                "options": [
+                  "A. \\(\\dot q_2=0.5q_1-2.5q_2\\)",
+                  "B. \\(\\dot q_1=0.5q_1-2.5q_2\\)",
+                  "C. \\(q_2=-1.5q_1-q_2+x\\)",
+                  "D. \\(y=0.5q_1-2.5q_2\\)"
+                ],
+                "correct_option": "A",
+                "explanation": "The second row of the matrix equation determines \\(\\dot q_2\\): multiply \\([0.5\\ -2.5]\\) by \\([q_1\\ q_2]^T\\), and the second input coefficient is zero.",
+                "wrong_option_explanations": {
+                  "B": "The second row gives \\(\\dot q_2\\), not \\(\\dot q_1\\).",
+                  "C": "This mixes the first-row equation with the state variable itself.",
+                  "D": "This is a state derivative equation, not an output equation."
+                },
+                "hint": "Match row 2 with \\(\\dot q_2\\).",
+                "needs_visual": false,
+                "same_point_variant": false
+              }
+            ]
+          },
+          {
+            "id": "controllability_observability",
+            "label": "Controllability and observability from structure",
+            "importance": "high",
+            "exam_weight": "medium",
+            "mastery_rule": {
+              "correct_streak_required": 2
+            },
+            "questions": [
+              {
+                "id": "kp4_q1",
+                "type": "multiple_choice",
+                "stem": "Observe a block diagram where an internal subsystem affects the state evolution but no arrow from that subsystem reaches the measured output \\(y(t)\\). What issue should you suspect?",
+                "options": [
+                  "A. Lack of observability",
+                  "B. Lack of linearity only",
+                  "C. The system must be memoryless",
+                  "D. The state equation is unnecessary"
+                ],
+                "correct_option": "A",
+                "explanation": "If an internal state cannot be detected from the output, the system has an observability problem.",
+                "wrong_option_explanations": {
+                  "B": "Observability is about whether internal states can be inferred from outputs, not simply whether the system is linear.",
+                  "C": "Hidden internal behavior usually indicates memory, not memorylessness.",
+                  "D": "State equations are still useful, especially for identifying hidden modes."
+                },
+                "hint": "Observable means visible through the output.",
+                "needs_visual": true,
+                "visual_type": "book_figure_reference",
+                "visual_instruction": "Use Figure 1.42(b) or an equivalent block diagram showing an internal subsystem not visible at the output.",
+                "same_point_variant": false
+              },
+              {
+                "id": "kp4_q2",
+                "type": "multiple_choice",
+                "stem": "In Example (1.36), the state equation is \\(\\dot q(t)=-0.5q(t)\\). Why is this a warning sign for controllability?",
+                "options": [
+                  "A. The input \\(x(t)\\) does not appear in the state equation.",
+                  "B. The coefficient \\(-0.5\\) is negative.",
+                  "C. The state variable is named \\(q\\).",
+                  "D. First-order equations are never controllable."
+                ],
+                "correct_option": "A",
+                "explanation": "If the input does not affect the state equation, the input cannot drive that state, which signals lack of controllability.",
+                "wrong_option_explanations": {
+                  "B": "A negative coefficient can simply indicate natural decay; it does not by itself imply uncontrollability.",
+                  "C": "The variable name has no effect on controllability.",
+                  "D": "Many first-order systems are controllable."
+                },
+                "hint": "Ask whether the input can change the state.",
+                "needs_visual": false,
+                "same_point_variant": true
+              },
+              {
+                "id": "kp4_q3",
+                "type": "short_answer",
+                "stem": "A classmate says, \"If a circuit has an input source and an output terminal, then every internal state is automatically controllable and observable.\" Explain why this is wrong.",
+                "ideal_answer": "An input source may not actually influence every internal state, so some states can be uncontrollable. Also, an output terminal may not reveal every internal state, so some states can be unobservable. Controllability depends on input-to-state paths, and observability depends on state-to-output paths.",
+                "grading_rubric": [
+                  "Must distinguish controllability from observability",
+                  "Must state that an input source alone does not guarantee control of every state",
+                  "Must state that an output terminal alone does not guarantee visibility of every state",
+                  "Must mention paths, influence, or structural connection"
+                ],
+                "explanation": "This checks whether the student understands the structural meaning, not just the vocabulary.",
+                "hint": "Separate the question \"Can the input move it?\" from \"Can the output reveal it?\"",
+                "needs_visual": true,
+                "visual_type": "book_figure_reference",
+                "visual_instruction": "Use Figure 1.42 as the reference visual for the wrong-vs-right reasoning.",
+                "same_point_variant": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "existing_page_images": {
+    "page-121": "/pages/page-121.png",
+    "page-122": "/pages/page-122.png",
+    "page-123": "/pages/page-123.png",
+    "page-124": "/pages/page-124.png",
+    "page-125": "/pages/page-125.png",
+    "page-126": "/pages/page-126.png"
+  },
+  "available_figures": {
+    "page-121": [
+      {
+        "fig_id": "Figure 1.42",
+        "caption": "Structures of uncontrollable and unobservable systems.",
+        "description": "The figure shows two block diagrams inside dashed system boundaries, labeled (a) and (b), with signal arrows running from input x(t) on the left to output y(t) on the right. In (a), subsystems S1 and S2 both feed a summing junction Σ before y(t), illustrating an uncontrollable structure where one internal mode is not directly influenced by the input path. In (b), the input branches to subsystems S1 and S2, while y(t) is taken from the S1 path only, illustrating an unobservable structure where an internal subsystem affects state evolution but not the measured output. Students should notice how connectivity of x(t), y(t), S1, S2, and the summing node determines controllability and observability."
+      }
+    ],
+    "page-122": [
+      {
+        "fig_id": "Fig. 1.43",
+        "caption": "Choosing suitable initial conditions in a network.",
+        "description": "A circuit diagram shows a source labeled x(t) feeding a top rail through a 1 Ω resistor, with branch currents i1(t), iC(t), i2(t), and i3(t) indicated by arrows and element voltages v1(t), v2(t), v3(t), and vL(t) marked with polarity signs. The network includes a 1 F capacitor to the bottom reference node, a 2 Ω vertical resistor, a 2 H inductor in the top path, and a 5 Ω vertical resistor at the right; capacitor charge q1(t) and inductor-related state q2(t) are labeled near the energy-storage elements. Students should notice the common bottom node, the series and shunt relationships among elements, and that the figure highlights suitable initial conditions associated with the capacitor and inductor states."
+      }
+    ],
+    "page-124": [
+      {
+        "fig_id": "Figure 1.44",
+        "caption": "Analysis of a system that is neither controllable nor observable.",
+        "description": "The figure shows two schematic circuit diagrams, labeled (a) and (b), used to analyze a system described as neither controllable nor observable. An input voltage source x(t) is applied on the left, the output y(t) is marked across the right-side terminals with + and - polarity, and nodes a, b, c, d, and e label the network connections; the circuit contains a 3 Ω resistor, four 2 Ω resistors, and in (b) a capacitor between a and b with charge q and current q̇. Students should notice the symmetry of the resistor network, the annotated branch currents such as x/5, x/10, and q̇/2, and how panel (b) introduces capacitor-state variables to relate internal dynamics to the same external input-output connection."
+      }
+    ],
+    "page-125": [
+      {
+        "fig_id": "unknown",
+        "caption": "An RLC circuit with a voltage source x(t), a 1 H inductor, a 1/2 F capacitor, and a 3 Ω resistor, with mesh currents q₁(t) and capacitor charge q₂(t) indicated.",
+        "description": "The figure is a schematic of a single-loop RLC circuit, so there are no coordinate axes. A voltage source labeled x(t) is on the left, a 1 H inductor is on the top branch, a 1/2 F capacitor is on the right branch with polarity marked + and -, and a 3 Ω resistor is on the bottom branch. An arrow labeled q1(t) indicates the loop current direction across the top branch, and q2(t) labels the capacitor charge. Students should notice the series arrangement of the source, inductor, capacitor, and resistor, along with the indicated current direction and capacitor polarity."
+      }
+    ]
+  },
+  "web_sources": [
+    {
+      "index": 1,
+      "title": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Wikipedia",
+      "snippet": "changed Wikipedia&#039;s domain from wikipedia.com to wikipedia.org. After an early period of exponential growth, the growth rate of the English Wikipedia in terms"
+    },
+    {
+      "index": 2,
+      "title": "History of Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/History_of_Wikipedia",
+      "snippet": "4, 2026. \"Wikipedia.org Site Info\". Alexa Internet. Archived from the original on July 6, 2016. Retrieved July 7, 2016. \"Wikipedia.org Site Info\". Alexa"
+    },
+    {
+      "index": 3,
+      "title": "Wikimedia Foundation",
+      "url": "https://en.wikipedia.org/wiki/Wikimedia_Foundation",
+      "snippet": "(wikimediafoundation.org) Wikimedia site navigation (wikimedia.org) Wikimedia Foundation 2022–23 Annual Plan (draft) Wikimedia Foundation annual reports Wikimedia Foundation"
+    },
+    {
+      "index": 4,
+      "title": "SpaceX",
+      "url": "https://en.wikipedia.org/wiki/SpaceX",
+      "snippet": "had a revenue of over $10 billion in 2024, while a 2025 offer to buy internal shares valued SpaceX at $800 billion, making it the world&#039;s most valuable"
+    },
+    {
+      "index": 5,
+      "title": "List of HTTP status codes",
+      "url": "https://en.wikipedia.org/wiki/List_of_HTTP_status_codes",
+      "snippet": "processing, but the processing has not been completed. The request might or might not be eventually acted upon, and may be disallowed when processing"
+    }
+  ],
+  "output_contract": {
+    "format": "single_json_object",
+    "no_markdown_fences": true,
+    "no_prose": true,
+    "compact_json_preferred": true
+  },
+  "section_specific_rules": null,
+  "summary_hint": null,
+  "exam_priority_guidance": null
+}

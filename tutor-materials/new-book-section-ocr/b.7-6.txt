@@ -1,0 +1,195 @@
+# Aquarius section OCR
+section_id: b.7-6
+source_pages: page-049, page-050, page-051, page-052, page-053
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+B.7-6 Matrix Operations
+Many applications require more than row vectors with evenly spaced elements; row vectors,
+column vectors, and matrices with arbitrary elements are typically needed.
+     MATLAB provides several functions to generate common, useful matrices. Given integers
+m, n, and vector x, the function eye(m) creates the m × m identity matrix; the function ones(m,n)
+creates the m × n matrix of all ones; the function zeros(m,n) creates the m × n matrix of all
+zeros; and the function diag(x) uses vector x to create a diagonal matrix. The creation of general
+matrices and vectors, however, requires each individual element to be specified.
+     Vectors and matrices can be input spreadsheet style by using MATLAB’s array editor. This
+graphical approach is rather cumbersome and is not often used. A more direct method is preferable.
+     Consider a simple row vector r,
+
+                                          r=[ 1       0     0 ]
+
+The MATLAB notation a:b:c cannot create this row vector. Rather, square brackets are used to
+create r.
+
+>>   r = [1 0 0]
+     r = 1    0              0
+
+Square brackets enclose elements of the vector, and spaces or commas are used to separate row
+elements.
+    Next, consider the 3 × 2 matrix A,
+                                                ⎡           ⎤
+                                               2          3
+                                           A=⎣ 4          5 ⎦
+                                               0          6
+
+[[PAGE page-050]]
+50   CHAPTER B       BACKGROUND
+
+     Matrix A can be viewed as a three-high stack of two-element row vectors. With a semicolon to
+     separate rows, square brackets are used to create the matrix.
+     >>   A = [2 3;4 5;0 6]
+          A = 2    3
+              4    5
+              0    6
+     Each row vector needs to have the same length to create a sensible matrix.
+          In addition to enclosing string arguments, a single quote performs the complex conjugate
+     transpose operation. In this way, row vectors become column vectors and vice versa. For example,
+     a column vector c is easily created by transposing row vector r.
+     >>   c = r’
+          c = 1
+              0
+              0
+     Since vector r is real, the complex-conjugate transpose is just the transpose. Had r been complex,
+     the simple transpose could have been accomplished by either r.’ or (conj(r))’.
+          More formally, square brackets are referred to as a concatenation operator. A concatenation
+     combines or connects smaller pieces into a larger whole. Concatenations can involve simple
+     numbers, such as the six-element concatenation used to create the 3×2 matrix A. It is also possible
+     to concatenate larger objects, such as vectors and matrices. For example, vector c and matrix A
+     can be concatenated to form a 3 × 3 matrix B.
+     >>   B = [c A]
+          B = 1    2          3
+              0    4          5
+              0    0          6
+     Errors will occur if the component dimensions do not sensibly match; a 2 × 2 matrix would not be
+     concatenated with a 3 × 3 matrix, for example.
+         Elements of a matrix are indexed much like vectors, except two indices are typically used to
+     specify row and column.† Element (1, 2) of matrix B, for example, is 2.
+     >>   B(1,2)
+          ans = 2
+     Indices can likewise be vectors. For example, vector indices allow us to extract the elements
+     common to the first two rows and last two columns of matrix B.
+     >>   B(1:2,2:3)
+          ans = 2    3
+                4    5
+
+     † Matrix elements can also be accessed by means of a single index, which enumerates along columns.
+     Formally, the element from row m and column n of an M × N matrix may be obtained with a single index
+     (n − 1)M + m. For example, element (1, 2) of matrix B is accessed by using the index (2 − 1)3 + 1 = 4. That
+     is, B(4) yields 2.
+
+[[PAGE page-051]]
+B.7 MATLAB: Elementary Operations               51
+
+    One indexing technique is particularly useful and deserves special attention. A colon can be
+used to specify all elements along a specified dimension. For example, B(2,:) selects all column
+elements along the second row of B.
+
+>>   B(2,:)
+     ans = 0       4      5
+
+     Now that we understand basic vector and matrix creation, we turn our attention to using these
+tools on real problems. Consider solving a set of three linear simultaneous equations in three
+unknowns.
+
+                                         x1 − 2x2 + 3x3 = 1
+                                     √            √
+                                    − 3x1 + x2 − 5x3 = π
+                                             √
+                                       3x1 − 7x2 + x3 = e
+
+This system of equations is represented in matrix form according to Ax = y, where
+                  ⎡                   ⎤                ⎡    ⎤                  ⎡ ⎤
+                  1
+                  √            −2  3
+                                   √                     x1                     1
+             A=⎣ − 3           √1 − 5 ⎦,           x = ⎣ x2 ⎦ , and        y = ⎣π ⎦
+                  3           − 7  1                     x3                     e
+
+Although Cramer’s rule can be used to solve Ax = y, it is more convenient to solve by multiplying
+both sides by the matrix inverse of A. That is, x = A−1 Ax = A−1 y. Solving for x by hand or by
+calculator would be tedious at best, so MATLAB is used. We first create A and y.
+
+>>   A = [1 -2 3;-sqrt(3) 1 -sqrt(5);3 -sqrt(7) 1]; y = [1;pi;exp(1)];
+
+The vector solution is found by using MATLAB’s inv function.
+
+>>   x = inv(A)*y
+     x = -1.9999
+         -3.8998
+         -1.5999
+
+It is also possible to use MATLAB’s left divide operator x = A\y to find the same solution.
+The left divide is generally more computationally efficient than matrix inverses. As with matrix
+multiplication, left division requires that the two arguments be conformable.
+     Of course, Cramer’s rule can be used to compute individual solutions, such as x1 , by using
+vector indexing, concatenation, and MATLAB’s det command to compute determinants.
+
+>>   x1 = det([y,A(:,2:3)])/det(A)
+     x1 = -1.9999
+
+    Another nice application of matrices is the simultaneous creation of a family of curves.
+Consider hα (t) = e−αt sin (2π 10t + π/6) over 0 ≤ t ≤ 0.2. Figure B.14 shows hα (t) for α = 0
+and α = 10. Let’s investigate the family of curves hα (t) for α = [0, 1, . . . , 10].
+
+[[PAGE page-052]]
+52   CHAPTER B               BACKGROUND
+
+          An inefficient way to solve this problem is create hα (t) for each α of interest. This requires 11
+     individual cases. Instead, a matrix approach allows all 11 curves to be computed simultaneously.
+     First, a vector is created that contains the desired values of α.
+
+     >>   alpha = (0:10);
+
+     By using a sampling interval of one millisecond,       t = 0.001, a time vector is also created.
+
+     >>   t = (0:0.001:0.2)’;
+
+     The result is a length-201 column vector. By replicating the time vector for each of the 11 curves
+     required, a time matrix T is created. This replication can be accomplished by using an outer product
+     between t and a 1 × 11 vector of ones.†
+
+     >>   T = t*ones(1,11);
+
+     The result is a 201 × 11 matrix that has identical columns. Right multiplying T by a diagonal
+     matrix created from α, columns of T can be individually scaled and the final result is computed.
+
+     >>   H = exp(-T*diag(alpha)).*sin(2*pi*10*T+pi/6);
+
+     Here, H is a 201 × 11 matrix, where each column corresponds to a different value of α. That is,
+     H = [h0 , h1 , . . . , h10 ], where hα are column vectors. As shown in Fig. B.15, the 11 desired curves
+     are simultaneously displayed by using MATLAB’s plot command, which allows matrix arguments.
+
+     >>   plot(t,H); xlabel(’t’); ylabel(’h(t)’);
+
+     This example illustrates an important technique called vectorization, which increases execution
+     efficiency for interpretive languages such as MATLAB. Algorithm vectorization uses matrix and
+
+
+
+                    1
+
+
+                  0.5
+
+
+           h(t)     0
+
+
+                  –0.5
+
+
+                   –1
+                         0         0.05              0.1      0.15            0.2
+                                                       t
+           Figure B.15 hα (t) for α = [0, 1, . . . , 10].
+
+
+     † The repmat command provides a more flexible method to replicate or tile objects. Equivalently, T =
+     repmat(t,1,11).
+
+[[PAGE page-053]]
+B.7 MATLAB: Elementary Operations             53
+
+vector operations to avoid manual repetition and loop structures. It takes practice and effort to
+become proficient at vectorization, but the worthwhile result is efficient, compact code.†

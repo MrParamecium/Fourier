@@ -1,0 +1,14 @@
+# Aquarius section OCR
+section_id: 3.3
+source_pages: page-245, page-246, page-247, page-248, page-249, page-250, page-251, page-252, page-253
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+3.3  Some Useful Discrete-Time Signal Models  245
+
+DRILL 3.5  Expansion and Interpolation
+A signal x[n] is expanded by factor 2 to obtain signal x[n/2]. The odd-numbered samples (n odd) in this signal have zero value. Show that the linearly interpolated odd-numbered samples are given by x_i[n] = (1/2){x[n − 1] + x[n + 1]}.
+
+3.3 SOME USEFUL DISCRETE-TIME SIGNAL MODELS
+We now discuss some important discrete-time signal models that are encountered frequently in the study of discrete-time signals and systems.

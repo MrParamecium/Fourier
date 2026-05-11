@@ -1,0 +1,22 @@
+{
+  "sectionId": "3.1",
+  "sourcePages": [
+    "page-237",
+    "page-238",
+    "page-239",
+    "page-240"
+  ],
+  "usedPages": [
+    "page-237",
+    "page-238",
+    "page-239",
+    "page-240"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "3.1 INTRODUCTION",
+  "foundEnd": true,
+  "endBeforeLine": "3.1-1 Size of a Discrete-Time Signal",
+  "endBeforeCode": "3.1-1",
+  "charCount": 3286
+}

@@ -1,0 +1,376 @@
+# Aquarius section OCR
+section_id: 3.4
+source_pages: page-253, page-254, page-255, page-256, page-257, page-258, page-259, page-260, page-261, page-262, page-263, page-264, page-265
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+3.4   Examples of Discrete-Time Systems                                                    253
+
+Figure 3.12  Sinusoid plot for Ex. 3.5.
+
+3.4 EXAMPLES OF DISCRETE-TIME SYSTEMS
+
+We shall give here four examples of discrete-time systems. In the first two examples, the signals
+are inherently of the discrete-time variety. In the third and fourth examples, a continuous-time
+signal is processed by a discrete-time system, as illustrated in Fig. 3.2, by discretizing the signal
+through sampling.
+
+EXAMPLE 3.6  Savings Account
+
+A person makes a deposit (the input) in a bank regularly at an interval of T (say, 1 month). The
+bank pays a certain interest on the account balance during the period T and mails out a periodic
+statement of the account balance (the output) to the depositor. Find the equation relating the
+output y[n] (the balance) to the input x[n] (the deposit).
+
+In this case, the signals are inherently discrete time. Let
+
+x[n] = deposit made at the nth discrete instant
+y[n] = account balance at the nth instant computed
+       immediately after receipt of the nth deposit x[n]
+r = interest per dollar per period T
+
+The balance y[n] is the sum of (i) the previous balance y[n − 1], (ii) the interest on y[n − 1]
+during the period T, and (iii) the deposit x[n]
+
+y[n] = y[n − 1] + ry[n − 1] + x[n]
+     = (1 + r)y[n − 1] + x[n]
+
+or
+
+y[n] − ay[n − 1] = x[n]      a = 1 + r                                            (3.3)
+
+In this example the deposit x[n] is the input (cause) and the balance y[n] is the output (effect).
+
+[[PAGE page-254]]
+254      CHAPTER 3   TIME-DOMAIN ANALYSIS OF DISCRETE-TIME SYSTEMS
+
+A withdrawal from the account is a negative deposit. Therefore, this formulation can handle deposits as well as withdrawals. It also applies to a loan payment problem with the initial value y[0] = −M, where M is the amount of the loan. A loan is an initial deposit with a negative value. Alternately, we may treat a loan of M dollars taken at n = 0 as an input of −M at n = 0 (see Prob. 3.8-23).
+
+We can express Eq. (3.3) in an alternate form. The choice of index n in Eq. (3.3) is completely arbitrary, so we can substitute n + 1 for n to obtain
+
+y[n + 1] − ay[n] = x[n + 1]                                                (3.4)
+
+We also could have obtained Eq. (3.4) directly by realizing that y[n + 1], the balance at instant (n + 1), is the sum of y[n] plus ry[n] (the interest on y[n]) plus the deposit (input) x[n + 1] at instant (n + 1).
+
+The difference equation in Eq. (3.3) uses delays, whereas the form in Eq. (3.4) uses advances. Thus, Eq. (3.3) is said to be in delay form and Eq. (3.4) is said to be in advance form. The delay form is more natural because operation of delay is causal, hence realizable. In contrast, advance operation, being noncausal, is unrealizable. We use the advance form primarily for its mathematical convenience over the delay form.†
+
+We shall now represent this system in a block diagram form, which is basically a road map to a hardware (or software) realization of the system. For this purpose, the causal (realizable) delay form in Eq. (3.3) will be used. There are three basic operations in this equation: addition, scalar multiplication, and delay. Figure 3.13 shows their schematic representation. In addition, we also have a pickoff node (Fig. 3.13d), which is used to provide multiple copies of a signal at its input.
+
+x[n]        y[n] = x[n] + w[n]
+w[n]
+(a)
+
+x[n]    a    y[n] = ax[n]
+(b)
+
+x[n]    D    y[n] = x[n − 1]
+(c)
+
+x[n]
+x[n]
+x[n]
+(d)
+
+Figure 3.13  Schematic representations of basic operations on sequences.
+
+† Use of the advance form results in discrete-time system equations that are identical in form to those for continuous-time systems. This will become apparent later. In transform analysis, advance form leads to the more convenient variable z instead of the clumsy z−1 that arises from delay form.
+
+[[PAGE page-255]]
+3.4  Examples of Discrete-Time Systems                                                                 255
+
+x[n]
+Σ
+ay[n − 1]
+a
+D
+y[n − 1]
+N
+y[n]
+
+Figure 3.14  Realization of the savings account system.
+
+Figure 3.14 shows in block diagram form a system represented by Eq. (3.3). To understand this realization, it is helpful to rewrite Eq. (3.3) as y[n] = ay[n − 1] + x[n] (a = 1 + r). Now, assume that the output y[n] is available at the pickoff node N. Unit delay of y[n] results in y[n − 1], which is multiplied by a scalar of value a to yield ay[n − 1]. Next, we generate y[n] by adding the input x[n] and ay[n − 1]. Observe that node N is a pickoff node, from which two copies of the output signal flow out: one as the feedback signal and the other as the output signal.
+
+EXAMPLE 3.7  Sales Estimate
+
+During semester n, x[n] students enroll in a course requiring a certain textbook while the publisher sells y[n] new copies of the same book. On the average, one-quarter of students with books in salable condition resell the texts at the end of the semester, and the book life is three semesters. Write the equation relating y[n], the new books sold by the publisher, to x[n], the number of students enrolled in the nth semester, assuming that every student buys a book.
+
+In the nth semester, the total books x[n] sold to students must be equal to y[n] (new books from the publisher) plus the used books from students enrolled in the preceding two semesters (because the book life is only three semesters). There are y[n − 1] new books sold in semester (n − 1), and one-quarter of these books, that is, (1/4)y[n − 1], will be resold in the nth semester. Also, y[n − 2] new books are sold in semester n − 2, and one-quarter of these, that is, (1/4)y[n − 2], will be resold in semester (n − 1). Again, a quarter of these, that is, (1/16)y[n − 2], will be resold in the nth semester. Therefore, x[n] must be equal to the sum of y[n], (1/4)y[n − 1], and (1/16)y[n − 2].
+
+y[n] + ¼y[n − 1] + ⅑y[n − 2] = x[n]                                                   (3.5)
+
+Equation (3.5) can also be expressed in an alternative form by realizing that this equation is valid for any value of n. Therefore, replacing n by n + 2, we obtain
+
+y[n + 2] + ¼y[n + 1] + ⅑y[n] = x[n + 2]                                                 (3.6)
+
+This is the alternative form of Eq. (3.5).
+
+† A unit delay represents 1 unit of time delay. In this example, 1 unit of delay in the output corresponds to period T for the actual output.
+
+[[PAGE page-256]]
+256
+CHAPTER 3  TIME-DOMAIN ANALYSIS OF DISCRETE-TIME SYSTEMS
+
+To facilitate a realization of a system with this input-output equation, we rewrite the delay-form Eq. (3.5) as y[n] = -\frac{1}{4}y[n - 1] - \frac{1}{16}y[n - 2] + x[n]. Figure 3.15 shows a corresponding hardware realization using two unit delays in cascade.†
+
+x[n]
+Σ
+y[n]
+y[n]
+D
+y[n - 1]
+D
+y[n - 2]
+\frac{1}{4}
+\frac{1}{16}
+
+Figure 3.15  Realization of the system representing sales estimate in Ex. 3.7.
+
+EXAMPLE 3.8  Digital Differentiator
+
+Design a discrete-time system, like the one in Fig. 3.2, to differentiate continuous-time signals. This differentiator is used in an audio system having an input signal bandwidth below 20 kHz.
+
+In this case, the output y(t) is required to be the derivative of the input x(t). The discrete-time processor (system) G processes the samples of x(t) to produce the discrete-time output y[n]. Let x[n] and y[n] represent the samples T seconds apart of the signals x(t) and y(t), respectively, that is,
+
+x[n] = x(nT)      and      y[n] = y(nT)                                              (3.7)
+
+The signals x[n] and y[n] are the input and the output for the discrete-time system G. Now, we require that
+
+y(t) = \frac{dx(t)}{dt}
+
+Therefore, at t = nT (see Fig. 3.16a),
+
+y(nT) = \left.\frac{dx(t)}{dt}\right|_{t=nT} = \lim_{T\to 0} \frac{1}{T}[x(nT) - x[(n - 1)T]]
+
+† The comments in the preceding footnote apply here also. Although 1 unit of delay in this example is one semester, we need not use this value in the hardware realization. Any value other than one semester results in a time-scaled output.
+
+[[PAGE page-257]]
+3.4  Examples of Discrete-Time Systems                                                                 257
+
+x(t)
+
+x[nT]
+
+x[(n − 1)T]
+
+(n − 1)T   nT   t
+(a)
+
+G
+
+x(t)   C/D   x[n]   x[n]   Σ   1/T   y[n]   D/C   y(t)
+                    ↓            −
+                    D          x[n − 1]
+(b)
+
+x(t)              x[n]              y[n]              y(t)
+
+tu(t)
+
+0      t         0    5    10   n   0               T      10T   t    T      t
+                 0    5T   10T  t                    n
+(c)               (d)               (e)               (f)
+
+Figure 3.16  Digital differentiator and its realization.
+
+By using the notation in Eq. (3.7), the foregoing equation can be expressed as
+
+y[n] = lim_{T→0} \frac{1}{T}\{x[n] − x[n − 1]\}
+
+This is the input–output relationship for G required to achieve our objective. In practice, the sampling interval T cannot be zero. Assuming T to be sufficiently small, the equation just given can be expressed as
+
+y[n] = \frac{1}{T}\{x[n] − x[n − 1]\}                                                                  (3.8)
+
+The approximation improves as T approaches 0. A discrete-time processor G to realize Eq. (3.8) is shown inside the shaded box in Fig. 3.16b. The system in Fig. 3.16b acts as a differentiator. This example shows how a continuous-time signal can be processed by a
+
+[[PAGE page-258]]
+258  CHAPTER 3  TIME-DOMAIN ANALYSIS OF DISCRETE-TIME SYSTEMS
+
+discrete-time system. The considerations for determining the sampling interval T are discussed
+in Chs. 5 and 8, where it is shown that to process frequencies below 20 kHz, the proper choice is
+
+T \leq \frac{1}{2 \times \text{highest frequency}} = \frac{1}{40{,}000} = 25\ \mu\text{s}
+
+To see how well this method works, let us consider the differentiator in Fig. 3.16b with a
+ramp input x(t) = t, depicted in Fig. 3.16c. If the system were to act as a differentiator, then
+the output y(t) of the system should be the unit step function u(t). Let us investigate how the
+system performs this particular operation and how well the system achieves the objective.
+The samples of the input x(t) = t at the interval of T seconds act as the input to the
+discrete-time system G. These samples, denoted by a compact notation x[n], are, therefore,
+
+x[n] = x(t)|_{t=nT} = t|_{t=nT}      t \geq 0
+     = nT      n \geq 0
+
+Figure 3.16d shows the sampled signal x[n]. This signal acts as an input to the discrete-time
+system G. Figure 3.16b shows that the operation of G consists of subtracting a sample from the
+preceding (delayed) sample and then multiplying the difference with 1/T. From Fig. 3.16d, it
+is clear that the difference between the successive samples is a constant nT - (n - 1)T = T for
+all samples, except for the sample at n = 0 (because there is no preceding sample at n = 0).
+The output of G is 1/T times the difference T, which is unity for all values of n, except n = 0,
+where it is zero. Therefore, the output y[n] of G consists of samples of unit values for n \geq 1, as
+illustrated in Fig. 3.16e. The D/C (discrete-time to continuous-time) converter converts these
+samples into a continuous-time signal y(t), as shown in Fig. 3.16f. Ideally, the output should
+have been y(t) = u(t). This deviation from the ideal is due to our use of a nonzero sampling
+interval T. As T approaches zero, the output y(t) approaches the desired output u(t).
+The digital differentiator in Eq. (3.8) is an example of what is known as the backward
+difference system. The reason for calling it so is obvious from Fig. 3.16a. To compute the
+derivative of y(t), we are using the difference between the present sample value and the
+preceding (backward) sample value. If we use the difference between the next (forward) sample
+at t = (n + 1)T and the present sample at t = nT, we obtain a forward difference form of
+differentiator as
+
+y[n] = \frac{1}{T}\{x[n + 1] - x[n]\}                                                         (3.9)
+
+EXAMPLE 3.9  Digital Integrator
+
+Design a digital integrator along the same lines as the digital differentiator in Ex. 3.8.
+
+For an integrator, the input x(t) and the output y(t) are related by
+
+y(t) = \int_{-\infty}^{t} x(\tau)\, d\tau
+
+[[PAGE page-259]]
+3.4  Examples of Discrete-Time Systems                                                                 259
+
+Therefore, at t = nT (see Fig. 3.16a),
+
+                         y(nT) = lim ∑ x(kT)T
+                                 T→0 k=−∞
+                                        n
+
+Using the usual notation x(kT) = x[k], y(nT) = y[n], and so on, this equation can be expressed
+as
+
+                           y[n] = lim T ∑ x[k]
+                                  T→0 k=−∞
+                                         n
+
+Assuming that T is small enough to justify the assumption T → 0, we have
+
+                                   n
+                         y[n] = T ∑ x[k]                                         (3.10)
+                                 k=−∞
+
+This equation represents an example of accumulator system. This digital integrator equation
+can be expressed in an alternate form. From Eq. (3.10), it follows that
+
+                         y[n] − y[n − 1] = Tx[n]                               (3.11)
+
+This is an alternate description for the digital integrator. Equations (3.10) and (3.11) are
+equivalent; the one can be derived from the other. Observe that the form of Eq. (3.11) is
+similar to that of Eq. (3.3). Hence, the block diagram representation of a digital integrator
+in the form of Eq. (3.11) is identical to that in Fig. 3.14 with a = 1 and the input multiplied
+by T.
+
+RECURSIVE AND NONRECURSIVE FORMS OF
+DIFFERENCE EQUATION
+
+If Eq. (3.11) expresses Eq. (3.10) in another form, what is the difference between these two forms?
+Which form is preferable? To answer these questions, let us examine how the output is computed
+by each of these forms. In Eq. (3.10), the output y[n] at any instant n is computed by adding all
+the past input values till n. This can mean a large number of additions. In contrast, Eq. (3.11) can
+be expressed as y[n] = y[n − 1] + Tx[n]. Hence, computation of y[n] involves addition of only two
+values: the preceding output value y[n − 1] and the present input value x[n]. The computations
+are done recursively by using the preceding output values. For example, if the input starts at
+n = 0, we first compute y[0]. Then we use the computed value y[0] to compute y[1]. Knowing
+y[1], we compute y[2], and so on. The computations are recursive. This is why the form of Eq.
+(3.11) is called recursive form and the form of Eq. (3.10) is called nonrecursive form. Clearly,
+“recursive” and “nonrecursive” describe two different ways of presenting the same information.
+Equations (3.3), (3.5), and (3.11) are examples of recursive form, and Eqs. (3.8) and (3.10) are
+examples of nonrecursive form.
+
+[[PAGE page-260]]
+260    CHAPTER 3    TIME-DOMAIN ANALYSIS OF DISCRETE-TIME SYSTEMS
+
+KINSHIP OF DIFFERENCE EQUATIONS
+TO DIFFERENTIAL EQUATIONS
+We now show that a digitized version of a differential equation results in a difference equation.
+Let us consider a simple first-order differential equation
+
+\[
+\frac{dy(t)}{dt} + cy(t) = x(t)
+\]
+(3.12)
+
+Consider uniform samples of x(t) at intervals of T seconds. As usual, we use the notation x[n] to
+denote x(nT), the nth sample of x(t). Similarly, y[n] denotes y[nT], the nth sample of y(t). From
+the basic definition of a derivative, we can express Eq. (3.12) at t = nT as
+
+\[
+\lim_{T \to 0} \frac{y[n] - y[n - 1]}{T} + cy[n] = x[n]
+\]
+
+Clearing the fractions and rearranging the terms yield (assuming nonzero, but very small T)
+
+\[
+y[n] + \alpha y[n - 1] = \beta x[n]
+\]
+(3.13)
+
+where
+
+\[
+\alpha = \frac{-1}{1 + cT}
+\]
+and
+\[
+\beta = \frac{T}{1 + cT}
+\]
+
+We can also express Eq. (3.13) in advance form as
+
+\[
+y[n + 1] + \alpha y[n] = \beta x[n + 1]
+\]
+
+It is clear that a differential equation can be approximated by a difference equation of the
+same order. In this way, we can approximate an nth-order differential equation by a difference
+equation of nth order. Indeed, a digital computer solves differential equations by using an
+equivalent difference equation, which can be solved by means of simple operations of addition,
+multiplication, and shifting. Recall that a computer can perform only these simple operations. It
+must necessarily approximate complex operation like differentiation and integration in terms of
+such simple operations. The approximation can be made as close to the exact answer as possible
+by choosing sufficiently small value for T.
+
+At this stage, we have not developed tools required to choose a suitable value of the sampling
+interval T. This subject is discussed in Ch. 5 and also in Ch. 8. In Sec. 5.7, we shall discuss a
+systematic procedure (impulse invariance method) for finding a discrete-time system with which
+to realize an Nth-order LTIC system.
+
+ORDER OF A DIFFERENCE EQUATION
+Equations (3.3), (3.5), (3.9), (3.11), and (3.13) are examples of difference equations. The
+highest-order difference of the output signal or the input signal, whichever is higher, represents
+the order of the difference equation. Hence, Eqs. (3.3), (3.9), (3.11), and (3.13) are first-order
+difference equations, whereas Eq. (3.5) is of the second order.
+
+[[PAGE page-261]]
+3.4  Examples of Discrete-Time Systems  261
+
+DRILL 3.8  Digital Integrator Design
+
+Design a digital integrator in Ex. 3.9 using the fact that for an integrator, the output y(t) and the input x(t) are related by dy(t)/dt = x(t). Approximation (similar to that in Ex. 3.8) of this equation at t = nT yields the recursive form in Eq. (3.11).
+
+ANALOG, DIGITAL, CONTINUOUS-TIME,
+and DISCRETE-TIME SYSTEMS
+
+The basic difference between continuous-time systems and analog systems, as also between discrete-time and digital systems, is fully explained in Secs. 1.7-5 and 1.7-6.† Historically, discrete-time systems have been realized with digital computers, where continuous-time signals are processed through digitized samples rather than unquantized samples. Therefore, the terms digital filters and discrete-time systems are used synonymously in the literature. This distinction is irrelevant in the analysis of discrete-time systems. For this reason, we follow this loose convention in this book, where the term digital filter implies a discrete-time system, and analog filter means continuous-time system. Moreover, the terms C/D (continuous-to-discrete-time) and D/C will occasionally be used interchangeably with terms A/D (analog-to-digital) and D/A, respectively.
+
+ADVANTAGES OF DIGITAL SIGNAL PROCESSING
+
+1. Digital systems operation can tolerate considerable variation in signal values, and hence are less sensitive to changes in the component parameter values due to temperature variation, aging, and other factors. This results in greater degree of precision and stability. Since digital systems are binary circuits, their accuracy can be increased by using more complex circuitry to increase word length, subject to cost limitations.
+2. Digital systems do not require any factory adjustment and can be easily duplicated in volume without having to worry about precise component values. They can be fully integrated, and even highly complex systems can be placed on a single chip by using VLSI (very-large-scale integrated) circuits.
+3. Digital filters are more flexible. Their characteristics can be easily altered simply by changing the program. Digital hardware implementation permits the use of microprocessors, miniprocessors, digital switching, and large-scale integrated circuits.
+4. A greater variety of filters can be realized by digital systems.
+5. Digital signals can be stored easily and inexpensively on various media (e.g., magnetic, optical, and solid state) without deterioration of signal quality. It is also possible (and increasingly popular) to search and select information from distant electronic storehouses, such as the cloud.
+6. Digital signals can be coded to yield extremely low error rates and high fidelity, as well as privacy. Also, more sophisticated signal-processing algorithms can be used to process digital signals.
+
+† The terms discrete-time and continuous-time qualify the nature of a signal along the time axis (horizontal axis). The terms analog and digital, in contrast, qualify the nature of the signal amplitude (vertical axis).
+
+[[PAGE page-262]]
+262      CHAPTER 3   TIME-DOMAIN ANALYSIS OF DISCRETE-TIME SYSTEMS
+
+7. Digital filters can be easily time-shared and therefore can serve a number of inputs simultaneously. Moreover, it is easier and more efficient to multiplex several digital signals on the same channel.
+8. Reproduction with digital messages is extremely reliable without deterioration. Analog messages such as photocopies and films, for example, lose quality at each successive stage of reproduction and have to be transported physically from one distant place to another, often at relatively high cost.
+
+One must weigh these advantages against such disadvantages as increased system complexity due to use of A/D and D/A interfaces, limited range of frequencies available in practice (affordable rates are gigahertz or less), and use of more power than is needed for the passive analog circuits. Digital systems use power-consuming active devices.

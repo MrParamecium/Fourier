@@ -1,0 +1,20 @@
+{
+  "sectionId": "b.7-4",
+  "sourcePages": [
+    "page-046",
+    "page-047",
+    "page-048"
+  ],
+  "usedPages": [
+    "page-046",
+    "page-047",
+    "page-048"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "B.7-4 Simple Plotting",
+  "foundEnd": true,
+  "endBeforeLine": "B.7-5 Element-by-Element Operations",
+  "endBeforeCode": "b.7-5",
+  "charCount": 2775
+}

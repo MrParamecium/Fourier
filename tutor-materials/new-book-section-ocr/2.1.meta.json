@@ -1,0 +1,18 @@
+{
+  "sectionId": "2.1",
+  "sourcePages": [
+    "page-150",
+    "page-151"
+  ],
+  "usedPages": [
+    "page-150",
+    "page-151"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "2.1 INTRODUCTION",
+  "foundEnd": true,
+  "endBeforeLine": "2.2 System Response to Internal Conditions: The Zero-Input Response 151",
+  "endBeforeCode": "2.2",
+  "charCount": 1140
+}

@@ -1,0 +1,20 @@
+{
+  "sectionId": "2.6-4",
+  "sourcePages": [
+    "page-207",
+    "page-208",
+    "page-209"
+  ],
+  "usedPages": [
+    "page-207",
+    "page-208",
+    "page-209"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "2.6-4 Time Constant and Filtering",
+  "foundEnd": true,
+  "endBeforeLine": "2.6-5 Time Constant and Pulse Dispersion (Spreading)",
+  "endBeforeCode": "2.6-5",
+  "charCount": 4313
+}

@@ -1,0 +1,589 @@
+# Agent A Preview: 1.5-2 Even and Odd Components of a Signal
+
+- Difficulty: intermediate
+- Estimated read minutes: 6
+
+## Learning Objectives
+
+- Recognize even and odd signal symmetry from the formulas x(-t)=x(t) and x(-t)=-x(t).
+- Use Eq. (1.17) to decompose any signal into even and odd components.
+- Apply the decomposition formula to the causal exponential signal x(t)=e^{-at}u(t).
+- Interpret the textbook sketch of x(t), x_e(t), and x_o(t) as a symmetry check.
+
+## Visualization Need
+
+```json
+{
+  "level": "interactive",
+  "reason": [
+    "depends_on_parameter_change",
+    "formula_to_phenomenon_gap",
+    "student_should_manipulate_to_understand",
+    "pattern_recognition_benefits_from_figure"
+  ],
+  "recommended_assets": [
+    "react_canvas_demo"
+  ]
+}
+```
+
+## Visual Plan
+
+```json
+{
+  "primary_anchor": "both",
+  "rationale": "This section is formula-driven, but students understand it faster when they see time reflection and symmetry. Use LaTeX for the exact decomposition formulas, an interactive React Canvas demo for changing between x(t), x(-t), x_e(t), and x_o(t), and the available textbook Figure 1.24 as the canonical worked-example visual. Do not use GPTImage2 because the textbook already provides the exact exam-facing diagram for the causal exponential example.",
+  "cram": "Use the visuals to recognize mirror symmetry, sign-flip symmetry, and the decomposition pattern quickly.",
+  "standard": "Use the demo plus Figure 1.24 to connect the formula to one representative example.",
+  "top_score": "Use the visual comparison to catch subtle errors: confusing x(-t) with -x(t), or forgetting the factor 1/2.",
+  "main_visual_strategy": "LaTeX-native formulas plus React Canvas manipulation plus textbook Figure 1.24 for the worked example."
+}
+```
+
+## Planned Blocks
+
+### Block 1: `text_explanation`
+- **instruction**: Create Page 1 as a compact outline only. Use exactly these two headings: 'Section Objective' and 'Concepts In This Section'. Under 'Section Objective', write one sentence: 'Learn how any signal can be split into an even component and an odd component.' Under 'Concepts In This Section', list only these concept names as bullets: 'even signal symmetry', 'odd signal symmetry', 'even-odd decomposition formula', 'causal exponential example'. Do not add background paragraphs, motivation, or explanations on this page.
+
+### Block 2: `math_block`
+- **latex**: \text{even: }x(-t)=x(t)\qquad \text{odd: }x(-t)=-x(t)
+- **explanation_instruction**: Start the page with heading '## 1. Symmetry test: even vs odd signals'. Explain in 100–140 words that replacing t by -t is a time reflection. An even signal is unchanged after reflection; an odd signal becomes the negative of itself after reflection. Include one minimal example for each: cos(t) is even and sin(t) is odd. State symbol meanings: x(t) is the original signal, x(-t) is the reflected signal, and -x(t) is the vertically sign-flipped signal. Exam trigger: when a problem asks whether a signal is even or odd, substitute -t and compare. Common misuse: do not confuse x(-t), a horizontal reflection, with -x(t), a vertical sign flip.
+
+### Block 3: `interactive_demo`
+- **teaching_role**: concept_anchor
+- **mode_specific_visual_use**:
+```json
+{
+  "cram": "Use the demo to identify whether a graph stays the same or flips sign after time reflection.",
+  "standard": "Use the demo to connect the symmetry formulas to the visual behavior of a signal.",
+  "top_score": "Use the demo to test borderline cases and catch x(-t) versus -x(t) confusion."
+}
+```
+- **instruction**: Build a React + Canvas demo titled 'Time reflection symmetry test'. Show three synchronized plots on a white background: x(t), x(-t), and -x(t). Include a dropdown with three signals: cos(t), sin(t), and e^{-t}u(t). Add toggles: 'overlay x(t) with x(-t)' and 'overlay x(-t) with -x(t)'. For cos(t), the overlay x(t) with x(-t) should match and display a small label 'even'. For sin(t), x(-t) should match -x(t) and display 'odd'. For e^{-t}u(t), neither test should match and display 'neither before decomposition'. Keep axes labeled t and amplitude. Use navy for x(t), muted teal for x(-t), and muted red for -x(t). Add one short note below the demo: 'Reflection changes t to -t; sign flip changes x to -x.'
+
+### Block 4: `text_explanation`
+- **instruction**: Start a new page with heading '## 2. Every signal has an even part and an odd part'. Write 80–120 words. Explain that even/odd decomposition is not asking whether the original signal is even or odd. Instead, it says any signal can be rebuilt by adding one even component and one odd component. Preview the idea: average x(t) with its reflection to get the even part; subtract the reflection from x(t) to get the odd part. Mention that this is useful in exams because it turns a non-symmetric signal into two symmetry-controlled pieces. Do not include the formula in this text block; the next math block must carry the formula.
+
+### Block 5: `math_block`
+- **latex**: x(t)=\frac{1}{2}\big[x(t)+x(-t)\big]+\frac{1}{2}\big[x(t)-x(-t)\big]\quad\text{(1.17)}
+- **explanation_instruction**: Explain Eq. (1.17) in 120–150 words. Define the first bracket as the even component x_e(t) and the second bracket as the odd component x_o(t). State what each symbol means: x(t) is the original signal, x(-t) is its time-reflected version, x_e(t) is unchanged by reflection, and x_o(t) changes sign under reflection. When to use it: any time the problem asks for even and odd components of a signal. Exam trigger: phrases like 'find the even and odd components' or 'decompose x(t)'. Common misuse: forgetting the factor 1/2, or writing x(t)+x(-t) as the even component without halving it.
+
+### Block 6: `math_block`
+- **latex**: x_e(t)=\frac{1}{2}\big[e^{-at}u(t)+e^{at}u(-t)\big]
+- **explanation_instruction**: Start a new page with heading '## 3. Worked example: causal exponential signal'. Explain in 80–110 words that for x(t)=e^{-at}u(t), the reflected signal is x(-t)=e^{at}u(-t). Briefly remind the student that u(t) turns the signal on for t>0, while u(-t) turns the reflected version on for t<0. Explain that x_e(t) averages the right-side exponential with its left-side reflection, so the result is symmetric about t=0. Common trap: writing e^{-a(-t)} correctly gives e^{at}, not e^{-at}.
+
+### Block 7: `math_block`
+- **latex**: x_o(t)=\frac{1}{2}\big[e^{-at}u(t)-e^{at}u(-t)\big]
+- **explanation_instruction**: Continue the same worked-example page in 70–100 words. Explain that x_o(t) uses the same reflected signal but subtracts it, creating an odd component: positive on the right side and negative on the left side. State that adding x_e(t)+x_o(t) cancels the left-side pieces and restores the original causal signal x(t)=e^{-at}u(t). Exam note: if the odd component is not antisymmetric, check the minus sign in front of the reflected term.
+
+### Block 8: `book_image`
+- **source_page**: page-094
+- **fig_id**: Figure 1.24
+- **teaching_role**: example_support
+- **mode_specific_visual_use**:
+```json
+{
+  "cram": "Use the three plots to memorize the shape pattern of the decomposition.",
+  "standard": "Use the figure to verify the representative worked example visually.",
+  "top_score": "Use the figure to check the sign and symmetry of each component separately."
+}
+```
+- **caption_instruction**: One sentence: Figure 1.24 shows how the causal exponential x(t)=e^{-at}u(t) splits into its even component x_e(t) and odd component x_o(t).
+- **description_instruction**: Describe the three stacked plots: the original signal is zero for t<0 and decays for t>0; the even component mirrors the half-exponential across t=0; the odd component is positive on the right and negative on the left. Tell students to notice that x_e(t) is symmetric, x_o(t) is antisymmetric, and their sum reconstructs x(t).
+
+### Block 9: `section_summary`
+- **instruction**: Create the recap page titled '📌 Key Takeaways'. Include 4 concise bullets. The bullets must explicitly include these formulas: even test x(-t)=x(t), odd test x(-t)=-x(t), Eq. (1.17) x(t)=1/2[x(t)+x(-t)]+1/2[x(t)-x(-t)], and the example component formulas x_e(t)=1/2[e^{-at}u(t)+e^{at}u(-t)] and x_o(t)=1/2[e^{-at}u(t)-e^{at}u(-t)]. Keep each bullet under 25 words if possible. End with one sentence: 'Next, use symmetry to simplify signal calculations instead of doing unnecessary work.'
+
+### Block 10: `quiz_plan`
+- **target_questions**:
+```json
+6
+```
+- **question_range**:
+```json
+{
+  "min": 5,
+  "max": 7
+}
+```
+- **knowledge_points**:
+```json
+[
+  {
+    "id": "even_odd_symmetry_test",
+    "label": "Even and odd symmetry tests",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "kp1_q1",
+        "type": "multiple_choice",
+        "stem": "A signal satisfies x(-t)=x(t). What can you conclude?",
+        "options": [
+          "A. The signal is even.",
+          "B. The signal is odd.",
+          "C. The signal is causal.",
+          "D. The signal is zero for t<0."
+        ],
+        "correct_option": "A",
+        "explanation": "An even signal is unchanged when time is reflected from t to -t.",
+        "wrong_option_explanations": {
+          "B": "Odd symmetry requires x(-t)=-x(t), not x(-t)=x(t).",
+          "C": "Causality is about being zero before t=0, not mirror symmetry.",
+          "D": "Being zero for t<0 describes a causal-style signal, not even symmetry."
+        },
+        "hint": "Ask whether reflection leaves the signal unchanged or flips its sign.",
+        "needs_visual": false,
+        "same_point_variant": true
+      },
+      {
+        "id": "kp1_q2",
+        "type": "multiple_choice",
+        "stem": "Which statement correctly describes an odd signal?",
+        "options": [
+          "A. x(-t)=x(t)",
+          "B. x(-t)=-x(t)",
+          "C. x(t)=0 for all t<0",
+          "D. x(t)+x(-t)=x(t)"
+        ],
+        "correct_option": "B",
+        "explanation": "Odd symmetry means reflecting time produces the negative of the original signal.",
+        "wrong_option_explanations": {
+          "A": "That is the even symmetry condition.",
+          "C": "That describes a one-sided or causal-type signal, not odd symmetry.",
+          "D": "This is not the odd symmetry definition and is generally false."
+        },
+        "hint": "Odd symmetry pairs horizontal reflection with a vertical sign flip.",
+        "needs_visual": false,
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "decomposition_formula",
+    "label": "Even-odd decomposition formula",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "kp2_q1",
+        "type": "multiple_choice",
+        "stem": "Which formula gives the even component of any signal x(t)?",
+        "options": [
+          "A. x_e(t)=x(t)+x(-t)",
+          "B. x_e(t)=1/2[x(t)+x(-t)]",
+          "C. x_e(t)=1/2[x(t)-x(-t)]",
+          "D. x_e(t)=x(t)-x(-t)"
+        ],
+        "correct_option": "B",
+        "explanation": "The even component is the average of the signal and its time reflection.",
+        "wrong_option_explanations": {
+          "A": "This misses the required factor 1/2.",
+          "C": "This is the odd component, not the even component.",
+          "D": "This misses the factor 1/2 and uses the odd-component subtraction pattern."
+        },
+        "hint": "Even part means average with the reflected signal.",
+        "needs_visual": false,
+        "same_point_variant": true
+      },
+      {
+        "id": "kp2_q2",
+        "type": "multiple_choice",
+        "stem": "A student writes x_o(t)=1/2[x(t)+x(-t)]. Why is this wrong?",
+        "options": [
+          "A. The plus sign makes the expression even, not odd.",
+          "B. The factor 1/2 should never appear.",
+          "C. x(-t) is not allowed in decomposition formulas.",
+          "D. Odd components must always be causal."
+        ],
+        "correct_option": "A",
+        "explanation": "Adding x(t) and x(-t) creates the even component. The odd component uses subtraction.",
+        "wrong_option_explanations": {
+          "B": "The factor 1/2 is required in both components.",
+          "C": "x(-t) is essential because decomposition compares the signal with its reflection.",
+          "D": "Odd symmetry is unrelated to causality."
+        },
+        "hint": "Plus creates symmetry; minus creates antisymmetry.",
+        "needs_visual": false,
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "causal_exponential_example",
+    "label": "Causal exponential decomposition",
+    "importance": "medium",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp3_q1",
+        "type": "multiple_choice",
+        "stem": "For x(t)=e^{-at}u(t), what is x(-t)?",
+        "options": [
+          "A. e^{-at}u(-t)",
+          "B. e^{at}u(-t)",
+          "C. -e^{-at}u(t)",
+          "D. e^{at}u(t)"
+        ],
+        "correct_option": "B",
+        "explanation": "Substitute -t for every t: e^{-a(-t)} becomes e^{at}, and u(t) becomes u(-t).",
+        "wrong_option_explanations": {
+          "A": "The unit step is reflected, but the exponential exponent was not updated correctly.",
+          "C": "Time reflection is not the same as multiplying the whole signal by -1.",
+          "D": "The exponential changed correctly, but the unit step was not reflected."
+        },
+        "hint": "Replace every t by -t, not just the u(t).",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  },
+  {
+    "id": "visual_interpretation",
+    "label": "Visual interpretation of x_e(t) and x_o(t)",
+    "importance": "high",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp4_q1",
+        "type": "multiple_choice",
+        "stem": "Observe the decomposition plots for x(t)=e^{-at}u(t). Which visual description matches x_o(t)?",
+        "options": [
+          "A. It is identical on the left and right sides of t=0.",
+          "B. It is positive on the right and negative with matching shape on the left.",
+          "C. It is zero for all t<0.",
+          "D. It is always nonnegative."
+        ],
+        "correct_option": "B",
+        "explanation": "The odd component is antisymmetric: the left side is the negative mirror of the right side.",
+        "wrong_option_explanations": {
+          "A": "That describes even symmetry, which belongs to x_e(t).",
+          "C": "The original causal signal is zero for t<0, but the odd component is generally not.",
+          "D": "The odd component has negative values on one side of the origin."
+        },
+        "hint": "Odd means mirrored shape with opposite sign.",
+        "needs_visual": true,
+        "visual_type": "book_figure_or_demo_observation",
+        "same_point_variant": false
+      },
+      {
+        "id": "kp4_q2",
+        "type": "short_answer",
+        "stem": "In one or two sentences, explain why x_e(t)+x_o(t) reconstructs the original x(t).",
+        "ideal_answer": "The reflected terms cancel when the two components are added: 1/2[x(t)+x(-t)] + 1/2[x(t)-x(-t)] = x(t). The even and odd parts are designed to sum back to the original signal.",
+        "grading_rubric": [
+          "Must mention that the x(-t) terms cancel",
+          "Must include or describe the factor 1/2 correctly",
+          "Must state that the sum equals the original x(t)"
+        ],
+        "explanation": "This checks whether the student understands decomposition algebra instead of just memorizing two formulas.",
+        "hint": "Add the two brackets and watch what happens to +x(-t) and -x(-t).",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  }
+]
+```
+
+## Raw JSON
+
+```json
+{
+  "section_id": "1.5-2",
+  "section_title": "Even and Odd Components of a Signal",
+  "difficulty": "intermediate",
+  "estimated_read_minutes": 6,
+  "learning_objectives": [
+    "Recognize even and odd signal symmetry from the formulas x(-t)=x(t) and x(-t)=-x(t).",
+    "Use Eq. (1.17) to decompose any signal into even and odd components.",
+    "Apply the decomposition formula to the causal exponential signal x(t)=e^{-at}u(t).",
+    "Interpret the textbook sketch of x(t), x_e(t), and x_o(t) as a symmetry check."
+  ],
+  "visualization_need": {
+    "level": "interactive",
+    "reason": [
+      "depends_on_parameter_change",
+      "formula_to_phenomenon_gap",
+      "student_should_manipulate_to_understand",
+      "pattern_recognition_benefits_from_figure"
+    ],
+    "recommended_assets": [
+      "react_canvas_demo"
+    ]
+  },
+  "visual_plan": {
+    "primary_anchor": "both",
+    "rationale": "This section is formula-driven, but students understand it faster when they see time reflection and symmetry. Use LaTeX for the exact decomposition formulas, an interactive React Canvas demo for changing between x(t), x(-t), x_e(t), and x_o(t), and the available textbook Figure 1.24 as the canonical worked-example visual. Do not use GPTImage2 because the textbook already provides the exact exam-facing diagram for the causal exponential example.",
+    "cram": "Use the visuals to recognize mirror symmetry, sign-flip symmetry, and the decomposition pattern quickly.",
+    "standard": "Use the demo plus Figure 1.24 to connect the formula to one representative example.",
+    "top_score": "Use the visual comparison to catch subtle errors: confusing x(-t) with -x(t), or forgetting the factor 1/2.",
+    "main_visual_strategy": "LaTeX-native formulas plus React Canvas manipulation plus textbook Figure 1.24 for the worked example."
+  },
+  "blocks": [
+    {
+      "type": "text_explanation",
+      "instruction": "Create Page 1 as a compact outline only. Use exactly these two headings: 'Section Objective' and 'Concepts In This Section'. Under 'Section Objective', write one sentence: 'Learn how any signal can be split into an even component and an odd component.' Under 'Concepts In This Section', list only these concept names as bullets: 'even signal symmetry', 'odd signal symmetry', 'even-odd decomposition formula', 'causal exponential example'. Do not add background paragraphs, motivation, or explanations on this page."
+    },
+    {
+      "type": "math_block",
+      "latex": "\\text{even: }x(-t)=x(t)\\qquad \\text{odd: }x(-t)=-x(t)",
+      "explanation_instruction": "Start the page with heading '## 1. Symmetry test: even vs odd signals'. Explain in 100–140 words that replacing t by -t is a time reflection. An even signal is unchanged after reflection; an odd signal becomes the negative of itself after reflection. Include one minimal example for each: cos(t) is even and sin(t) is odd. State symbol meanings: x(t) is the original signal, x(-t) is the reflected signal, and -x(t) is the vertically sign-flipped signal. Exam trigger: when a problem asks whether a signal is even or odd, substitute -t and compare. Common misuse: do not confuse x(-t), a horizontal reflection, with -x(t), a vertical sign flip."
+    },
+    {
+      "type": "interactive_demo",
+      "teaching_role": "concept_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Use the demo to identify whether a graph stays the same or flips sign after time reflection.",
+        "standard": "Use the demo to connect the symmetry formulas to the visual behavior of a signal.",
+        "top_score": "Use the demo to test borderline cases and catch x(-t) versus -x(t) confusion."
+      },
+      "instruction": "Build a React + Canvas demo titled 'Time reflection symmetry test'. Show three synchronized plots on a white background: x(t), x(-t), and -x(t). Include a dropdown with three signals: cos(t), sin(t), and e^{-t}u(t). Add toggles: 'overlay x(t) with x(-t)' and 'overlay x(-t) with -x(t)'. For cos(t), the overlay x(t) with x(-t) should match and display a small label 'even'. For sin(t), x(-t) should match -x(t) and display 'odd'. For e^{-t}u(t), neither test should match and display 'neither before decomposition'. Keep axes labeled t and amplitude. Use navy for x(t), muted teal for x(-t), and muted red for -x(t). Add one short note below the demo: 'Reflection changes t to -t; sign flip changes x to -x.'"
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Start a new page with heading '## 2. Every signal has an even part and an odd part'. Write 80–120 words. Explain that even/odd decomposition is not asking whether the original signal is even or odd. Instead, it says any signal can be rebuilt by adding one even component and one odd component. Preview the idea: average x(t) with its reflection to get the even part; subtract the reflection from x(t) to get the odd part. Mention that this is useful in exams because it turns a non-symmetric signal into two symmetry-controlled pieces. Do not include the formula in this text block; the next math block must carry the formula."
+    },
+    {
+      "type": "math_block",
+      "latex": "x(t)=\\frac{1}{2}\\big[x(t)+x(-t)\\big]+\\frac{1}{2}\\big[x(t)-x(-t)\\big]\\quad\\text{(1.17)}",
+      "explanation_instruction": "Explain Eq. (1.17) in 120–150 words. Define the first bracket as the even component x_e(t) and the second bracket as the odd component x_o(t). State what each symbol means: x(t) is the original signal, x(-t) is its time-reflected version, x_e(t) is unchanged by reflection, and x_o(t) changes sign under reflection. When to use it: any time the problem asks for even and odd components of a signal. Exam trigger: phrases like 'find the even and odd components' or 'decompose x(t)'. Common misuse: forgetting the factor 1/2, or writing x(t)+x(-t) as the even component without halving it."
+    },
+    {
+      "type": "math_block",
+      "latex": "x_e(t)=\\frac{1}{2}\\big[e^{-at}u(t)+e^{at}u(-t)\\big]",
+      "explanation_instruction": "Start a new page with heading '## 3. Worked example: causal exponential signal'. Explain in 80–110 words that for x(t)=e^{-at}u(t), the reflected signal is x(-t)=e^{at}u(-t). Briefly remind the student that u(t) turns the signal on for t>0, while u(-t) turns the reflected version on for t<0. Explain that x_e(t) averages the right-side exponential with its left-side reflection, so the result is symmetric about t=0. Common trap: writing e^{-a(-t)} correctly gives e^{at}, not e^{-at}."
+    },
+    {
+      "type": "math_block",
+      "latex": "x_o(t)=\\frac{1}{2}\\big[e^{-at}u(t)-e^{at}u(-t)\\big]",
+      "explanation_instruction": "Continue the same worked-example page in 70–100 words. Explain that x_o(t) uses the same reflected signal but subtracts it, creating an odd component: positive on the right side and negative on the left side. State that adding x_e(t)+x_o(t) cancels the left-side pieces and restores the original causal signal x(t)=e^{-at}u(t). Exam note: if the odd component is not antisymmetric, check the minus sign in front of the reflected term."
+    },
+    {
+      "type": "book_image",
+      "source_page": "page-094",
+      "fig_id": "Figure 1.24",
+      "teaching_role": "example_support",
+      "mode_specific_visual_use": {
+        "cram": "Use the three plots to memorize the shape pattern of the decomposition.",
+        "standard": "Use the figure to verify the representative worked example visually.",
+        "top_score": "Use the figure to check the sign and symmetry of each component separately."
+      },
+      "caption_instruction": "One sentence: Figure 1.24 shows how the causal exponential x(t)=e^{-at}u(t) splits into its even component x_e(t) and odd component x_o(t).",
+      "description_instruction": "Describe the three stacked plots: the original signal is zero for t<0 and decays for t>0; the even component mirrors the half-exponential across t=0; the odd component is positive on the right and negative on the left. Tell students to notice that x_e(t) is symmetric, x_o(t) is antisymmetric, and their sum reconstructs x(t)."
+    },
+    {
+      "type": "section_summary",
+      "instruction": "Create the recap page titled '📌 Key Takeaways'. Include 4 concise bullets. The bullets must explicitly include these formulas: even test x(-t)=x(t), odd test x(-t)=-x(t), Eq. (1.17) x(t)=1/2[x(t)+x(-t)]+1/2[x(t)-x(-t)], and the example component formulas x_e(t)=1/2[e^{-at}u(t)+e^{at}u(-t)] and x_o(t)=1/2[e^{-at}u(t)-e^{at}u(-t)]. Keep each bullet under 25 words if possible. End with one sentence: 'Next, use symmetry to simplify signal calculations instead of doing unnecessary work.'"
+    },
+    {
+      "type": "quiz_plan",
+      "target_questions": 6,
+      "question_range": {
+        "min": 5,
+        "max": 7
+      },
+      "knowledge_points": [
+        {
+          "id": "even_odd_symmetry_test",
+          "label": "Even and odd symmetry tests",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp1_q1",
+              "type": "multiple_choice",
+              "stem": "A signal satisfies x(-t)=x(t). What can you conclude?",
+              "options": [
+                "A. The signal is even.",
+                "B. The signal is odd.",
+                "C. The signal is causal.",
+                "D. The signal is zero for t<0."
+              ],
+              "correct_option": "A",
+              "explanation": "An even signal is unchanged when time is reflected from t to -t.",
+              "wrong_option_explanations": {
+                "B": "Odd symmetry requires x(-t)=-x(t), not x(-t)=x(t).",
+                "C": "Causality is about being zero before t=0, not mirror symmetry.",
+                "D": "Being zero for t<0 describes a causal-style signal, not even symmetry."
+              },
+              "hint": "Ask whether reflection leaves the signal unchanged or flips its sign.",
+              "needs_visual": false,
+              "same_point_variant": true
+            },
+            {
+              "id": "kp1_q2",
+              "type": "multiple_choice",
+              "stem": "Which statement correctly describes an odd signal?",
+              "options": [
+                "A. x(-t)=x(t)",
+                "B. x(-t)=-x(t)",
+                "C. x(t)=0 for all t<0",
+                "D. x(t)+x(-t)=x(t)"
+              ],
+              "correct_option": "B",
+              "explanation": "Odd symmetry means reflecting time produces the negative of the original signal.",
+              "wrong_option_explanations": {
+                "A": "That is the even symmetry condition.",
+                "C": "That describes a one-sided or causal-type signal, not odd symmetry.",
+                "D": "This is not the odd symmetry definition and is generally false."
+              },
+              "hint": "Odd symmetry pairs horizontal reflection with a vertical sign flip.",
+              "needs_visual": false,
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "decomposition_formula",
+          "label": "Even-odd decomposition formula",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp2_q1",
+              "type": "multiple_choice",
+              "stem": "Which formula gives the even component of any signal x(t)?",
+              "options": [
+                "A. x_e(t)=x(t)+x(-t)",
+                "B. x_e(t)=1/2[x(t)+x(-t)]",
+                "C. x_e(t)=1/2[x(t)-x(-t)]",
+                "D. x_e(t)=x(t)-x(-t)"
+              ],
+              "correct_option": "B",
+              "explanation": "The even component is the average of the signal and its time reflection.",
+              "wrong_option_explanations": {
+                "A": "This misses the required factor 1/2.",
+                "C": "This is the odd component, not the even component.",
+                "D": "This misses the factor 1/2 and uses the odd-component subtraction pattern."
+              },
+              "hint": "Even part means average with the reflected signal.",
+              "needs_visual": false,
+              "same_point_variant": true
+            },
+            {
+              "id": "kp2_q2",
+              "type": "multiple_choice",
+              "stem": "A student writes x_o(t)=1/2[x(t)+x(-t)]. Why is this wrong?",
+              "options": [
+                "A. The plus sign makes the expression even, not odd.",
+                "B. The factor 1/2 should never appear.",
+                "C. x(-t) is not allowed in decomposition formulas.",
+                "D. Odd components must always be causal."
+              ],
+              "correct_option": "A",
+              "explanation": "Adding x(t) and x(-t) creates the even component. The odd component uses subtraction.",
+              "wrong_option_explanations": {
+                "B": "The factor 1/2 is required in both components.",
+                "C": "x(-t) is essential because decomposition compares the signal with its reflection.",
+                "D": "Odd symmetry is unrelated to causality."
+              },
+              "hint": "Plus creates symmetry; minus creates antisymmetry.",
+              "needs_visual": false,
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "causal_exponential_example",
+          "label": "Causal exponential decomposition",
+          "importance": "medium",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp3_q1",
+              "type": "multiple_choice",
+              "stem": "For x(t)=e^{-at}u(t), what is x(-t)?",
+              "options": [
+                "A. e^{-at}u(-t)",
+                "B. e^{at}u(-t)",
+                "C. -e^{-at}u(t)",
+                "D. e^{at}u(t)"
+              ],
+              "correct_option": "B",
+              "explanation": "Substitute -t for every t: e^{-a(-t)} becomes e^{at}, and u(t) becomes u(-t).",
+              "wrong_option_explanations": {
+                "A": "The unit step is reflected, but the exponential exponent was not updated correctly.",
+                "C": "Time reflection is not the same as multiplying the whole signal by -1.",
+                "D": "The exponential changed correctly, but the unit step was not reflected."
+              },
+              "hint": "Replace every t by -t, not just the u(t).",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "visual_interpretation",
+          "label": "Visual interpretation of x_e(t) and x_o(t)",
+          "importance": "high",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp4_q1",
+              "type": "multiple_choice",
+              "stem": "Observe the decomposition plots for x(t)=e^{-at}u(t). Which visual description matches x_o(t)?",
+              "options": [
+                "A. It is identical on the left and right sides of t=0.",
+                "B. It is positive on the right and negative with matching shape on the left.",
+                "C. It is zero for all t<0.",
+                "D. It is always nonnegative."
+              ],
+              "correct_option": "B",
+              "explanation": "The odd component is antisymmetric: the left side is the negative mirror of the right side.",
+              "wrong_option_explanations": {
+                "A": "That describes even symmetry, which belongs to x_e(t).",
+                "C": "The original causal signal is zero for t<0, but the odd component is generally not.",
+                "D": "The odd component has negative values on one side of the origin."
+              },
+              "hint": "Odd means mirrored shape with opposite sign.",
+              "needs_visual": true,
+              "visual_type": "book_figure_or_demo_observation",
+              "same_point_variant": false
+            },
+            {
+              "id": "kp4_q2",
+              "type": "short_answer",
+              "stem": "In one or two sentences, explain why x_e(t)+x_o(t) reconstructs the original x(t).",
+              "ideal_answer": "The reflected terms cancel when the two components are added: 1/2[x(t)+x(-t)] + 1/2[x(t)-x(-t)] = x(t). The even and odd parts are designed to sum back to the original signal.",
+              "grading_rubric": [
+                "Must mention that the x(-t) terms cancel",
+                "Must include or describe the factor 1/2 correctly",
+                "Must state that the sum equals the original x(t)"
+              ],
+              "explanation": "This checks whether the student understands decomposition algebra instead of just memorizing two formulas.",
+              "hint": "Add the two brackets and watch what happens to +x(-t) and -x(-t).",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```

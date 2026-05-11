@@ -1,0 +1,18 @@
+# Aquarius section OCR
+section_id: 3.13
+source_pages: page-313
+cut_start_found: yes
+cut_end_found: no
+
+--- OCR ---
+3.13 SUMMARY
+This chapter discusses time-domain analysis of LTID (linear, time-invariant, discrete-time) systems. The analysis is parallel to that of LTIC systems, with some minor differences. Discrete-time systems are described by difference equations. For an Nth-order system, N auxiliary conditions must be specified for a unique solution. Characteristic modes are discrete-time exponentials of the form γ^n corresponding to an unrepeated root γ, and the modes are of the form n^iγ^n corresponding to a repeated root γ.
+
+The unit impulse function δ[n] is a sequence of a single number of unit value at n = 0. The unit impulse response h[n] of a discrete-time system is a linear combination of its characteristic modes.‡
+
+The zero-state response (response due to external input) of a linear system is obtained by breaking the input into impulse components and then adding the system responses to all the impulse components. The sum of the system responses to the impulse components is in the form of a sum, known as the convolution sum, whose structure and properties are similar to the convolution integral. The system response is obtained as the convolution sum of the input x[n] with the system’s impulse response h[n]. Therefore, the knowledge of the system’s impulse response allows us to determine the system response to any arbitrary input.
+
+LTID systems have a very special relationship to the everlasting exponential signal z^n because the response of an LTID system to such an input signal is the same signal within a multiplicative
+
+† Q̂[γ] is now an (N − 1)-order polynomial. Hence there are only N − 1 unknowns in y_c[n].
+‡ There is a possibility of an impulse δ[n] in addition to characteristic modes.

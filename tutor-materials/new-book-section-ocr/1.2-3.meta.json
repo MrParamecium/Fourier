@@ -1,0 +1,18 @@
+{
+  "sectionId": "1.2-3",
+  "sourcePages": [
+    "page-076",
+    "page-077"
+  ],
+  "usedPages": [
+    "page-076",
+    "page-077"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "1.2-3 Time Reversal",
+  "foundEnd": true,
+  "endBeforeLine": "1.2-4 Combined Operations",
+  "endBeforeCode": "1.2-4",
+  "charCount": 2690
+}

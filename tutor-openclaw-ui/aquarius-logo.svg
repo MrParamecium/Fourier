@@ -1,14 +1,27 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="Aquarius">
-  <rect x="26" y="26" width="116" height="116" rx="28" fill="#1E293B"/>
-  <g transform="rotate(-5 80 80)">
-    <rect x="20" y="20" width="116" height="116" rx="28" fill="#FDFBF7" stroke="#1E293B" stroke-width="6"/>
-    <rect x="42" y="58" width="76" height="28" rx="14" fill="#FDE047" opacity="0.8" transform="rotate(-3 80 72)"/>
-    <path d="M40 60 Q52 42 64 60 T88 60 T112 60" fill="none" stroke="#1E293B" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M40 90 Q52 72 64 90 T88 90 T112 90" fill="none" stroke="#0EA5E9" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M112 28 Q116 38 126 38 Q116 38 112 48 Q112 38 102 38 Q112 38 112 28 Z" fill="#F9A8D4" stroke="#1E293B" stroke-width="4" stroke-linejoin="round"/>
-  </g>
-  <g transform="rotate(-18 35 25)">
-    <rect x="0" y="0" width="60" height="22" fill="#7DD3FC" opacity="0.9"/>
-    <path d="M0 0 L60 0 M0 22 L60 22" stroke="#1E293B" stroke-width="2" stroke-dasharray="4 4" opacity="0.5"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-12 -12 184 184" role="img" aria-label="Aquarius">
+  <path d="M46 31H111C124.8 31 136 42.2 136 56V86C136 99.8 124.8 111 111 111H46C32.2 111 21 99.8 21 86V56C21 42.2 32.2 31 46 31Z" fill="#1E293B" stroke="#1E293B" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M40 25H105C118.8 25 130 36.2 130 50V80C130 93.8 118.8 105 105 105H75L45 135L55 105H40C26.2 105 15 93.8 15 80V50C15 36.2 26.2 25 40 25Z" fill="#FDFBF7" stroke="#1E293B" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M30 65Q75 55 115 65" stroke="#FEF08A" stroke-width="22" stroke-linecap="round" fill="none" opacity=".8"/>
+  <path d="M35 55C48 35 62 75 75 55C88 35 102 75 115 55" fill="none" stroke="#38BDF8" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M35 75C48 55 62 95 75 75C88 55 102 95 115 75" fill="none" stroke="#1E293B" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M128 6Q128 22 144 22Q128 22 128 38Q128 22 112 22Q128 22 128 6Z" fill="#FDE047" stroke="#1E293B" stroke-width="5" stroke-linejoin="round"/>
+  <circle cx="144" cy="10" r="2.5" fill="#1E293B"/>
+  <g transform="translate(18 16) rotate(-42)">
+    <g transform="translate(4 9)">
+      <path d="M0-10L-26-2L-26 30L0 22Z" fill="#1E293B" stroke="#1E293B" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M0-10L26-2L26 30L0 22Z" fill="#1E293B" stroke="#1E293B" stroke-width="4" stroke-linejoin="round"/>
+    </g>
+    <path d="M-14-1L-26-12L-18-16L-8-4Z" fill="#E11D48" stroke="#1E293B" stroke-width="3" stroke-linejoin="round"/>
+    <g transform="translate(0 7)">
+      <path d="M0-10L-26-2L-26 30L0 22Z" fill="#FDFBF7" stroke="#1E293B" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M0-10L26-2L26 30L0 22Z" fill="#FDFBF7" stroke="#1E293B" stroke-width="4" stroke-linejoin="round"/>
+      <line x1="0" y1="-10" x2="0" y2="22" stroke="#1E293B" stroke-width="2.5" stroke-linecap="round" opacity=".4"/>
+    </g>
+    <path d="M0-10L-26-2L-26 30L0 22Z" fill="#3B82F6" stroke="#1E293B" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M0-10L26-2L26 30L0 22Z" fill="#3B82F6" stroke="#1E293B" stroke-width="4" stroke-linejoin="round"/>
+    <line x1="0" y1="-10" x2="0" y2="22" stroke="#1E293B" stroke-width="4" stroke-linecap="round"/>
+    <line x1="-18" y1="5" x2="-6" y2="1" stroke="#1E293B" stroke-width="2.5" stroke-linecap="round" opacity=".6"/>
+    <line x1="-18" y1="11" x2="-10" y2="8" stroke="#1E293B" stroke-width="2.5" stroke-linecap="round" opacity=".6"/>
+    <line x1="18" y1="5" x2="6" y2="1" stroke="#1E293B" stroke-width="2.5" stroke-linecap="round" opacity=".6"/>
   </g>
 </svg>

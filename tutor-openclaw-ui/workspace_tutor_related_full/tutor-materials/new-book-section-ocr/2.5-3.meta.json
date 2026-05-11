@@ -1,0 +1,22 @@
+{
+  "sectionId": "2.5-3",
+  "sourcePages": [
+    "page-199",
+    "page-200",
+    "page-201",
+    "page-202"
+  ],
+  "usedPages": [
+    "page-199",
+    "page-200",
+    "page-201",
+    "page-202"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "2.5-3 Relationship Between BIBO and Asymptotic Stability",
+  "foundEnd": false,
+  "endBeforeLine": "",
+  "endBeforeCode": "",
+  "charCount": 6164
+}

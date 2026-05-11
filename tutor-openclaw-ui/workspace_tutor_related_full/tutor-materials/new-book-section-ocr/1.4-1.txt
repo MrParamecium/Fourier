@@ -1,0 +1,181 @@
+# Aquarius section OCR
+section_id: 1.4-1
+source_pages: page-083, page-084, page-085, page-086
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+1.4-1 The Unit Step Function u(t)
+In much of our discussion, the signals begin at t = 0 (causal signals). Such signals can be
+conveniently described in terms of unit step function u(t) shown in Fig. 1.14a. This function is
+defined by
+                                            
+                                               1     t≥0
+                                    u(t) =                                                 (1.8)
+                                               0     t<0
+     If we want a signal to start at t = 0 (so that it has a value of zero for t < 0), we need only
+multiply the signal by u(t). For instance, the signal e−at represents an everlasting exponential that
+starts at t = −∞. The causal form of this exponential (Fig. 1.14b) can be described as e−at u(t).
+     The unit step function also proves very useful in specifying a function with different
+mathematical descriptions over different intervals. Examples of such functions appear in Fig. 1.7.
+These functions have different mathematical descriptions over different segments of time, as
+seen from Eqs. (1.5) and (1.6). Such a description often proves clumsy and inconvenient in
+mathematical treatment. We can use the unit step function to describe such functions by a single
+expression that is valid for all t.
+     Consider, for example, the rectangular pulse depicted in Fig. 1.15a. We can express such a
+pulse in terms of familiar step functions by observing that the pulse x(t) can be expressed as the
+sum of the two delayed unit step functions, as shown in Fig. 1.15b. The unit step function u(t)
+delayed by T seconds is u(t − T). From Fig. 1.15b, it is clear that
+
+                                         x(t) = u(t − 2) − u(t − 4)
+
+
+
+             1            u(t)                             1
+
+                                                                eatu(t)
+
+
+
+
+             0                       t                     0                         t
+
+                        (a)                                          (b)
+
+      Figure 1.14 (a) Unit step function u(t). (b) Exponential e−at u(t).
+
+
+
+         1                                            1
+
+
+                                                                                 4
+         0          2            4       t             0               2                 t
+
+
+                                                    1
+
+                          (a)                                              (b)
+      Figure 1.15 Representation of a rectangular pulse by step functions.
+
+[[PAGE page-084]]
+84       CHAPTER 1       SIGNALS AND SYSTEMS
+
+
+     E X A M P L E 1.6 Describing a Triangle Function with the Unit Step
+
+         Use the unit step function to describe the signal in Fig. 1.16a.
+
+
+
+                                          2
+                               x(t)
+
+
+                                      0           2       3           t
+
+                                                (a)
+
+                                                              x1(t)
+                          t
+             2                                        2
+             1
+
+
+                 0         2                              0               2       t
+
+                                                (b)
+
+                                                              x2(t)
+             2                2(t  3)               2
+             1
+
+                 0         2          3                   0               2   3   t
+
+                                                (c)
+         Figure 1.16 Representation of a signal defined interval by interval.
+
+
+
+
+         The signal illustrated in Fig. 1.16a can be conveniently handled by breaking it up into the two
+         components x1 (t) and x2 (t), depicted in Figs. 1.16b and 1.16c, respectively. Here, x1 (t) can be
+         obtained by multiplying the ramp t by the gate pulse u(t) − u(t − 2), as shown in Fig. 1.16b.
+         Therefore,
+                                             x1 (t) = t[u(t) − u(t − 2)]
+         The signal x2 (t) can be obtained by multiplying another ramp by the gate pulse illustrated in
+         Fig. 1.16c. This ramp has a slope −2; hence it can be described by −2t + c. Now, because the
+         ramp has a zero value at t = 3, the constant c = 6, and the ramp can be described by −2(t − 3).
+         Also, the gate pulse in Fig. 1.16c is u(t − 2) − u(t − 3). Therefore,
+
+                                              x2 (t) = −2(t − 3)[u(t − 2) − u(t − 3)]
+
+[[PAGE page-085]]
+1.4    Some Useful Signal Models   85
+
+    and
+
+                        x(t) = x1 (t) + x2 (t)
+                             = t [u(t) − u(t − 2)] − 2(t − 3) [u(t − 2) − u(t − 3)]
+                             = tu(t) − 3(t − 2)u(t − 2) + 2(t − 3)u(t − 3)
+
+
+
+
+E X A M P L E 1.7 Describing a Piecewise Function with the Unit Step
+
+    Describe the signal in Fig. 1.7a by a single expression valid for all t.
+
+
+    Over the interval from −1.5 to 0, the signal can be described by a constant 2, and over the
+    interval from 0 to 3, it can be described by 2 e−t/2 . Therefore,
+
+                         x(t) = 2[u(t + 1.5) − u(t)] + 2e−t/2 [u(t) − u(t − 3)]
+                                                                       
+                                       constant part                  exponential part
+                                                           −t/2
+                              = 2u(t + 1.5) − 2(1 − e             )u(t) − 2e−t/2 u(t − 3)
+
+    Compare this expression with the expression for the same function found in Eq. (1.6).
+
+
+
+
+     D R I L L 1.7 Using Reﬂected Unit Step Functions
+     Show that the signals depicted in Figs. 1.17a and 1.17b can be described as u(−t) and e−at u(−t),
+     respectively.
+
+
+
+
+                                          u(t)                                 eat u(t)
+                                                       1
+
+
+                                                                                                   1
+
+
+                              t                    0                 t                         0
+                              (a)                                                        (b)
+           Figure 1.17 Signals for Drill 1.7.
+
+[[PAGE page-086]]
+86   CHAPTER 1         SIGNALS AND SYSTEMS
+
+
+
+      D R I L L 1.8 Describing a Piecewise Function with the Unit Step
+      Show that the signal shown in Fig. 1.18 can be described as
+
+                                  x(t) = (t − 1)u(t − 1) − (t − 2)u(t − 2) − u(t − 4)
+
+
+
+          x(t)
+
+            1
+
+
+
+                     1    2             4      t
+                                                                  Figure 1.18 Signal for Drill 1.8.

@@ -1,0 +1,34 @@
+{
+  "sectionId": "2.6",
+  "sourcePages": [
+    "page-203",
+    "page-204",
+    "page-205",
+    "page-206",
+    "page-207",
+    "page-208",
+    "page-209",
+    "page-210",
+    "page-211",
+    "page-212"
+  ],
+  "usedPages": [
+    "page-203",
+    "page-204",
+    "page-205",
+    "page-206",
+    "page-207",
+    "page-208",
+    "page-209",
+    "page-210",
+    "page-211",
+    "page-212"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "2.6 Intuitive Insights into System Behavior 203",
+  "foundEnd": true,
+  "endBeforeLine": "2.6-1 Dependence of System Behavior on Characteristic Modes",
+  "endBeforeCode": "2.6-1",
+  "charCount": 2040
+}

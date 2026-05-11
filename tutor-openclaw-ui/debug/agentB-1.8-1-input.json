@@ -1,0 +1,398 @@
+{
+  "blueprint": {
+    "section_id": "1.8-1",
+    "section_title": "System Model: Input-Output Description",
+    "difficulty": "intermediate",
+    "estimated_read_minutes": 7,
+    "learning_objectives": [
+      "Explain what an input-output description is for a continuous-time system.",
+      "Use circuit laws and element laws to derive an equation relating input and output.",
+      "Interpret differential operator notation such as D and polynomial expressions in D.",
+      "Derive representative input-output equations for simple RLC and RC circuits."
+    ],
+    "visualization_need": {
+      "level": "static",
+      "reason": [
+        "classification_benefits_from_figure",
+        "pattern_recognition_benefits_from_figure",
+        "misconception_needs_visual_correction"
+      ],
+      "recommended_assets": [
+        "provided_textbook_figure",
+        "latex_native_visual"
+      ]
+    },
+    "visual_plan": {
+      "primary_anchor": "both",
+      "rationale": "This section is built around circuit-to-equation translation. The strongest visuals are the provided textbook circuit diagrams on page-111 and page-113 because they show the exact exam-facing topology, component values, input, and chosen output. The formulas should be rendered as clean LaTeX-native visuals because the key learning task is recognizing how physical laws become differential equations. Do not use generated images because ready-made textbook circuit figures are available.",
+      "cram": "Use the circuit diagrams to identify input, output, series current, and which law triggers the equation.",
+      "standard": "Use each circuit diagram next to one representative derivation so students connect topology to formula.",
+      "top_score": "Use visuals to distinguish output current from capacitor voltage and prevent operator-notation mistakes."
+    },
+    "blocks": [
+      {
+        "type": "text_explanation",
+        "instruction": "Render Page 1 as a minimal overview only. Use exactly two short sections. First heading: 'Section Objective'. Under it, write one sentence: 'Learn how to turn a continuous-time electrical system into an input-output equation.' Second heading: 'Concepts In This Section'. Under it, list concept names only as bullets: input-output description; system model; Kirchhoff voltage law; element voltage-current laws; differential operator D; RLC circuit equation; RC circuit equation. Do not add background paragraphs, examples, or expanded explanations on this page."
+      },
+      {
+        "type": "web_search_image",
+        "search_query": "series RLC circuit diagram voltage source inductor resistor capacitor series Wikimedia Commons",
+        "purpose": "Show the exact kind of circuit topology used to derive the RLC input-output equation: a voltage source driving a series inductor, resistor, and capacitor with one loop current.",
+        "preferred_sources": [
+          "provided_textbook_figure_page-111",
+          "wikimedia_commons",
+          "wikipedia"
+        ],
+        "prefer_animated": false,
+        "fallback": "Use the provided cropped textbook figure from page-111 if available; do not generate a replacement image.",
+        "teaching_role": "concept_anchor",
+        "mode_specific_visual_use": {
+          "cram": "Point to the source x(t), loop current y(t), and the three voltage drops before writing KVL.",
+          "standard": "Use the diagram as the map for translating each element into one term of the equation.",
+          "top_score": "Emphasize that changing the measured output changes the final input-output equation."
+        }
+      },
+      {
+        "type": "book_image",
+        "source_page": "page-111",
+        "fig_id": "unknown",
+        "crop_hint": "full",
+        "caption": "A series RLC circuit with inductance L = 1 H, resistance R = 3 Ω, and capacitance C = 1/2 F driven by voltage source x(t), with output defined as the capacitor voltage v_C(t).",
+        "description": "The figure is a circuit diagram, not a graph, so there are no axes. It shows a series RLC loop driven by an input voltage source labeled x(t), with an inductor labeled L = 1 H, a resistor labeled R = 3 Ω, and a capacitor labeled C = 1/2 F connected in series. A loop current y(t) is indicated by a circular arrow, and the output is the capacitor voltage v_C(t) measured across the capacitor with marked positive and negative terminals. Students should notice that the source drives all three series elements, while the measured output is specifically the voltage across the capacitor.",
+        "caption_instruction": "Add a one-sentence caption explaining what this textbook figure shows and why it matters for the core concept of this section.",
+        "description_instruction": "Use the stored figure description to describe axes, objects, relationships, and what students should notice.",
+        "teaching_role": "concept_anchor",
+        "mode_specific_visual_use": {
+          "cram": "Use this visual for fast recognition of the key pattern.",
+          "standard": "Use this visual to clarify the main concept.",
+          "top_score": "Use this visual to surface a subtle distinction, trap, or variant."
+        }
+      },
+      {
+        "type": "math_block",
+        "latex": "v_L(t)+v_R(t)+v_C(t)=x(t)",
+        "explanation_instruction": "Start this page with the heading '## 1. Start from the loop law'. Explain in 80-120 words that this is Kirchhoff's voltage law for the series RLC circuit: the source voltage equals the sum of voltage drops across the inductor, resistor, and capacitor. Define x(t) as the input voltage and v_L(t), v_R(t), v_C(t) as element voltages. State when to use it: when a single-loop circuit asks for an input-output equation. Add a minimal example sentence: 'For this circuit, the output is the loop current y(t), so each voltage drop must be rewritten using y(t).' Exam trigger: 'series circuit + source voltage + output current'. Common misuse: writing component laws before deciding the sign convention and loop direction."
+      },
+      {
+        "type": "math_block",
+        "latex": "\\frac{dy(t)}{dt}+3y(t)+2\\int_{-\\infty}^{t}y(\\tau)\\,d\\tau=x(t)\\quad (1.27)",
+        "explanation_instruction": "Start this page with the heading '## 2. Replace each circuit element by its voltage-current law'. Explain in 100-140 words how the RLC circuit becomes Eq. (1.27). State that L=1 H gives inductor voltage dy(t)/dt, R=3 Ω gives resistor voltage 3y(t), and C=1/2 F gives capacitor voltage 2 times the accumulated current integral. Define τ as a dummy integration variable. When to use: after KVL when the output is current. Exam trigger: an RLC series circuit asking for an equation in loop current. Common misuse: forgetting that capacitor voltage depends on the integral of current, not directly on current. Include one quick check: ask students to identify which term came from the capacitor, then immediately answer: the integral term."
+      },
+      {
+        "type": "math_block",
+        "latex": "(D^2+3D+2)y(t)=Dx(t)",
+        "explanation_instruction": "Start this page with the heading '## 3. Use D notation as differential-operator shorthand'. Explain in 110-150 words that D means 'differentiate with respect to t', so Dy(t) is dy(t)/dt and D^2y(t) is the second derivative. Explain that multiplying Eq. (1.27) by D differentiates both sides and removes the integral, giving the operator equation. Clearly state that D^2+3D+2 is not an ordinary algebraic multiplier; it is an instruction: take the second derivative of y(t), add 3 times the first derivative, then add 2y(t). When to use: to write linear differential equations compactly. Exam trigger: equations containing derivatives and integrals that can be cleaned with D. Common misuse: canceling D like a number without thinking about differentiation."
+      },
+      {
+        "type": "web_search_image",
+        "search_query": "RC series circuit voltage source resistor capacitor diagram Wikimedia Commons",
+        "purpose": "Show a simple RC series circuit where the same current flows through the resistor and capacitor, but the output may be either current or capacitor voltage.",
+        "preferred_sources": [
+          "provided_textbook_figure_page-113",
+          "wikimedia_commons",
+          "wikipedia"
+        ],
+        "prefer_animated": false,
+        "fallback": "Use the provided cropped textbook figure from page-113 if available; do not generate a replacement image.",
+        "teaching_role": "example_support",
+        "mode_specific_visual_use": {
+          "cram": "Use the diagram to quickly identify R=15 Ω, C=1/5 F, input x(t), current i(t), and output y(t).",
+          "standard": "Use the diagram beside the derivation so students see why the same current enters both element laws.",
+          "top_score": "Use it to contrast the two possible outputs: loop current i(t) versus capacitor voltage y(t)."
+        }
+      },
+      {
+        "type": "math_block",
+        "latex": "(15D+5)i(t)=Dx(t)\\quad (1.30)",
+        "explanation_instruction": "Start this page with the heading '## 4. RC example: output is loop current'. Explain in 90-130 words that for the RC circuit, KVL first gives resistor voltage plus capacitor voltage equals x(t). With R=15 Ω, the resistor term is 15i(t). With C=1/5 F, capacitor voltage is 5 times the integral of i(t). Multiplying by D differentiates the whole equation and gives Eq. (1.30). Define i(t) as loop current and Dx(t) as dx(t)/dt. When to use: when the output requested is current. Exam trigger: 'find equation relating input voltage to loop current'. Common misuse: leaving an integral form when the question expects operator notation."
+      },
+      {
+        "type": "math_block",
+        "latex": "(3D+1)y(t)=x(t)\\quad (1.31)",
+        "explanation_instruction": "Continue the RC example on a separate focused page with the heading '## 5. RC example: output is capacitor voltage'. Explain in 90-130 words that if the output is capacitor voltage y(t), use the capacitor current law i(t)=C\\,dy(t)/dt=(1/5)Dy(t). Substituting this into the same RC loop equation gives Eq. (1.31). Define y(t) as capacitor voltage, D as differentiation, and x(t) as input voltage. When to use: when the measured output is capacitor voltage, not current. Exam trigger: 'capacitor voltage as output'. Common misuse: reusing the current-output equation without converting i(t) into Dy(t). Add one representative check: if y(t) is constant, Dy(t)=0, so the equation reduces to y(t)=x(t)."
+      },
+      {
+        "type": "section_summary",
+        "instruction": "Create the recap page titled '📌 Key Takeaways'. Use 4-6 concise bullets. Include these core formulas explicitly, each as its own readable display or inline formula: KVL: v_L(t)+v_R(t)+v_C(t)=x(t); RLC current equation: \\(\\frac{dy(t)}{dt}+3y(t)+2\\int_{-\\infty}^{t}y(\\tau)d\\tau=x(t)\\) from (1.27); operator form: \\((D^2+3D+2)y(t)=Dx(t)\\); RC current-output equation: \\((15D+5)i(t)=Dx(t)\\); RC capacitor-voltage equation: \\((3D+1)y(t)=x(t)\\). End with one bridge sentence: 'Next, these input-output equations become the starting point for analyzing system behavior.'"
+      },
+      {
+        "type": "quiz_plan",
+        "target_questions": 6,
+        "question_range": {
+          "min": 5,
+          "max": 7
+        },
+        "knowledge_points": [
+          {
+            "id": "input_output_description",
+            "label": "Meaning of input-output description",
+            "importance": "high",
+            "exam_weight": "medium",
+            "mastery_rule": {
+              "correct_streak_required": 1
+            },
+            "questions": [
+              {
+                "id": "io_q1",
+                "type": "multiple_choice",
+                "stem": "What is the main goal of an input-output description of a system?",
+                "options": [
+                  "A. To list every internal physical variable in the system",
+                  "B. To relate the measured output variable directly to the input variable",
+                  "C. To draw a detailed physical diagram without equations",
+                  "D. To replace Kirchhoff's laws with experimental guessing"
+                ],
+                "correct_option": "B",
+                "explanation": "An input-output description keeps the focus on the relationship between the externally applied input and the measured output.",
+                "wrong_option_explanations": {
+                  "A": "Internal variables may appear temporarily, but the final goal is to eliminate unwanted variables.",
+                  "C": "A diagram helps, but the model is the mathematical relationship.",
+                  "D": "Circuit laws are the tools used to derive the model."
+                },
+                "hint": "Ask what variables remain in the final equation.",
+                "needs_visual": false,
+                "same_point_variant": false
+              }
+            ]
+          },
+          {
+            "id": "rlc_kvl_translation",
+            "label": "RLC circuit law translation",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 1
+            },
+            "questions": [
+              {
+                "id": "rlc_q1",
+                "type": "multiple_choice",
+                "stem": "For the series RLC circuit with input voltage x(t) and loop current y(t), which term in Eq. (1.27) comes from the capacitor?",
+                "options": [
+                  "A. \\(\\frac{dy(t)}{dt}\\)",
+                  "B. \\(3y(t)\\)",
+                  "C. \\(2\\int_{-\\infty}^{t}y(\\tau)d\\tau\\)",
+                  "D. \\(x(t)\\)"
+                ],
+                "correct_option": "C",
+                "explanation": "Capacitor voltage is proportional to accumulated charge, so when current is the output, the capacitor voltage appears as an integral of current.",
+                "wrong_option_explanations": {
+                  "A": "That is the inductor voltage because inductor voltage is proportional to derivative of current.",
+                  "B": "That is the resistor voltage from Ohm's law.",
+                  "D": "That is the input source voltage, not a component voltage drop."
+                },
+                "hint": "Capacitors store charge, so look for accumulation over time.",
+                "needs_visual": true,
+                "visual_type": "provided_textbook_circuit_figure_page-111",
+                "same_point_variant": false
+              }
+            ]
+          },
+          {
+            "id": "d_operator_meaning",
+            "label": "Differential operator D",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 2
+            },
+            "questions": [
+              {
+                "id": "dop_q1",
+                "type": "multiple_choice",
+                "stem": "What does \\((D^2+3D+2)y(t)\\) mean?",
+                "options": [
+                  "A. Multiply y(t) by the number \\(D^2+3D+2\\)",
+                  "B. Take \\(y''(t)+3y'(t)+2y(t)\\)",
+                  "C. Take \\(y(t)^2+3y(t)+2\\)",
+                  "D. Differentiate x(t) twice"
+                ],
+                "correct_option": "B",
+                "explanation": "D is an operator: D means differentiate once, and D^2 means differentiate twice.",
+                "wrong_option_explanations": {
+                  "A": "D is not an ordinary number in this context.",
+                  "C": "The powers are on the operator D, not on y(t).",
+                  "D": "The expression operates on y(t), not x(t)."
+                },
+                "hint": "Read D as 'differentiate'.",
+                "needs_visual": false,
+                "same_point_variant": true
+              },
+              {
+                "id": "dop_q2",
+                "type": "short_answer",
+                "stem": "A classmate says \\(D^2+3D+2\\) is just an algebraic factor multiplying \\(y(t)\\). Explain why that is wrong.",
+                "ideal_answer": "It is a differential operator, not an ordinary algebraic factor. \\((D^2+3D+2)y(t)\\) means take the second derivative of y(t), add 3 times the first derivative, and add 2y(t).",
+                "grading_rubric": [
+                  "Must state that D is a differential operator",
+                  "Must explain at least D and D^2 correctly",
+                  "Must identify the result as operations on y(t), not ordinary multiplication"
+                ],
+                "explanation": "This checks the most important notation trap in the section.",
+                "hint": "Expand what D does to y(t).",
+                "needs_visual": false,
+                "same_point_variant": true
+              }
+            ]
+          },
+          {
+            "id": "rc_output_choice",
+            "label": "RC circuit output choice",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 1
+            },
+            "questions": [
+              {
+                "id": "rc_q1",
+                "type": "multiple_choice",
+                "stem": "In the RC circuit with R=15 Ω and C=1/5 F, which equation matches the case where the output is loop current i(t)?",
+                "options": [
+                  "A. \\((15D+5)i(t)=Dx(t)\\)",
+                  "B. \\((3D+1)y(t)=x(t)\\)",
+                  "C. \\((D^2+3D+2)i(t)=Dx(t)\\)",
+                  "D. \\(15i(t)+5y(t)=Dx(t)\\)"
+                ],
+                "correct_option": "A",
+                "explanation": "When current is the output, the RC equation is written directly in terms of i(t), and differentiating gives \\((15D+5)i(t)=Dx(t)\\).",
+                "wrong_option_explanations": {
+                  "B": "That is the capacitor-voltage output equation.",
+                  "C": "That second-order form belongs to the RLC circuit, not this RC circuit.",
+                  "D": "This incorrectly mixes current and voltage output variables."
+                },
+                "hint": "Look for the equation whose output variable is i(t).",
+                "needs_visual": true,
+                "visual_type": "provided_textbook_circuit_figure_page-113",
+                "same_point_variant": false
+              },
+              {
+                "id": "rc_q2",
+                "type": "multiple_choice",
+                "stem": "Why does the capacitor-voltage output equation for the RC circuit become \\((3D+1)y(t)=x(t)\\)?",
+                "options": [
+                  "A. Because the capacitor current is \\(i(t)=C\\,Dy(t)=(1/5)Dy(t)\\)",
+                  "B. Because the resistor voltage is always equal to y(t)",
+                  "C. Because the capacitor removes all derivatives from the equation",
+                  "D. Because \\(D\\) can be canceled from both sides like a common number"
+                ],
+                "correct_option": "A",
+                "explanation": "When the output is capacitor voltage y(t), current must be rewritten as capacitor current: \\(i(t)=C\\,dy(t)/dt\\).",
+                "wrong_option_explanations": {
+                  "B": "The resistor voltage is 15i(t), not y(t).",
+                  "C": "The derivative appears because current through a capacitor depends on the derivative of capacitor voltage.",
+                  "D": "D represents differentiation and cannot be casually canceled like a number."
+                },
+                "hint": "Use the capacitor current-voltage law.",
+                "needs_visual": true,
+                "visual_type": "provided_textbook_circuit_figure_page-113",
+                "same_point_variant": false
+              }
+            ]
+          },
+          {
+            "id": "exam_process",
+            "label": "Derivation workflow",
+            "importance": "medium",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 1
+            },
+            "questions": [
+              {
+                "id": "process_q1",
+                "type": "multiple_choice",
+                "stem": "Which workflow best matches the derivation of an electrical input-output equation in this section?",
+                "options": [
+                  "A. Guess the final differential equation, then draw a circuit",
+                  "B. Write KVL or KCL, substitute element laws, eliminate unwanted variables, then write the result in the desired output variable",
+                  "C. Use only Ohm's law for every circuit element",
+                  "D. Ignore the chosen output until the final numerical answer"
+                ],
+                "correct_option": "B",
+                "explanation": "The section's method is systematic: interconnection law first, element laws second, eliminate unwanted variables, then express input against output.",
+                "wrong_option_explanations": {
+                  "A": "The equation is derived from physical laws, not guessed.",
+                  "C": "Inductors and capacitors require derivative or integral laws, not just Ohm's law.",
+                  "D": "The chosen output determines which variables must remain in the final equation."
+                },
+                "hint": "Think: circuit law → element law → eliminate variables.",
+                "needs_visual": false,
+                "same_point_variant": false
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "existing_page_images": {
+    "page-111": "/pages/page-111.png",
+    "page-112": "/pages/page-112.png",
+    "page-113": "/pages/page-113.png",
+    "page-114": "/pages/page-114.png"
+  },
+  "available_figures": {
+    "page-111": [
+      {
+        "fig_id": "unknown",
+        "caption": "A series RLC circuit with inductance L = 1 H, resistance R = 3 Ω, and capacitance C = 1/2 F driven by voltage source x(t), with output defined as the capacitor voltage v_C(t).",
+        "description": "The figure is a circuit diagram, not a graph, so there are no axes. It shows a series RLC loop driven by an input voltage source labeled x(t), with an inductor labeled L = 1 H, a resistor labeled R = 3 Ω, and a capacitor labeled C = 1/2 F connected in series. A loop current y(t) is indicated by a circular arrow, and the output is the capacitor voltage v_C(t) measured across the capacitor with marked positive and negative terminals. Students should notice that the source drives all three series elements, while the measured output is specifically the voltage across the capacitor."
+      }
+    ],
+    "page-113": [
+      {
+        "fig_id": "unknown",
+        "caption": "An RC series circuit with a voltage source x(t), resistor R = 15 Ω, and capacitor C = 1/5 F, used to find the loop current i(t) and capacitor voltage y(t).",
+        "description": "The figure shows a single-loop RC series circuit with an input voltage source labeled x(t), a resistor labeled R = 15 Ω on the top branch, and a capacitor labeled C = 1/5 F on the right branch. A curved arrow inside the loop marks the loop current i(t), and the output voltage y(t) is measured across the capacitor with polarity labels + at the top terminal and − at the bottom terminal. There are no plotted axes; the key relationship is that the same current flows through the resistor and capacitor in series, while y(t) is the capacitor voltage."
+      }
+    ]
+  },
+  "web_sources": [
+    {
+      "index": 1,
+      "title": "BERT (language model)",
+      "url": "https://en.wikipedia.org/wiki/BERT_(language_model)",
+      "snippet": "is3 cute4\". After processing the input text, the model&#039;s 4th output vector is passed to its decoder layer, which outputs a probability distribution over"
+    },
+    {
+      "index": 2,
+      "title": "Biological neuron model",
+      "url": "https://en.wikipedia.org/wiki/Biological_neuron_model",
+      "snippet": "abstraction/detail level: Electrical input–output membrane voltage models – These models produce a prediction for membrane output voltage as a function of electrical"
+    },
+    {
+      "index": 3,
+      "title": "CP/M",
+      "url": "https://en.wikipedia.org/wiki/CP%2FM",
+      "snippet": "processors. CP/M&#039;s core components are the Basic Input/Output System (BIOS), the Basic Disk Operating System (BDOS), and the Console Command Processor (CCP)"
+    },
+    {
+      "index": 4,
+      "title": "Plan 9 from Bell Labs",
+      "url": "https://en.wikipedia.org/wiki/Plan_9_from_Bell_Labs",
+      "snippet": "access. The window system thus receives all input and output commands from the program and handles these appropriately, by sending output to the actual screen"
+    },
+    {
+      "index": 5,
+      "title": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Wikipedia",
+      "snippet": "changed Wikipedia&#039;s domain from wikipedia.com to wikipedia.org. After an early period of exponential growth, the growth rate of the English Wikipedia in terms"
+    },
+    {
+      "index": 6,
+      "title": "IM-1",
+      "url": "https://en.wikipedia.org/wiki/IM-1",
+      "snippet": "English Wikipedia and the Rosetta Project. A Radio Frequency Mass Gauge (RFMG) on board estimated how much propellant was available during the IM-1 mission"
+    }
+  ],
+  "output_contract": {
+    "format": "single_json_object",
+    "no_markdown_fences": true,
+    "no_prose": true,
+    "compact_json_preferred": true
+  },
+  "section_specific_rules": null,
+  "summary_hint": null,
+  "exam_priority_guidance": null
+}

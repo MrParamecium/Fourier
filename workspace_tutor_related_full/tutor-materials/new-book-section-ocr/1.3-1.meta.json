@@ -1,0 +1,16 @@
+{
+  "sectionId": "1.3-1",
+  "sourcePages": [
+    "page-078"
+  ],
+  "usedPages": [
+    "page-078"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "1.3-1 Continuous-Time and Discrete-Time Signals",
+  "foundEnd": true,
+  "endBeforeLine": "1.3-2 Analog and Digital Signals",
+  "endBeforeCode": "1.3-2",
+  "charCount": 484
+}

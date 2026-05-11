@@ -1,0 +1,59 @@
+# Aquarius section OCR
+section_id: 1.7-7
+source_pages: page-109, page-110
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+1.7-7 Invertible and Noninvertible Systems
+    A system S performs certain operation(s) on input signal(s). If we can obtain the input x(t) back
+    from the corresponding output y(t) by some operation, the system S is said to be invertible. When
+    several different inputs result in the same output (as in a rectifier), it is impossible to obtain the
+    input from the output, and the system is noninvertible. Therefore, for an invertible system, it is
+    essential that every input have a unique output so that there is a one-to-one mapping between an
+    input and the corresponding output. The system that achieves the inverse operation [of obtaining
+    x(t) from y(t)] is the inverse system for S. For instance, if S is an ideal integrator, then its inverse
+    system is an ideal differentiator. Consider a system S connected in tandem with its inverse Si , as
+    shown in Fig. 1.33. The input x(t) to this tandem system results in signal y(t) at the output of S,
+    and the signal y(t), which now acts as an input to Si , yields back the signal x(t) at the output of Si .
+    Thus, Si undoes the operation of S on x(t), yielding back x(t). A system whose output is equal to
+    the input (for all possible inputs) is an identity system. Cascading a system with its inverse system,
+    as shown in Fig. 1.33, results in an identity system.
+         In contrast, a rectifier, specified by an equation y(t) = |x(t)|, is noninvertible because the
+    rectification operation cannot be undone.
+         Inverse systems are very important in signal processing. In many applications, the signals are
+    distorted during the processing, and it is necessary to undo the distortion. For instance, in transmis-
+    sion of data over a communication channel, the signals are distorted owing to non-ideal frequency
+    response and finite bandwidth of a channel. It is necessary to restore the signal as closely as possi-
+    ble to its original shape. Such equalization is also used in audio systems and photographic systems.
+
+
+     x(t)                   y(t)                    x(t)
+                                         Si                 Figure 1.33 A cascade of a system with its
+                S
+                                                            inverse results in an identity system.
+
+
+
+
+E X A M P L E 1.14 Assessing System Invertibility
+
+    Determine whether the following systems are invertible: (a) y(t) = x(−t), (b) y(t) = tx(t), and
+    (c) y(t) = dtd x(t).
+
+
+         (a) Here, the output is a reflection of the input, which does not cause any loss to the input.
+    The input can, in fact, be exactly recovered by simply reflecting the output [x(t) = y(−t)],
+    which is to say that a reflecting system is its own inverse. Thus, y(t) = x(−t) is an invertible
+    system.
+
+[[PAGE page-110]]
+110       CHAPTER 1      SIGNALS AND SYSTEMS
+
+                (b) In this case, one might be tempted to recover the input from the output as x(t) = 1t y(t).
+          This approach works almost everywhere, except at t = 0 where the input value x(0) cannot be
+          recovered. Due to this single lost point, the system y(t) = tx(t) is not invertible.
+                (c) Differentiation eliminates any dc component. For example, the inputs x1 (t) = 1 and
+          x2 (t) = 2 both produce the same output y(t) = 0. Given only y(t) = 0, it is impossible to know
+          if the original input was x1 (t) = 1, x2 (t) = 2, or something else entirely. Since unique inputs do
+          produce unique outputs, we know that y(t) = dtd x(t) is not an invertible system.

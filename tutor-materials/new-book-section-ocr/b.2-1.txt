@@ -1,0 +1,131 @@
+# Aquarius section OCR
+section_id: b.2-1
+source_pages: page-018, page-019, page-020
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+B.2-1 Addition of Sinusoids
+     Two sinusoids having the same frequency but different phases add to form a single sinusoid of the
+     same frequency. This fact is readily seen from the well-known trigonometric identity
+
+                              C cos θ cos ω0 t − C sin θ sin ω0 t = C cos (ω0 t + θ )
+
+     Setting a = C cos θ and b = −C sin θ , we see that
+
+                                    a cos ω0 t + b sin ω0 t = C cos (ω0 t + θ )                      (B.16)
+
+     From trigonometry, we know that
+
+                                                                           −b
+                                   C=    a2 + b2      and      θ = tan−1                             (B.17)
+                                                                             a
+
+     Equation (B.17) shows that C and θ are the magnitude and angle, respectively, of a complex
+     number a − jb. In other words, a − jb = Cejθ . Hence, to find C and θ , we convert a − jb
+     to polar form and the magnitude and the angle of the resulting polar number are C and θ ,
+     respectively.
+          The process of adding two sinusoids with the same frequency can be clarified by using phasors
+     to represent sinusoids. We represent the sinusoid C cos (ω0 t +θ ) by a phasor of length C at an angle
+     θ with the horizontal axis. Clearly, the sinusoid a cos ω0 t is represented by a horizontal phasor of
+     length a (θ = 0), while b sin ω0 t = b cos (ω0 t − π/2) is represented by a vertical phasor of length b
+     at an angle −π/2 with the horizontal (Fig. B.7). Adding these two phasors results in a phasor of
+     length C at an angle θ , as depicted in Fig. B.7. From this figure, we verify the values of C and θ
+     found in Eq. (B.17). Proper care should be exercised in computing θ , as explained on page 8 (“A
+     Warning About Computing Angles with Calculators”).
+
+
+
+       Im
+                         a
+                u             Re
+                C
+       b                               Figure B.7 Phasor addition of sinusoids.
+
+[[PAGE page-019]]
+B.2 Sinusoids           19
+
+
+E X A M P L E B.6 Addition of Sinusoids
+
+    In the following cases, express x(t) as a single sinusoid:
+                              √
+         (a) x(t) = cos ω0 t − 3 sin ω0 t
+           (b) x(t) = −3 cos ω0 t + 4 sin ω0 t
+
+
+                                            √
+           (a) In this case, a = 1 and b = − 3. Using Eq. (B.17) yields
+                                                                  √ 
+                                        √ 2
+                             C = 12 + 3 = 2 and θ = tan−1 13 = 60◦
+
+    Therefore,
+                                           x(t) = 2 cos (ω0 t + 60◦ )
+    We can verify this result by drawing phasors corresponding to the two sinusoids. The sinusoid
+    cos ω0 t is represented by a phasor of unit length at a zero angle with the horizontal. The phasor
+                                                                    ◦
+    sin√ω0 t is represented by a unit phasor at an angle√ of −90  ◦
+                                                                      with the horizontal. Therefore,
+    − 3 sin ω0 t is represented by a phasor of length 3 at 90 with the horizontal, as depicted in
+    Fig. B.8a. The two phasors added yield a phasor of length 2 at 60◦ with the horizontal (also
+    shown in Fig. B.8a).
+
+
+
+      Im                                             Im
+                                            3                  Re
+
+       3                                                   126.9
+                                                 5
+              2
+
+
+               60                                         4
+
+                     1         Re
+                                                                        Figure B.8 Phasor addition of
+                     (a)                             (b)                sinusoids.
+                                                 √
+         Alternately, we note that a − jb = 1 + j 3 = 2ejπ/3 . Hence, C = 2 and θ = π/3.
+         Observe that a phase shift of ±π amounts to multiplication by −1. Therefore, x(t) can
+    also be expressed alternatively as
+
+              x(t) = −2 cos (ω0 t + 60◦ ± 180◦ ) = −2 cos (ω0 t − 120◦ ) = −2 cos (ω0 t + 240◦ )
+
+    In practice, the principal value, that is, −120◦ , is preferred.
+         (b) In this case, a = −3 and b = 4. Using Eq. (B.17) yields
+                                                                     
+                        C = (−3)2 + 42 = 5 and θ = tan−1 −4           −3
+                                                                         = −126.9◦
+
+[[PAGE page-020]]
+20   CHAPTER B      BACKGROUND
+
+     Observe that                                     
+                                      tan−1 −4
+                                            −3
+                                               = tan−1 43 = 53.1◦
+     Therefore,
+                                         x(t) = 5 cos (ω0 t − 126.9◦ )
+     This result is readily verified in the phasor diagram in Fig. B.8b. Alternately, a−jb = −3−j4 =
+              ◦
+     5e−j126.9 , a fact readily confirmed using MATLAB.
+
+     >>   C = abs(-3+4j)
+          C = 5
+     >>   theta = angle(-3+4j)*180/pi
+          theta = 126.8699
+
+     Hence, C = 5 and θ = −126.8699◦ .
+
+
+
+
+          We can also perform the reverse operation, expressing C cos (ω0 t + θ ) in terms of cos ω0 t and
+     sin ω0 t by again using the trigonometric identity
+
+                              C cos (ω0 t + θ ) = C cos θ cos ω0 t − C sin θ sin ω0 t
+
+     For example,                                                    √
+                                10 cos (ω0 t − 60◦ ) = 5 cos ω0 t + 5 3 sin ω0 t

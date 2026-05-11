@@ -1,0 +1,24 @@
+{
+  "sectionId": "1.8-2",
+  "sourcePages": [
+    "page-114",
+    "page-115",
+    "page-116",
+    "page-117",
+    "page-118"
+  ],
+  "usedPages": [
+    "page-114",
+    "page-115",
+    "page-116",
+    "page-117",
+    "page-118"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "1.8-2 Mechanical Systems",
+  "foundEnd": true,
+  "endBeforeLine": "1.8-3 Electromechanical Systems",
+  "endBeforeCode": "1.8-3",
+  "charCount": 9575
+}

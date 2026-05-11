@@ -1,0 +1,125 @@
+# Aquarius section OCR
+section_id: 3.4-1
+source_pages: page-262, page-263, page-264
+cut_start_found: yes
+cut_end_found: no
+
+--- OCR ---
+3.4-1 Classification of Discrete-Time Systems
+
+Before examining the nature of discrete-time system equations, let us consider the concepts of linearity, time invariance (or shift invariance), and causality, which apply to discrete-time systems also.
+
+LINEARITY AND TIME INVARIANCE
+
+For discrete-time systems, the definition of linearity is identical to that for continuous-time systems, as given in Eq. (1.22). We can show that the systems in Exs. 3.6, 3.7, 3.8, and 3.9 are all linear.
+
+Time invariance (or shift invariance) for discrete-time systems is also defined in a way similar to that for continuous-time systems. Systems whose parameters do not change with time (with n) are time-invariant or shift-invariant (also constant-parameter) systems. For such a system, if the input is delayed by k units or samples, the output is the same as before but delayed by k samples (assuming the initial conditions also are delayed by k). The systems in Exs. 3.6, 3.7, 3.8, and 3.9 are time-invariant because the coefficients in the system equations are constants (independent of n). If these coefficients were functions of n (time), then the systems would be linear time-varying systems. Consider, for example, a system described by
+
+y[n] = e^{-n}x[n]
+
+For this system, let a signal x1[n] yield the output y1[n], and another input x2[n] yield the output y2[n]. Then
+
+y1[n] = e^{-n}x1[n]      and      y2[n] = e^{-n}x2[n]
+
+If we let x2[n] = x1[n - N0], then
+
+y2[n] = e^{-n}x2[n] = e^{-n}x1[n - N0] ≠ y1[n - N0]
+
+Clearly, this is a time-varying parameter system.
+
+[[PAGE page-263]]
+3.4  Examples of Discrete-Time Systems                                              263
+
+CAUSAL AND NONCAUSAL SYSTEMS
+A causal (also known as a physical or nonanticipative) system is one for which the output at any
+instant n = k depends only on the value of the input x[n] for n ≤ k. In other words, the value of the
+output at the present instant depends only on the past and present values of the input x[n], not on
+its future values. As we shall see, the systems in Exs. 3.6, 3.7, 3.8, and 3.9 are all causal.
+
+INVERTIBLE AND NONINVERTIBLE SYSTEMS
+A discrete-time system S is invertible if an inverse system S_i exists such that the cascade of S and
+S_i results in an identity system. An identity system is defined as one whose output is identical to
+the input. In other words, for an invertible system, the input can be uniquely determined from the
+corresponding output. For every input there is a unique output. When a signal is processed through
+such a system, its input can be reconstructed from the corresponding output. There is no loss of
+information when a signal is processed through an invertible system.
+    A cascade of a unit delay with a unit advance results in an identity system because the output
+of such a cascaded system is identical to the input. Clearly, the inverse of an ideal unit delay
+is ideal unit advance, which is a noncausal (and unrealizable) system. In contrast, a compressor
+y[n] = x[Mn] is not invertible because this operation loses all but every Mth sample of the input,
+and, generally, the input cannot be reconstructed. Similarly, operations, such as y[n] = cos x[n] or
+y[n] = |x[n]|, are not invertible.
+
+DRILL 3.9  Invertibility
+Show that a system specified by equation y[n] = ax[n] + b is invertible but that the system
+y[n] = |x[n]|^2 is noninvertible.
+
+STABLE AND UNSTABLE SYSTEMS
+The concept of stability is similar to that in continuous-time systems. Stability can be internal
+or external. If every bounded input applied at the input terminal results in a bounded output, the
+system is said to be stable externally. External stability can be ascertained by measurements at
+the external terminals of the system. This type of stability is also known as the stability in the
+BIBO (bounded-input/bounded-output) sense. Both internal and external stability are discussed in
+greater detail in Sec. 3.9.
+
+MEMORYLESS SYSTEMS AND SYSTEMS WITH MEMORY
+The concepts of memoryless (or instantaneous) systems and those with memory (or dynamic) are
+identical to the corresponding concepts of the continuous-time case. A system is memoryless if
+its response at any instant n depends at most on the input at the same instant n. The output at any
+instant of a system with memory generally depends on the past, present, and future values of the
+input. For example, y[n] = sin x[n] is an example of instantaneous system, and y[n] − y[n − 1] = x[n]
+is an example of a dynamic system or a system with memory.
+
+[[PAGE page-264]]
+264
+CHAPTER 3  TIME-DOMAIN ANALYSIS OF DISCRETE-TIME SYSTEMS
+
+EXAMPLE 3.10  Investigating DT System Properties
+
+Consider a DT system described as y[n + 1] = x[n + 1]x[n]. Determine whether the system is
+(a) linear, (b) time-invariant, (c) causal, (d) invertible, (e) BIBO-stable, and (f) memoryless.
+
+Let us delay the input–output equation by one to obtain the equivalent but more convenient
+representation of y[n] = x[n]x[n − 1].
+
+(a) Linearity requires both homogeneity and additivity. Let us first investigate
+homogeneity. Assuming x[n] ⟹ y[n], we see that
+
+ax[n] ⟹ (ax[n])(ax[n − 1]) = a²y[n] ≠ ay[n]
+
+Thus, the system does not satisfy the homogeneity property.
+The system also does not satisfy the additivity property. Assuming x1[n] ⟹ y1[n] and
+x2[n] ⟹ y2[n], we see that input x[n] = x1[n] + x2[n] produces output y[n] as
+
+y[n] = (x1[n] + x2[n])(x1[n − 1] + x2[n − 1])
+     = x1[n]x1[n − 1] + x2[n]x2[n − 1] + x1[n]x2[n − 1] + x2[n]x1[n − 1]
+     = y1[n] + y2[n] + x1[n]x2[n − 1] + x2[n]x1[n − 1]
+     ≠ y1[n] + y2[n]
+
+Clearly, additivity is not satisfied.
+Since the system does not satisfy both the homogeneity and additivity properties, we
+conclude that the system is not linear.
+
+(b) To be time-invariant, a shift in any input should cause a corresponding shift in
+respective output. Assume that x[n] ⟹ y[n]. Applying a delay version of this input to the
+system yields
+
+x[n − N] ⟹ x[n − N]x[n − 1 − N] = x[(n − N)]x[(n − N) − 1] = y[n − N]
+
+Since shifting an input causes a corresponding shift in the output, we conclude that the system
+is time-invariant.
+
+(c) To be causal, an output value cannot depend on any future input values. The output y
+at time n depends on the input x at present and past times n and n − 1. Since the current output
+does not depend on future input values, the system is causal.
+
+(d) For a system to be invertible, every input must generate a unique output, which allows
+exact recovery of the input from the output. Consider two inputs to this system: x1[n] = 1 and
+x2[n] = −1. Both inputs generate the same output: y1[n] = y2[n] = 1. Since unique inputs do
+not always generate unique outputs, we conclude that the system is not invertible.
+
+(e) To be BIBO-stable, any bounded input must generate a bounded output. A bounded
+input satisfies |x[n]| ≤ Mx < ∞ for all n. Given this condition, the system output magnitude
+behaves as
+
+|y[n]| = |x[n]x[n − 1]| = |x[n]| |x[n − 1]| ≤ Mx² < ∞

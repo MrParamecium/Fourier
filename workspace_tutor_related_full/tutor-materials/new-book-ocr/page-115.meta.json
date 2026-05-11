@@ -25,9 +25,20 @@
       "left": 0.2109,
       "bottom": 0.3246,
       "right": 0.858,
-      "fig_id": "Fig. 1.36",
-      "caption": "Some elements in translational mechanical systems, including (a) a mass M, (b) a spring with stiffness K, and (c) a linear dashpot with damping coefficient B.",
-      "crop_file": "page-115-fig__1_36-1.png"
+      "fig_id": "Figure 1.36",
+      "caption": "Figure 1.36 Some elements in translational mechanical systems.",
+      "crop_file": "page-115-fig__1_36-1.png",
+      "description": "The figure shows three basic translational mechanical system elements. Panel (a) is a mass M with input force x(t) and displacement output y(t), panel (b) is a spring with stiffness K, and panel (c) is a linear dashpot with damping coefficient B. Students should connect these elements to their terminal relationships: mass relates force to acceleration, spring relates force to displacement, and dashpot relates force to velocity.",
+      "keywords": [
+        "translational mechanical elements",
+        "mass spring dashpot",
+        "input force x(t)",
+        "output displacement y(t)",
+        "spring stiffness k",
+        "damping coefficient b",
+        "mechanical system modeling"
+      ],
+      "description_model": "manual-codex-2026-05-09"
     },
     {
       "top": 0.5138,

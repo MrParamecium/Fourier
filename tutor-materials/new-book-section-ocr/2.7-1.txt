@@ -1,0 +1,75 @@
+# Aquarius section OCR
+section_id: 2.7-1
+source_pages: page-213, page-214
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+2.7-1 Script M-Files
+
+Script files, the simplest type of M-file, consist of a series of MATLAB commands. Script files
+record and automate a series of steps, and they are easy to modify. To demonstrate the utility of a
+script file, consider the operational amplifier circuit shown in Fig. 2.25.
+
+The system’s characteristic modes define the circuit’s behavior and provide insight regarding
+system behavior. Using ideal, infinite gain difference amplifier characteristics, we first derive the
+differential equation that relates output y(t) to input x(t). Kirchhoff’s current law (KCL) at the
+node shared by R1 and R3 provides
+
+\frac{x(t)-v(t)}{R_3} + \frac{y(t)-v(t)}{R_2} + \frac{0-v(t)}{R_1} - C_2 \dot{v}(t) = 0
+
+KCL at the inverting input of the op amp gives
+
+\frac{v(t)}{R_1} + C_1 \dot{y}(t) = 0
+
+Combining and simplifying the KCL equations yield
+
+\ddot{y}(t) + \frac{1}{C_2}\left\{\frac{1}{R_1} + \frac{1}{R_2} + \frac{1}{R_3}\right\}\dot{y}(t) + \frac{1}{R_1 R_2 C_1 C_2} y(t) = -\frac{1}{R_1 R_3 C_1 C_2} x(t)
+
+which is the desired constant coefficient differential equation. Thus, the characteristic equation is
+given by
+
+\lambda^2 + \frac{1}{C_2}\left\{\frac{1}{R_1} + \frac{1}{R_2} + \frac{1}{R_3}\right\}\lambda + \frac{1}{R_1 R_2 C_1 C_2} = (a_0\lambda^2 + a_1\lambda + a_2) = 0      (2.50)
+
+The roots \lambda_1 and \lambda_2 of Eq. (2.50) establish the nature of the characteristic modes e^{\lambda_1 t} and e^{\lambda_2 t}.
+As a first case, assign nominal component values of R_1 = R_2 = R_3 = 10 k\Omega and C_1 = C_2 = 1
+\muF. A series of MATLAB commands allows convenient computation of the roots \lambda = [\lambda_1; \lambda_2].
+Although \lambda can be determined using the quadratic equation, MATLAB’s roots command is more
+convenient. The roots command requires an input vector that contains the polynomial coefficients
+in descending order. Even if a coefficient is zero, it must still be included in the vector.
+
+Figure 2.25  Operation-amplifier circuit.
+
+[[PAGE page-214]]
+214      CHAPTER 2   TIME-DOMAIN ANALYSIS OF CONTINUOUS-TIME SYSTEMS
+
+% CH2MP1.m : Chapter 2, MATLAB Program 1
+% Script M-file determines characteristic roots of op-amp circuit.
+
+% Set component values:
+R = [1e4, 1e4, 1e4]; C = [1e-6, 1e-6];
+% Determine coefficients for characteristic equation:
+A = [1, (1/R(1)+1/R(2)+1/R(3))/C(2), 1/(R(1)*R(2)*C(1)*C(2))];
+% Determine characteristic roots:
+lambda = roots(A);
+
+A script file is created by placing these commands in a text file, which in this case is named CH2MP1.m. While comment lines improve program clarity, their removal does not affect program functionality. The program is executed by typing
+
+>>  CH2MP1
+
+After execution, all the resulting variables are available in the workspace. For example, to view the characteristic roots, type
+
+>>  lambda
+   lambda = -261.8034
+            -38.1966
+
+Thus, the characteristic modes are simple decaying exponentials: e^{-261.8034t} and e^{-38.1966t}.
+Script files permit simple or incremental changes, thereby saving significant effort. Consider what happens when capacitor C1 is changed from 1.0 μF to 1.0 nF. Changing CH2MP1.m so that C = [1e-9, 1e-6] allows computation of the new characteristic roots:
+
+>>  CH2MP1
+>>  lambda
+   lambda = 1.0e+003 *
+            -0.1500 + 3.1587i
+            -0.1500 - 3.1587i
+
+Perhaps surprisingly, the characteristic modes are now complex exponentials capable of supporting oscillations. The imaginary portion of λ dictates an oscillation rate of 3158.7 rad/s or about 503 Hz. The real portion dictates the rate of decay. The time expected to reduce the amplitude to 25% is approximately t = ln0.25/Re(λ) ≈ 0.01 second.

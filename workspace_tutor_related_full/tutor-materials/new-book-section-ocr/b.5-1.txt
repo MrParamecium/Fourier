@@ -1,0 +1,60 @@
+# Aquarius section OCR
+section_id: b.5-1
+source_pages: page-026, page-027
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+B.5-1 Method of Clearing Fractions
+         A rational function can be written as a sum of appropriate partial fractions with unknown
+         coefficients, which are determined by clearing fractions and equating the coefficients of similar
+         powers on the two sides. This procedure is demonstrated by the following example.
+
+
+     E X A M P L E B.8 Method of Clearing Fractions
+
+         Expand the following rational function F(x) into partial fractions:
+
+                                                      x3 + 3x2 + 4x + 6
+                                          F(x) =
+                                                   (x + 1)(x + 2)(x + 3)2
+
+
+         This function can be expressed as a sum of partial fractions with denominators (x + 1),
+         (x + 2), (x + 3), and (x + 3)2 , as follows:
+
+                                  x3 + 3x2 + 4x + 6       k1    k2    k3     k4
+                      F(x) =                          =      +     +     +
+                               (x + 1)(x + 2)(x + 3)2   x + 1 x + 2 x + 3 (x + 3)2
+         To determine the unknowns k1 , k2 , k3 , and k4 , we clear fractions by multiplying both sides by
+         (x + 1)(x + 2)(x + 3)2 to obtain
+
+                x3 + 3x2 + 4x + 6 = k1 (x3 + 8x2 + 21x + 18) + k2 (x3 + 7x2 + 15x + 9)
+                                      + k3 (x3 + 6x2 + 11x + 6) + k4 (x2 + 3x + 2)
+                                   = x3 (k1 + k2 + k3 ) + x2 (8k1 + 7k2 + 6k3 + k4 )
+                                      + x(21k1 + 15k2 + 11k3 + 3k4 ) + (18k1 + 9k2 + 6k3 + 2k4 )
+
+         Equating coefficients of similar powers on both sides yields
+
+                                                         k1 + k2 + k3 = 1
+                                               8k1 + 7k2 + 6k3 + k4 = 3
+                                          21k1 + 15k2 + 11k3 + 3k4 = 4
+                                             18k1 + 9k2 + 6k3 + 2k4 = 6
+
+[[PAGE page-027]]
+B.5 Partial Fraction Expansion         27
+
+Solution of these four simultaneous equations yields
+
+                        k1 = 1,       k2 = −2,          k3 = 2,       k4 = −3
+
+Therefore,
+                                      1     2     2      3
+                           F(x) =        −     +     −
+                                    x + 1 x + 2 x + 3 (x + 3)2
+
+
+
+
+    Although this method is straightforward and applicable to all situations, it is not necessarily
+the most efficient. We now discuss other methods that can reduce numerical work considerably.

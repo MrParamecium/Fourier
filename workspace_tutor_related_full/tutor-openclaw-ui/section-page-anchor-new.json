@@ -3,9 +3,13 @@
     "page": "page-064",
     "startRatio": 0.016
   },
-  "0.5": {
-    "page": "page-023",
-    "startRatio": 0.536
+  "2": {
+    "page": "page-150",
+    "startRatio": 0
+  },
+  "3": {
+    "page": "page-237",
+    "startRatio": 0
   },
   "1.1": {
     "page": "page-064",
@@ -179,9 +183,249 @@
     "page": "page-119",
     "startRatio": 0
   },
-  "7.8888": {
-    "page": "page-053",
-    "startRatio": 0.752
+  "2.1": {
+    "page": "page-150",
+    "startRatio": 0.23
+  },
+  "2.2": {
+    "page": "page-151",
+    "startRatio": 0
+  },
+  "2.2-1": {
+    "page": "page-161",
+    "startRatio": 0.872
+  },
+  "2.3": {
+    "page": "page-163",
+    "startRatio": 0
+  },
+  "2.4": {
+    "page": "page-168",
+    "startRatio": 0.117
+  },
+  "2.4-1": {
+    "page": "page-170",
+    "startRatio": 0.343
+  },
+  "2.4-2": {
+    "page": "page-178",
+    "startRatio": 0.15
+  },
+  "2.4-3": {
+    "page": "page-190",
+    "startRatio": 0.456
+  },
+  "2.4-4": {
+    "page": "page-193",
+    "startRatio": 0.087
+  },
+  "2.4-5": {
+    "page": "page-195",
+    "startRatio": 0.192
+  },
+  "2.5": {
+    "page": "page-196",
+    "startRatio": 0.652
+  },
+  "2.5-1": {
+    "page": "page-196",
+    "startRatio": 0.84
+  },
+  "2.5-2": {
+    "page": "page-198",
+    "startRatio": 0.045
+  },
+  "2.5-3": {
+    "page": "page-199",
+    "startRatio": 0.88
+  },
+  "2.6": {
+    "page": "page-203",
+    "startRatio": 0
+  },
+  "2.6-1": {
+    "page": "page-203",
+    "startRatio": 0.874
+  },
+  "2.6-2": {
+    "page": "page-205",
+    "startRatio": 0.372
+  },
+  "2.6-3": {
+    "page": "page-206",
+    "startRatio": 0.692
+  },
+  "2.6-4": {
+    "page": "page-207",
+    "startRatio": 0.207
+  },
+  "2.6-5": {
+    "page": "page-209",
+    "startRatio": 0.009
+  },
+  "2.6-6": {
+    "page": "page-209",
+    "startRatio": 0.365
+  },
+  "2.6-7": {
+    "page": "page-210",
+    "startRatio": 0.582
+  },
+  "2.7": {
+    "page": "page-212",
+    "startRatio": 0.565
+  },
+  "2.7-1": {
+    "page": "page-213",
+    "startRatio": 0.021
+  },
+  "2.7-2": {
+    "page": "page-214",
+    "startRatio": 0.88
+  },
+  "2.7-3": {
+    "page": "page-215",
+    "startRatio": 0.84
+  },
+  "2.7-4": {
+    "page": "page-217",
+    "startRatio": 0.854
+  },
+  "2.8": {
+    "page": "page-219",
+    "startRatio": 0
+  },
+  "2.9": {
+    "page": "page-221",
+    "startRatio": 0.865
+  },
+  "3.1": {
+    "page": "page-237",
+    "startRatio": 0.228
+  },
+  "3.1-1": {
+    "page": "page-238",
+    "startRatio": 0.818
+  },
+  "3.10": {
+    "page": "page-305",
+    "startRatio": 0
+  },
+  "3.11": {
+    "page": "page-306",
+    "startRatio": 0.703
+  },
+  "3.11-1": {
+    "page": "page-306",
+    "startRatio": 0.822
+  },
+  "3.11-2": {
+    "page": "page-308",
+    "startRatio": 0.262
+  },
+  "3.11-3": {
+    "page": "page-310",
+    "startRatio": 0.722
+  },
+  "3.11-4": {
+    "page": "page-311",
+    "startRatio": 0.749
+  },
+  "3.12": {
+    "page": "page-313",
+    "startRatio": 0
+  },
+  "3.13": {
+    "page": "page-313",
+    "startRatio": 0.572
+  },
+  "3.2": {
+    "page": "page-240",
+    "startRatio": 0.488
+  },
+  "3.3": {
+    "page": "page-245",
+    "startRatio": 0
+  },
+  "3.3-1": {
+    "page": "page-245",
+    "startRatio": 0.251
+  },
+  "3.3-2": {
+    "page": "page-246",
+    "startRatio": 0.016
+  },
+  "3.3-3": {
+    "page": "page-247",
+    "startRatio": 0.311
+  },
+  "3.3-4": {
+    "page": "page-251",
+    "startRatio": 0.032
+  },
+  "3.3-5": {
+    "page": "page-252",
+    "startRatio": 0.097
+  },
+  "3.4": {
+    "page": "page-253",
+    "startRatio": 0
+  },
+  "3.4-1": {
+    "page": "page-262",
+    "startRatio": 0.215
+  },
+  "3.5": {
+    "page": "page-265",
+    "startRatio": 0
+  },
+  "3.5-1": {
+    "page": "page-266",
+    "startRatio": 0.285
+  },
+  "3.6": {
+    "page": "page-270",
+    "startRatio": 0.105
+  },
+  "3.7": {
+    "page": "page-277",
+    "startRatio": 0
+  },
+  "3.7-1": {
+    "page": "page-278",
+    "startRatio": 0.065
+  },
+  "3.8": {
+    "page": "page-280",
+    "startRatio": 0.652
+  },
+  "3.8-1": {
+    "page": "page-288",
+    "startRatio": 0.223
+  },
+  "3.8-2": {
+    "page": "page-294",
+    "startRatio": 0.03
+  },
+  "3.8-3": {
+    "page": "page-297",
+    "startRatio": 0.598
+  },
+  "3.9": {
+    "page": "page-298",
+    "startRatio": 0.661
+  },
+  "3.9-1": {
+    "page": "page-298",
+    "startRatio": 0.791
+  },
+  "3.9-2": {
+    "page": "page-299",
+    "startRatio": 0.432
+  },
+  "3.9-3": {
+    "page": "page-301",
+    "startRatio": 0.697
   },
   "b": {
     "page": "page-001",
@@ -200,16 +444,16 @@
     "startRatio": 0.22
   },
   "b.2": {
-    "page": "page-016",
-    "startRatio": 0.029
+    "page": "page-018",
+    "startRatio": 0
   },
   "b.2-1": {
     "page": "page-018",
     "startRatio": 0.204
   },
   "b.2-2": {
-    "page": "page-020",
-    "startRatio": 0.598
+    "page": "page-020-b2-2-only",
+    "startRatio": 0
   },
   "b.3": {
     "page": "page-020",
@@ -232,8 +476,8 @@
     "startRatio": 0.285
   },
   "b.5-2": {
-    "page": "page-027",
-    "startRatio": 0.318
+    "page": "page-027-b5-2-start",
+    "startRatio": 0
   },
   "b.5-3": {
     "page": "page-031",
@@ -248,8 +492,8 @@
     "startRatio": 0.22
   },
   "b.5-6": {
-    "page": "page-035",
-    "startRatio": 0.38
+    "page": "page-035-b5-6-start",
+    "startRatio": 0
   },
   "b.6": {
     "page": "page-037",
@@ -260,8 +504,8 @@
     "startRatio": 0.28
   },
   "b.6-2": {
-    "page": "page-038",
-    "startRatio": 0.087
+    "page": "page-038-b6-2-start",
+    "startRatio": 0
   },
   "b.7": {
     "page": "page-042",
@@ -338,5 +582,9 @@
   "b.8-9": {
     "page": "page-058",
     "startRatio": 0.004
+  },
+  "b.4": {
+    "page": "page-023",
+    "startRatio": 0.49
   }
 }

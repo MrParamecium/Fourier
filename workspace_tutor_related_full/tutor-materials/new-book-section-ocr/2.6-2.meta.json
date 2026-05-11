@@ -1,0 +1,18 @@
+{
+  "sectionId": "2.6-2",
+  "sourcePages": [
+    "page-205",
+    "page-206"
+  ],
+  "usedPages": [
+    "page-205",
+    "page-206"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "2.6-2 Response Time of a System: The System Time Constant",
+  "foundEnd": true,
+  "endBeforeLine": "2.6-3 Time Constant and Rise Time of a System",
+  "endBeforeCode": "2.6-3",
+  "charCount": 3163
+}

@@ -1,0 +1,20 @@
+{
+  "sectionId": "1.11-1",
+  "sourcePages": [
+    "page-126",
+    "page-127",
+    "page-128"
+  ],
+  "usedPages": [
+    "page-126",
+    "page-127",
+    "page-128"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "1.11-1 Anonymous Functions",
+  "foundEnd": true,
+  "endBeforeLine": "1.11-2 Relational Operators and the Unit Step Function",
+  "endBeforeCode": "1.11-2",
+  "charCount": 3632
+}

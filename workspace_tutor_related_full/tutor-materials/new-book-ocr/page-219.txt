@@ -1,0 +1,44 @@
+2.8   MATLAB: M-Files                                                                 219
+
+h(τ) [solid], x(t−τ) [dashed], h(τ)×(t−τ) [gray]
+
+2
+0
+−2
+−1   −0.5   0   0.5   1   1.5   2   2.5   3   3.5   4
+τ
+
+y(t) = ∫ h(τ)x(t−τ) dτ
+
+2
+1
+0
+−1
+−1   −0.5   0   0.5   1   1.5   2   2.5   3   3.5   4
+t
+
+Figure 2.27  Graphical convolution at step t = 0.75 second.
+
+h(τ) [solid], x(t−τ) [dashed], h(τ)×(t−τ) [gray]
+
+2
+0
+−2
+−1   −0.5   0   0.5   1   1.5   2   2.5   3   3.5   4
+τ
+
+y(t) = ∫ h(τ)x(t−τ) dτ
+
+2
+1
+0
+−1
+−1   −0.5   0   0.5   1   1.5   2   2.5   3   3.5   4
+t
+
+Figure 2.28  Graphical convolution at step t = 2.25 seconds.
+
+command forces MATLAB to update the graphics window for each loop iteration. Although slow,
+this creates an animation-like effect. Replacing drawnow with the pause command allows users
+to manually step through the convolution process. The pause command still forces the graphics
+window to update, but the program will not continue until a key is pressed.

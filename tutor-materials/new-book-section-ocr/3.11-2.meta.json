@@ -1,0 +1,20 @@
+{
+  "sectionId": "3.11-2",
+  "sourcePages": [
+    "page-308",
+    "page-309",
+    "page-310"
+  ],
+  "usedPages": [
+    "page-308",
+    "page-309",
+    "page-310"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "3.11-2 System Responses Through Filtering",
+  "foundEnd": true,
+  "endBeforeLine": "3.11-3 A Custom Filter Function",
+  "endBeforeCode": "3.11-3",
+  "charCount": 3958
+}

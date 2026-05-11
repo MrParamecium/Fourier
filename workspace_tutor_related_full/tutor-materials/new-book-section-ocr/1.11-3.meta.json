@@ -1,0 +1,18 @@
+{
+  "sectionId": "1.11-3",
+  "sourcePages": [
+    "page-130",
+    "page-131"
+  ],
+  "usedPages": [
+    "page-130",
+    "page-131"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "1.11-3 Visualizing Operations on the Independent Variable",
+  "foundEnd": true,
+  "endBeforeLine": "1.11-4 Numerical Integration and Estimating Signal Energy",
+  "endBeforeCode": "1.11-4",
+  "charCount": 3156
+}

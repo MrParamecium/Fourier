@@ -1,0 +1,22 @@
+{
+  "chapter": "2",
+  "section": "2.4",
+  "subsection": null,
+  "title": "System Response to External Input: The Zero-State Response",
+  "summary": "This page is a figure-based explanation of how to find the zero-state response to an arbitrary input by decomposing the input into narrow pulses and corresponding weighted impulses. It shows the impulse response h(t), shifted responses h(t−nΔτ), incremental outputs x(nΔτ)h(t−nΔτ)Δτ, and their summation into the total output y(t).",
+  "keywords": [
+    "zero-state response",
+    "impulse response",
+    "arbitrary input",
+    "weighted impulse",
+    "shifted impulse",
+    "system response",
+    "Figure 2.3",
+    "convolution concept"
+  ],
+  "has_math": true,
+  "page_type": "figure",
+  "book_page": "page-169",
+  "figures": [],
+  "metadata_model": "openrouter:openai/gpt-5.4"
+}

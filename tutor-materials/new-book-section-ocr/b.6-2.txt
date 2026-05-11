@@ -1,0 +1,243 @@
+# Aquarius section OCR
+section_id: b.6-2
+source_pages: page-038, page-039, page-040, page-041, page-042
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+B.6-2 Matrix Algebra
+     We shall now define matrix operations, such as addition, subtraction, multiplication, and division
+     of matrices. The definitions should be formulated so that they are useful in the manipulation of
+     matrices.
+
+     A DDITION OF M ATRICES
+     For two matrices A and B, both of the same order (m × n),
+                  ⎡                         ⎤                  ⎡                                      ⎤
+                      a11 a12 · · · a1n                          b11                b12     ···   b1n
+                  ⎢ a21 a22 · · · a2n ⎥                        ⎢ b21                b22     ···   b2n ⎥
+                  ⎢                         ⎥                  ⎢                                      ⎥
+             A=⎢ .          ..           .. ⎥      and     B=⎢ .                     ..            .. ⎥
+                  ⎣ ..       .   ···      . ⎦                  ⎣ ..                   .     ···     . ⎦
+                       am1    am2    ···    amn                               bm1   bm2     ···   bmn
+
+     we define the sum A + B as
+                               ⎡                                                            ⎤
+                                (a11 + b11 )             (a12 + b12 )   ···    (a1n + b1n )
+                              ⎢ (a21 + b21 )             (a22 + b22 )   ···    (a2n + b2n ) ⎥
+                              ⎢                                                             ⎥
+                        A+B = ⎢      ..                       ..                    ..      ⎥
+                              ⎣       .                        .        ···          .      ⎦
+                                      (am1 + bm1 )       (am2 + bm2 )   ···    (amn + bmn )
+     or
+                                                 A + B = (aij + bij )m×n
+     Note that two matrices can be added only if they are of the same order.
+
+     M ULTIPLICATION OF A M ATRIX BY A S CALAR
+     We multiply a matrix A by a scalar c as follows:
+                      ⎡                           ⎤ ⎡                                          ⎤
+                          a11 a12 · · · a1n           ca11 ca12                  ···      ca1n
+                      ⎢ a21 a22 · · · a2n ⎥ ⎢ ca21 ca22                          ···      ca2n ⎥
+                      ⎢                           ⎥ ⎢                                          ⎥
+               cA = c ⎢ .        ..           .. ⎥ = ⎢ ..    ..                             .. ⎥ = Ac
+                      ⎣ ..        .   ···      . ⎦ ⎣ .        .                 ···          . ⎦
+                             am1    am2    ···     amn           cam1   cam2    ···    camn
+
+     Thus, we also observe that the scalar c and the matrix A commute: cA = Ac.
+
+     M ATRIX M ULTIPLICATION
+     We define the product
+                                                         AB = C
+     in which cij , the element of C in the ith row and jth column, is found by adding the products of
+     the elements of A in the ith row multiplied by the corresponding elements of B in the jth column.
+
+[[PAGE page-039]]
+B.6    Vectors and Matrices       39
+
+Thus,
+                                                                           "
+                                                                           n
+                           cij = ai1 b1j + ai2 b2j + · · · + ain bnj =           aik bkj                 (B.33)
+                                                                           k=1
+
+This result is expressed as follows:
+                                            ⎡                         ⎤
+               ⎡                       ⎤               b1j             ⎡                            ⎤
+                                        ⎢              b2j           ⎥
+               ⎢                      ⎥⎢                             ⎥ ⎢                             ⎥
+               ⎢                      ⎥⎢                ..           ⎥ ⎢                             ⎥
+               ⎢                      ⎥⎢                 .           ⎥ ⎢                             ⎥
+               ⎢                      ⎥⎢                             ⎥=⎢                             ⎥
+               ⎢ ai1 ai2
+               ⎢            · · · ain ⎥ ⎢
+                                      ⎥⎢ · · ·         bij       ··· ⎥ ⎢
+                                                                     ⎥ ⎢ ···               cij   ··· ⎥
+                                                                                                     ⎥
+               ⎣                      ⎦⎢                ..           ⎥ ⎣                             ⎦
+                                        ⎣                .           ⎦
+                                                   bnj                                        
+                                                                   
+                        A(m×n)                                                       C(m×p)
+                                                     B(n×p)
+
+Note carefully that if this procedure is to work, the number of columns of A must be equal to the
+number of rows of B. In other words, AB, the product of matrices A and B, is defined only if
+the number of columns of A is equal to the number of rows of B. If this condition is not satisfied,
+the product AB is not defined and is meaningless. When the number of columns of A is equal
+to the number of rows of B, matrix A is said to be conformable to matrix B for the product AB.
+Observe that if A is an m × n matrix and B is an n × p matrix, A and B are conformable for the
+product, and C is an m × p matrix.
+     We demonstrate the use of the rule in Eq. (B.33) with the following examples.
+                       ⎡     ⎤                                    ⎡                  ⎤
+                         2 3                                 !      8      9     5 7
+                       ⎣ 1 1 ⎦         1 3 1 2
+                                                                 =⎣ 3      4     2 3 ⎦
+                                       2 1 1 1
+                         3 1                                        5     10     4 7
+
+                                                         ⎡  ⎤
+                                                          2
+                                       [ 2      1    3 ]⎣ 1 ⎦ = 8
+                                                          1
+
+In both cases, the two matrices are conformable. However, if we interchange the order of the first
+matrices as follows:
+                                                   ⎡         ⎤
+                                                  ! 2 3
+                                     1 3 1 2 ⎣
+                                                     1 1 ⎦
+                                     2 1 1 1
+                                                     3 1
+
+the matrices are no longer conformable for the product. It is evident that, in general,
+
+                                                    AB = BA
+
+Indeed, AB may exist and BA may not exist, or vice versa, as in our examples. We shall see later
+that for some special matrices, AB = BA. When this is true, matrices A and B are said to commute.
+We re-emphasize that in general, matrices do not commute.
+
+[[PAGE page-040]]
+40   CHAPTER B       BACKGROUND
+
+         In the matrix product AB, matrix A is said to be postmultiplied by B or matrix B is said to be
+     premultiplied by A. We may also verify the following relationships:
+
+                                               (A + B)C = AC + BC
+                                               C(A + B) = CA + CB
+
+     We can verify that any matrix A premultiplied or postmultiplied by the identity matrix I remains
+     unchanged:
+                                             AI = IA = A
+     Of course, we must make sure that the order of I is such that the matrices are conformable for the
+     corresponding product.
+         We give here, without proof, another important property of matrices:
+
+                                                   |AB| = |A||B|
+
+     where |A| and |B| represent determinants of matrices A and B.
+
+     M ULTIPLICATION OF A M ATRIX BY A V ECTOR
+     Consider Eq. (B.32), which represents Eq. (B.31). The right-hand side of Eq. (B.32) is a product of
+     the m × n matrix A and a vector x. If, for the time being, we treat the vector x as if it were an n × 1
+     matrix, then the product Ax, according to the matrix multiplication rule, yields the right-hand side
+     of Eq. (B.31). Thus, we may multiply a matrix by a vector by treating the vector as if it were an
+     n × 1 matrix. Note that the constraint of conformability still applies. Thus, in this case, xA is not
+     defined and is meaningless.
+
+     M ATRIX I NVERSION
+     To define the inverse of a matrix, let us consider the set of equations represented by Eq. (B.32)
+     when m = n:               ⎡     ⎤ ⎡                            ⎤⎡      ⎤
+                                 y1           a11 a12 · · · a1n          x1
+                               ⎢ y2 ⎥ ⎢ a21 a22 · · · a2n ⎥ ⎢ x2 ⎥
+                               ⎢     ⎥ ⎢                            ⎥⎢      ⎥
+                               ⎢ .. ⎥ = ⎢ ..        ..          .. ⎥ ⎢ .. ⎥                     (B.34)
+                               ⎣ . ⎦ ⎣ .             . ··· .        ⎦ ⎣   . ⎦
+                                     yn           an1   an2   ···    ann        xn
+     We can solve this set of equations for x1 , x2 , . . . , xn in terms of y1 , y2 , . . . , yn by using Cramer’s
+     rule [see Eq. (B.21)]. This yields
+                                        ⎡ |D | |D |                    |Dn1 | ⎤
+                                              11          21
+                                                                 ···
+                            ⎡     ⎤ ⎢ |A|              |A|              |A| ⎥    ⎡         ⎤
+                               x1       ⎢                                     ⎥ y1
+                                        ⎢ |D | |D |                           ⎥
+                                                                       |Dn2 | ⎥ ⎢ y ⎥
+                            ⎢ x2 ⎥ ⎢          12          22
+                            ⎢     ⎥ ⎢                            ···          ⎥⎢ 2 ⎥
+                            ⎢ .. ⎥ = ⎢ |A|             |A|              |A| ⎥ ⎢ .. ⎥                         (B.35)
+                            ⎣ . ⎦ ⎢                                           ⎥⎣ . ⎦
+                                        ⎢    ..          ..              ..   ⎥
+                               xn       ⎢     .           .      ···      .   ⎥ yn
+                                        ⎣ |D | |D |                    |Dnn | ⎦
+                                              1n          2n
+                                                                 ···
+                                           |A|         |A|              |A|
+     in which |A| is the determinant of the matrix A and |Dij | is the cofactor of element aij in
+     the matrix A. The cofactor of element aij is given by (−1)i+j times the determinant of the
+
+[[PAGE page-041]]
+B.6   Vectors and Matrices           41
+
+    (n − 1) × (n − 1) matrix that is obtained when the ith row and the jth column in matrix A are
+    deleted.
+        We can express Eq. (B.34) in compact matrix form as
+
+                                                     y = Ax                                           (B.36)
+
+    We now define A−1 , the inverse of a square matrix A, with the property
+
+                                         A−1 A = I       (unit matrix)
+
+    Then, premultiplying both sides of Eq. (B.36) by A−1 , we obtain
+
+                                           A−1 y = A−1 Ax = Ix = x
+
+    or
+                                                   x = A−1 y                                          (B.37)
+    A comparison of Eq. (B.37) with Eq. (B.35) shows that
+                                         ⎡                                    ⎤
+                                           |D11 | |D21 | · · ·         |Dn1 |
+                                      1 ⎢⎢ |D 12 | |D22 | · · ·        |Dn2 | ⎥
+                                                                              ⎥
+                             A−1 =       ⎢ ..        ..                  .. ⎥
+                                     |A| ⎣ .          .   ···             . ⎦
+                                           |D1n | |D2n | · · ·         |Dnn |
+
+         One of the conditions necessary for a unique solution of Eq. (B.34) is that the number of
+    equations must equal the number of unknowns. This implies that the matrix A must be a square
+    matrix. In addition, we observe from the solution as given in Eq. (B.35) that if the solution is
+    to exist, |A| = 0.† Therefore, the inverse exists only for a square matrix and only under the
+    condition that the determinant of the matrix be nonzero. A matrix whose determinant is nonzero
+    is a nonsingular matrix. Thus, an inverse exists only for a nonsingular, square matrix. Since
+    A−1 A = I = AA−1 , we further note that the matrices A and A−1 commute.‡
+         The operation of matrix division can be accomplished through matrix inversion.
+
+
+
+E X A M P L E B.12 Computing the Inverse of a Matrix
+
+    Let us find A−1 if                           ⎡    ⎤
+                                                2 1 1
+                                            A=⎣ 1 2 3 ⎦
+                                                3 2 1
+
+
+
+
+    † These two conditions imply that the number of equations is equal to the number of unknowns and that all
+    the equations are independent.
+    ‡ To prove AA−1 = I, notice first that we define A−1 A = I. Thus, IA = AI = A(A−1 A) = (AA−1 )A.
+    Subtracting (AA−1 )A, we see that IA − (AA−1 )A = 0 or (I − AA−1 )A = 0. This requires AA−1 = I.
+
+[[PAGE page-042]]
+42   CHAPTER B      BACKGROUND
+
+     Here,
+                              |D11 | = −4,     |D12 | = 8,      |D13 | = −4
+                              |D21 | = 1,      |D22 | = −1,     |D23 | = −1
+                              |D31 | = 1,      |D32 | = −5,     |D33 | = 3
+     and |A| = −4. Therefore,                ⎡                   ⎤
+                                               −4         1    1
+                                           1
+                                    A−1 = − ⎣ 8          −1   −5 ⎦
+                                           4 −4          −1    3

@@ -1,0 +1,343 @@
+{
+  "blueprint": {
+    "section_id": "1.7-3",
+    "section_title": "Instantaneous and Dynamic Systems",
+    "difficulty": "intermediate",
+    "estimated_read_minutes": 6,
+    "learning_objectives": [
+      "Distinguish memoryless systems from dynamic systems",
+      "Identify finite-memory and infinite-memory systems from input-output dependence",
+      "Explain why a derivative operation is not memoryless",
+      "Classify simple systems using exam-style dependency checks"
+    ],
+    "visualization_need": {
+      "level": "static",
+      "reason": [
+        "misconception_needs_visual_correction",
+        "wrong_vs_right_contrast_is_high_value",
+        "pattern_recognition_benefits_from_figure"
+      ],
+      "recommended_assets": [
+        "generated_image"
+      ]
+    },
+    "visual_plan": {
+      "primary_anchor": "generated_image",
+      "rationale": "This section is mostly definition-first, so the main definitions should be taught with clean LaTeX-native formulas. No textbook figure is available, and the available Wikipedia result for dynamical systems is too broad for the specific memoryless-vs-derivative trap. A custom generated lecture-note visual is justified only for the high-risk misconception: students often think y(t)=dx(t)/dt is memoryless because it uses the same symbol t.",
+      "cram": "Use the visual to recognize the derivative trap quickly: same x(t) value does not determine slope.",
+      "standard": "Use the visual after the derivative formula to connect the definition to one representative example.",
+      "top_score": "Use the visual to expose the subtle distinction between depending on a value at t and depending on nearby behavior around t."
+    },
+    "blocks": [
+      {
+        "type": "text_explanation",
+        "instruction": "Create a minimal overview page only. Use exactly two short sections: 'Section Objective' and 'Concepts In This Section'. Under 'Section Objective', write one sentence: 'Classify systems by whether the output at time t depends only on the input at time t or also on input values at other times.' Under 'Concepts In This Section', list only these concept names as bullets: memoryless system; dynamic system; finite memory; infinite memory; derivative-as-memory trap. Do not add expanded background, examples, or extra paragraphs."
+      },
+      {
+        "type": "math_block",
+        "latex": "y(t)=F\\bigl(t,x(t)\\bigr)",
+        "explanation_instruction": "Start this page with the heading '## 1. Memoryless systems'. Explain in 90–130 words that a system is memoryless, also called instantaneous, when the output at time \\(t\\) depends at most on the input value at that same time \\(t\\). Explain that \\(F\\) represents any rule the system applies, and the rule may explicitly depend on time \\(t\\). State when to use this test: if every output sample can be computed from the input sample at the same instant, classify the system as memoryless. Include the minimal example \\(y(t)=(t-1)x(t)\\): it is memoryless because the coefficient changes with time, but no past or future input value is used. Common misuse to warn against: do not call a system dynamic merely because the coefficient contains \\(t\\)."
+      },
+      {
+        "type": "math_block",
+        "latex": "y(t_0)\\text{ depends on }x(\\tau)\\text{ for at least one }\\tau\\ne t_0",
+        "explanation_instruction": "Start this page with the heading '## 2. Dynamic systems'. Explain in 90–130 words that a dynamic system, also called a system with memory, is any system whose output at a time \\(t_0\\) cannot be determined from only the input value at \\(t_0\\). Explain the symbols: \\(t_0\\) is the output time being tested, and \\(\\tau\\) is some other time. State the exam trigger: if the formula uses delayed input, advanced input, an integral over time, accumulated state, or a derivative, suspect memory. Include the minimal example \\(y(t)=x(t-1)\\): the output now uses the input one second earlier, so the system is dynamic. Common misuse: do not judge by whether the formula looks simple; judge by which input times are required."
+      },
+      {
+        "type": "math_block",
+        "latex": "y(t)\\text{ depends on }x(\\tau),\\quad t-T\\le \\tau\\le t",
+        "explanation_instruction": "Start this page with the heading '## 3. Finite memory'. Explain in 80–120 words that a finite-memory system needs only a limited window of past input values to determine the current output. Define \\(T\\) as the memory length in seconds, and \\(\\tau\\) as a time inside the relevant past interval. State when to use this idea: when a problem says the response at \\(t\\) is determined by the input over the past \\(T\\) seconds. Include the minimal example: if \\(T=2\\), then \\(y(t)\\) may use input values from \\(t-2\\) to \\(t\\), but not from earlier than \\(t-2\\). Common misuse: finite memory does not mean memoryless; it still uses more than the single instant \\(t\\)."
+      },
+      {
+        "type": "math_block",
+        "latex": "y(t)\\text{ depends on }x(\\tau),\\quad -\\infty<\\tau\\le t",
+        "explanation_instruction": "Start this page with the heading '## 4. Infinite memory'. Explain in 80–120 words that an infinite-memory system can depend on the entire past input history, not just a fixed recent window. Explain that \\(-\\infty<\\tau\\le t\\) means every earlier time may matter when computing the output at \\(t\\). Connect this to the textbook statement that networks containing inductors and capacitors generally have infinite memory because stored energy makes the present response depend on the past. Use the representative example of an RC circuit: its present voltage response is shaped by earlier charging and discharging. Common misuse: infinite memory does not mean the output is impossible to compute; it means the required history is not limited to a fixed finite interval."
+      },
+      {
+        "type": "math_block",
+        "latex": "y(t)=\\frac{d}{dt}x(t)=\\lim_{T\\to 0}\\frac{x(t)-x(t-T)}{T}",
+        "explanation_instruction": "Start this page with the heading '## 5. The derivative trap'. Explain in 100–150 words that \\(y(t)=\\frac{d}{dt}x(t)\\) is not memoryless, even though the notation seems to mention only time \\(t\\). The derivative is a slope, and slope cannot be known from a single input value \\(x(t)\\). Explain the limit formula: it compares \\(x(t)\\) with a nearby past value \\(x(t-T)\\), then lets \\(T\\) shrink toward zero. Use this representative example from the section: \\(y(t)=\\frac{d}{dt}x(t)\\) is dynamic because it needs behavior around \\(t\\), not just the value at \\(t\\). Exam trigger: derivative means memory unless the problem gives a special separate state rule. Common misuse: treating \\(x(t)\\) and the slope of \\(x\\) at \\(t\\) as the same information."
+      },
+      {
+        "type": "generate_image",
+        "tool": "openai/gpt-5.4-image-2",
+        "reason": "No textbook figure is available and the standard Wikipedia dynamical-system reference is too broad. A custom wrong-vs-right teaching visual is needed to expose the specific derivative misconception that LaTeX alone may not fix.",
+        "teaching_role": "trap_exposure",
+        "mode_specific_visual_use": {
+          "cram": "Make students instantly remember that derivative needs nearby points, not just the current value.",
+          "standard": "Support the derivative example with one clear visual comparison of value versus slope.",
+          "top_score": "Highlight that two signals can share the same value at t but have different derivatives at t."
+        },
+        "prompt": "Pure white clean background, minimalist lecture-notes educational diagram, exactly one knowledge point: why y(t)=d x(t)/dt is not memoryless. Draw two small coordinate sketches side by side or stacked. Both signals pass through the same highlighted point at time t with the same value x(t). One curve is rising steeply at t; the other is flat or falling at t. Mark the shared point with a muted teal dot. Add a small label near the shared point: 'same x(t)'. Add muted red slope arrows showing different slopes and a small note: 'different dx/dt'. Include a concise conclusion box: 'Value at t alone is not enough.' Low-saturation navy, muted teal, soft gray, muted red only for warning. Clean linework, no shadows, no decorative poster styling, no cartoon elements, no dense text blocks, no derivation, one clear reading path.",
+        "style_hint": "lecture notes, academic, clean, restrained color boxes, exam-oriented, one concept only"
+      },
+      {
+        "type": "section_summary",
+        "instruction": "Create the recap page titled '📌 Key Takeaways'. Include exactly 5 bullets, each no more than 24 words. The bullets must explicitly include these core formulas: \\(y(t)=F(t,x(t))\\); \\(y(t_0)\\) depends on \\(x(\\tau)\\) for some \\(\\tau\\ne t_0\\); finite memory \\(t-T\\le\\tau\\le t\\); infinite memory \\(-\\infty<\\tau\\le t\\); derivative formula \\(\\frac{d}{dt}x(t)=\\lim_{T\\to0}\\frac{x(t)-x(t-T)}{T}\\). End with one bridge sentence: 'Next, use this same dependency test when checking other system properties.'"
+      },
+      {
+        "type": "quiz_plan",
+        "target_questions": 6,
+        "question_range": {
+          "min": 5,
+          "max": 7
+        },
+        "knowledge_points": [
+          {
+            "id": "memoryless_definition",
+            "label": "Memoryless system test",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 2
+            },
+            "questions": [
+              {
+                "id": "memoryless_q1",
+                "type": "multiple_choice",
+                "stem": "Which condition is enough to classify a system as memoryless?",
+                "options": [
+                  "A. The system output changes with time",
+                  "B. The output at time t depends only on the input value at time t",
+                  "C. The system formula contains no coefficient involving t",
+                  "D. The output depends on all past input values"
+                ],
+                "correct_option": "B",
+                "explanation": "A memoryless system uses only the input value at the same instant as the output being computed.",
+                "wrong_option_explanations": {
+                  "A": "Changing with time does not automatically mean memory. A time-varying multiplier can still be memoryless.",
+                  "C": "A formula may contain t and still be memoryless, such as y(t)=(t-1)x(t).",
+                  "D": "Depending on all past input values describes infinite memory, not memoryless behavior."
+                },
+                "hint": "Ask whether any input time other than the output time is needed.",
+                "needs_visual": false,
+                "same_point_variant": true
+              },
+              {
+                "id": "memoryless_q2",
+                "type": "multiple_choice",
+                "stem": "Classify the system y(t)=(t-1)x(t).",
+                "options": [
+                  "A. Memoryless, because it uses x(t) only",
+                  "B. Dynamic, because the coefficient t-1 changes with time",
+                  "C. Infinite-memory, because t can become large",
+                  "D. Finite-memory with memory of 1 second"
+                ],
+                "correct_option": "A",
+                "explanation": "The output at time t uses only x(t). The time-varying coefficient does not require past or future input values.",
+                "wrong_option_explanations": {
+                  "B": "A time-varying coefficient is not the same as memory.",
+                  "C": "Large values of t do not imply dependence on the entire past.",
+                  "D": "The expression t-1 is a coefficient, not a delayed input x(t-1)."
+                },
+                "hint": "Do not confuse t-1 multiplying x(t) with x(t-1).",
+                "needs_visual": false,
+                "same_point_variant": true
+              }
+            ]
+          },
+          {
+            "id": "dynamic_system_test",
+            "label": "Dynamic system recognition",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 1
+            },
+            "questions": [
+              {
+                "id": "dynamic_q1",
+                "type": "multiple_choice",
+                "stem": "Which system is definitely dynamic?",
+                "options": [
+                  "A. y(t)=3x(t)",
+                  "B. y(t)=t x(t)",
+                  "C. y(t)=x(t-2)",
+                  "D. y(t)=(t+5)x(t)"
+                ],
+                "correct_option": "C",
+                "explanation": "The output at time t uses the input at time t-2, so the system requires a past input value.",
+                "wrong_option_explanations": {
+                  "A": "This uses only x(t), so it is memoryless.",
+                  "B": "The coefficient t changes with time, but the input used is still x(t).",
+                  "D": "The coefficient t+5 changes with time, but the input used is still x(t)."
+                },
+                "hint": "Look for x evaluated at a time different from t.",
+                "needs_visual": false,
+                "same_point_variant": false
+              }
+            ]
+          },
+          {
+            "id": "finite_infinite_memory",
+            "label": "Finite memory versus infinite memory",
+            "importance": "medium",
+            "exam_weight": "medium",
+            "mastery_rule": {
+              "correct_streak_required": 1
+            },
+            "questions": [
+              {
+                "id": "memory_window_q1",
+                "type": "multiple_choice",
+                "stem": "A system output y(t) is completely determined by input values from t-3 to t. What is the best classification?",
+                "options": [
+                  "A. Memoryless",
+                  "B. Finite-memory system with memory of 3 seconds",
+                  "C. Infinite-memory system",
+                  "D. Not a dynamic system"
+                ],
+                "correct_option": "B",
+                "explanation": "The system uses a limited past interval of length 3 seconds, so it has finite memory.",
+                "wrong_option_explanations": {
+                  "A": "Memoryless would use only x(t), not a whole interval.",
+                  "C": "Infinite memory would require the entire past, not just the past 3 seconds.",
+                  "D": "Finite-memory systems are still dynamic because they use more than the single current input value."
+                },
+                "hint": "A limited past window means finite memory.",
+                "needs_visual": false,
+                "same_point_variant": false
+              },
+              {
+                "id": "infinite_memory_q1",
+                "type": "multiple_choice",
+                "stem": "A circuit response at time t depends on input values over the entire past interval (-∞, t). What does this indicate?",
+                "options": [
+                  "A. Memoryless behavior",
+                  "B. Finite memory with unknown T",
+                  "C. Infinite memory",
+                  "D. Time invariance"
+                ],
+                "correct_option": "C",
+                "explanation": "Dependence on the entire past means the memory is not limited to any finite time window.",
+                "wrong_option_explanations": {
+                  "A": "Memoryless systems depend only on the present input.",
+                  "B": "Finite memory requires a fixed finite window such as t-T to t.",
+                  "D": "Time invariance is a different property and is not determined by memory length alone."
+                },
+                "hint": "The symbol -∞ is the giveaway.",
+                "needs_visual": false,
+                "same_point_variant": false
+              }
+            ]
+          },
+          {
+            "id": "derivative_trap",
+            "label": "Derivative operation is not memoryless",
+            "importance": "high",
+            "exam_weight": "high",
+            "mastery_rule": {
+              "correct_streak_required": 2
+            },
+            "questions": [
+              {
+                "id": "derivative_q1",
+                "type": "multiple_choice",
+                "stem": "Why is y(t)=dx(t)/dt not memoryless?",
+                "options": [
+                  "A. Because derivatives always make systems nonlinear",
+                  "B. Because the slope at t cannot be determined from the single value x(t)",
+                  "C. Because the output uses x(t+1)",
+                  "D. Because the formula contains no explicit coefficient t"
+                ],
+                "correct_option": "B",
+                "explanation": "A derivative measures local change, so it needs neighboring input behavior around t, not just the value at t.",
+                "wrong_option_explanations": {
+                  "A": "A derivative operation can be linear; linearity is not the issue here.",
+                  "C": "The derivative does not specifically require x(t+1); it requires nearby behavior around t.",
+                  "D": "The presence or absence of an explicit time coefficient is not the memory test."
+                },
+                "hint": "Can one point alone determine a slope?",
+                "needs_visual": false,
+                "same_point_variant": true
+              },
+              {
+                "id": "derivative_visual_q1",
+                "type": "multiple_choice",
+                "stem": "In the visual, two signals pass through the same value at time t but have different slopes there. What does this prove about y(t)=dx(t)/dt?",
+                "options": [
+                  "A. The derivative system is memoryless because both signals have the same x(t)",
+                  "B. The derivative system is dynamic because x(t) alone does not determine the output",
+                  "C. The derivative system has finite memory of exactly 1 second",
+                  "D. The derivative system is time-invariant only for flat signals"
+                ],
+                "correct_option": "B",
+                "explanation": "If the same current input value can produce different derivative outputs, then the current value alone is not enough.",
+                "wrong_option_explanations": {
+                  "A": "Same x(t) is exactly why this is a trap: the output can still differ.",
+                  "C": "The visual shows dependence on nearby behavior, not an exact 1-second memory window.",
+                  "D": "The question is about memory, not time invariance."
+                },
+                "hint": "Compare value at t versus slope at t.",
+                "needs_visual": true,
+                "visual_type": "generated_wrong_vs_right_derivative_slope_visual",
+                "same_point_variant": true
+              },
+              {
+                "id": "derivative_short_q1",
+                "type": "short_answer",
+                "stem": "A classmate says y(t)=dx(t)/dt is memoryless because it only mentions t. Write a one-sentence correction.",
+                "ideal_answer": "It is not memoryless because the derivative at t depends on how x changes around t, not just on the single value x(t).",
+                "grading_rubric": [
+                  "Must state that the derivative system is not memoryless",
+                  "Must mention slope or change around t",
+                  "Must distinguish x(t) from nearby behavior of x"
+                ],
+                "explanation": "This checks whether the student can explain the derivative trap instead of only selecting an option.",
+                "hint": "Use the word slope or nearby values.",
+                "needs_visual": false,
+                "same_point_variant": true
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "existing_page_images": {
+    "page-103": "/pages/page-103.png",
+    "page-104": "/pages/page-104.png"
+  },
+  "available_figures": {},
+  "web_sources": [
+    {
+      "index": 1,
+      "title": "Dynamical system",
+      "url": "https://en.wikipedia.org/wiki/Dynamical_system",
+      "snippet": "In mathematics, physics, engineering and systems theory, a dynamical system is the description of how a system evolves in time. For example, an astronomer"
+    },
+    {
+      "index": 2,
+      "title": "Internet",
+      "url": "https://en.wikipedia.org/wiki/Internet",
+      "snippet": "Dynamic Host Configuration Protocol, or are configured.[citation needed] Domain Name Systems convert user-inputted domain names (e.g. \"en.wikipedia.org\")"
+    },
+    {
+      "index": 3,
+      "title": "McDonnell Douglas F-15 Eagle",
+      "url": "https://en.wikipedia.org/wiki/McDonnell_Douglas_F-15_Eagle",
+      "snippet": "instantaneous track updates and enhanced multitarget tracking capability. The APG-63(V)2 and (V)3 are compatible with current F-15C weapon loads and enable"
+    },
+    {
+      "index": 4,
+      "title": "Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Wikipedia",
+      "snippet": "changed Wikipedia&#039;s domain from wikipedia.com to wikipedia.org. After an early period of exponential growth, the growth rate of the English Wikipedia in terms"
+    },
+    {
+      "index": 5,
+      "title": "Duga radar",
+      "url": "https://en.wikipedia.org/wiki/Duga_radar",
+      "snippet": "signal became such a nuisance that some communications receivers began including \"Woodpecker Blankers\" in their circuit designs. The unclaimed signal"
+    }
+  ],
+  "output_contract": {
+    "format": "single_json_object",
+    "no_markdown_fences": true,
+    "no_prose": true,
+    "compact_json_preferred": true
+  },
+  "section_specific_rules": null,
+  "summary_hint": null,
+  "exam_priority_guidance": null
+}

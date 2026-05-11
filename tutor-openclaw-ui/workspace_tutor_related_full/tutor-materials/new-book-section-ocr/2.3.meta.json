@@ -1,0 +1,26 @@
+{
+  "sectionId": "2.3",
+  "sourcePages": [
+    "page-163",
+    "page-164",
+    "page-165",
+    "page-166",
+    "page-167",
+    "page-168"
+  ],
+  "usedPages": [
+    "page-163",
+    "page-164",
+    "page-165",
+    "page-166",
+    "page-167",
+    "page-168"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "2.3 The Unit Impulse Response h(t) 163",
+  "foundEnd": true,
+  "endBeforeLine": "2.4 SYSTEM RESPONSE TO EXTERNAL INPUT:",
+  "endBeforeCode": "2.4",
+  "charCount": 11722
+}

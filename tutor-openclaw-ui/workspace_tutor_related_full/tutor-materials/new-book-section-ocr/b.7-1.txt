@@ -1,0 +1,66 @@
+# Aquarius section OCR
+section_id: b.7-1
+source_pages: page-042, page-043
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+B.7-1 MATLAB Overview
+     Although MATLABĺ (a registered trademark of The MathWorks, Inc.) is easy to use, it can
+     be intimidating to new users. Over the years, MATLAB has evolved into a sophisticated
+     computational package with thousands of functions and thousands of pages of documentation.
+     This section provides a brief introduction to the software environment.
+          When MATLAB is first launched, its command window appears. When MATLAB is ready
+     to accept an instruction or input, a command prompt (>>) is displayed in the command window.
+     Nearly all MATLAB activity is initiated at the command prompt.
+          Entering instructions at the command prompt generally results in the creation of an object or
+     objects. Many classes of objects are possible, including functions and strings, but usually objects
+     are just data. Objects are placed in what is called the MATLAB workspace. If not visible, the
+     workspace can be viewed in a separate window by typing workspace at the command prompt.
+     The workspace provides important information about each object, including the object’s name,
+     size, and class.
+          Another way to view the workspace is the whos command. When whos is typed at the
+     command prompt, a summary of the workspace is printed in the command window. The who
+     command is a short version of whos that reports only the names of workspace objects.
+          Several functions exist to remove unnecessary data and help free system resources. To remove
+     specific variables from the workspace, the clear command is typed, followed by the names of the
+     variables to be removed. Just typing clear removes all objects from the workspace. Additionally,
+     the clc command clears the command window, and the clf command clears the current figure
+     window.
+          Often, important data and objects created in one session need to be saved for future use. The
+     save command, followed by the desired filename, saves the entire workspace to a file, which
+     has the .mat extension. It is also possible to selectively save objects by typing save followed by
+     the filename and then the names of the objects to be saved. The load command followed by the
+     filename is used to load the data and objects contained in a MATLAB data file (.mat file).
+          Although MATLAB does not automatically save workspace data from one session to the next,
+     lines entered at the command prompt are recorded in the command history. Previous command
+     lines can be viewed, copied, and executed directly from the command history window. From the
+
+[[PAGE page-043]]
+B.7 MATLAB: Elementary Operations                43
+
+command window, pressing the up or down arrow key scrolls through previous commands and
+redisplays them at the command prompt. Typing the first few characters and then pressing the
+arrow keys scrolls through the previous commands that start with the same characters. The arrow
+keys allow command sequences to be repeated without retyping.
+     Perhaps the most important and useful command for new users is help. To learn more about
+a function, simply type help followed by the function name. Helpful text is then displayed in
+the command window. The obvious shortcoming of help is that the function name must first
+be known. This is especially limiting for MATLAB beginners. Fortunately, help screens often
+conclude by referencing related or similar functions. These references are an excellent way to
+learn new MATLAB commands. Typing help help, for example, displays detailed information
+on the help command itself and also provides reference to relevant functions, such as the lookfor
+command. The lookfor command helps locate MATLAB functions based on a keyword search.
+Simply type lookfor followed by a single keyword, and MATLAB searches for functions that
+contain that keyword.
+     MATLAB also has comprehensive HTML-based help. The HTML help is accessed by using
+MATLAB’s integrated help browser, which also functions as a standard web browser. The HTML
+help facility includes a function and topic index as well as full text-searching capabilities. Since
+HTML documents can contain graphics and special characters, HTML help can provide more
+information than the command-line help. After a little practice, it is easy to find information in
+MATLAB.
+     When MATLAB graphics are created, the print command can save figures in a common file
+format such as postscript, encapsulated postscript, JPEG, or TIFF. The format of displayed data,
+such as the number of digits displayed, is selected by using the format command. MATLAB help
+provides the necessary details for both these functions. When a MATLAB session is complete, the
+exit command terminates MATLAB.

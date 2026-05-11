@@ -1,0 +1,23 @@
+{
+  "chapter": "2",
+  "section": null,
+  "subsection": null,
+  "title": "Figure 2.1 Circuits for Ex. 2.4.",
+  "summary": "This page continues Example 2.4 by determining the zero-input response initial conditions for an RLC circuit. It derives ẏ0(0) = -5 from the loop equation, gives y0(t) = -5e^(-t) + 5e^(-2t), and then begins comparing total-response conditions at t = 0− and t = 0+.",
+  "keywords": [
+    "RLC circuit",
+    "zero-input response",
+    "initial conditions",
+    "loop equation",
+    "inductor voltage",
+    "capacitor voltage",
+    "total response",
+    "discontinuity at t=0",
+    "Example 2.4"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "page-160",
+  "figures": [],
+  "metadata_model": "openrouter:openai/gpt-5.4"
+}

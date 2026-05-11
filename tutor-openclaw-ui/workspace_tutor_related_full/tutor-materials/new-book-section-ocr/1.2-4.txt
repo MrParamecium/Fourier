@@ -1,0 +1,24 @@
+# Aquarius section OCR
+section_id: 1.2-4
+source_pages: page-077, page-078
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+1.2-4 Combined Operations
+    Certain complex operations require simultaneous use of more than one of the operations just
+    described. The most general operation involving all the three operations is x(at − b), which is
+    realized in two possible sequences of operation:
+        1. Time-shift x(t) by b to obtain x(t − b). Now time-scale the shifted signal x(t − b) by a [i.e.,
+           replace t with at] to obtain x(at − b).
+        2. Time-scale x(t) by a to obtain x(at). Now time-shift x(at) by b/a [i.e., replace t with
+           t − (b/a)] to obtain x[a(t − b/a)] = x(at − b). In either case, if a is negative, time scaling
+           involves time reversal.
+         For example, the signal x(2t −6) can be obtained in two ways. We can delay x(t) by 6 to obtain
+    x(t − 6), and then time-compress this signal by factor 2 (replace t with 2t) to obtain x(2t − 6).
+
+[[PAGE page-078]]
+78   CHAPTER 1      SIGNALS AND SYSTEMS
+
+     Alternately, we can first time-compress x(t) by factor 2 to obtain x(2t), then delay this signal by 3
+     (replace t with t − 3) to obtain x(2t − 6).

@@ -1,0 +1,720 @@
+# Agent A Preview: 1.3-2 Analog and Digital Signals
+
+- Difficulty: beginner
+- Estimated read minutes: 6
+
+## Learning Objectives
+
+- Distinguish continuous-time and discrete-time descriptions from analog and digital amplitude descriptions.
+- Identify whether a signal is analog or digital by looking at the vertical-axis amplitude values.
+- Explain M-ary and binary digital signals.
+- Recognize that analog-to-digital conversion uses quantization of amplitude values.
+
+## Visualization Need
+
+```json
+{
+  "level": "interactive",
+  "reason": [
+    "classification_benefits_from_figure",
+    "pattern_recognition_benefits_from_figure",
+    "student_should_manipulate_to_understand",
+    "formula_to_phenomenon_gap"
+  ],
+  "recommended_assets": [
+    "book_figure",
+    "wiki_figure",
+    "react_canvas_demo"
+  ]
+}
+```
+
+## Visual Plan
+
+```json
+{
+  "primary_anchor": "both",
+  "rationale": "This section is mainly about not confusing two independent axes of signal classification: time on the horizontal axis and amplitude on the vertical axis. The available textbook figure is valuable for continuous-time versus discrete-time recognition, a Wikipedia/Wikimedia reference image can support analog-versus-digital waveform recognition, and an interactive demo is the strongest way to show that sampling time and quantizing amplitude are different operations.",
+  "cram": "Use visuals to make the exam trigger immediate: horizontal axis decides continuous-time versus discrete-time; vertical values decide analog versus digital.",
+  "standard": "Use one representative figure and one interactive comparison so students can classify ordinary examples without overloading edge cases.",
+  "top_score": "Use the demo to expose the subtle cases: analog discrete-time signals and digital continuous-time signals are possible."
+}
+```
+
+## Planned Blocks
+
+### Block 1: `text_explanation`
+- **instruction**: Create a minimal overview page only. Use the heading 'Section Objective' followed by one sentence: 'Learn how analog/digital classification differs from continuous-time/discrete-time classification.' Then add the heading 'Concepts In This Section' and list only these concept names as bullets: continuous-time versus discrete-time, analog versus digital, M-ary and binary signals, quantization. Do not add expanded background, examples, or long paragraphs on this page.
+
+### Block 2: `book_image`
+- **source_page**: page-079
+- **fig_id**: Fig. 1.10
+- **caption_instruction**: One sentence: this figure contrasts a smooth continuous-time signal with a discrete-time data sequence.
+- **description_instruction**: Describe the two panels briefly. In panel (a), point out that the signal is drawn for every time value along the horizontal axis. In panel (b), point out that the values appear at separate quarterly time instants. End by saying this figure is about the time axis, not about whether the amplitudes are analog or digital.
+
+### Block 3: `text_explanation`
+- **instruction**: Start a new knowledge-point page with the heading '## 1. Time axis: continuous-time versus discrete-time'. Explain in 90–130 words that continuous-time and discrete-time describe where the signal is defined along the horizontal time axis. Use the exact contrast: continuous-time means the signal can be evaluated at every real time value; discrete-time means the signal is defined only at separated time instants, often indexed by integers. Include one representative example: a microphone voltage modeled as x(t) is continuous-time; quarterly GNP data is discrete-time because it is reported once per quarter. End with the exam note: 'Do not decide analog/digital from the horizontal axis.'
+
+### Block 4: `math_block`
+- **latex**: x(t)
+- **explanation_instruction**: Explain that x(t) is the usual notation for a continuous-time signal: t is a real-valued time variable. Use it when the signal is defined over a continuous time line. Common misuse: assuming x(t) automatically means the amplitudes are analog.
+
+### Block 5: `math_block`
+- **latex**: x[n]
+- **explanation_instruction**: Explain that x[n] is the usual notation for a discrete-time signal: n is an integer index. Use it when samples or measurements occur at separated instants. Common misuse: assuming x[n] automatically means the amplitudes are digital.
+
+### Block 6: `web_search_image`
+- **search_query**: Wikimedia Commons analog signal digital signal waveform comparison
+- **purpose**: Find a clean reference visual comparing a smooth analog waveform with a quantized or stepped digital waveform, emphasizing amplitude values on the vertical axis.
+- **preferred_sources**:
+```json
+[
+  "wikimedia_commons",
+  "wikipedia"
+]
+```
+- **prefer_animated**:
+```json
+false
+```
+- **fallback**: interactive_demo
+- **teaching_role**: comparison_anchor
+- **mode_specific_visual_use**:
+```json
+{
+  "cram": "Use the image to memorize that analog/digital is decided by possible amplitude levels.",
+  "standard": "Use the image as the representative visual for vertical-axis classification.",
+  "top_score": "Use the image to separate amplitude quantization from time sampling."
+}
+```
+
+### Block 7: `text_explanation`
+- **instruction**: Start a new knowledge-point page with the heading '## 2. Amplitude axis: analog versus digital'. Explain in 100–150 words that analog and digital describe the possible vertical-axis amplitude values, not the time axis. Define analog as amplitudes that may take any value in a continuous range. Define digital as amplitudes restricted to a finite set of possible values. Include one representative example: a signal with amplitudes 0 V, 1 V, 2 V, and 3 V only is digital even if it is drawn over continuous time. Include a quick check sentence: 'Ask: how many amplitude values are allowed?'
+
+### Block 8: `math_block`
+- **latex**: x \in [a,b]
+- **explanation_instruction**: Explain that this represents the analog idea: the amplitude x may be any real value in a continuous interval from a to b. Symbols: a and b are the lower and upper amplitude limits. Use this when the problem describes a continuous range of possible amplitudes. Exam trigger: phrases like 'can take any value between'. Common misuse: thinking the curve must be smooth in time.
+
+### Block 9: `math_block`
+- **latex**: x \in \{a_1,a_2,\ldots,a_M\}
+- **explanation_instruction**: Explain that this represents the digital idea: the amplitude x must be one of M allowed values. Symbols: a_1 through a_M are the allowed amplitude levels; M is the number of levels. Use this when the problem says finite levels, quantized levels, or M-ary. Common misuse: thinking digital always means only two levels.
+
+### Block 10: `math_block`
+- **latex**: M=2
+- **explanation_instruction**: Explain that binary is the special case of a digital signal with exactly two allowed amplitude values. Use it for computer-style two-level signals. Common misuse: calling every digital signal binary; digital may have M levels, not necessarily two.
+
+### Block 11: `interactive_demo`
+- **title**: Sampling time versus quantizing amplitude
+- **teaching_role**: concept_anchor
+- **mode_specific_visual_use**:
+```json
+{
+  "cram": "Let students toggle sampling and quantization to instantly classify the four signal types.",
+  "standard": "Use the demo to show one clean waveform and how changing the time axis differs from changing amplitude levels.",
+  "top_score": "Use the demo to test subtle combinations such as analog discrete-time and digital continuous-time."
+}
+```
+- **instruction**: Build a React + Canvas demo with one base smooth waveform. Include two independent toggles: 'Time: continuous / discrete samples' and 'Amplitude: continuous / quantized levels'. When time is continuous, draw a continuous curve; when discrete, draw stems or dots at separated sample instants. When amplitude is continuous, allow the vertical values to follow the waveform exactly; when quantized, snap amplitudes to 4 visible horizontal levels. Display a live classification label with one of four outputs: 'continuous-time analog', 'continuous-time digital', 'discrete-time analog', or 'discrete-time digital'. Add a short prompt under the canvas: 'First inspect the horizontal axis, then inspect the vertical axis.'
+
+### Block 12: `text_explanation`
+- **instruction**: Start a new knowledge-point page with the heading '## 3. Analog-to-digital conversion: quantization'. Explain in 90–130 words that A/D conversion changes an analog amplitude into one of a finite set of digital levels. Keep the focus on quantization as rounding amplitude values, not on hardware details. Include one representative example: if the allowed levels are 0, 1, 2, and 3 volts, then a measured amplitude of 2.7 volts may be rounded to 3 volts. End with the exam note: 'Sampling affects time; quantization affects amplitude.'
+
+### Block 13: `math_block`
+- **latex**: x_q = Q(x)
+- **explanation_instruction**: Explain that Q is a quantizer and x_q is the quantized output amplitude. Use this when an analog value is rounded or mapped to an allowed digital level. Common misuse: treating quantization as choosing sample times; quantization changes vertical values.
+
+### Block 14: `section_summary`
+- **instruction**: Create a recap page titled '📌 Key Takeaways'. Include 4 concise bullets. The bullets must explicitly include these formulas/rules: x(t) for continuous-time notation, x[n] for discrete-time notation, x in [a,b] for analog amplitude range, x in {a_1,a_2,...,a_M} for digital M-ary amplitude levels, M=2 for binary, and x_q = Q(x) for quantization. Keep each bullet under 25 words if possible. End with one bridge sentence: 'Next, we will classify signals by repetition: periodic versus aperiodic.'
+
+### Block 15: `quiz_plan`
+- **target_questions**:
+```json
+7
+```
+- **question_range**:
+```json
+{
+  "min": 6,
+  "max": 8
+}
+```
+- **knowledge_points**:
+```json
+[
+  {
+    "id": "time_axis_classification",
+    "label": "Continuous-time versus discrete-time",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "kp1_q1",
+        "type": "multiple_choice",
+        "stem": "A signal is measured once every hour and written as x[n]. What classification is definitely supported?",
+        "options": [
+          "A. It is continuous-time",
+          "B. It is discrete-time",
+          "C. It is analog",
+          "D. It is binary"
+        ],
+        "correct_option": "B",
+        "explanation": "The index n indicates separated time instants, so the signal is discrete-time.",
+        "wrong_option_explanations": {
+          "A": "Continuous-time signals are usually written as x(t), not x[n].",
+          "C": "Analog depends on amplitude values, not time indexing.",
+          "D": "Binary means two amplitude levels; the stem does not say that."
+        },
+        "hint": "Look at the horizontal-axis information first.",
+        "needs_visual": false,
+        "same_point_variant": false
+      },
+      {
+        "id": "kp1_q2",
+        "type": "multiple_choice",
+        "stem": "In the textbook-style figure, a smooth curve drawn for every time t should be read primarily as what?",
+        "options": [
+          "A. A continuous-time signal",
+          "B. A digital signal",
+          "C. A binary signal",
+          "D. A quantized signal"
+        ],
+        "correct_option": "A",
+        "explanation": "A curve defined for every time t shows continuous-time behavior. It does not by itself prove whether amplitudes are analog or digital.",
+        "wrong_option_explanations": {
+          "B": "Digital depends on a finite set of amplitude values.",
+          "C": "Binary requires exactly two amplitude levels.",
+          "D": "Quantized means amplitudes have been rounded to allowed levels."
+        },
+        "hint": "A smooth horizontal-time drawing answers a time-axis question.",
+        "needs_visual": true,
+        "visual_type": "book_figure_reference",
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "amplitude_axis_classification",
+    "label": "Analog versus digital amplitude values",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "kp2_q1",
+        "type": "multiple_choice",
+        "stem": "A signal amplitude can take any real value from -5 V to 5 V. Which notation best matches that idea?",
+        "options": [
+          "A. x \\in [-5,5]",
+          "B. x \\in \\{-5,5\\}",
+          "C. x[n]",
+          "D. M=2"
+        ],
+        "correct_option": "A",
+        "explanation": "The interval notation means every real value between -5 and 5 is allowed, which is analog amplitude behavior.",
+        "wrong_option_explanations": {
+          "B": "This set contains only two values, -5 and 5.",
+          "C": "x[n] describes discrete time, not amplitude range.",
+          "D": "M=2 describes a binary digital signal."
+        },
+        "hint": "Continuous range means interval notation.",
+        "needs_visual": false,
+        "same_point_variant": false
+      },
+      {
+        "id": "kp2_q2",
+        "type": "multiple_choice",
+        "stem": "A signal can only have amplitudes 0 V, 1 V, 2 V, or 3 V. What is the best classification of its amplitude?",
+        "options": [
+          "A. Analog",
+          "B. Digital, 4-ary",
+          "C. Binary",
+          "D. Continuous-time"
+        ],
+        "correct_option": "B",
+        "explanation": "There are four allowed amplitude levels, so the signal is digital with M=4.",
+        "wrong_option_explanations": {
+          "A": "Analog would allow a continuous range of amplitudes.",
+          "C": "Binary requires exactly two levels, not four.",
+          "D": "Continuous-time describes the time axis, not the amplitude set."
+        },
+        "hint": "Count the allowed vertical values.",
+        "needs_visual": false,
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "binary_and_mary",
+    "label": "M-ary and binary digital signals",
+    "importance": "medium",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp3_q1",
+        "type": "multiple_choice",
+        "stem": "Which statement is correct?",
+        "options": [
+          "A. Every digital signal is binary",
+          "B. Every binary signal is digital",
+          "C. Every analog signal is continuous-time",
+          "D. Every discrete-time signal is digital"
+        ],
+        "correct_option": "B",
+        "explanation": "Binary means exactly two allowed amplitude levels, so it is a special case of digital.",
+        "wrong_option_explanations": {
+          "A": "Digital signals may have M levels, not necessarily two.",
+          "C": "Analog describes amplitude, not the time axis.",
+          "D": "Discrete-time describes sample times, not amplitude levels."
+        },
+        "hint": "Binary is the special case M=2.",
+        "needs_visual": false,
+        "same_point_variant": false
+      }
+    ]
+  },
+  {
+    "id": "axis_confusion_trap",
+    "label": "Do not confuse time-axis and amplitude-axis classifications",
+    "importance": "high",
+    "exam_weight": "high",
+    "mastery_rule": {
+      "correct_streak_required": 2
+    },
+    "questions": [
+      {
+        "id": "kp4_q1",
+        "type": "multiple_choice",
+        "stem": "Observe a demo setting where time is switched to 'discrete samples' but amplitude is switched to 'continuous'. What is the correct label?",
+        "options": [
+          "A. Continuous-time analog",
+          "B. Discrete-time analog",
+          "C. Discrete-time digital",
+          "D. Continuous-time digital"
+        ],
+        "correct_option": "B",
+        "explanation": "Discrete samples determine the time-axis classification. Continuous amplitude values determine the analog classification.",
+        "wrong_option_explanations": {
+          "A": "The time axis is not continuous in this setting.",
+          "C": "The amplitude values are not restricted to finite quantized levels.",
+          "D": "Both the time and amplitude labels are reversed."
+        },
+        "hint": "Classify time first, then amplitude.",
+        "needs_visual": true,
+        "visual_type": "interactive_demo_observation",
+        "same_point_variant": false
+      },
+      {
+        "id": "kp4_q2",
+        "type": "short_answer",
+        "stem": "A classmate says, 'This signal is discrete-time, so it must be digital.' Explain why that is wrong.",
+        "ideal_answer": "Discrete-time describes the horizontal time axis: the signal is defined only at separated time instants. Digital describes the vertical amplitude axis: the amplitude must come from a finite set of levels. A discrete-time signal can still have analog amplitudes.",
+        "grading_rubric": [
+          "Must state that discrete-time refers to the time axis",
+          "Must state that digital refers to finite amplitude levels",
+          "Must mention that discrete-time analog signals are possible"
+        ],
+        "explanation": "This checks the central misconception in the section: time classification and amplitude classification are independent.",
+        "hint": "Ask whether x[n] tells you the allowed vertical values.",
+        "needs_visual": false,
+        "same_point_variant": true
+      }
+    ]
+  },
+  {
+    "id": "quantization",
+    "label": "Quantization in analog-to-digital conversion",
+    "importance": "medium",
+    "exam_weight": "medium",
+    "mastery_rule": {
+      "correct_streak_required": 1
+    },
+    "questions": [
+      {
+        "id": "kp5_q1",
+        "type": "multiple_choice",
+        "stem": "In A/D conversion, what does quantization mainly do?",
+        "options": [
+          "A. It chooses the time instants at which the signal is measured",
+          "B. It rounds or maps amplitudes to allowed levels",
+          "C. It makes every digital signal binary",
+          "D. It turns x[n] into x(t)"
+        ],
+        "correct_option": "B",
+        "explanation": "Quantization acts on amplitude values, mapping them to a finite set of allowed digital levels.",
+        "wrong_option_explanations": {
+          "A": "Choosing time instants is sampling, not quantization.",
+          "C": "Digital signals may have more than two levels.",
+          "D": "x[n] and x(t) describe time indexing, not quantization."
+        },
+        "hint": "Quantization changes the vertical value.",
+        "needs_visual": true,
+        "visual_type": "interactive_demo_observation",
+        "same_point_variant": false
+      }
+    ]
+  }
+]
+```
+
+## Raw JSON
+
+```json
+{
+  "section_id": "1.3-2",
+  "section_title": "Analog and Digital Signals",
+  "difficulty": "beginner",
+  "estimated_read_minutes": 6,
+  "learning_objectives": [
+    "Distinguish continuous-time and discrete-time descriptions from analog and digital amplitude descriptions.",
+    "Identify whether a signal is analog or digital by looking at the vertical-axis amplitude values.",
+    "Explain M-ary and binary digital signals.",
+    "Recognize that analog-to-digital conversion uses quantization of amplitude values."
+  ],
+  "visualization_need": {
+    "level": "interactive",
+    "reason": [
+      "classification_benefits_from_figure",
+      "pattern_recognition_benefits_from_figure",
+      "student_should_manipulate_to_understand",
+      "formula_to_phenomenon_gap"
+    ],
+    "recommended_assets": [
+      "book_figure",
+      "wiki_figure",
+      "react_canvas_demo"
+    ]
+  },
+  "visual_plan": {
+    "primary_anchor": "both",
+    "rationale": "This section is mainly about not confusing two independent axes of signal classification: time on the horizontal axis and amplitude on the vertical axis. The available textbook figure is valuable for continuous-time versus discrete-time recognition, a Wikipedia/Wikimedia reference image can support analog-versus-digital waveform recognition, and an interactive demo is the strongest way to show that sampling time and quantizing amplitude are different operations.",
+    "cram": "Use visuals to make the exam trigger immediate: horizontal axis decides continuous-time versus discrete-time; vertical values decide analog versus digital.",
+    "standard": "Use one representative figure and one interactive comparison so students can classify ordinary examples without overloading edge cases.",
+    "top_score": "Use the demo to expose the subtle cases: analog discrete-time signals and digital continuous-time signals are possible."
+  },
+  "blocks": [
+    {
+      "type": "text_explanation",
+      "instruction": "Create a minimal overview page only. Use the heading 'Section Objective' followed by one sentence: 'Learn how analog/digital classification differs from continuous-time/discrete-time classification.' Then add the heading 'Concepts In This Section' and list only these concept names as bullets: continuous-time versus discrete-time, analog versus digital, M-ary and binary signals, quantization. Do not add expanded background, examples, or long paragraphs on this page."
+    },
+    {
+      "type": "book_image",
+      "source_page": "page-079",
+      "fig_id": "Fig. 1.10",
+      "caption_instruction": "One sentence: this figure contrasts a smooth continuous-time signal with a discrete-time data sequence.",
+      "description_instruction": "Describe the two panels briefly. In panel (a), point out that the signal is drawn for every time value along the horizontal axis. In panel (b), point out that the values appear at separate quarterly time instants. End by saying this figure is about the time axis, not about whether the amplitudes are analog or digital."
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Start a new knowledge-point page with the heading '## 1. Time axis: continuous-time versus discrete-time'. Explain in 90–130 words that continuous-time and discrete-time describe where the signal is defined along the horizontal time axis. Use the exact contrast: continuous-time means the signal can be evaluated at every real time value; discrete-time means the signal is defined only at separated time instants, often indexed by integers. Include one representative example: a microphone voltage modeled as x(t) is continuous-time; quarterly GNP data is discrete-time because it is reported once per quarter. End with the exam note: 'Do not decide analog/digital from the horizontal axis.'"
+    },
+    {
+      "type": "math_block",
+      "latex": "x(t)",
+      "explanation_instruction": "Explain that x(t) is the usual notation for a continuous-time signal: t is a real-valued time variable. Use it when the signal is defined over a continuous time line. Common misuse: assuming x(t) automatically means the amplitudes are analog."
+    },
+    {
+      "type": "math_block",
+      "latex": "x[n]",
+      "explanation_instruction": "Explain that x[n] is the usual notation for a discrete-time signal: n is an integer index. Use it when samples or measurements occur at separated instants. Common misuse: assuming x[n] automatically means the amplitudes are digital."
+    },
+    {
+      "type": "web_search_image",
+      "search_query": "Wikimedia Commons analog signal digital signal waveform comparison",
+      "purpose": "Find a clean reference visual comparing a smooth analog waveform with a quantized or stepped digital waveform, emphasizing amplitude values on the vertical axis.",
+      "preferred_sources": [
+        "wikimedia_commons",
+        "wikipedia"
+      ],
+      "prefer_animated": false,
+      "fallback": "interactive_demo",
+      "teaching_role": "comparison_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Use the image to memorize that analog/digital is decided by possible amplitude levels.",
+        "standard": "Use the image as the representative visual for vertical-axis classification.",
+        "top_score": "Use the image to separate amplitude quantization from time sampling."
+      }
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Start a new knowledge-point page with the heading '## 2. Amplitude axis: analog versus digital'. Explain in 100–150 words that analog and digital describe the possible vertical-axis amplitude values, not the time axis. Define analog as amplitudes that may take any value in a continuous range. Define digital as amplitudes restricted to a finite set of possible values. Include one representative example: a signal with amplitudes 0 V, 1 V, 2 V, and 3 V only is digital even if it is drawn over continuous time. Include a quick check sentence: 'Ask: how many amplitude values are allowed?'"
+    },
+    {
+      "type": "math_block",
+      "latex": "x \\in [a,b]",
+      "explanation_instruction": "Explain that this represents the analog idea: the amplitude x may be any real value in a continuous interval from a to b. Symbols: a and b are the lower and upper amplitude limits. Use this when the problem describes a continuous range of possible amplitudes. Exam trigger: phrases like 'can take any value between'. Common misuse: thinking the curve must be smooth in time."
+    },
+    {
+      "type": "math_block",
+      "latex": "x \\in \\{a_1,a_2,\\ldots,a_M\\}",
+      "explanation_instruction": "Explain that this represents the digital idea: the amplitude x must be one of M allowed values. Symbols: a_1 through a_M are the allowed amplitude levels; M is the number of levels. Use this when the problem says finite levels, quantized levels, or M-ary. Common misuse: thinking digital always means only two levels."
+    },
+    {
+      "type": "math_block",
+      "latex": "M=2",
+      "explanation_instruction": "Explain that binary is the special case of a digital signal with exactly two allowed amplitude values. Use it for computer-style two-level signals. Common misuse: calling every digital signal binary; digital may have M levels, not necessarily two."
+    },
+    {
+      "type": "interactive_demo",
+      "title": "Sampling time versus quantizing amplitude",
+      "teaching_role": "concept_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Let students toggle sampling and quantization to instantly classify the four signal types.",
+        "standard": "Use the demo to show one clean waveform and how changing the time axis differs from changing amplitude levels.",
+        "top_score": "Use the demo to test subtle combinations such as analog discrete-time and digital continuous-time."
+      },
+      "instruction": "Build a React + Canvas demo with one base smooth waveform. Include two independent toggles: 'Time: continuous / discrete samples' and 'Amplitude: continuous / quantized levels'. When time is continuous, draw a continuous curve; when discrete, draw stems or dots at separated sample instants. When amplitude is continuous, allow the vertical values to follow the waveform exactly; when quantized, snap amplitudes to 4 visible horizontal levels. Display a live classification label with one of four outputs: 'continuous-time analog', 'continuous-time digital', 'discrete-time analog', or 'discrete-time digital'. Add a short prompt under the canvas: 'First inspect the horizontal axis, then inspect the vertical axis.'"
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Start a new knowledge-point page with the heading '## 3. Analog-to-digital conversion: quantization'. Explain in 90–130 words that A/D conversion changes an analog amplitude into one of a finite set of digital levels. Keep the focus on quantization as rounding amplitude values, not on hardware details. Include one representative example: if the allowed levels are 0, 1, 2, and 3 volts, then a measured amplitude of 2.7 volts may be rounded to 3 volts. End with the exam note: 'Sampling affects time; quantization affects amplitude.'"
+    },
+    {
+      "type": "math_block",
+      "latex": "x_q = Q(x)",
+      "explanation_instruction": "Explain that Q is a quantizer and x_q is the quantized output amplitude. Use this when an analog value is rounded or mapped to an allowed digital level. Common misuse: treating quantization as choosing sample times; quantization changes vertical values."
+    },
+    {
+      "type": "section_summary",
+      "instruction": "Create a recap page titled '📌 Key Takeaways'. Include 4 concise bullets. The bullets must explicitly include these formulas/rules: x(t) for continuous-time notation, x[n] for discrete-time notation, x in [a,b] for analog amplitude range, x in {a_1,a_2,...,a_M} for digital M-ary amplitude levels, M=2 for binary, and x_q = Q(x) for quantization. Keep each bullet under 25 words if possible. End with one bridge sentence: 'Next, we will classify signals by repetition: periodic versus aperiodic.'"
+    },
+    {
+      "type": "quiz_plan",
+      "target_questions": 7,
+      "question_range": {
+        "min": 6,
+        "max": 8
+      },
+      "knowledge_points": [
+        {
+          "id": "time_axis_classification",
+          "label": "Continuous-time versus discrete-time",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp1_q1",
+              "type": "multiple_choice",
+              "stem": "A signal is measured once every hour and written as x[n]. What classification is definitely supported?",
+              "options": [
+                "A. It is continuous-time",
+                "B. It is discrete-time",
+                "C. It is analog",
+                "D. It is binary"
+              ],
+              "correct_option": "B",
+              "explanation": "The index n indicates separated time instants, so the signal is discrete-time.",
+              "wrong_option_explanations": {
+                "A": "Continuous-time signals are usually written as x(t), not x[n].",
+                "C": "Analog depends on amplitude values, not time indexing.",
+                "D": "Binary means two amplitude levels; the stem does not say that."
+              },
+              "hint": "Look at the horizontal-axis information first.",
+              "needs_visual": false,
+              "same_point_variant": false
+            },
+            {
+              "id": "kp1_q2",
+              "type": "multiple_choice",
+              "stem": "In the textbook-style figure, a smooth curve drawn for every time t should be read primarily as what?",
+              "options": [
+                "A. A continuous-time signal",
+                "B. A digital signal",
+                "C. A binary signal",
+                "D. A quantized signal"
+              ],
+              "correct_option": "A",
+              "explanation": "A curve defined for every time t shows continuous-time behavior. It does not by itself prove whether amplitudes are analog or digital.",
+              "wrong_option_explanations": {
+                "B": "Digital depends on a finite set of amplitude values.",
+                "C": "Binary requires exactly two amplitude levels.",
+                "D": "Quantized means amplitudes have been rounded to allowed levels."
+              },
+              "hint": "A smooth horizontal-time drawing answers a time-axis question.",
+              "needs_visual": true,
+              "visual_type": "book_figure_reference",
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "amplitude_axis_classification",
+          "label": "Analog versus digital amplitude values",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp2_q1",
+              "type": "multiple_choice",
+              "stem": "A signal amplitude can take any real value from -5 V to 5 V. Which notation best matches that idea?",
+              "options": [
+                "A. x \\in [-5,5]",
+                "B. x \\in \\{-5,5\\}",
+                "C. x[n]",
+                "D. M=2"
+              ],
+              "correct_option": "A",
+              "explanation": "The interval notation means every real value between -5 and 5 is allowed, which is analog amplitude behavior.",
+              "wrong_option_explanations": {
+                "B": "This set contains only two values, -5 and 5.",
+                "C": "x[n] describes discrete time, not amplitude range.",
+                "D": "M=2 describes a binary digital signal."
+              },
+              "hint": "Continuous range means interval notation.",
+              "needs_visual": false,
+              "same_point_variant": false
+            },
+            {
+              "id": "kp2_q2",
+              "type": "multiple_choice",
+              "stem": "A signal can only have amplitudes 0 V, 1 V, 2 V, or 3 V. What is the best classification of its amplitude?",
+              "options": [
+                "A. Analog",
+                "B. Digital, 4-ary",
+                "C. Binary",
+                "D. Continuous-time"
+              ],
+              "correct_option": "B",
+              "explanation": "There are four allowed amplitude levels, so the signal is digital with M=4.",
+              "wrong_option_explanations": {
+                "A": "Analog would allow a continuous range of amplitudes.",
+                "C": "Binary requires exactly two levels, not four.",
+                "D": "Continuous-time describes the time axis, not the amplitude set."
+              },
+              "hint": "Count the allowed vertical values.",
+              "needs_visual": false,
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "binary_and_mary",
+          "label": "M-ary and binary digital signals",
+          "importance": "medium",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp3_q1",
+              "type": "multiple_choice",
+              "stem": "Which statement is correct?",
+              "options": [
+                "A. Every digital signal is binary",
+                "B. Every binary signal is digital",
+                "C. Every analog signal is continuous-time",
+                "D. Every discrete-time signal is digital"
+              ],
+              "correct_option": "B",
+              "explanation": "Binary means exactly two allowed amplitude levels, so it is a special case of digital.",
+              "wrong_option_explanations": {
+                "A": "Digital signals may have M levels, not necessarily two.",
+                "C": "Analog describes amplitude, not the time axis.",
+                "D": "Discrete-time describes sample times, not amplitude levels."
+              },
+              "hint": "Binary is the special case M=2.",
+              "needs_visual": false,
+              "same_point_variant": false
+            }
+          ]
+        },
+        {
+          "id": "axis_confusion_trap",
+          "label": "Do not confuse time-axis and amplitude-axis classifications",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "kp4_q1",
+              "type": "multiple_choice",
+              "stem": "Observe a demo setting where time is switched to 'discrete samples' but amplitude is switched to 'continuous'. What is the correct label?",
+              "options": [
+                "A. Continuous-time analog",
+                "B. Discrete-time analog",
+                "C. Discrete-time digital",
+                "D. Continuous-time digital"
+              ],
+              "correct_option": "B",
+              "explanation": "Discrete samples determine the time-axis classification. Continuous amplitude values determine the analog classification.",
+              "wrong_option_explanations": {
+                "A": "The time axis is not continuous in this setting.",
+                "C": "The amplitude values are not restricted to finite quantized levels.",
+                "D": "Both the time and amplitude labels are reversed."
+              },
+              "hint": "Classify time first, then amplitude.",
+              "needs_visual": true,
+              "visual_type": "interactive_demo_observation",
+              "same_point_variant": false
+            },
+            {
+              "id": "kp4_q2",
+              "type": "short_answer",
+              "stem": "A classmate says, 'This signal is discrete-time, so it must be digital.' Explain why that is wrong.",
+              "ideal_answer": "Discrete-time describes the horizontal time axis: the signal is defined only at separated time instants. Digital describes the vertical amplitude axis: the amplitude must come from a finite set of levels. A discrete-time signal can still have analog amplitudes.",
+              "grading_rubric": [
+                "Must state that discrete-time refers to the time axis",
+                "Must state that digital refers to finite amplitude levels",
+                "Must mention that discrete-time analog signals are possible"
+              ],
+              "explanation": "This checks the central misconception in the section: time classification and amplitude classification are independent.",
+              "hint": "Ask whether x[n] tells you the allowed vertical values.",
+              "needs_visual": false,
+              "same_point_variant": true
+            }
+          ]
+        },
+        {
+          "id": "quantization",
+          "label": "Quantization in analog-to-digital conversion",
+          "importance": "medium",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "kp5_q1",
+              "type": "multiple_choice",
+              "stem": "In A/D conversion, what does quantization mainly do?",
+              "options": [
+                "A. It chooses the time instants at which the signal is measured",
+                "B. It rounds or maps amplitudes to allowed levels",
+                "C. It makes every digital signal binary",
+                "D. It turns x[n] into x(t)"
+              ],
+              "correct_option": "B",
+              "explanation": "Quantization acts on amplitude values, mapping them to a finite set of allowed digital levels.",
+              "wrong_option_explanations": {
+                "A": "Choosing time instants is sampling, not quantization.",
+                "C": "Digital signals may have more than two levels.",
+                "D": "x[n] and x(t) describe time indexing, not quantization."
+              },
+              "hint": "Quantization changes the vertical value.",
+              "needs_visual": true,
+              "visual_type": "interactive_demo_observation",
+              "same_point_variant": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```

@@ -1,0 +1,16 @@
+{
+  "sectionId": "2.6-5",
+  "sourcePages": [
+    "page-209"
+  ],
+  "usedPages": [
+    "page-209"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "2.6-5 Time Constant and Pulse Dispersion (Spreading)",
+  "foundEnd": true,
+  "endBeforeLine": "2.6-6 Time Constant and Rate of Information Transmission",
+  "endBeforeCode": "2.6-6",
+  "charCount": 891
+}

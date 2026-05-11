@@ -1,0 +1,321 @@
+# Aquarius section OCR
+section_id: 2.4-1
+source_pages: page-170, page-171, page-172, page-173, page-174, page-175, page-176, page-177, page-178
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+2.4-1 The Convolution Integral
+
+The zero-state response y(t) obtained in Eq. (2.23) is given by an integral that occurs frequently in the physical sciences, engineering, and mathematics. For this reason this integral is given a special name: the convolution integral. The convolution integral of two functions x1(t) and x2(t) is denoted symbolically by x1(t) ∗ x2(t) and is defined as
+
+x1(t) ∗ x2(t) ≜ ∫ from −∞ to ∞ x1(τ)x2(t − τ)dτ                          (2.24)
+
+Some important properties of the convolution integral follow.
+
+THE COMMUTATIVE PROPERTY
+
+Convolution operation is commutative; that is, x1(t) ∗ x2(t) = x2(t) ∗ x1(t). This property can be proved by a change of variable. In Eq. (2.24), if we let z = t − τ so that τ = t − z and dτ = −dz, we obtain
+
+x1(t) ∗ x2(t) = − ∫ from ∞ to −∞ x2(z)x1(t − z)dz
+
+= ∫ from −∞ to ∞ x2(z)x1(t − z)dz
+
+= x2(t) ∗ x1(t)                                                         (2.25)
+
+† In deriving this result we have assumed a time-invariant system. If the system is time-varying, then the system response to the input δ(t − nΔτ) cannot be expressed as h(t − nΔτ) but instead has the form h(t, nΔτ). Use of this form modifies Eq. (2.23) to
+
+y(t) = ∫ from −∞ to ∞ x(τ)h(t, τ)dτ
+
+where h(t, τ) is the system response at instant t to a unit impulse input located at τ.
+
+[[PAGE page-171]]
+2.4  System Response to External Input: The Zero-State Response                                                  171
+
+THE DISTRIBUTIVE PROPERTY
+According to the distributive property,
+
+x₁(t) * [x₂(t) + x₃(t)] = x₁(t) * x₂(t) + x₁(t) * x₃(t)                                                          (2.26)
+
+THE ASSOCIATIVE PROPERTY
+According to the associative property,
+
+x₁(t) * [x₂(t) * x₃(t)] = [x₁(t) * x₂(t)] * x₃(t)                                                                  (2.27)
+
+The proofs of Eqs. (2.26) and (2.27) follow directly from the definition of the convolution integral.
+They are left as an exercise for the reader.
+
+THE SHIFT PROPERTY
+If
+
+x₁(t) * x₂(t) = c(t)
+
+then
+
+x₁(t) * x₂(t − T) = x₁(t − T) * x₂(t) = c(t − T)
+
+More generally, we see that
+
+x₁(t − T₁) * x₂(t − T₂) = c(t − T₁ − T₂)                                                                          (2.28)
+
+Proof. We are given
+
+x₁(t) * x₂(t) = ∫₋∞^∞ x₁(τ)x₂(t − τ) dτ = c(t)
+
+Therefore,
+
+x₁(t) * x₂(t − T) = ∫₋∞^∞ x₁(τ)x₂(t − T − τ) dτ
+                     = c(t − T)
+
+The equally simple proof of Eq. (2.28) follows a similar approach.
+
+CONVOLUTION WITH AN IMPULSE
+Convolution of a function x(t) with a unit impulse results in the function x(t) itself. By definition
+of convolution,
+
+x(t) * δ(t) = ∫₋∞^∞ x(τ) δ(t − τ) dτ
+
+Because δ(t − τ) is an impulse located at τ = t, according to the sampling property of the impulse
+[Eq. (1.11)], the integral here is just the value of x(τ) at τ = t, that is, x(t). Therefore,
+
+x(t) * δ(t) = x(t)
+
+Actually this result was derived earlier [Eq. (2.22)].
+
+[[PAGE page-172]]
+172  CHAPTER 2  TIME-DOMAIN ANALYSIS OF CONTINUOUS-TIME SYSTEMS
+
+THE WIDTH PROPERTY
+If the durations (widths) of x1(t) and x2(t) are finite, given by T1 and T2, respectively, then the duration (width) of x1(t) ∗ x2(t) is T1 + T2 (Fig. 2.4). The proof of this property follows readily from the graphical considerations discussed later in Sec. 2.4-2.
+
+x1(t)    x2(t)    x1(t) ∗ x2(t)
+T1       T2       T1 + T2
+
+Figure 2.4  Width property of convolution.
+
+ZERO-STATE RESPONSE AND CAUSALITY
+The (zero-state) response y(t) of an LTIC system is
+
+y(t) = x(t) ∗ h(t) = ∫−∞∞ x(τ)h(t − τ) dτ                                            (2.29)
+
+In deriving Eq. (2.29), we assumed the system to be linear and time-invariant. There were no other restrictions either on the system or on the input signal x(t). Since, in practice, most systems are causal, their response cannot begin before the input. Furthermore, most inputs are also causal, which means they start at t = 0.
+
+Causality restriction on both signals and systems further simplifies the limits of integration in Eq. (2.29). By definition, the response of a causal system cannot begin before its input begins. Consequently, the causal system’s response to a unit impulse δ(t) (which is located at t = 0) cannot begin before t = 0. Therefore, a causal system’s unit impulse response h(t) is a causal signal.
+
+It is important to remember that the integration in Eq. (2.29) is performed with respect to τ (not t). If the input x(t) is causal, x(τ) = 0 for τ < 0. Therefore, x(τ) = 0 for τ < 0, as illustrated in Fig. 2.5a. Similarly, if h(t) is causal, h(t − τ) = 0 for t − τ < 0; that is, for τ > t, as depicted in Fig. 2.5a. Therefore, the product x(τ)h(t − τ) = 0 everywhere except over the nonshaded interval 0 ≤ τ ≤ t shown in Fig. 2.5a (assuming t ≥ 0). Observe that if t is negative, x(τ)h(t − τ) = 0 for all τ, as shown in Fig. 2.5b. Therefore, Eq. (2.29) reduces to
+
+y(t) = x(t) ∗ h(t) = { ∫0−t x(τ)h(t − τ) dτ    t ≥ 0
+                       0                          t < 0                          (2.30)
+
+The lower limit of integration in Eq. (2.30) is taken as 0− to avoid the difficulty in integration that can arise if x(t) contains an impulse at the origin. This result shows that if x(t) and h(t) are both causal, the response y(t) is also causal.
+
+[[PAGE page-173]]
+2.4  System Response to External Input: The Zero-State Response                                                         173
+
+x(τ) = 0                                  h(t − τ) = 0
+0                              t        τ                      t ≥ 0
+(a)
+
+x(τ) =                                   h(t − τ) = 0          t < 0
+t                    0                   τ
+(b)
+
+Figure 2.5  Limits of the
+convolution integral.
+
+Because of the convolution’s commutative property [Eq. (2.25)], we can also express
+Eq. (2.30) as [assuming causal x(t) and h(t)]
+
+y(t) = {
+      ∫₀⁻ᵗ h(τ)x(t − τ) dτ      t ≥ 0
+      0                         t < 0
+
+Hereafter, the lower limit of 0⁻ will be implied even when we write it as 0. As in Eq. (2.30), this
+result assumes that both the input and the system are causal.
+
+EXAMPLE 2.8  Computing the Zero-State Response
+
+For an LTIC system with the unit impulse response h(t) = e^(−2t)u(t), determine the response y(t)
+for the input
+
+x(t) = e^(−t)u(t)
+
+Here both x(t) and h(t) are causal (Fig. 2.6). Hence, from Eq. (2.30), we obtain
+
+y(t) = ∫₀ᵗ x(τ)h(t − τ) dτ      t ≥ 0
+
+Because x(t) = e^(−t)u(t) and h(t) = e^(−2t)u(t),
+
+x(τ) = e^(−τ)u(τ)      and      h(t − τ) = e^(−2(t−τ))u(t − τ)
+
+Remember that the integration is performed with respect to τ (not t), and the region of
+integration is 0 ≤ τ ≤ t. Hence, τ ≥ 0 and t − τ ≥ 0. Therefore, u(τ) = 1 and u(t − τ) = 1;
+consequently,
+
+y(t) = ∫₀ᵗ e^(−τ)e^(−2(t−τ)) dτ      t ≥ 0
+
+[[PAGE page-174]]
+174
+CHAPTER 2  TIME-DOMAIN ANALYSIS OF CONTINUOUS-TIME SYSTEMS
+
+x(t)
+1
+e^{-t}
+0
+t
+(a)
+
+h(t)
+1
+e^{-2t}
+0
+t
+(b)
+
+y(t)
+1
+e^{-t} - e^{-2t}
+e^{-t}
+0
+t
+e^{-2t}
+-1
+(c)
+
+Figure 2.6  Convolution of x(t) and h(t).
+
+Because this integration is with respect to τ, we can pull e^{-2t} outside the integral, giving
+us
+
+y(t) = e^{-2t} \int_0^t e^{\tau} d\tau = e^{-2t}(e^t - 1) = e^{-t} - e^{-2t}      t \ge 0
+
+Moreover, y(t) = 0 when t < 0 [see Eq. (2.30)]. Therefore,
+
+y(t) = (e^{-t} - e^{-2t})u(t)
+
+The response is depicted in Fig. 2.6c.
+
+DRILL 2.5  Computing the Zero-State Response
+
+For an LTIC system with the impulse response h(t) = 6e^{-t}u(t), determine the system response
+to the input: (a) 2u(t) and (b) 3e^{-3t}u(t).
+
+ANSWERS
+
+(a) 12(1 - e^{-t})u(t)
+(b) 9(e^{-t} - e^{-3t})u(t)
+
+[[PAGE page-175]]
+2.4  System Response to External Input: The Zero-State Response  175
+
+DRILL 2.6  Zero-State Response with Resonance
+Repeat Drill 2.5 for the input x(t) = e^{-t}u(t).
+
+ANSWER
+6te^{-t}u(t)
+
+THE CONVOLUTION TABLE
+The task of convolution is considerably simplified by a ready-made convolution table (Table 2.1).
+This table, which lists several pairs of signals and their convolution, can conveniently determine
+y(t), a system response to an input x(t), without performing the tedious job of integration. For
+instance, we could have readily found the convolution in Ex. 2.8 by using pair 4 (with λ1 = −1
+and λ2 = −2) to be (e^{-t} − e^{-2t})u(t). The following example demonstrates the utility of this table.
+
+EXAMPLE 2.9  Convolution by Tables
+Use Table 2.1 to compute the loop current y(t) of the RLC circuit in Ex. 2.4 for the input
+x(t) = 10e^{-3t}u(t) when all the initial conditions are zero.
+
+The loop equation for this circuit [see Ex. 1.16 or Eq. (1.29)] is
+
+(D^2 + 3D + 2)y(t) = Dx(t)
+
+The impulse response h(t) for this system, as obtained in Ex. 2.6, is
+
+h(t) = (2e^{-2t} − e^{-t})u(t)
+
+The input is x(t) = 10e^{-3t}u(t), and the response y(t) is
+
+y(t) = x(t) ∗ h(t) = 10e^{-3t}u(t) ∗ [2e^{-2t} − e^{-t}]u(t)
+
+Using the distributive property of the convolution [Eq. (2.26)], we obtain
+
+y(t) = 10e^{-3t}u(t) ∗ 2e^{-2t}u(t) − 10e^{-3t}u(t) ∗ e^{-t}u(t)
+     = 20[e^{-3t}u(t) ∗ e^{-2t}u(t)] − 10[e^{-3t}u(t) ∗ e^{-t}u(t)]
+
+Now the use of pair 4 in Table 2.1 yields
+
+y(t) = \frac{20}{-3 - (-2)}[e^{-3t} − e^{-2t}]u(t) − \frac{10}{-3 - (-1)}[e^{-3t} − e^{-t}]u(t)
+     = -20(e^{-3t} − e^{-2t})u(t) + 5(e^{-3t} − e^{-t})u(t)
+     = (-5e^{-t} + 20e^{-2t} − 15e^{-3t})u(t)
+
+[[PAGE page-176]]
+176     CHAPTER 2   TIME-DOMAIN ANALYSIS OF CONTINUOUS-TIME SYSTEMS
+
+TABLE 2.1   Select Convolution Integrals
+
+No.      x1(t)                      x2(t)                      x1(t) * x2(t) = x2(t) * x1(t)
+
+1        x(t)                       δ(t − T)                   x(t − T)
+
+2        e^{λt}u(t)                 u(t)                       (1 − e^{λt})/(-λ) · u(t)
+
+3        u(t)                       u(t)                       t u(t)
+
+4        e^{λ1 t}u(t)               e^{λ2 t}u(t)               (e^{λ1 t} − e^{λ2 t})/(λ1 − λ2) · u(t)      λ1 ≠ λ2
+
+5        e^{λt}u(t)                 e^{λt}u(t)                 t e^{λt}u(t)
+
+6        t e^{λt}u(t)               e^{λt}u(t)                 (1/2)t^2 e^{λt}u(t)
+
+7        t^N u(t)                   e^{λt}u(t)                 (N! e^{λt})/λ^{N+1} u(t) − Σ[k=0 to N] (N! t^{N−k})/(λ^{k+1}(N − k)!) u(t)
+
+8        t^M u(t)                   t^N u(t)                   (M!N!)/(M + N + 1)! · t^{M+N+1}u(t)
+
+9        t e^{λ1 t}u(t)             e^{λ2 t}u(t)               (e^{λ2 t} − e^{λ1 t} + (λ1 − λ2)t e^{λ1 t})/(λ1 − λ2)^2 · u(t)
+
+10       t^M e^{λt}u(t)             t^N e^{λt}u(t)             (M!N!)/(N + M + 1)! · t^{M+N+1} e^{λt}u(t)
+
+11       t^M e^{λ1 t}u(t)           t^N e^{λ2 t}u(t)           Σ[k=0 to M] ((−1)^k M!(N + k)! t^{M−k} e^{λ1 t})/(k!(M − k)!(λ1 − λ2)^{N+k+1}) u(t)
+                                                                   + Σ[k=0 to N] ((−1)^k N!(M + k)! t^{N−k} e^{λ2 t})/(k!(N − k)!(λ2 − λ1)^{M+k+1}) u(t)
+                                          λ1 ≠ λ2
+
+12       e^{−αt} cos(βt + θ)u(t)    e^{λt}u(t)                 (cos(θ − φ)e^{λt} − e^{−αt} cos(βt + θ − φ))/√((α + λ)^2 + β^2) · u(t)
+                                                                   φ = tan^{−1}[−β/(α + λ)]
+
+13       e^{λ1 t}u(t)               e^{λ2 t}u(−t)              (e^{λ1 t}u(t) + e^{λ2 t}u(−t))/(λ2 − λ1)      Re λ2 > Re λ1
+
+14       e^{λ1 t}u(−t)              e^{λ2 t}u(−t)              (e^{λ1 t} − e^{λ2 t})/(λ2 − λ1) · u(−t)
+
+[[PAGE page-177]]
+2.4  System Response to External Input: The Zero-State Response  177
+
+DRILL 2.7  Convolution by Tables
+Use Table 2.1 to show e^{-2t}u(t) * (1 - e^{-t})u(t) = (\frac{1}{2} - e^{-t} + \frac{1}{2}e^{-2t})u(t).
+
+DRILL 2.8  Zero-State Response by Convolution Table
+Rework Drills 2.5 and 2.6 using Table 2.1.
+
+DRILL 2.9  Another Zero-State Response by Convolution Table
+For an LTIC system with the unit impulse response h(t) = e^{-2t}u(t), determine the zero-state response y(t) if the input x(t) = \sin 3t\,u(t). [Hint: Use pair 12 from Table 2.1.]
+ANSWER
+\frac{1}{13}[3e^{-2t} + \sqrt{13}\cos(3t - 146.32^\circ)]u(t) or  \frac{1}{13}[3e^{-2t} - \sqrt{13}\cos(3t + 33.68^\circ)]u(t)
+
+RESPONSE TO COMPLEX INPUTS
+The LTIC system response discussed so far applies to general input signals, real or complex. However, if the system is real, that is, if h(t) is real, then we shall show that the real part of the input generates the real part of the output, and a similar conclusion applies to the imaginary part.
+If the input is x(t) = x_r(t) + jx_i(t), where x_r(t) and x_i(t) are the real and imaginary parts of x(t), then for real h(t)
+
+y(t) = h(t) * [x_r(t) + jx_i(t)] = h(t) * x_r(t) + jh(t) * x_i(t) = y_r(t) + jy_i(t)
+
+where y_r(t) and y_i(t) are the real and the imaginary parts of y(t). Using the right-directed-arrow notation to indicate a pair of the input and the corresponding output, the foregoing result can be expressed as follows. If
+
+x(t) = x_r(t) + jx_i(t)  \Longrightarrow  y(t) = y_r(t) + jy_i(t)
+
+then
+
+x_r(t)  \Longrightarrow  y_r(t)    and    x_i(t)  \Longrightarrow  y_i(t)                                                   (2.31)
+
+[[PAGE page-178]]
+178    CHAPTER 2    TIME-DOMAIN ANALYSIS OF CONTINUOUS-TIME SYSTEMS
+
+MULTIPLE INPUTS
+Multiple inputs to LTI systems can be treated by applying the superposition principle. Each input is considered separately, with all other inputs assumed to be zero. The sum of all these individual system responses constitutes the total system output when all the inputs are applied simultaneously.

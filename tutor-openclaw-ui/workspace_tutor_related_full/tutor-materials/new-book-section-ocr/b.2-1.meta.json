@@ -1,0 +1,20 @@
+{
+  "sectionId": "b.2-1",
+  "sourcePages": [
+    "page-018",
+    "page-019",
+    "page-020"
+  ],
+  "usedPages": [
+    "page-018",
+    "page-019",
+    "page-020"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "B.2-1 Addition of Sinusoids",
+  "foundEnd": true,
+  "endBeforeLine": "B.2-2 Sinusoids in Terms of Exponentials",
+  "endBeforeCode": "b.2-2",
+  "charCount": 5744
+}

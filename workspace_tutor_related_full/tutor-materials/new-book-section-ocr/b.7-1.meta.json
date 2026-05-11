@@ -1,0 +1,18 @@
+{
+  "sectionId": "b.7-1",
+  "sourcePages": [
+    "page-042",
+    "page-043"
+  ],
+  "usedPages": [
+    "page-042",
+    "page-043"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "B.7-1 MATLAB Overview",
+  "foundEnd": true,
+  "endBeforeLine": "B.7-2 Calculator Operations",
+  "endBeforeCode": "b.7-2",
+  "charCount": 4771
+}

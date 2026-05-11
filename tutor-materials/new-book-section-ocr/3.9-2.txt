@@ -1,0 +1,86 @@
+# Aquarius section OCR
+section_id: 3.9-2
+source_pages: page-299, page-300, page-301
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+3.9-2 Internal (Asymptotic) Stability
+For LTID systems, as in the case of LTIC systems, internal stability, called asymptotical stability or stability in the sense of Lyapunov (also the zero-input stability), is defined in terms of the zero-input response of a system.
+
+For an LTID system specified by a difference equation in the form of Eq. (3.15) [or Eq. (3.20)], the zero-input response consists of the characteristic modes of the system. The mode corresponding to a characteristic root γ is γⁿ. To be more general, let γ be complex so that
+
+γ = |γ|e^{jβ}      and      γⁿ = |γ|ⁿ e^{jβn}
+
+Since the magnitude of e^{jβn} is always unity regardless of the value of n, the magnitude of γⁿ is |γ|ⁿ. Therefore,
+
+if |γ| < 1,      then γⁿ → 0 as n → ∞
+if |γ| > 1,      then γⁿ → ∞ as n → ∞
+and if |γ| = 1,      then |γ|ⁿ = 1 for all n
+
+The characteristic modes corresponding to characteristic roots at various locations in the complex plane appear in Fig. 3.27.
+
+These results can be grasped more effectively in terms of the location of characteristic roots in the complex plane. Figure 3.28 shows a circle of unit radius, centered at the origin in a complex plane. Our discussion shows that if all characteristic roots of the system lie inside the unit circle, |γᵢ| < 1 for all i and the system is asymptotically stable. On the other hand, even if one characteristic root lies outside the unit circle, the system is unstable. If none of the characteristic
+
+[[PAGE page-300]]
+300
+CHAPTER 3  TIME-DOMAIN ANALYSIS OF DISCRETE-TIME SYSTEMS
+
+Complex plane
+
+(a)
+
+(b)
+
+(c)
+
+(d)
+
+n →
+
+n →
+
+n →
+
+n →
+
+n →
+
+n →
+
+n →
+
+n →
+
+Figure 3.27  Characteristic roots locations and the corresponding characteristic modes.
+
+[[PAGE page-301]]
+3.9  System Stability                                                                 301
+
+roots lie outside the unit circle, but some simple (unrepeated) roots lie on the circle itself, the
+system is marginally stable. If two or more characteristic roots coincide on the unit circle (repeated
+roots), the system is unstable. The reason is that for repeated roots, the zero-input response is of the
+form n^{r-1}γ^n, and if |γ| = 1, then |n^{r-1}γ^n| = n^{r-1} → ∞ as n → ∞.† Note, however, that repeated
+roots inside the unit circle do not cause instability.
+
+Marginally stable
+Im
+Unstable
+|γ|
+γ
+β
+−1
+1
+Re
+Stable
+
+Figure 3.28  Characteristic root locations and system stability.
+
+To summarize:
+1.  An LTID system is asymptotically stable if, and only if, all the characteristic roots are
+    inside the unit circle. The roots may be simple or repeated.
+2.  An LTID system is unstable if, and only if, either one or both of the following conditions
+    exist: (i) at least one root is outside the unit circle; (ii) there are repeated roots on the unit
+    circle.
+3.  An LTID system is marginally stable if and only if there are no roots outside the unit circle
+    and there are some unrepeated roots on the unit circle.

@@ -1,0 +1,46 @@
+# Aquarius section OCR
+section_id: 3.11-3
+source_pages: page-310, page-311
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+3.11-3  A Custom Filter Function
+
+The filtic command is available only if the signal-processing toolbox is installed. To accommodate installations without the signal-processing toolbox and to help develop your MATLAB skills, consider writing a function similar in syntax to filter that directly uses the ICs y[−1], y[−2], . . . , y[−N]. Normalizing a₀ = 1 and solving Eq. (3.44) for y[n] yield
+
+y[n] = \sum_{k=0}^{N} b_k x[n-k] - \sum_{k=1}^{N} a_k y[n-k]
+
+This recursive form provides a good basis for our custom filter function.
+
+† Implementation structures, such as direct form II transposed, are discussed in Ch. 4.
+
+[[PAGE page-311]]
+3.11 MATLAB: Discrete-Time Signals and Systems 311
+
+function [y] = CH3MP1(b,a,x,yi);
+% CH3MP1.m : Chapter 3, MATLAB Program 1
+% Function M-file filters data x to create y
+% INPUTS:   b = vector of feedforward coefficients
+%           a = vector of feedback coefficients
+%           x = input data vector
+%           yi = vector of initial conditions [y[-1], y[-2], ...]
+% OUTPUTS:  y = vector of filtered output data
+
+yi = flipud(yi(:)); % Properly format IC's.
+y = [yi;zeros(length(x),1)]; % Preinitialize y, beginning with IC's.
+x = [zeros(length(yi),1);x(:)]; % Append x with zeros to match size of y.
+b = b/a(1);a = a/a(1); % Normalize coefficients.
+for n = length(yi)+1:length(y),
+    for nb = 0:length(b)-1,
+        y(n) = y(n) + b(nb+1)*x(n-nb); % Feedforward terms.
+    end
+    for na = 1:length(a)-1,
+        y(n) = y(n) - a(na+1)*y(n-na); % Feedback terms.
+    end
+end
+y = y(length(yi)+1:end); % Strip off IC's for final output.
+
+Most instructions in CH3MP1 have been discussed; now we turn to the flipud instruction. The flip up-down command flipud reverses the order of elements in a column vector. Although not used here, the flip left-right command fliplr reverses the order of elements in a row vector. Note that typing help filename displays the first contiguous set of comment lines in an M-file. Thus, it is good programming practice to document M-files, as in CH3MP1, with an initial block of clear comment lines.
+
+As an exercise, the reader should verify that CH3MP1 correctly computes the impulse response h[n], the zero-state response y[n], the zero-input response y0[n], and the total response y[n] + y0[n].

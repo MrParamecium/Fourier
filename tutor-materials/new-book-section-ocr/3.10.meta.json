@@ -1,0 +1,18 @@
+{
+  "sectionId": "3.10",
+  "sourcePages": [
+    "page-305",
+    "page-306"
+  ],
+  "usedPages": [
+    "page-305",
+    "page-306"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "3.10 Intuitive Insights into System Behavior 305",
+  "foundEnd": true,
+  "endBeforeLine": "3.11 MATLAB: DISCRETE-TIME SIGNALS AND SYSTEMS",
+  "endBeforeCode": "3.11",
+  "charCount": 3808
+}

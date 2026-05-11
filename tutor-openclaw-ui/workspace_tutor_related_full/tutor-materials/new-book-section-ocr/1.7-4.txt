@@ -1,0 +1,146 @@
+# Aquarius section OCR
+section_id: 1.7-4
+source_pages: page-104, page-105, page-106, page-107
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+1.7-4 Causal and Noncausal Systems
+          A causal (also known as a physical or nonanticipative) system is one for which the output at any
+          instant t0 depends only on the value of the input x(t) for t ≤ t0 . In other words, the value of the
+          output at the present instant depends only on the past and present values of the input x(t), not on
+          its future values. To put it simply, in a causal system the output cannot start before the input is
+          applied. If the response starts before the input, it means that the system knows the input in the
+
+[[PAGE page-105]]
+1.7    Classiﬁcation of Systems     105
+
+                        x(t)                                                         y(t)
+
+                    1                                                            1
+
+
+
+
+                        0      1             t                 2       1           0      1   2    3   t
+                               (a)                                                       (b)
+
+                                         y(t)
+
+                                     1
+
+
+
+
+                                         0       1   2     3        4        5       t
+                                                         (c)
+           Figure 1.30 Input–output of a noncausal system and the causal output achieved by delay.
+
+
+    future and acts on this knowledge before the input is applied. A system that violates the condition
+    of causality is called a noncausal (or anticipative) system.
+         Any practical system that operates in real time† must necessarily be causal. We do not yet
+    know how to build a system that can respond to future inputs (inputs not yet applied). A noncausal
+    system is a prophetic system that knows the future input and acts on it in the present. Thus, if we
+    apply an input starting at t = 0 to a noncausal system, the output would begin even before t = 0.
+    For example, consider the system specified by
+
+                                                     y(t) = x(t − 2) + x(t + 2)                                            (1.26)
+
+    For the input x(t) illustrated in Fig. 1.30a, the output y(t), as computed from Eq. (1.26) (shown in
+    Fig. 1.30b), starts even before the input is applied. Equation (1.26) shows that y(t), the output at t,
+    is given by the sum of the input values 2 seconds before and 2 seconds after t (at t − 2 and t + 2,
+    respectively). But if we are operating the system in real time at t, we do not know what the value
+    of the input will be 2 seconds later. Thus it is impossible to implement this system in real time.
+    For this reason, noncausal systems are unrealizable in real time.
+
+
+E X A M P L E 1.13 Assessing System Causality
+
+    Determine whether the following systems are causal: (a) y(t) = x(−t), (b) y(t) = x(t + 1), and
+    (c) y(t + 1) = x(t).
+
+
+
+
+    † In real-time operations, the response to an input is essentially simultaneous (contemporaneous) with the
+    input itself.
+
+[[PAGE page-106]]
+106   CHAPTER 1      SIGNALS AND SYSTEMS
+
+           (a) Here, the output is a reflection of the input. We can easily use a counterexample to
+      disprove the causality of this system. The input x(t) = δ(t − 1), which is nonzero at t = 1,
+      produces an output y(t) = δ(t + 1), which is nonzero at t = −1, a time 2 seconds earlier than
+      the input! Clearly the system is not causal.
+           (b) In this case, the output at time t depends on the input at future time of t + 1. Clearly
+      the system is not causal.
+           (c) In this case, the output at time t + 1 depends on the input one second in the past, at
+      time t. Since the output does not depend on future values of the input, the system is causal.
+
+
+
+
+      W HY S TUDY N ONCAUSAL S YSTEMS ?
+      The foregoing discussion may suggest that noncausal systems have no practical purpose. This
+      is not the case; they are valuable in the study of systems for several reasons. First, noncausal
+      systems are realizable when the independent variable is other than “time” (e.g., space). Consider,
+      for example, an electric charge of density q(x) placed along the x axis for x ≥ 0. This charge
+      density produces an electric field E(x) that is present at every point on the x axis from x = −∞ to
+      ∞. In this case the input [i.e., the charge density q(x)] starts at x = 0, but its output [the electric
+      field E(x)] begins before x = 0. Clearly, this space-charge system is noncausal. This discussion
+      shows that only temporal systems (systems with time as independent variable) must be causal to
+      be realizable. The terms “before” and “after” have a special connection to causality only when the
+      independent variable is time. This connection is lost for variables other than time. Nontemporal
+      systems, such as those occurring in optics, can be noncausal and still realizable.
+           Moreover, even for temporal systems, such as those used for signal processing, the study of
+      noncausal systems is important. In such systems we may have all input data prerecorded. This
+      often happens with speech, geophysical, and meteorological signals, and with space probes. In
+      such cases, the input’s future values are available to us. For example, suppose we had a set of
+      input signal records available for the system described by Eq. (1.26). We can then compute y(t)
+      since, for any t, we need only refer to the records to find the input’s value 2 seconds before and
+      2 seconds after t. Thus, noncausal systems can be realized, although not in real time. We may
+      therefore be able to realize a noncausal system, provided we are willing to accept a time delay
+      in the output. Consider a system whose output ŷ(t) is the same as y(t) in Eq. (1.26) delayed by
+      2 seconds (Fig. 1.30c), so that
+
+                                        ŷ(t) = y(t − 2) = x(t − 4) + x(t)
+
+      Here the value of the output ŷ at any instant t is the sum of the values of the input x at t and at
+      the instant 4 seconds earlier [at (t − 4)]. In this case, the output at any instant t does not depend
+      on future values of the input, and the system is causal. The output of this system, which is ŷ(t),
+      is identical to that in Eq. (1.26) or Fig. 1.30b except for a delay of 2 seconds. Thus, a noncausal
+      system may be realized or satisfactorily approximated in real time by using a causal system with
+      a delay.
+           A third reason for studying noncausal systems is that they provide an upper bound on the
+      performance of causal systems. For example, if we wish to design a filter for separating a signal
+      from noise, then the optimum filter is invariably a noncausal system. Although unrealizable, this
+
+[[PAGE page-107]]
+1.7   Classiﬁcation of Systems            107
+
+
+
+
+                            Noncausal systems are realizable with time delay!
+
+
+noncausal system’s performance acts as the upper limit on what can be achieved and gives us a
+standard for evaluating the performance of causal filters.
+     At first glance, noncausal systems may seem to be inscrutable. Actually, there is nothing
+mysterious about these systems and their approximate realization through physical systems with
+delay. If we want to know what will happen one year from now, we have two choices: go to a
+prophet (an unrealizable person) who can give the answers instantly, or go to a wise man and
+allow him a delay of one year to give us the answer! If the wise man is truly wise, he may even be
+able, by studying trends, to shrewdly guess the future very closely with a delay of less than a year.
+Such is the case with noncausal systems—nothing more and nothing less.
+
+
+
+ D R I L L 1.15 A Noncausal System
+ Show that a system described by the following equation is noncausal:
+                                                       # t+5
+                                              y(t) =           x(τ ) dτ
+                                                        t−5
+
+ Show that this system can be realized physically if we accept a delay of 5 seconds in the output.

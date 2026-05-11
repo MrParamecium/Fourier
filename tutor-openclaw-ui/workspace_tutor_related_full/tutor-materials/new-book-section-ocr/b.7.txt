@@ -1,0 +1,8 @@
+# Aquarius section OCR
+section_id: b.7
+source_pages: page-042, page-043, page-044, page-045, page-046, page-047, page-048, page-049, page-050, page-051, page-052, page-053
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+B.7 MATLAB: E LEMENTARY O PERATIONS

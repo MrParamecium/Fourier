@@ -67,6 +67,7 @@ const TUTOR_MATERIALS_DIR = resolveExistingDir([
 const OCR_DIR_OLD = path.join(TUTOR_MATERIALS_DIR, 'background-ocr-v3');
 const PAGE_IMAGE_DIR_OLD = path.join(TUTOR_MATERIALS_DIR, 'background-pages-split');
 const OCR_DIR_NEW = path.join(TUTOR_MATERIALS_DIR, 'new-book-ocr');
+const SECTION_OCR_DIR_NEW = path.join(TUTOR_MATERIALS_DIR, 'new-book-section-ocr');
 const PAGE_IMAGE_DIR_NEW = path.join(TUTOR_MATERIALS_DIR, 'new-book-pages');
 const FIGURE_IMAGE_DIR_NEW = path.join(TUTOR_MATERIALS_DIR, 'new-book-figures');
 const PYTHON_BIN = process.env.TUTOR_PYTHON_BIN || '/Library/Frameworks/Python.framework/Versions/3.12/bin/python3';
@@ -1082,6 +1083,13 @@ console.log(`[Index] Section maps loaded: old=${Object.keys(SECTION_PAGE_MAP).le
 console.log(`[Index] Section figure map loaded: new=${Object.keys(SECTION_FIGURE_MAP_NEW).length}`);
 console.log(`[Index] New-book figure index loaded: pages=${Object.keys(NEW_BOOK_FIGURE_INDEX).length}`);
 
+function getActiveSectionPageMap(ocrDir = OCR_DIR_OLD) {
+    if (ocrDir === OCR_DIR_NEW) {
+        return loadSectionPageMap('section-page-map-new.json');
+    }
+    return loadSectionPageMap('section-page-map.json');
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // USER MEMORY
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1094,6 +1102,14 @@ const LESSON_CACHE_VERSION = 'aquarius_visual_latex_v2';
 const LESSON_CACHE_MISS_MESSAGE = 'This section has not been prepared yet.';
 const BLUEPRINT_DIR = path.join(TUTOR_MATERIALS_DIR, '');
 try { if (!fs.existsSync(LESSON_CACHE_DIR)) fs.mkdirSync(LESSON_CACHE_DIR, { recursive: true }); } catch (_) {}
+
+function hasLessonCacheFile(sectionId, memory, bookSource = 'old', cacheVariant = 'lesson') {
+    const key = buildLessonCacheKey(memory, bookSource, cacheVariant);
+    if (!key) return false;
+    const normId = normalizeSectionId(sectionId);
+    const file = path.join(LESSON_CACHE_DIR, normId, `${key}.${LESSON_CACHE_VERSION}.en.md`);
+    return fs.existsSync(file);
+}
 
 /**
  * Returns cached lesson markdown or null.
@@ -1140,110 +1156,17 @@ function normalizeQuizProfile(quiz = {}) {
 function getB8FormulaAppendix(sectionId = '', sectionTitle = '') {
     const text = compactWhitespace(`${sectionId} ${sectionTitle}`);
     if (!/B\.8\b/i.test(text)) return null;
-    const pages = [
-        {
-            title: 'B.8-1 Mathematical Constants',
-            formulas: [
-                '\\pi \\approx 3.14159',
-                'e \\approx 2.71828',
-                'e^{-1}=\\frac{1}{e} \\approx 0.36788',
-                '\\log_{10}2 \\approx 0.30103',
-                '\\log_{10}3 \\approx 0.47712'
-            ]
-        },
-        {
-            title: 'B.8-2 Complex-Number Identities',
-            formulas: [
-                'e^{\\pm j\\theta}=\\cos\\theta \\pm j\\sin\\theta',
-                'a+jb = r e^{j\\theta}',
-                'r=\\sqrt{a^2+b^2}',
-                '\\theta=\\tan^{-1}\\left(\\frac{b}{a}\\right)\\quad\\text{with quadrant check}',
-                'e^{\\pm j\\pi/2}=\\pm j',
-                'e^{\\pm jn\\pi}=(-1)^n'
-            ]
-        },
-        {
-            title: 'B.8-3 Summation Formulas',
-            formulas: [
-                '\\sum_{k=m}^{n} r^k = \\frac{r^{n+1}-r^m}{r-1},\\quad r\\ne 1',
-                '\\sum_{k=0}^{n} k = \\frac{n(n+1)}{2}',
-                '\\sum_{k=0}^{n} k^2 = \\frac{n(n+1)(2n+1)}{6}',
-                '\\sum_{k=0}^{n} kr^k = \\frac{r+[n(r-1)-1]r^{n+1}}{(r-1)^2},\\quad r\\ne1'
-            ]
-        },
-        {
-            title: 'B.8-4 Taylor and Maclaurin Series',
-            formulas: [
-                'f(x)=\\sum_{n=0}^{\\infty}\\frac{f^{(n)}(a)}{n!}(x-a)^n',
-                'f(x)=\\sum_{n=0}^{\\infty}\\frac{f^{(n)}(0)}{n!}x^n',
-                'e^x=\\sum_{n=0}^{\\infty}\\frac{x^n}{n!}',
-                '\\ln(1+x)=\\sum_{n=1}^{\\infty}(-1)^{n+1}\\frac{x^n}{n}'
-            ]
-        },
-        {
-            title: 'B.8-5 Power Series',
-            formulas: [
-                '\\sin x=\\sum_{n=0}^{\\infty}(-1)^n\\frac{x^{2n+1}}{(2n+1)!}',
-                '\\cos x=\\sum_{n=0}^{\\infty}(-1)^n\\frac{x^{2n}}{(2n)!}',
-                '\\frac{1}{1-x}=\\sum_{n=0}^{\\infty}x^n,\\quad |x|<1',
-                '(1+x)^\\alpha=1+\\alpha x+\\frac{\\alpha(\\alpha-1)}{2!}x^2+\\cdots'
-            ]
-        },
-        {
-            title: 'B.8-6 Trigonometric Identities',
-            formulas: [
-                '\\sin^2 x+\\cos^2 x=1',
-                '\\sin(\\alpha\\pm\\beta)=\\sin\\alpha\\cos\\beta\\pm\\cos\\alpha\\sin\\beta',
-                '\\cos(\\alpha\\pm\\beta)=\\cos\\alpha\\cos\\beta\\mp\\sin\\alpha\\sin\\beta',
-                '\\sin 2x=2\\sin x\\cos x',
-                '\\cos 2x=\\cos^2x-\\sin^2x=1-2\\sin^2x=2\\cos^2x-1'
-            ]
-        },
-        {
-            title: 'B.8-7 Common Derivative Formulas',
-            formulas: [
-                '\\frac{d}{dx}x^n=nx^{n-1}',
-                '\\frac{d}{dx}e^{ax}=ae^{ax}',
-                '\\frac{d}{dx}\\ln x=\\frac{1}{x}',
-                '\\frac{d}{dx}\\sin ax=a\\cos ax',
-                '\\frac{d}{dx}\\cos ax=-a\\sin ax',
-                '\\frac{d}{dx}\\tan ax=a\\sec^2 ax'
-            ]
-        },
-        {
-            title: 'B.8-8 Indefinite Integrals',
-            formulas: [
-                '\\int x^n\\,dx=\\frac{x^{n+1}}{n+1}+C,\\quad n\\ne -1',
-                '\\int e^{ax}\\,dx=\\frac{1}{a}e^{ax}+C',
-                '\\int \\sin ax\\,dx=-\\frac{1}{a}\\cos ax+C',
-                '\\int \\cos ax\\,dx=\\frac{1}{a}\\sin ax+C',
-                '\\int u\\,dv=uv-\\int v\\,du'
-            ]
-        },
-        {
-            title: "B.8-9 L'Hôpital's Rule",
-            formulas: [
-                "\\lim_{x\\to a}\\frac{f(x)}{g(x)}=\\lim_{x\\to a}\\frac{f'(x)}{g'(x)}",
-                '\\text{Valid for indeterminate forms }0/0\\text{ or }\\infty/\\infty',
-                "g'(x)\\ne 0\\text{ near }a"
-            ]
-        },
-        {
-            title: 'B.8-10 Solution of Quadratic and Cubic Equations',
-            formulas: [
-                'ax^2+bx+c=0',
-                'x=\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}',
-                'ax^3+bx^2+cx+d=0',
-                'x=y-\\frac{b}{3a}',
-                'y^3+py+q=0',
-                'y=\\sqrt[3]{-\\frac{q}{2}+\\sqrt{\\left(\\frac{q}{2}\\right)^2+\\left(\\frac{p}{3}\\right)^3}}+\\sqrt[3]{-\\frac{q}{2}-\\sqrt{\\left(\\frac{q}{2}\\right)^2+\\left(\\frac{p}{3}\\right)^3}}'
-            ]
-        }
-    ];
-    return pages.map((page) => {
-        const formulas = page.formulas.map((formula, i) => `${i + 1}.\n\n$$\n${formula}\n$$`).join('\n\n');
-        return `## ${page.title}\n\n${formulas}`;
-    }).join('\n\n');
+    return [
+        '## B.8 Appendix: Useful Mathematical Formulas',
+        '',
+        'This appendix is a compact formula reference. Use it as the lookup sheet for the algebra, series, calculus, and trigonometric identities that appear throughout the earlier background sections.',
+        '',
+        'Read it by formula family, not from top to bottom like a proof. First identify the kind of move you need: complex-number conversion, summation, Taylor/Maclaurin expansion, power series, trig simplification, derivative, integral, limit rule, or polynomial equation formula.',
+        '',
+        'The main exam trap is sign and condition copying. Check the plus/minus signs, whether a formula assumes a nonzero denominator, and whether the variable is in radians. For worked examples, connect these formulas back to B.1 complex numbers, B.2 sinusoids, and B.5 partial fractions.',
+        '',
+        'Switch to the **Textbook** tab for the full appendix pages.'
+    ].join('\n');
 }
 
 function buildLessonCacheKey(_memory, bookSource = 'old', cacheVariant = 'lesson') {
@@ -2094,6 +2017,15 @@ async function generateSearchAngles(question, options = {}) {
     const sectionTitle = compactWhitespace(options.sectionTitle || '');
     const lessonContext = compactWhitespace(options.lessonContext || '').slice(0, 2500);
     const userProfilePrompt = compactWhitespace(options.userProfilePrompt || '').slice(0, 1200);
+    const examPriorityGuidance = options.examPriorityGuidance || null;
+    const examPrioritySearchHint = examPriorityGuidance && examPriorityGuidance.json
+        ? [
+            `Exam-priority source: ${examPriorityGuidance.source || 'unknown'}`,
+            `Relevant homework topic ids: ${((examPriorityGuidance.json.topic_filter || {}).relevant_topic_ids || []).join(', ') || 'none'}`,
+            `High-priority problem types: ${(examPriorityGuidance.json.high_priority_problem_types || []).slice(0, 6).join('; ') || 'none'}`,
+            `Common traps: ${(examPriorityGuidance.json.common_traps || []).slice(0, 5).join('; ') || 'none'}`
+        ].join('\n')
+        : '';
 
     const historyText = history
         .slice(-8)
@@ -2131,6 +2063,7 @@ async function generateSearchAngles(question, options = {}) {
                         `Course: Signal Processing and Linear Systems`,
                         `Current section: ${sectionTitle || 'unknown'}`,
                         userProfilePrompt ? `Student profile: ${userProfilePrompt}` : '',
+                        examPrioritySearchHint ? `Homework/exam priority hint (use lightly to disambiguate course-related searches):\n${examPrioritySearchHint}` : '',
                         lessonContext ? `Recent lesson content (excerpt): ${lessonContext}` : '',
                         historyText ? `Recent conversation:\n${historyText}` : '',
                         `\nUser's latest message: "${base}"`
@@ -2226,6 +2159,30 @@ function readOCRText(filePath, maxChars = 5000) {
     } catch (err) {
         return '';
     }
+}
+
+function getSectionOcrPath(sectionId = '', bookSource = 'old') {
+    if (bookSource !== 'new') return '';
+    const code = extractSectionCode(sectionId);
+    if (!code) return '';
+    return path.join(SECTION_OCR_DIR_NEW, `${code.replace(/[^a-z0-9._-]+/gi, '_')}.txt`);
+}
+
+function readSectionOCRText(sectionId = '', bookSource = 'old', maxChars = 50000) {
+    const sectionOcrPath = getSectionOcrPath(sectionId, bookSource);
+    if (!sectionOcrPath || !fs.existsSync(sectionOcrPath)) return '';
+    return readOCRText(sectionOcrPath, maxChars);
+}
+
+function attachSectionOcrToPages(sectionId = '', bookPages = [], bookSource = 'old') {
+    if (bookSource !== 'new' || !Array.isArray(bookPages) || !bookPages.length) return bookPages;
+    const sectionOcrText = readSectionOCRText(sectionId, bookSource, 50000);
+    if (!sectionOcrText) return bookPages;
+    return bookPages.map((page, index) => (
+        index === 0
+            ? { ...page, ocrOverrideText: sectionOcrText, sectionOcrPath: getSectionOcrPath(sectionId, bookSource) }
+            : { ...page, ocrOverrideText: '' }
+    ));
 }
 
 function extractDuckDuckGoResults(payload) {
@@ -2684,6 +2641,16 @@ async function generateExplanation(question, bookPages, webSources, options = {}
     const userProfilePrompt = options.userProfilePrompt || '';
     const attachments = Array.isArray(options.attachments) ? options.attachments : [];
     const answerLength = options.answerLength || 'medium';
+    const examPriorityGuidance = options.examPriorityGuidance || null;
+    const examPriorityAnswerHint = examPriorityGuidance && examPriorityGuidance.json
+        ? [
+            `Source: ${examPriorityGuidance.source || 'unknown'}`,
+            `Relevant topic ids: ${((examPriorityGuidance.json.topic_filter || {}).relevant_topic_ids || []).join(', ') || 'none'}`,
+            `High-priority concepts: ${(examPriorityGuidance.json.high_priority_concepts || []).slice(0, 8).join('; ') || 'none'}`,
+            `High-priority problem types: ${(examPriorityGuidance.json.high_priority_problem_types || []).slice(0, 8).join('; ') || 'none'}`,
+            `Common traps: ${(examPriorityGuidance.json.common_traps || []).slice(0, 8).join('; ') || 'none'}`
+        ].join('\n')
+        : '';
 
     let lengthInstruction = '';
     if (answerLength === 'short') {
@@ -2715,6 +2682,8 @@ async function generateExplanation(question, bookPages, webSources, options = {}
         '',
         lessonContext ? `当前讲解内容摘要：\n${lessonContext}` : '当前讲解内容摘要：无',
         '',
+        examPriorityAnswerHint ? `作业/考试重点提示（只在相关时轻度使用，不要强行提作业）：\n${examPriorityAnswerHint}` : '',
+        examPriorityAnswerHint ? '' : '',
         '教材上下文：',
         buildBookContext(bookPages),
         '',
@@ -2730,6 +2699,11 @@ async function generateExplanation(question, bookPages, webSources, options = {}
         language === 'zh' ? '6. 如果出现数学公式，使用 LaTeX，块级公式写成 $$...$$，行内公式写成 $...$。' : '6. Use LaTeX for math. $$...$$ for block, $...$ for inline.',
         language === 'zh' ? '7. 优先结合教材，再补充联网资料。' : '7. Prioritize textbook content, then web sources.',
         language === 'zh' ? '8. 如果联网资料为空，也照常基于书页完成讲解。' : '8. Answer using book context if web sources are empty.',
+        examPriorityAnswerHint
+            ? (language === 'zh'
+                ? '9. 如果问题与上述作业/考试重点相关，回答要优先点出常考判断方法、典型题型或常见坑；如果不相关，不要硬扯作业。'
+                : '9. If the question matches the homework/exam priority hint, emphasize the tested procedure, representative problem type, or common trap. If it does not match, do not force homework framing.')
+            : '',
         lengthInstruction
     ].filter(Boolean).join('\n');
 
@@ -2978,9 +2952,12 @@ function getPagesForSection(sectionId, ocrDir = OCR_DIR_OLD) {
  */
 async function generateSectionIntro(sectionId, sectionTitle, bookPages, language = 'en') {
     const ocrSnippets = bookPages.slice(0, 3).map((p, i) => {
+        if (Object.prototype.hasOwnProperty.call(p, 'ocrOverrideText')) {
+            return p.ocrOverrideText ? `[Section OCR]\n${String(p.ocrOverrideText || '').slice(0, 1800)}` : '';
+        }
         const txt = readOCRText(p.textPath, 1200);
         return `[Page ${i+1}]\n${txt}`;
-    }).join('\n\n');
+    }).filter(Boolean).join('\n\n');
 
     const isZh = language === 'zh';
     const prompt = isZh ? [
@@ -3057,6 +3034,14 @@ function isBackgroundSection(sectionId = '', sectionTitle = '') {
     const id = compactWhitespace(String(sectionId || ''));
     const title = compactWhitespace(String(sectionTitle || ''));
     return /^B(?:[.-]|$)/i.test(id) || /\bbackground\b/i.test(title);
+}
+
+function isChapterOneSection(sectionId = '', sectionTitle = '') {
+    const code = extractSectionCode(sectionId || sectionTitle).toLowerCase();
+    const title = compactWhitespace(String(sectionTitle || '')).toLowerCase();
+    return /^1(?:[.\-]|$)/.test(code)
+        || /\bchapter\s*1\b/.test(title)
+        || /\bintroduction to signals and systems\b/.test(title);
 }
 
 function isHistoricalBackgroundNote(sectionId = '', sectionTitle = '') {
@@ -3149,6 +3134,194 @@ function getExamPriorityTopicBuckets() {
                 'Getting phase sign wrong in sinusoid compression',
                 'Giving amplitude without final phase-adjusted sinusoid'
             ]
+        },
+        signal_size: {
+            label: 'Signal size: energy, power, and rms',
+            sectionHints: ['1.1', '1.1-1', '1.1-2'],
+            source: 'chapter1_hw2_distilled',
+            includeWhen: (sectionId = '', sectionTitle = '') => {
+                const code = extractSectionCode(sectionId || sectionTitle).toLowerCase();
+                const title = compactWhitespace(sectionTitle).toLowerCase();
+                return /^1[.\-]1(?:[.\-][12])?$/i.test(code)
+                    || /\benergy\b|\bpower\b|\brms\b|size of a signal/.test(title);
+            },
+            concepts: [
+                'Signal energy',
+                'Signal power',
+                'RMS value',
+                'Scaling effects',
+                'Cross terms in signal combinations'
+            ],
+            problemTypes: [
+                'Compute energy of sums/differences',
+                'Compute power and rms of periodic signals',
+                'Analyze scaling and sign-change effects'
+            ],
+            examplePatterns: [
+                'Energy of x(t)+y(t) and x(t)-y(t)',
+                'Power/rms under -f(t), 2f(t), and c f(t)'
+            ],
+            traps: [
+                'Assuming sign change changes power',
+                'Forgetting time average',
+                'Dropping cross terms'
+            ]
+        },
+        signal_transformations: {
+            label: 'Signal transformations and graph literacy',
+            sectionHints: ['1.2', '1.2-1', '1.2-2', '1.2-3', '1.2-4', '1.3', '1.3-3'],
+            source: 'chapter1_hw2_distilled',
+            includeWhen: (sectionId = '', sectionTitle = '') => {
+                const code = extractSectionCode(sectionId || sectionTitle).toLowerCase();
+                const title = compactWhitespace(sectionTitle).toLowerCase();
+                return /^1[.\-][23](?:[.\-][1-5])?$/i.test(code)
+                    || /time shift|time scaling|time reversal|combined operation|classification of signals|signal operation/.test(title);
+            },
+            concepts: [
+                'Time shifting',
+                'Time scaling',
+                'Time reversal',
+                'Combined transformations'
+            ],
+            problemTypes: [
+                'Sketch transformed signals',
+                'Determine order of operations in f(a t + b)'
+            ],
+            examplePatterns: [
+                'Sketch f(t-a), f(t/a), f(-t), f(2t-4), and f(2-t)'
+            ],
+            traps: [
+                'Shift direction reversal',
+                'Wrong order for f(2t-4)',
+                'Mistaking compression for expansion'
+            ]
+        },
+        step_impulse_signal_models: {
+            label: 'Unit step, impulse, derivative, and integral models',
+            sectionHints: ['1.4', '1.4-1', '1.4-2', '1.4-3'],
+            source: 'chapter1_hw2_distilled',
+            includeWhen: (sectionId = '', sectionTitle = '') => {
+                const code = extractSectionCode(sectionId || sectionTitle).toLowerCase();
+                const title = compactWhitespace(sectionTitle).toLowerCase();
+                return /^1[.\-]4(?:[.\-][1-3])?$/i.test(code)
+                    || /unit step|unit impulse|exponential function|signal model|delta|impulse|step function/.test(title);
+            },
+            concepts: [
+                'Unit-step windows',
+                'Graph-to-expression conversion',
+                'Impulse sifting',
+                'Differentiating discontinuities',
+                'Running integral as accumulated area'
+            ],
+            problemTypes: [
+                'Build/sketch step-gated signals',
+                'Simplify g(t) delta(t-a)',
+                'Evaluate impulse integrals',
+                'Differentiate and integrate plotted signals'
+            ],
+            examplePatterns: [
+                'Represent a pulse with u(t-a)-u(t-b)',
+                'Simplify g(t) delta(t-a) by evaluating g(a)',
+                'Evaluate integral f(tau) delta(t-tau) d tau',
+                'Differentiate a signal with jumps and add impulse terms',
+                'Sketch accumulated area integral from -infinity to t'
+            ],
+            traps: [
+                'Wrong impulse support',
+                'Forgetting jump impulses',
+                'Confusing impulse height with impulse area'
+            ]
+        },
+        complex_frequency_signal_models: {
+            label: 'Complex frequencies for exponentially varying sinusoids',
+            sectionHints: ['1.4-3', '1.4'],
+            source: 'chapter1_hw2_distilled',
+            includeWhen: (sectionId = '', sectionTitle = '') => {
+                const code = extractSectionCode(sectionId || sectionTitle).toLowerCase();
+                const title = compactWhitespace(sectionTitle).toLowerCase();
+                return /^1[.\-]4[.\-]3$/i.test(code)
+                    || /exponential function|complex frequenc|e\^st/.test(title);
+            },
+            concepts: [
+                'Complex frequency s = sigma + j omega',
+                'Damped and growing sinusoids',
+                's-plane location'
+            ],
+            problemTypes: [
+                'Locate sigma +/- j omega in the complex plane'
+            ],
+            examplePatterns: [
+                'Locate sigma +/- j omega for damped or growing sinusoids'
+            ],
+            traps: [
+                'Confusing real-axis growth/decay with imaginary-axis oscillation',
+                'Forgetting cosine has conjugate frequency pair'
+            ]
+        },
+        even_odd_decomposition: {
+            label: 'Even and odd components',
+            sectionHints: ['1.5', '1.5-1', '1.5-2'],
+            source: 'chapter1_hw2_distilled',
+            includeWhen: (sectionId = '', sectionTitle = '') => {
+                const code = extractSectionCode(sectionId || sectionTitle).toLowerCase();
+                const title = compactWhitespace(sectionTitle).toLowerCase();
+                return /^1[.\-]5(?:[.\-][12])?$/i.test(code)
+                    || /even|odd|symmetr/.test(title);
+            },
+            concepts: [
+                'Even component',
+                'Odd component',
+                'Symmetry check'
+            ],
+            problemTypes: [
+                'Compute x_e(t) and x_o(t)',
+                'Recognize already-even/already-odd signals'
+            ],
+            examplePatterns: [
+                'Decompose t u(t) into even and odd components'
+            ],
+            traps: [
+                'Forgetting x(-t)',
+                'Assuming a causal signal has no even component',
+                'Failing to simplify already-even cosine'
+            ]
+        },
+        system_properties: {
+            label: 'System property classification',
+            sectionHints: ['1.7', '1.7-1', '1.7-2', '1.7-3', '1.7-4', '1.7-7'],
+            source: 'chapter1_hw2_distilled',
+            includeWhen: (sectionId = '', sectionTitle = '') => {
+                const code = extractSectionCode(sectionId || sectionTitle).toLowerCase();
+                const title = compactWhitespace(sectionTitle).toLowerCase();
+                return /^1[.\-]7(?:[.\-][1-8])?$/i.test(code)
+                    || /classification of systems|linear|time-invariant|time varying|causal|invertible|stable|system propert/.test(title);
+            },
+            concepts: [
+                'Linearity',
+                'Time invariance',
+                'Causality',
+                'Invertibility'
+            ],
+            problemTypes: [
+                'Classify systems from equations',
+                'Apply delay test',
+                'Check future dependence',
+                'Recover input from output when possible'
+            ],
+            examplePatterns: [
+                'Test linearity on f^2(t), affine offsets, squared derivatives, and f(t) df/dt',
+                'Test time invariance on delay, time scaling, fixed-window integration, and derivative-square systems',
+                'Test causality for f(-t) and f(at)',
+                'Find inverse relation for y(t)=integral f and y(t)=f(3t-6)'
+            ],
+            traps: [
+                'Input nonlinearity',
+                'Output derivative squared',
+                'Affine offsets',
+                'Time scaling vs time invariance',
+                'Causality for f(at)',
+                'Many-to-one mappings'
+            ]
         }
     };
 }
@@ -3156,16 +3329,20 @@ function getExamPriorityTopicBuckets() {
 function filterExamPriorityGuidanceForSection(sectionId = '', sectionTitle = '', rawGuidance = {}) {
     const buckets = getExamPriorityTopicBuckets();
     const relevantTopics = Object.entries(buckets)
-        .filter(([, bucket]) => bucket.includeWhen(sectionId, sectionTitle))
+        .filter(([, bucket]) => (!bucket.source || bucket.source === rawGuidance.source) && bucket.includeWhen(sectionId, sectionTitle))
         .map(([id, bucket]) => ({ id, ...bucket, includeWhen: undefined }));
     const previewOnlyTopics = Object.entries(buckets)
+        .filter(([, bucket]) => !bucket.source || bucket.source === rawGuidance.source)
         .filter(([id]) => !relevantTopics.some(topic => topic.id === id))
         .map(([id, bucket]) => ({ id, label: bucket.label, sectionHints: bucket.sectionHints }));
 
     const sectionType = classifyBackgroundSection(sectionId, sectionTitle);
-    if (!relevantTopics.length || sectionType === 'historical_note') return null;
+    if (!relevantTopics.length || (isBackgroundSection(sectionId, sectionTitle) && sectionType === 'historical_note')) return null;
 
     const flatten = (key) => [...new Set(relevantTopics.flatMap(topic => topic[key] || []))];
+    const displaySource = rawGuidance.source === 'chapter1_hw2_distilled'
+        ? 'Chapter 1 HW2 Distillation'
+        : 'Background HW1 Distillation';
     return {
         ...rawGuidance,
         filtered: true,
@@ -3191,7 +3368,7 @@ function filterExamPriorityGuidanceForSection(sectionId = '', sectionTitle = '',
             quiz_bias: rawGuidance?.json?.quiz_bias || null
         },
         markdown: [
-            '# Background HW1 Distillation — Section Filtered',
+            `# ${displaySource} — Section Filtered`,
             '',
             `Current section: ${sectionId || sectionTitle}`,
             `Relevant topic buckets: ${relevantTopics.map(topic => topic.id).join(', ')}`,
@@ -3217,13 +3394,18 @@ function filterExamPriorityGuidanceForSection(sectionId = '', sectionTitle = '',
 }
 
 function loadExamPriorityGuidance(sectionId = '', sectionTitle = '') {
-    if (!isBackgroundSection(sectionId, sectionTitle)) return null;
+    const useBackground = isBackgroundSection(sectionId, sectionTitle);
+    const useChapterOne = isChapterOneSection(sectionId, sectionTitle);
+    if (!useBackground && !useChapterOne) return null;
 
-    const sectionType = classifyBackgroundSection(sectionId, sectionTitle);
-    if (sectionType === 'historical_note') return null;
+    if (useBackground) {
+        const sectionType = classifyBackgroundSection(sectionId, sectionTitle);
+        if (sectionType === 'historical_note') return null;
+    }
 
-    const mdPath = path.join(EXAM_PRIORITY_DIR, 'background_hw1_distilled.md');
-    const jsonPath = path.join(EXAM_PRIORITY_DIR, 'background_hw1_distilled.json');
+    const source = useChapterOne ? 'chapter1_hw2_distilled' : 'background_hw1_distilled';
+    const mdPath = path.join(EXAM_PRIORITY_DIR, `${source}.md`);
+    const jsonPath = path.join(EXAM_PRIORITY_DIR, `${source}.json`);
     if (!fs.existsSync(mdPath) && !fs.existsSync(jsonPath)) return null;
 
     let markdown = '';
@@ -3238,12 +3420,36 @@ function loadExamPriorityGuidance(sectionId = '', sectionTitle = '') {
     } catch (_) {}
 
     const rawGuidance = {
-        source: 'background_hw1_distilled',
+        source,
         markdown,
         json,
-        sectionType
+        sectionType: useBackground ? classifyBackgroundSection(sectionId, sectionTitle) : 'chapter1'
     };
     return filterExamPriorityGuidanceForSection(sectionId, sectionTitle, rawGuidance);
+}
+
+function inferExamPriorityContext(sectionId = '', sectionTitle = '', bookPages = []) {
+    const explicitId = compactWhitespace(sectionId || '');
+    const explicitTitle = compactWhitespace(sectionTitle || '');
+    if (explicitId || explicitTitle) {
+        return { sectionId: explicitId, sectionTitle: explicitTitle };
+    }
+
+    for (const page of Array.isArray(bookPages) ? bookPages : []) {
+        const candidateTitle = compactWhitespace(page && page.title ? page.title : '');
+        const candidateSubsection = compactWhitespace(page && page.subsection ? page.subsection : '');
+        const candidate = candidateSubsection || candidateTitle;
+        if (!candidate) continue;
+        const code = extractSectionCode(candidate);
+        if (/^1(?:[.\-]|$)/.test(code) || /^B(?:[.\-]|$)/i.test(code)) {
+            return {
+                sectionId: candidateSubsection || code,
+                sectionTitle: candidateTitle || candidateSubsection || code
+            };
+        }
+    }
+
+    return { sectionId: '', sectionTitle: '' };
 }
 
 function buildSectionSpecificPromptSection(sectionId = '', sectionTitle = '') {
@@ -3517,7 +3723,9 @@ function focusOcrTextForSection(sectionId = '', sectionTitle = '', rawText = '')
 async function agentA_plan(sectionId, sectionTitle, bookPages, webSources, language = 'en', userProfilePrompt = '', bookSource = 'old') {
     const ocrPages = bookPages.map(p => ({
         pageId: p.page,
-        text: p.ocrOverrideText || focusOcrTextForSection(sectionId, sectionTitle, readOCRText(p.textPath, 3000))
+        text: Object.prototype.hasOwnProperty.call(p, 'ocrOverrideText')
+            ? p.ocrOverrideText
+            : focusOcrTextForSection(sectionId, sectionTitle, readOCRText(p.textPath, 3000))
     }));
     const existingPageImages = bookPages.map(p => p.page);
     const allowedNewBookFigures = getAllowedNewBookFigures(sectionId, bookPages, bookSource);
@@ -4020,7 +4228,9 @@ async function preGenerateSectionLesson(sectionId, sectionTitle, options = {}) {
     const preludePages = shouldGenerateParentPreludeLesson(sectionId, sectionTitle, mappedPages)
         ? getParentPreludePages(sectionId, sectionTitle, mappedPages)
         : [];
-    const rawPages = preludePages.length ? preludePages : mappedPages;
+    const rawPages = preludePages.length
+        ? preludePages
+        : attachSectionOcrToPages(sectionId, mappedPages, bookSource);
 
     const cachedLesson = readLessonCache(sectionId, profileMemory, bookSource, cacheVariant);
     if (cachedLesson && !options.force) {
@@ -5014,6 +5224,7 @@ const server = http.createServer(async (req, res) => {
 
             console.log(`[SECTION] sectionId=${sectionId} mode=${mode} book=${data.bookSource||'old'}`);
             const rawPages = getPagesForSection(sectionId, secOcrDir);
+            const sectionOcrPages = attachSectionOcrToPages(sectionId, rawPages, data.bookSource);
             const bookPages = rawPages.map(item => ({
                 ...item,
                 image: getPageImageUrl(data.bookSource, item.pageImage)
@@ -5040,7 +5251,7 @@ const server = http.createServer(async (req, res) => {
             }
 
             if (mode === 'intro') {
-                const intro = await generateSectionIntro(sectionId, sectionTitle, rawPages, language);
+                const intro = await generateSectionIntro(sectionId, sectionTitle, sectionOcrPages, language);
                 res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
                 res.end(JSON.stringify({
                     sectionId,
@@ -5055,7 +5266,8 @@ const server = http.createServer(async (req, res) => {
                     }))
                 }));
             } else if (mode === 'overview') {
-                const hasPrelude = shouldGenerateParentPreludeLesson(sectionId, sectionTitle, rawPages);
+                const hasExistingPrelude = hasLessonCacheFile(sectionId, profileMemory, data.bookSource, 'parent_prelude');
+                const hasPrelude = hasExistingPrelude || shouldGenerateParentPreludeLesson(sectionId, sectionTitle, rawPages);
                 let cachedLesson = hasPrelude ? readLessonCache(sectionId, profileMemory, data.bookSource, 'parent_prelude') : null;
                 const normalizedCachedLesson = cachedLesson
                     ? normalizeMathMarkdown(convertLegacyQuickCheckToKcBlocks(cachedLesson))
@@ -5301,6 +5513,12 @@ const server = http.createServer(async (req, res) => {
                 }));
             }
 
+            const examContext = inferExamPriorityContext(sectionId, sectionTitle, relatedBooks);
+            const examPriorityGuidance = loadExamPriorityGuidance(examContext.sectionId, examContext.sectionTitle);
+            if (examPriorityGuidance) {
+                console.log(`[ASK] Exam-priority hint active: ${examPriorityGuidance.source} / ${(examPriorityGuidance.json?.topic_filter?.relevant_topic_ids || []).join(',')}`);
+            }
+
             let webSources = Array.isArray(data.webSources) && data.webSources.length
                 ? data.webSources
                 : [];
@@ -5315,7 +5533,8 @@ const server = http.createServer(async (req, res) => {
                     history,
                     sectionTitle: sectionTitle || sectionId,
                     lessonContext,
-                    userProfilePrompt
+                    userProfilePrompt,
+                    examPriorityGuidance
                 });
                 searchAngles = searchResult.angles || [];
                 const resolvedQuestion = searchResult.resolvedQuery || question;
@@ -5348,7 +5567,8 @@ const server = http.createServer(async (req, res) => {
                 mode,
                 userProfilePrompt,
                 attachments,
-                answerLength
+                answerLength,
+                examPriorityGuidance
             });
 
             if (answerLength === 'short' && !explanation.includes('```')) {
@@ -5380,13 +5600,15 @@ const server = http.createServer(async (req, res) => {
                     `✅ 搜索到 ${webSources.length} 个网页来源`,
                     '✅ Haiku 讲解生成完毕'
                 ],
-                debug: {
-                    mode,
-                    searchAngles,
-                    historyCount: history.length,
-                    sectionTitle: sectionTitle || sectionId
-                }
-            }));
+	                debug: {
+	                    mode,
+	                    searchAngles,
+	                    historyCount: history.length,
+	                    sectionTitle: sectionTitle || sectionId,
+	                    examPrioritySource: examPriorityGuidance ? examPriorityGuidance.source : null,
+	                    examPriorityTopics: examPriorityGuidance ? (examPriorityGuidance.json?.topic_filter?.relevant_topic_ids || []) : []
+	                }
+	            }));
 
             // ── Async: update user memory based on this Q&A turn ─────────────
             // Fire-and-forget: does NOT block the response

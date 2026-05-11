@@ -1,0 +1,3739 @@
+{
+  "generatedAt": "2026-05-11T12:03:35.017Z",
+  "sourceMap": "tutor-openclaw-ui/section-page-map-display-new.json",
+  "pageOcrDir": "workspace_tutor_related_full/tutor-materials/new-book-ocr",
+  "sectionOcrDir": "workspace_tutor_related_full/tutor-materials/new-book-section-ocr",
+  "sections": {
+    "1": {
+      "file": "1.txt",
+      "meta": "1.meta.json",
+      "sectionId": "1",
+      "sourcePages": [
+        "page-064",
+        "page-065",
+        "page-066",
+        "page-067",
+        "page-068",
+        "page-069",
+        "page-070",
+        "page-071",
+        "page-072",
+        "page-073",
+        "page-074",
+        "page-075",
+        "page-076",
+        "page-077",
+        "page-078",
+        "page-079",
+        "page-080",
+        "page-081",
+        "page-082",
+        "page-083",
+        "page-084",
+        "page-085",
+        "page-086",
+        "page-087",
+        "page-088",
+        "page-089",
+        "page-090",
+        "page-091",
+        "page-092",
+        "page-093",
+        "page-094",
+        "page-095",
+        "page-096",
+        "page-097",
+        "page-098",
+        "page-099",
+        "page-100",
+        "page-101",
+        "page-102",
+        "page-103",
+        "page-104",
+        "page-105",
+        "page-106",
+        "page-107",
+        "page-108",
+        "page-109",
+        "page-110",
+        "page-111",
+        "page-112",
+        "page-113",
+        "page-114",
+        "page-115",
+        "page-116",
+        "page-117",
+        "page-118",
+        "page-119",
+        "page-120",
+        "page-121",
+        "page-122",
+        "page-123",
+        "page-124",
+        "page-125",
+        "page-126",
+        "page-127",
+        "page-128",
+        "page-129",
+        "page-130",
+        "page-131",
+        "page-132",
+        "page-133",
+        "page-134",
+        "page-135"
+      ],
+      "usedPages": [
+        "page-064",
+        "page-065",
+        "page-066",
+        "page-067",
+        "page-068",
+        "page-069",
+        "page-070",
+        "page-071",
+        "page-072",
+        "page-073",
+        "page-074",
+        "page-075",
+        "page-076",
+        "page-077",
+        "page-078",
+        "page-079",
+        "page-080",
+        "page-081",
+        "page-082",
+        "page-083",
+        "page-084",
+        "page-085",
+        "page-086",
+        "page-087",
+        "page-088",
+        "page-089",
+        "page-090",
+        "page-091",
+        "page-092",
+        "page-093",
+        "page-094",
+        "page-095",
+        "page-096",
+        "page-097",
+        "page-098",
+        "page-099",
+        "page-100",
+        "page-101",
+        "page-102",
+        "page-103",
+        "page-104",
+        "page-105",
+        "page-106",
+        "page-107",
+        "page-108",
+        "page-109",
+        "page-110",
+        "page-111",
+        "page-112",
+        "page-113",
+        "page-114",
+        "page-115",
+        "page-116",
+        "page-117",
+        "page-118",
+        "page-119",
+        "page-120",
+        "page-121",
+        "page-122",
+        "page-123",
+        "page-124",
+        "page-125",
+        "page-126",
+        "page-127",
+        "page-128",
+        "page-129",
+        "page-130",
+        "page-131",
+        "page-132",
+        "page-133",
+        "page-134",
+        "page-135"
+      ],
+      "missingPages": [],
+      "foundStart": false,
+      "startLine": "",
+      "foundEnd": true,
+      "endBeforeLine": "1.1 S IZE OF A S IGNAL",
+      "endBeforeCode": "1.1",
+      "charCount": 2064
+    },
+    "2": {
+      "file": "2.txt",
+      "meta": "2.meta.json",
+      "sectionId": "2",
+      "sourcePages": [
+        "page-150",
+        "page-151",
+        "page-152",
+        "page-153",
+        "page-154",
+        "page-155",
+        "page-156",
+        "page-157",
+        "page-158",
+        "page-159",
+        "page-160",
+        "page-161",
+        "page-162",
+        "page-163",
+        "page-164",
+        "page-165",
+        "page-166",
+        "page-167",
+        "page-168",
+        "page-169",
+        "page-170",
+        "page-171",
+        "page-172",
+        "page-173",
+        "page-174",
+        "page-175",
+        "page-176",
+        "page-177",
+        "page-178",
+        "page-179",
+        "page-180",
+        "page-181",
+        "page-182",
+        "page-183",
+        "page-184",
+        "page-185",
+        "page-186",
+        "page-187",
+        "page-188",
+        "page-189",
+        "page-190",
+        "page-191",
+        "page-192",
+        "page-193",
+        "page-194",
+        "page-195",
+        "page-196",
+        "page-197",
+        "page-198",
+        "page-199",
+        "page-200",
+        "page-201",
+        "page-202",
+        "page-203",
+        "page-204",
+        "page-205",
+        "page-206",
+        "page-207",
+        "page-208",
+        "page-209",
+        "page-210",
+        "page-211",
+        "page-212",
+        "page-213",
+        "page-214",
+        "page-215",
+        "page-216",
+        "page-217",
+        "page-218",
+        "page-219",
+        "page-220",
+        "page-221",
+        "page-222"
+      ],
+      "usedPages": [
+        "page-150",
+        "page-151",
+        "page-152",
+        "page-153",
+        "page-154",
+        "page-155",
+        "page-156",
+        "page-157",
+        "page-158",
+        "page-159",
+        "page-160",
+        "page-161",
+        "page-162",
+        "page-163",
+        "page-164",
+        "page-165",
+        "page-166",
+        "page-167",
+        "page-168",
+        "page-169",
+        "page-170",
+        "page-171",
+        "page-172",
+        "page-173",
+        "page-174",
+        "page-175",
+        "page-176",
+        "page-177",
+        "page-178",
+        "page-179",
+        "page-180",
+        "page-181",
+        "page-182",
+        "page-183",
+        "page-184",
+        "page-185",
+        "page-186",
+        "page-187",
+        "page-188",
+        "page-189",
+        "page-190",
+        "page-191",
+        "page-192",
+        "page-193",
+        "page-194",
+        "page-195",
+        "page-196",
+        "page-197",
+        "page-198",
+        "page-199",
+        "page-200",
+        "page-201",
+        "page-202",
+        "page-203",
+        "page-204",
+        "page-205",
+        "page-206",
+        "page-207",
+        "page-208",
+        "page-209",
+        "page-210",
+        "page-211",
+        "page-212",
+        "page-213",
+        "page-214",
+        "page-215",
+        "page-216",
+        "page-217",
+        "page-218",
+        "page-219",
+        "page-220",
+        "page-221",
+        "page-222"
+      ],
+      "missingPages": [],
+      "foundStart": false,
+      "startLine": "",
+      "foundEnd": true,
+      "endBeforeLine": "2.1 INTRODUCTION",
+      "endBeforeCode": "2.1",
+      "charCount": 332
+    },
+    "3": {
+      "file": "3.txt",
+      "meta": "3.meta.json",
+      "sectionId": "3",
+      "sourcePages": [
+        "page-237",
+        "page-238",
+        "page-239",
+        "page-240",
+        "page-241",
+        "page-242",
+        "page-243",
+        "page-244",
+        "page-245",
+        "page-246",
+        "page-247",
+        "page-248",
+        "page-249",
+        "page-250",
+        "page-251",
+        "page-252",
+        "page-253",
+        "page-254",
+        "page-255",
+        "page-256",
+        "page-257",
+        "page-258",
+        "page-259",
+        "page-260",
+        "page-261",
+        "page-262",
+        "page-263",
+        "page-264",
+        "page-265",
+        "page-266",
+        "page-267",
+        "page-268",
+        "page-269",
+        "page-270",
+        "page-271",
+        "page-272",
+        "page-273",
+        "page-274",
+        "page-275",
+        "page-276",
+        "page-277",
+        "page-278",
+        "page-279",
+        "page-280",
+        "page-281",
+        "page-282",
+        "page-283",
+        "page-284",
+        "page-285",
+        "page-286",
+        "page-287",
+        "page-288",
+        "page-289",
+        "page-290",
+        "page-291",
+        "page-292",
+        "page-293",
+        "page-294",
+        "page-295",
+        "page-296",
+        "page-297",
+        "page-298",
+        "page-299",
+        "page-300",
+        "page-301",
+        "page-302",
+        "page-303",
+        "page-304",
+        "page-305",
+        "page-306",
+        "page-307",
+        "page-308",
+        "page-309",
+        "page-310",
+        "page-311",
+        "page-312",
+        "page-313"
+      ],
+      "usedPages": [
+        "page-237",
+        "page-238",
+        "page-239",
+        "page-240",
+        "page-241",
+        "page-242",
+        "page-243",
+        "page-244",
+        "page-245",
+        "page-246",
+        "page-247",
+        "page-248",
+        "page-249",
+        "page-250",
+        "page-251",
+        "page-252",
+        "page-253",
+        "page-254",
+        "page-255",
+        "page-256",
+        "page-257",
+        "page-258",
+        "page-259",
+        "page-260",
+        "page-261",
+        "page-262",
+        "page-263",
+        "page-264",
+        "page-265",
+        "page-266",
+        "page-267",
+        "page-268",
+        "page-269",
+        "page-270",
+        "page-271",
+        "page-272",
+        "page-273",
+        "page-274",
+        "page-275",
+        "page-276",
+        "page-277",
+        "page-278",
+        "page-279",
+        "page-280",
+        "page-281",
+        "page-282",
+        "page-283",
+        "page-284",
+        "page-285",
+        "page-286",
+        "page-287",
+        "page-288",
+        "page-289",
+        "page-290",
+        "page-291",
+        "page-292",
+        "page-293",
+        "page-294",
+        "page-295",
+        "page-296",
+        "page-297",
+        "page-298",
+        "page-299",
+        "page-300",
+        "page-301",
+        "page-302",
+        "page-303",
+        "page-304",
+        "page-305",
+        "page-306",
+        "page-307",
+        "page-308",
+        "page-309",
+        "page-310",
+        "page-311",
+        "page-312",
+        "page-313"
+      ],
+      "missingPages": [],
+      "foundStart": false,
+      "startLine": "",
+      "foundEnd": true,
+      "endBeforeLine": "3.1 INTRODUCTION",
+      "endBeforeCode": "3.1",
+      "charCount": 408
+    },
+    "1.1": {
+      "file": "1.1.txt",
+      "meta": "1.1.meta.json",
+      "sectionId": "1.1",
+      "sourcePages": [
+        "page-064",
+        "page-065"
+      ],
+      "usedPages": [
+        "page-064",
+        "page-065"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.1 S IZE OF A S IGNAL",
+      "foundEnd": true,
+      "endBeforeLine": "1.1-1 Signal Energy",
+      "endBeforeCode": "1.1-1",
+      "charCount": 1051
+    },
+    "1.1-1": {
+      "file": "1.1-1.txt",
+      "meta": "1.1-1.meta.json",
+      "sectionId": "1.1-1",
+      "sourcePages": [
+        "page-065"
+      ],
+      "usedPages": [
+        "page-065"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.1-1 Signal Energy",
+      "foundEnd": true,
+      "endBeforeLine": "1.1-2 Signal Power",
+      "endBeforeCode": "1.1-2",
+      "charCount": 1172
+    },
+    "1.1-2": {
+      "file": "1.1-2.txt",
+      "meta": "1.1-2.meta.json",
+      "sectionId": "1.1-2",
+      "sourcePages": [
+        "page-065",
+        "page-066",
+        "page-067",
+        "page-068",
+        "page-069",
+        "page-070"
+      ],
+      "usedPages": [
+        "page-065",
+        "page-066",
+        "page-067",
+        "page-068",
+        "page-069",
+        "page-070"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.1-2 Signal Power",
+      "foundEnd": false,
+      "endBeforeLine": "",
+      "endBeforeCode": "",
+      "charCount": 15922
+    },
+    "1.10": {
+      "file": "1.10.txt",
+      "meta": "1.10.meta.json",
+      "sectionId": "1.10",
+      "sourcePages": [
+        "page-121",
+        "page-122",
+        "page-123",
+        "page-124",
+        "page-125"
+      ],
+      "usedPages": [
+        "page-121",
+        "page-122",
+        "page-123",
+        "page-124",
+        "page-125"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.10 Internal Description: The State-Space Description 121",
+      "foundEnd": false,
+      "endBeforeLine": "",
+      "endBeforeCode": "",
+      "charCount": 15955
+    },
+    "1.11": {
+      "file": "1.11.txt",
+      "meta": "1.11.meta.json",
+      "sectionId": "1.11",
+      "sourcePages": [
+        "page-126"
+      ],
+      "usedPages": [
+        "page-126"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.11 MATLAB: W ORKING WITH F UNCTIONS",
+      "foundEnd": true,
+      "endBeforeLine": "1.11-1 Anonymous Functions",
+      "endBeforeCode": "1.11-1",
+      "charCount": 293
+    },
+    "1.11-1": {
+      "file": "1.11-1.txt",
+      "meta": "1.11-1.meta.json",
+      "sectionId": "1.11-1",
+      "sourcePages": [
+        "page-126",
+        "page-127",
+        "page-128"
+      ],
+      "usedPages": [
+        "page-126",
+        "page-127",
+        "page-128"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.11-1 Anonymous Functions",
+      "foundEnd": true,
+      "endBeforeLine": "1.11-2 Relational Operators and the Unit Step Function",
+      "endBeforeCode": "1.11-2",
+      "charCount": 3632
+    },
+    "1.11-2": {
+      "file": "1.11-2.txt",
+      "meta": "1.11-2.meta.json",
+      "sectionId": "1.11-2",
+      "sourcePages": [
+        "page-128",
+        "page-129",
+        "page-130"
+      ],
+      "usedPages": [
+        "page-128",
+        "page-129",
+        "page-130"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.11-2 Relational Operators and the Unit Step Function",
+      "foundEnd": true,
+      "endBeforeLine": "1.11-3 Visualizing Operations on the Independent Variable",
+      "endBeforeCode": "1.11-3",
+      "charCount": 4337
+    },
+    "1.11-3": {
+      "file": "1.11-3.txt",
+      "meta": "1.11-3.meta.json",
+      "sectionId": "1.11-3",
+      "sourcePages": [
+        "page-130",
+        "page-131"
+      ],
+      "usedPages": [
+        "page-130",
+        "page-131"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.11-3 Visualizing Operations on the Independent Variable",
+      "foundEnd": true,
+      "endBeforeLine": "1.11-4 Numerical Integration and Estimating Signal Energy",
+      "endBeforeCode": "1.11-4",
+      "charCount": 3156
+    },
+    "1.11-4": {
+      "file": "1.11-4.txt",
+      "meta": "1.11-4.meta.json",
+      "sectionId": "1.11-4",
+      "sourcePages": [
+        "page-131",
+        "page-132",
+        "page-133"
+      ],
+      "usedPages": [
+        "page-131",
+        "page-132",
+        "page-133"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.11-4 Numerical Integration and Estimating Signal Energy",
+      "foundEnd": true,
+      "endBeforeLine": "1.12 Summary 133",
+      "endBeforeCode": "1.12",
+      "charCount": 2959
+    },
+    "1.12": {
+      "file": "1.12.txt",
+      "meta": "1.12.meta.json",
+      "sectionId": "1.12",
+      "sourcePages": [
+        "page-133",
+        "page-134",
+        "page-135"
+      ],
+      "usedPages": [
+        "page-133",
+        "page-134",
+        "page-135"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.12 Summary 133",
+      "foundEnd": false,
+      "endBeforeLine": "",
+      "endBeforeCode": "",
+      "charCount": 10413
+    },
+    "1.2": {
+      "file": "1.2.txt",
+      "meta": "1.2.meta.json",
+      "sectionId": "1.2",
+      "sourcePages": [
+        "page-071"
+      ],
+      "usedPages": [
+        "page-071"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.2 Some Useful Signal Operations 71",
+      "foundEnd": true,
+      "endBeforeLine": "1.2-1 Time Shifting",
+      "endBeforeCode": "1.2-1",
+      "charCount": 448
+    },
+    "1.2-1": {
+      "file": "1.2-1.txt",
+      "meta": "1.2-1.meta.json",
+      "sectionId": "1.2-1",
+      "sourcePages": [
+        "page-071",
+        "page-072",
+        "page-073"
+      ],
+      "usedPages": [
+        "page-071",
+        "page-072",
+        "page-073"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.2-1 Time Shifting",
+      "foundEnd": true,
+      "endBeforeLine": "1.2-2 Time Scaling",
+      "endBeforeCode": "1.2-2",
+      "charCount": 4345
+    },
+    "1.2-2": {
+      "file": "1.2-2.txt",
+      "meta": "1.2-2.meta.json",
+      "sectionId": "1.2-2",
+      "sourcePages": [
+        "page-073",
+        "page-074",
+        "page-075",
+        "page-076"
+      ],
+      "usedPages": [
+        "page-073",
+        "page-074",
+        "page-075",
+        "page-076"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.2-2 Time Scaling",
+      "foundEnd": true,
+      "endBeforeLine": "1.2-3 Time Reversal",
+      "endBeforeCode": "1.2-3",
+      "charCount": 5997
+    },
+    "1.2-3": {
+      "file": "1.2-3.txt",
+      "meta": "1.2-3.meta.json",
+      "sectionId": "1.2-3",
+      "sourcePages": [
+        "page-076",
+        "page-077"
+      ],
+      "usedPages": [
+        "page-076",
+        "page-077"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.2-3 Time Reversal",
+      "foundEnd": true,
+      "endBeforeLine": "1.2-4 Combined Operations",
+      "endBeforeCode": "1.2-4",
+      "charCount": 2690
+    },
+    "1.2-4": {
+      "file": "1.2-4.txt",
+      "meta": "1.2-4.meta.json",
+      "sectionId": "1.2-4",
+      "sourcePages": [
+        "page-077",
+        "page-078"
+      ],
+      "usedPages": [
+        "page-077",
+        "page-078"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.2-4 Combined Operations",
+      "foundEnd": true,
+      "endBeforeLine": "1.3 C LASSIFICATION OF S IGNALS",
+      "endBeforeCode": "1.3",
+      "charCount": 1094
+    },
+    "1.3": {
+      "file": "1.3.txt",
+      "meta": "1.3.meta.json",
+      "sectionId": "1.3",
+      "sourcePages": [
+        "page-078"
+      ],
+      "usedPages": [
+        "page-078"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.3 C LASSIFICATION OF S IGNALS",
+      "foundEnd": true,
+      "endBeforeLine": "1.3-1 Continuous-Time and Discrete-Time Signals",
+      "endBeforeCode": "1.3-1",
+      "charCount": 967
+    },
+    "1.3-1": {
+      "file": "1.3-1.txt",
+      "meta": "1.3-1.meta.json",
+      "sectionId": "1.3-1",
+      "sourcePages": [
+        "page-078"
+      ],
+      "usedPages": [
+        "page-078"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.3-1 Continuous-Time and Discrete-Time Signals",
+      "foundEnd": true,
+      "endBeforeLine": "1.3-2 Analog and Digital Signals",
+      "endBeforeCode": "1.3-2",
+      "charCount": 484
+    },
+    "1.3-2": {
+      "file": "1.3-2.txt",
+      "meta": "1.3-2.meta.json",
+      "sectionId": "1.3-2",
+      "sourcePages": [
+        "page-078",
+        "page-079"
+      ],
+      "usedPages": [
+        "page-078",
+        "page-079"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.3-2 Analog and Digital Signals",
+      "foundEnd": true,
+      "endBeforeLine": "1.3-3 Periodic and Aperiodic Signals",
+      "endBeforeCode": "1.3-3",
+      "charCount": 2382
+    },
+    "1.3-3": {
+      "file": "1.3-3.txt",
+      "meta": "1.3-3.meta.json",
+      "sectionId": "1.3-3",
+      "sourcePages": [
+        "page-079",
+        "page-080",
+        "page-081",
+        "page-082"
+      ],
+      "usedPages": [
+        "page-079",
+        "page-080",
+        "page-081",
+        "page-082"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.3-3 Periodic and Aperiodic Signals",
+      "foundEnd": true,
+      "endBeforeLine": "1.3-4 Energy and Power Signals",
+      "endBeforeCode": "1.3-4",
+      "charCount": 6012
+    },
+    "1.3-4": {
+      "file": "1.3-4.txt",
+      "meta": "1.3-4.meta.json",
+      "sectionId": "1.3-4",
+      "sourcePages": [
+        "page-082"
+      ],
+      "usedPages": [
+        "page-082"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.3-4 Energy and Power Signals",
+      "foundEnd": true,
+      "endBeforeLine": "1.3-5 Deterministic and Random Signals",
+      "endBeforeCode": "1.3-5",
+      "charCount": 1584
+    },
+    "1.3-5": {
+      "file": "1.3-5.txt",
+      "meta": "1.3-5.meta.json",
+      "sectionId": "1.3-5",
+      "sourcePages": [
+        "page-082"
+      ],
+      "usedPages": [
+        "page-082"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.3-5 Deterministic and Random Signals",
+      "foundEnd": true,
+      "endBeforeLine": "1.4 S OME U SEFUL S IGNAL M ODELS",
+      "endBeforeCode": "1.4",
+      "charCount": 488
+    },
+    "1.4": {
+      "file": "1.4.txt",
+      "meta": "1.4.meta.json",
+      "sectionId": "1.4",
+      "sourcePages": [
+        "page-082"
+      ],
+      "usedPages": [
+        "page-082"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.4 S OME U SEFUL S IGNAL M ODELS",
+      "foundEnd": false,
+      "endBeforeLine": "",
+      "endBeforeCode": "",
+      "charCount": 298
+    },
+    "1.4-1": {
+      "file": "1.4-1.txt",
+      "meta": "1.4-1.meta.json",
+      "sectionId": "1.4-1",
+      "sourcePages": [
+        "page-083",
+        "page-084",
+        "page-085",
+        "page-086"
+      ],
+      "usedPages": [
+        "page-083",
+        "page-084",
+        "page-085",
+        "page-086"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.4-1 The Unit Step Function u(t)",
+      "foundEnd": true,
+      "endBeforeLine": "1.4-2 The Unit Impulse Function δ(t)",
+      "endBeforeCode": "1.4-2",
+      "charCount": 6760
+    },
+    "1.4-2": {
+      "file": "1.4-2.txt",
+      "meta": "1.4-2.meta.json",
+      "sectionId": "1.4-2",
+      "sourcePages": [
+        "page-086",
+        "page-087",
+        "page-088",
+        "page-089"
+      ],
+      "usedPages": [
+        "page-086",
+        "page-087",
+        "page-088",
+        "page-089"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.4-2 The Unit Impulse Function δ(t)",
+      "foundEnd": true,
+      "endBeforeLine": "1.4-3 The Exponential Function est",
+      "endBeforeCode": "1.4-3",
+      "charCount": 9700
+    },
+    "1.4-3": {
+      "file": "1.4-3.txt",
+      "meta": "1.4-3.meta.json",
+      "sectionId": "1.4-3",
+      "sourcePages": [
+        "page-089",
+        "page-090",
+        "page-091"
+      ],
+      "usedPages": [
+        "page-089",
+        "page-090",
+        "page-091"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.4-3 The Exponential Function est",
+      "foundEnd": false,
+      "endBeforeLine": "",
+      "endBeforeCode": "",
+      "charCount": 5759
+    },
+    "1.5": {
+      "file": "1.5.txt",
+      "meta": "1.5.meta.json",
+      "sectionId": "1.5",
+      "sourcePages": [
+        "page-092"
+      ],
+      "usedPages": [
+        "page-092"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.5 E VEN AND O DD F UNCTIONS",
+      "foundEnd": true,
+      "endBeforeLine": "1.5-1 Some Properties of Even and Odd Functions",
+      "endBeforeCode": "1.5-1",
+      "charCount": 735
+    },
+    "1.5-1": {
+      "file": "1.5-1.txt",
+      "meta": "1.5-1.meta.json",
+      "sectionId": "1.5-1",
+      "sourcePages": [
+        "page-092",
+        "page-093"
+      ],
+      "usedPages": [
+        "page-092",
+        "page-093"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.5-1 Some Properties of Even and Odd Functions",
+      "foundEnd": true,
+      "endBeforeLine": "1.5-2 Even and Odd Components of a Signal",
+      "endBeforeCode": "1.5-2",
+      "charCount": 1735
+    },
+    "1.5-2": {
+      "file": "1.5-2.txt",
+      "meta": "1.5-2.meta.json",
+      "sectionId": "1.5-2",
+      "sourcePages": [
+        "page-093",
+        "page-094",
+        "page-095"
+      ],
+      "usedPages": [
+        "page-093",
+        "page-094",
+        "page-095"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.5-2 Even and Odd Components of a Signal",
+      "foundEnd": true,
+      "endBeforeLine": "1.6 Systems 95",
+      "endBeforeCode": "1.6",
+      "charCount": 3163
+    },
+    "1.6": {
+      "file": "1.6.txt",
+      "meta": "1.6.meta.json",
+      "sectionId": "1.6",
+      "sourcePages": [
+        "page-095",
+        "page-096",
+        "page-097"
+      ],
+      "usedPages": [
+        "page-095",
+        "page-096",
+        "page-097"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.6 Systems 95",
+      "foundEnd": true,
+      "endBeforeLine": "1.7 Classiﬁcation of Systems 97",
+      "endBeforeCode": "1.7",
+      "charCount": 6537
+    },
+    "1.7": {
+      "file": "1.7.txt",
+      "meta": "1.7.meta.json",
+      "sectionId": "1.7",
+      "sourcePages": [
+        "page-097"
+      ],
+      "usedPages": [
+        "page-097"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.7 Classiﬁcation of Systems 97",
+      "foundEnd": true,
+      "endBeforeLine": "1.7-1 Linear and Nonlinear Systems",
+      "endBeforeCode": "1.7-1",
+      "charCount": 1228
+    },
+    "1.7-1": {
+      "file": "1.7-1.txt",
+      "meta": "1.7-1.meta.json",
+      "sectionId": "1.7-1",
+      "sourcePages": [
+        "page-097",
+        "page-098",
+        "page-099",
+        "page-100",
+        "page-101"
+      ],
+      "usedPages": [
+        "page-097",
+        "page-098",
+        "page-099",
+        "page-100",
+        "page-101"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.7-1 Linear and Nonlinear Systems",
+      "foundEnd": false,
+      "endBeforeLine": "",
+      "endBeforeCode": "",
+      "charCount": 12651
+    },
+    "1.7-2": {
+      "file": "1.7-2.txt",
+      "meta": "1.7-2.meta.json",
+      "sectionId": "1.7-2",
+      "sourcePages": [
+        "page-102",
+        "page-103"
+      ],
+      "usedPages": [
+        "page-102",
+        "page-103"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.7-2 Time-Invariant and Time-Varying Systems",
+      "foundEnd": true,
+      "endBeforeLine": "1.7-3 Instantaneous and Dynamic Systems",
+      "endBeforeCode": "1.7-3",
+      "charCount": 4956
+    },
+    "1.7-3": {
+      "file": "1.7-3.txt",
+      "meta": "1.7-3.meta.json",
+      "sectionId": "1.7-3",
+      "sourcePages": [
+        "page-103",
+        "page-104"
+      ],
+      "usedPages": [
+        "page-103",
+        "page-104"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.7-3 Instantaneous and Dynamic Systems",
+      "foundEnd": true,
+      "endBeforeLine": "1.7-4 Causal and Noncausal Systems",
+      "endBeforeCode": "1.7-4",
+      "charCount": 2901
+    },
+    "1.7-4": {
+      "file": "1.7-4.txt",
+      "meta": "1.7-4.meta.json",
+      "sectionId": "1.7-4",
+      "sourcePages": [
+        "page-104",
+        "page-105",
+        "page-106",
+        "page-107"
+      ],
+      "usedPages": [
+        "page-104",
+        "page-105",
+        "page-106",
+        "page-107"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.7-4 Causal and Noncausal Systems",
+      "foundEnd": true,
+      "endBeforeLine": "1.7-5 Continuous-Time and Discrete-Time Systems",
+      "endBeforeCode": "1.7-5",
+      "charCount": 8167
+    },
+    "1.7-5": {
+      "file": "1.7-5.txt",
+      "meta": "1.7-5.meta.json",
+      "sectionId": "1.7-5",
+      "sourcePages": [
+        "page-107",
+        "page-108"
+      ],
+      "usedPages": [
+        "page-107",
+        "page-108"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.7-5 Continuous-Time and Discrete-Time Systems",
+      "foundEnd": false,
+      "endBeforeLine": "",
+      "endBeforeCode": "",
+      "charCount": 3641
+    },
+    "1.7-6": {
+      "file": "1.7-6.txt",
+      "meta": "1.7-6.meta.json",
+      "sectionId": "1.7-6",
+      "sourcePages": [
+        "page-109"
+      ],
+      "usedPages": [
+        "page-109"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.7-6 Analog and Digital Systems",
+      "foundEnd": true,
+      "endBeforeLine": "1.7-7 Invertible and Noninvertible Systems",
+      "endBeforeCode": "1.7-7",
+      "charCount": 392
+    },
+    "1.7-7": {
+      "file": "1.7-7.txt",
+      "meta": "1.7-7.meta.json",
+      "sectionId": "1.7-7",
+      "sourcePages": [
+        "page-109",
+        "page-110"
+      ],
+      "usedPages": [
+        "page-109",
+        "page-110"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.7-7 Invertible and Noninvertible Systems",
+      "foundEnd": true,
+      "endBeforeLine": "1.7-8 Stable and Unstable Systems",
+      "endBeforeCode": "1.7-8",
+      "charCount": 3589
+    },
+    "1.7-8": {
+      "file": "1.7-8.txt",
+      "meta": "1.7-8.meta.json",
+      "sectionId": "1.7-8",
+      "sourcePages": [
+        "page-110"
+      ],
+      "usedPages": [
+        "page-110"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.7-8 Stable and Unstable Systems",
+      "foundEnd": false,
+      "endBeforeLine": "",
+      "endBeforeCode": "",
+      "charCount": 2014
+    },
+    "1.8": {
+      "file": "1.8.txt",
+      "meta": "1.8.meta.json",
+      "sectionId": "1.8",
+      "sourcePages": [
+        "page-111"
+      ],
+      "usedPages": [
+        "page-111"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.8 System Model: Input–Output Description 111",
+      "foundEnd": true,
+      "endBeforeLine": "1.8-1 Electrical Systems",
+      "endBeforeCode": "1.8-1",
+      "charCount": 792
+    },
+    "1.8-1": {
+      "file": "1.8-1.txt",
+      "meta": "1.8-1.meta.json",
+      "sectionId": "1.8-1",
+      "sourcePages": [
+        "page-111",
+        "page-112",
+        "page-113",
+        "page-114"
+      ],
+      "usedPages": [
+        "page-111",
+        "page-112",
+        "page-113",
+        "page-114"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.8-1 Electrical Systems",
+      "foundEnd": true,
+      "endBeforeLine": "1.8-2 Mechanical Systems",
+      "endBeforeCode": "1.8-2",
+      "charCount": 8708
+    },
+    "1.8-2": {
+      "file": "1.8-2.txt",
+      "meta": "1.8-2.meta.json",
+      "sectionId": "1.8-2",
+      "sourcePages": [
+        "page-114",
+        "page-115",
+        "page-116",
+        "page-117",
+        "page-118"
+      ],
+      "usedPages": [
+        "page-114",
+        "page-115",
+        "page-116",
+        "page-117",
+        "page-118"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.8-2 Mechanical Systems",
+      "foundEnd": true,
+      "endBeforeLine": "1.8-3 Electromechanical Systems",
+      "endBeforeCode": "1.8-3",
+      "charCount": 9575
+    },
+    "1.8-3": {
+      "file": "1.8-3.txt",
+      "meta": "1.8-3.meta.json",
+      "sectionId": "1.8-3",
+      "sourcePages": [
+        "page-118",
+        "page-119"
+      ],
+      "usedPages": [
+        "page-118",
+        "page-119"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.8-3 Electromechanical Systems",
+      "foundEnd": true,
+      "endBeforeLine": "1.9 Internal and External Descriptions of a System 119",
+      "endBeforeCode": "1.9",
+      "charCount": 1391
+    },
+    "1.9": {
+      "file": "1.9.txt",
+      "meta": "1.9.meta.json",
+      "sectionId": "1.9",
+      "sourcePages": [
+        "page-119",
+        "page-120",
+        "page-121"
+      ],
+      "usedPages": [
+        "page-119",
+        "page-120",
+        "page-121"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "1.9 Internal and External Descriptions of a System 119",
+      "foundEnd": true,
+      "endBeforeLine": "1.10 Internal Description: The State-Space Description 121",
+      "endBeforeCode": "1.10",
+      "charCount": 7133
+    },
+    "2.1": {
+      "file": "2.1.txt",
+      "meta": "2.1.meta.json",
+      "sectionId": "2.1",
+      "sourcePages": [
+        "page-150",
+        "page-151"
+      ],
+      "usedPages": [
+        "page-150",
+        "page-151"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "2.1 INTRODUCTION",
+      "foundEnd": true,
+      "endBeforeLine": "2.2 System Response to Internal Conditions: The Zero-Input Response 151",
+      "endBeforeCode": "2.2",
+      "charCount": 1140
+    },
+    "2.2": {
+      "file": "2.2.txt",
+      "meta": "2.2.meta.json",
+      "sectionId": "2.2",
+      "sourcePages": [
+        "page-151",
+        "page-152",
+        "page-153",
+        "page-154",
+        "page-155",
+        "page-156",
+        "page-157",
+        "page-158",
+        "page-159",
+        "page-160",
+        "page-161",
+        "page-162",
+        "page-163"
+      ],
+      "usedPages": [
+        "page-151",
+        "page-152",
+        "page-153",
+        "page-154",
+        "page-155",
+        "page-156",
+        "page-157",
+        "page-158",
+        "page-159",
+        "page-160",
+        "page-161",
+        "page-162",
+        "page-163"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "2.2 System Response to Internal Conditions: The Zero-Input Response 151",
+      "foundEnd": true,
+      "endBeforeLine": "2.2-1 Some Insights into the Zero-Input Behavior of a System",
+      "endBeforeCode": "2.2-1",
+      "charCount": 23142
+    },
+    "2.2-1": {
+      "file": "2.2-1.txt",
+      "meta": "2.2-1.meta.json",
+      "sectionId": "2.2-1",
+      "sourcePages": [
+        "page-161",
+        "page-162"
+      ],
+      "usedPages": [
+        "page-161",
+        "page-162"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "2.2-1 Some Insights into the Zero-Input Behavior of a System",
+      "foundEnd": false,
+      "endBeforeLine": "",
+      "endBeforeCode": "",
+      "charCount": 3036
+    },
+    "2.3": {
+      "file": "2.3.txt",
+      "meta": "2.3.meta.json",
+      "sectionId": "2.3",
+      "sourcePages": [
+        "page-163",
+        "page-164",
+        "page-165",
+        "page-166",
+        "page-167",
+        "page-168"
+      ],
+      "usedPages": [
+        "page-163",
+        "page-164",
+        "page-165",
+        "page-166",
+        "page-167",
+        "page-168"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "2.3 The Unit Impulse Response h(t) 163",
+      "foundEnd": true,
+      "endBeforeLine": "2.4 SYSTEM RESPONSE TO EXTERNAL INPUT:",
+      "endBeforeCode": "2.4",
+      "charCount": 11722
+    },
+    "2.4": {
+      "file": "2.4.txt",
+      "meta": "2.4.meta.json",
+      "sectionId": "2.4",
+      "sourcePages": [
+        "page-168",
+        "page-169",
+        "page-170",
+        "page-171",
+        "page-172",
+        "page-173",
+        "page-174",
+        "page-175",
+        "page-176",
+        "page-177",
+        "page-178",
+        "page-179",
+        "page-180",
+        "page-181",
+        "page-182",
+        "page-183",
+        "page-184",
+        "page-185",
+        "page-186",
+        "page-187",
+        "page-188",
+        "page-189",
+        "page-190",
+        "page-191",
+        "page-192",
+        "page-193",
+        "page-194",
+        "page-195",
+        "page-196"
+      ],
+      "usedPages": [
+        "page-168",
+        "page-169",
+        "page-170",
+        "page-171",
+        "page-172",
+        "page-173",
+        "page-174",
+        "page-175",
+        "page-176",
+        "page-177",
+        "page-178",
+        "page-179",
+        "page-180",
+        "page-181",
+        "page-182",
+        "page-183",
+        "page-184",
+        "page-185",
+        "page-186",
+        "page-187",
+        "page-188",
+        "page-189",
+        "page-190",
+        "page-191",
+        "page-192",
+        "page-193",
+        "page-194",
+        "page-195",
+        "page-196"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "2.4 SYSTEM RESPONSE TO EXTERNAL INPUT:",
+      "foundEnd": true,
+      "endBeforeLine": "2.4-1 The Convolution Integral",
+      "endBeforeCode": "2.4-1",
+      "charCount": 3170
+    },
+    "2.4-1": {
+      "file": "2.4-1.txt",
+      "meta": "2.4-1.meta.json",
+      "sectionId": "2.4-1",
+      "sourcePages": [
+        "page-170",
+        "page-171",
+        "page-172",
+        "page-173",
+        "page-174",
+        "page-175",
+        "page-176",
+        "page-177",
+        "page-178"
+      ],
+      "usedPages": [
+        "page-170",
+        "page-171",
+        "page-172",
+        "page-173",
+        "page-174",
+        "page-175",
+        "page-176",
+        "page-177",
+        "page-178"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "2.4-1 The Convolution Integral",
+      "foundEnd": true,
+      "endBeforeLine": "2.4-2 Graphical Understanding of Convolution Operation",
+      "endBeforeCode": "2.4-2",
+      "charCount": 13277
+    },
+    "2.4-2": {
+      "file": "2.4-2.txt",
+      "meta": "2.4-2.meta.json",
+      "sectionId": "2.4-2",
+      "sourcePages": [
+        "page-178",
+        "page-179",
+        "page-180",
+        "page-181",
+        "page-182",
+        "page-183",
+        "page-184",
+        "page-185",
+        "page-186",
+        "page-187",
+        "page-188",
+        "page-189",
+        "page-190"
+      ],
+      "usedPages": [
+        "page-178",
+        "page-179",
+        "page-180",
+        "page-181",
+        "page-182",
+        "page-183",
+        "page-184",
+        "page-185",
+        "page-186",
+        "page-187",
+        "page-188",
+        "page-189",
+        "page-190"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "2.4-2 Graphical Understanding of Convolution Operation",
+      "foundEnd": true,
+      "endBeforeLine": "2.4-3 Interconnected Systems",
+      "endBeforeCode": "2.4-3",
+      "charCount": 19760
+    },
+    "2.4-3": {
+      "file": "2.4-3.txt",
+      "meta": "2.4-3.meta.json",
+      "sectionId": "2.4-3",
+      "sourcePages": [
+        "page-190",
+        "page-191",
+        "page-192",
+        "page-193"
+      ],
+      "usedPages": [
+        "page-190",
+        "page-191",
+        "page-192",
+        "page-193"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "2.4-3 Interconnected Systems",
+      "foundEnd": true,
+      "endBeforeLine": "2.4-4 A Very Special Function for LTIC Systems:",
+      "endBeforeCode": "2.4-4",
+      "charCount": 6349
+    },
+    "2.4-4": {
+      "file": "2.4-4.txt",
+      "meta": "2.4-4.meta.json",
+      "sectionId": "2.4-4",
+      "sourcePages": [
+        "page-193",
+        "page-194",
+        "page-195"
+      ],
+      "usedPages": [
+        "page-193",
+        "page-194",
+        "page-195"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "2.4-4 A Very Special Function for LTIC Systems:",
+      "foundEnd": true,
+      "endBeforeLine": "2.4-5 Total Response",
+      "endBeforeCode": "2.4-5",
+      "charCount": 4674
+    },
+    "2.4-5": {
+      "file": "2.4-5.txt",
+      "meta": "2.4-5.meta.json",
+      "sectionId": "2.4-5",
+      "sourcePages": [
+        "page-195"
+      ],
+      "usedPages": [
+        "page-195"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "2.4-5 Total Response",
+      "foundEnd": false,
+      "endBeforeLine": "",
+      "endBeforeCode": "",
+      "charCount": 1014
+    },
+    "2.5": {
+      "file": "2.5.txt",
+      "meta": "2.5.meta.json",
+      "sectionId": "2.5",
+      "sourcePages": [
+        "page-196",
+        "page-197",
+        "page-198",
+        "page-199",
+        "page-200",
+        "page-201",
+        "page-202",
+        "page-203"
+      ],
+      "usedPages": [
+        "page-196",
+        "page-197",
+        "page-198",
+        "page-199",
+        "page-200",
+        "page-201",
+        "page-202",
+        "page-203"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "2.5 SYSTEM STABILITY",
+      "foundEnd": true,
+      "endBeforeLine": "2.5-1 External (BIBO) Stability",
+      "endBeforeCode": "2.5-1",
+      "charCount": 228
+    },
+    "2.5-1": {
+      "file": "2.5-1.txt",
+      "meta": "2.5-1.meta.json",
+      "sectionId": "2.5-1",
+      "sourcePages": [
+        "page-196",
+        "page-197",
+        "page-198"
+      ],
+      "usedPages": [
+        "page-196",
+        "page-197",
+        "page-198"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "2.5-1 External (BIBO) Stability",
+      "foundEnd": true,
+      "endBeforeLine": "2.5-2 Internal (Asymptotic) Stability",
+      "endBeforeCode": "2.5-2",
+      "charCount": 3895
+    },
+    "2.5-2": {
+      "file": "2.5-2.txt",
+      "meta": "2.5-2.meta.json",
+      "sectionId": "2.5-2",
+      "sourcePages": [
+        "page-198",
+        "page-199"
+      ],
+      "usedPages": [
+        "page-198",
+        "page-199"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "2.5-2 Internal (Asymptotic) Stability",
+      "foundEnd": true,
+      "endBeforeLine": "2.5-3 Relationship Between BIBO and Asymptotic Stability",
+      "endBeforeCode": "2.5-3",
+      "charCount": 3870
+    },
+    "2.5-3": {
+      "file": "2.5-3.txt",
+      "meta": "2.5-3.meta.json",
+      "sectionId": "2.5-3",
+      "sourcePages": [
+        "page-199",
+        "page-200",
+        "page-201",
+        "page-202"
+      ],
+      "usedPages": [
+        "page-199",
+        "page-200",
+        "page-201",
+        "page-202"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "2.5-3 Relationship Between BIBO and Asymptotic Stability",
+      "foundEnd": false,
+      "endBeforeLine": "",
+      "endBeforeCode": "",
+      "charCount": 6164
+    },
+    "2.6": {
+      "file": "2.6.txt",
+      "meta": "2.6.meta.json",
+      "sectionId": "2.6",
+      "sourcePages": [
+        "page-203",
+        "page-204",
+        "page-205",
+        "page-206",
+        "page-207",
+        "page-208",
+        "page-209",
+        "page-210",
+        "page-211",
+        "page-212"
+      ],
+      "usedPages": [
+        "page-203",
+        "page-204",
+        "page-205",
+        "page-206",
+        "page-207",
+        "page-208",
+        "page-209",
+        "page-210",
+        "page-211",
+        "page-212"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "2.6 Intuitive Insights into System Behavior 203",
+      "foundEnd": true,
+      "endBeforeLine": "2.6-1 Dependence of System Behavior on Characteristic Modes",
+      "endBeforeCode": "2.6-1",
+      "charCount": 2040
+    },
+    "2.6-1": {
+      "file": "2.6-1.txt",
+      "meta": "2.6-1.meta.json",
+      "sectionId": "2.6-1",
+      "sourcePages": [
+        "page-203",
+        "page-204",
+        "page-205"
+      ],
+      "usedPages": [
+        "page-203",
+        "page-204",
+        "page-205"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "2.6-1 Dependence of System Behavior on Characteristic Modes",
+      "foundEnd": true,
+      "endBeforeLine": "2.6-2 Response Time of a System: The System Time Constant",
+      "endBeforeCode": "2.6-2",
+      "charCount": 4234
+    },
+    "2.6-2": {
+      "file": "2.6-2.txt",
+      "meta": "2.6-2.meta.json",
+      "sectionId": "2.6-2",
+      "sourcePages": [
+        "page-205",
+        "page-206"
+      ],
+      "usedPages": [
+        "page-205",
+        "page-206"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "2.6-2 Response Time of a System: The System Time Constant",
+      "foundEnd": true,
+      "endBeforeLine": "2.6-3 Time Constant and Rise Time of a System",
+      "endBeforeCode": "2.6-3",
+      "charCount": 3163
+    },
+    "2.6-3": {
+      "file": "2.6-3.txt",
+      "meta": "2.6-3.meta.json",
+      "sectionId": "2.6-3",
+      "sourcePages": [
+        "page-206",
+        "page-207"
+      ],
+      "usedPages": [
+        "page-206",
+        "page-207"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "2.6-3 Time Constant and Rise Time of a System",
+      "foundEnd": true,
+      "endBeforeLine": "2.6-4 Time Constant and Filtering",
+      "endBeforeCode": "2.6-4",
+      "charCount": 1506
+    },
+    "2.6-4": {
+      "file": "2.6-4.txt",
+      "meta": "2.6-4.meta.json",
+      "sectionId": "2.6-4",
+      "sourcePages": [
+        "page-207",
+        "page-208",
+        "page-209"
+      ],
+      "usedPages": [
+        "page-207",
+        "page-208",
+        "page-209"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "2.6-4 Time Constant and Filtering",
+      "foundEnd": true,
+      "endBeforeLine": "2.6-5 Time Constant and Pulse Dispersion (Spreading)",
+      "endBeforeCode": "2.6-5",
+      "charCount": 4313
+    },
+    "2.6-5": {
+      "file": "2.6-5.txt",
+      "meta": "2.6-5.meta.json",
+      "sectionId": "2.6-5",
+      "sourcePages": [
+        "page-209"
+      ],
+      "usedPages": [
+        "page-209"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "2.6-5 Time Constant and Pulse Dispersion (Spreading)",
+      "foundEnd": true,
+      "endBeforeLine": "2.6-6 Time Constant and Rate of Information Transmission",
+      "endBeforeCode": "2.6-6",
+      "charCount": 891
+    },
+    "2.6-6": {
+      "file": "2.6-6.txt",
+      "meta": "2.6-6.meta.json",
+      "sectionId": "2.6-6",
+      "sourcePages": [
+        "page-209",
+        "page-210"
+      ],
+      "usedPages": [
+        "page-209",
+        "page-210"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "2.6-6 Time Constant and Rate of Information Transmission",
+      "foundEnd": true,
+      "endBeforeLine": "2.6-7 The Resonance Phenomenon",
+      "endBeforeCode": "2.6-7",
+      "charCount": 3216
+    },
+    "2.6-7": {
+      "file": "2.6-7.txt",
+      "meta": "2.6-7.meta.json",
+      "sectionId": "2.6-7",
+      "sourcePages": [
+        "page-210",
+        "page-211"
+      ],
+      "usedPages": [
+        "page-210",
+        "page-211"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "2.6-7 The Resonance Phenomenon",
+      "foundEnd": false,
+      "endBeforeLine": "",
+      "endBeforeCode": "",
+      "charCount": 3357
+    },
+    "2.7": {
+      "file": "2.7.txt",
+      "meta": "2.7.meta.json",
+      "sectionId": "2.7",
+      "sourcePages": [
+        "page-212",
+        "page-213",
+        "page-214",
+        "page-215",
+        "page-216",
+        "page-217",
+        "page-218",
+        "page-219"
+      ],
+      "usedPages": [
+        "page-212",
+        "page-213",
+        "page-214",
+        "page-215",
+        "page-216",
+        "page-217",
+        "page-218",
+        "page-219"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "2.7 MATLAB: M-FILES",
+      "foundEnd": true,
+      "endBeforeLine": "2.7-1 Script M-Files",
+      "endBeforeCode": "2.7-1",
+      "charCount": 958
+    },
+    "2.7-1": {
+      "file": "2.7-1.txt",
+      "meta": "2.7-1.meta.json",
+      "sectionId": "2.7-1",
+      "sourcePages": [
+        "page-213",
+        "page-214"
+      ],
+      "usedPages": [
+        "page-213",
+        "page-214"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "2.7-1 Script M-Files",
+      "foundEnd": true,
+      "endBeforeLine": "2.7-2 Function M-Files",
+      "endBeforeCode": "2.7-2",
+      "charCount": 3648
+    },
+    "2.7-2": {
+      "file": "2.7-2.txt",
+      "meta": "2.7-2.meta.json",
+      "sectionId": "2.7-2",
+      "sourcePages": [
+        "page-214",
+        "page-215"
+      ],
+      "usedPages": [
+        "page-214",
+        "page-215"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "2.7-2 Function M-Files",
+      "foundEnd": true,
+      "endBeforeLine": "2.7-3 For-Loops",
+      "endBeforeCode": "2.7-3",
+      "charCount": 2486
+    },
+    "2.7-3": {
+      "file": "2.7-3.txt",
+      "meta": "2.7-3.meta.json",
+      "sectionId": "2.7-3",
+      "sourcePages": [
+        "page-215",
+        "page-216",
+        "page-217"
+      ],
+      "usedPages": [
+        "page-215",
+        "page-216",
+        "page-217"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "2.7-3 For-Loops",
+      "foundEnd": true,
+      "endBeforeLine": "2.7-4 Graphical Understanding of Convolution",
+      "endBeforeCode": "2.7-4",
+      "charCount": 4593
+    },
+    "2.7-4": {
+      "file": "2.7-4.txt",
+      "meta": "2.7-4.meta.json",
+      "sectionId": "2.7-4",
+      "sourcePages": [
+        "page-217",
+        "page-218"
+      ],
+      "usedPages": [
+        "page-217",
+        "page-218"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "2.7-4 Graphical Understanding of Convolution",
+      "foundEnd": false,
+      "endBeforeLine": "",
+      "endBeforeCode": "",
+      "charCount": 3706
+    },
+    "2.8": {
+      "file": "2.8.txt",
+      "meta": "2.8.meta.json",
+      "sectionId": "2.8",
+      "sourcePages": [
+        "page-219",
+        "page-220",
+        "page-221"
+      ],
+      "usedPages": [
+        "page-219",
+        "page-220",
+        "page-221"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "2.8 MATLAB: M-Files 219",
+      "foundEnd": true,
+      "endBeforeLine": "2.9 SUMMARY",
+      "endBeforeCode": "2.9",
+      "charCount": 4853
+    },
+    "2.9": {
+      "file": "2.9.txt",
+      "meta": "2.9.meta.json",
+      "sectionId": "2.9",
+      "sourcePages": [
+        "page-221",
+        "page-222"
+      ],
+      "usedPages": [
+        "page-221",
+        "page-222"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "2.9 SUMMARY",
+      "foundEnd": false,
+      "endBeforeLine": "",
+      "endBeforeCode": "",
+      "charCount": 4163
+    },
+    "3.1": {
+      "file": "3.1.txt",
+      "meta": "3.1.meta.json",
+      "sectionId": "3.1",
+      "sourcePages": [
+        "page-237",
+        "page-238",
+        "page-239",
+        "page-240"
+      ],
+      "usedPages": [
+        "page-237",
+        "page-238",
+        "page-239",
+        "page-240"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.1 INTRODUCTION",
+      "foundEnd": true,
+      "endBeforeLine": "3.1-1 Size of a Discrete-Time Signal",
+      "endBeforeCode": "3.1-1",
+      "charCount": 3286
+    },
+    "3.1-1": {
+      "file": "3.1-1.txt",
+      "meta": "3.1-1.meta.json",
+      "sectionId": "3.1-1",
+      "sourcePages": [
+        "page-238",
+        "page-239"
+      ],
+      "usedPages": [
+        "page-238",
+        "page-239"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.1-1 Size of a Discrete-Time Signal",
+      "foundEnd": false,
+      "endBeforeLine": "",
+      "endBeforeCode": "",
+      "charCount": 2285
+    },
+    "3.10": {
+      "file": "3.10.txt",
+      "meta": "3.10.meta.json",
+      "sectionId": "3.10",
+      "sourcePages": [
+        "page-305",
+        "page-306"
+      ],
+      "usedPages": [
+        "page-305",
+        "page-306"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.10 Intuitive Insights into System Behavior 305",
+      "foundEnd": true,
+      "endBeforeLine": "3.11 MATLAB: DISCRETE-TIME SIGNALS AND SYSTEMS",
+      "endBeforeCode": "3.11",
+      "charCount": 3808
+    },
+    "3.11": {
+      "file": "3.11.txt",
+      "meta": "3.11.meta.json",
+      "sectionId": "3.11",
+      "sourcePages": [
+        "page-306",
+        "page-307",
+        "page-308",
+        "page-309",
+        "page-310",
+        "page-311",
+        "page-312",
+        "page-313"
+      ],
+      "usedPages": [
+        "page-306",
+        "page-307",
+        "page-308",
+        "page-309",
+        "page-310",
+        "page-311",
+        "page-312",
+        "page-313"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.11 MATLAB: DISCRETE-TIME SIGNALS AND SYSTEMS",
+      "foundEnd": true,
+      "endBeforeLine": "3.11-1 Discrete-Time Functions and Stem Plots",
+      "endBeforeCode": "3.11-1",
+      "charCount": 310
+    },
+    "3.11-1": {
+      "file": "3.11-1.txt",
+      "meta": "3.11-1.meta.json",
+      "sectionId": "3.11-1",
+      "sourcePages": [
+        "page-306",
+        "page-307",
+        "page-308"
+      ],
+      "usedPages": [
+        "page-306",
+        "page-307",
+        "page-308"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.11-1 Discrete-Time Functions and Stem Plots",
+      "foundEnd": true,
+      "endBeforeLine": "3.11-2 System Responses Through Filtering",
+      "endBeforeCode": "3.11-2",
+      "charCount": 2538
+    },
+    "3.11-2": {
+      "file": "3.11-2.txt",
+      "meta": "3.11-2.meta.json",
+      "sectionId": "3.11-2",
+      "sourcePages": [
+        "page-308",
+        "page-309",
+        "page-310"
+      ],
+      "usedPages": [
+        "page-308",
+        "page-309",
+        "page-310"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.11-2 System Responses Through Filtering",
+      "foundEnd": true,
+      "endBeforeLine": "3.11-3 A Custom Filter Function",
+      "endBeforeCode": "3.11-3",
+      "charCount": 3958
+    },
+    "3.11-3": {
+      "file": "3.11-3.txt",
+      "meta": "3.11-3.meta.json",
+      "sectionId": "3.11-3",
+      "sourcePages": [
+        "page-310",
+        "page-311"
+      ],
+      "usedPages": [
+        "page-310",
+        "page-311"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.11-3 A Custom Filter Function",
+      "foundEnd": true,
+      "endBeforeLine": "3.11-4 Discrete-Time Convolution",
+      "endBeforeCode": "3.11-4",
+      "charCount": 2269
+    },
+    "3.11-4": {
+      "file": "3.11-4.txt",
+      "meta": "3.11-4.meta.json",
+      "sectionId": "3.11-4",
+      "sourcePages": [
+        "page-311",
+        "page-312"
+      ],
+      "usedPages": [
+        "page-311",
+        "page-312"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.11-4 Discrete-Time Convolution",
+      "foundEnd": false,
+      "endBeforeLine": "",
+      "endBeforeCode": "",
+      "charCount": 2715
+    },
+    "3.12": {
+      "file": "3.12.txt",
+      "meta": "3.12.meta.json",
+      "sectionId": "3.12",
+      "sourcePages": [
+        "page-313"
+      ],
+      "usedPages": [
+        "page-313"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.12 APPENDIX: IMPULSE RESPONSE",
+      "foundEnd": true,
+      "endBeforeLine": "3.13 SUMMARY",
+      "endBeforeCode": "3.13",
+      "charCount": 1057
+    },
+    "3.13": {
+      "file": "3.13.txt",
+      "meta": "3.13.meta.json",
+      "sectionId": "3.13",
+      "sourcePages": [
+        "page-313"
+      ],
+      "usedPages": [
+        "page-313"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.13 SUMMARY",
+      "foundEnd": false,
+      "endBeforeLine": "",
+      "endBeforeCode": "",
+      "charCount": 1717
+    },
+    "3.2": {
+      "file": "3.2.txt",
+      "meta": "3.2.meta.json",
+      "sectionId": "3.2",
+      "sourcePages": [
+        "page-240",
+        "page-241",
+        "page-242",
+        "page-243",
+        "page-244",
+        "page-245"
+      ],
+      "usedPages": [
+        "page-240",
+        "page-241",
+        "page-242",
+        "page-243",
+        "page-244",
+        "page-245"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.2 USEFUL SIGNAL OPERATIONS",
+      "foundEnd": true,
+      "endBeforeLine": "3.3 Some Useful Discrete-Time Signal Models 245",
+      "endBeforeCode": "3.3",
+      "charCount": 7557
+    },
+    "3.3": {
+      "file": "3.3.txt",
+      "meta": "3.3.meta.json",
+      "sectionId": "3.3",
+      "sourcePages": [
+        "page-245",
+        "page-246",
+        "page-247",
+        "page-248",
+        "page-249",
+        "page-250",
+        "page-251",
+        "page-252",
+        "page-253"
+      ],
+      "usedPages": [
+        "page-245",
+        "page-246",
+        "page-247",
+        "page-248",
+        "page-249",
+        "page-250",
+        "page-251",
+        "page-252",
+        "page-253"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.3 Some Useful Discrete-Time Signal Models 245",
+      "foundEnd": true,
+      "endBeforeLine": "3.3-1 Discrete-Time Impulse Function δ[n]",
+      "endBeforeCode": "3.3-1",
+      "charCount": 510
+    },
+    "3.3-1": {
+      "file": "3.3-1.txt",
+      "meta": "3.3-1.meta.json",
+      "sectionId": "3.3-1",
+      "sourcePages": [
+        "page-245",
+        "page-246"
+      ],
+      "usedPages": [
+        "page-245",
+        "page-246"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.3-1 Discrete-Time Impulse Function δ[n]",
+      "foundEnd": true,
+      "endBeforeLine": "3.3-2 Discrete-Time Unit Step Function u[n]",
+      "endBeforeCode": "3.3-2",
+      "charCount": 751
+    },
+    "3.3-2": {
+      "file": "3.3-2.txt",
+      "meta": "3.3-2.meta.json",
+      "sectionId": "3.3-2",
+      "sourcePages": [
+        "page-246",
+        "page-247"
+      ],
+      "usedPages": [
+        "page-246",
+        "page-247"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.3-2 Discrete-Time Unit Step Function u[n]",
+      "foundEnd": true,
+      "endBeforeLine": "3.3-3 Discrete-Time Exponential γⁿ",
+      "endBeforeCode": "3.3-3",
+      "charCount": 2088
+    },
+    "3.3-3": {
+      "file": "3.3-3.txt",
+      "meta": "3.3-3.meta.json",
+      "sectionId": "3.3-3",
+      "sourcePages": [
+        "page-247",
+        "page-248",
+        "page-249",
+        "page-250",
+        "page-251"
+      ],
+      "usedPages": [
+        "page-247",
+        "page-248",
+        "page-249",
+        "page-250",
+        "page-251"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.3-3 Discrete-Time Exponential γⁿ",
+      "foundEnd": true,
+      "endBeforeLine": "3.3-4 Discrete-Time Sinusoid cos (Ωn + θ)",
+      "endBeforeCode": "3.3-4",
+      "charCount": 6421
+    },
+    "3.3-4": {
+      "file": "3.3-4.txt",
+      "meta": "3.3-4.meta.json",
+      "sectionId": "3.3-4",
+      "sourcePages": [
+        "page-251",
+        "page-252"
+      ],
+      "usedPages": [
+        "page-251",
+        "page-252"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.3-4 Discrete-Time Sinusoid cos (Ωn + θ)",
+      "foundEnd": true,
+      "endBeforeLine": "3.3-5 Discrete-Time Complex Exponential e^{jΩn}",
+      "endBeforeCode": "3.3-5",
+      "charCount": 1582
+    },
+    "3.3-5": {
+      "file": "3.3-5.txt",
+      "meta": "3.3-5.meta.json",
+      "sectionId": "3.3-5",
+      "sourcePages": [
+        "page-252"
+      ],
+      "usedPages": [
+        "page-252"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.3-5 Discrete-Time Complex Exponential e^{jΩn}",
+      "foundEnd": false,
+      "endBeforeLine": "",
+      "endBeforeCode": "",
+      "charCount": 1685
+    },
+    "3.4": {
+      "file": "3.4.txt",
+      "meta": "3.4.meta.json",
+      "sectionId": "3.4",
+      "sourcePages": [
+        "page-253",
+        "page-254",
+        "page-255",
+        "page-256",
+        "page-257",
+        "page-258",
+        "page-259",
+        "page-260",
+        "page-261",
+        "page-262",
+        "page-263",
+        "page-264",
+        "page-265"
+      ],
+      "usedPages": [
+        "page-253",
+        "page-254",
+        "page-255",
+        "page-256",
+        "page-257",
+        "page-258",
+        "page-259",
+        "page-260",
+        "page-261",
+        "page-262",
+        "page-263",
+        "page-264",
+        "page-265"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.4 Examples of Discrete-Time Systems 253",
+      "foundEnd": true,
+      "endBeforeLine": "3.4-1 Classification of Discrete-Time Systems",
+      "endBeforeCode": "3.4-1",
+      "charCount": 21310
+    },
+    "3.4-1": {
+      "file": "3.4-1.txt",
+      "meta": "3.4-1.meta.json",
+      "sectionId": "3.4-1",
+      "sourcePages": [
+        "page-262",
+        "page-263",
+        "page-264"
+      ],
+      "usedPages": [
+        "page-262",
+        "page-263",
+        "page-264"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.4-1 Classification of Discrete-Time Systems",
+      "foundEnd": false,
+      "endBeforeLine": "",
+      "endBeforeCode": "",
+      "charCount": 6948
+    },
+    "3.5": {
+      "file": "3.5.txt",
+      "meta": "3.5.meta.json",
+      "sectionId": "3.5",
+      "sourcePages": [
+        "page-265",
+        "page-266",
+        "page-267",
+        "page-268",
+        "page-269",
+        "page-270"
+      ],
+      "usedPages": [
+        "page-265",
+        "page-266",
+        "page-267",
+        "page-268",
+        "page-269",
+        "page-270"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.5 Discrete-Time System Equations 265",
+      "foundEnd": true,
+      "endBeforeLine": "3.5-1 Recursive (Iterative) Solution of Difference Equation",
+      "endBeforeCode": "3.5-1",
+      "charCount": 3610
+    },
+    "3.5-1": {
+      "file": "3.5-1.txt",
+      "meta": "3.5-1.meta.json",
+      "sectionId": "3.5-1",
+      "sourcePages": [
+        "page-266",
+        "page-267",
+        "page-268",
+        "page-269"
+      ],
+      "usedPages": [
+        "page-266",
+        "page-267",
+        "page-268",
+        "page-269"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.5-1 Recursive (Iterative) Solution of Difference Equation",
+      "foundEnd": false,
+      "endBeforeLine": "",
+      "endBeforeCode": "",
+      "charCount": 7316
+    },
+    "3.6": {
+      "file": "3.6.txt",
+      "meta": "3.6.meta.json",
+      "sectionId": "3.6",
+      "sourcePages": [
+        "page-270",
+        "page-271",
+        "page-272",
+        "page-273",
+        "page-274",
+        "page-275",
+        "page-276",
+        "page-277"
+      ],
+      "usedPages": [
+        "page-270",
+        "page-271",
+        "page-272",
+        "page-273",
+        "page-274",
+        "page-275",
+        "page-276",
+        "page-277"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.6 SYSTEM RESPONSE TO INTERNAL CONDITIONS:",
+      "foundEnd": true,
+      "endBeforeLine": "3.7 The Unit Impulse Response h[n]",
+      "endBeforeCode": "3.7",
+      "charCount": 12180
+    },
+    "3.7": {
+      "file": "3.7.txt",
+      "meta": "3.7.meta.json",
+      "sectionId": "3.7",
+      "sourcePages": [
+        "page-277",
+        "page-278",
+        "page-279",
+        "page-280"
+      ],
+      "usedPages": [
+        "page-277",
+        "page-278",
+        "page-279",
+        "page-280"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.7 The Unit Impulse Response h[n]",
+      "foundEnd": true,
+      "endBeforeLine": "3.7-1 The Closed-Form Solution of h[n]",
+      "endBeforeCode": "3.7-1",
+      "charCount": 1659
+    },
+    "3.7-1": {
+      "file": "3.7-1.txt",
+      "meta": "3.7-1.meta.json",
+      "sectionId": "3.7-1",
+      "sourcePages": [
+        "page-278",
+        "page-279"
+      ],
+      "usedPages": [
+        "page-278",
+        "page-279"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.7-1 The Closed-Form Solution of h[n]",
+      "foundEnd": false,
+      "endBeforeLine": "",
+      "endBeforeCode": "",
+      "charCount": 3834
+    },
+    "3.8": {
+      "file": "3.8.txt",
+      "meta": "3.8.meta.json",
+      "sectionId": "3.8",
+      "sourcePages": [
+        "page-280",
+        "page-281",
+        "page-282",
+        "page-283",
+        "page-284",
+        "page-285",
+        "page-286",
+        "page-287",
+        "page-288",
+        "page-289",
+        "page-290",
+        "page-291",
+        "page-292",
+        "page-293",
+        "page-294",
+        "page-295",
+        "page-296",
+        "page-297",
+        "page-298"
+      ],
+      "usedPages": [
+        "page-280",
+        "page-281",
+        "page-282",
+        "page-283",
+        "page-284",
+        "page-285",
+        "page-286",
+        "page-287",
+        "page-288",
+        "page-289",
+        "page-290",
+        "page-291",
+        "page-292",
+        "page-293",
+        "page-294",
+        "page-295",
+        "page-296",
+        "page-297",
+        "page-298"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.8 SYSTEM RESPONSE TO EXTERNAL INPUT:",
+      "foundEnd": true,
+      "endBeforeLine": "3.8-1 Graphical Procedure for the Convolution Sum",
+      "endBeforeCode": "3.8-1",
+      "charCount": 11877
+    },
+    "3.8-1": {
+      "file": "3.8-1.txt",
+      "meta": "3.8-1.meta.json",
+      "sectionId": "3.8-1",
+      "sourcePages": [
+        "page-288",
+        "page-289",
+        "page-290",
+        "page-291",
+        "page-292",
+        "page-293",
+        "page-294"
+      ],
+      "usedPages": [
+        "page-288",
+        "page-289",
+        "page-290",
+        "page-291",
+        "page-292",
+        "page-293",
+        "page-294"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.8-1 Graphical Procedure for the Convolution Sum",
+      "foundEnd": true,
+      "endBeforeLine": "3.8-2 Interconnected Systems",
+      "endBeforeCode": "3.8-2",
+      "charCount": 7037
+    },
+    "3.8-2": {
+      "file": "3.8-2.txt",
+      "meta": "3.8-2.meta.json",
+      "sectionId": "3.8-2",
+      "sourcePages": [
+        "page-294",
+        "page-295",
+        "page-296",
+        "page-297"
+      ],
+      "usedPages": [
+        "page-294",
+        "page-295",
+        "page-296",
+        "page-297"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.8-2 Interconnected Systems",
+      "foundEnd": true,
+      "endBeforeLine": "3.8-3 Total Response",
+      "endBeforeCode": "3.8-3",
+      "charCount": 6617
+    },
+    "3.8-3": {
+      "file": "3.8-3.txt",
+      "meta": "3.8-3.meta.json",
+      "sectionId": "3.8-3",
+      "sourcePages": [
+        "page-297"
+      ],
+      "usedPages": [
+        "page-297"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.8-3 Total Response",
+      "foundEnd": false,
+      "endBeforeLine": "",
+      "endBeforeCode": "",
+      "charCount": 970
+    },
+    "3.9": {
+      "file": "3.9.txt",
+      "meta": "3.9.meta.json",
+      "sectionId": "3.9",
+      "sourcePages": [
+        "page-298",
+        "page-299",
+        "page-300",
+        "page-301",
+        "page-302",
+        "page-303",
+        "page-304",
+        "page-305"
+      ],
+      "usedPages": [
+        "page-298",
+        "page-299",
+        "page-300",
+        "page-301",
+        "page-302",
+        "page-303",
+        "page-304",
+        "page-305"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.9 SYSTEM STABILITY",
+      "foundEnd": true,
+      "endBeforeLine": "3.9-1 External (BIBO) Stability",
+      "endBeforeCode": "3.9-1",
+      "charCount": 394
+    },
+    "3.9-1": {
+      "file": "3.9-1.txt",
+      "meta": "3.9-1.meta.json",
+      "sectionId": "3.9-1",
+      "sourcePages": [
+        "page-298",
+        "page-299"
+      ],
+      "usedPages": [
+        "page-298",
+        "page-299"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.9-1 External (BIBO) Stability",
+      "foundEnd": true,
+      "endBeforeLine": "3.9-2 Internal (Asymptotic) Stability",
+      "endBeforeCode": "3.9-2",
+      "charCount": 1014
+    },
+    "3.9-2": {
+      "file": "3.9-2.txt",
+      "meta": "3.9-2.meta.json",
+      "sectionId": "3.9-2",
+      "sourcePages": [
+        "page-299",
+        "page-300",
+        "page-301"
+      ],
+      "usedPages": [
+        "page-299",
+        "page-300",
+        "page-301"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.9-2 Internal (Asymptotic) Stability",
+      "foundEnd": true,
+      "endBeforeLine": "3.9-3 Relationship Between BIBO and Asymptotic Stability",
+      "endBeforeCode": "3.9-3",
+      "charCount": 2937
+    },
+    "3.9-3": {
+      "file": "3.9-3.txt",
+      "meta": "3.9-3.meta.json",
+      "sectionId": "3.9-3",
+      "sourcePages": [
+        "page-301",
+        "page-302",
+        "page-303",
+        "page-304"
+      ],
+      "usedPages": [
+        "page-301",
+        "page-302",
+        "page-303",
+        "page-304"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "3.9-3 Relationship Between BIBO and Asymptotic Stability",
+      "foundEnd": false,
+      "endBeforeLine": "",
+      "endBeforeCode": "",
+      "charCount": 5975
+    },
+    "b": {
+      "file": "b.txt",
+      "meta": "b.meta.json",
+      "sectionId": "b",
+      "sourcePages": [
+        "page-001",
+        "page-002",
+        "page-003",
+        "page-004",
+        "page-005",
+        "page-006",
+        "page-007",
+        "page-008",
+        "page-009",
+        "page-010",
+        "page-011",
+        "page-012",
+        "page-013",
+        "page-014",
+        "page-015",
+        "page-016",
+        "page-017",
+        "page-018",
+        "page-019",
+        "page-020",
+        "page-021",
+        "page-022",
+        "page-023",
+        "page-024",
+        "page-025",
+        "page-026",
+        "page-027",
+        "page-028",
+        "page-029",
+        "page-030",
+        "page-031",
+        "page-032",
+        "page-033",
+        "page-034",
+        "page-035",
+        "page-036",
+        "page-037",
+        "page-038",
+        "page-039",
+        "page-040",
+        "page-041",
+        "page-042",
+        "page-043",
+        "page-044",
+        "page-045",
+        "page-046",
+        "page-047",
+        "page-048",
+        "page-049",
+        "page-050",
+        "page-051",
+        "page-052",
+        "page-053",
+        "page-054",
+        "page-055",
+        "page-056",
+        "page-057",
+        "page-058"
+      ],
+      "usedPages": [
+        "page-001",
+        "page-002",
+        "page-003",
+        "page-004",
+        "page-005",
+        "page-006",
+        "page-007",
+        "page-008",
+        "page-009",
+        "page-010",
+        "page-011",
+        "page-012",
+        "page-013",
+        "page-014",
+        "page-015",
+        "page-016",
+        "page-017",
+        "page-018",
+        "page-019",
+        "page-020",
+        "page-021",
+        "page-022",
+        "page-023",
+        "page-024",
+        "page-025",
+        "page-026",
+        "page-027",
+        "page-028",
+        "page-029",
+        "page-030",
+        "page-031",
+        "page-032",
+        "page-033",
+        "page-034",
+        "page-035",
+        "page-036",
+        "page-037",
+        "page-038",
+        "page-039",
+        "page-040",
+        "page-041",
+        "page-042",
+        "page-043",
+        "page-044",
+        "page-045",
+        "page-046",
+        "page-047",
+        "page-048",
+        "page-049",
+        "page-050",
+        "page-051",
+        "page-052",
+        "page-053",
+        "page-054",
+        "page-055",
+        "page-056",
+        "page-057",
+        "page-058"
+      ],
+      "missingPages": [],
+      "foundStart": false,
+      "startLine": "",
+      "foundEnd": true,
+      "endBeforeLine": "B.1 C OMPLEX N UMBERS",
+      "endBeforeCode": "b.1",
+      "charCount": 664
+    },
+    "b.1": {
+      "file": "b.1.txt",
+      "meta": "b.1.meta.json",
+      "sectionId": "b.1",
+      "sourcePages": [
+        "page-001"
+      ],
+      "usedPages": [
+        "page-001"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "B.1 C OMPLEX N UMBERS",
+      "foundEnd": true,
+      "endBeforeLine": "B.1-1 A Historical Note",
+      "endBeforeCode": "b.1-1",
+      "charCount": 1054
+    },
+    "b.1-1": {
+      "file": "b.1-1.txt",
+      "meta": "b.1-1.meta.json",
+      "sectionId": "b.1-1",
+      "sourcePages": [
+        "page-001",
+        "page-002",
+        "page-003",
+        "page-004",
+        "page-005"
+      ],
+      "usedPages": [
+        "page-001",
+        "page-002",
+        "page-003",
+        "page-004",
+        "page-005"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "B.1-1 A Historical Note",
+      "foundEnd": true,
+      "endBeforeLine": "B.1-2 Algebra of Complex Numbers",
+      "endBeforeCode": "b.1-2",
+      "charCount": 10346
+    },
+    "b.1-2": {
+      "file": "b.1-2.txt",
+      "meta": "b.1-2.meta.json",
+      "sectionId": "b.1-2",
+      "sourcePages": [
+        "page-005",
+        "page-006",
+        "page-007",
+        "page-008",
+        "page-009",
+        "page-010",
+        "page-011",
+        "page-012",
+        "page-013",
+        "page-014",
+        "page-015"
+      ],
+      "usedPages": [
+        "page-005",
+        "page-006",
+        "page-007",
+        "page-008",
+        "page-009",
+        "page-010",
+        "page-011",
+        "page-012",
+        "page-013",
+        "page-014",
+        "page-015"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "B.1-2 Algebra of Complex Numbers",
+      "foundEnd": false,
+      "endBeforeLine": "",
+      "endBeforeCode": "",
+      "charCount": 28812
+    },
+    "b.2": {
+      "file": "b.2.txt",
+      "meta": "b.2.meta.json",
+      "sectionId": "b.2",
+      "sourcePages": [
+        "page-016",
+        "page-017",
+        "page-018"
+      ],
+      "usedPages": [
+        "page-016",
+        "page-017",
+        "page-018"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "B.2 S INUSOIDS",
+      "foundEnd": true,
+      "endBeforeLine": "B.2-1 Addition of Sinusoids",
+      "endBeforeCode": "b.2-1",
+      "charCount": 5660
+    },
+    "b.2-1": {
+      "file": "b.2-1.txt",
+      "meta": "b.2-1.meta.json",
+      "sectionId": "b.2-1",
+      "sourcePages": [
+        "page-018",
+        "page-019",
+        "page-020"
+      ],
+      "usedPages": [
+        "page-018",
+        "page-019",
+        "page-020"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "B.2-1 Addition of Sinusoids",
+      "foundEnd": true,
+      "endBeforeLine": "B.2-2 Sinusoids in Terms of Exponentials",
+      "endBeforeCode": "b.2-2",
+      "charCount": 5744
+    },
+    "b.2-2": {
+      "file": "b.2-2.txt",
+      "meta": "b.2-2.meta.json",
+      "sectionId": "b.2-2",
+      "sourcePages": [
+        "page-020"
+      ],
+      "usedPages": [
+        "page-020"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "B.2-2 Sinusoids in Terms of Exponentials",
+      "foundEnd": true,
+      "endBeforeLine": "B.3 S KETCHING S IGNALS",
+      "endBeforeCode": "b.3",
+      "charCount": 592
+    },
+    "b.3": {
+      "file": "b.3.txt",
+      "meta": "b.3.meta.json",
+      "sectionId": "b.3",
+      "sourcePages": [
+        "page-020"
+      ],
+      "usedPages": [
+        "page-020"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "B.3 S KETCHING S IGNALS",
+      "foundEnd": true,
+      "endBeforeLine": "B.3-1 Monotonic Exponentials",
+      "endBeforeCode": "b.3-1",
+      "charCount": 123
+    },
+    "b.3-1": {
+      "file": "b.3-1.txt",
+      "meta": "b.3-1.meta.json",
+      "sectionId": "b.3-1",
+      "sourcePages": [
+        "page-020",
+        "page-021",
+        "page-022"
+      ],
+      "usedPages": [
+        "page-020",
+        "page-021",
+        "page-022"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "B.3-1 Monotonic Exponentials",
+      "foundEnd": true,
+      "endBeforeLine": "B.3-2 The Exponentially Varying Sinusoid",
+      "endBeforeCode": "b.3-2",
+      "charCount": 3402
+    },
+    "b.3-2": {
+      "file": "b.3-2.txt",
+      "meta": "b.3-2.meta.json",
+      "sectionId": "b.3-2",
+      "sourcePages": [
+        "page-022",
+        "page-023"
+      ],
+      "usedPages": [
+        "page-022",
+        "page-023"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "B.3-2 The Exponentially Varying Sinusoid",
+      "foundEnd": true,
+      "endBeforeLine": "B.4 Cramer’s Rule 23",
+      "endBeforeCode": "b.4",
+      "charCount": 2872
+    },
+    "b.4": {
+      "file": "b.4.txt",
+      "meta": "b.4.meta.json",
+      "sectionId": "b.4",
+      "sourcePages": [
+        "page-023",
+        "page-024",
+        "page-025"
+      ],
+      "usedPages": [
+        "page-023",
+        "page-024",
+        "page-025"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "B.4 Cramer’s Rule 23",
+      "foundEnd": true,
+      "endBeforeLine": "B.5 Partial Fraction Expansion 25",
+      "endBeforeCode": "b.5",
+      "charCount": 4687
+    },
+    "b.5": {
+      "file": "b.5.txt",
+      "meta": "b.5.meta.json",
+      "sectionId": "b.5",
+      "sourcePages": [
+        "page-025",
+        "page-026"
+      ],
+      "usedPages": [
+        "page-025",
+        "page-026"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "B.5 Partial Fraction Expansion 25",
+      "foundEnd": true,
+      "endBeforeLine": "B.5-1 Method of Clearing Fractions",
+      "endBeforeCode": "b.5-1",
+      "charCount": 3411
+    },
+    "b.5-1": {
+      "file": "b.5-1.txt",
+      "meta": "b.5-1.meta.json",
+      "sectionId": "b.5-1",
+      "sourcePages": [
+        "page-026",
+        "page-027"
+      ],
+      "usedPages": [
+        "page-026",
+        "page-027"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "B.5-1 Method of Clearing Fractions",
+      "foundEnd": true,
+      "endBeforeLine": "B.5-2 The Heaviside “Cover-Up” Method",
+      "endBeforeCode": "b.5-2",
+      "charCount": 2495
+    },
+    "b.5-2": {
+      "file": "b.5-2.txt",
+      "meta": "b.5-2.meta.json",
+      "sectionId": "b.5-2",
+      "sourcePages": [
+        "page-027",
+        "page-028",
+        "page-029",
+        "page-030"
+      ],
+      "usedPages": [
+        "page-027",
+        "page-028",
+        "page-029",
+        "page-030"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "B.5-2 The Heaviside “Cover-Up” Method",
+      "foundEnd": false,
+      "endBeforeLine": "",
+      "endBeforeCode": "",
+      "charCount": 10587
+    },
+    "b.5-3": {
+      "file": "b.5-3.txt",
+      "meta": "b.5-3.meta.json",
+      "sectionId": "b.5-3",
+      "sourcePages": [
+        "page-031",
+        "page-032"
+      ],
+      "usedPages": [
+        "page-031",
+        "page-032"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "B.5-3 Repeated Factors of Q(x)",
+      "foundEnd": true,
+      "endBeforeLine": "B.5-4 A Combination of Heaviside “Cover-Up” and Clearing Fractions",
+      "endBeforeCode": "b.5-4",
+      "charCount": 5770
+    },
+    "b.5-4": {
+      "file": "b.5-4.txt",
+      "meta": "b.5-4.meta.json",
+      "sectionId": "b.5-4",
+      "sourcePages": [
+        "page-032",
+        "page-033",
+        "page-034"
+      ],
+      "usedPages": [
+        "page-032",
+        "page-033",
+        "page-034"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "B.5-4 A Combination of Heaviside “Cover-Up” and Clearing Fractions",
+      "foundEnd": true,
+      "endBeforeLine": "B.5-5 Improper F(x) with m = n",
+      "endBeforeCode": "b.5-5",
+      "charCount": 4062
+    },
+    "b.5-5": {
+      "file": "b.5-5.txt",
+      "meta": "b.5-5.meta.json",
+      "sectionId": "b.5-5",
+      "sourcePages": [
+        "page-034",
+        "page-035"
+      ],
+      "usedPages": [
+        "page-034",
+        "page-035"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "B.5-5 Improper F(x) with m = n",
+      "foundEnd": true,
+      "endBeforeLine": "B.5-6 Modiﬁed Partial Fractions",
+      "endBeforeCode": "b.5-6",
+      "charCount": 2913
+    },
+    "b.5-6": {
+      "file": "b.5-6.txt",
+      "meta": "b.5-6.meta.json",
+      "sectionId": "b.5-6",
+      "sourcePages": [
+        "page-035"
+      ],
+      "usedPages": [
+        "page-035"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "B.5-6 Modiﬁed Partial Fractions",
+      "foundEnd": false,
+      "endBeforeLine": "",
+      "endBeforeCode": "",
+      "charCount": 1477
+    },
+    "b.6": {
+      "file": "b.6.txt",
+      "meta": "b.6.meta.json",
+      "sectionId": "b.6",
+      "sourcePages": [
+        "page-036",
+        "page-037"
+      ],
+      "usedPages": [
+        "page-036",
+        "page-037"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "B.6 V ECTORS AND M ATRICES",
+      "foundEnd": true,
+      "endBeforeLine": "B.6-1 Some Deﬁnitions and Properties",
+      "endBeforeCode": "b.6-1",
+      "charCount": 4243
+    },
+    "b.6-1": {
+      "file": "b.6-1.txt",
+      "meta": "b.6-1.meta.json",
+      "sectionId": "b.6-1",
+      "sourcePages": [
+        "page-037",
+        "page-038"
+      ],
+      "usedPages": [
+        "page-037",
+        "page-038"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "B.6-1 Some Deﬁnitions and Properties",
+      "foundEnd": true,
+      "endBeforeLine": "B.6-2 Matrix Algebra",
+      "endBeforeCode": "b.6-2",
+      "charCount": 2479
+    },
+    "b.6-2": {
+      "file": "b.6-2.txt",
+      "meta": "b.6-2.meta.json",
+      "sectionId": "b.6-2",
+      "sourcePages": [
+        "page-038",
+        "page-039",
+        "page-040",
+        "page-041",
+        "page-042"
+      ],
+      "usedPages": [
+        "page-038",
+        "page-039",
+        "page-040",
+        "page-041",
+        "page-042"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "B.6-2 Matrix Algebra",
+      "foundEnd": true,
+      "endBeforeLine": "B.7 MATLAB: E LEMENTARY O PERATIONS",
+      "endBeforeCode": "b.7",
+      "charCount": 14492
+    },
+    "b.7": {
+      "file": "b.7.txt",
+      "meta": "b.7.meta.json",
+      "sectionId": "b.7",
+      "sourcePages": [
+        "page-042",
+        "page-043",
+        "page-044",
+        "page-045",
+        "page-046",
+        "page-047",
+        "page-048",
+        "page-049",
+        "page-050",
+        "page-051",
+        "page-052",
+        "page-053"
+      ],
+      "usedPages": [
+        "page-042",
+        "page-043",
+        "page-044",
+        "page-045",
+        "page-046",
+        "page-047",
+        "page-048",
+        "page-049",
+        "page-050",
+        "page-051",
+        "page-052",
+        "page-053"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "B.7 MATLAB: E LEMENTARY O PERATIONS",
+      "foundEnd": true,
+      "endBeforeLine": "B.7-1 MATLAB Overview",
+      "endBeforeCode": "b.7-1",
+      "charCount": 35
+    },
+    "b.7-1": {
+      "file": "b.7-1.txt",
+      "meta": "b.7-1.meta.json",
+      "sectionId": "b.7-1",
+      "sourcePages": [
+        "page-042",
+        "page-043"
+      ],
+      "usedPages": [
+        "page-042",
+        "page-043"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "B.7-1 MATLAB Overview",
+      "foundEnd": true,
+      "endBeforeLine": "B.7-2 Calculator Operations",
+      "endBeforeCode": "b.7-2",
+      "charCount": 4771
+    },
+    "b.7-2": {
+      "file": "b.7-2.txt",
+      "meta": "b.7-2.meta.json",
+      "sectionId": "b.7-2",
+      "sourcePages": [
+        "page-043",
+        "page-044",
+        "page-045"
+      ],
+      "usedPages": [
+        "page-043",
+        "page-044",
+        "page-045"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "B.7-2 Calculator Operations",
+      "foundEnd": true,
+      "endBeforeLine": "B.7-3 Vector Operations",
+      "endBeforeCode": "b.7-3",
+      "charCount": 4333
+    },
+    "b.7-3": {
+      "file": "b.7-3.txt",
+      "meta": "b.7-3.meta.json",
+      "sectionId": "b.7-3",
+      "sourcePages": [
+        "page-045",
+        "page-046"
+      ],
+      "usedPages": [
+        "page-045",
+        "page-046"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "B.7-3 Vector Operations",
+      "foundEnd": true,
+      "endBeforeLine": "B.7-4 Simple Plotting",
+      "endBeforeCode": "b.7-4",
+      "charCount": 3677
+    },
+    "b.7-4": {
+      "file": "b.7-4.txt",
+      "meta": "b.7-4.meta.json",
+      "sectionId": "b.7-4",
+      "sourcePages": [
+        "page-046",
+        "page-047",
+        "page-048"
+      ],
+      "usedPages": [
+        "page-046",
+        "page-047",
+        "page-048"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "B.7-4 Simple Plotting",
+      "foundEnd": true,
+      "endBeforeLine": "B.7-5 Element-by-Element Operations",
+      "endBeforeCode": "b.7-5",
+      "charCount": 2775
+    },
+    "b.7-5": {
+      "file": "b.7-5.txt",
+      "meta": "b.7-5.meta.json",
+      "sectionId": "b.7-5",
+      "sourcePages": [
+        "page-048",
+        "page-049"
+      ],
+      "usedPages": [
+        "page-048",
+        "page-049"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "B.7-5 Element-by-Element Operations",
+      "foundEnd": true,
+      "endBeforeLine": "B.7-6 Matrix Operations",
+      "endBeforeCode": "b.7-6",
+      "charCount": 3355
+    },
+    "b.7-6": {
+      "file": "b.7-6.txt",
+      "meta": "b.7-6.meta.json",
+      "sectionId": "b.7-6",
+      "sourcePages": [
+        "page-049",
+        "page-050",
+        "page-051",
+        "page-052",
+        "page-053"
+      ],
+      "usedPages": [
+        "page-049",
+        "page-050",
+        "page-051",
+        "page-052",
+        "page-053"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "B.7-6 Matrix Operations",
+      "foundEnd": true,
+      "endBeforeLine": "B.7-7 Partial Fraction Expansions",
+      "endBeforeCode": "b.7-7",
+      "charCount": 8782
+    },
+    "b.7-7": {
+      "file": "b.7-7.txt",
+      "meta": "b.7-7.meta.json",
+      "sectionId": "b.7-7",
+      "sourcePages": [
+        "page-053"
+      ],
+      "usedPages": [
+        "page-053"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "B.7-7 Partial Fraction Expansions",
+      "foundEnd": false,
+      "endBeforeLine": "",
+      "endBeforeCode": "",
+      "charCount": 2217
+    },
+    "b.8": {
+      "file": "b.8.txt",
+      "meta": "b.8.meta.json",
+      "sectionId": "b.8",
+      "sourcePages": [
+        "page-054",
+        "page-055",
+        "page-056",
+        "page-057",
+        "page-058"
+      ],
+      "usedPages": [
+        "page-054",
+        "page-055",
+        "page-056",
+        "page-057",
+        "page-058"
+      ],
+      "missingPages": [],
+      "foundStart": true,
+      "startLine": "B.8 A PPENDIX : U SEFUL M ATHEMATICAL F ORMULAS",
+      "foundEnd": true,
+      "endBeforeLine": "B.8-1 Some Useful Constants",
+      "endBeforeCode": "b.8-1",
+      "charCount": 124
+    }
+  },
+  "count": 137
+}

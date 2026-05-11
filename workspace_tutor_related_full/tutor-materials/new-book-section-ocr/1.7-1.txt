@@ -1,0 +1,226 @@
+# Aquarius section OCR
+section_id: 1.7-1
+source_pages: page-097, page-098, page-099, page-100, page-101
+cut_start_found: yes
+cut_end_found: no
+
+--- OCR ---
+1.7-1 Linear and Nonlinear Systems
+T HE C ONCEPT OF L INEARITY
+A system whose output is proportional to its input is an example of a linear system. But linearity
+implies more than this; it also implies the additivity property: that is, if several inputs are acting
+on a system, then the total effect on the system due to all these inputs can be determined by
+considering one input at a time while assuming all the other inputs to be zero. The total effect is
+then the sum of all the component effects. This property may be expressed as follows: for a linear
+system, if an input x1 acting alone has an effect y1 , and if another input x2 , also acting alone, has
+an effect y2 , then, with both inputs acting on the system, the total effect will be y1 + y2 . Thus, if
+
+                                    x1 −→ y1        and       x2 −→ y2
+
+then for all x1 and x2
+                                           x1 + x2 −→ y1 + y2                                    (1.20)
+In addition, a linear system must satisfy the homogeneity or scaling property, which states that
+for arbitrary real or imaginary number k, if an input is increased k-fold, the effect also increases
+k-fold. Thus, if
+                                              x −→ y
+
+† Strictly speaking, this means independent inductor currents and capacitor voltages.
+
+[[PAGE page-098]]
+98   CHAPTER 1      SIGNALS AND SYSTEMS
+
+     then for all real or imaginary k
+                                                    kx −→ ky                                          (1.21)
+     Thus, linearity implies two properties: homogeneity (scaling) and additivity.† Both these properties
+     can be combined into one property (superposition), which is expressed as follows: If
+
+                                        x1 −→ y1       and         x2 −→ y2
+
+     then for all inputs x1 and x2 and all constants k1 and k2 ,
+
+                                          k1 x1 + k2 x2 −→ k1 y1 + k2 y2                              (1.22)
+
+     There is another useful way to view the linearity condition described in Eq. (1.22): the response of
+     a linear system is unchanged whether the operations of summing and scaling precede the system
+     (sum and scale act on inputs) or follow the system (sum and scale act on outputs). Thus, linearity
+     implies commutability between a system and the operations of summing and scaling. It may appear
+     that additivity implies homogeneity. Unfortunately, homogeneity does not always follow from
+     additivity. Drill 1.11 demonstrates such a case.
+
+
+
+      D R I L L 1.11 Additivity but Not Homogeneity
+      Show that a system with the input x(t) and the output y(t) related by y(t) = Re{x(t)} satisfies the
+      additivity property but violates the homogeneity property. Hence, such a system is not linear.
+      [Hint: Show that Eq. (1.21) is not satisfied when k is complex.]
+
+
+
+     R ESPONSE OF A L INEAR S YSTEM
+     For the sake of simplicity, we discuss only single-input, single-output (SISO) systems. But the
+     discussion can be readily extended to multiple-input, multiple-output (MIMO) systems.
+          A system’s output for t ≥ 0 is the result of two independent causes: the initial conditions of
+     the system (or the system state) at t = 0 and the input x(t) for t ≥ 0. If a system is to be linear, the
+     output must be the sum of the two components resulting from these two causes: first, the zero-input
+     response (ZIR) that results only from the initial conditions at t = 0 with the input x(t) = 0 for t ≥ 0,
+     and then the zero-state response (ZSR) that results only from the input x(t) for t ≥ 0 when the initial
+     conditions (at t = 0) are assumed to be zero. When all the appropriate initial conditions are zero,
+     the system is said to be in zero state. The system output is zero when the input is zero only if the
+     system is in zero state.
+          In summary, a linear system response can be expressed as the sum of the zero-input and
+     zero-state responses:
+
+                          total response = zero-input response + zero-state response
+
+     † A linear system must also satisfy the additional condition of smoothness, where small changes in the
+     system’s inputs must result in small changes in its outputs [3].
+
+[[PAGE page-099]]
+1.7   Classiﬁcation of Systems            99
+
+         This property of linear systems, which permits the separation of an output into components
+    resulting from the initial conditions and from the input, is called the decomposition property. For
+    the RC circuit of Fig. 1.26, the response y(t) was found to be [see Eq. (1.19) with t0 = 0]
+                                                              #
+                                                            1 t
+                                    y(t) = vC (0) + Rx(t) +       x(τ ) dτ                       (1.23)
+                                                        C 0
+                                             ZIR                      
+                                                                    ZSR
+
+    From Eq. (1.23), it is clear that if the input x(t) = 0 for t ≥ 0, the output y(t) = vC (0). Hence vC (0)
+    is the zero-input response of the response y(t). Similarly, if the system state (the voltage vC in
+    this case) is zero at t = 0, the output is given by the second component on the right-hand side of
+    Eq. (1.23). Clearly this is the zero-state response of the response y(t).
+         In addition to the decomposition property, linearity implies that both the zero-input and
+    zero-state components must obey the principle of superposition with respect to each of their
+    respective causes. For example, if we increase the initial condition k-fold, the zero-input response
+    must also increase k-fold. Similarly, if we increase the input k-fold, the zero-state response must
+    also increase k-fold. These facts can be readily verified from Eq. (1.23) for the RC circuit in
+    Fig. 1.26. For instance, if we double the initial condition vC (0), the zero-input response doubles;
+    if we double the input x(t), the zero-state response doubles.
+
+
+E X A M P L E 1.10 Linearity of Constant-Coefﬁcient Linear Differential
+Equations
+
+    Show that the system described by the equation
+                                               dy(t)
+                                                     + 3y(t) = x(t)                                     (1.24)
+                                                dt
+    is linear.
+
+
+    Let the system response to the inputs x1 (t) and x2 (t) be y1 (t) and y2 (t), respectively. Then
+                       dy1 (t)                                      dy2 (t)
+                               + 3y1 (t) = x1 (t)        and                + 3y2 (t) = x2 (t)
+                         dt                                           dt
+    Multiplying the first equation by k1 , the second by k2 , and adding them yield
+                     d
+                        [k1 y1 (t) + k2 y2 (t)] + 3[k1 y1 (t) + k2 y2 (t)] = k1 x1 (t) + k2 x2 (t)
+                     dt
+    But this equation is the system equation [Eq. (1.24)] with
+
+                      x(t) = k1 x1 (t) + k2 x2 (t)       and       y(t) = k1 y1 (t) + k2 y2 (t)
+
+    Therefore, when the input is k1 x1 (t) + k2 x2 (t), the system response is k1 y1 (t) + k2 y2 (t).
+    Consequently, the system is linear. Using this argument, we can readily generalize the result to
+
+[[PAGE page-100]]
+100   CHAPTER 1        SIGNALS AND SYSTEMS
+
+      show that a system described by a differential equation of the form
+
+             dN y(t)      dN−1 y(t)                          dM x(t)                dx(t)
+        a0       N
+                     + a1     N−1
+                                    + · · · + aN y(t) = bN−M     M
+                                                                     + · · · + bN−1       + bN x(t)   (1.25)
+              dt           dt                                 dt                     dt
+      is a linear system. The coefficients ai and bi in this equation can be constants or functions of
+      time. Although here we proved only zero-state linearity, it can be shown that such systems are
+      also zero-input linear and have the decomposition property.
+
+
+
+
+       D R I L L 1.12 Linearity of a Differential Equation with
+       Time-Varying Parameters
+       Show that the system described by the following equation is linear:
+
+                                            dy(t)
+                                                  + t2 y(t) = (2t + 3)x(t)
+                                             dt
+
+
+
+
+       D R I L L 1.13 A Nonlinear Differential Equation
+       Show that the system described by the following equation is nonlinear:
+
+                                                     dy(t)
+                                              y(t)         + 3y(t) = x(t)
+                                                      dt
+
+
+
+      M ORE C OMMENTS ON L INEAR S YSTEMS
+      Almost all systems observed in practice become nonlinear when large enough signals are applied
+      to them. However, it is possible to approximate most of the nonlinear systems by linear systems for
+      small-signal analysis. The analysis of nonlinear systems is generally difficult. Nonlinearities can
+      arise in so many ways that describing them with a common mathematical form is impossible. Not
+      only is each system a category in itself, but even for a given system, changes in initial conditions
+      or input amplitudes may change the nature of the problem. On the other hand, the superposition
+      property of linear systems is a powerful unifying principle that allows for a general solution.
+      The superposition property (linearity) greatly simplifies the analysis of linear systems. Because
+      of the decomposition property, we can evaluate separately the two components of the output.
+      The zero-input response can be computed by assuming the input to be zero, and the zero-state
+      response can be computed by assuming zero initial conditions. Moreover, if we express an
+
+[[PAGE page-101]]
+1.7   Classiﬁcation of Systems              101
+
+input x(t) as a sum of simpler functions,
+
+                                x(t) = a1 x1 (t) + a2 x2 (t) + · · · + am xm (t)
+
+then, by virtue of linearity, the response y(t) is given by
+
+                                y(t) = a1 y1 (t) + a2 y2 (t) + · · · + am ym (t)
+
+where yk (t) is the zero-state response to an input xk (t). This apparently trivial observation has
+profound implications. As we shall see repeatedly in later chapters, it proves extremely useful and
+opens new avenues for analyzing linear systems.
+     For example, consider an arbitrary input x(t) such as the one shown in Fig. 1.27a. We can
+approximate x(t) with a sum of rectangular pulses of width t and of varying heights. The
+approximation improves as t → 0, when the rectangular pulses become impulses spaced t
+seconds apart (with t → 0).† Thus, an arbitrary input can be replaced by a weighted sum of
+impulses spaced t ( t → 0) seconds apart. Therefore, if we know the system response to a
+unit impulse, we can immediately determine the system response to an arbitrary input x(t) by
+adding the system response to each impulse component of x(t). A similar situation is depicted
+in Fig. 1.27b, where x(t) is approximated by a sum of step functions of varying magnitude and
+spaced t seconds apart. The approximation improves as t becomes smaller. Therefore, if we
+know the system response to a unit step input, we can compute the system response to any arbitrary
+input x(t) with relative ease. Time-domain analysis of linear systems (discussed in Ch. 2) uses this
+approach.
+     Chapters 4, 5, 6, and 7 employ the same approach but instead use sinusoids or exponentials
+as the basic signal components. We show that any arbitrary input signal can be expressed as a
+weighted sum of sinusoids (or exponentials) having various frequencies. Thus a knowledge of
+the system response to a sinusoid enables us to determine the system response to an arbitrary
+input x(t).
+
+
+      x(t)                                          x(t)
+
+
+
+
+                                         t                                                t
+               t                                            t
+                          (a)                                             (b)
+      Figure 1.27 Signal representation in terms of impulse and step components.
+
+
+
+† Here, the discussion of a rectangular pulse approaching an impulse at         t → 0 is somewhat imprecise. It is
+explained in Sec. 2.4 with more rigor.

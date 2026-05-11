@@ -1,0 +1,20 @@
+{
+  "sectionId": "1.2-1",
+  "sourcePages": [
+    "page-071",
+    "page-072",
+    "page-073"
+  ],
+  "usedPages": [
+    "page-071",
+    "page-072",
+    "page-073"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "1.2-1 Time Shifting",
+  "foundEnd": true,
+  "endBeforeLine": "1.2-2 Time Scaling",
+  "endBeforeCode": "1.2-2",
+  "charCount": 4345
+}

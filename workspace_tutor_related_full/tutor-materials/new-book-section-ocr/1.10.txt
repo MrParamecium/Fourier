@@ -1,0 +1,275 @@
+# Aquarius section OCR
+section_id: 1.10
+source_pages: page-121, page-122, page-123, page-124, page-125
+cut_start_found: yes
+cut_end_found: no
+
+--- OCR ---
+1.10   Internal Description: The State-Space Description         121
+
+
+       x(t)                                           y(t)                                     y(t)
+                                  S1
+                                                                               S1
+                                                              x(t)
+
+                  S2                                                                      S2
+
+
+
+                            (a)                                                     (b)
+      Figure 1.42 Structures of uncontrollable and unobservable systems.
+
+and observable (linked to both the input and output). Such systems are undesirable in practice and
+should be avoided in any system design. The system in Fig. 1.41a can be shown to be neither
+controllable nor observable. It can be represented structurally as a combination of the systems in
+Figs. 1.42a and 1.42b.
+
+
+1.10 I NTERNAL D ESCRIPTION : T HE S TATE -S PACE
+D ESCRIPTION
+We shall now introduce the state-space description of a linear system, which is an internal
+description of a system. In this approach, we identify certain key variables, called the state
+variables, of the system. These variables have the property that every possible signal in the system
+can be expressed as a linear combination of these state variables. For example, we can show
+that every possible signal in a passive RLC circuit can be expressed as a linear combination of
+independent capacitor voltages and inductor currents, which, therefore, are state variables for the
+circuit.
+     To illustrate this point, consider the network in Fig. 1.43. We identify two state variables: the
+capacitor voltage q1 and the inductor current q2 . If the values of q1 , q2 , and the input x(t) are known
+at some instant t, we can demonstrate that every possible signal (current or voltage) in the circuit
+can be determined at t. For example, if q1 = 10, q2 = 1, and the input x = 20 at some instant, the
+remaining voltages and currents at that instant will be
+
+                                         i1 = (x − q1 )/1 = 20 − 10 = 10 A
+                                              v1 = x − q1 = 20 − 10 = 10 V
+                                                            v2 = q1 = 10 V
+                                                            i2 = q1 /2 = 5 A
+                                       iC = i1 − i2 − q2 = 10 − 5 − 1 = 4 A
+                                                              i3 = q2 = 1 A
+                                                            v3 = 5q2 = 5 V
+                                               vL = q1 − v3 = 10 − 5 = 5 V                            (1.33)
+
+Thus all signals in this circuit are determined. Clearly, state variables consist of the key variables
+in a system; a knowledge of the state variables allows one to determine every possible output of
+the system. Note that the state-variable description is an internal description of a system because
+it is capable of describing all possible signals in the system.
+
+[[PAGE page-122]]
+122       CHAPTER 1        SIGNALS AND SYSTEMS
+
+
+                       i1(t)     1                                  q2(t)       2H
+
+                                v (t)        iC (t)       i2(t)            v (t)          i3(t)
+                                                                               L
+                                  1
+                                                                                            
+                x(t)                  q1(t)                v2(t)                               v3(t)
+                                                1F                      2                 5
+                                                                                            
+
+
+
+
+                Figure 1.43 Choosing suitable initial conditions in a network.
+
+
+
+
+      E X A M P L E 1.20 State-Space Description of a System
+
+          This example illustrates how state equations may be natural and easier to determine than other
+          descriptions, such as loop or node equations. Consider again the network in Fig. 1.43 with q1
+          and q2 as the state variables and write the state equations.
+
+
+          This can be done by simple inspection of Fig. 1.43. Since q˙1 is the current through the
+          capacitor,
+
+                                                q̇1 = iC = i1 − i2 − q2
+                                                        = (x − q1 ) − 0.5 q1 − q2
+                                                        = −1.5 q1 − q2 + x
+
+          Also 2q˙2 , the voltage across the inductor, is given by
+
+                                                           2q̇2 = q1 − v3
+                                                                = q1 − 5q2
+
+          or
+                                                        q̇2 = 0.5 q1 − 2.5 q2
+          Thus, the state equations are
+
+                                                     q̇1 = −1.5 q1 − q2 + x
+                                                          q̇2 = 0.5 q1 − 2.5 q2                        (1.34)
+
+          This is a set of two simultaneous first-order differential equations. This set of equations
+          comprises the state equations. Once these equations have been solved for q1 and q2 , everything
+          else in the circuit can be determined by using Eq. (1.33), which are known as the output
+          equations. Thus, in this approach, we have two sets of equations, the state equations and the
+          output equations. Once we have solved the state equations, all possible outputs can be obtained
+
+[[PAGE page-123]]
+1.10   Internal Description: The State-Space Description               123
+
+    from the output equations. In the input–output description, an Nth-order system is described
+    by an Nth-order equation. In the state-variable approach, the same system is described by N
+    simultaneous first-order state equations.†
+
+
+
+E X A M P L E 1.21 Controllability and Observability
+
+    Investigate the nature of state equations and the issue of controllability and observability for
+    the circuit in Fig. 1.41a.
+
+
+    This circuit has only one capacitor and no inductors. Hence, there is only one state variable,
+    the capacitor voltage q(t). Since C = 1 F, the capacitor current is q̇. There are two sources in
+    this circuit: the input x(t) and the capacitor voltage q(t). The response due to x(t), assuming
+    q(t) = 0, is the zero-state response, which can be found from Fig. 1.44a, where we have shorted
+    the capacitor [q(t) = 0]. The response due to q(t) assuming x(t) = 0, is the zero-input response,
+    which can be found from Fig. 1.44b, where we have shorted x(t) to ensure x(t) = 0. It is now
+    trivial to find both the components.
+         Figure 1.44a shows zero-state currents in every branch. It is clear that the input x(t) sees
+    an effective resistance of 5 , and, hence, the current through x(t) is x/5 A, which divides in
+    the two parallel branches, resulting in the current x/10 through each branch.
+         Examining the circuit in Fig. 1.44b for the zero-input response, we note that the capacitor
+    voltage is q and the current is q̇. We also observe that the capacitor sees two loops in parallel,
+    each with resistance 4  and current q̇/2. Interestingly, the 3  branch is effectively shorted
+    because the circuit is balanced, and thus the voltage across the terminals cd is zero. The
+    total current in any branch is the sum of the currents in that branch in Figs. 1.44a and 1.44b
+    (principle of superposition).
+
+                                    Branch         Current       Voltage
+                                                    x   q̇           x   q̇
+                                    ca                +          2     +
+                                                   10 2             10 2
+                                                    x   q̇           x   q̇
+                                    cb                −          2     −
+                                                   10 2             10 2
+                                                    x   q̇           x   q̇
+                                    ad                −          2     −                                 (1.35)
+                                                   10 2             10 2
+                                                    x   q̇           x   q̇
+                                    bd                +          2     +
+                                                   10 2             10 2
+                                                   x                x
+                                    ec                           3
+                                                   5                5
+                                                   x
+                                    ed                           x
+                                                   5
+
+
+    † This assumes the system to be controllable and observable. If it is not, the input–output description equation
+    will be of an order lower than the corresponding number of state equations.
+
+[[PAGE page-124]]
+124     CHAPTER 1          SIGNALS AND SYSTEMS
+
+                           x
+                 3                                                         3
+         e                 5       c             c               e                       c                   c
+                                    x                 x                                                             
+                                   10                10
+
+                       2                             2                         2                                 2
+                                                                                                   q/2
+      x(t)                                                                                                   q/2
+                                                                                   q/2
+                                                                                        q
+                               a                 b        y(t)                      a                        b       y(t)
+                                                                                             q         
+                                    x                 x
+                                   10                10                            q/2                       q/2
+
+                       2                             2                         2                   q/2           2
+
+
+
+                                   d         d                                          d               d           
+
+
+                                       (a)                                                   (b)
+      Figure 1.44 Analysis of a system that is neither controllable nor observable.
+
+         To find the state equation, we note that the current in branch ca is (x/10) + q̇/2 and the current
+         in branch cb is (x/10) − q̇/2. Hence, the equation around the loop acba is
+                                                        !              !
+                                                x    q̇        x    q̇
+                                     q=2 − −              +2      −      = −2q̇
+                                               10 2           10 2
+         or
+                                                              q̇ = −0.5q                                                    (1.36)
+         This is the desired state equation.
+              Substitution of q̇ = −0.5q in Eq. (1.35) shows that every possible current and voltage in
+         the circuit can be expressed in terms of the state variable q and the input x, as desired. Hence,
+         the set of Eq. (1.35) is the output equation for this circuit. Once we have solved the state
+         equation [Eq. (1.36)] for q, we can determine every possible output in the circuit.
+              The output y(t) is given by
+                                                       !              !
+                                               x    q̇        x    q̇    2
+                                     y(t) = 2    −       +2      +      = x(t)                       (1.37)
+                                              10 2           10 2        5
+
+              A little examination of the state and the output equations indicates the nature of this
+         system. Equation (1.36) shows that the state q(t) is independent of the input x(t); hence the
+         system state q cannot be controlled by the input. Moreover, Eq. (1.37) shows that the output
+         y(t) does not depend on the state q(t). Thus, the system state cannot be observed from the
+         output terminals. Hence, the system is neither controllable nor observable. Such is not the case
+         of other systems examined earlier. Consider, for example, the circuit in Fig. 1.43. The state
+         equations [Eq. (1.34)] show that the states are influenced by the input directly or indirectly.
+         Hence, the system is controllable. Moreover, as Eq. (1.33) shows, every possible output is
+         expressed in terms of the state variables and the input. Hence, the states are also observable.
+
+[[PAGE page-125]]
+1.10   Internal Description: The State-Space Description          125
+
+    State-space techniques are useful not just because of their ability to provide internal system
+description, but for several other reasons, including the following.
+    1. State equations of a system provide a mathematical model of great generality that can
+       describe not just linear systems, but also nonlinear systems; not just time-invariant systems,
+       but also time-varying parameter systems; not just SISO (single-input/single-output)
+       systems, but also multiple-input/multiple-output (MIMO) systems. Indeed, state
+       equations are ideally suited for the analysis, synthesis, and optimization of MIMO
+       systems.
+    2. Compact matrix notation and the powerful techniques of linear algebra greatly facilitate
+       complex manipulations. Without such features, many important results of the modern
+       system theory would have been difficult to obtain. State equations can yield a great deal of
+       information about a system even when they are not solved explicitly.
+    3. State equations lend themselves readily to digital computer simulation of complex systems
+       of high order, with or without nonlinearities, and with multiple inputs and outputs.
+    4. For second-order systems (N = 2), a graphical method called phase-plane analysis can be
+       used on state equations, whether they are linear or nonlinear.
+     The real benefits of the state-space approach, however, are realized for highly complex
+systems of large order. Much of the book is devoted to introduction of the basic concepts of linear
+systems analysis, which must necessarily begin with simpler systems without using the state-space
+approach. Chapter 10 deals with the state-space analysis of linear, time-invariant, continuous-time,
+and discrete-time systems.
+
+
+
+ D R I L L 1.20 State Equations for a Series RLC Circuit
+ Write the state equations for the series RLC circuit shown in Fig. 1.45, using the inductor current
+ q1 (t) and the capacitor voltage q2 (t) as state variables. Express every voltage and current in this
+ circuit as a linear combination of q1 , q2 , and x.
+
+ ANSWERS
+ q1 = −3 q1 − q2 + x and q2 = 2 q1 .
+
+
+
+                          1H
+
+
+                      q1(t)
+                                        
+                                1
+    x(t)                          F         q2(t)
+                                2
+                                        
+
+
+
+                      3                             Figure 1.45 Circuit for Drill 1.20.

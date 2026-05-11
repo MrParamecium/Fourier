@@ -1,0 +1,20 @@
+{
+  "sectionId": "1.12",
+  "sourcePages": [
+    "page-133",
+    "page-134",
+    "page-135"
+  ],
+  "usedPages": [
+    "page-133",
+    "page-134",
+    "page-135"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "1.12 Summary 133",
+  "foundEnd": false,
+  "endBeforeLine": "",
+  "endBeforeCode": "",
+  "charCount": 10413
+}

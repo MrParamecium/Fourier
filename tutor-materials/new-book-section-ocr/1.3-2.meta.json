@@ -1,0 +1,18 @@
+{
+  "sectionId": "1.3-2",
+  "sourcePages": [
+    "page-078",
+    "page-079"
+  ],
+  "usedPages": [
+    "page-078",
+    "page-079"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "1.3-2 Analog and Digital Signals",
+  "foundEnd": true,
+  "endBeforeLine": "1.3-3 Periodic and Aperiodic Signals",
+  "endBeforeCode": "1.3-3",
+  "charCount": 2382
+}

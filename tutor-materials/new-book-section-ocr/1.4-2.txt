@@ -1,0 +1,176 @@
+# Aquarius section OCR
+section_id: 1.4-2
+source_pages: page-086, page-087, page-088, page-089
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+1.4-2 The Unit Impulse Function δ(t)
+     The unit impulse function δ(t) is one of the most important functions in the study of signals and
+     systems. This function was first defined in two parts by P. A. M. Dirac as
+                                                              # ∞
+                              δ(t) = 0 t = 0        and           δ(t) dt = 1                    (1.9)
+                                                                                   −∞
+
+          We can visualize an impulse as a tall, narrow, rectangular pulse of unit area, as illustrated
+     in Fig. 1.19b. The width of this rectangular pulse is a very small value → 0. Consequently, its
+     height is a very large value 1/ → ∞. The unit impulse therefore can be regarded as a rectangular
+     pulse with a width that has become infinitesimally small, a height that has become infinitely
+     large, and an overall area that has been maintained at unity. Thus δ(t) = 0 everywhere except at
+     t = 0, where it is undefined. For this reason, a unit impulse is represented by the spearlike symbol
+     in Fig. 1.19a.
+          Other pulses, such as the exponential, triangular, or Gaussian types, may also be used in
+     impulse approximation. The important feature of the unit impulse function is not its shape but the
+     fact that its effective duration (pulse width) approaches zero while its area remains at unity. For
+     example, the exponential pulse αe−αt u(t) in Fig. 1.20a becomes taller and narrower as α increases.
+
+
+
+                  d(t)                                        1
+                                                              e
+                                                                       e       0
+
+
+                 0                                     e e
+                              t                                           t
+                                                       2 2                              Figure 1.19 A unit impulse and its
+                 (a)                                    (b)                             approximation.
+
+[[PAGE page-087]]
+1.4   Some Useful Signal Models             87
+
+
+
+
+      Figure 1.20 Other possible approximations to a unit impulse.
+
+
+In the limit as α → ∞, the pulse height → ∞, and its width or duration → 0. Yet, the area under
+the pulse is unity regardless of the value of α because
+                                          # ∞
+                                               αe−αt dt = 1
+                                             0
+
+The pulses in Figs. 1.20b and 1.20c behave in a similar fashion. Clearly, the exact impulse function
+cannot be generated in practice; it can only be approached.
+     From Eq. (1.9), it follows that the function kδ(t) = 0 for all t = 0, and its area is k. Thus, kδ(t)
+is an impulse function whose area is k (in contrast to the unit impulse function, whose area is 1).
+
+M ULTIPLICATION OF A F UNCTION BY AN I MPULSE
+Let us now consider what happens when we multiply the unit impulse δ(t) by a function φ(t) that
+is known to be continuous at t = 0. Since the impulse has nonzero value only at t = 0, and the
+value of φ(t) at t = 0 is φ(0), we obtain
+
+                                          φ(t)δ(t) = φ(0)δ(t)
+
+Thus, multiplication of a continuous-time function φ(t) with an unit impulse located at t = 0 results
+in an impulse, which is located at t = 0 and has strength φ(0) [the value of φ(t) at the location of
+the impulse]. Use of exactly the same argument leads to the generalization of this result, stating
+that provided φ(t) is continuous at t = T, φ(t) multiplied by an impulse δ(t − T) (impulse located
+at t = T) results in an impulse located at t = T and having strength φ(T) [the value of φ(t) at the
+location of the impulse].
+                                   φ(t)δ(t − T) = φ(T)δ(t − T)                                 (1.10)
+
+S AMPLING P ROPERTY OF THE U NIT I MPULSE F UNCTION
+From Eq. (1.10) it follows that
+                         # ∞                         # ∞
+                              φ(t)δ(t − T) dt = φ(T)     δ(t) dt = φ(T)                            (1.11)
+                            −∞                             −∞
+
+provided φ(t) is continuous at t = T. This result means that the area under the product of a function
+with an impulse δ(t − T) is equal to the value of that function at the instant at which the unit
+impulse is located. This property is very important and useful and is known as the sampling or
+sifting property of the unit impulse.
+
+[[PAGE page-088]]
+88   CHAPTER 1       SIGNALS AND SYSTEMS
+
+     U NIT I MPULSE AS A G ENERALIZED F UNCTION
+     The definition of the unit impulse function given in Eq. (1.9) is not mathematically rigorous,
+     which leads to serious difficulties. First, the impulse function does not define a unique function:
+     for example, it can be shown that δ(t) + δ̇(t) also satisfies Eq. (1.9) [1]. Moreover, δ(t) is not even
+     a true function in the ordinary sense. An ordinary function is specified by its values for all time t.
+     The impulse function is zero everywhere except at t = 0, and at this, the only interesting part of
+     its range, it is undefined. These difficulties are resolved by defining the impulse as a generalized
+     function rather than an ordinary function. A generalized function is defined by its effect on other
+     functions instead of by its value at every instant of time.
+           In this approach the impulse function is defined by the sampling property [Eq. (1.11)]. We
+     say nothing about what the impulse function is or what it looks like. Instead, the impulse function
+     is defined in terms of its effect on a test function φ(t). We define a unit impulse as a function for
+     which the area under its product with a function φ(t) is equal to the value of the function φ(t) at
+     the instant at which the impulse is located. It is assumed that φ(t) is continuous at the location
+     of the impulse. Recall that the sampling property [Eq. (1.11)] is the consequence of the classical
+     (Dirac) definition of the unit impulse in Eq. (1.9). In contrast, the sampling property [Eq. (1.11)]
+     defines the impulse function in the generalized function approach.
+           We now present an interesting application of the generalized function definition of an impulse.
+     Because the unit step function u(t) is discontinuous at t = 0, its derivative du/dt does not exist at
+     t = 0 in the ordinary sense. We now show that this derivative does exist in the generalized sense,
+     and it is, in fact, δ(t). As a proof, let us evaluate the integral of (du/dt)φ(t), using integration by
+     parts:
+                             # ∞                          ∞    # ∞
+                                 du(t)                    
+                                       φ(t) dt = u(t)φ(t) −        u(t)φ̇(t) dt
+                               −∞ dt                       −∞    −∞
+                                                              # ∞
+                                               = φ(∞) − 0 −       φ̇(t) dt
+                                                                  0
+                                                = φ(∞) − φ(t)|∞
+                                                              0 = φ(0)
+
+
+     This result shows that du/dt satisfies the sampling property of δ(t). Therefore it is an impulse δ(t)
+     in the generalized sense—that is,
+                                                  du(t)
+                                                        = δ(t)                                     (1.12)
+                                                   dt
+     Consequently,
+                                              # t
+                                                    δ(τ ) dτ = u(t)
+                                               −∞
+
+       These results can also be obtained graphically from Fig. 1.19b. We observe that the area from
+     −∞ to t under the limiting form of δ(t) in Fig. 1.19b is zero if t < − /2 and unity if t ≥ /2 with
+      → 0. Consequently,
+                                        # t             
+                                                         0       t<0
+                                             δ(τ ) dτ =
+                                          −∞             1       t≥0
+                                                      = u(t)
+
+[[PAGE page-089]]
+1.4   Some Useful Signal Models                 89
+
+This result shows that the unit step function can be obtained by integrating the unit impulse
+function. Similarly the unit ramp function x(t) = tu(t) can be obtained by integrating the unit
+step function. We may continue with unit parabolic function t2 /2 obtained by integrating the unit
+ramp, and so on. On the other side, we have derivatives of impulse function, which can be defined
+as generalized functions (see Prob. 1.4-12). All these functions, derived from the unit impulse
+function (successive derivatives and integrals), are called singularity functions.†
+
+
+
+ D R I L L 1.9 Simplifying Expressions Containing the Unit Impulse
+ Show that
+       (a) (t3 + 3)δ(t) = 3δ(t)
+           '          π (
+       (b) sin t2 −         δ(t) = −δ(t)
+                       2
+       (c) e−2t δ(t) = δ(t)
+           ω2 + 1               1
+       (d) 2        δ(ω − 1) = δ(ω − 1)
+           ω +9                 5
+
+
+
+
+ D R I L L 1.10 Simplifying Integrals Containing the Unit Impulse
+ Show that
+        # ∞
+    (a)       δ(t)e−jωt dt = 1
+          −∞
+         # ∞               πt 
+    (b)       δ(t − 2) cos         dt = 0
+           −∞                 4
+        # ∞
+    (c)       e−2(x−t) δ(2 − t) dt = e−2(x−2)
+             −∞
