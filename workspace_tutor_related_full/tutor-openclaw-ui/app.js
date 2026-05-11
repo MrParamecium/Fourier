@@ -6,6 +6,15 @@ const API_BASE = (() => {
   return window.location.hostname === 'localhost' ? 'http://127.0.0.1:9000' : window.location.origin;
 })();
 
+async function readApiJson(res, label = 'request') {
+  if (!res.ok) {
+    const body = await res.text().catch(() => '');
+    const detail = compactWhitespace(body).slice(0, 120);
+    throw new Error(`${label} failed: ${res.status}${detail ? ` ${detail}` : ''}`);
+  }
+  return res.json();
+}
+
 const INTRO_LANDING_SEEN_KEY = 'aquarius-intro-seen';
 const THEME_STORAGE_KEY = 'aquarius-theme';
 let introScene = null;
@@ -10254,7 +10263,7 @@ async function openLearnMode(sectionId, sectionTitle, subsections = [], options 
         body: JSON.stringify({ sectionId, sectionTitle, mode: 'intro', language: 'en', uid: getUid(), bookSource: currentBook }),
         signal: learnAbort.signal
       });
-      const data = await res.json();
+      const data = await readApiJson(res, 'section preview request');
       learnPages = data.bookPages || [];
       hideSplash();
       if (learnIntroMeta && data.bookPages && data.bookPages.length) {
@@ -10342,7 +10351,7 @@ async function startLesson(options = {}) {
       splashShowDelayTimer = null;
     }
     if (splashVisible) setSplashStage(4); // charts / rendering
-    const data = await res.json();
+    const data = await readApiJson(res, 'lesson request');
     hideSplash();
     if (isB8TextbookOnlySection(learnSectionId, learnSectionTitle)) {
       data.lesson = getB8TextbookOnlyMarkdown();
