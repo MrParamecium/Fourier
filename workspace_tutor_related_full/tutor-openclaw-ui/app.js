@@ -6207,6 +6207,12 @@ function getDemoControlValue(control, state) {
   return Number.isFinite(num) ? num : Number(control.default ?? control.min ?? 1);
 }
 
+function fmt(value, digits = 2) {
+  const num = Number(value);
+  if (!Number.isFinite(num)) return '0';
+  return Number((Math.abs(num) < 1e-9 ? 0 : num).toFixed(digits)).toString();
+}
+
 const CHAPTER_ONE_DEMO_TYPES = new Set([
   'energy_cross_term',
   'step_window_composer',
@@ -6231,6 +6237,206 @@ function inferChapterOneDemoType(demo = {}) {
     return 'impulse_unit_area_limit';
   }
   return '';
+}
+
+function getInteractiveDemoSpec(demo = {}) {
+  return demo.demo_spec || demo.spec || {};
+}
+
+function slugifyInteractiveDemoKey(value = '') {
+  return compactWhitespace(value)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '') || 'control';
+}
+
+function getInteractiveDemoText(demo = {}) {
+  const spec = getInteractiveDemoSpec(demo);
+  const mode = demo.mode_specific_visual_use || {};
+  return [
+    demo.title,
+    demo.demo_title,
+    demo.explanation,
+    demo.content,
+    demo.caption,
+    demo.student_prompt,
+    demo.student_instruction,
+    demo.student_task,
+    demo.observation_note,
+    demo.purpose,
+    demo.page_title,
+    demo.code,
+    demo.component_code,
+    demo.react_code,
+    demo.demo_code,
+    spec.title,
+    spec.description,
+    spec.note_below_demo,
+    spec.note_below_canvas,
+    spec.student_prompt,
+    spec.student_task_prompt,
+    spec.what_to_notice,
+    spec.observation_prompt,
+    JSON.stringify(spec || {}),
+    JSON.stringify(mode || {})
+  ].filter(Boolean).join(' ');
+}
+
+function getInteractiveDemoTitle(demo = {}, fallback = 'Interactive demo') {
+  const spec = getInteractiveDemoSpec(demo);
+  return compactWhitespace(demo.title || demo.demo_title || spec.title || demo.page_title || fallback);
+}
+
+function getInteractiveDemoSubtitle(demo = {}) {
+  const spec = getInteractiveDemoSpec(demo);
+  const mode = demo.mode_specific_visual_use || {};
+  return compactWhitespace(
+    demo.explanation
+    || demo.content
+    || demo.caption
+    || demo.student_prompt
+    || demo.student_instruction
+    || spec.description
+    || spec.student_prompt
+    || spec.student_task_prompt
+    || mode.standard
+    || mode.cram
+    || ''
+  );
+}
+
+function normalizeInteractiveDemoControl(control = {}) {
+  const key = control.key
+    || control.id
+    || control.param
+    || control.name
+    || slugifyInteractiveDemoKey(control.label || control.title || control.value || 'control');
+  return { ...control, key };
+}
+
+function inferInteractiveDemoFamily(demo = {}) {
+  const title = getInteractiveDemoTitle(demo, '');
+  const text = getInteractiveDemoText(demo).toLowerCase();
+  const spec = getInteractiveDemoSpec(demo);
+  const frame = String(spec.framework || demo.framework || '').toLowerCase();
+
+  if (demo.demo_type === 'matrix_multiplication_conformability'
+    || /matrix multiplication conformability|matrix size compatibility|inner dimensions|rows of a.*rows of b|product c = ab/i.test(title + ' ' + text)) {
+    return 'matrix_conformability';
+  }
+  if (/matrix size and entry locator|matrix entry locator|a_{ij}|row index|column index|entry locator/i.test(title + ' ' + text)) {
+    return 'matrix_locator';
+  }
+  if (/point-by-point multiplication|point by point multiplication|sample-by-sample|element-by-element|vector orientation|dimension mismatch/i.test(title + ' ' + text)) {
+    return 'pointwise_multiplication';
+  }
+  if (/watch energy grow but power settle|running energy|average power|energy vs power|energy signal|power signal|rectangular approximation of signal energy|classifier/i.test(title + ' ' + text)) {
+    return 'energy_power';
+  }
+  if (/sampling a continuous-time signal|sampling time|quantizing amplitude|discrete-time|analog|digital|sample stems|sampled continuous-time/i.test(title + ' ' + text)) {
+    return 'sampling_quantization';
+  }
+  if (/superposition|time-invariance|time invariance|causality|bibo|invertibility|recover the input|delay-then-system|system-then-delay|time-shift tester/i.test(title + ' ' + text)) {
+    return 'system_property';
+  }
+  if (/dc motor|parameter response|motor parameter|inertia|damping|drive strength|step response/i.test(title + ' ' + text)) {
+    return 'parameter_response';
+  }
+  if (/time constant|decay and growth controlled by a|exponential time constant|complex exponential|envelope-controlled sinusoid|decay|growth|e\^\(st\)|e\^st|sigma|omega|damped/i.test(title + ' ' + text)) {
+    return 'exponential_envelope';
+  }
+  if (/opposite rotations create sine and cosine|rotating vector|sine and cosine|phasor|complex plane|polar form|rectangular form|quadrant-safe phase|same frequency/i.test(title + ' ' + text) || frame.includes('react_canvas')) {
+    if (/complex plane|polar form|rectangular form/i.test(title + ' ' + text)) return 'complex_plane';
+    return 'sinusoid';
+  }
+  if (/time scaling|mirror the signal|time reflection|shift-test|does the shift match|move and flip the unit step|explore y\(t\)\s*=\s*x\(at-b\)|explore g\(at\+b\)|y\(t\)\s*=\s*x\(at-b\)|unit step|window|landmark|periodicity|shift|reflection/i.test(title + ' ' + text)) {
+    return 'signal_transform';
+  }
+  if (/clearing fractions|repeated-factor|fraction expansion|term ladder|partial fractions|matrix locator|point-by-point/i.test(title + ' ' + text)) {
+    return 'algebra_brief';
+  }
+  return 'brief';
+}
+
+function setupInteractiveDemoCanvas(canvas, ctx, height = 260, minWidth = 320) {
+  if (!canvas || !ctx) return { width: 0, height: 0 };
+  const dpr = Math.max(window.devicePixelRatio || 1, 1);
+  const width = Math.max(Math.floor(canvas.parentElement?.clientWidth || canvas.clientWidth || 0), minWidth);
+  canvas.width = Math.floor(width * dpr);
+  canvas.height = Math.floor(height * dpr);
+  canvas.style.width = '100%';
+  canvas.style.height = `${height}px`;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, width, height);
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, width, height);
+  return { width, height };
+}
+
+function drawInteractiveDemoArrow(ctx, x1, y1, x2, y2, color = '#2563eb', width = 3, dashed = false) {
+  const angle = Math.atan2(y2 - y1, x2 - x1);
+  ctx.save();
+  ctx.strokeStyle = color;
+  ctx.fillStyle = color;
+  ctx.lineWidth = width;
+  if (dashed) ctx.setLineDash([7, 6]);
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.stroke();
+  if (!dashed) {
+    ctx.beginPath();
+    ctx.moveTo(x2, y2);
+    ctx.lineTo(x2 - 10 * Math.cos(angle - Math.PI / 6), y2 - 10 * Math.sin(angle - Math.PI / 6));
+    ctx.lineTo(x2 - 10 * Math.cos(angle + Math.PI / 6), y2 - 10 * Math.sin(angle + Math.PI / 6));
+    ctx.closePath();
+    ctx.fill();
+  }
+  ctx.restore();
+}
+
+function drawInteractiveDemoAxes(ctx, width, height, options = {}) {
+  const pad = options.pad ?? 42;
+  const minT = options.minT ?? -4;
+  const maxT = options.maxT ?? 6;
+  const originY = options.originY ?? Math.round(height * 0.68);
+  const toX = (t) => pad + ((t - minT) / (maxT - minT)) * (width - pad * 2);
+  ctx.strokeStyle = options.axisColor || '#cbd5e1';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(pad, originY);
+  ctx.lineTo(width - pad, originY);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(pad, 18);
+  ctx.lineTo(pad, height - 30);
+  ctx.stroke();
+  ctx.fillStyle = options.labelColor || '#64748b';
+  ctx.font = '600 12px Quicksand, sans-serif';
+  ctx.textAlign = 'center';
+  for (let t = minT; t <= maxT; t += options.tickStep ?? 2) {
+    const x = toX(t);
+    ctx.beginPath();
+    ctx.moveTo(x, originY - 4);
+    ctx.lineTo(x, originY + 4);
+    ctx.stroke();
+    ctx.fillText(String(t), x, originY + 18);
+  }
+  return { toX, originY, minT, maxT, pad };
+}
+
+function drawInteractiveDemoRoundedRect(ctx, x, y, width, height, radius) {
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  ctx.lineTo(x + radius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
 }
 
 function hydrateChapterOneDemo(node, demo) {
@@ -6726,22 +6932,25 @@ function hydrateInteractiveDemos(root) {
     const demo = parseBase64JsonAttr(node.dataset.demoB64 || node.getAttribute('data-demo-b64'));
     if (!demo) return;
 
-    const isMatrixDemo = demo.demo_type === 'matrix_multiplication_conformability';
-    const demoControls = Array.isArray(demo.demo_spec?.controls) ? demo.demo_spec.controls : [];
-    const demoText = `${demo.title || ''} ${demo.content || ''} ${demo.explanation || ''} ${demo.react_code || ''}`;
+    const demoSpec = getInteractiveDemoSpec(demo);
+    const family = inferInteractiveDemoFamily(demo);
+    const isMatrixDemo = family === 'matrix_conformability';
+    const specControls = Array.isArray(demoSpec.controls) ? demoSpec.controls : [];
+    const demoControls = specControls.length ? specControls : (Array.isArray(demo.controls) ? demo.controls : []);
+    const demoText = getInteractiveDemoText(demo);
     const isComplexPlaneDemo = demo.type === 'interactive_demo'
-      && demo.demo_spec
-      && demo.demo_spec.framework === 'react_canvas'
+      && demoSpec
+      && String(demoSpec.framework || '').toLowerCase() === 'react_canvas'
       && demoControls.some((control) => (control.id || control.key) === 'slider_a')
       && demoControls.some((control) => (control.id || control.key) === 'slider_b')
       && /complex number|rectangular|polar|complex plane/i.test(demoText)
       && !/sinusoid|same frequency|cosine wave|phasor sum/i.test(demoText);
     const isPhasorDemo = !isComplexPlaneDemo
       && demo.type === 'interactive_demo'
-      && demo.demo_spec
-      && demo.demo_spec.framework === 'react_canvas'
-      && Array.isArray(demo.demo_spec.panels)
-      && demo.demo_spec.panels.some((panel) => panel.id === 'phasor_panel');
+      && demoSpec
+      && String(demoSpec.framework || '').toLowerCase() === 'react_canvas'
+      && Array.isArray(demoSpec.panels)
+      && demoSpec.panels.some((panel) => panel.id === 'phasor_panel');
     const isSinusoidDemo = demo.demo_type === 'sinusoid_phasor_projection'
       || (demo.type === 'interactive_demo'
         && /sinusoid/i.test(demoText)
@@ -6749,7 +6958,6 @@ function hydrateInteractiveDemos(root) {
     const chapterOneDemoType = inferChapterOneDemoType(demo);
     const isChapterOneDemo = CHAPTER_ONE_DEMO_TYPES.has(chapterOneDemoType);
 
-    if (!isMatrixDemo && !isComplexPlaneDemo && !isPhasorDemo && !isSinusoidDemo && !isChapterOneDemo) return;
     node.dataset.hydrated = '1';
 
     if (isChapterOneDemo) {
@@ -7321,7 +7529,7 @@ function hydrateInteractiveDemos(root) {
     }
 
     if (isPhasorDemo) {
-      const spec = demo.demo_spec || {};
+      const spec = demoSpec || {};
       const controls = Array.isArray(spec.controls) ? spec.controls : [];
       const state = Object.create(null);
       controls.forEach((control) => {
@@ -7633,11 +7841,77 @@ function hydrateInteractiveDemos(root) {
       return;
     }
 
-    const controls = Array.isArray(demo.controls) ? demo.controls : [];
+    if (family === 'signal_transform') {
+      renderSignalTransformFallback(node, demo);
+      return;
+    }
+
+    if (family === 'energy_power') {
+      renderEnergyPowerFallback(node, demo);
+      return;
+    }
+
+    if (family === 'sampling_quantization') {
+      renderSamplingQuantizationFallback(node, demo);
+      return;
+    }
+
+    if (family === 'system_property') {
+      renderSystemPropertyFallback(node, demo);
+      return;
+    }
+
+    if (family === 'exponential_envelope') {
+      renderExponentialEnvelopeFallback(node, demo);
+      return;
+    }
+
+    if (family === 'matrix_locator') {
+      renderMatrixLocatorFallback(node, demo);
+      return;
+    }
+
+    if (family === 'parameter_response') {
+      renderParameterResponseFallback(node, demo);
+      return;
+    }
+
+    if (family === 'pointwise_multiplication') {
+      renderPointwiseMultiplicationFallback(node, demo);
+      return;
+    }
+
+    if (!isMatrixDemo) {
+      renderBriefDemoFallback(node, demo, family);
+      return;
+    }
+
+    const controls = demoControls.length ? demoControls.map(normalizeInteractiveDemoControl) : [
+      { key: 'rowsA', label: 'rows of A', min: 1, max: 5, step: 1, default: 2 },
+      { key: 'colsA', label: 'cols of A', min: 1, max: 5, step: 1, default: 3 },
+      { key: 'rowsB', label: 'rows of B', min: 1, max: 5, step: 1, default: 3 },
+      { key: 'colsB', label: 'cols of B', min: 1, max: 5, step: 1, default: 2 }
+    ];
     const state = Object.create(null);
     controls.forEach((control) => {
-      state[control.key] = Number(control.default ?? control.min ?? 1);
+      const labelText = String(control.label || control.key || '').toLowerCase();
+      const mappedKey = labelText.includes('rows of a') || /^m\b/.test(labelText)
+        ? 'rowsA'
+        : labelText.includes('cols of a') || labelText.includes('cols of a = rows of b') || /^n\b/.test(labelText)
+          ? 'colsA'
+          : labelText.includes('rows of b') || labelText.includes('override rows of b')
+            ? 'rowsB'
+            : labelText.includes('cols of b') || /^p\b/.test(labelText)
+              ? 'colsB'
+              : control.key;
+      control.key = mappedKey;
+      const defaultValue = control.default ?? (mappedKey === 'rowsA' ? 2 : mappedKey === 'colsA' ? 3 : mappedKey === 'rowsB' ? 3 : mappedKey === 'colsB' ? 2 : control.min ?? 1);
+      state[mappedKey] = Number(defaultValue);
     });
+    if (!Number.isFinite(Number(state.rowsA))) state.rowsA = 2;
+    if (!Number.isFinite(Number(state.colsA))) state.colsA = 3;
+    if (!Number.isFinite(Number(state.rowsB))) state.rowsB = 3;
+    if (!Number.isFinite(Number(state.colsB))) state.colsB = 2;
 
     node.innerHTML = `
       <section class="matrix-demo-shell">
@@ -7827,7 +8101,7 @@ function hydrateInteractiveDemos(root) {
       wrap.className = 'matrix-demo-control';
       const label = document.createElement('span');
       label.className = 'matrix-demo-control-label';
-      label.textContent = control.key;
+      label.textContent = control.label || control.key;
       const input = document.createElement('input');
       input.type = 'range';
       input.min = String(control.min ?? 1);
@@ -7852,6 +8126,1167 @@ function hydrateInteractiveDemos(root) {
     window.addEventListener('resize', rerender, { passive: true });
     render();
   });
+}
+
+function renderBriefDemoFallback(node, demo, family = 'brief') {
+  const title = getInteractiveDemoTitle(demo, 'Interactive demo');
+  const subtitle = getInteractiveDemoSubtitle(demo);
+  const mode = demo.mode_specific_visual_use || {};
+  const spec = getInteractiveDemoSpec(demo);
+  const tabs = [
+    ['cram', mode.cram || spec.student_prompt || subtitle || ''],
+    ['standard', mode.standard || spec.description || subtitle || ''],
+    ['top_score', mode.top_score || spec.note_below_demo || spec.what_to_notice || '']
+  ].filter(([, value]) => compactWhitespace(value));
+  const initialTab = tabs[0] ? tabs[0][0] : 'standard';
+
+  node.innerHTML = `
+    <section class="interactive-demo-shell interactive-demo-shell--brief interactive-demo-shell--${escapeHtml(family)}">
+      <div class="interactive-demo-head">
+        <div class="interactive-demo-title">${escapeHtml(title)}</div>
+        <div class="interactive-demo-subtitle">${escapeHtml(subtitle || 'This section is ready to teach, with a compact brief instead of a blank panel.')}</div>
+      </div>
+      ${tabs.length ? `
+        <div class="interactive-demo-tabs" role="tablist">
+          ${tabs.map(([key, label], index) => `<button type="button" class="interactive-demo-tab${key === initialTab ? ' is-active' : ''}" data-interactive-tab="${escapeHtml(key)}" aria-pressed="${key === initialTab ? 'true' : 'false'}">${escapeHtml(key.replace(/_/g, ' '))}</button>`).join('')}
+        </div>
+      ` : ''}
+      <div class="interactive-demo-brief-card">
+        <div class="interactive-demo-brief-label">Teaching emphasis</div>
+        <div class="interactive-demo-brief-copy" data-interactive-brief-copy>${escapeHtml(tabs.find(([key]) => key === initialTab)?.[1] || subtitle || '')}</div>
+      </div>
+      <div class="interactive-demo-readouts">
+        ${spec.note_below_demo ? `<div class="interactive-demo-readout"><strong>Note:</strong> ${decodeInlineMarkdownFragment(escapeHtml(spec.note_below_demo))}</div>` : ''}
+        ${spec.student_prompt ? `<div class="interactive-demo-readout"><strong>Prompt:</strong> ${escapeHtml(spec.student_prompt)}</div>` : ''}
+        ${spec.observation_prompt ? `<div class="interactive-demo-readout"><strong>Observe:</strong> ${escapeHtml(spec.observation_prompt)}</div>` : ''}
+      </div>
+    </section>
+  `;
+
+  const shellEl = node.querySelector('.interactive-demo-shell');
+  const copyEl = node.querySelector('[data-interactive-brief-copy]');
+  const tabsEl = node.querySelectorAll('[data-interactive-tab]');
+  const tabMap = new Map(tabs);
+  tabsEl.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      const key = tab.getAttribute('data-interactive-tab');
+      tabsEl.forEach((item) => {
+        const active = item === tab;
+        item.classList.toggle('is-active', active);
+        item.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+      if (copyEl) copyEl.textContent = tabMap.get(key) || '';
+    });
+  });
+  if (shellEl) shellEl.classList.toggle('is-narrow', shellEl.clientWidth < 760);
+}
+
+function renderSignalTransformFallback(node, demo) {
+  const title = getInteractiveDemoTitle(demo, 'Signal transform sandbox');
+  const subtitle = getInteractiveDemoSubtitle(demo) || 'Move the sliders and watch landmarks shift together.';
+  const titleText = `${title} ${subtitle} ${getInteractiveDemoText(demo)}`.toLowerCase();
+  const state = Object.create(null);
+  state.waveform = /unit step|window/.test(titleText) ? 'step'
+    : /periodic|periodicity|shift-test|does the shift match/.test(titleText) ? 'periodic'
+      : /mirror|reflection|flip/.test(titleText) ? 'pulse'
+        : /g\(at\+b\)|x\(at-b\)|landmark/.test(titleText) ? 'burst'
+          : 'pulse';
+  state.a = /reflection|mirror/.test(titleText) ? -1 : 2;
+  state.b = /unit step|window/.test(titleText) ? 1 : 1;
+
+  const baseSignal = (t) => {
+    switch (state.waveform) {
+      case 'step':
+        return t >= 0 ? 1 : 0;
+      case 'periodic':
+        return 0.65 * Math.cos(Math.PI * t) + 0.15 * Math.cos(3 * Math.PI * t);
+      case 'burst':
+        return t < -0.5 || t > 2.5 ? 0 : Math.exp(-0.35 * (t + 0.5)) * Math.cos(2.2 * Math.PI * (t + 0.5));
+      default:
+        if (t < -1 || t > 2) return 0;
+        if (t < 0) return t + 1;
+        if (t < 1) return 1 - 0.25 * t;
+        return Math.max(0, 0.75 - 0.75 * (t - 1));
+    }
+  };
+
+  const sample = (fn, minT, maxT, steps = 320) => Array.from({ length: steps + 1 }, (_, i) => {
+    const t = minT + ((maxT - minT) * i) / steps;
+    return { t, value: fn(t) };
+  });
+
+  node.innerHTML = `
+    <section class="interactive-demo-shell interactive-demo-shell--signal">
+      <div class="interactive-demo-head">
+        <div class="interactive-demo-title">${escapeHtml(title)}</div>
+        <div class="interactive-demo-subtitle">${escapeHtml(subtitle)}</div>
+      </div>
+      <div class="interactive-demo-grid">
+        <div class="interactive-demo-controls">
+          <label class="interactive-demo-control">
+            <span class="interactive-demo-control-label">Waveform</span>
+            <select class="interactive-demo-select" data-control="waveform">
+              <option value="pulse">Asymmetric pulse</option>
+              <option value="step">Unit step</option>
+              <option value="periodic">Periodic wave</option>
+              <option value="burst">Causal burst</option>
+            </select>
+          </label>
+          <label class="interactive-demo-control">
+            <span class="interactive-demo-control-label">a</span>
+            <div class="interactive-demo-slider-row">
+              <input type="range" min="-3" max="3" step="0.5" value="${state.a}" data-control="a">
+              <strong class="interactive-demo-control-value" data-value="a"></strong>
+            </div>
+          </label>
+          <label class="interactive-demo-control">
+            <span class="interactive-demo-control-label">b</span>
+            <div class="interactive-demo-slider-row">
+              <input type="range" min="-6" max="6" step="0.5" value="${state.b}" data-control="b">
+              <strong class="interactive-demo-control-value" data-value="b"></strong>
+            </div>
+          </label>
+          <div class="interactive-demo-brief-card">
+            <div class="interactive-demo-brief-label">Shift rule</div>
+            <div class="interactive-demo-brief-copy" data-copy="formula"></div>
+          </div>
+        </div>
+        <div class="interactive-demo-stage">
+          <canvas class="interactive-demo-canvas" height="320"></canvas>
+        </div>
+      </div>
+      <div class="interactive-demo-readouts">
+        <div class="interactive-demo-readout" data-readout="shift"></div>
+        <div class="interactive-demo-readout" data-readout="rule"></div>
+      </div>
+    </section>
+  `;
+
+  const canvas = node.querySelector('.interactive-demo-canvas');
+  const ctx = canvas && canvas.getContext ? canvas.getContext('2d') : null;
+  const shellEl = node.querySelector('.interactive-demo-shell');
+  const formulaEl = node.querySelector('[data-copy="formula"]');
+  const shiftReadout = node.querySelector('[data-readout="shift"]');
+  const ruleReadout = node.querySelector('[data-readout="rule"]');
+  const controls = {
+    waveform: node.querySelector('[data-control="waveform"]'),
+    a: node.querySelector('[data-control="a"]'),
+    b: node.querySelector('[data-control="b"]')
+  };
+  const values = {
+    a: node.querySelector('[data-value="a"]'),
+    b: node.querySelector('[data-value="b"]')
+  };
+
+  const draw = () => {
+    state.waveform = controls.waveform.value;
+    state.a = Number(controls.a.value);
+    state.b = Number(controls.b.value);
+    if (values.a) values.a.textContent = Number(state.a.toFixed(1)).toString();
+    if (values.b) values.b.textContent = Number(state.b.toFixed(1)).toString();
+
+    if (!ctx || !canvas) return;
+    const { width, height } = setupInteractiveDemoCanvas(canvas, ctx, 320, 340);
+    const panelH = Math.floor((height - 28) / 2);
+    const panels = [
+      { y: 12, label: 'x(t)', color: '#1d4ed8', fn: baseSignal },
+      { y: 12 + panelH + 12, label: 'y(t) = x(at - b)', color: '#0f766e', fn: (t) => baseSignal(state.a * t - state.b) }
+    ];
+    const xRange = { minT: -4, maxT: 6 };
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, width, height);
+
+    panels.forEach((panel) => {
+      const originY = panel.y + Math.round(panelH * 0.64);
+      const toX = (t) => 36 + ((t - xRange.minT) / (xRange.maxT - xRange.minT)) * (width - 72);
+      const yMin = -1.4;
+      const yMax = 1.4;
+      const toY = (v) => panel.y + panelH - 18 - ((v - yMin) / (yMax - yMin)) * (panelH - 30);
+      ctx.strokeStyle = '#dbe3f0';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(36, originY);
+      ctx.lineTo(width - 36, originY);
+      ctx.stroke();
+      ctx.strokeStyle = '#cbd5e1';
+      ctx.beginPath();
+      ctx.moveTo(36, panel.y + 10);
+      ctx.lineTo(36, panel.y + panelH - 10);
+      ctx.stroke();
+      ctx.fillStyle = '#334155';
+      ctx.font = '700 13px Quicksand, sans-serif';
+      ctx.fillText(panel.label, 44, panel.y + 18);
+      const points = sample(panel.fn, xRange.minT, xRange.maxT, 340);
+      ctx.strokeStyle = panel.color;
+      ctx.lineWidth = 2.8;
+      ctx.beginPath();
+      points.forEach((pt, index) => {
+        const x = toX(pt.t);
+        const y = toY(pt.value);
+        if (index === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+      const shift = state.a !== 0 ? state.b / state.a : 0;
+      const markerX = toX(shift);
+      ctx.strokeStyle = '#f59e0b';
+      ctx.setLineDash([5, 5]);
+      ctx.beginPath();
+      ctx.moveTo(markerX, panel.y + 12);
+      ctx.lineTo(markerX, panel.y + panelH - 18);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = '#475569';
+      ctx.fillText('t = b/a', markerX - 16, panel.y + 28);
+      if (panel.label === 'y(t) = x(at - b)') {
+        ctx.fillStyle = '#334155';
+        ctx.fillText(state.a < 0 ? 'time reversal' : 'time scaling', width - 140, panel.y + 18);
+      }
+    });
+
+    const shift = state.a !== 0 ? state.b / state.a : 0;
+    const formula = `y(t) = x(${Number(state.a.toFixed(2)).toString()}t ${state.b >= 0 ? '-' : '+'} ${Number(Math.abs(state.b).toFixed(2)).toString()})`;
+    if (formulaEl) formulaEl.textContent = formula;
+    if (shiftReadout) shiftReadout.innerHTML = `<strong>Effective shift:</strong> ${fmt(shift)} (${state.a >= 0 ? 'slide right when b > 0' : 'reflection plus shift'})`;
+    if (ruleReadout) ruleReadout.innerHTML = `<strong>Rule:</strong> when a is negative, the waveform flips before it shifts.`;
+  };
+
+  Object.values(controls).forEach((control) => control?.addEventListener('input', draw));
+  if (shellEl) shellEl.classList.toggle('is-narrow', shellEl.clientWidth < 760);
+  draw();
+}
+
+function renderEnergyPowerFallback(node, demo) {
+  const title = getInteractiveDemoTitle(demo, 'Energy vs Power');
+  const subtitle = getInteractiveDemoSubtitle(demo) || 'Watch the running energy and average power separate as T grows.';
+  const titleText = `${title} ${subtitle} ${getInteractiveDemoText(demo)}`.toLowerCase();
+  const state = {
+    signal: /cosine|power/.test(titleText) ? 'cosine' : /ramp/.test(titleText) ? 'ramp' : 'pulse',
+    T: 3,
+    a: 1.5,
+    omega: 2
+  };
+
+  const signalValue = (t) => {
+    switch (state.signal) {
+      case 'cosine':
+        return Math.cos(t);
+      case 'ramp':
+        return t >= 0 ? t : 0;
+      case 'real_exp':
+        return t >= 0 ? Math.exp(-state.a * t) : Math.exp(state.a * t);
+      default:
+        return t < 0 ? 0 : t <= 1 ? 1 : 0;
+    }
+  };
+  const sampleSignal = (fn, minT, maxT, steps = 240) => Array.from({ length: steps + 1 }, (_, i) => {
+    const t = minT + ((maxT - minT) * i) / steps;
+    return { t, value: fn(t) };
+  });
+
+  const classify = () => {
+    if (state.signal === 'pulse') return 'Energy signal';
+    if (state.signal === 'cosine') return 'Power signal';
+    return 'Neither';
+  };
+
+  const integrate = (halfWindow) => {
+    const dt = 0.01;
+    let energy = 0;
+    for (let t = -halfWindow; t <= halfWindow; t += dt) {
+      const v = signalValue(t);
+      energy += (v * v) * dt;
+    }
+    const power = halfWindow > 0 ? energy / (2 * halfWindow) : 0;
+    return { energy, power };
+  };
+
+  node.innerHTML = `
+    <section class="interactive-demo-shell interactive-demo-shell--energy">
+      <div class="interactive-demo-head">
+        <div class="interactive-demo-title">${escapeHtml(title)}</div>
+        <div class="interactive-demo-subtitle">${escapeHtml(subtitle)}</div>
+      </div>
+      <div class="interactive-demo-grid">
+        <div class="interactive-demo-controls">
+          <label class="interactive-demo-control">
+            <span class="interactive-demo-control-label">Signal</span>
+            <select class="interactive-demo-select" data-control="signal">
+              <option value="pulse">Finite pulse</option>
+              <option value="cosine">Cosine</option>
+              <option value="ramp">Ramp</option>
+              <option value="real_exp">Real exponential</option>
+            </select>
+          </label>
+          <label class="interactive-demo-control">
+            <span class="interactive-demo-control-label">Observation half-window T</span>
+            <div class="interactive-demo-slider-row">
+              <input type="range" min="0.5" max="6" step="0.1" value="${state.T}" data-control="T">
+              <strong class="interactive-demo-control-value" data-value="T"></strong>
+            </div>
+          </label>
+          <label class="interactive-demo-control" data-hidden="a">
+            <span class="interactive-demo-control-label">Real exponential a</span>
+            <div class="interactive-demo-slider-row">
+              <input type="range" min="0.25" max="4" step="0.05" value="${state.a}" data-control="a">
+              <strong class="interactive-demo-control-value" data-value="a"></strong>
+            </div>
+          </label>
+          <div class="interactive-demo-brief-card">
+            <div class="interactive-demo-brief-label">Classification</div>
+            <div class="interactive-demo-brief-copy" data-copy="classification"></div>
+          </div>
+        </div>
+        <div class="interactive-demo-stage">
+          <canvas class="interactive-demo-canvas" height="360"></canvas>
+        </div>
+      </div>
+      <div class="interactive-demo-readouts">
+        <div class="interactive-demo-readout" data-readout="energy"></div>
+        <div class="interactive-demo-readout" data-readout="power"></div>
+      </div>
+    </section>
+  `;
+
+  const canvas = node.querySelector('.interactive-demo-canvas');
+  const ctx = canvas && canvas.getContext ? canvas.getContext('2d') : null;
+  const shellEl = node.querySelector('.interactive-demo-shell');
+  const classificationEl = node.querySelector('[data-copy="classification"]');
+  const energyReadout = node.querySelector('[data-readout="energy"]');
+  const powerReadout = node.querySelector('[data-readout="power"]');
+  const controls = {
+    signal: node.querySelector('[data-control="signal"]'),
+    T: node.querySelector('[data-control="T"]'),
+    a: node.querySelector('[data-control="a"]')
+  };
+  const values = {
+    T: node.querySelector('[data-value="T"]'),
+    a: node.querySelector('[data-value="a"]')
+  };
+  const aControlWrap = node.querySelector('[data-hidden="a"]');
+
+  const update = () => {
+    state.signal = controls.signal.value;
+    state.T = Number(controls.T.value);
+    state.a = Number(controls.a.value);
+    if (values.T) values.T.textContent = fmt(state.T);
+    if (values.a) values.a.textContent = fmt(state.a);
+    if (aControlWrap) aControlWrap.hidden = state.signal !== 'real_exp';
+
+    const { energy, power } = integrate(state.T);
+    if (classificationEl) classificationEl.textContent = classify();
+    if (energyReadout) energyReadout.innerHTML = `<strong>Running energy:</strong> E(T) = ${fmt(energy)}`;
+    if (powerReadout) powerReadout.innerHTML = `<strong>Average power:</strong> P(T) = ${fmt(power)}`;
+
+    if (!ctx || !canvas) return;
+    const { width, height } = setupInteractiveDemoCanvas(canvas, ctx, 360, 360);
+    const panelH = Math.floor((height - 28) / 3);
+    const panelMeta = [
+      { y: 10, label: 'x(t)', color: '#1d4ed8' },
+      { y: 10 + panelH + 8, label: 'E(T)', color: '#0f766e' },
+      { y: 10 + (panelH + 8) * 2, label: 'P(T)', color: '#dc2626' }
+    ];
+
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, width, height);
+    const curveData = Array.from({ length: 240 }, (_, i) => {
+      const T = (6 * i) / 239;
+      const { energy: e, power: p } = integrate(T);
+      return { T, energy: e, power: p };
+    });
+    const energyMax = Math.max(...curveData.map((d) => d.energy), 1.1);
+    const powerMax = Math.max(...curveData.map((d) => d.power), 1.1);
+
+    const drawPanel = (meta, fn, yMin, yMax) => {
+      const left = 36;
+      const right = width - 22;
+      const top = meta.y + 20;
+      const bottom = meta.y + panelH - 16;
+      const midY = (top + bottom) / 2;
+      const toX = (t) => left + (t / 6) * (right - left);
+      const toY = (v) => bottom - ((v - yMin) / (yMax - yMin)) * (bottom - top);
+      ctx.strokeStyle = '#dbe3f0';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(left, midY);
+      ctx.lineTo(right, midY);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(left, top);
+      ctx.lineTo(left, bottom);
+      ctx.stroke();
+      ctx.fillStyle = '#334155';
+      ctx.font = '700 13px Quicksand, sans-serif';
+      ctx.fillText(meta.label, left + 4, meta.y + 14);
+      ctx.strokeStyle = meta.color;
+      ctx.lineWidth = 2.4;
+      ctx.beginPath();
+      curveData.forEach((d, index) => {
+        const x = toX(d.T);
+        const y = toY(fn(d));
+        if (index === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+      const cursorX = toX(state.T);
+      ctx.strokeStyle = '#f59e0b';
+      ctx.setLineDash([5, 5]);
+      ctx.beginPath();
+      ctx.moveTo(cursorX, top);
+      ctx.lineTo(cursorX, bottom);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = '#475569';
+      ctx.fillText(`T = ${fmt(state.T)}`, cursorX - 18, meta.y + 14);
+    };
+
+    const tMin = -4;
+    const tMax = 4;
+    drawPanel(panelMeta[0], (d) => signalValue(tMin + ((tMax - tMin) * d.T) / 6), -1.4, 1.4);
+    drawPanel(panelMeta[1], (d) => d.energy, 0, energyMax);
+    drawPanel(panelMeta[2], (d) => d.power, 0, powerMax);
+
+    const signalPoints = sampleSignal(signalValue, -4, 4, 360);
+    const xOffset = 0;
+    const axisTop = 18;
+    const axisBottom = 104;
+    ctx.strokeStyle = '#dbe3f0';
+    ctx.beginPath();
+    ctx.moveTo(width - 105, axisTop);
+    ctx.lineTo(width - 105, axisBottom);
+    ctx.stroke();
+    if (xOffset === 0) {
+      ctx.fillStyle = '#64748b';
+      ctx.font = '600 12px Quicksand, sans-serif';
+      ctx.fillText('signal preview', width - 130, axisTop + 12);
+    }
+    ctx.strokeStyle = '#1d4ed8';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    signalPoints.forEach((pt, index) => {
+      const x = width - 180 + ((pt.t + 4) / 8) * 140;
+      const y = axisBottom - ((pt.value + 1.4) / 2.8) * 70;
+      if (index === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+  };
+
+  Object.values(controls).forEach((control) => control?.addEventListener('input', update));
+  if (shellEl) shellEl.classList.toggle('is-narrow', shellEl.clientWidth < 760);
+  update();
+}
+
+function renderSamplingQuantizationFallback(node, demo) {
+  const title = getInteractiveDemoTitle(demo, 'Sampling and quantization');
+  const subtitle = getInteractiveDemoSubtitle(demo) || 'Change one axis at a time and the classification changes with it.';
+  const state = { timeMode: 'continuous', ampMode: 'continuous' };
+  const levels = [0.1, 0.35, 0.6, 0.85];
+  const quantize = (v) => levels.reduce((best, level) => (Math.abs(v - level) < Math.abs(v - best) ? level : best), levels[0]);
+  const sineVal = (i, total) => {
+    const t = i / (total - 1);
+    return 0.5 + 0.38 * Math.sin(2 * Math.PI * t * 1.5 - 0.4) + 0.08 * Math.sin(2 * Math.PI * t * 4);
+  };
+
+  node.innerHTML = `
+    <section class="interactive-demo-shell interactive-demo-shell--sampling">
+      <div class="interactive-demo-head">
+        <div class="interactive-demo-title">${escapeHtml(title)}</div>
+        <div class="interactive-demo-subtitle">${escapeHtml(subtitle)}</div>
+      </div>
+      <div class="interactive-demo-switch-row">
+        <div class="interactive-demo-switch-group">
+          <span class="interactive-demo-switch-label">Time axis</span>
+          <button type="button" class="interactive-demo-switch is-active" data-time-mode="continuous">Continuous</button>
+          <button type="button" class="interactive-demo-switch" data-time-mode="discrete">Discrete</button>
+        </div>
+        <div class="interactive-demo-switch-group">
+          <span class="interactive-demo-switch-label">Amplitude</span>
+          <button type="button" class="interactive-demo-switch is-active" data-amp-mode="continuous">Continuous</button>
+          <button type="button" class="interactive-demo-switch" data-amp-mode="quantized">Quantized</button>
+        </div>
+      </div>
+      <div class="interactive-demo-stage">
+        <canvas class="interactive-demo-canvas" height="280"></canvas>
+      </div>
+      <div class="interactive-demo-readouts">
+        <div class="interactive-demo-readout"><strong>Classification:</strong> <span data-readout="class"></span></div>
+        <div class="interactive-demo-readout">First inspect the horizontal axis, then inspect the vertical axis.</div>
+      </div>
+    </section>
+  `;
+
+  const canvas = node.querySelector('.interactive-demo-canvas');
+  const ctx = canvas && canvas.getContext ? canvas.getContext('2d') : null;
+  const classReadout = node.querySelector('[data-readout="class"]');
+  const timeButtons = node.querySelectorAll('[data-time-mode]');
+  const ampButtons = node.querySelectorAll('[data-amp-mode]');
+  const classificationFor = () => `${state.timeMode === 'continuous' ? 'Continuous-time' : 'Discrete-time'} ${state.ampMode === 'continuous' ? 'analog' : 'digital'}`;
+  const setButtons = (selector, value) => {
+    node.querySelectorAll(selector).forEach((button) => button.classList.toggle('is-active', button.getAttribute(selector === '[data-time-mode]' ? 'data-time-mode' : 'data-amp-mode') === value));
+  };
+
+  const draw = () => {
+    if (!ctx || !canvas) return;
+    const { width, height } = setupInteractiveDemoCanvas(canvas, ctx, 280, 340);
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, width, height);
+    const left = 42;
+    const right = width - 18;
+    const top = 22;
+    const bottom = height - 28;
+    const midY = (top + bottom) / 2;
+    const yScale = (bottom - top) / 8;
+    const drawGrid = (panelTop, panelBottom) => {
+      ctx.strokeStyle = '#e2e8f0';
+      for (let x = left; x <= right; x += 44) {
+        ctx.beginPath();
+        ctx.moveTo(x, panelTop);
+        ctx.lineTo(x, panelBottom);
+        ctx.stroke();
+      }
+    };
+    drawGrid(top, bottom);
+    ctx.strokeStyle = '#94a3b8';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(left, midY);
+    ctx.lineTo(right, midY);
+    ctx.stroke();
+    ctx.fillStyle = '#475569';
+    ctx.font = '700 13px Quicksand, sans-serif';
+    ctx.fillText('Time / samples', left, top + 16);
+    ctx.fillText('Amplitude', 10, top + 18);
+
+    const levelsY = levels.map((value) => midY - (value - 0.5) * yScale * 2.2);
+    if (state.ampMode === 'quantized') {
+      ctx.save();
+      ctx.setLineDash([4, 6]);
+      ctx.strokeStyle = '#b0b8c8';
+      levelsY.forEach((y) => {
+        ctx.beginPath();
+        ctx.moveTo(left, y);
+        ctx.lineTo(right, y);
+        ctx.stroke();
+      });
+      ctx.restore();
+    }
+
+    if (state.timeMode === 'continuous') {
+      ctx.strokeStyle = '#1d4ed8';
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      for (let i = 0; i <= 220; i += 1) {
+        const rawV = sineVal(i, 221);
+        const v = state.ampMode === 'quantized' ? quantize(rawV) : rawV;
+        const x = left + ((right - left) * i) / 220;
+        const y = midY - (v - 0.5) * yScale * 2.2;
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+    } else {
+      for (let i = 0; i < 16; i += 1) {
+        const rawV = sineVal(i, 16);
+        const v = state.ampMode === 'quantized' ? quantize(rawV) : rawV;
+        const x = left + ((right - left) * i) / 15;
+        const y = midY - (v - 0.5) * yScale * 2.2;
+        ctx.strokeStyle = '#1d4ed8';
+        ctx.lineWidth = 1.8;
+        ctx.beginPath();
+        ctx.moveTo(x, midY);
+        ctx.lineTo(x, y);
+        ctx.stroke();
+        ctx.fillStyle = '#1d4ed8';
+        ctx.beginPath();
+        ctx.arc(x, y, 4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+  };
+
+  timeButtons.forEach((button) => button.addEventListener('click', () => {
+    state.timeMode = button.getAttribute('data-time-mode');
+    setButtons('[data-time-mode]', state.timeMode);
+    if (classReadout) classReadout.textContent = classificationFor();
+    draw();
+  }));
+  ampButtons.forEach((button) => button.addEventListener('click', () => {
+    state.ampMode = button.getAttribute('data-amp-mode');
+    setButtons('[data-amp-mode]', state.ampMode);
+    if (classReadout) classReadout.textContent = classificationFor();
+    draw();
+  }));
+  if (classReadout) classReadout.textContent = classificationFor();
+  draw();
+  if (classReadout) classReadout.textContent = classificationFor();
+}
+
+function renderSystemPropertyFallback(node, demo) {
+  const title = getInteractiveDemoTitle(demo, 'System property tester');
+  const subtitle = getInteractiveDemoSubtitle(demo) || 'Compare two paths and watch whether the output curves agree.';
+  const text = `${title} ${subtitle} ${getInteractiveDemoText(demo)}`.toLowerCase();
+  const mode = /superposition|linear/.test(text) ? 'superposition'
+    : /causality/.test(text) ? 'causality'
+      : /bibo/.test(text) ? 'bibo'
+        : 'time_invariance';
+  const state = {
+    system: mode === 'superposition' ? 'linear' : mode === 'causality' ? 'future' : mode === 'bibo' ? 'bounded' : 'linear',
+    a: 2,
+    b: -1,
+    T: 1.5
+  };
+  const x1 = (t) => Math.sin(t);
+  const x2 = (t) => Math.cos(t);
+  const signal = (t) => Math.sin(t) + 0.4 * Math.cos(2 * t);
+  const applySystem = (x, t) => {
+    if (state.system === 'square') return x * x;
+    if (state.system === 'offset') return x + 1;
+    if (state.system === 'future') return signal(t + 1);
+    if (state.system === 'integrator') return t;
+    return 2 * x;
+  };
+  const systemOptions = mode === 'superposition'
+    ? [
+      ['linear', 'S{x}=2x'],
+      ['square', 'S{x}=x^2'],
+      ['offset', 'S{x}=x+1']
+    ]
+    : mode === 'causality'
+      ? [
+        ['linear', 'uses x(t)'],
+        ['future', 'uses x(t+1)']
+      ]
+      : mode === 'bibo'
+        ? [
+          ['bounded', 'bounded gain'],
+          ['integrator', 'unbounded ramp']
+        ]
+        : [
+          ['linear', 'time-invariant gain'],
+          ['square', 'nonlinear but time-invariant'],
+          ['future', 'time-varying look-ahead']
+        ];
+
+  node.innerHTML = `
+    <section class="interactive-demo-shell interactive-demo-shell--system">
+      <div class="interactive-demo-head">
+        <div class="interactive-demo-title">${escapeHtml(title)}</div>
+        <div class="interactive-demo-subtitle">${escapeHtml(subtitle)}</div>
+      </div>
+      <div class="interactive-demo-grid">
+        <div class="interactive-demo-controls">
+          <label class="interactive-demo-control">
+            <span class="interactive-demo-control-label">System</span>
+            <select class="interactive-demo-select" data-control="system">
+              ${systemOptions.map(([value, label]) => `<option value="${escapeHtml(value)}"${value === state.system ? ' selected' : ''}>${escapeHtml(label)}</option>`).join('')}
+            </select>
+          </label>
+          <label class="interactive-demo-control" data-control-wrap="a">
+            <span class="interactive-demo-control-label">a</span>
+            <div class="interactive-demo-slider-row"><input type="range" min="-3" max="3" step="0.1" value="${state.a}" data-control="a"><strong class="interactive-demo-control-value" data-value="a"></strong></div>
+          </label>
+          <label class="interactive-demo-control" data-control-wrap="b">
+            <span class="interactive-demo-control-label">b</span>
+            <div class="interactive-demo-slider-row"><input type="range" min="-3" max="3" step="0.1" value="${state.b}" data-control="b"><strong class="interactive-demo-control-value" data-value="b"></strong></div>
+          </label>
+          <label class="interactive-demo-control" data-control-wrap="T">
+            <span class="interactive-demo-control-label">Shift T</span>
+            <div class="interactive-demo-slider-row"><input type="range" min="-3" max="3" step="0.25" value="${state.T}" data-control="T"><strong class="interactive-demo-control-value" data-value="T"></strong></div>
+          </label>
+          <div class="interactive-demo-brief-card">
+            <div class="interactive-demo-brief-label">Verdict</div>
+            <div class="interactive-demo-brief-copy" data-copy="verdict"></div>
+          </div>
+        </div>
+        <div class="interactive-demo-stage"><canvas class="interactive-demo-canvas" height="300"></canvas></div>
+      </div>
+      <div class="interactive-demo-readouts">
+        <div class="interactive-demo-readout" data-readout="left"></div>
+        <div class="interactive-demo-readout" data-readout="right"></div>
+      </div>
+    </section>
+  `;
+
+  const canvas = node.querySelector('.interactive-demo-canvas');
+  const ctx = canvas && canvas.getContext ? canvas.getContext('2d') : null;
+  const controls = {
+    system: node.querySelector('[data-control="system"]'),
+    a: node.querySelector('[data-control="a"]'),
+    b: node.querySelector('[data-control="b"]'),
+    T: node.querySelector('[data-control="T"]')
+  };
+  const values = {
+    a: node.querySelector('[data-value="a"]'),
+    b: node.querySelector('[data-value="b"]'),
+    T: node.querySelector('[data-value="T"]')
+  };
+  const verdictEl = node.querySelector('[data-copy="verdict"]');
+  const leftEl = node.querySelector('[data-readout="left"]');
+  const rightEl = node.querySelector('[data-readout="right"]');
+
+  const update = () => {
+    state.system = controls.system.value;
+    state.a = Number(controls.a.value);
+    state.b = Number(controls.b.value);
+    state.T = Number(controls.T.value);
+    Object.entries(values).forEach(([key, el]) => { if (el) el.textContent = fmt(state[key]); });
+
+    const points = Array.from({ length: 260 }, (_, i) => {
+      const t = ((Math.PI * 2) * i) / 259;
+      let left;
+      let right;
+      if (mode === 'superposition') {
+        left = applySystem(state.a * x1(t) + state.b * x2(t), t);
+        right = state.a * applySystem(x1(t), t) + state.b * applySystem(x2(t), t);
+      } else if (mode === 'bibo') {
+        left = Math.sin(t);
+        right = state.system === 'integrator' ? t / 2 : 0.8 * Math.sin(t);
+      } else {
+        left = applySystem(signal(t - state.T), t);
+        right = applySystem(signal(t), t - state.T);
+      }
+      return { t, left, right, diff: Math.abs(left - right) };
+    });
+    const maxDiff = Math.max(...points.map((p) => p.diff));
+    const pass = maxDiff < 0.08 && state.system !== 'integrator';
+    if (verdictEl) verdictEl.textContent = pass ? 'Passes this visible test' : 'Fails this visible test';
+    if (leftEl) leftEl.innerHTML = `<strong>Path A:</strong> ${mode === 'superposition' ? 'S{a x1 + b x2}' : mode === 'bibo' ? 'bounded input' : 'shift then system'}`;
+    if (rightEl) rightEl.innerHTML = `<strong>Path B:</strong> ${mode === 'superposition' ? 'a S{x1} + b S{x2}' : mode === 'bibo' ? 'output behavior' : 'system then shift'}`;
+
+    if (!ctx || !canvas) return;
+    const { width, height } = setupInteractiveDemoCanvas(canvas, ctx, 300, 340);
+    const left = 42;
+    const right = width - 18;
+    const top = 24;
+    const bottom = height - 38;
+    const all = points.flatMap((p) => [p.left, p.right]);
+    const span = Math.max(1.5, Math.max(...all.map(Math.abs)));
+    const toX = (i) => left + (i / (points.length - 1)) * (right - left);
+    const toY = (v) => (top + bottom) / 2 - (v / span) * ((bottom - top) / 2 - 10);
+    ctx.strokeStyle = '#dbe3f0';
+    ctx.beginPath();
+    ctx.moveTo(left, (top + bottom) / 2);
+    ctx.lineTo(right, (top + bottom) / 2);
+    ctx.stroke();
+    ctx.fillStyle = '#334155';
+    ctx.font = '700 13px Quicksand, sans-serif';
+    ctx.fillText('Path comparison', left, top - 6);
+    [
+      ['left', '#0f766e', []],
+      ['right', '#1d4ed8', [6, 4]]
+    ].forEach(([key, color, dash]) => {
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2.6;
+      ctx.setLineDash(dash);
+      ctx.beginPath();
+      points.forEach((p, i) => {
+        const x = toX(i);
+        const y = toY(p[key]);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+    });
+    ctx.setLineDash([]);
+    ctx.fillStyle = pass ? '#166534' : '#991b1b';
+    ctx.font = '900 15px Quicksand, sans-serif';
+    ctx.fillText(pass ? 'curves overlap' : `max difference ${fmt(maxDiff)}`, left, bottom + 24);
+  };
+
+  Object.values(controls).forEach((control) => control?.addEventListener('input', update));
+  update();
+}
+
+function renderExponentialEnvelopeFallback(node, demo) {
+  const title = getInteractiveDemoTitle(demo, 'Exponential sketcher');
+  const subtitle = getInteractiveDemoSubtitle(demo) || 'Change the decay rate and frequency; the envelope tells you the sketch.';
+  const state = { a: 1, omega: 5, mode: 'decay', showEnvelope: true };
+
+  node.innerHTML = `
+    <section class="interactive-demo-shell interactive-demo-shell--exponential">
+      <div class="interactive-demo-head">
+        <div class="interactive-demo-title">${escapeHtml(title)}</div>
+        <div class="interactive-demo-subtitle">${escapeHtml(subtitle)}</div>
+      </div>
+      <div class="interactive-demo-grid">
+        <div class="interactive-demo-controls">
+          <label class="interactive-demo-control">
+            <span class="interactive-demo-control-label">a</span>
+            <div class="interactive-demo-slider-row"><input type="range" min="0.25" max="5" step="0.05" value="${state.a}" data-control="a"><strong class="interactive-demo-control-value" data-value="a"></strong></div>
+          </label>
+          <label class="interactive-demo-control">
+            <span class="interactive-demo-control-label">omega</span>
+            <div class="interactive-demo-slider-row"><input type="range" min="1" max="12" step="0.25" value="${state.omega}" data-control="omega"><strong class="interactive-demo-control-value" data-value="omega"></strong></div>
+          </label>
+          <label class="interactive-demo-control">
+            <span class="interactive-demo-control-label">Mode</span>
+            <select class="interactive-demo-select" data-control="mode">
+              <option value="decay">decay: e^(-at)</option>
+              <option value="growth">growth: e^(at)</option>
+              <option value="damped">damped sinusoid</option>
+            </select>
+          </label>
+          <label class="interactive-demo-check"><input type="checkbox" checked data-control="showEnvelope"> Show envelope</label>
+          <div class="interactive-demo-brief-card"><div class="interactive-demo-brief-label">Time constant</div><div class="interactive-demo-brief-copy" data-copy="tau"></div></div>
+        </div>
+        <div class="interactive-demo-stage"><canvas class="interactive-demo-canvas" height="300"></canvas></div>
+      </div>
+      <div class="interactive-demo-readouts"><div class="interactive-demo-readout" data-readout="note"></div></div>
+    </section>
+  `;
+
+  const canvas = node.querySelector('.interactive-demo-canvas');
+  const ctx = canvas && canvas.getContext ? canvas.getContext('2d') : null;
+  const controls = {
+    a: node.querySelector('[data-control="a"]'),
+    omega: node.querySelector('[data-control="omega"]'),
+    mode: node.querySelector('[data-control="mode"]'),
+    showEnvelope: node.querySelector('[data-control="showEnvelope"]')
+  };
+  const values = {
+    a: node.querySelector('[data-value="a"]'),
+    omega: node.querySelector('[data-value="omega"]')
+  };
+  const tauEl = node.querySelector('[data-copy="tau"]');
+  const noteEl = node.querySelector('[data-readout="note"]');
+  const update = () => {
+    state.a = Number(controls.a.value);
+    state.omega = Number(controls.omega.value);
+    state.mode = controls.mode.value;
+    state.showEnvelope = controls.showEnvelope.checked;
+    if (values.a) values.a.textContent = fmt(state.a);
+    if (values.omega) values.omega.textContent = fmt(state.omega);
+    const tau = 1 / state.a;
+    if (tauEl) tauEl.textContent = `T = 1/a = ${fmt(tau)} s`;
+    if (noteEl) noteEl.innerHTML = `<strong>Landmark:</strong> at one time constant, decay reaches about 1/e = 0.37 of the starting value.`;
+
+    if (!ctx || !canvas) return;
+    const { width, height } = setupInteractiveDemoCanvas(canvas, ctx, 300, 340);
+    const left = 42;
+    const right = width - 18;
+    const top = 26;
+    const bottom = height - 36;
+    const toX = (t) => left + (t / 5) * (right - left);
+    const yMax = state.mode === 'growth' ? Math.min(Math.exp(state.a * 5), 20) : 1.15;
+    const toY = (v) => bottom - ((v + yMax) / (2 * yMax)) * (bottom - top);
+    ctx.strokeStyle = '#dbe3f0';
+    ctx.beginPath();
+    ctx.moveTo(left, (top + bottom) / 2);
+    ctx.lineTo(right, (top + bottom) / 2);
+    ctx.stroke();
+    ctx.fillStyle = '#334155';
+    ctx.font = '700 13px Quicksand, sans-serif';
+    ctx.fillText('t', right - 8, (top + bottom) / 2 - 8);
+    if (state.showEnvelope) {
+      ctx.strokeStyle = '#0f766e';
+      ctx.setLineDash([6, 4]);
+      [1, -1].forEach((sign) => {
+        ctx.beginPath();
+        for (let i = 0; i <= 260; i += 1) {
+          const t = (5 * i) / 260;
+          const env = sign * (state.mode === 'growth' ? Math.exp(state.a * t) : Math.exp(-state.a * t));
+          const x = toX(t);
+          const y = toY(Math.max(-yMax, Math.min(yMax, env)));
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      });
+      ctx.setLineDash([]);
+    }
+    ctx.strokeStyle = '#1d4ed8';
+    ctx.lineWidth = 2.7;
+    ctx.beginPath();
+    for (let i = 0; i <= 360; i += 1) {
+      const t = (5 * i) / 360;
+      const env = state.mode === 'growth' ? Math.exp(state.a * t) : Math.exp(-state.a * t);
+      const val = state.mode === 'damped' ? env * Math.cos(state.omega * t) : env;
+      const x = toX(t);
+      const y = toY(Math.max(-yMax, Math.min(yMax, val)));
+      if (i === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    const tauX = toX(Math.min(tau, 5));
+    ctx.strokeStyle = '#f59e0b';
+    ctx.setLineDash([5, 5]);
+    ctx.beginPath();
+    ctx.moveTo(tauX, top);
+    ctx.lineTo(tauX, bottom);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#475569';
+    ctx.fillText('T=1/a', tauX + 6, top + 16);
+  };
+
+  Object.values(controls).forEach((control) => control?.addEventListener('input', update));
+  update();
+}
+
+function renderMatrixLocatorFallback(node, demo) {
+  const title = getInteractiveDemoTitle(demo, 'Matrix entry locator');
+  const subtitle = getInteractiveDemoSubtitle(demo) || 'Row index first, column index second.';
+  const state = { m: 3, n: 4, i: 2, j: 3 };
+  node.innerHTML = `
+    <section class="interactive-demo-shell interactive-demo-shell--matrix-locator">
+      <div class="interactive-demo-head"><div class="interactive-demo-title">${escapeHtml(title)}</div><div class="interactive-demo-subtitle">${escapeHtml(subtitle)}</div></div>
+      <div class="interactive-demo-grid">
+        <div class="interactive-demo-controls">
+          ${['m','n','i','j'].map((key) => `<label class="interactive-demo-control"><span class="interactive-demo-control-label">${key === 'm' ? 'Rows m' : key === 'n' ? 'Columns n' : key === 'i' ? 'Row index i' : 'Column index j'}</span><div class="interactive-demo-slider-row"><input type="range" min="1" max="5" step="1" value="${state[key]}" data-control="${key}"><strong class="interactive-demo-control-value" data-value="${key}"></strong></div></label>`).join('')}
+          <div class="interactive-demo-brief-card"><div class="interactive-demo-brief-label">Selected entry</div><div class="interactive-demo-brief-copy" data-copy="entry"></div></div>
+        </div>
+        <div class="interactive-demo-stage"><canvas class="interactive-demo-canvas" height="300"></canvas></div>
+      </div>
+    </section>
+  `;
+  const canvas = node.querySelector('.interactive-demo-canvas');
+  const ctx = canvas && canvas.getContext ? canvas.getContext('2d') : null;
+  const controls = Object.fromEntries(['m','n','i','j'].map((key) => [key, node.querySelector(`[data-control="${key}"]`)]));
+  const values = Object.fromEntries(['m','n','i','j'].map((key) => [key, node.querySelector(`[data-value="${key}"]`)]));
+  const entryEl = node.querySelector('[data-copy="entry"]');
+  const update = () => {
+    state.m = Number(controls.m.value);
+    state.n = Number(controls.n.value);
+    state.i = Math.min(Number(controls.i.value), state.m);
+    state.j = Math.min(Number(controls.j.value), state.n);
+    controls.i.max = String(state.m);
+    controls.j.max = String(state.n);
+    controls.i.value = String(state.i);
+    controls.j.value = String(state.j);
+    Object.entries(values).forEach(([key, el]) => { if (el) el.textContent = String(state[key]); });
+    if (entryEl) entryEl.textContent = `a_${state.i}${state.j}: row ${state.i}, column ${state.j}`;
+    if (!ctx || !canvas) return;
+    const { width, height } = setupInteractiveDemoCanvas(canvas, ctx, 300, 340);
+    const cell = Math.min(56, Math.floor((Math.min(width - 120, height - 70)) / Math.max(state.m, state.n)));
+    const startX = Math.max(70, Math.floor((width - state.n * cell) / 2));
+    const startY = Math.max(48, Math.floor((height - state.m * cell) / 2));
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, width, height);
+    ctx.font = '800 13px Quicksand, sans-serif';
+    ctx.textAlign = 'center';
+    for (let c = 0; c < state.n; c += 1) {
+      ctx.fillStyle = '#64748b';
+      ctx.fillText(String(c + 1), startX + c * cell + cell / 2, startY - 12);
+    }
+    for (let r = 0; r < state.m; r += 1) {
+      ctx.fillStyle = '#64748b';
+      ctx.fillText(String(r + 1), startX - 22, startY + r * cell + cell / 2 + 5);
+      for (let c = 0; c < state.n; c += 1) {
+        const active = r === state.i - 1 && c === state.j - 1;
+        ctx.fillStyle = active ? '#ccfbf1' : '#ffffff';
+        ctx.strokeStyle = active ? '#0f766e' : '#cbd5e1';
+        ctx.lineWidth = active ? 3 : 1.5;
+        ctx.fillRect(startX + c * cell, startY + r * cell, cell, cell);
+        ctx.strokeRect(startX + c * cell, startY + r * cell, cell, cell);
+        ctx.fillStyle = active ? '#0f766e' : '#334155';
+        ctx.fillText(`a${r + 1}${c + 1}`, startX + c * cell + cell / 2, startY + r * cell + cell / 2 + 5);
+      }
+    }
+  };
+  Object.values(controls).forEach((control) => control?.addEventListener('input', update));
+  update();
+}
+
+function renderParameterResponseFallback(node, demo) {
+  const title = getInteractiveDemoTitle(demo, 'DC motor parameter response');
+  const subtitle = getInteractiveDemoSubtitle(demo) || 'Move one parameter at a time and watch only one aspect of the response change.';
+  const state = { K_T: 1, J: 1.6, B: 1.4 };
+  node.innerHTML = `
+    <section class="interactive-demo-shell interactive-demo-shell--parameter-response">
+      <div class="interactive-demo-head"><div class="interactive-demo-title">${escapeHtml(title)}</div><div class="interactive-demo-subtitle">${escapeHtml(subtitle)}</div></div>
+      <div class="interactive-demo-grid">
+        <div class="interactive-demo-controls">
+          ${[
+            ['K_T', 'Drive gain K_T', 0.5, 4, 0.05, state.K_T],
+            ['J', 'Inertia J', 0.5, 4, 0.05, state.J],
+            ['B', 'Damping B', 0.5, 4, 0.05, state.B]
+          ].map(([key, label, min, max, step, value]) => `
+            <label class="interactive-demo-control">
+              <span class="interactive-demo-control-label">${escapeHtml(label)}</span>
+              <div class="interactive-demo-slider-row"><input type="range" min="${min}" max="${max}" step="${step}" value="${value}" data-control="${key}"><strong class="interactive-demo-control-value" data-value="${key}"></strong></div>
+            </label>
+          `).join('')}
+          <div class="interactive-demo-brief-card"><div class="interactive-demo-brief-label">Read this first</div><div class="interactive-demo-brief-copy" data-copy="summary"></div></div>
+        </div>
+        <div class="interactive-demo-stage"><canvas class="interactive-demo-canvas" height="300"></canvas></div>
+      </div>
+      <div class="interactive-demo-readouts">
+        <div class="interactive-demo-readout" data-readout="gain"></div>
+        <div class="interactive-demo-readout" data-readout="tau"></div>
+      </div>
+    </section>
+  `;
+  const canvas = node.querySelector('.interactive-demo-canvas');
+  const ctx = canvas && canvas.getContext ? canvas.getContext('2d') : null;
+  const controls = {
+    K_T: node.querySelector('[data-control="K_T"]'),
+    J: node.querySelector('[data-control="J"]'),
+    B: node.querySelector('[data-control="B"]')
+  };
+  const values = {
+    K_T: node.querySelector('[data-value="K_T"]'),
+    J: node.querySelector('[data-value="J"]'),
+    B: node.querySelector('[data-value="B"]')
+  };
+  const summaryEl = node.querySelector('[data-copy="summary"]');
+  const gainEl = node.querySelector('[data-readout="gain"]');
+  const tauEl = node.querySelector('[data-readout="tau"]');
+  const update = () => {
+    state.K_T = Number(controls.K_T.value);
+    state.J = Number(controls.J.value);
+    state.B = Number(controls.B.value);
+    Object.entries(values).forEach(([key, el]) => { if (el) el.textContent = fmt(state[key]); });
+    const gain = state.K_T / Math.max(state.B, 0.1);
+    const tau = state.J / Math.max(state.B, 0.1);
+    if (summaryEl) summaryEl.textContent = 'Change one parameter, then read the shape: gain, speed, and damping separate cleanly.';
+    if (gainEl) gainEl.innerHTML = `<strong>Steady gain:</strong> ${fmt(gain)} (mostly set by K_T and B)`;
+    if (tauEl) tauEl.innerHTML = `<strong>Time constant:</strong> ${fmt(tau)} s (mostly set by J and B)`;
+    if (!ctx || !canvas) return;
+    const { width, height } = setupInteractiveDemoCanvas(canvas, ctx, 300, 340);
+    const left = 42;
+    const right = width - 18;
+    const top = 26;
+    const bottom = height - 36;
+    const toX = (t) => left + (t / 6) * (right - left);
+    const response = Array.from({ length: 300 }, (_, i) => {
+      const t = (6 * i) / 299;
+      return gain * (1 - Math.exp(-t / Math.max(tau, 0.2)));
+    });
+    const yMax = Math.max(2, ...response) * 1.1;
+    const toY = (v) => bottom - (v / yMax) * (bottom - top);
+    ctx.strokeStyle = '#dbe3f0';
+    ctx.beginPath();
+    ctx.moveTo(left, bottom);
+    ctx.lineTo(right, bottom);
+    ctx.stroke();
+    ctx.fillStyle = '#334155';
+    ctx.font = '700 13px Quicksand, sans-serif';
+    ctx.fillText('step response', left, top - 2);
+    ctx.strokeStyle = '#1d4ed8';
+    ctx.lineWidth = 2.6;
+    ctx.beginPath();
+    response.forEach((value, index) => {
+      const x = toX((6 * index) / 299);
+      const y = toY(value);
+      if (index === 0) ctx.moveTo(x, y);
+      else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+    const tauX = toX(Math.min(tau, 6));
+    ctx.strokeStyle = '#0f766e';
+    ctx.setLineDash([5, 5]);
+    ctx.beginPath();
+    ctx.moveTo(tauX, top);
+    ctx.lineTo(tauX, bottom);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#0f766e';
+    ctx.fillText('t = tau', tauX + 6, top + 16);
+  };
+  Object.values(controls).forEach((control) => control?.addEventListener('input', update));
+  update();
+}
+
+function renderPointwiseMultiplicationFallback(node, demo) {
+  const title = getInteractiveDemoTitle(demo, 'Point-by-point multiplication');
+  const subtitle = getInteractiveDemoSubtitle(demo) || 'Each sample multiplies only its matching sample.';
+  const state = { a: 10, mismatch: false, highlight: true };
+  const f = (t) => Math.sin(2 * Math.PI * t) + 0.35 * Math.cos(6 * Math.PI * t);
+  const g = (t) => Math.exp(-state.a * t);
+  node.innerHTML = `
+    <section class="interactive-demo-shell interactive-demo-shell--pointwise">
+      <div class="interactive-demo-head"><div class="interactive-demo-title">${escapeHtml(title)}</div><div class="interactive-demo-subtitle">${escapeHtml(subtitle)}</div></div>
+      <div class="interactive-demo-grid">
+        <div class="interactive-demo-controls">
+          <label class="interactive-demo-control">
+            <span class="interactive-demo-control-label">Decay rate a</span>
+            <div class="interactive-demo-slider-row"><input type="range" min="1" max="30" step="0.5" value="${state.a}" data-control="a"><strong class="interactive-demo-control-value" data-value="a"></strong></div>
+          </label>
+          <label class="interactive-demo-check"><input type="checkbox" data-control="mismatch"> Vector orientation mismatch</label>
+          <label class="interactive-demo-check"><input type="checkbox" checked data-control="highlight"> Highlight one sample</label>
+          <div class="interactive-demo-brief-card"><div class="interactive-demo-brief-label">Formula</div><div class="interactive-demo-brief-copy" data-copy="formula"></div></div>
+        </div>
+        <div class="interactive-demo-stage"><canvas class="interactive-demo-canvas" height="300"></canvas></div>
+      </div>
+      <div class="interactive-demo-readouts">
+        <div class="interactive-demo-readout" data-readout="status"></div>
+      </div>
+    </section>
+  `;
+  const canvas = node.querySelector('.interactive-demo-canvas');
+  const ctx = canvas && canvas.getContext ? canvas.getContext('2d') : null;
+  const controls = {
+    a: node.querySelector('[data-control="a"]'),
+    mismatch: node.querySelector('[data-control="mismatch"]'),
+    highlight: node.querySelector('[data-control="highlight"]')
+  };
+  const values = { a: node.querySelector('[data-value="a"]') };
+  const formulaEl = node.querySelector('[data-copy="formula"]');
+  const statusEl = node.querySelector('[data-readout="status"]');
+  const update = () => {
+    state.a = Number(controls.a.value);
+    state.mismatch = controls.mismatch.checked;
+    state.highlight = controls.highlight.checked;
+    if (values.a) values.a.textContent = fmt(state.a);
+    if (formulaEl) formulaEl.textContent = 'h(t) = f(t) g(t), sample by sample';
+    if (statusEl) statusEl.innerHTML = state.mismatch
+      ? '<strong>Mismatch:</strong> row versus column orientation does not line up.'
+      : '<strong>Match:</strong> each output sample uses the matching input samples only.';
+
+    if (!ctx || !canvas) return;
+    const { width, height } = setupInteractiveDemoCanvas(canvas, ctx, 300, 340);
+    const left = 42;
+    const right = width - 18;
+    const top = 24;
+    const bottom = height - 36;
+    const toX = (t) => left + (t / 3) * (right - left);
+    const toY = (v) => (top + bottom) / 2 - v * 40;
+    const samples = Array.from({ length: 240 }, (_, i) => {
+      const t = (3 * i) / 239;
+      return { t, f: f(t), g: g(t), h: f(t) * g(t) };
+    });
+    ctx.strokeStyle = '#dbe3f0';
+    ctx.beginPath();
+    ctx.moveTo(left, (top + bottom) / 2);
+    ctx.lineTo(right, (top + bottom) / 2);
+    ctx.stroke();
+    const curves = [
+      ['f', '#1d4ed8', []],
+      ['g', '#0f766e', [6, 4]],
+      ['h', '#dc2626', [2, 3]]
+    ];
+    curves.forEach(([key, color, dash]) => {
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2.2;
+      ctx.setLineDash(dash);
+      ctx.beginPath();
+      samples.forEach((sample, index) => {
+        const x = toX(sample.t);
+        const y = toY(sample[key]);
+        if (index === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      });
+      ctx.stroke();
+    });
+    ctx.setLineDash([]);
+    if (state.highlight) {
+      const idx = 120;
+      const sample = samples[idx];
+      const x = toX(sample.t);
+      ctx.strokeStyle = '#f59e0b';
+      ctx.setLineDash([5, 5]);
+      ctx.beginPath();
+      ctx.moveTo(x, top + 10);
+      ctx.lineTo(x, bottom);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = '#f59e0b';
+      ctx.fillText('k', x - 2, top + 16);
+    }
+  };
+  Object.values(controls).forEach((control) => control?.addEventListener('input', update));
+  update();
 }
 
 function resetLearnKnowledgePointState() {

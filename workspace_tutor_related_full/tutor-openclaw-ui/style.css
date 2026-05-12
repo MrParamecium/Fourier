@@ -9114,6 +9114,219 @@ body.learn-resizing .learn-resizer::before {
   overflow-x: auto;
 }
 
+.interactive-demo-shell {
+  border: 2px solid rgba(191, 219, 254, 0.95);
+  border-radius: 16px;
+  background:
+    linear-gradient(rgba(226, 232, 240, 0.38) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(226, 232, 240, 0.38) 1px, transparent 1px),
+    #fffefa;
+  background-size: 20px 20px;
+  box-shadow: 4px 7px 0 #dbeafe;
+  box-sizing: border-box;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  padding: 18px;
+}
+
+.interactive-demo-head {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.interactive-demo-title {
+  color: var(--text);
+  font-family: "Quicksand", "Nunito", sans-serif;
+  font-size: 1.24rem;
+  font-weight: 900;
+  line-height: 1.25;
+}
+
+.interactive-demo-subtitle {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.interactive-demo-grid {
+  display: grid;
+  grid-template-columns: minmax(210px, 280px) minmax(0, 1fr);
+  gap: 16px;
+  align-items: stretch;
+  min-width: 0;
+}
+
+.interactive-demo-shell.is-narrow .interactive-demo-grid,
+.interactive-demo-shell--brief .interactive-demo-grid {
+  grid-template-columns: 1fr;
+}
+
+.interactive-demo-controls,
+.interactive-demo-stage,
+.interactive-demo-readouts,
+.interactive-demo-brief-card,
+.interactive-demo-switch-row {
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(203, 213, 225, 0.9);
+  border-radius: 12px;
+  box-shadow: 0 2px 0 rgba(226, 232, 240, 0.85);
+}
+
+.interactive-demo-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+}
+
+.interactive-demo-control {
+  display: grid;
+  gap: 7px;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.interactive-demo-control-label {
+  color: #475569;
+}
+
+.interactive-demo-slider-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 46px;
+  gap: 10px;
+  align-items: center;
+}
+
+.interactive-demo-slider-row input {
+  width: 100%;
+  accent-color: #2563eb;
+}
+
+.interactive-demo-control-value {
+  color: #1d4ed8;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.interactive-demo-select {
+  appearance: none;
+  background: #ffffff;
+  border: 2px solid #cbd5e1;
+  border-radius: 10px;
+  color: #334155;
+  font: inherit;
+  min-height: 38px;
+  padding: 7px 10px;
+  width: 100%;
+}
+
+.interactive-demo-stage {
+  min-width: 0;
+  overflow: hidden;
+  padding: 10px;
+}
+
+.interactive-demo-canvas {
+  background: #ffffff;
+  border: 1px solid rgba(203, 213, 225, 0.85);
+  border-radius: 10px;
+  display: block;
+  max-width: 100%;
+  width: 100%;
+}
+
+.interactive-demo-readouts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+  padding: 12px;
+}
+
+.interactive-demo-readout {
+  color: #475569;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.interactive-demo-readout strong {
+  color: #0f172a;
+}
+
+.interactive-demo-brief-card {
+  padding: 12px 14px;
+}
+
+.interactive-demo-brief-label {
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.interactive-demo-brief-copy {
+  color: #1e293b;
+  font-size: 0.95rem;
+  font-weight: 750;
+  line-height: 1.55;
+}
+
+.interactive-demo-tabs,
+.interactive-demo-switch-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 10px;
+}
+
+.interactive-demo-tab,
+.interactive-demo-switch {
+  background: #f8fafc;
+  border: 2px solid #cbd5e1;
+  border-radius: 999px;
+  color: #475569;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 900;
+  min-height: 32px;
+  padding: 6px 12px;
+  text-transform: capitalize;
+}
+
+.interactive-demo-tab.is-active,
+.interactive-demo-switch.is-active {
+  background: #dbeafe;
+  border-color: #60a5fa;
+  color: #1e3a8a;
+}
+
+.interactive-demo-switch-group {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.interactive-demo-switch-label {
+  color: #334155;
+  font-size: 13px;
+  font-weight: 900;
+  margin-right: 2px;
+}
+
+@media (max-width: 760px) {
+  .interactive-demo-grid,
+  .interactive-demo-readouts {
+    grid-template-columns: 1fr;
+  }
+}
+
 .chapter-demo-shell {
   border: 1px solid rgba(148, 163, 184, 0.45);
   border-radius: 14px;
