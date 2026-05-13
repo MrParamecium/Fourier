@@ -1,0 +1,61 @@
+17
+
+B.2 Sinusoids
+
+Im
+
+Re
+
+$a$
+
+$-b$
+
+$\theta$
+
+$C$
+
+Fig. B.7 Phasor addition of sinusoids.
+
+Therefore,
+
+$$
+C=\sqrt{a^2+b^2}
+\qquad \text{(B.23b)}
+$$
+
+$$
+\theta=\tan^{-1}\left(\frac{-b}{a}\right)
+\qquad \text{(B.23c)}
+$$
+
+Equations (B.23b) and (B.23c) show that $C$ and $\theta$ are the magnitude and angle, respectively, of a complex number $a-jb$. In other words, $a-jb=C e^{j\theta}$. Hence, to find $C$ and $\theta$, we convert $a-jb$ to polar form and the magnitude and the angle of the resulting polar number are $C$ and $\theta$, respectively.
+
+To summarize,
+
+$$
+a\cos \omega_0 t+b\sin \omega t=C\cos(\omega_0 t+\theta)
+$$
+
+in which $C$ and $\theta$ are given by Eqs. (B.23b) and (B.23c), respectively. These happen to be the magnitude and angle, respectively, of $a-jb$.
+
+The process of adding two sinusoids with the same frequency can be clarified by using phasors to represent sinusoids. We represent the sinusoid $C\cos(\omega_0 t+\theta)$ by a phasor of length $C$ at an angle $\theta$ with the horizontal axis. Clearly, the sinusoid $a\cos \omega_0 t$ is represented by a horizontal phasor of length $a$ $(\theta=0)$, while $b\sin \omega t=b\cos(\omega t-\pi/2)$ is represented by a vertical phasor of length $b$ at an angle $-\pi/2$ with the horizontal (Fig. B.7). Adding these two phasors results in a phasor of length $C$ at an angle $\theta$, as depicted in Fig. B.7. From this figure, we verify the values of $C$ and $\theta$ found in Eqs. (B.23b) and (B.23c), respectively.
+
+Proper care should be exercised in computing $\theta$. Recall that $\tan^{-1}\left(\frac{-b}{a}\right)\ne \tan^{-1}\left(\frac{b}{-a}\right)$. Similarly, $\tan^{-1}\left(\frac{-b}{a}\right)\ne \tan^{-1}\left(\frac{-a}{b}\right)$. Electronic calculators cannot make this distinction. When calculating such an angle, it is advisable to note the quadrant where the angle lies and not to rely exclusively on an electronic calculator. A foolproof method is to convert the complex number $a-jb$ to polar form. The magnitude of the resulting polar number is $C$ and the angle is $\theta$. The following examples clarify this point.
+
+Example B.6
+
+In the following cases, express $f(t)$ as a single sinusoid:
+
+(a) $f(t)=\cos \omega_0 t-\sqrt{3}\sin \omega t$
+
+(b) $f(t)=-3\cos \omega_0 t+4\sin \omega t$
+
+(a) In this case, $a=1$, $b=-\sqrt{3}$, and from Eqs. (B.23)
+
+$$
+C=\sqrt{1^2+(\sqrt{3})^2}=2
+$$
+
+$$
+\theta=\tan^{-1}\left(\frac{\sqrt{3}}{1}\right)=60^\circ
+$$

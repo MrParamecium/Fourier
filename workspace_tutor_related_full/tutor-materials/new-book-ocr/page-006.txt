@@ -1,0 +1,52 @@
+6   CHAPTER B       BACKGROUND
+
+    To prove Euler’s formula, we use a Maclaurin series to expand ejθ , cos θ , and sin θ :
+
+                                       (jθ )2 (jθ )3 (jθ )4 (jθ )5 (jθ )6
+                          ejθ = 1 + jθ +     +      +      +      +       +· · ·
+                                         2!     3!     4!     5!     6!
+                                       θ2    θ3 θ4     θ5 θ6
+                             = 1 + jθ − − j + + j − − · · ·
+                                       2!     3! 4!     5! 6!
+                                   θ2 θ4 θ6 θ8
+                       cos θ = 1 − + − + · · ·
+                                    2! 4! 6! 8!
+                                    θ3 θ5 θ7
+                       sin θ = θ − + − + · · ·
+                                    3! 5! 7!
+    Clearly, it follows that ejθ = cos θ + j sin θ . Using Eq. (B.3) in Eq. (B.2) yields
+
+                                                     z = rejθ                                       (B.4)
+
+    This representation is the polar form of complex number z.
+         Summarizing, a complex number can be expressed in rectangular form a + jb or polar form
+    rejθ with                                                  √
+                                 a = r cos θ              r = a2 + b2
+                                                 and                                        (B.5)
+                                  b = r sin θ             θ = tan−1 ba
+    Observe that r is the distance of the point z from the origin. For this reason, r is also called the
+    magnitude (or absolute value) of z and is denoted by |z|. Similarly, θ is called the angle of z and is
+    denoted by  z. Therefore, we can also write polar form of Eq. (B.4) as
+                                           
+                                  z = |z|ej z      where |z| = r and  z = θ
+
+    Using polar form, we see that the reciprocal of a complex number is given by
+                                         1   1   1       1  
+                                           =    = e−jθ = e−j z
+                                         z rejθ  r      |z|
+
+    C ONJUGATE OF A C OMPLEX N UMBER
+    We define z∗ , the conjugate of z = a + jb, as
+                                                                     
+                                        z∗ = a − jb = re−jθ = |z|e−j z                              (B.6)
+
+    The graphical representations of a number z and its conjugate z∗ are depicted in Fig. B.2. Observe
+    that z∗ is a mirror image of z about the horizontal axis. To find the conjugate of any number, we
+    need only replace j with −j in that number (which is the same as changing the sign of its angle).
+         The sum of a complex number and its conjugate is a real number equal to twice the real part
+    of the number:
+                                 z + z∗ = (a + jb) + (a − jb) = 2a = 2 Re z
+    Thus, we see that the real part of complex number z can be computed as
+                                                          z + z∗
+                                                 Re z =                                             (B.7)
+                                                            2

@@ -1,0 +1,20 @@
+{
+  "subsection": "B.6-5",
+  "summary": "This page shows how a function of a matrix can be reduced from an infinite power series to a finite polynomial in the matrix of degree at most n-1, with coefficients determined from the matrix eigenvalues using a Vandermonde system. It then begins subsection B.6-5, introducing the computation of the matrix exponential e^{At} by applying this result with f(\\lambda)=e^{\\lambda t}.",
+  "keywords": [
+    "matrix functions",
+    "Vandermonde matrix",
+    "eigenvalues",
+    "polynomial representation",
+    "power series",
+    "matrix exponential",
+    "coefficients beta_i",
+    "Cayley-Hamilton-type reduction",
+    "computation of e^{At}",
+    "powers of a matrix"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-044",
+  "figures": []
+}

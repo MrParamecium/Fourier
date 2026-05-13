@@ -1,0 +1,99 @@
+
+/* Final final final: split overview controls must win over single-overview rules. */
+.learn-body.chapter-overview-split-active {
+  position: relative !important;
+}
+
+.learn-body.chapter-overview-split-active .learn-body-inner {
+  display: flex !important;
+  grid-template-columns: none !important;
+}
+
+.learn-body.chapter-overview-split-active .learn-book-col {
+  display: none !important;
+}
+
+.learn-body.chapter-overview-split-active .learn-explain-toolbar,
+.learn-body.chapter-overview-split-active .learn-chat-topbar {
+  display: block !important;
+  position: static !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+  pointer-events: none !important;
+  z-index: 100 !important;
+}
+
+.learn-body.chapter-overview-split-active .learn-explain-toggle-btn,
+.learn-body.chapter-overview-split-active #learnFocusBtn {
+  display: inline-flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  position: absolute !important;
+  top: 22px !important;
+  z-index: 140 !important;
+}
+
+.learn-body.chapter-overview-split-active .learn-explain-toggle-btn {
+  left: 20px !important;
+  right: auto !important;
+}
+
+.learn-body.chapter-overview-split-active #learnFocusBtn {
+  right: 20px !important;
+  left: auto !important;
+}
+
+.learn-body.chapter-overview-split-active[data-panel-focus="lecture-full"] #learnFocusBtn,
+.learn-body.chapter-overview-split-active[data-panel-focus="qa-full"] .learn-explain-toggle-btn {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.learn-body.chapter-overview-split-active .learn-explain-col,
+.learn-body.chapter-overview-split-active .learn-chat-col {
+  display: flex !important;
+  min-width: 0 !important;
+}
+
+.learn-body.chapter-overview-split-active .learn-explain-col {
+  border-right: 1px solid var(--border) !important;
+}
+
+.learn-body.chapter-overview-split-active .learn-resizer {
+  display: block !important;
+}
+
+.learn-body.chapter-overview-split-active .learn-followup-bar,
+.learn-body[data-panel-focus="normal"] .learn-chat-col .learn-followup-bar {
+  box-sizing: border-box !important;
+  width: calc(100% - 32px) !important;
+  max-width: calc(100% - 32px) !important;
+  margin: 0 16px 18px !important;
+}
+
+.learn-body.chapter-overview-split-active .learn-followup-bar .followup-bar-row,
+.learn-body[data-panel-focus="normal"] .learn-chat-col .learn-followup-bar .followup-bar-row {
+  width: 100% !important;
+  min-width: 0 !important;
+  grid-template-columns: 44px minmax(0, 1fr) 48px !important;
+  grid-template-areas:
+    "attach input send"
+    ". mode web" !important;
+}
+
+.learn-body.chapter-overview-split-active .learn-followup-input,
+.learn-body[data-panel-focus="normal"] .learn-chat-col .learn-followup-input {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+.learn-body[data-panel-focus="qa-wide"] .learn-followup-bar,
+.learn-body[data-panel-focus="qa-full"] .learn-followup-bar {
+  width: calc(100% - 52px) !important;
+  max-width: calc(100% - 52px) !important;
+  margin-inline: 26px !important;
+}

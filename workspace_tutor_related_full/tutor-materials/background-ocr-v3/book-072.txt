@@ -1,0 +1,76 @@
+72
+
+1 Introduction to Signals and Systems
+
+this derivative does exist in the generalized sense, and it is, in fact, $\delta(t)$. As a proof, let us evaluate the integral of $(du/dt)\phi(t)$, using integration by parts:
+
+$$
+\int_{-\infty}^{\infty}\frac{du}{dt}\phi(t)\,dt
+= u(t)\phi(t)\Big|_{-\infty}^{\infty} - \int_{-\infty}^{\infty}u(t)\dot{\phi}(t)\,dt
+\qquad (1.25)
+$$
+
+$$
+= \phi(\infty) - 0 - \int_{0}^{\infty}\dot{\phi}(t)\,dt
+$$
+
+$$
+= \phi(\infty) - \phi(t)\Big|_{0}^{\infty}
+$$
+
+$$
+= \phi(0)
+\qquad (1.26)
+$$
+
+This result shows that $du/dt$ satisfies the sampling property of $\delta(t)$. Therefore it is an impulse $\delta(t)$ in the generalized sense—that is,
+
+$$
+\frac{du}{dt} = \delta(t)
+\qquad (1.27)
+$$
+
+Consequently
+
+$$
+\int_{-\infty}^{t}\delta(\tau)\,d\tau = u(t)
+\qquad (1.28)
+$$
+
+These results can also be obtained graphically from Fig. 1.19b. We observe that the area from $-\infty$ to $t$ under the limiting form of $\delta(t)$ in Fig. 1.19b is zero if $t < 0$ and unity if $t \geq 0$. Consequently
+
+$$
+\int_{-\infty}^{t}\delta(\tau)\,d\tau =
+\begin{cases}
+0 & t < 0 \\
+1 & t \geq 0
+\end{cases}
+= u(t)
+\qquad (1.29)
+$$
+
+Derivatives of impulse function can also be defined as generalized functions (see Prob. 1.4-10).
+
+$\triangle$ Exercise E1.9  
+Show that
+
+(a) $(t^3 + 3)\delta(t) = 3\delta(t)$
+
+(b) $\left[\sin\left(t^2 - \frac{\pi}{2}\right)\right]\delta(t) = -\delta(t)$
+
+(c) $e^{-2t}\delta(t) = \delta(t)$
+
+(d) $\frac{\omega^2 + 1}{\omega^2 + 9}\,\delta(\omega - 1) = \frac{1}{5}\delta(\omega - 1)$
+
+Hint: Use Eqs. (1.23). $\triangledown$
+
+$\triangle$ Exercise E1.10  
+Show that
+
+(a) $\int_{-\infty}^{\infty}\delta(t)e^{-j\omega t}\,dt = 1$
+
+(b) $\int_{-\infty}^{\infty}\delta(t - 2)\cos\left(\frac{\pi t}{4}\right)\,dt = 0$
+
+(c) $\int_{-\infty}^{\infty} e^{-2(x-t)}\delta(2-t)\,dt = e^{-2(x-2)}$
+
+Hint: In part c recall that $\delta(x)$ is located at $x = 0$. Therefore $\delta(2 - t)$ is located at $2 - t = 0$; that is at $t = 2$. $\triangledown$

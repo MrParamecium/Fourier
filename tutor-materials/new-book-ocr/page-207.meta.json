@@ -1,0 +1,42 @@
+{
+  "chapter": "2",
+  "section": "2.6",
+  "subsection": "2.6-4",
+  "title": "Time Constant and Filtering",
+  "summary": "This page explains how a system’s time constant affects its responsiveness and filtering behavior. A large time constant leads to sluggish response and suppression of rapidly varying inputs, illustrating lowpass filtering with figure examples comparing high- and low-frequency sinusoidal inputs.",
+  "keywords": [
+    "time constant",
+    "filtering",
+    "lowpass filter",
+    "high-frequency sinusoid",
+    "system response",
+    "rise time",
+    "impulse response",
+    "Figure 2.22",
+    "Figure 2.23"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "page-207",
+  "figures": [
+    {
+      "fig_id": "Figure 2.22",
+      "top": 0.0732,
+      "left": 0.2,
+      "bottom": 0.1991,
+      "right": 0.6756,
+      "caption": "Rise time of a system: step input x(t), rectangular h(t), and ramp-to-constant output y(t)",
+      "crop_file": "page-207-figure_2_22.png"
+    },
+    {
+      "fig_id": "Figure 2.23",
+      "top": 0.36,
+      "left": 0.2144,
+      "bottom": 0.7068,
+      "right": 0.6111,
+      "caption": "Time constant and filtering: rectangular h(t), convolution-window views with high- and low-frequency sinusoids, and corresponding outputs",
+      "crop_file": "page-207-figure_2_23.png"
+    }
+  ],
+  "metadata_model": "openrouter:openai/gpt-5.4"
+}

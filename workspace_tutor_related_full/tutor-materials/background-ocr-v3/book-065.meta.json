@@ -1,0 +1,30 @@
+{
+  "subsection": "1.3-3",
+  "summary": "This page concludes an example of time expansion, showing how replacing t by t/2 stretches a signal in time and shifts key time instants accordingly. It then introduces time inversion (time reversal), explaining that reflecting a signal about the vertical axis produces the signal f(-t), illustrated by Fig. 1.12 and formalized in equation (1.19).",
+  "keywords": [
+    "signal operations",
+    "time expansion",
+    "time compression",
+    "sinusoid",
+    "frequency scaling",
+    "time inversion",
+    "time reversal",
+    "reflection",
+    "f(-t)",
+    "mirror image",
+    "continuous-time signals"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-065",
+  "figures": [
+    {
+      "fig_id": "Fig. 1.12",
+      "top": 0.0636,
+      "left": 0.1621,
+      "bottom": 0.2282,
+      "right": 0.4166,
+      "caption": "Two plots demonstrating time inversion of a signal. Plot (a) shows the original signal f(t). Plot (b) shows the time-inverted signal φ(t) = f(-t), which is a reflection of f(t) about the vertical axis."
+    }
+  ]
+}

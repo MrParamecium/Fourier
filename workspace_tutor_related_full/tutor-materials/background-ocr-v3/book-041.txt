@@ -1,0 +1,62 @@
+41
+
+B.6 Vectors and Matrices
+
+B.6-3 Derivatives and Integrals of a Matrix
+
+Elements of a matrix need not be constants; they may be functions of a variable. For example, if
+
+$$
+A=
+\begin{bmatrix}
+e^{-2t} & \sin t \\
+e^t & e^{-t}+e^{-2t}
+\end{bmatrix}
+\qquad (B.68)
+$$
+
+then the matrix elements are functions of $t$. Here, it is helpful to denote $A$ by $A(t)$. Also, it would be helpful to define the derivative and integral of $A(t)$.
+
+The derivative of a matrix $A(t)$ (with respect to $t$) is defined as a matrix whose $ij$th element is the derivative (with respect to $t$) of the $ij$th element of the matrix $A$. Thus, if
+
+$$A(t)=[a_{ij}(t)]_{m\times n}$$
+
+then
+
+$$\frac{d}{dt}[A(t)]=\left[\frac{d}{dt}a_{ij}(t)\right]_{m\times n} \qquad (B.69a)$$
+
+or
+
+$$\dot{A}(t)=[\dot{a}_{ij}(t)]_{m\times n} \qquad (B.69b)$$
+
+Thus, the derivative of the matrix in Eq. (B.68) is given by
+
+$$
+\dot{A}(t)=
+\begin{bmatrix}
+-2e^{-2t} & \cos t \\
+e^t & -e^{-t}-2e^{-2t}
+\end{bmatrix}
+$$
+
+Similarly, we define the integral of $A(t)$ (with respect to $t$) as a matrix whose $ij$th element is the integral (with respect to $t$) of the $ij$th element of the matrix $A$:
+
+$$\int A(t)\,dt=\left(\int a_{ij}(t)\,dt\right)_{m\times n} \qquad (B.70)$$
+
+Thus, for the matrix $A$ in Eq. (B.68), we have
+
+$$
+\int A(t)\,dt=
+\begin{bmatrix}
+\int e^{-2t}\,dt & \int \sin t\,dt \\
+\int e^t\,dt & \int (e^{-t}+2e^{-2t})\,dt
+\end{bmatrix}
+$$
+
+We can readily prove the following identities:
+
+$$\frac{d}{dt}(A+B)=\frac{dA}{dt}+\frac{dB}{dt} \qquad (B.71a)$$
+
+$$\frac{d}{dt}(cA)=c\frac{dA}{dt} \qquad (B.71b)$$
+
+$$\frac{d}{dt}(AB)=\frac{dA}{dt}B+A\frac{dB}{dt}=\dot{A}B+A\dot{B} \qquad (B.71c)$$

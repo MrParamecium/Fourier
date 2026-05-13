@@ -1,0 +1,18 @@
+{
+  "sectionId": "1.1",
+  "sourcePages": [
+    "page-064",
+    "page-065"
+  ],
+  "usedPages": [
+    "page-064",
+    "page-065"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "1.1 S IZE OF A S IGNAL",
+  "foundEnd": true,
+  "endBeforeLine": "1.1-1 Signal Energy",
+  "endBeforeCode": "1.1-1",
+  "charCount": 1051
+}

@@ -1,0 +1,84 @@
+B.5 Partial Fraction Expansion
+
+25
+
+Therefore, $F(x)$ can be expressed as
+
+$$
+F(x)=\frac{2x^3+9x^2+11x+2}{x^2+4x+3}
+= \underbrace{2x+1}_{\text{polynomial in }x}
++\underbrace{\frac{x-1}{x^2+4x+3}}_{\text{proper function}}
+\qquad \text{(B.34b)}
+$$
+
+A proper function can be further expanded into partial fractions. The remaining discussion in this section is concerned with various ways of doing this.
+
+B.5-1 Partial Fraction Expansion: Method of Clearing Fractions
+
+This method consists of writing a rational function as a sum of appropriate partial fractions with unknown coefficients, which are determined by clearing fractions and equating the coefficients of similar powers on the two sides. This procedure is demonstrated by the following example.
+
+Example B.8
+
+Expand the following rational function $F(x)$ into partial fractions:
+
+$$
+F(x)=\frac{x^3+3x^2+4x+6}{(x+1)(x+2)(x+3)^2}
+$$
+
+This function can be expressed as a sum of partial fractions with denominators $(x+1)$, $(x+2)$, $(x+3)$, and $(x+3)^2$, as shown below.
+
+$$
+F(x)=\frac{x^3+3x^2+4x+6}{(x+1)(x+2)(x+3)^2}
+=\frac{k_1}{x+1}+\frac{k_2}{x+2}+\frac{k_3}{x+3}+\frac{k_4}{(x+3)^2}
+$$
+
+To determine the unknowns $k_1$, $k_2$, $k_3$, and $k_4$ we clear fractions by multiplying both sides by $(x+1)(x+2)(x+3)^2$ to obtain
+
+$$
+x^3+3x^2+4x+6
+= k_1(x^3+8x^2+21x+18)+k_2(x^3+7x^2+15x+9)
+$$
+
+$$
+\qquad\qquad +\,k_3(x^3+6x^2+11x+6)+k_4(x^2+3x+2)
+$$
+
+$$
+= x^3(k_1+k_2+k_3)+x^2(8k_1+7k_2+6k_3+k_4)
+$$
+
+$$
+\qquad\qquad +\,x(21k_1+15k_2+11k_3+3k_4)+(18k_1+9k_2+6k_3+2k_4)
+$$
+
+Equating coefficients of similar powers on both sides yields
+
+$$
+k_1+k_2+k_3=1
+$$
+
+$$
+8k_1+7k_2+6k_3+k_4=3
+$$
+
+$$
+21k_1+15k_2+11k_3+3k_4=4
+$$
+
+$$
+18k_1+9k_2+6k_3+2k_4=6
+$$
+
+Solution of these four simultaneous equations yields
+
+$$
+k_1=1,\qquad k_2=-2,\qquad k_3=2,\qquad k_4=-3
+$$
+
+Therefore,
+
+$$
+F(x)=\frac{1}{x+1}-\frac{2}{x+2}+\frac{2}{x+3}-\frac{3}{(x+3)^2}
+$$
+
+Although this method is straightforward and applicable to all situations, it is not necessarily the most efficient. We now discuss other methods which can reduce numerical work considerably.

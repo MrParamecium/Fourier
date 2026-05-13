@@ -1,0 +1,40 @@
+{
+  "sectionId": "3.4",
+  "sourcePages": [
+    "page-253",
+    "page-254",
+    "page-255",
+    "page-256",
+    "page-257",
+    "page-258",
+    "page-259",
+    "page-260",
+    "page-261",
+    "page-262",
+    "page-263",
+    "page-264",
+    "page-265"
+  ],
+  "usedPages": [
+    "page-253",
+    "page-254",
+    "page-255",
+    "page-256",
+    "page-257",
+    "page-258",
+    "page-259",
+    "page-260",
+    "page-261",
+    "page-262",
+    "page-263",
+    "page-264",
+    "page-265"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "3.4 Examples of Discrete-Time Systems 253",
+  "foundEnd": true,
+  "endBeforeLine": "3.4-1 Classification of Discrete-Time Systems",
+  "endBeforeCode": "3.4-1",
+  "charCount": 21310
+}

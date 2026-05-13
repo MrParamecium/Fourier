@@ -1,0 +1,30 @@
+{
+  "subsection": "1 Introduction to Signals and Systems",
+  "summary": "This page introduces time shifting of signals through Example 1.3, showing how an exponential signal is delayed and advanced by 1 second. It gives both graphical illustrations and piecewise mathematical descriptions for the original, delayed, and advanced signals using substitutions t -> t-1 and t -> t+1. The page also includes an exercise on delaying another signal by 2 seconds.",
+  "keywords": [
+    "time shifting",
+    "signal delay",
+    "signal advance",
+    "right shift",
+    "left shift",
+    "exponential signal",
+    "piecewise function",
+    "f(t-1)",
+    "f(t+1)",
+    "Example 1.3",
+    "Figure 1.9"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-062",
+  "figures": [
+    {
+      "fig_id": "Fig. 1.9",
+      "top": 0.0581,
+      "left": 0.1844,
+      "bottom": 0.2712,
+      "right": 0.7432,
+      "caption": "Fig. 1.9 (a) signal f(t) (b) f(t) delayed by 1 second (c) f(t) advanced by 1 second."
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+B.6 Vectors and Matrices
+
+43
+
+$$
+\left|
+\begin{array}{cccc}
+a_{11} - \lambda & a_{12} & \cdots & a_{1n} \\
+a_{21} & a_{22} - \lambda & \cdots & a_{2n} \\
+\cdot \cdot \cdot \cdot \cdot \cdot \cdot \cdot \cdot \cdot \cdot \cdot \cdot \cdot \\
+a_{n1} & a_{n2} & \cdots & a_{nn} - \lambda
+\end{array}
+\right|
+= 0
+\qquad\qquad (B.76b)
+$$
+
+Equation (B.76a) [or (B.76b)] is known as the characteristic equation of the matrix $\mathbf{A}$ and can be expressed as
+
+$$
+Q(\lambda) = |\lambda \mathbf{I} - \mathbf{A}| = \lambda^n + a_{n-1}\lambda^{n-1} + \cdots + a_1\lambda + a_0\lambda^0 = 0
+\qquad\qquad (B.77)
+$$
+
+$Q(\lambda)$ is called the characteristic polynomial of the matrix $\mathbf{A}$. The $n$ zeros of the characteristic polynomial are the eigenvalues of $\mathbf{A}$ and, corresponding to each eigenvalue, there is an eigenvector that satisfies Eq. (B.74).
+
+The Cayley-Hamilton theorem states that every $n \times n$ matrix $\mathbf{A}$ satisfies its own characteristic equation. In other words, Eq. (B.77) is valid if $\lambda$ is replaced by $\mathbf{A}$:
+
+$$
+Q(\mathbf{A}) = \mathbf{A}^n + a_{n-1}\mathbf{A}^{n-1} + \cdots + a_1\mathbf{A} + a_0\mathbf{A}^0 = 0
+\qquad\qquad (B.78)
+$$
+
+Functions of a Matrix
+
+The Cayley-Hamilton theorem can be used to evaluate functions of a square matrix $\mathbf{A}$, as shown below.
+
+Consider a function $f(\lambda)$ in the form of an infinite power series:
+
+$$
+f(\lambda) = \alpha_0 + \alpha_1\lambda + \alpha_2\lambda^2 + \cdots + \cdots = \sum_{i=0}^{\infty} \alpha_i \lambda^i
+\qquad\qquad (B.79)
+$$
+
+Because $\lambda$ satisfies the characteristic Eq. (B.77), we can write
+
+$$
+\lambda^n = -a_{n-1}\lambda^{n-1} - a_{n-2}\lambda^{n-2} - \cdots - a_1\lambda - a_0
+\qquad\qquad (B.80)
+$$
+
+If we multiply both sides by $\lambda$, the left-hand side is $\lambda^{n+1}$, and the right-hand side contains the terms $\lambda^n, \lambda^{n-1}, \ldots, \lambda$. Using Eq. (B.80), if we substitute $\lambda^n$ in terms of $\lambda^{n-1}, \lambda^{n-2}, \ldots, \lambda$, the highest power on the right-hand side is reduced to $n - 1$. Continuing in this way, we see that $\lambda^{n+k}$ can be expressed in terms of $\lambda^{n-1}, \lambda^{n-2}, \ldots, \lambda$ for any $k$. Hence, the infinite series on the right-hand side of Eq. (B.79) can always be expressed in terms of $\lambda^{n-1}, \lambda^{n-2}, \ldots, \lambda$ as
+
+$$
+f(\lambda) = \beta_0 + \beta_1\lambda + \beta_2\lambda^2 + \cdots + \beta_{n-1}\lambda^{n-1}
+\qquad\qquad (B.81)
+$$
+
+If we assume that there are $n$ distinct eigenvalues $\lambda_1, \lambda_2, \cdots, \lambda_n$, then Eq. (B.81) holds for these $n$ values of $\lambda$. The substitution of these values in Eq. (B.81) yields $n$ simultaneous equations

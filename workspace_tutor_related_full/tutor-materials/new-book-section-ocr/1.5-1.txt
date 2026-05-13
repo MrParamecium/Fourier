@@ -1,0 +1,58 @@
+# Aquarius section OCR
+section_id: 1.5-1
+source_pages: page-092, page-093
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+1.5-1 Some Properties of Even and Odd Functions
+     Even and odd functions have the following properties:
+
+                                   even function × odd function = odd function
+                                     odd function × odd function = even function
+                                   even function × even function = even function
+
+     The proofs are trivial and follow directly from the definition of odd and even functions [Eq. (1.15)].
+
+
+
+
+               xe(t)
+
+
+
+
+                  a       0       a            t
+                           (a)
+
+
+                   xo(t)
+
+
+
+                  a
+                               0   a            t
+
+
+
+
+                           (b)                            Figure 1.23 Functions of t: (a) even and (b) odd.
+
+[[PAGE page-093]]
+1.5 Even and Odd Functions          93
+
+    A REA
+    Because of the symmetries of even and odd functions about the vertical axis, it follows from
+    Eq. (1.15) [or Fig. 1.23] that
+
+                           # a                    # a                          # a
+                                  xe (t) dt = 2         xe (t) dt     and                xo (t) dt = 0       (1.16)
+                             −a                    0                                −a
+
+
+
+    These results are valid under the assumption that there is no impulse (or its derivatives) at the
+    origin. The proof of these statements is obvious from the plots of even and odd functions. Formal
+    proofs, left as an exercise for the reader, can be accomplished by using the definitions in Eq. (1.15).
+         Because of their properties, study of odd and even functions proves useful in many
+    applications, as will become evident in later chapters.

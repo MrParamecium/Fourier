@@ -1,0 +1,41 @@
+61
+
+1.3 Some Useful Signal Operations
+
+$f(t)$
+
+(a)
+
+$\phi(t)=f(t-T)$
+
+(b)
+
+$f(t+T)$
+
+(c)
+
+Fig. 1.8  Time shifting a signal.
+
+cannot be predicted precisely but are known only in terms of probabilistic description, such as mean value, mean squared value, and so on is a random signal. In this book we shall exclusively deal with deterministic signals. Random signals are beyond the scope of this study.
+
+1.3  Some Useful Signal Operations
+
+We discuss here three useful signal operations: shifting, scaling, and inversion. Since the independent variable in our signal description is time, these operations are discussed as time shifting, time scaling, and time inversion (or folding). However, this discussion is valid for functions having independent variables other than time (e.g., frequency or distance).
+
+1.3-1  Time Shifting
+
+Consider a signal $f(t)$ (Fig. 1.8a) and the same signal delayed by $T$ seconds (Fig. 1.8b), which we shall denote by $\phi(t)$. Whatever happens in $f(t)$ (Fig. 1.8a) at some instant $t$ also happens in $\phi(t)$ (Fig. 1.8b) $T$ seconds later at the instant $t+T$. Therefore
+
+$$
+\phi(t+T)=f(t)
+$$
+(1.8)
+
+and
+
+$$
+\phi(t)=f(t-T)
+$$
+(1.9)
+
+Therefore, to time-shift a signal by $T$, we replace $t$ with $t-T$. Thus $f(t-T)$ represents $f(t)$ time-shifted by $T$ seconds. If $T$ is positive, the shift is to the right (delay). If $T$ is negative, the shift is to the left (advance). Thus, $f(t-2)$ is $f(t)$ delayed (right-shifted) by 2 seconds, and $f(t+2)$ is $f(t)$ advanced (left-shifted) by 2 seconds.

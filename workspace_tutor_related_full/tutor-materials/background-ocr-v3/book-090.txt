@@ -1,0 +1,43 @@
+90
+
+1 Introduction to Signals and Systems
+
+$R = 15\,\Omega$
+
+$C = \frac{1}{5}\,\mathrm{F}$
+
+$f(t)$
+
+$x(t)$
+
+$y(t)$
+
+Fig. 1.32  Circuit for Example 1.11.
+
+Consequently, the loop equation (1.48) can be expressed as
+
+$$\left(D + 3 + \frac{2}{D}\right)y(t) = f(t) \qquad (1.54)$$
+
+Multiplying both sides by $D$, that is, differentiating Eq. (1.54), we obtain
+
+$$(D^2 + 3D + 2)y(t) = Df(t) \qquad (1.55)$$
+
+which is identical to Eq. (1.52).
+
+Recall that Eq. (1.55) is not an algebraic equation, and $D^2 + 3D + 2$ is not an algebraic term that multiplies $y(t)$; it is an operator that operates on $y(t)$. It means that we must perform the following operations on $y(t)$: take the second derivative of $y(t)$ and add to it 3 times the first derivative of $y(t)$ and 2 times $y(t)$. Clearly, a polynomial in $D$ multiplied by $y(t)$ represents a certain differential operation on $y(t)$.
+
+Example 1.11
+
+Find the equation relating the input to output for the series $RC$ circuit of Fig. 1.32 if the input is the voltage $f(t)$ and output is (a) the loop current $x(t)$ (b) the capacitor voltage $y(t)$.
+
+The loop equation for the circuit is
+
+$$Rx(t) + \frac{1}{C}\int_{-\infty}^{t} x(\tau)\,d\tau = f(t) \qquad (1.56)$$
+
+or
+
+$$15x(t) + 5\int_{-\infty}^{t} x(\tau)\,d\tau = f(t) \qquad (1.57)$$
+
+With operational notation, this equation can be expressed as
+
+numerator as well as in the denominator. This happens, for instance, in circuits with all-inductor loops or all-capacitor cutsets. To eliminate this problem, avoid the integral operation in system equations so that the resulting equations are differential rather than integro-differential. In electrical circuits, this can be done by using charge (instead of current) variables in loops containing capacitors and using current variables for loops without capacitors. In the literature this problem of commutativity of $D$ and $I/D$ is largely ignored. As mentioned earlier, such procedure gives erroneous results only in special systems, such as the circuits with all-inductor loops or all-capacitor cutsets. Fortunately such systems constitute a very small fraction of the systems we deal with. For further discussion of this topic and a correct method of handling problems involving integrals, see Ref. 4.

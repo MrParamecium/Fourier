@@ -1,0 +1,22 @@
+{
+  "subsection": "B.7",
+  "summary": "This page presents a reference list of identities from the miscellaneous background section, focusing on complex numbers and trigonometric formulas. It includes Euler-form representations of complex numbers, polar-form multiplication and powers, and a wide range of trigonometric identities such as angle-shift, double-angle, power-reduction, sum-and-difference, and product-to-sum relations.",
+  "keywords": [
+    "complex numbers",
+    "Euler's formula",
+    "polar form",
+    "phasors",
+    "trigonometric identities",
+    "sine",
+    "cosine",
+    "tangent",
+    "sum and difference formulas",
+    "double-angle formulas",
+    "product-to-sum",
+    "signal processing background"
+  ],
+  "has_math": true,
+  "page_type": "text",
+  "book_page": "book-047",
+  "figures": []
+}

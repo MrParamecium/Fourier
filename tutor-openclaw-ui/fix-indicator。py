@@ -1,0 +1,13 @@
+import re
+with open('style.css', 'r', encoding='utf-8') as f:
+    css = f.read()
+
+# Change .learn-lecture-page-indicator to stick to bottom right of .learn-explain-col instead of position:fixed which is detached from DOM scroll
+css = css.replace('.learn-lecture-page-indicator {\n  position: fixed;\n  right: 42.4%;\n  bottom: 14px;', 
+                  '.learn-lecture-page-indicator {\n  position: absolute;\n  right: 14px;\n  bottom: 14px;')
+
+css = css.replace('.learn-explain-bottom-rail {\n  position: absolute;', '.learn-explain-bottom-rail {\n  position: sticky;')
+
+with open('style.css', 'w', encoding='utf-8') as f:
+    f.write(css)
+

@@ -1,0 +1,21 @@
+87
+
+1.7 Classification of Systems
+
+1.7-5 Lumped-Parameter and Distributed-Parameter Systems
+
+In the study of electrical systems, we make use of voltage-current relationships for various components (Ohm's law, for example). In doing so, we implicitly assume that the current in any system component (resistor, inductor, etc.) is the same at every point throughout that component. Thus, we assume that electrical signals are propagated instantaneously throughout the system. In reality, however, electrical signals are electromagnetic space waves requiring some finite propagation time. An electric current, for example, propagates through a component with a finite velocity and therefore may exhibit different values at different locations in the same component. Thus, an electric current is a function not only of time but also of space. However, if the physical dimensions of a component are small compared to the wavelength of the signal propagated, we may assume that the current is constant throughout the component. This is the assumption made in lumped-parameter systems, where each component is regarded as being lumped at one point in space. Such an assumption is justified at lower frequencies (higher wavelength). Therefore, in lumped-parameter models, signals can be assumed to be functions of time alone. For such systems, the system equations require only one independent variable (time) and therefore are ordinary differential equations.
+
+In contrast, for distributed-parameter systems such as transmission lines, waveguides, antennas, and microwave tubes, the system dimensions cannot be assumed to be small compared to the wavelengths of the signals; thus the lumped-parameter assumption breaks down. The signals here are functions of space as well as of time, leading to mathematical models consisting of partial differential equations.$^3$ The discussion in this book will be restricted to lumped-parameter systems only.
+
+1.7-6 Continuous-Time and Discrete-Time Systems
+
+Distinction between discrete-time and continuous-time signals is discussed in Sec. 1.2-1. Systems whose inputs and outputs are continuous-time signals are continuous-time systems. On the other hand, systems whose inputs and outputs are discrete-time signals are discrete-time systems. If a continuous-time signal is sampled, the resulting signal is a discrete-time signal. We can process a continuous-time signal by processing its samples with a discrete-time system.
+
+1.7-7 Analog and Digital Systems
+
+Analog and digital signals are discussed in Sec. 1.2-2. A system whose input and output signals are analog is an analog system; a system whose input and output signals are digital is a digital system. A digital computer is an example of a digital (binary) system. Observe that a digital computer is an example of a system that is digital as well as discrete-time.
+
+Additional Classification of Systems
+
+There are additional classes of systems, such as invertible and noninvertible systems. A system $S$ performs certain operation(s) on input signal(s). If we can obtain the input $f(t)$ back from the output $y(t)$ by some operation, the system

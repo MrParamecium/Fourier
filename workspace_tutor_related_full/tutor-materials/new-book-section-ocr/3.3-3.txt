@@ -1,0 +1,120 @@
+# Aquarius section OCR
+section_id: 3.3-3
+source_pages: page-247, page-248, page-249, page-250, page-251
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+3.3-3  Discrete-Time Exponential γⁿ
+A continuous-time exponential e^{λt} can be expressed in an alternate form as
+
+e^{λt} = γ^t      (γ = e^λ or λ = ln γ)
+
+For example, e^{−0.3t} = (0.7408)^t because e^{−0.3} = 0.7408. Conversely, 4^t = e^{1.386t} because e^{1.386} = 4, that is, ln 4 = 1.386. In the study of continuous-time signals and systems, we prefer the form e^{λt} rather than γ^t. In contrast, the exponential form γⁿ is preferable in the study of discrete-time signals and systems, as will become apparent later. The discrete-time exponential γⁿ can also be expressed by using a natural base, as
+
+e^{λn} = γⁿ      (γ = e^λ or λ = ln γ)
+
+Because of unfamiliarity with exponentials with bases other than e, exponentials of the form γⁿ may seem inconvenient and confusing at first. The reader is urged to plot some exponentials to acquire a sense of these functions. Also observe that γ^{−n} = (1/γ)^n.
+
+DRILL 3.6  Equivalent Forms of DT Exponentials
+
+(a) Show that (i) (0.25)^{−n} = 4^n, (ii) 4^{−n} = (0.25)^n, (iii) e^{2t} = (7.389)^t, (iv) e^{−2t} = (0.1353)^t = (7.389)^{−t}, (v) e^{3n} = (20.086)^n, and (vi) e^{−1.5n} = (0.2231)^n = (4.4817)^{−n}.
+(b) Show that (i) 2^n = e^{0.693n}, (ii) (0.5)^n = e^{−0.693n}, and (iii) (0.8)^{−n} = e^{0.2231n}.
+
+Nature of γⁿ. The signal e^{λn} grows exponentially with n if Re λ > 0 (λ in the RHP), and decays exponentially if Re λ < 0 (λ in the LHP). It is constant or oscillates with constant amplitude if Re λ = 0 (λ on the imaginary axis). Clearly, the location of λ in the complex plane indicates whether the signal e^{λn} will grow exponentially, decay exponentially, or oscillate with constant
+
+[[PAGE page-248]]
+248      CHAPTER 3   TIME-DOMAIN ANALYSIS OF DISCRETE-TIME SYSTEMS
+
+LHP            Im            RHP
+Exponentially decreasing     Exponentially increasing
+Re →
+
+λ Plane
+(a)
+
+Im
+Exponentially increasing
+Exponentially
+decreasing
+−1          1   Re →
+γ Plane
+(b)
+
+Figure 3.8  The λ plane, the γ plane, and their mapping.
+
+amplitude (Fig. 3.8a). A constant signal (λ = 0) is also an oscillation with zero frequency. We now find a similar criterion for determining the nature of γ^n from the location of γ in the complex plane.
+
+Figure 3.8a shows a complex plane (λ plane). Consider a signal e^{jΩn}. In this case, λ = jΩ lies on the imaginary axis (Fig. 3.8a), and therefore is a constant-amplitude oscillating signal. This signal e^{jΩn} can be expressed as γ^n, where γ = e^{jΩ}. Because the magnitude of e^{jΩ} is unity, |γ| = 1. Hence, when λ lies on the imaginary axis, the corresponding γ lies on a circle of unit radius, centered at the origin (the unit circle illustrated in Fig. 3.8b). Therefore, a signal γ^n oscillates with constant amplitude if γ lies on the unit circle. Thus, the imaginary axis in the λ plane maps into the unit circle in the γ plane.
+
+Next consider the signal e^{λn}, where λ lies in the left half-plane in Fig. 3.8a. This means λ = a + jb, where a is negative (a < 0). In this case, the signal decays exponentially. This signal can be expressed as γ^n, where
+
+γ = e^λ = e^{a+jb} = e^a e^{jb}
+
+and
+
+|γ| = |e^a||e^{jb}| = e^a      because |e^{jb}| = 1
+
+Also, a is negative (a < 0). Hence, |γ| = e^a < 1. This result means that the corresponding γ lies inside the unit circle. Therefore, a signal γ^n decays exponentially if γ lies within the unit circle (Fig. 3.8b). If, in the preceding case we select a to be positive (λ in the right half-plane), then |γ| > 1, and γ lies outside the unit circle. Therefore, a signal γ^n grows exponentially if γ lies outside the unit circle (Fig. 3.8b).
+
+To summarize, the imaginary axis in the λ plane maps into the unit circle in the γ plane. The left half-plane in the λ plane maps into the inside of the unit circle and the right half of the λ plane maps into the outside of the unit circle in the γ plane, as depicted in Fig. 3.8.
+
+[[PAGE page-249]]
+3.3  Some Useful Discrete-Time Signal Models                                                                 249
+
+1
+(0.8)^n
+0 1 2 3 4 5 6 n
+(a)
+
+1
+(-0.8)^n
+0 1 2 3 4 5 6 7 8
+-1
+n
+(b)
+
+1
+(0.5)^n
+0 1 2 3 4 5 6 n
+(c)
+
+(1.1)^n
+0 1 2 3 4 5 6 n
+(d)
+
+Figure 3.9  Discrete-time exponentials γ^n.
+
+Plots of (0.8)^n and (-0.8)^n appear in Figs. 3.9a and 3.9b, respectively. Plots of (0.5)^n and (1.1)^n appear in Figs. 3.9c and 3.9d, respectively. These plots verify our earlier conclusions about the location of γ and the nature of signal growth. Observe that a signal (-|γ|)^n alternates sign successively (is positive for even values of n and negative for odd values of n, as depicted in Fig. 3.9b). Also, the exponential (0.5)^n decays faster than (0.8)^n because 0.5 is closer to the origin than 0.8. The exponential (0.5)^n can also be expressed as 2^{-n} because (0.5)^{-1} = 2.
+
+DRILL 3.7  Sketching DT Exponentials
+
+Sketch the following signals: (a) (1)^n, (b) (-1)^n, (c) (0.5)^n, (d) (-0.5)^n, (e) (0.5)^{-n}, (f) 2^{-n}, and (g) (-2)^n. Express these exponentials as γ^n, and plot γ in the complex plane for each case. Verify that γ^n decays exponentially with n if γ lies inside the unit circle and that γ^n grows with n if γ is outside the unit circle. If γ is on the unit circle, γ^n is constant or oscillates with a constant amplitude.
+
+[[PAGE page-250]]
+250
+CHAPTER 3  TIME-DOMAIN ANALYSIS OF DISCRETE-TIME SYSTEMS
+
+Accurately hand-sketching DT signals can be tedious and difficult. As the next example
+shows, MATLAB is particularly well suited to plot DT signals, including exponentials.
+
+EXAMPLE 3.4  Plotting DT Exponentials with MATLAB
+
+Use MATLAB to plot the following discrete-time signals over (0 ≤ n ≤ 8): (a) x_a[n] = (0.8)^n,
+(b) x_b[n] = (-0.8)^n, (c) x_c[n] = (0.5)^n, and (d) x_d[n] = (1.1)^n.
+
+To begin, we use anonymous functions to represent each of the four signals. Next, we plot
+these functions over the desired range of n. The results, shown in Fig. 3.10, match the earlier
+Fig. 3.9 plots of the same signals.
+
+>>  n = (0:8); x_a = @(n) (0.8).^n; x_b = @(n) (-0.8).^(n);
+>>  x_c = @(n) (0.5).^n; x_d = @(n) (1.1).^n;
+>>  subplot(2,2,1); stem(n,x_a(n),'k'); ylabel('x_a[n]'); xlabel('n');
+>>  subplot(2,2,2); stem(n,x_b(n),'k'); ylabel('x_b[n]'); xlabel('n');
+>>  subplot(2,2,3); stem(n,x_c(n),'k'); ylabel('x_c[n]'); xlabel('n');
+>>  subplot(2,2,4); stem(n,x_d(n),'k'); ylabel('x_d[n]'); xlabel('n');
+
+Figure 3.10  DT plots for Ex. 3.4.
+
+[[PAGE page-251]]
+3.3  Some Useful Discrete-Time Signal Models  251

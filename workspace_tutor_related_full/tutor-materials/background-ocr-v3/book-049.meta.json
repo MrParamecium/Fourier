@@ -1,0 +1,26 @@
+{
+  "subsection": "B.7",
+  "summary": "This page presents miscellaneous mathematical reference material, including a differentiation table with common derivative rules and formulas. It also lists several useful constants such as pi, e, and common base-10 logarithms, and begins a section on solving quadratic and cubic equations by giving the standard quadratic formula.",
+  "keywords": [
+    "miscellaneous mathematics",
+    "differentiation table",
+    "derivative rules",
+    "chain rule",
+    "product rule",
+    "quotient rule",
+    "trigonometric derivatives",
+    "inverse trigonometric derivatives",
+    "exponential derivatives",
+    "logarithmic derivatives",
+    "useful constants",
+    "pi",
+    "e",
+    "quadratic equation",
+    "quadratic formula",
+    "cubic equations"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-049",
+  "figures": []
+}

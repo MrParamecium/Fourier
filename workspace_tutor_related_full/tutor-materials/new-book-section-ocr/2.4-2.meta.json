@@ -1,0 +1,40 @@
+{
+  "sectionId": "2.4-2",
+  "sourcePages": [
+    "page-178",
+    "page-179",
+    "page-180",
+    "page-181",
+    "page-182",
+    "page-183",
+    "page-184",
+    "page-185",
+    "page-186",
+    "page-187",
+    "page-188",
+    "page-189",
+    "page-190"
+  ],
+  "usedPages": [
+    "page-178",
+    "page-179",
+    "page-180",
+    "page-181",
+    "page-182",
+    "page-183",
+    "page-184",
+    "page-185",
+    "page-186",
+    "page-187",
+    "page-188",
+    "page-189",
+    "page-190"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "2.4-2 Graphical Understanding of Convolution Operation",
+  "foundEnd": true,
+  "endBeforeLine": "2.4-3 Interconnected Systems",
+  "endBeforeCode": "2.4-3",
+  "charCount": 19760
+}

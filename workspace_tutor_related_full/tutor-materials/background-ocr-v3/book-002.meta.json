@@ -1,0 +1,22 @@
+{
+  "subsection": null,
+  "summary": "This page traces the historical expansion of the number system from fractions and irrational numbers to negative and imaginary numbers. It explains why negative numbers and complex numbers were introduced, culminating in the definition of the imaginary unit j used in engineering and simple examples such as the square root of negative numbers.",
+  "keywords": [
+    "number system",
+    "fractions",
+    "irrational numbers",
+    "negative numbers",
+    "complex numbers",
+    "imaginary numbers",
+    "Pythagoras",
+    "Descartes",
+    "Euler",
+    "imaginary unit",
+    "j notation",
+    "square root of negative numbers"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-002",
+  "figures": []
+}

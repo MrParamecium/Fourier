@@ -1,0 +1,33 @@
+{
+  "subsection": "1.8",
+  "summary": "This page presents Example 1.10, deriving the input-output equation for a series RLC circuit using Kirchhoff's voltage law and the element voltage-current relations. It converts the resulting integro-differential equation into a second-order differential equation and introduces the differential operator notation D and the integral operator 1/D.",
+  "keywords": [
+    "System Model: Input-Output Description",
+    "Example 1.10",
+    "series RLC circuit",
+    "Kirchhoff's voltage law",
+    "input-output equation",
+    "differential equation",
+    "integro-differential equation",
+    "differential operator",
+    "operator notation",
+    "inductor",
+    "resistor",
+    "capacitor",
+    "loop current",
+    "voltage-current laws"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-089",
+  "figures": [
+    {
+      "fig_id": "Fig. 1.31",
+      "top": 0.069,
+      "left": 0.1394,
+      "bottom": 0.1683,
+      "right": 0.4503,
+      "caption": "A series RLC circuit diagram with a voltage source f(t), an inductor L=1H, a resistor R=3Ω, and a capacitor C=1/2F. The loop current is denoted as y(t)."
+    }
+  ]
+}

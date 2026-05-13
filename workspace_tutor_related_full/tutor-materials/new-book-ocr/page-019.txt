@@ -1,0 +1,55 @@
+B.2 Sinusoids           19
+
+
+E X A M P L E B.6 Addition of Sinusoids
+
+    In the following cases, express x(t) as a single sinusoid:
+                              √
+         (a) x(t) = cos ω0 t − 3 sin ω0 t
+           (b) x(t) = −3 cos ω0 t + 4 sin ω0 t
+
+
+                                            √
+           (a) In this case, a = 1 and b = − 3. Using Eq. (B.17) yields
+                                                                  √ 
+                                        √ 2
+                             C = 12 + 3 = 2 and θ = tan−1 13 = 60◦
+
+    Therefore,
+                                           x(t) = 2 cos (ω0 t + 60◦ )
+    We can verify this result by drawing phasors corresponding to the two sinusoids. The sinusoid
+    cos ω0 t is represented by a phasor of unit length at a zero angle with the horizontal. The phasor
+                                                                    ◦
+    sin√ω0 t is represented by a unit phasor at an angle√ of −90  ◦
+                                                                      with the horizontal. Therefore,
+    − 3 sin ω0 t is represented by a phasor of length 3 at 90 with the horizontal, as depicted in
+    Fig. B.8a. The two phasors added yield a phasor of length 2 at 60◦ with the horizontal (also
+    shown in Fig. B.8a).
+
+
+
+      Im                                             Im
+                                            3                  Re
+
+       3                                                   126.9
+                                                 5
+              2
+
+
+               60                                         4
+
+                     1         Re
+                                                                        Figure B.8 Phasor addition of
+                     (a)                             (b)                sinusoids.
+                                                 √
+         Alternately, we note that a − jb = 1 + j 3 = 2ejπ/3 . Hence, C = 2 and θ = π/3.
+         Observe that a phase shift of ±π amounts to multiplication by −1. Therefore, x(t) can
+    also be expressed alternatively as
+
+              x(t) = −2 cos (ω0 t + 60◦ ± 180◦ ) = −2 cos (ω0 t − 120◦ ) = −2 cos (ω0 t + 240◦ )
+
+    In practice, the principal value, that is, −120◦ , is preferred.
+         (b) In this case, a = −3 and b = 4. Using Eq. (B.17) yields
+                                                                     
+                        C = (−3)2 + 42 = 5 and θ = tan−1 −4           −3
+                                                                         = −126.9◦

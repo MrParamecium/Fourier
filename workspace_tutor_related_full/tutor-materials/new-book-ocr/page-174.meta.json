@@ -1,0 +1,32 @@
+{
+  "chapter": "2",
+  "section": null,
+  "subsection": null,
+  "title": "DRILL 2.5 Computing the Zero-State Response",
+  "summary": "This page concludes a convolution example for continuous-time systems, showing graphically how x(t) and h(t) produce y(t) = (e^{-t} - e^{-2t})u(t). It also introduces Drill 2.5, asking for zero-state responses of an LTIC system to two inputs and providing the answers.",
+  "keywords": [
+    "convolution",
+    "zero-state response",
+    "LTIC system",
+    "impulse response",
+    "unit step",
+    "exponential response",
+    "Figure 2.6",
+    "Drill 2.5"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "page-174",
+  "figures": [
+    {
+      "fig_id": "Figure 2.6",
+      "top": 0.0682,
+      "left": 0.0944,
+      "bottom": 0.4705,
+      "right": 0.625,
+      "caption": "Convolution of x(t) and h(t), showing plots (a) x(t)=e^-t, (b) h(t)=e^-2t, and (c) y(t)",
+      "crop_file": "page-174-figure_2_6.png"
+    }
+  ],
+  "metadata_model": "openrouter:openai/gpt-5.4"
+}

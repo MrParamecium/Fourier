@@ -1,0 +1,45 @@
+5
+
+B.1 Complex Numbers
+
+Fig. B.1 Use of complex numbers can reduce the work.
+
+$$
+z=a+jb
+\tag{B.1}
+$$
+
+The numbers $a$ and $b$ (the abscissa and the ordinate) of $z$ are the real part and the imaginary part, respectively, of $z$. They are also expressed as
+
+$$
+\mathrm{Re}\ z=a
+$$
+
+$$
+\mathrm{Im}\ z=b
+$$
+
+Note that in this plane all real numbers lie on the horizontal axis, and all imaginary numbers lie on the vertical axis.
+
+Complex numbers may also be expressed in terms of polar coordinates. If $(r,\theta)$ are the polar coordinates of a point $z=a+jb$ (see Fig. B.2), then
+
+$$
+a=r\cos\theta
+$$
+
+$$
+b=r\sin\theta
+$$
+
+and
+
+$$
+z=a+jb=r\cos\theta+jr\sin\theta
+$$
+
+$$
+=r(\cos\theta+j\sin\theta)
+\tag{B.2}
+$$
+
+Fig. B.2 Representation of a number in the complex plane.

@@ -1,0 +1,91 @@
+B.6 Vectors and Matrices
+
+37
+
+$$
+A+B=
+\begin{bmatrix}
+(a_{11}+b_{11}) & (a_{12}+b_{12}) & \cdots & (a_{1n}+b_{1n})\\
+(a_{21}+b_{21}) & (a_{22}+b_{22}) & \cdots & (a_{2n}+b_{2n})\\
+\vdots & \vdots &        & \vdots\\
+(a_{m1}+b_{m1}) & (a_{m2}+b_{m2}) & \cdots & (a_{mn}+b_{mn})
+\end{bmatrix}
+$$
+
+or
+
+$$
+A+B=(a_{ij}+b_{ij})_{m\times n}
+$$
+
+Note that two matrices can be added only if they are of the same order.
+
+2. Multiplication of a Matrix by a Scalar
+
+We define the multiplication of a matrix $A$ by a scalar $c$ as
+
+$$
+cA=
+c\begin{bmatrix}
+a_{11} & a_{12} & \cdots & a_{1n}\\
+a_{21} & a_{22} & \cdots & a_{2n}\\
+\vdots & \vdots &        & \vdots\\
+a_{m1} & a_{m2} & \cdots & a_{mn}
+\end{bmatrix}
+=
+\begin{bmatrix}
+ca_{11} & ca_{12} & \cdots & ca_{1n}\\
+ca_{21} & ca_{22} & \cdots & ca_{2n}\\
+\vdots & \vdots &         & \vdots\\
+ca_{m1} & ca_{m2} & \cdots & ca_{mn}
+\end{bmatrix}
+$$
+
+3. Matrix Multiplication
+
+We define the product
+
+$$
+AB=C
+$$
+
+in which $c_{ij}$, the element of $C$ in the $i$th row and $j$th column, is found by adding the products of the elements of $A$ in the $i$th row with the corresponding elements of $B$ in the $j$th column. Thus,
+
+$$
+c_{ij}=a_{i1}b_{1j}+a_{i2}b_{2j}+\cdots+a_{in}b_{nj}
+$$
+
+$$
+=\sum_{k=1}^{n} a_{ik}b_{kj}
+\qquad\qquad (B.56)
+$$
+
+This result is shown below.
+
+$$
+\underbrace{
+\begin{bmatrix}
+\\
+a_{i1}\; a_{i2}\; \cdots\; a_{in}\\
+\\
+\end{bmatrix}
+}_{A(m\times n)}
+\underbrace{
+\begin{bmatrix}
+b_{1j}\\
+b_{2j}\\
+\vdots\\
+b_{ij}\\
+\vdots\\
+b_{nj}
+\end{bmatrix}
+}_{B(n\times p)}
+=
+\underbrace{
+\begin{bmatrix}
+\\
+\cdots\; c_{ij}\; \cdots\\
+\\
+\end{bmatrix}
+}_{C(m\times p)}
+$$

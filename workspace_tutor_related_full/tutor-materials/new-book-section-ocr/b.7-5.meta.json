@@ -1,0 +1,18 @@
+{
+  "sectionId": "b.7-5",
+  "sourcePages": [
+    "page-048",
+    "page-049"
+  ],
+  "usedPages": [
+    "page-048",
+    "page-049"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "B.7-5 Element-by-Element Operations",
+  "foundEnd": true,
+  "endBeforeLine": "B.7-6 Matrix Operations",
+  "endBeforeCode": "b.7-6",
+  "charCount": 3355
+}

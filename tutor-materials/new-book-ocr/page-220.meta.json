@@ -1,0 +1,33 @@
+{
+  "chapter": "2",
+  "section": "2.8",
+  "subsection": null,
+  "title": "APPENDIX: DETERMINING THE IMPULSE RESPONSE",
+  "summary": "The page closes a graphical convolution example with Figure 2.29 at t = 2.85 seconds and begins Section 2.8 on determining the impulse response. It explains that the impulse response of an LTIC system can be written as an impulse term plus characteristic modes, then introduces an auxiliary system S0 and derives differential-equation forms for the characteristic-mode-only impulse response yn(t).",
+  "keywords": [
+    "graphical convolution",
+    "Figure 2.29",
+    "impulse response",
+    "LTIC system",
+    "characteristic modes",
+    "Q(D)",
+    "delta function",
+    "differential equation",
+    "system S0"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "page-220",
+  "figures": [
+    {
+      "fig_id": "Figure 2.29",
+      "top": 0.0909,
+      "left": 0.1611,
+      "bottom": 0.3227,
+      "right": 0.6861,
+      "caption": "Graphical convolution at step t = 2.85 seconds, showing two stacked signal plots: h(τ), x(t−τ), h(τ)x(t−τ), and the resulting y(t)",
+      "crop_file": "page-220-figure_2_29.png"
+    }
+  ],
+  "metadata_model": "openrouter:openai/gpt-5.4"
+}

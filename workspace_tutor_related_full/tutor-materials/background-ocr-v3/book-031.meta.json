@@ -1,0 +1,19 @@
+{
+  "subsection": "B.5-4",
+  "summary": "This page continues a partial fraction expansion example by computing coefficients for a repeated root using derivatives, obtaining the final decomposition. It then introduces a hybrid method that combines the Heaviside cover-up technique with clearing fractions, showing how to determine some coefficients directly and solve for the remaining ones by equating polynomial coefficients.",
+  "keywords": [
+    "partial fraction expansion",
+    "repeated roots",
+    "Heaviside cover-up method",
+    "hybrid method",
+    "clearing fractions",
+    "equating coefficients",
+    "derivatives",
+    "rational functions",
+    "multiple roots"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-031",
+  "figures": []
+}

@@ -1,0 +1,18 @@
+{
+  "sectionId": "2.6-3",
+  "sourcePages": [
+    "page-206",
+    "page-207"
+  ],
+  "usedPages": [
+    "page-206",
+    "page-207"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "2.6-3 Time Constant and Rise Time of a System",
+  "foundEnd": true,
+  "endBeforeLine": "2.6-4 Time Constant and Filtering",
+  "endBeforeCode": "2.6-4",
+  "charCount": 1506
+}

@@ -1,0 +1,65 @@
+Background
+
+B.7 Miscellaneous
+
+47
+
+B.7-5 Complex Numbers
+
+$$e^{\pm j\pi/2}=\pm j$$
+
+$$e^{\pm jn\pi}=
+\begin{cases}
+1 & n\ \text{even}\\
+-1 & n\ \text{odd}
+\end{cases}$$
+
+$$e^{\pm j\theta}=\cos\theta \pm j\sin\theta$$
+
+$$a+jb=re^{j\theta} \qquad r=\sqrt{a^2+b^2}, \qquad \theta=\tan^{-1}\left(\frac{b}{a}\right)$$
+
+$$(re^{j\theta})^k=r^k e^{jk\theta}$$
+
+$$(r_1e^{j\theta_1})(r_2e^{j\theta_2})=r_1r_2e^{j(\theta_1+\theta_2)}$$
+
+B.7-6 Trigonometric Identities
+
+$$e^{\pm jx}=\cos x \pm j\sin x$$
+
+$$\cos x=\frac{1}{2}[e^{jx}+e^{-jx}]$$
+
+$$\sin x=\frac{1}{2j}[e^{jx}-e^{-jx}]$$
+
+$$\cos\left(x\pm \frac{\pi}{2}\right)=\mp \sin x$$
+
+$$\sin\left(x\pm \frac{\pi}{2}\right)=\pm \cos x$$
+
+$$2\sin x\cos x=\sin 2x$$
+
+$$\sin^2 x+\cos^2 x=1$$
+
+$$\cos^2 x-\sin^2 x=\cos 2x$$
+
+$$\cos^2 x=\frac{1}{2}(1+\cos 2x)$$
+
+$$\sin^2 x=\frac{1}{2}(1-\cos 2x)$$
+
+$$\cos^3 x=\frac{1}{4}(3\cos x+\cos 3x)$$
+
+$$\sin^3 x=\frac{1}{4}(3\sin x-\sin 3x)$$
+
+$$\sin(x\pm y)=\sin x\cos y \pm \cos x\sin y$$
+
+$$\cos(x\pm y)=\cos x\cos y \mp \sin x\sin y$$
+
+$$\tan(x\pm y)=\frac{\tan x\pm \tan y}{1\mp \tan x\tan y}$$
+
+$$\sin x\sin y=\frac{1}{2}[\cos(x-y)-\cos(x+y)]$$
+
+$$\cos x\cos y=\frac{1}{2}[\cos(x-y)+\cos(x+y)]$$
+
+$$\sin x\cos y=\frac{1}{2}[\sin(x-y)+\sin(x+y)]$$
+
+$$a\cos x+b\sin x=C\cos(x+\theta)$$
+
+in which $C=\sqrt{a^2+b^2}$ and $\theta=\tan^{-1}\left(\frac{-b}{a}\right)$

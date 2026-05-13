@@ -1,0 +1,66 @@
+# Aquarius section OCR
+section_id: b.5-5
+source_pages: page-034, page-035
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+B.5-5 Improper F(x) with m = n
+         A general method of handling an improper function is indicated in the beginning of this section.
+         However, for the special case of when the numerator and denominator polynomials of F(x) have
+         the same degree (m = n), the procedure is the same as that for a proper function. We can show that
+         for
+
+                                              bn xn + bn−1 xn−1 + · · · + b1 x + b0
+                                      F(x) =
+                                               xn + an−1 xn−1 + · · · + a1 x + a0
+                                                      k1        k2                kn
+                                            = bn +         +          +· · ·+
+                                                    x − λ1 x − λ2               x − λn
+
+         the coefficients k1 , k2 , . . . , kn are computed as if F(x) were proper. Thus,
+
+                                                  kr = (x − λr )F(x)|x=λr
+
+         For quadratic or repeated factors, the appropriate procedures discussed in Secs. B.5-2 or B.5-3
+         should be used as if F(x) were proper. In other words, when m = n, the only difference between
+         the proper and improper case is the appearance of an extra constant bn in the latter. Otherwise, the
+         procedure remains the same. The proof is left as an exercise for the reader.
+
+
+
+     E X A M P L E B.11 Partial Fraction Expansion of Improper Rational
+     Function
+
+         Expand F(x) into partial fractions if
+
+                                                3x2 + 9x − 20 3x2 + 9x − 20
+                                       F(x) =                =
+                                                  x2 + x − 6   (x − 2)(x + 3)
+
+
+         Here, m = n = 2 with bn = b2 = 3. Therefore,
+
+                                              3x2 + 9x − 20        k1   k2
+                                     F(x) =                  = 3+     +
+                                              (x − 2)(x + 3)      x−2 x+3
+
+[[PAGE page-035]]
+B.5 Partial Fraction Expansion        35
+
+in which                                  
+                           3x2 + 9x − 20              12 + 18 − 20 10
+                      k1 =                         =               =   =2
+                           (x − 2)(x + 3)                 (2 + 3)    5
+                                              x=2
+
+and                                      
+                          3x2 + 9x − 20               27 − 27 − 20 −20
+                     k2 =                          =               =    =4
+                          (x − 2)(x + 3)                 (−3 − 2)    −5
+                                             x=−3
+
+Therefore,
+                                   3x2 + 9x − 20        2   4
+                          F(x) =                  = 3+    +
+                                   (x − 2)(x + 3)      x−2 x+3

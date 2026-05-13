@@ -1,0 +1,22 @@
+{
+  "subsection": "B.6",
+  "summary": "This page continues the discussion of matrix operations by noting the identity property of the unit matrix and explaining matrix-vector multiplication via conformable dimensions. It then introduces matrix inversion for square matrices, deriving the inverse concept from a system of linear equations and Cramer's rule, and defining the inverse matrix through the relation A^{-1}A = I.",
+  "keywords": [
+    "vectors and matrices",
+    "identity matrix",
+    "unit matrix",
+    "matrix-vector multiplication",
+    "conformability",
+    "matrix inversion",
+    "inverse matrix",
+    "Cramer's rule",
+    "determinant",
+    "cofactor",
+    "square matrix",
+    "linear equations"
+  ],
+  "has_math": true,
+  "page_type": "text",
+  "book_page": "book-039",
+  "figures": []
+}

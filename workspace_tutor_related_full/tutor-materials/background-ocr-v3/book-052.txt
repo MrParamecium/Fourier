@@ -1,0 +1,38 @@
+52
+
+1 Introduction to Signals and Systems
+
+1.1 Size of a Signal
+
+The size of any entity is a number that indicates the largeness or strength of that entity. Generally speaking, the signal amplitude varies with time. How can a signal that exists over a certain time interval with varying amplitude be measured by one number that will indicate the signal size or signal strength? Such a measure must consider not only the signal amplitude, but also its duration. For instance, if we are to devise a single number $V$ as a measure of the size of a human being, we must consider not only his or her width (girth), but also the height. If we make a simplifying assumption that the shape of a person is a cylinder of variable radius $r$ (which varies with the height $h$) then a reasonable measure of the size of a person of height $H$ is the person's volume $V$, given by
+
+$$
+V=\pi\int_0^H r^2(h)\,dh
+$$
+
+Signal Energy
+
+Arguing in this manner, we may consider the area under a signal $f(t)$ as a possible measure of its size, because it takes account of not only the amplitude, but also the duration. However, this will be a defective measure because $f(t)$ could be a large signal, yet its positive and negative areas could cancel each other, indicating a signal of small size. This difficulty can be corrected by defining the signal size as the area under $f^2(t)$, which is always positive. We call this measure the signal energy $E_f$, defined (for a real signal) as
+
+$$
+E_f=\int_{-\infty}^{\infty} f^2(t)\,dt
+$$
+(1.1)
+
+This definition can be generalized to a complex valued signal $f(t)$ as
+
+$$
+E_f=\int_{-\infty}^{\infty} |f(t)|^2\,dt
+$$
+(1.2)
+
+There are also other possible measures of signal size, such as the area under $|f(t)|$. The energy measure, however, is not only more tractable mathematically, but is also more meaningful (as shown later) in the sense that it is indicative of the energy that can be extracted from the signal.
+
+Signal Power
+
+The signal energy must be finite if it to be a meaningful measure of the signal size. A necessary condition for the energy to be finite is that the signal amplitude $\to 0$ as $|t|\to\infty$ (Fig. 1.1a). Otherwise the integral in Eq. (1.1) will not converge. In some cases, for instance, when the amplitude of $f(t)$ does not $\to 0$ as $|t|\to\infty$ (Fig. 1.1b), then, the signal energy is infinite. A more meaningful measure of the signal size in such a case would be the time average of the energy, if it exists. This measure is called the power of the signal. For a signal $f(t)$, we define its power $P_f$ as
+
+$$
+P_f=\lim_{T\to\infty}\frac{1}{T}\int_{-T/2}^{T/2} f^2(t)\,dt
+$$
+(1.3)

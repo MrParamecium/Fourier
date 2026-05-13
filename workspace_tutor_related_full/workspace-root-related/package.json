@@ -1,0 +1,1 @@
+{"name": "tutor-backend","version": "1.0.0","description": "Tutor Agent API Bridge","main": "tutor-openclaw-ui/ws-bridge.js","scripts": {"start": "node tutor-openclaw-ui/ws-bridge.js"},"dependencies": {"pptxgenjs": "^4.0.1","ws": "^8.19.0"}}

@@ -1,0 +1,20 @@
+{
+  "sectionId": "b.4",
+  "sourcePages": [
+    "page-023",
+    "page-024",
+    "page-025"
+  ],
+  "usedPages": [
+    "page-023",
+    "page-024",
+    "page-025"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "B.4 Cramer’s Rule 23",
+  "foundEnd": true,
+  "endBeforeLine": "B.5 Partial Fraction Expansion 25",
+  "endBeforeCode": "b.5",
+  "charCount": 4687
+}

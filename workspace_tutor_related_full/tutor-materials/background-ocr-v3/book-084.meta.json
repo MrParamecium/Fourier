@@ -1,0 +1,31 @@
+{
+  "subsection": "1.7-3",
+  "summary": "This page defines instantaneous (memoryless) systems and dynamic systems, explaining that memoryless systems depend only on the input at the same instant while dynamic systems depend on past or possibly future input values. It also introduces causal and noncausal systems, emphasizing that practical real-time systems are causal, and gives an example equation of a noncausal system involving both delayed and advanced input terms.",
+  "keywords": [
+    "instantaneous systems",
+    "memoryless systems",
+    "dynamic systems",
+    "systems with memory",
+    "finite-memory systems",
+    "infinite memory",
+    "causal systems",
+    "noncausal systems",
+    "real-time systems",
+    "linear time-varying system",
+    "RC circuit",
+    "input-output relation"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-084",
+  "figures": [
+    {
+      "fig_id": "Fig. 1.29",
+      "top": 0.0575,
+      "left": 0.2484,
+      "bottom": 0.1604,
+      "right": 0.6472,
+      "caption": "An example of a linear time-varying system."
+    }
+  ]
+}

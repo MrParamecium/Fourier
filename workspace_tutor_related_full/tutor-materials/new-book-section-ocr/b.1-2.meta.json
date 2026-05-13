@@ -1,0 +1,36 @@
+{
+  "sectionId": "b.1-2",
+  "sourcePages": [
+    "page-005",
+    "page-006",
+    "page-007",
+    "page-008",
+    "page-009",
+    "page-010",
+    "page-011",
+    "page-012",
+    "page-013",
+    "page-014",
+    "page-015"
+  ],
+  "usedPages": [
+    "page-005",
+    "page-006",
+    "page-007",
+    "page-008",
+    "page-009",
+    "page-010",
+    "page-011",
+    "page-012",
+    "page-013",
+    "page-014",
+    "page-015"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "B.1-2 Algebra of Complex Numbers",
+  "foundEnd": false,
+  "endBeforeLine": "",
+  "endBeforeCode": "",
+  "charCount": 28812
+}

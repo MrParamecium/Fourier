@@ -1,0 +1,20 @@
+{
+  "subsection": "1.4",
+  "summary": "This page introduces the sampling (or sifting) property of the unit impulse, showing that integrating a function multiplied by δ(t) or δ(t-T) yields the function value at the impulse location. It then explains why the unit impulse is better viewed as a generalized function rather than an ordinary function, defining it by its action on test functions rather than pointwise values.",
+  "keywords": [
+    "unit impulse",
+    "Dirac delta",
+    "sampling property",
+    "sifting property",
+    "generalized function",
+    "test function",
+    "delta(t-T)",
+    "continuity",
+    "unit step",
+    "distribution"
+  ],
+  "has_math": true,
+  "page_type": "text",
+  "book_page": "book-071",
+  "figures": []
+}

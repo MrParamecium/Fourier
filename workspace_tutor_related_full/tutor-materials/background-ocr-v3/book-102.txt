@@ -1,0 +1,55 @@
+102
+
+1 Introduction to Signals and Systems
+
+1.7-4 A system is specified by its input-output relationship as
+
+$$
+y(t)=f^2(t)\left(\frac{df}{dt}\right)
+$$
+
+Show that the system satisfies the homogeneity property but not the additivity property.
+
+1.7-5 Show that the circuit in Fig. P1.7-5 is zero-state linear but is not zero-input linear. Assume all diodes to have identical (matched) characteristics.
+Hint: In zero state (when the initial capacitor voltage $v_c(0)=0$), the circuit is linear. If the input $f(t)=0$, and $v_c(0)$ is nonzero, the current $y(t)$ does not exhibit linearity with respect to its cause $v_c(0)$.
+
+$y(t)$
+
+$D_1 \qquad C \qquad D_2 \qquad D_3$
+
+$+$
+$v_c$
+
+$2R \qquad 2R \qquad R$
+
+$f(t)$
+
+Fig. P1.7-5
+
+1.7-6 The inductor $L$ and the capacitor $C$ in Fig. P1.7-6 are nonlinear, which makes the circuit nonlinear. The remaining 3 elements are linear. Show that the output $y(t)$ of this nonlinear circuit satisfies the linearity conditions with respect to the input $f(t)$ and the initial conditions (all the initial inductor currents and capacitor voltages). Recognize that a current source is an open circuit when the current is zero.
+
+$C$
+
+$L$
+
+$0.1\,H$
+
+$1F$
+
+$2\Omega$
+
+$f(t)$
+
+$y(t)$
+
+Fig. P1.7-6
+
+1.7-7 For the systems described by the equations below, with the input $f(t)$ and output $y(t)$, determine which of the systems are causal and which are noncausal.
+
+(a) $y(t)=f(t-2)$
+
+(b) $y(t)=f(-t)$
+
+(c) $y(t)=f(at)\quad a>1$
+
+(d) $y(t)=f(at)\quad a<1$

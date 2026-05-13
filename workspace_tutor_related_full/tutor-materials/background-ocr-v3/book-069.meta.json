@@ -1,0 +1,39 @@
+{
+  "subsection": "1.4",
+  "summary": "This page concludes examples of representing piecewise signals using the unit step function through Exercises E1.7 and E1.8, with accompanying figures. It then begins a new topic introducing the unit impulse function \\(\\delta(t)\\), giving Dirac's defining properties and explaining its interpretation as the limiting case of a narrow rectangular pulse of unit area.",
+  "keywords": [
+    "signal models",
+    "unit step function",
+    "u(-t)",
+    "exponential signal",
+    "piecewise signal representation",
+    "exercise E1.7",
+    "exercise E1.8",
+    "unit impulse function",
+    "delta function",
+    "Dirac delta",
+    "impulse approximation",
+    "rectangular pulse"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-069",
+  "figures": [
+    {
+      "fig_id": "Fig. 1.17",
+      "top": 0.0466,
+      "left": 0.0352,
+      "bottom": 0.1423,
+      "right": 0.5505,
+      "caption": "Fig. 1.17 The Signal for Exercise E1.7."
+    },
+    {
+      "fig_id": "Fig. 1.18",
+      "top": 0.1538,
+      "left": 0.1832,
+      "bottom": 0.2361,
+      "right": 0.4017,
+      "caption": "Fig. 1.18 The signal for Exercise E1.8."
+    }
+  ]
+}

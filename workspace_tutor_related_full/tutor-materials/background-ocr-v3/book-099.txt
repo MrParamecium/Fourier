@@ -1,0 +1,89 @@
+Problems
+
+99
+
+$f(t)$
+
+$0.5$
+
+$0$
+
+$-1$
+
+$6 \quad 12 \quad 15 \quad 24 \quad t$
+
+Fig. P1.3-2
+
+$4$
+
+$2$
+
+$0$
+
+$-4 \quad 0 \quad 2 \quad t$
+
+Fig. P1.3-3
+
+$f_1(t)$
+
+(a)
+
+$4$
+
+$-1 \quad 0 \quad 2 \quad t$
+
+$f_2(t)$
+
+(b)
+
+$t^2$
+
+$4$
+
+$2 \quad 4 \quad t$
+
+$-4$
+
+Fig. P1.4-2
+
+1.4-1 Sketch the signals (a) $u(t-5)-u(t-7)$ (b) $u(t-5)+u(t-7)$ (c) $t^2[u(t-1)-u(t-2)]$ (d) $(t-4)[u(t-2)-u(t-4)]$
+
+1.4-2 Express each of the signals in Fig. P1.4-2 by a single expression valid for all $t$.
+
+1.4-3 For an energy signal $f(t)$ with energy $E_f$, show that the energy of any one of the signals $-f(t)$, $f(-t)$ and $f(t-T)$ is $E_f$. Show also that the energy of $f(t)$ as well as $f(at-b)$ is $E_f/a$.
+
+This means that time-inversion and time-shifting do not affect signal energy. On the other hand, time compression of a signal $(a>1)$ reduces the energy, and time expansion of a signal $(a<1)$ increases the energy. What is the effect on signal energy if the signal is multiplied by a constant $\alpha$?
+
+1.4-4 Simplify the following expressions:
+
+(a)
+$$
+\left(\frac{\sin t}{t^2+2}\right)\delta(t)
+$$
+
+(b)
+$$
+\left(\frac{j\omega+2}{\omega^2+9}\right)\delta(\omega)
+$$
+
+(c)
+$$
+\left[e^{-t}\cos(3t-60^\circ)\right]\delta(t)
+$$
+
+(d)
+$$
+\left(\frac{\sin\left[\frac{\pi}{2}(t-2)\right]}{t^2+4}\right)\delta(t-1)
+$$
+
+(e)
+$$
+\left(\frac{1}{j\omega+2}\right)\delta(\omega+3)
+$$
+
+(f)
+$$
+\left(\frac{\sin k\omega}{\omega}\right)\delta(\omega)
+$$
+
+Hint: Use Eq. (1.23). For part (f) use L'Hôpital's rule.

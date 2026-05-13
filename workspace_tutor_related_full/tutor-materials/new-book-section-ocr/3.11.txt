@@ -1,0 +1,11 @@
+# Aquarius section OCR
+section_id: 3.11
+source_pages: page-306, page-307, page-308, page-309, page-310, page-311, page-312, page-313
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+3.11 MATLAB: DISCRETE-TIME SIGNALS AND SYSTEMS
+MATLAB is naturally and ideally suited to discrete-time signals and systems. Many special
+functions are available for discrete-time data operations, including the stem, filter, and conv
+commands. In this section, we investigate and apply these and other commands.

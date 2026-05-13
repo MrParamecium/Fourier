@@ -1,0 +1,29 @@
+{
+  "subsection": "B.1",
+  "summary": "This page continues the introduction to complex numbers by explaining the geometric meaning of the complex conjugate and showing that a number and its conjugate sum to twice the real part and multiply to the squared magnitude. It then uses the polar form $re^{j\\theta}$ and a figure-based interpretation to derive useful exponential identities such as $e^{\\pm jn\\pi}=-1$ for odd integers, $e^{\\pm j2n\\pi}=1$, and $e^{\\pm j\\pi/2}=\\pm j$.",
+  "keywords": [
+    "complex numbers",
+    "complex conjugate",
+    "real part",
+    "magnitude",
+    "polar form",
+    "Euler form",
+    "complex plane",
+    "exponential identities",
+    "Re(z)",
+    "|z|^2"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-007",
+  "figures": [
+    {
+      "fig_id": "Fig. B.3",
+      "top": 0.0515,
+      "left": 0.1135,
+      "bottom": 0.1846,
+      "right": 0.5599,
+      "caption": "Two diagrams illustrating complex numbers. (a) shows a complex number re^jθ represented as a vector in the complex plane with real (Re) and imaginary (Im) axes. (b) shows the unit circle in the complex plane with points 1, -1, j, and -j marked, along with their corresponding angles π, -π, π/2, and -π/2."
+    }
+  ]
+}

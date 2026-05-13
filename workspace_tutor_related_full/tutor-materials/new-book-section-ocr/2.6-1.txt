@@ -1,0 +1,75 @@
+# Aquarius section OCR
+section_id: 2.6-1
+source_pages: page-203, page-204, page-205
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+2.6-1 Dependence of System Behavior on Characteristic Modes
+Recall that the zero-input response of a system consists of the system’s characteristic modes. For a stable system, these characteristic modes decay exponentially and eventually vanish. This behavior may give the impression that these modes do not substantially affect system behavior in general and system response in particular. This impression is totally wrong! We shall now see that the system’s characteristic modes leave their imprint on every aspect of the system behavior. We may compare the system’s characteristic modes (or roots) to a seed that eventually dissolves in the
+
+[[PAGE page-204]]
+204
+CHAPTER 2  TIME-DOMAIN ANALYSIS OF CONTINUOUS-TIME SYSTEMS
+
+ground; however, the plant that springs from it is totally determined by the seed. The imprint of
+the seed exists on every cell of the plant.
+To understand this interesting phenomenon, recall that the characteristic modes of a system
+are very special to that system because it can sustain these signals without the application of an
+external input. In other words, the system offers a free ride and ready access to these signals. Now
+imagine what would happen if we actually drove the system with an input having the form of a
+characteristic mode! We would expect the system to respond strongly (this is, in fact, the resonance
+phenomenon discussed later in this section). If the input is not exactly a characteristic mode but is
+close to such a mode, we would still expect the system response to be strong. However, if the input
+is very different from any of the characteristic modes, we would expect the system to respond
+poorly. We shall now show that these intuitive deductions are indeed true.
+
+THE ANSWER
+IS INTUITIVELY
+OBVIOUS.
+
+WE'RE
+DEAD
+MEAT!
+
+CONIGLIO
+
+Intuition can cut the math jungle instantly!
+
+We have devised a measure of similarity of signals later (see in Ch. 6). Here we shall take
+a simpler approach. Let us restrict the system's inputs to exponentials of the form e^{ζt}, where ζ
+is generally a complex number. The similarity of two exponential signals e^{ζt} and e^{λt} will then be
+measured by the closeness of ζ and λ. If the difference ζ - λ is small, the signals are similar; if
+ζ - λ is large, the signals are dissimilar.
+Now consider a first-order system with a single characteristic mode e^{λt} and the input e^{ζt}. The
+impulse response of this system is then given by Ae^{λt}, where the exact value of A is not important
+for this qualitative discussion. The system response y(t) is given by
+
+y(t) = h(t) ∗ x(t) = Ae^{λt}u(t) ∗ e^{ζt}u(t)
+
+From the convolution table (Table 2.1), we obtain
+
+y(t) = \frac{A}{ζ - λ}[e^{ζt} - e^{λt}]u(t)                              (2.46)
+
+[[PAGE page-205]]
+2.6  Intuitive Insights into System Behavior                                                                 205
+
+Clearly, if the input e^{ζt} is similar to e^{λt}, ζ − λ is small and the system response is large. The closer
+the input x(t) to the characteristic mode, the stronger the system response. In contrast, if the input
+is very different from the natural mode, ζ − λ is large and the system responds poorly. This is
+precisely what we set out to prove.
+
+We have proved the foregoing assertion for a single-mode (first-order) system. It can be
+generalized to an Nth-order system, which has N characteristic modes. The impulse response h(t)
+of such a system is a linear combination of its N modes. Therefore, if x(t) is similar to any one
+of the modes, the corresponding response will be high; if it is similar to none of the modes, the
+response will be small. Clearly, the characteristic modes are very influential in determining system
+response to a given input.
+
+It would be tempting to conclude on the basis of Eq. (2.46) that if the input is identical to the
+characteristic mode, so that ζ = λ, then the response goes to infinity. Remember, however, that if
+ζ = λ, the numerator on the right-hand side of Eq. (2.46) also goes to zero. We shall study this
+interesting behavior (resonance phenomenon) later in this section.
+
+We now show that mere inspection of the impulse response h(t) (which is composed of
+characteristic modes) reveals a great deal about the system behavior.

@@ -1,0 +1,20 @@
+{
+  "sectionId": "2.7-3",
+  "sourcePages": [
+    "page-215",
+    "page-216",
+    "page-217"
+  ],
+  "usedPages": [
+    "page-215",
+    "page-216",
+    "page-217"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "2.7-3 For-Loops",
+  "foundEnd": true,
+  "endBeforeLine": "2.7-4 Graphical Understanding of Convolution",
+  "endBeforeCode": "2.7-4",
+  "charCount": 4593
+}

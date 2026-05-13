@@ -1,0 +1,22 @@
+{
+  "sectionId": "1.4-2",
+  "sourcePages": [
+    "page-086",
+    "page-087",
+    "page-088",
+    "page-089"
+  ],
+  "usedPages": [
+    "page-086",
+    "page-087",
+    "page-088",
+    "page-089"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "1.4-2 The Unit Impulse Function δ(t)",
+  "foundEnd": true,
+  "endBeforeLine": "1.4-3 The Exponential Function est",
+  "endBeforeCode": "1.4-3",
+  "charCount": 9700
+}

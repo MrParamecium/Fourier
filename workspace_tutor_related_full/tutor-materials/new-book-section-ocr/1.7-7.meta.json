@@ -1,0 +1,18 @@
+{
+  "sectionId": "1.7-7",
+  "sourcePages": [
+    "page-109",
+    "page-110"
+  ],
+  "usedPages": [
+    "page-109",
+    "page-110"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "1.7-7 Invertible and Noninvertible Systems",
+  "foundEnd": true,
+  "endBeforeLine": "1.7-8 Stable and Unstable Systems",
+  "endBeforeCode": "1.7-8",
+  "charCount": 3589
+}

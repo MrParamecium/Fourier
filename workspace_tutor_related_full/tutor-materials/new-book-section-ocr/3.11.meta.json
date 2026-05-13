@@ -1,0 +1,30 @@
+{
+  "sectionId": "3.11",
+  "sourcePages": [
+    "page-306",
+    "page-307",
+    "page-308",
+    "page-309",
+    "page-310",
+    "page-311",
+    "page-312",
+    "page-313"
+  ],
+  "usedPages": [
+    "page-306",
+    "page-307",
+    "page-308",
+    "page-309",
+    "page-310",
+    "page-311",
+    "page-312",
+    "page-313"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "3.11 MATLAB: DISCRETE-TIME SIGNALS AND SYSTEMS",
+  "foundEnd": true,
+  "endBeforeLine": "3.11-1 Discrete-Time Functions and Stem Plots",
+  "endBeforeCode": "3.11-1",
+  "charCount": 310
+}

@@ -1,0 +1,20 @@
+{
+  "subsection": "B.5-5",
+  "summary": "This page finishes a partial-fraction example by combining the Heaviside cover-up method with shortcut techniques to determine the remaining unknown coefficients. It then introduces subsection B.5-5, explaining that when an improper rational function has numerator and denominator of the same degree (m = n), it can be handled similarly to a proper function, with an added constant term and residues computed by the usual formulas.",
+  "keywords": [
+    "partial fraction expansion",
+    "Heaviside cover-up method",
+    "improper rational function",
+    "equal degree polynomials",
+    "residue coefficients",
+    "repeated factors",
+    "quadratic factors",
+    "rational functions",
+    "coefficient determination",
+    "B.5-5"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-032",
+  "figures": []
+}

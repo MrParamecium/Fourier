@@ -1,0 +1,26 @@
+1.4 Some Useful Signal Models
+
+71
+
+Sampling Property of the Unit Impulse Function
+
+From Eq. (1.23a) it follows that
+
+$$\int_{-\infty}^{\infty} \phi(t)\delta(t)\,dt = \phi(0)\int_{-\infty}^{\infty}\delta(t)\,dt$$
+$$= \phi(0) \qquad (1.24a)$$
+
+provided $\phi(t)$ is continuous at $t=0$. This result means that the area under the product of a function with an impulse $\delta(t)$ is equal to the value of that function at the instant where the unit impulse is located. This property is very important and useful, and is known as the sampling or sifting property of the unit impulse.
+
+From Eq. (1.23b) it follows that
+
+$$\int_{-\infty}^{\infty} \phi(t)\delta(t-T)\,dt = \phi(T) \qquad (1.24b)$$
+
+Equation (1.24b) is just another form of sampling or sifting property. In the case of Eq. (1.24b), the impulse $\delta(t-T)$ is located at $t=T$. Therefore, the area under $\phi(t)\delta(t-T)$ is $\phi(T)$, the value of $\phi(t)$ at the instant where the impulse is located (at $t=T$). In these derivations we have assumed that the function is continuous at the instant where the impulse is located.
+
+Unit Impulse as a Generalized Function
+
+The definition of the unit impulse function given in Eq. (1.21) is not mathematically rigorous, which leads to serious difficulties. First, the impulse function does not define a unique function: for example, it can be shown that $\delta(t)+\dot{\delta}(t)$ also satisfies Eq. (1.21).$^1$ Moreover, $\delta(t)$ is not even a true function in the ordinary sense. An ordinary function is specified by its values for all time $t$. The impulse function is zero everywhere except at $t=0$, and at this only interesting part of its range it is undefined. These difficulties are resolved by defining the impulse as a generalized function rather than an ordinary function. A generalized function is defined by its effect on other functions instead of by its value at every instant of time.
+
+In this approach the impulse function is defined by the sampling property [Eq. (1.24)]. We say nothing about what the impulse function is or what it looks like. Instead, the impulse function is defined in terms of its effect on a test function $\phi(t)$. We define a unit impulse as a function for which the area under its product with a function $\phi(t)$ is equal to the value of the function $\phi(t)$ at the instant where the impulse is located. It is assumed that $\phi(t)$ is continuous at the location of the impulse. Therefore, either Eq. (1.24a) or (1.24b) can serve as a definition of the impulse function in this approach. Recall that the sampling property [Eq. (1.24)] is the consequence of the classical (Dirac) definition of impulse in Eq. (1.21). In contrast, the sampling property [Eq. (1.24)] defines the impulse function in the generalized function approach.
+
+We now present an interesting application of the generalized function definition of an impulse. Because the unit step function $u(t)$ is discontinuous at $t=0$, its derivative $du/dt$ does not exist at $t=0$ in the ordinary sense. We now show that

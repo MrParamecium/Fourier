@@ -1,0 +1,24 @@
+{
+  "subsection": "B.2",
+  "summary": "This page presents Example B.5, showing how to convert a complex frequency-domain function into Cartesian and polar forms, including derivation of its real part, imaginary part, magnitude, and phase. It then begins Section B.2 on sinusoids, introducing a cosine signal, explaining periodic repetition, and defining the period-frequency relationship as T0 = 1/F0.",
+  "keywords": [
+    "Example B.5",
+    "complex function",
+    "Cartesian form",
+    "polar form",
+    "real part",
+    "imaginary part",
+    "magnitude",
+    "phase angle",
+    "complex conjugate",
+    "sinusoids",
+    "cosine signal",
+    "frequency",
+    "period",
+    "periodicity"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-014",
+  "figures": []
+}

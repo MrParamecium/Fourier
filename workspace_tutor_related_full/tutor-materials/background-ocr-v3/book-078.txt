@@ -1,0 +1,49 @@
+78
+
+1 Introduction to Signals and Systems
+
+$R$
+
+$f(t)$
+
+$C$
+
+$v_c(t)$
+
+$y(t)$
+
+Fig. 1.26  An example of a simple electrical system.
+
+Data Needed to Compute System Response
+
+In order to understand what data we need to compute a system response, consider a simple RC circuit with a current source $f(t)$ as its input (Fig. 1.26). The output voltage $y(t)$ is given by
+
+$$
+y(t)=Rf(t)+\frac{1}{C}\int_{-\infty}^{t} f(\tau)\,d\tau
+$$
+(1.36a)
+
+The limits of the integral on the right-hand side are from $-\infty$ to $t$ because this integral represents the capacitor charge due to the current $f(t)$ flowing in the capacitor, and this charge is the result of the current flowing in the capacitor from $-\infty$. Now, Eq. (1.36a) can be expressed as
+
+$$
+y(t)=Rf(t)+\frac{1}{C}\int_{-\infty}^{0} f(\tau)\,d\tau+\frac{1}{C}\int_{0}^{t} f(\tau)\,d\tau
+$$
+(1.36b)
+
+The middle term on the right-hand side is $v_C(0)$, the capacitor voltage at $t=0$. Therefore
+
+$$
+y(t)=v_C(0)+Rf(t)+\frac{1}{C}\int_{0}^{t} f(\tau)\,d\tau
+$$
+(1.36c)
+
+This equation can be readily generalized as
+
+$$
+y(t)=v_C(t_0)+Rf(t)+\frac{1}{C}\int_{t_0}^{t} f(\tau)\,d\tau
+$$
+(1.36d)
+
+From Eq. (1.36a), the output voltage $y(t)$ at an instant $t$ can be computed if we know the input current flowing in the capacitor throughout its entire past ($-\infty$ to $t$). Alternatively, if we know the input current $f(t)$ from some moment on forward, then, using Eq. (1.36d), we can still calculate $y(t)$ for $t\geq t_0$ from a knowledge of the input current, provided we know $v_C(t_0)$, the initial capacitor voltage (voltage at $t_0$). Thus $v_C(t_0)$ contains all the relevant information about the circuit's entire past ($-\infty$ to $t_0$) that we need to compute $y(t)$ for $t\geq t_0$. Therefore, the response of a system at $t>t_0$ can be determined from its input(s) during the interval $t_0$ to $t$ and from certain initial conditions at $t=t_0$.
+
+In the preceding example, we needed only one initial condition. However, in more complex systems, several initial conditions may be necessary. We know, for example, that in passive RLC networks, the initial values of all inductor currents

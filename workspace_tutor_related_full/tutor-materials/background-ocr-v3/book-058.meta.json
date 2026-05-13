@@ -1,0 +1,31 @@
+{
+  "subsection": "1.2-2",
+  "summary": "This page distinguishes continuous-time versus discrete-time signals from analog versus digital signals, emphasizing that time indexing and amplitude quantization are different properties. It uses Fig. 1.5 to illustrate analog/digital and continuous-time/discrete-time combinations, introduces M-ary and binary digital signals, mentions analog-to-digital conversion by quantization, and begins the definition of periodic signals with the condition f(t) = f(t + T0).",
+  "keywords": [
+    "continuous-time signals",
+    "discrete-time signals",
+    "analog signals",
+    "digital signals",
+    "binary signals",
+    "M-ary signals",
+    "quantization",
+    "analog-to-digital conversion",
+    "periodic signals",
+    "aperiodic signals",
+    "signal classification",
+    "Figure 1.5"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-058",
+  "figures": [
+    {
+      "fig_id": "Fig. 1.5",
+      "top": 0.0575,
+      "left": 0.0611,
+      "bottom": 0.2785,
+      "right": 0.8325,
+      "caption": "Examples of Signals: (a) analog, continuous-time (b) digital, continuous-time (c) analog, discrete-time (d) digital, discrete-time."
+    }
+  ]
+}

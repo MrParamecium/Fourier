@@ -1,0 +1,59 @@
+12
+
+Background
+
+and
+
+$$z_1 = 3 + j4 = 5e^{j53.1^\circ}$$
+
+then
+
+$$z_2 = 2 + j3 = \sqrt{13}e^{j56.3^\circ}$$
+
+$$z_1 + z_2 = (3 + j4) + (2 + j3) = 5 + j7$$
+
+If $z_1$ and $z_2$ are given in polar form, we would need to convert them into Cartesian form for the purpose of adding (or subtracting). Multiplication and division, however, can be carried out in either Cartesian or polar form, although the latter proves to be much more convenient. This is because if $z_1$ and $z_2$ are expressed in polar form as
+
+$$z_1 = r_1 e^{j\theta_1} \qquad \text{and} \qquad z_2 = r_2 e^{j\theta_2}$$
+
+then
+
+$$z_1 z_2 = (r_1 e^{j\theta_1})(r_2 e^{j\theta_2}) = r_1 r_2 e^{j(\theta_1+\theta_2)} \qquad \text{(B.15a)}$$
+
+and
+
+$$\frac{z_1}{z_2} = \frac{r_1 e^{j\theta_1}}{r_2 e^{j\theta_2}} = \frac{r_1}{r_2} e^{j(\theta_1-\theta_2)} \qquad \text{(B.15b)}$$
+
+Moreover,
+
+$$z^n = (re^{j\theta})^n = r^n e^{jn\theta} \qquad \text{(B.15c)}$$
+
+and
+
+$$z^{1/n} = (re^{j\theta})^{1/n} = r^{1/n} e^{j\theta/n} \qquad \text{(B.15d)}$$
+
+This shows that the operations of multiplication, division, powers, and roots can be carried out with remarkable ease when the numbers are in polar form.
+
+■ Example B.3
+
+Determine $z_1 z_2$ and $z_1/z_2$ for the numbers
+
+$$z_1 = 3 + j4 = 5e^{j53.1^\circ}$$
+
+$$z_2 = 2 + j3 = \sqrt{13}e^{j56.3^\circ}$$
+
+We shall solve this problem in both polar and Cartesian forms.
+
+Multiplication: Cartesian Form
+
+$$z_1 z_2 = (3 + j4)(2 + j3) = (6 - 12) + j(8 + 9) = -6 + j17$$
+
+Multiplication: Polar Form
+
+$$z_1 z_2 = (5e^{j53.1^\circ})(\sqrt{13}e^{j56.3^\circ}) = 5\sqrt{13}e^{j109.4^\circ}$$
+
+Division: Cartesian Form
+
+$$\frac{z_1}{z_2} = \frac{3 + j4}{2 + j3}$$
+
+In order to eliminate the complex number in the denominator, we multiply both the numerator and the denominator of the right-hand side by $2 - j3$, the denominator's conjugate. This yields

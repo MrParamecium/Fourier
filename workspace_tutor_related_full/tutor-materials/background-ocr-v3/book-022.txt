@@ -1,0 +1,37 @@
+22
+
+Background
+
+are $4/e$, $4/e^2$, $4/e^3$, and $4/e^4$, or about $1.47$, $0.54$, $0.2$, and $0.07$ respectively. Using these values as a guide, we sketch $4e^{-2t}$, as illustrated in Fig. B.11a.
+
+(ii) Sketching $\cos(6t-60^\circ)$
+
+The procedure for sketching $\cos(6t-60^\circ)$ is discussed in Sec. B.2 (Fig. B.6c). Here the period of the sinusoid is $T_0=2\pi/6\approx 1$, and there is a phase delay of $60^\circ$, or two-thirds of a quarter-cycle, which is equivalent to about a $(60/360)(1)\approx 1/6$ second delay (see Fig. B.11b).
+
+(iii) Sketching $4e^{-2t}\cos(6t-60^\circ)$
+
+We now multiply the waveforms in (i) and (ii). The multiplication amounts to forcing the amplitude of the sinusoid $\cos(6t-60^\circ)$ to decrease exponentially with a time constant of $0.5$. The initial amplitude (at $t=0$) is $4$, decreasing to $4/e\ (=1.47)$ at $t=0.5$, to $1.47/e\ (=0.54)$ at $t=1$, and so on. This is depicted in Fig. B.11c. Note that at the instants where $\cos(6t-60^\circ)$ has a value of unity (peak amplitude),
+
+$$4e^{-2t}\cos(6t-60^\circ)=4e^{-2t} \qquad\text{(B.27)}$$
+
+Therefore, $4e^{-2t}\cos(6t-60^\circ)$ touches $4e^{-2t}$ at those instants where the sinusoid $\cos(6t-60^\circ)$ is at its positive peaks. Clearly $4e^{-2t}$ is an envelope for positive amplitudes of $4e^{-2t}\cos(6t-60^\circ)$. Similarly, at those instants where the sinusoid $\cos(6t-60^\circ)$ has a value of $-1$ (negative peak amplitude),
+
+$$4e^{-2t}\cos(6t-60^\circ)=-4e^{-2t} \qquad\text{(B.28)}$$
+
+and $4e^{-2t}\cos(6t-60^\circ)$ touches $-4e^{-2t}$ at its negative peaks. Therefore, $-4e^{-2t}$ is an envelope for negative amplitudes of $4e^{-2t}\cos(6t-60^\circ)$. Thus, to sketch $4e^{-2t}\cos(6t-60^\circ)$, we first draw the envelopes $4e^{-2t}$ and $-4e^{-2t}$ (the mirror image of $4e^{-2t}$ about the horizontal axis), and then sketch the sinusoid $\cos(6t-60^\circ)$, with these envelopes acting as constraints on the sinusoid’s amplitude (see Fig. B.11c).
+
+In general, $Ke^{-at}\cos(\omega_0 t+\theta)$ can be sketched in this manner, with $Ke^{-at}$ and $-Ke^{-at}$ constraining the amplitude of $\cos(\omega_0 t+\theta)$.
+
+B.4 Cramer’s Rule
+
+This is a very convenient rule used to solve simultaneous linear equations. Consider a set of $n$ linear simultaneous equations in $n$ unknowns $x_1,x_2,\ldots,x_n$:
+
+$$a_{11}x_1+a_{12}x_2+\cdots+a_{1n}x_n=y_1$$
+
+$$a_{21}x_1+a_{22}x_2+\cdots+a_{2n}x_n=y_2$$
+
+$$\cdots\cdots\cdots\cdots\cdots\cdots\cdots\cdots$$
+
+$$a_{n1}x_1+a_{n2}x_2+\cdots+a_{nn}x_n=y_n \qquad\text{(B.29)}$$
+
+These equations can be expressed in matrix form as

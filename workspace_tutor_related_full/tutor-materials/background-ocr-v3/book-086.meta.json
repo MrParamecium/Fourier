@@ -1,0 +1,29 @@
+{
+  "subsection": null,
+  "summary": "This page explains that a noncausal system can often be implemented in practice by introducing an appropriate time delay in the output, making the resulting system causal. It also notes that noncausal systems are important because they can represent ideal or optimal performance limits, especially in filtering, and includes an exercise asking the reader to analyze a noncausal integral system and show how it becomes realizable with delay.",
+  "keywords": [
+    "noncausal systems",
+    "causal systems",
+    "time delay",
+    "realizability",
+    "delayed output",
+    "filtering",
+    "optimal filter",
+    "performance bound",
+    "integral system",
+    "exercise"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-086",
+  "figures": [
+    {
+      "fig_id": null,
+      "top": 0.0545,
+      "left": 0.0611,
+      "bottom": 0.1725,
+      "right": 0.8231,
+      "caption": "A three-panel comic strip illustrating the concept of noncausal systems. A man asks a wizard to predict the stock market a year from now. The wizard replies that he needs a year to figure it out, which the man finds exasperating."
+    }
+  ]
+}

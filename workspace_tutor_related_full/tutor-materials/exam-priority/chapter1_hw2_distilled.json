@@ -1,0 +1,257 @@
+{
+  "source_pdf": "/Users/chenghaoxiang/Desktop/HW2/HW2_05_15.pdf",
+  "source_screenshots": [
+    "/Users/chenghaoxiang/Desktop/HW2/截屏2026-05-11 16.39.36.png",
+    "/Users/chenghaoxiang/Desktop/HW2/截屏2026-05-11 16.39.58.png",
+    "/Users/chenghaoxiang/Desktop/HW2/截屏2026-05-11 16.40.12.png"
+  ],
+  "scope": "chapter1",
+  "course_signal": "Chapter 1 homework emphasizes operational signal manipulation and definition-based system property classification.",
+  "assigned_problem_set": [
+    { "id": "1.1-3", "parts": ["a"], "topic": "energy of signal combinations" },
+    { "id": "1.1-4", "parts": ["all"], "topic": "periodic power and rms" },
+    { "id": "1.1-6", "parts": ["c"], "topic": "power/rms of amplitude-modulated sinusoidal product" },
+    { "id": "1.3-3", "parts": ["all"], "topic": "time shift, scaling, reversal, and combined transformations" },
+    { "id": "1.4-1", "parts": ["b", "d"], "topic": "unit-step construction and sketching" },
+    { "id": "1.4-2", "parts": ["all"], "topic": "graph-to-expression using step functions" },
+    { "id": "1.4-4", "parts": ["a", "c", "f"], "topic": "impulse product simplification" },
+    { "id": "1.4-5", "parts": ["b", "d", "e"], "topic": "impulse sifting integrals" },
+    { "id": "1.4-6", "parts": ["all"], "topic": "differentiating discontinuous signals" },
+    { "id": "1.4-7", "parts": ["all"], "topic": "running integral / accumulated area" },
+    { "id": "1.4-11", "parts": ["all"], "topic": "complex frequency locations for exponentially varying sinusoids" },
+    { "id": "1.5-1", "parts": ["b", "f"], "topic": "even and odd decomposition" },
+    { "id": "1.7-1", "parts": ["a", "c", "e", "g"], "topic": "linearity classification" },
+    { "id": "1.7-2", "parts": ["a", "c", "e", "f"], "topic": "time-invariance classification" },
+    { "id": "1.7-7", "parts": ["b", "c", "d"], "topic": "causality classification" },
+    { "id": "1.7-8", "parts": ["a", "b", "c"], "topic": "invertibility classification and inverse relation" }
+  ],
+  "high_priority_concepts": [
+    "Signal energy, power, and rms",
+    "Cross-term logic in energy of x+y and x-y",
+    "Time shifting, time scaling, time reversal, and combined transformations",
+    "Unit-step gating and rectangular windows",
+    "Graph-to-expression conversion",
+    "Impulse sifting and impulse product simplification",
+    "Impulse integrals and correct impulse location",
+    "Differentiation of discontinuous signals with impulse terms",
+    "Running integrals and accumulated area",
+    "Complex frequency location for exponentially varying sinusoids",
+    "Even and odd decomposition",
+    "Linearity: additivity and homogeneity",
+    "Time invariance via delay test",
+    "Causality via present/past/future dependence",
+    "Invertibility via unique input recovery"
+  ],
+  "high_priority_problem_types": [
+    "Compute energy of signal sums and differences",
+    "Compute power/rms of periodic and scaled signals",
+    "Sketch transformed signals from a graph",
+    "Express plotted signals using unit steps",
+    "Simplify products with delta functions",
+    "Evaluate shifted impulse integrals",
+    "Differentiate or integrate plotted signals",
+    "Locate complex frequencies in the s-plane",
+    "Compute even/odd components",
+    "Classify systems as linear/nonlinear",
+    "Classify systems as time-invariant/time-varying",
+    "Classify systems as causal/noncausal",
+    "Classify systems as invertible/noninvertible and find inverse mappings"
+  ],
+  "common_traps": [
+    "Thinking time shift or sign change changes energy",
+    "Forgetting power is a time average",
+    "Dropping cross terms in energy of x+y or x-y",
+    "Reversing left/right shift direction",
+    "Doing combined time transformations in the wrong order",
+    "Using the wrong support point for delta(1-t), delta(3-t), or delta(t-a)",
+    "Forgetting impulse area equals jump size when differentiating discontinuities",
+    "Confusing even/odd decomposition with visual halves of a signal",
+    "Calling a system linear when the input is squared or multiplied by its derivative",
+    "Missing affine offsets such as 3y+2=f in linearity tests",
+    "Confusing time invariance with absence of explicit t",
+    "Misjudging causality for f(at) when a>1 versus a<1",
+    "Assuming f^n(t) is always invertible without checking uniqueness and parity",
+    "Calling cosine of the input invertible despite many-to-one behavior"
+  ],
+  "required_example_patterns": [
+    "Energy of x(t)+y(t) and x(t)-y(t)",
+    "Power/rms under -f(t), 2f(t), and c f(t)",
+    "Sketch f(t-a), f(t/a), f(-t), f(2t-4), and f(2-t)",
+    "Represent a pulse with u(t-a)-u(t-b)",
+    "Simplify g(t) delta(t-a) by evaluating g(a)",
+    "Evaluate integral f(tau) delta(t-tau) d tau",
+    "Differentiate a signal with jumps and add impulse terms",
+    "Sketch accumulated area integral from -infinity to t",
+    "Locate sigma +/- j omega for damped or growing sinusoids",
+    "Decompose t u(t) into even and odd components",
+    "Test linearity on f^2(t), affine offsets, squared derivatives, and f(t) df/dt",
+    "Test time invariance on delay, time scaling, fixed-window integration, and derivative-square systems",
+    "Test causality for f(-t) and f(at)",
+    "Find inverse relation for y(t)=integral f and y(t)=f(3t-6)"
+  ],
+  "explanation_bias": {
+    "worked_examples_over_definition_only": true,
+    "graph_reasoning_is_core": true,
+    "property_tests_require_reasoning": true,
+    "include_trap_warnings": true,
+    "filter_by_current_section": true,
+    "deemphasize_long_conceptual_prose_without_procedure": true
+  },
+  "quiz_bias": {
+    "favor_energy_power_items": true,
+    "favor_signal_transformation_items": true,
+    "favor_step_impulse_items": true,
+    "favor_even_odd_items": true,
+    "favor_system_property_classification": true,
+    "favor_trap_questions_on_linearity_time_invariance_causality_invertibility": true
+  },
+  "topic_buckets": {
+    "signal_size": {
+      "label": "Signal size: energy, power, and rms",
+      "sectionHints": ["1.1", "1.1-1", "1.1-2"],
+      "problemIds": ["1.1-3", "1.1-4", "1.1-6"],
+      "concepts": [
+        "Signal energy",
+        "Signal power",
+        "RMS value",
+        "Scaling effects",
+        "Cross terms in signal combinations"
+      ],
+      "problemTypes": [
+        "Compute energy of sums/differences",
+        "Compute power and rms of periodic signals",
+        "Analyze scaling and sign-change effects"
+      ],
+      "traps": [
+        "Assuming sign change changes power",
+        "Forgetting time average",
+        "Dropping cross terms"
+      ]
+    },
+    "signal_transformations": {
+      "label": "Signal transformations and graph literacy",
+      "sectionHints": ["1.2", "1.2-1", "1.2-2", "1.2-3", "1.2-4", "1.3", "1.3-3"],
+      "problemIds": ["1.3-3"],
+      "concepts": [
+        "Time shifting",
+        "Time scaling",
+        "Time reversal",
+        "Combined transformations"
+      ],
+      "problemTypes": [
+        "Sketch transformed signals",
+        "Determine order of operations in f(a t + b)"
+      ],
+      "traps": [
+        "Shift direction reversal",
+        "Wrong order for f(2t-4)",
+        "Mistaking compression for expansion"
+      ]
+    },
+    "step_impulse_signal_models": {
+      "label": "Unit step, impulse, derivative, and integral models",
+      "sectionHints": ["1.4", "1.4-1", "1.4-2", "1.4-3"],
+      "problemIds": ["1.4-1", "1.4-2", "1.4-4", "1.4-5", "1.4-6", "1.4-7"],
+      "concepts": [
+        "Unit-step windows",
+        "Graph-to-expression conversion",
+        "Impulse sifting",
+        "Differentiating discontinuities",
+        "Running integral as accumulated area"
+      ],
+      "problemTypes": [
+        "Build/sketch step-gated signals",
+        "Simplify g(t) delta(t-a)",
+        "Evaluate impulse integrals",
+        "Differentiate and integrate plotted signals"
+      ],
+      "traps": [
+        "Wrong impulse support",
+        "Forgetting jump impulses",
+        "Confusing impulse height with impulse area"
+      ]
+    },
+    "complex_frequency_signal_models": {
+      "label": "Complex frequencies for exponentially varying sinusoids",
+      "sectionHints": ["1.4-3", "1.4"],
+      "problemIds": ["1.4-11"],
+      "concepts": [
+        "Complex frequency s = sigma + j omega",
+        "Damped and growing sinusoids",
+        "s-plane location"
+      ],
+      "problemTypes": [
+        "Locate sigma +/- j omega in the complex plane"
+      ],
+      "traps": [
+        "Confusing real-axis growth/decay with imaginary-axis oscillation",
+        "Forgetting cosine has conjugate frequency pair"
+      ]
+    },
+    "even_odd_decomposition": {
+      "label": "Even and odd components",
+      "sectionHints": ["1.5", "1.5-1", "1.5-2"],
+      "problemIds": ["1.5-1"],
+      "concepts": [
+        "Even component",
+        "Odd component",
+        "Symmetry check"
+      ],
+      "problemTypes": [
+        "Compute x_e(t) and x_o(t)",
+        "Recognize already-even/already-odd signals"
+      ],
+      "traps": [
+        "Forgetting x(-t)",
+        "Assuming a causal signal has no even component",
+        "Failing to simplify already-even cosine"
+      ]
+    },
+    "system_properties": {
+      "label": "System property classification",
+      "sectionHints": ["1.7", "1.7-1", "1.7-2", "1.7-3", "1.7-4", "1.7-7"],
+      "problemIds": ["1.7-1", "1.7-2", "1.7-7", "1.7-8"],
+      "concepts": [
+        "Linearity",
+        "Time invariance",
+        "Causality",
+        "Invertibility"
+      ],
+      "problemTypes": [
+        "Classify systems from equations",
+        "Apply delay test",
+        "Check future dependence",
+        "Recover input from output when possible"
+      ],
+      "traps": [
+        "Input nonlinearity",
+        "Output derivative squared",
+        "Affine offsets",
+        "Time scaling vs time invariance",
+        "Causality for f(at)",
+        "Many-to-one mappings"
+      ]
+    }
+  },
+  "section_priority_keywords": [
+    "energy",
+    "power",
+    "rms",
+    "time shifting",
+    "time scaling",
+    "time reversal",
+    "unit step",
+    "impulse",
+    "delta",
+    "sifting",
+    "derivative",
+    "integral",
+    "complex frequency",
+    "even",
+    "odd",
+    "linear",
+    "time-invariant",
+    "causal",
+    "invertible"
+  ]
+}

@@ -1,0 +1,170 @@
+# Aquarius section OCR
+section_id: b.1-1
+source_pages: page-001, page-002, page-003, page-004, page-005
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+B.1-1 A Historical Note
+   Among early people the number system consisted only of natural numbers (positive integers)
+   needed to express the number of children, cattle, and quivers of arrows. These people had no need
+   for fractions. Whoever heard of two and one-half children or three and one-fourth cows!
+        However, with the advent of agriculture, people needed to measure continuously varying
+   quantities, such as the length of a field and the weight of a quantity of butter. The number system,
+   therefore, was extended to include fractions. The ancient Egyptians and Babylonians knew how
+
+
+                                                                                                       1
+
+[[PAGE page-002]]
+2   CHAPTER B      BACKGROUND
+
+    to handle fractions, but Pythagoras discovered that some numbers (like the diagonal of a unit
+    square) could not be expressed as a whole number or a fraction. Pythagoras, a number mystic,
+    who regarded numbers as the essence and principle of all things in the universe, was so appalled at
+    his discovery that he swore his followers to secrecy and imposed a death penalty for divulging this
+    secret [1]. These numbers, however, were included in the number system by the time of Descartes,
+    and they are now known as irrational numbers.
+         Until recently, negative numbers were not a part of the number system. The concept of
+    negative numbers must have appeared absurd to early man. However, the medieval Hindus had a
+    clear understanding of the significance of positive and negative numbers [2, 3]. They were also
+    the first to recognize the existence of absolute negative quantities [4]. The works of Bhaskar
+    (1114–1185) on arithmetic (Līlāvatī) and algebra (Bījaganit) not only use the decimal system
+    but also give rules for dealing with negative quantities. Bhaskar recognized that positive numbers
+    have two square roots [5]. Much later, in Europe, the men who developed the banking system
+    that arose in Florence and Venice during the late Renaissance (fifteenth century) are credited with
+    introducing a crude form of negative numbers. The seemingly absurd subtraction of 7 from 5
+    seemed reasonable when bankers began to allow their clients to draw seven gold ducats while
+    their deposit stood at five. All that was necessary for this purpose was to write the difference, 2,
+    on the debit side of a ledger [6].
+         Thus, the number system was once again broadened (generalized) to include negative
+    numbers. The acceptance of negative numbers made it possible to solve equations such as x+5 = 0,
+    which had no solution before. Yet for equations such as x2 + 1 = 0, leading to x2 = −1, the
+    solution could not be found in the real number system. It was therefore necessary to define a
+    completely new kind of number with its square equal to −1. During the time of Descartes and
+    Newton, imaginary (or complex) numbers came to be accepted as part of the number system, but
+    they were still regarded as algebraic fiction. The Swiss √mathematician Leonhard Euler introduced
+    the notation i (for imaginary) around 1777 to represent −1. Electrical engineers use the notation
+    j instead of i to avoid confusion with the notation i often used for electrical current. Thus,
+                                                           √
+                                     j2 = −1      and          −1 = ±j
+
+    This notation allows us to determine the square root of any negative number. For example,
+                                        √    √   √
+                                         −4 = 4 × −1 = ±2j
+
+       When imaginary numbers are included in the number system, the resulting numbers are called
+    complex numbers.
+
+    O RIGINS OF C OMPLEX N UMBERS
+    Ironically (and contrary to popular belief), it was not the solution of a quadratic equation, such
+    as x2 + 1 = 0, but a cubic equation with real roots that √made imaginary numbers plausible and
+    acceptable to early mathematicians. They could dismiss −1 as pure nonsense when it appeared
+    as a solution to x2 + 1 = 0 because this equation has no real solution. But in 1545, Gerolamo
+    Cardano of Milan published Ars Magna (The Great Art), the most important algebraic work of the
+    Renaissance. In this book, he gave a method of solving a general cubic equation in which a root
+    of a negative number appeared in an intermediate step. According to his method, the solution to a
+
+[[PAGE page-003]]
+B.1 Complex Numbers                   3
+
+third-order equation†
+                                                x3 + ax + b = 0
+is given by                                            
+                                                            
+                                  3    b        b2 a3   3 b    b2 a3
+                             x=       − +         +    + − −     +
+                                       2        4   27    2    4   27
+For example, to find a solution of x3 + 6x − 20 = 0, we substitute a = 6, b = −20 in the foregoing
+equation to obtain
+                                       
+                        3      √        3      √       √3
+                                                                    √3
+                   x = 10 + 108 + 10 − 108 = 20.392 − 0.392 = 2
+
+We can readily verify that 2 is indeed a solution of x3 + 6x − 20 = 0. But when Cardano tried to
+solve the equation x3 − 15x − 4 = 0 by this formula, his solution was
+                                                    
+                                    3     √           3    √
+                                x = 2 + −121 + 2 − −121
+
+What was Cardano to make of this equation in the year 1545? In those days, negative numbers
+were themselves suspect, and a square root of a negative number was doubly preposterous! Today,
+we know that                                              √
+                                (2 ± j)3 = 2 ± j11 = 2 ± −121
+Therefore, Cardano’s formula gives
+
+                                         x = (2 + j) + (2 − j) = 4
+
+We can readily verify that x = 4 is indeed
+                                        √      a solution of x3 − 15x − 4 = 0. Cardano tried to
+explain halfheartedly the presence of −121 but ultimately dismissed the whole enterprise as
+being “as subtle as it is useless.” A generation later, however, Raphael Bombelli (1526–1573),
+after examining Cardano’s results, proposed acceptance of imaginary numbers as a necessary
+vehicle that would transport the mathematician from the real cubic equation to its real solution.
+In other words, although we begin and end with real numbers, we seem compelled to move into
+an unfamiliar world of imaginaries to complete our journey. To mathematicians of the day, this
+proposal seemed incredibly strange [7]. Yet they could not dismiss the idea of imaginary numbers
+so easily because this concept yielded the real solution of an equation. It took two more centuries
+for the full importance of complex numbers to become evident in the works of Euler, Gauss, and
+Cauchy. Still, Bombelli deserves credit for recognizing that such numbers have a role to play in
+algebra [7].
+
+† This equation is known as the depressed cubic equation. A general cubic equation
+
+                                            y3 + py2 + qy + r = 0
+can always be reduced to a depressed cubic form by substituting y = x − (p/3). Therefore, any general cubic
+equation can be solved if we know the solution to the depressed cubic. The depressed cubic was independently
+solved, first by Scipione del Ferro (1465–1526) and then by Niccolo Fontana (1499–1557). The latter is better
+known in the history of mathematics as Tartaglia (“Stammerer”). Cardano learned the secret of the depressed
+cubic solution from Tartaglia. He then showed that by using the substitution y = x − (p/3), a general cubic is
+reduced to a depressed cubic.
+
+[[PAGE page-004]]
+4   CHAPTER B          BACKGROUND
+
+         In 1799 the German mathematician Karl Friedrich Gauss, at the ripe age of 22, proved the
+    fundamental theorem of algebra, namely that every algebraic equation in one unknown has a root
+    in the form of a complex number. He showed that every equation of the nth order has exactly n
+    solutions (roots), no more and no less. Gauss was also one of the first to give a coherent account
+    of complex numbers and to interpret them as points in a complex plane. It is he who introduced
+    the term complex numbers and paved the way for their general and systematic use. The number
+    system was once again broadened or generalized to include imaginary numbers. Ordinary (or real)
+    numbers became a special case of generalized (or complex) numbers.
+         The utility of complex numbers can be understood readily by an analogy with two neighboring
+    countries X and Y, as illustrated in Fig. B.1. If we want to travel from City a to City b (both in
+
+
+
+
+                      Gerolamo Cardano                           Karl Friedrich Gauss
+
+
+        Country
+          X
+                                   Al t e
+                                            rn
+                  a                          at
+
+
+                       Di                        e route
+                       rec
+                         t r
+                            oute
+
+           Country
+             Y                      b
+                                                           Figure B.1 Use of complex numbers can
+                                                           reduce the work.
+
+[[PAGE page-005]]
+B.1 Complex Numbers             5
+
+Country X), the shortest route is through Country Y, although the journey begins and ends in
+Country X. We may, if we desire, perform this journey by an alternate route that lies exclusively
+in X, but this alternate route is longer. In mathematics we have a similar situation with real
+numbers (Country X) and complex numbers (Country Y). Most real-world problems start with
+real numbers, and the final results must also be in real numbers. But the derivation of results
+is considerably simplified by using complex numbers as an intermediary. It is also possible to
+solve any real-world problem by an alternate method, using real numbers exclusively, but such
+procedures would increase the work needlessly.

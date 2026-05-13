@@ -1,0 +1,37 @@
+{
+  "subsection": "1 Introduction to Signals and Systems",
+  "summary": "This page continues the discussion of the unit impulse by showing several pulse shapes that approximate an impulse as their width shrinks to zero while maintaining unit area. It also introduces the scaling property of the impulse and the multiplication, or sampling, property stating that a continuous function multiplied by an impulse is evaluated at the impulse location.",
+  "keywords": [
+    "unit impulse",
+    "delta function",
+    "impulse approximation",
+    "exponential pulse",
+    "unit area",
+    "scaled impulse",
+    "sampling property",
+    "multiplication by an impulse",
+    "continuity",
+    "shifted impulse"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-070",
+  "figures": [
+    {
+      "fig_id": "Fig. 1.19",
+      "top": 0.0533,
+      "left": 0.0941,
+      "bottom": 0.1604,
+      "right": 0.7535,
+      "caption": "A unit impulse and its approximation, showing the ideal impulse δ(t) and a rectangular pulse approximation."
+    },
+    {
+      "fig_id": "Fig. 1.20",
+      "top": 0.1725,
+      "left": 0.08,
+      "bottom": 0.2718,
+      "right": 0.7996,
+      "caption": "Other possible approximations to a unit impulse, including an exponential pulse, a triangular pulse, and a Gaussian pulse."
+    }
+  ]
+}

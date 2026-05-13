@@ -1,0 +1,20 @@
+{
+  "subsection": "B.2",
+  "summary": "This page explains partial-fraction expansion when a denominator contains an irreducible quadratic factor formed from complex-conjugate roots. It shows how to write the numerator over the quadratic as a linear term, determine the coefficients by clearing fractions and equating powers, and then presents shortcut methods using evaluation at x = 0 and the limit as x approaches infinity.",
+  "keywords": [
+    "partial fraction expansion",
+    "quadratic factors",
+    "complex conjugate factors",
+    "Heaviside method",
+    "equating coefficients",
+    "irreducible quadratic",
+    "rational function",
+    "short-cuts",
+    "limit as x approaches infinity",
+    "real coefficients"
+  ],
+  "has_math": true,
+  "page_type": "text",
+  "book_page": "book-028",
+  "figures": []
+}

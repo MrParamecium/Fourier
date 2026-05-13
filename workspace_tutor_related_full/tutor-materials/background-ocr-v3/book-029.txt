@@ -1,0 +1,74 @@
+29
+
+B.5 Partial Fraction Expansion
+
+computations involved. We could just as well use other convenient values for $x$, such as $x=1$. Consider the case
+
+$$
+F(x)=\frac{2x^2+4x+5}{x(x^2+2x+5)}
+$$
+
+$$
+=\frac{k}{x}+\frac{c_1x+c_2}{x^2+2x+5}
+$$
+
+We find $k=1$ by the Heaviside method in the usual manner. As a result,
+
+$$
+\frac{2x^2+4x+5}{x(x^2+2x+5)}=\frac{1}{x}+\frac{c_1x+c_2}{x^2+2x+5}
+\qquad\text{(B.43)}
+$$
+
+To determine $c_1$ and $c_2$, if we try letting $x=0$ in Eq. (B.43), we obtain $\infty$ on both sides. So let us choose $x=1$. This yields
+
+$$
+F(1)=\frac{11}{8}=1+\frac{c_1+c_2}{8}
+$$
+
+or
+
+$$
+c_1+c_2=3
+$$
+
+We can now choose some other value for $x$, such as $x=2$, to obtain one more relationship to use in determining $c_1$ and $c_2$. In this case, however, a simple method is to multiply both sides of Eq. (B.43) by $x$ and then let $x\to\infty$. This yields
+
+$$
+2=1+c_1
+$$
+
+so that
+
+$$
+c_1=1
+\qquad\text{and}\qquad
+c_2=2
+$$
+
+Therefore,
+
+$$
+F(x)=\frac{1}{x}+\frac{x+2}{x^2+2x+5}
+$$
+
+B.5.3 Repeated Factors in $Q(x)$
+
+If a function $F(x)$ has a repeated factor in its denominator, it has the form
+
+$$
+F(x)=\frac{P(x)}{(x-\lambda)^r(x-\alpha_1)(x-\alpha_2)\cdots(x-\alpha_j)}
+\qquad\text{(B.44)}
+$$
+
+Its partial fraction expansion is given by
+
+$$
+F(x)=\frac{a_0}{(x-\lambda)^r}+\frac{a_1}{(x-\lambda)^{r-1}}+\cdots+\frac{a_{r-1}}{(x-\lambda)}
+$$
+
+$$
++\frac{k_1}{x-\alpha_1}+\frac{k_2}{x-\alpha_2}+\cdots+\frac{k_j}{x-\alpha_j}
+\qquad\text{(B.45)}
+$$
+
+The coefficients $k_1,k_2,\ldots,k_j$ corresponding to the unrepeated factors in this equation are determined by the Heaviside method, as before [Eq. (B.37)]. To find the

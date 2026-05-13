@@ -1,0 +1,35 @@
+{
+  "subsection": "B.2",
+  "summary": "This page explains the time constant of monotonic exponential signals and shows that a decaying exponential decreases to about 37% of its value over each interval of length 1/a. It uses the example f(t)=e^{-2t} to demonstrate how to sketch an exponential waveform by marking values at successive time constants, and briefly notes the corresponding growth behavior for e^{at}.",
+  "keywords": [
+    "monotonic exponentials",
+    "time constant",
+    "exponential decay",
+    "exponential growth",
+    "sketching signals",
+    "e^{-at}",
+    "e^{-2t}",
+    "signal waveform"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-020",
+  "figures": [
+    {
+      "fig_id": "Fig. B.9",
+      "top": 0.0533,
+      "left": 0.0894,
+      "bottom": 0.1707,
+      "right": 0.7328,
+      "caption": "Monotonic exponentials."
+    },
+    {
+      "fig_id": "Fig. B.10",
+      "top": 0.2875,
+      "left": 0.0941,
+      "bottom": 0.4074,
+      "right": 0.7526,
+      "caption": "(a) Sketching e⁻ᵃᵗ (b) sketching e⁻²ᵗ."
+    }
+  ]
+}

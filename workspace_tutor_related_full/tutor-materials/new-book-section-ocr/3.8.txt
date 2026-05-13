@@ -1,0 +1,332 @@
+# Aquarius section OCR
+section_id: 3.8
+source_pages: page-280, page-281, page-282, page-283, page-284, page-285, page-286, page-287, page-288, page-289, page-290, page-291, page-292, page-293, page-294, page-295, page-296, page-297, page-298
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+3.8 SYSTEM RESPONSE TO EXTERNAL INPUT:
+THE ZERO-STATE RESPONSE
+
+The zero-state response y[n] is the system response to an input x[n] when the system is in the
+zero state. In this section we shall assume that systems are in the zero state unless mentioned
+otherwise, so that the zero-state response will be the total response of the system. Here we follow
+the procedure parallel to that used in the continuous-time case by expressing an arbitrary input
+x[n] as a sum of impulse components. A signal x[n] in Fig. 3.20a can be expressed as a sum
+of impulse components, such as those depicted in Figs. 3.20b–3.20f. The component of x[n] at
+n = m is x[m]δ[n − m], and x[n] is the sum of all these components summed from m = −∞ to ∞.
+
+[[PAGE page-281]]
+3.8  System Response to External Input: The Zero-State Response                                                                 281
+
+(a)
+
+x[n]
+
+-2  -1   1   2   3   4    n
+
+(b)
+
+x[-2]δ[n + 2]
+
+-2                      n
+
+(c)
+
+x[-1]δ[n + 1]
+
+-1                      n
+
+(d)
+
+x[0]δ[n]
+
+n
+
+(e)
+
+x[1]δ[n - 1]
+
+1                       n
+
+(f)
+
+x[2]δ[n - 2]
+
+2                       n
+
+Figure 3.20  Representation of an arbitrary signal x[n]
+in terms of impulse components.
+
+Therefore,
+
+x[n] = x[0]δ[n] + x[1]δ[n - 1] + x[2]δ[n - 2] + · · ·
+      + x[-1]δ[n + 1] + x[-2]δ[n + 2] + · · ·
+      = \sum_{m=-\infty}^{\infty} x[m]δ[n - m]                                             (3.30)
+
+[[PAGE page-282]]
+282
+CHAPTER 3  TIME-DOMAIN ANALYSIS OF DISCRETE-TIME SYSTEMS
+
+For a linear system, if we know the system response to impulse δ[n], we can obtain the system
+response to any arbitrary input by summing the system response to various impulse components.
+Let h[n] be the system response to impulse input δ[n]. We shall use the notation
+
+x[n] ⟹ y[n]
+
+to indicate the input and the corresponding response of the system. Thus, if
+
+δ[n] ⟹ h[n]
+
+then because of time invariance
+
+δ[n - m] ⟹ h[n - m]
+
+and because of linearity
+
+x[m]δ[n - m] ⟹ x[m]h[n - m]
+
+and again because of linearity
+
+∑_{m=-∞}^{∞} x[m]δ[n - m]  ⟹  ∑_{m=-∞}^{∞} x[m]h[n - m]
+        ⏟x[n]                         ⏟y[n]
+
+The left-hand side is x[n] [see Eq. (3.30)], and the right-hand side is the system response y[n] to
+input x[n]. Therefore,†
+
+y[n] = ∑_{m=-∞}^{∞} x[m]h[n - m]                                              (3.31)
+
+The summation on the right-hand side is known as the convolution sum of x[n] and h[n], and is
+represented symbolically by x[n] ∗ h[n]
+
+x[n] ∗ h[n] = ∑_{m=-∞}^{∞} x[m]h[n - m]
+
+PROPERTIES OF THE CONVOLUTION SUM
+The structure of the convolution sum is similar to that of the convolution integral. Moreover,
+the properties of the convolution sum are similar to those of the convolution integral. We shall
+enumerate these properties here without proof. The proofs are similar to those for the convolution
+integral and may be derived by the reader.
+
+† In deriving this result, we have assumed a time-invariant system. The system response to input δ[n - m]
+for a time-varying system cannot be expressed as h[n - m]; instead, it has the form h[n, m]. Using this form,
+Eq. (3.31) is modified as follows:
+
+y[n] = ∑_{m=-∞}^{∞} x[m]h[n, m]
+
+[[PAGE page-283]]
+3.8  System Response to External Input: The Zero-State Response                                      283
+
+The Commutative Property.
+
+x1[n] ∗ x2[n] = x2[n] ∗ x1[n]
+
+The Distributive Property.
+
+x1[n] ∗ (x2[n] + x3[n]) = x1[n] ∗ x2[n] + x1[n] ∗ x3[n]
+
+The Associative Property.
+
+x1[n] ∗ (x2[n] ∗ x3[n]) = (x1[n] ∗ x2[n]) ∗ x3[n]
+
+The Shifting Property.  If
+
+x1[n] ∗ x2[n] = c[n]
+
+then
+
+x1[n − m] ∗ x2[n − p] = c[n − m − p]                                                      (3.32)
+
+The Convolution with an Impulse.
+
+x[n] ∗ δ[n] = x[n]
+
+The Width Property. If x1[n] and x2[n] have finite widths of W1 and W2, respectively, then the
+width of x1[n] ∗ x2[n] is W1 + W2. The width of a signal is 1 less than the number of its elements
+(length). Thus the signal in Fig. 3.22h has six elements (length of 6) but a width of only 5.
+Alternately, the property may be stated in terms of lengths as follows: if x1[n] and x2[n] have
+finite lengths of L1 and L2 elements, respectively, then the length of x1[n] ∗ x2[n] is L1 + L2 − 1
+elements.
+
+CAUSALITY AND ZERO-STATE RESPONSE
+In deriving Eq. (3.31), we assumed the system to be linear and time-invariant. There were no other
+restrictions on either the input signal or the system. In our applications, almost all the input signals
+are causal, and a majority of the systems are also causal. These restrictions further simplify the
+limits of the sum in Eq. (3.31). If the input x[n] is causal, x[m] = 0 for m < 0. Similarly, if the
+system is causal (i.e., if h[n] is causal), then h[x] = 0 for negative x so that h[n − m] = 0 when
+m > n. Therefore, if x[n] and h[n] are both causal, the product x[m]h[n − m] = 0 for m < 0 and for
+m > n, and it is nonzero only for the range 0 ≤ m ≤ n. Therefore, Eq. (3.31) in this case reduces to
+
+y[n] = ∑_{m=0}^{n} x[m]h[n − m]                                                           (3.33)
+
+We shall evaluate the convolution sum first by an analytical method and later with graphical
+aid.
+
+[[PAGE page-284]]
+284    CHAPTER 3    TIME-DOMAIN ANALYSIS OF DISCRETE-TIME SYSTEMS
+
+EXAMPLE 3.20  Convolution of Causal Signals
+
+Determine c[n] = x[n] * g[n] for
+
+x[n] = (0.8)^n u[n]    and    g[n] = (0.3)^n u[n]
+
+We have
+
+c[n] = \sum_{m=-\infty}^{\infty} x[m]g[n - m]
+
+Note that
+
+x[m] = (0.8)^m u[m]    and    g[n - m] = (0.3)^{n-m} u[n - m]
+
+Both x[n] and g[n] are causal. Therefore [see Eq. (3.33)],
+
+c[n] = \sum_{m=0}^{n} x[m]g[n - m] = \sum_{m=0}^{n} (0.8)^m u[m](0.3)^{n-m} u[n - m]
+
+In this summation, m lies between 0 and n (0 \le m \le n). Therefore, if n \ge 0, then both m and
+n - m \ge 0 so that u[m] = u[n - m] = 1. If n < 0, m is negative because m lies between 0 and n,
+and u[m] = 0. Therefore,
+
+c[n] = {
+\sum_{m=0}^{n} (0.8)^m (0.3)^{n-m}    n \ge 0
+0                                           n < 0
+
+or
+
+c[n] = (0.3)^n \sum_{m=0}^{n} \left( \frac{0.8}{0.3} \right)^m u[n]
+
+This is a geometric progression with common ratio (0.8/0.3). From Sec. B.8-3 we have
+
+c[n] = (0.3)^n \frac{(0.8)^{n+1} - (0.3)^{n+1}}{(0.3)^n (0.8 - 0.3)} u[n]
+
+= 2[(0.8)^{n+1} - (0.3)^{n+1}]u[n]
+
+DRILL 3.15  Convolution of Causal Signals
+
+Show that (0.8)^n u[n] * u[n] = 5[1 - (0.8)^{n+1}]u[n].
+
+[[PAGE page-285]]
+3.8  System Response to External Input: The Zero-State Response                                                                 285
+
+CONVOLUTION SUM FROM A TABLE
+Just as in the continuous-time case, we have prepared a table (Table 3.1) from which convolution
+sums may be determined directly for a variety of signal pairs. For example, the convolution in
+Ex. 3.20 can be read directly from this table (pair 4) as
+
+(0.8)^n u[n] ∗ (0.3)^n u[n] = \frac{(0.8)^{n+1} - (0.3)^{n+1}}{0.8 - 0.3} u[n] = 2[(0.8)^{n+1} - (0.3)^{n+1}]u[n]
+
+We shall demonstrate the use of the convolution table in the following example.
+
+TABLE 3.1   Select Convolution Sums
+
+No.     x1[n]                  x2[n]                  x1[n] ∗ x2[n] = x2[n] ∗ x1[n]
+
+1       δ[n − k]               x[n]                   x[n − k]
+
+2       γ^n u[n]               u[n]                   \left[\frac{1 - γ^{n+1}}{1 - γ}\right]u[n]
+
+3       u[n]                   u[n]                   (n + 1)u[n]
+
+4       γ1^n u[n]              γ2^n u[n]              \left[\frac{γ1^{n+1} - γ2^{n+1}}{γ1 - γ2}\right]u[n]      γ1 ≠ γ2
+
+5       u[n]                   nu[n]                  \frac{n(n + 1)}{2}u[n]
+
+6       γ^n u[n]               nu[n]                  \left[\frac{γ(γ^n - 1) + n(1 - γ)}{(1 - γ)^2}\right]u[n]
+
+7       nu[n]                  nu[n]                  \frac{1}{6}n(n − 1)(n + 1)u[n]
+
+8       γ^n u[n]               γ^n u[n]               (n + 1)γ^n u[n]
+
+9       nγ1^n u[n]             γ2^n u[n]              \frac{γ1γ2}{(γ1 − γ2)^2}\left[γ2^n − γ1^n + \frac{γ1 − γ2}{γ2}nγ1^n\right]u[n]      γ1 ≠ γ2
+
+10      |γ1|^n cos(βn + θ)u[n] |γ2|^n u[n]            \frac{1}{R}[|γ1|^{n+1} cos[β(n + 1) + θ − ϕ] − |γ2|^{n+1} cos(θ − ϕ)]u[n]
+
+                                                        R = [|γ1|^2 + |γ2|^2 − 2|γ1||γ2| cos β]^{1/2}
+
+                                                        ϕ = tan^−1\left[\frac{(|γ1| sin β)}{(|γ1| cos β − |γ2|)}\right]
+
+11      γ1^n u[−(n + 1)]       γ2^n u[n]              \frac{γ2}{γ1 − γ2}γ2^n u[n] + \frac{γ1}{γ1 − γ2}γ1^n u[−(n + 1)]      |γ1| > |γ2|
+
+[[PAGE page-286]]
+286
+CHAPTER 3  TIME-DOMAIN ANALYSIS OF DISCRETE-TIME SYSTEMS
+
+EXAMPLE 3.21  Convolution by Tables
+
+Using Table 3.1, find the (zero-state) response y[n] of an LTID system described by the
+equation
+
+y[n + 2] − 0.6y[n + 1] − 0.16y[n] = 5x[n + 2]
+
+if the input x[n] = 4^−n u[n].
+
+The input can be expressed as x[n] = 4^−n u[n] = (1/4)^n u[n] = (0.25)^n u[n]. The unit impulse
+response of this system, obtained in Ex. 3.18, is
+
+h[n] = [(-0.2)^n + 4(0.8)^n]u[n]
+
+Therefore,
+
+y[n] = x[n] ∗ h[n]
+      = (0.25)^n u[n] ∗ [(-0.2)^n u[n] + 4(0.8)^n u[n]]
+      = (0.25)^n u[n] ∗ (-0.2)^n u[n] + (0.25)^n u[n] ∗ 4(0.8)^n u[n]
+
+We use pair 4 (Table 3.1) to find the foregoing convolution sums.
+
+y[n] = [((0.25)^(n+1) − (−0.2)^(n+1)) / (0.25 − (−0.2)) + 4((0.25)^(n+1) − (0.8)^(n+1)) / (0.25 − 0.8)]u[n]
+     = (2.22[(0.25)^(n+1) − (−0.2)^(n+1)] − 7.27[(0.25)^(n+1) − (0.8)^(n+1)])u[n]
+     = [−5.05(0.25)^(n+1) − 2.22(−0.2)^(n+1) + 7.27(0.8)^(n+1)]u[n]
+
+Recognizing that
+
+γ^(n+1) = γ (γ)^n
+
+we can express y[n] as
+
+y[n] = [−1.26(0.25)^n + 0.444(−0.2)^n + 5.81(0.8)^n]u[n]
+     = [−1.26(4)^−n + 0.444(−0.2)^n + 5.81(0.8)^n]u[n]
+
+DRILL 3.16  Convolution by Tables
+
+Use Table 3.1 to show that
+
+(a)  (0.8)^(n+1)u[n] ∗ u[n] = 4[1 − 0.8(0.8)^n]u[n]
+(b)  n 3^−n u[n] ∗ (0.2)^n u[n] = 15/4 [(0.2)^n − (1 − 2n/3)3^−n]u[n]
+(c)  e^−n u[n] ∗ 2^−n u[n] = 2/(2 − e) [e^−n − (e/2)2^−n]u[n]
+
+[[PAGE page-287]]
+3.8  System Response to External Input: The Zero-State Response  287
+
+EXAMPLE 3.22  Filtering Perspective of the Zero-State Response
+
+Use the MATLAB filter command to compute and sketch the zero-state response for the system described by (E^2 + 0.5E − 1)y[n] = (2E^2 + 6E)x[n] and the input x[n] = 4^−n u[n].
+
+We solve this problem using the same approach as Ex. 3.19. Although the input is bounded and quickly decays to zero, the system itself is unstable and an unbounded output results.
+
+>>  n = (0:11); x = @(n) 4.^(-n).*(n>=0);
+>>  a = [1 0.5 -1]; b = [2 6 0]; y = filter(b,a,x(n));
+>>  clf; stem(n,y,'k'); xlabel('n'); ylabel('y[n]'); axis([-0.5 11.5 -20 25]);
+
+Figure 3.21  Zero-state response for Ex. 3.22
+
+RESPONSE TO COMPLEX INPUTS
+As in the case of real continuous-time systems, we can show that for an LTID system with real h[n], if the input and the output are expressed in terms of their real and imaginary parts, then the real part of the input generates the real part of the response and the imaginary part of the input generates the imaginary part. Thus, if
+
+x[n] = x_r[n] + jx_i[n]      and      y[n] = y_r[n] + jy_i[n]
+
+using the right-directed arrow to indicate the input–output pair, we can show that
+
+x_r[n] ⟹ y_r[n]      and      x_i[n] ⟹ y_i[n]                                           (3.34)
+
+The proof is similar to that used to derive Eq. (2.31) for LTIC systems.
+
+MULTIPLE INPUTS
+Multiple inputs to LTI systems can be treated by applying the superposition principle. Each input is considered separately, with all other inputs assumed to be zero. The sum of all these individual system responses constitutes the total system output when all the inputs are applied simultaneously.
+
+[[PAGE page-288]]
+288
+CHAPTER 3  TIME-DOMAIN ANALYSIS OF DISCRETE-TIME SYSTEMS
+
+DRILL 3.17  Response to Multiple Inputs
+Show that the system described by y[n] − 0.6y[n − 1] − 0.16y[n − 2] = 5x[n] responds to input
+x[n] = δ[n] + 4^{-n}u[n] with output y[n] = [−1.26(4)^{-n} + 1.444(−0.2)^n + 9.81(0.8)^n]u[n].
+[Hint: Use the results of Exs. 3.18 and 3.21.]

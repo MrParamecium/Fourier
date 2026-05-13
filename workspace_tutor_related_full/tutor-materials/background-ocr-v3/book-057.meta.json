@@ -1,0 +1,31 @@
+{
+  "subsection": "1.2-1",
+  "summary": "This page introduces the classification of signals and lists five major categories considered in the book: continuous-time/discrete-time, analog/digital, periodic/aperiodic, energy/power, and deterministic/probabilistic. It then begins subsection 1.2-1 by defining continuous-time signals as those specified for every time value and discrete-time signals as those specified only at discrete time instants, with Figure 1.4 illustrating both types.",
+  "keywords": [
+    "classification of signals",
+    "continuous-time signals",
+    "discrete-time signals",
+    "analog signals",
+    "digital signals",
+    "periodic signals",
+    "aperiodic signals",
+    "energy signals",
+    "power signals",
+    "deterministic signals",
+    "probabilistic signals",
+    "Figure 1.4"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-057",
+  "figures": [
+    {
+      "fig_id": "Fig. 1.4",
+      "top": 0.0521,
+      "left": 0.0587,
+      "bottom": 0.3753,
+      "right": 0.5654,
+      "caption": "Fig. 1.4 Continuous-time and Discrete-time Signals."
+    }
+  ]
+}

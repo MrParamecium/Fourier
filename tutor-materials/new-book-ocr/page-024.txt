@@ -1,0 +1,53 @@
+24       CHAPTER B      BACKGROUND
+
+         These equations can be expressed in matrix form as
+                                  ⎡                          ⎤⎡     ⎤ ⎡      ⎤
+                                    a11     a12    · · · a1n     x1       y1
+                                  ⎢ a21
+                                  ⎢         a22    · · · a2n ⎥ ⎢    ⎥ ⎢
+                                                             ⎥ ⎢ x2 ⎥ ⎢ y2 ⎥
+                                                                             ⎥
+                                  ⎢ ..       ..           .. ⎥ ⎢ .. ⎥ = ⎢ .. ⎥                       (B.20)
+                                  ⎣ .         .    · · · . ⎦⎣ . ⎦ ⎣ . ⎦
+                                      an1   an2    · · · ann      xn        yn
+
+         We denote the matrix on the left-hand side formed by the elements aij as A. The determinant of
+         A is denoted by |A|. If the determinant |A| is not zero, Eq. (B.19) has a unique solution given by
+         Cramer’s formula
+                                                 |Dk |
+                                           xk =            k = 1, 2, . . . , n                       (B.21)
+                                                  |A|
+         where |Dk | is obtained by replacing the kth column of |A| by the column on the right-hand side of
+         Eq. (B.20) (with elements y1 , y2 , . . . , yn ).
+              We shall demonstrate the use of this rule with an example.
+
+
+
+     E X A M P L E B.7 Using Cramer’s Rule to Solve a System of Equations
+
+         Use Cramer’s rule to solve the following simultaneous linear equations in three unknowns:
+
+                                                  2x1 + x2 + x3 = 3
+                                                  x1 + 3x2 − x3 = 7
+                                                   x1 + x2 + x3 = 1
+
+
+
+         In matrix form, these equations can be expressed as
+                                      ⎡              ⎤⎡      ⎤ ⎡ ⎤
+                                         2 1 1            x1    3
+                                      ⎣ 1 3 −1 ⎦ ⎣ x2 ⎦ = ⎣ 7 ⎦
+                                         1 1 1            x3    1
+
+         Here,                                                
+                                                    2
+                                                        1 1 
+                                            |A| =  1   3 −1  = 4
+                                                    1   1 1 
+         Since |A| = 4 = 0, a unique solution exists for x1 , x2 , and x3 . This solution is provided by
+         Cramer’s rule [Eq. (B.21)] as follows:
+                                                              
+                                                  3 1 1 
+                                              1               8
+                                        x1 =      7 3 −1  = = 2
+                                             |A|  1 1 1  4

@@ -1,0 +1,41 @@
+{
+  "subsection": "1.1-4",
+  "summary": "This page contains end-of-section problems on signal power, rms value, and time-domain signal transformations. It includes exercises on computing power for periodic and exponential/trigonometric signals, proving a power formula for a sum of complex exponentials, and expressing or sketching time-shifted, scaled, and inverted versions of signals from figures.",
+  "keywords": [
+    "signal power",
+    "RMS value",
+    "periodic signal",
+    "complex exponential",
+    "Fourier coefficients",
+    "cosine signal",
+    "sine signal",
+    "time shift",
+    "time scaling",
+    "time inversion",
+    "signal transformation",
+    "sketching signals",
+    "worked problems",
+    "figures"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-098",
+  "figures": [
+    {
+      "fig_id": "Fig. P1.1-4",
+      "top": 0.0908,
+      "left": 0.1082,
+      "bottom": 0.1816,
+      "right": 0.7808,
+      "caption": "Fig. P1.1-4"
+    },
+    {
+      "fig_id": "Fig. P1.3-1",
+      "top": 0.3511,
+      "left": 0.0517,
+      "bottom": 0.5085,
+      "right": 0.7761,
+      "caption": "Fig. P1.3-1"
+    }
+  ]
+}

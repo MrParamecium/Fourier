@@ -1,0 +1,25 @@
+{
+  "subsection": "1.8",
+  "summary": "This page concludes the discussion of invertible and noninvertible systems, explaining that invertibility requires a one-to-one input-output mapping and giving examples such as affine systems, rectifiers, and differentiators with auxiliary conditions. It then introduces Section 1.8 on system modeling, emphasizing input-output descriptions and the need for mathematical models based on element relationships and interconnection laws such as Ohm's law, KVL, and KCL.",
+  "keywords": [
+    "invertible system",
+    "noninvertible system",
+    "inverse system",
+    "one-to-one mapping",
+    "rectifier",
+    "differentiator",
+    "integrator",
+    "auxiliary condition",
+    "stability",
+    "system model",
+    "input-output description",
+    "continuous-time systems",
+    "Ohm's law",
+    "Kirchhoff's voltage law",
+    "Kirchhoff's current law"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-088",
+  "figures": []
+}

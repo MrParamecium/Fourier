@@ -1,0 +1,61 @@
+54   CHAPTER B            BACKGROUND
+
+
+     B.8 A PPENDIX : U SEFUL M ATHEMATICAL F ORMULAS
+     We conclude this chapter with a selection of useful mathematical facts.
+
+
+
+     B.8-1 Some Useful Constants
+     π ≈ 3.1415926535
+     e ≈ 2.7182818284
+     1
+       ≈ 0.3678794411
+     e
+     log10 2 ≈ 0.30103
+     log10 3 ≈ 0.47712
+
+
+
+     B.8-2 Complex Numbers
+     e±jπ/2 = ±j
+             
+              1           n even
+     e±jnπ =
+              −1          n odd
+     e±jθ = cos θ ± j sin θ
+                                  √                    
+     a + jb = rejθ           r=    a2 + b2 , θ = tan−1 ba
+     (rejθ )k = rk ejkθ
+     (r1 ejθ1 )(r2 ejθ2 ) = r1 r2 ej(θ1 +θ2 )
+
+
+
+     B.8-3 Sums
+     "
+     n
+                  rn+1 − rm
+           rk =                       r = 1
+     k=m
+                    r−1
+     "n
+                  n(n + 1)
+           k=
+     k=0
+                     2
+     "n
+                  n(n + 1)(2n + 1)
+           k2 =
+     k=0
+                         6
+     "
+     n
+                    r + [n (r − 1) − 1] rn+1
+           k rk =                                  r = 1
+     k=0
+                            (r − 1)2
+     "n
+                      r[(1 + r)(1 − rn ) − 2n(1 − r)rn − n2 (1 − r)2 rn ]
+           k2 r k =                                                         r = 1
+     k=0
+                                           (1 − r)3

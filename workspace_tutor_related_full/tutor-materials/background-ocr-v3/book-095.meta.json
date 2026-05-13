@@ -1,0 +1,30 @@
+{
+  "subsection": "1.9",
+  "summary": "This page summarizes key signal concepts including time scaling and inversion, the unit step and unit impulse functions, the sampling property of the impulse, and the role of complex exponentials in representing many common signals. It also reviews even and odd signal symmetry and related area/product properties, then introduces basic system concepts and classifications such as linear vs. nonlinear, time-invariant vs. time-varying, and memoryless vs. dynamic systems.",
+  "keywords": [
+    "summary",
+    "time scaling",
+    "time inversion",
+    "unit step function",
+    "unit impulse function",
+    "delta function",
+    "sampling property",
+    "sifting property",
+    "complex exponential",
+    "even signals",
+    "odd signals",
+    "signal symmetry",
+    "linear systems",
+    "superposition",
+    "time-invariant systems",
+    "time-varying systems",
+    "memoryless systems",
+    "dynamic systems",
+    "initial conditions",
+    "system classification"
+  ],
+  "has_math": true,
+  "page_type": "text",
+  "book_page": "book-095",
+  "figures": []
+}

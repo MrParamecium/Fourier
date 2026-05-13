@@ -1,0 +1,29 @@
+{
+  "subsection": "1.3-1",
+  "summary": "This page introduces useful signal operations and begins with time shifting. It explains that delaying or advancing a signal is represented by replacing t with t-T, giving the relationships φ(t+T)=f(t) and φ(t)=f(t-T), and clarifies that positive T corresponds to a right shift (delay) while negative T corresponds to a left shift (advance).",
+  "keywords": [
+    "signal operations",
+    "time shifting",
+    "delay",
+    "advance",
+    "right shift",
+    "left shift",
+    "deterministic signals",
+    "random signals",
+    "f(t-T)",
+    "signal transformation"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-061",
+  "figures": [
+    {
+      "fig_id": "Fig. 1.8",
+      "top": 0.0575,
+      "left": 0.1472,
+      "bottom": 0.2512,
+      "right": 0.4581,
+      "caption": "Fig. 1.8 Time shifting a signal."
+    }
+  ]
+}

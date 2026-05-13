@@ -1,0 +1,138 @@
+# Aquarius section OCR
+section_id: 2.4-3
+source_pages: page-190, page-191, page-192, page-193
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+2.4-3  Interconnected Systems
+A larger, more complex system can often be viewed as the interconnection of several smaller
+subsystems, each of which is easier to characterize. Knowing the characterizations of these
+subsystems, it becomes simpler to analyze such large systems. We shall consider here two basic
+interconnections, cascade and parallel. Figure 2.15a shows S1 and S2, two LTIC subsystems
+connected in parallel, and Fig. 2.15b shows the same two systems connected in cascade.
+
+In Fig. 2.15a, the device depicted by the symbol Σ inside a circle represents an adder, which
+adds signals at its inputs. Also the junction from which two (or more) branches radiate out is called
+the pickoff node. Every branch that radiates out from the pickoff node carries the same signal (the
+signal at the junction). In Fig. 2.15a, for instance, the junction at which the input is applied is a
+pickoff node from which two branches radiate out, each of which carries the input signal at the
+node.
+
+Let the impulse response of S1 and S2 be h1(t) and h2(t), respectively. Further assume that
+interconnecting these systems, as shown in Fig. 2.15, does not load them. This means that the
+impulse response of either of these systems remains unchanged whether observed when these
+systems are unconnected or when they are interconnected.
+
+To find hp(t), the impulse response of the parallel system Sp in Fig. 2.15a, we apply an impulse
+at the input of Sp. This results in the signal δ(t) at the inputs of S1 and S2, leading to their outputs
+h1(t) and h2(t), respectively. These signals are added by the adder to yield h1(t) + h2(t) as the
+output of Sp:
+
+hp(t) = h1(t) + h2(t)
+
+To find hc(t), the impulse response of the cascade system Sc in Fig. 2.15b, we apply the input δ(t)
+at the input of Sc, which is also the input to S1. Hence, the output of S1 is h1(t), which now acts
+
+[[PAGE page-191]]
+2.4  System Response to External Input: The Zero-State Response                                           191
+
+δ(t)
+δ(t)
+S1
+h1(t)
+Σ
+δ(t)
+S2
+h2(t)
+hp(t) = h1(t) + h2(t)
+Sp
+(a)
+
+δ(t)
+S1
+h1(t)
+S2
+h(t) = h1(t) ∗ h2(t)
+Sc
+(b)
+
+δ(t)
+S2
+h2(t)
+S1
+h(t) = h2(t) ∗ h1(t)
+(c)
+
+x(t)
+S
+y(t)
+∫t−∞
+∫t−∞ y(τ)dτ
+(d)
+
+x(t)
+∫t−∞
+∫t−∞ x(τ)dτ
+S
+∫t−∞ y(τ)dτ
+(e)
+
+x(t)
+h(t)
+y(t)
+=
+x(t)
+d/dt
+ẋ(t)
+h(t)
+∫t−∞
+y(t)
+(f)
+
+Figure 2.15  Interconnected systems.
+
+as the input to S2. The response of S2 to input h1(t) is h1(t) ∗ h2(t). Therefore,
+
+hc(t) = h1(t) ∗ h2(t)
+
+Because of the commutative property of convolution, it follows that interchanging the systems S1 and S2, as shown in Fig. 2.15c, results in the same impulse response h1(t) ∗ h2(t). This means that when several LTIC systems are cascaded, the order of systems does not affect the impulse response of the composite system. In other words, linear operations, performed in cascade, commute. The order in which they are performed is not important, at least theoretically.†
+
+† Change of order, however, could affect performance because of physical limitations and sensitivities to changes in the subsystems involved.
+
+[[PAGE page-192]]
+192
+CHAPTER 2  TIME-DOMAIN ANALYSIS OF CONTINUOUS-TIME SYSTEMS
+
+We shall give here another interesting application of the commutative property of LTIC systems. Figure 2.15d shows a cascade of two LTIC systems: a system S with impulse response h(t), followed by an ideal integrator. Figure 2.15e shows a cascade of the same two systems in reverse order; an ideal integrator followed by S. In Fig. 2.15d, if the input x(t) to S yields the output y(t), then the output of the system of Fig. 2.15d is the integral of y(t). In Fig. 2.15e, the output of the integrator is the integral of x(t). The output in Fig. 2.15e is identical to the output in Fig. 2.15d. Hence, it follows that if an LTIC system response to input x(t) is y(t), then the response of the same system to the integral of x(t) is the integral of y(t). In other words,
+
+if x(t) ⟹ y(t)      then  ∫_{-∞}^{t} x(τ) dτ ⟹ ∫_{-∞}^{t} y(τ) dτ
+
+Replacing the ideal integrator with an ideal differentiator in Figs. 2.15d and 2.15e, and following a similar argument, we conclude that
+
+if x(t) ⟹ y(t)      then  dx(t)/dt ⟹ dy(t)/dt
+
+If we let x(t) = δ(t) and y(t) = h(t) in Fig. 2.15e, we find that g(t), the unit step response of an LTIC system with impulse h(t), is given by
+
+g(t) = ∫_{-∞}^{t} h(τ) dτ                                         (2.35)
+
+We can also show that the system response to δ̇(t) is dh(t)/dt. These results can be extended to other singularity functions. For example, the unit ramp response of an LTIC system is the integral of its unit step response, and so on.
+
+INVERSE SYSTEMS
+
+In Fig. 2.15b, if S1 and S2 are inverse systems with impulse response h(t) and hi(t), respectively, then the impulse response of the cascade of these systems is h(t) ∗ hi(t). But, the cascade of a system with its inverse is an identity system, whose output is the same as the input. In other words, the unit impulse response of the cascade of inverse systems is also an unit impulse δ(t). Hence,
+
+h(t) ∗ hi(t) = δ(t)                                              (2.36)
+
+We shall give an interesting application of the commutative property. As seen from Eq. (2.36), a cascade of inverse systems is an identity system. Moreover, in a cascade of several LTIC subsystems, changing the order of the subsystems in any manner does not affect the impulse response of the cascade system. Using these facts, we observe that the two systems, shown in Fig. 2.15f, are equivalent. We can compute the response of the cascade system on the right-hand side, by computing the response of the system inside the dotted box to the input ẋ(t). The impulse response of the dotted box is g(t), the integral of h(t), as given in Eq. (2.35). Hence, it follows that
+
+y(t) = x(t) ∗ h(t) = ẋ(t) ∗ g(t)                                (2.37)
+
+Recall that g(t) is the unit step response of the system. Hence, an LTIC response can also be obtained as a convolution of ẋ(t) (the derivative of the input) with the unit step response of the
+
+[[PAGE page-193]]
+2.4  System Response to External Input: The Zero-State Response                                                 193
+
+system. This result can be readily extended to higher derivatives of the input. An LTIC system
+response is the convolution of the nth derivative of the input with the nth integral of the impulse
+response.

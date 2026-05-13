@@ -1,0 +1,39 @@
+# Aquarius section OCR
+section_id: b.5-6
+source_pages: page-035
+cut_start_found: yes
+cut_end_found: no
+
+--- OCR ---
+B.5-6 Modiﬁed Partial Fractions
+In finding the inverse z-transform (Ch. 5), we require partial fractions of the form kx/(x − λi )r
+rather than k/(x − λi )r . This can be achieved by expanding F(x)/x into partial fractions. Consider,
+for example,
+                                                5x2 + 20x + 18
+                                      F(x) =
+                                                (x + 2)(x + 3)2
+
+Dividing both sides by x yields
+                                      F(x)   5x2 + 20x + 18
+                                           =
+                                       x     x(x + 2)(x + 3)2
+
+Expansion of the right-hand side into partial fractions as usual yields
+
+                   F(x)   5x2 + 20x + 18     a1     a2     a3      a4
+                        =                  =    +      +       +
+                    x     x(x + 2)(x + 3)2   x    x + 2 (x + 3) (x + 3)2
+
+Using the procedure discussed earlier, we find a1 = 1, a2 = 1, a3 = −2, and a4 = 1. Therefore,
+
+                               F(x) 1   1     2      1
+                                   = +     −     +
+                                x   x x + 2 x + 3 (x + 3)2
+
+Now multiplying both sides by x yields
+
+                                                x     2x      x
+                               F(x) = 1 +          −     +
+                                              x + 2 x + 3 (x + 3)2
+
+This expresses F(x) as the sum of partial fractions having the form kx/(x − λi )r .

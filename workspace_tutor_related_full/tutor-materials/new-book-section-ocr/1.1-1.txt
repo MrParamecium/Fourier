@@ -1,0 +1,21 @@
+# Aquarius section OCR
+section_id: 1.1-1
+source_pages: page-065
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+1.1-1 Signal Energy
+Arguing in this manner, we may consider the area under a signal x(t) as a possible measure of its
+size, because it takes account not only of the amplitude but also of the duration. However, this will
+be a defective measure because even for a large signal x(t), its positive and negative areas could
+cancel each other, indicating a signal of small size. This difficulty can be corrected by defining
+the signal size as the area under |x(t)|2 , which is always positive. We call this measure the signal
+energy Ex , defined as                          #  ∞
+                                           Ex =        |x(t)|2 dt                                    (1.1)
+                                                  −∞
+                                                                    $∞
+This definition simplifies for a real-valued signal x(t) to Ex = −∞ x2 (t) dt. There are also other
+possible measures of signal size, such as the area under |x(t)|. The energy measure, however, is
+not only more tractable mathematically but is also more meaningful (as shown later) in the sense
+that it is indicative of the energy that can be extracted from the signal.

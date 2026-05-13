@@ -1,0 +1,16 @@
+{
+  "sectionId": "1.3-5",
+  "sourcePages": [
+    "page-082"
+  ],
+  "usedPages": [
+    "page-082"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "1.3-5 Deterministic and Random Signals",
+  "foundEnd": true,
+  "endBeforeLine": "1.4 S OME U SEFUL S IGNAL M ODELS",
+  "endBeforeCode": "1.4",
+  "charCount": 488
+}

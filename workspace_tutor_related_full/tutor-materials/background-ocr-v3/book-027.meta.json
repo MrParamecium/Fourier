@@ -1,0 +1,19 @@
+{
+  "subsection": "B.5",
+  "summary": "This page continues the partial fraction expansion procedure using the cover-up method to compute coefficients for simple linear factors, completing an example with three real poles. It then introduces the case of complex-conjugate factors and shows that the same method applies to obtain complex residues, including both rectangular and polar forms.",
+  "keywords": [
+    "partial fraction expansion",
+    "cover-up method",
+    "residues",
+    "linear factors",
+    "complex factors",
+    "complex-conjugate poles",
+    "rational function decomposition",
+    "B.38",
+    "B.39"
+  ],
+  "has_math": true,
+  "page_type": "example",
+  "book_page": "book-027",
+  "figures": []
+}

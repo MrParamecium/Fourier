@@ -1,0 +1,57 @@
+14       CHAPTER B      BACKGROUND
+
+         Therefore,
+                         √    √        √   √       √       √ 
+             2z1 − z2 = 2 2 + j 2 − 4 + j4 3 = 2 2 − 4 + j 2 2 − 4 3 = −1.17 − j4.1
+
+             (b)
+                                             1    1    1
+                                               = jπ/4 = e−jπ/4
+                                             z1 2e     2
+             (c)
+                            z1   2ejπ/4      2ejπ/4  1                1
+                               =          =         = ej(π/4−2π /3) = e−j(5π /12)
+                            z2 (8e )
+                             2     jπ/3 2   64ej2π/3 32              32
+             (d) There are three cube roots of 8ej(π/3) = 8ej(π/3+2πk) , k = 0, 1, 2.
+                                                                             ⎧ jπ /9
+                                                                           ⎨ 2e        k=0
+                 √
+                                                 = 81/3 ej[(6πk+π )/3]
+                                             1/3                        1/3
+                                                                            = 2ej7π /9
+                          1/3
+                  3
+                    z2 = z2 = 8ej(π/3+2πk)                                               k=1
+                                                                             ⎩ j13π /9
+                                                                                 2e      k=2
+
+         The value corresponding to k = 0 is termed the principal value.
+
+
+
+
+     E X A M P L E B.5 Standard Forms of Complex Numbers
+
+         Consider X(ω), a complex function of a real variable ω:
+                                                          2 + jω
+                                                X(ω) =
+                                                         3 + j4ω
+
+
+             (a) Express X(ω) in Cartesian form, and find its real and imaginary parts.
+             (b) Express X(ω) in polar form, and find its magnitude |X(ω)| and angle  X(ω).
+
+
+              (a) To obtain the real and imaginary parts of X(ω), we must eliminate imaginary terms
+         in the denominator of X(ω). This is readily done by multiplying both the numerator and the
+         denominator of X(ω) by 3 − j4ω, the conjugate of the denominator 3 + j4ω so that
+
+                             (2 + jω)(3 − j4ω)   (6 + 4ω2 ) − j5ω    6 + 4ω2       5ω
+                   X(ω) =                      =                  =          −j
+                            (3 + j4ω)(3 − j4ω)      9 + 16ω2        9 + 16ω2    9 + 16ω2
+         This is the Cartesian form of X(ω). Clearly, the real and imaginary parts Xr (ω) and Xi (ω) are
+         given by
+                                         6 + 4ω2                           −5ω
+                               Xr (ω) =                and      Xi (ω) =
+                                        9 + 16ω 2                        9 + 16ω2

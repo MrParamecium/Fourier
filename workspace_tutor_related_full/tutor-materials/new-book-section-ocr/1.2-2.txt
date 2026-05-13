@@ -1,0 +1,156 @@
+# Aquarius section OCR
+section_id: 1.2-2
+source_pages: page-073, page-074, page-075, page-076
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+1.2-2 Time Scaling
+The compression or expansion of a signal in time is known as time scaling. Consider the signal
+x(t) of Fig. 1.6a. The signal φ(t) in Fig. 1.6b is x(t) compressed in time by a factor of 2. Therefore,
+whatever happens in x(t) at some instant t also happens to φ(t) at the instant t/2 so that
+                                   t
+                               φ         = x(t)   and      φ(t) = x(2t)
+                                    2
+Observe that because x(t) = 0 at t = T1 and T2 , we must have φ(t) = 0 at t = T1 /2 and T2 /2, as
+shown in Fig. 1.6b. If x(t) were recorded on a tape and played back at twice the normal recording
+speed, we would obtain x(2t). In general, if x(t) is compressed in time by a factor a (a > 1), the
+resulting signal φ(t) is given by
+                                           φ(t) = x(at)
+     Using a similar argument, we can show that x(t) expanded (slowed down) in time by a factor
+a (a > 1) is given by
+                                                    t
+                                         φ(t) = x
+                                                   a
+Figure 1.6c shows x(t/2), which is x(t) expanded in time by a factor of 2. Observe that in a
+time-scaling operation, the origin t = 0 is the anchor point, which remains unchanged under the
+scaling operation because at t = 0, x(t) = x(at) = x(0).
+
+[[PAGE page-074]]
+74       CHAPTER 1     SIGNALS AND SYSTEMS
+
+                                         x(t)
+
+
+
+
+         (a)
+                               T1        0           T2                        t
+
+
+
+                                                  f(t)  x(2t)
+
+
+         (b)
+                                    T1       T2                                t
+                                    2        2
+
+                                                  f(t)  x   ( 2t (
+         (c)
+                         2T1             0                            2T2      t
+                                                                                      Figure 1.6 Time scaling a signal.
+
+
+
+             In summary, to time-scale a signal by a factor a, we replace t with at. If a > 1, the scaling
+         results in compression, and if a < 1, the scaling results in expansion.
+
+
+
+     E X A M P L E 1.4 Continuous Time-Scaling Operation
+
+         Figure 1.7a shows a signal x(t). Sketch and describe mathematically this signal
+         time-compressed by factor 3. Repeat the problem for the same signal time-expanded by
+         factor 2.
+
+
+         The signal x(t) can be described as
+                                                   ⎧
+                                                   ⎨2                       −1.5 ≤ t < 0
+                                             x(t) = 2 e−t/2                 0≤t<3                                  (1.6)
+                                                   ⎩
+                                                    0                       otherwise
+
+         Figure 1.7b shows xc (t), which is x(t) time-compressed by factor 3; consequently, it can be
+         described mathematically as x(3t), which is obtained by replacing t with 3t in the right-hand
+         side of Eq. (1.6). Thus,
+                                        ⎧
+                                        ⎨2           −1.5 ≤ 3t < 0 or − 0.5 ≤ t < 0
+                        xc (t) = x(3t) = 2 e−3t/2    0 ≤ 3t < 3 or 0 ≤ t < 1
+                                        ⎩
+                                          0          otherwise
+
+[[PAGE page-075]]
+1.2       Some Useful Signal Operations            75
+
+
+
+
+                            2       x(t)
+
+
+                                                2et2
+
+
+
+                  1.5          0                    3             t
+
+                            (a)
+
+
+                    xc(t)         2
+
+
+                                      2e3t2
+
+
+
+                      0.5 0            1                          t
+
+                            (b)
+
+
+                            2         xe(t)
+
+                                                    2et4
+
+
+
+
+            3                  0                    t                 6
+                                                                              Figure 1.7 (a) Signal x(t), (b)
+                                                                              signal x(3t), and (c) signal
+                            (c)                                               x(t/2).
+
+
+
+
+Observe that the instants t = −1.5 and 3 in x(t) correspond to the instants t = −0.5, and 1 in
+the compressed signal x(3t).
+     Figure 1.7c shows xe (t), which is x(t) time-expanded by factor 2; consequently, it can be
+described mathematically as x(t/2), which is obtained by replacing t with t/2 in x(t). Thus,
+                                ⎧                      t
+                                ⎪2             −1.5 ≤ < 0 or − 3 ≤ t < 0
+                          t ⎪ ⎨                      2
+               xe (t) = x      = 2 e−t/4           t
+                                ⎪              0 ≤   <  3 or 0 ≤ t < 6
+                           2    ⎪
+                                ⎩                  2
+                                   0           otherwise
+
+Observe that the instants t = −1.5 and 3 in x(t) correspond to the instants t = −3 and 6 in the
+expanded signal x(t/2).
+
+[[PAGE page-076]]
+76   CHAPTER 1      SIGNALS AND SYSTEMS
+
+
+
+      D R I L L 1.5 Compression and Expansion of Sinusoids
+      Show that the time compression by an integer factor n (n > 1) of a sinusoid results in a
+      sinusoid of the same amplitude and phase, but with the frequency increased n-fold. Similarly,
+      the time expansion by an integer factor n (n > 1) of a sinusoid results in a sinusoid of the same
+      amplitude and phase, but with the frequency reduced by a factor n. Verify your conclusion by
+      sketching a sinusoid sin 2t and the same sinusoid compressed by a factor 3 and expanded by a
+      factor 2.

@@ -1,0 +1,20 @@
+{
+  "sectionId": "1.4-3",
+  "sourcePages": [
+    "page-089",
+    "page-090",
+    "page-091"
+  ],
+  "usedPages": [
+    "page-089",
+    "page-090",
+    "page-091"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "1.4-3 The Exponential Function est",
+  "foundEnd": false,
+  "endBeforeLine": "",
+  "endBeforeCode": "",
+  "charCount": 5759
+}

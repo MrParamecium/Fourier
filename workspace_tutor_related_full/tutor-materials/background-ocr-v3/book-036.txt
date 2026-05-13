@@ -1,0 +1,82 @@
+36
+
+Background
+
+A matrix having all its elements zero is a zero matrix.
+
+A square matrix $A$ is a symmetric matrix if $a_{ij}=a_{ji}$ (symmetry about the main diagonal).
+
+Two matrices of the same order are said to be equal if they are equal element by element. Thus, if
+
+$$
+A=(a_{ij})_{m\times n}
+\qquad \text{and} \qquad
+B=(b_{ij})_{m\times n}
+$$
+
+then $A=B$ only if $a_{ij}=b_{ij}$ for all $i$ and $j$.
+
+If the rows and columns of an $m\times n$ matrix $A$ are interchanged so that the elements in the $i$th row now become the elements of the $i$th column (for $i=1,2,\ldots,m$), the resulting matrix is called the transpose of $A$ and is denoted by $A^T$. It is evident that $A^T$ is an $n\times m$ matrix. For example, if
+
+$$
+A=
+\begin{bmatrix}
+2 & 1\\
+3 & 2\\
+1 & 3
+\end{bmatrix}
+\qquad \text{then} \qquad
+A^T=
+\begin{bmatrix}
+2 & 3 & 1\\
+1 & 2 & 3
+\end{bmatrix}
+$$
+
+Thus, if
+
+$$
+A=(a_{ij})_{m\times n}
+$$
+
+then
+
+$$
+A^T=(a_{ji})_{n\times m}
+\qquad\qquad (B.54)
+$$
+
+Note that
+
+$$
+(A^T)^T=A
+\qquad\qquad (B.55)
+$$
+
+B.6-2 Matrix Algebra
+
+We shall now define matrix operations, such as addition, subtraction, multiplication, and division of matrices. The definitions should be formulated so that they are useful in the manipulation of matrices.
+
+1. Addition of Matrices
+
+For two matrices $A$ and $B$, both of the same order $(m\times n)$,
+
+$$
+A=
+\begin{bmatrix}
+a_{11} & a_{12} & \cdots & a_{1n}\\
+a_{21} & a_{22} & \cdots & a_{2n}\\
+\vdots & \vdots &        & \vdots\\
+a_{m1} & a_{m2} & \cdots & a_{mn}
+\end{bmatrix}
+\qquad \text{and} \qquad
+B=
+\begin{bmatrix}
+b_{11} & b_{12} & \cdots & b_{1n}\\
+b_{21} & b_{22} & \cdots & b_{2n}\\
+\vdots & \vdots &        & \vdots\\
+b_{m1} & b_{m2} & \cdots & b_{mn}
+\end{bmatrix}
+$$
+
+we define the sum $A+B$ as

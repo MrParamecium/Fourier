@@ -1,0 +1,33 @@
+{
+  "chapter": "2",
+  "section": "2.4",
+  "subsection": "2.4-5",
+  "title": "Total Response",
+  "summary": "This page introduces the total response of a linear system as the sum of the zero-input response and the zero-state response. It gives a general expression for distinct roots, applies it to a series RLC example, and illustrates the decomposition with Figure 2.16.",
+  "keywords": [
+    "total response",
+    "zero-input response",
+    "ZIR",
+    "zero-state response",
+    "ZSR",
+    "RLC circuit",
+    "convolution",
+    "natural response",
+    "forced response"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "page-195",
+  "figures": [
+    {
+      "fig_id": "Figure 2.16",
+      "top": 0.5114,
+      "left": 0.1639,
+      "bottom": 0.7568,
+      "right": 0.7139,
+      "caption": "Total response and its components; two response plots labeled (a) and (b) showing zero-state, zero-input, total, natural, and forced components.",
+      "crop_file": "page-195-figure_2_16.png"
+    }
+  ],
+  "metadata_model": "openrouter:openai/gpt-5.4"
+}

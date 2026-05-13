@@ -1,0 +1,55 @@
+64
+
+1  Introduction to Signals and Systems
+
+$f(t)$
+
+$2e^{-t/2}$
+
+(a)
+
+$f(2t)$
+
+$2e^{-3t/2}$
+
+(b)
+
+$f\!\left(\frac{t}{2}\right)$
+
+$2e^{-t/4}$
+
+(c)
+
+Fig. 1.11  (a) signal $f(t)$  (b) signal $f(3t)$  (c) signal $f\!\left(\frac{t}{2}\right)$.
+
+Example 1.4
+
+Figure 1.11a shows a signal $f(t)$. Sketch and describe mathematically this signal time-compressed by factor 3. Repeat the problem for the same signal time-expanded by factor 2.
+
+The signal $f(t)$ can be described as
+
+$$
+f(t)=
+\begin{cases}
+2, & -1.5 \le t < 0\\
+2e^{-t/2}, & 0 \le t < 3\\
+0, & \text{otherwise}
+\end{cases}
+\qquad (1.17)
+$$
+
+Figure 1.11b shows $f_c(t)$, which is $f(t)$ time-compressed by factor 3; consequently, it can be described mathematically as $f(3t)$, which is obtained by replacing $t$ with $3t$ in the right-hand side of Eq. 1.17. Thus
+
+$$
+f_c(t)=f(3t)=
+\begin{cases}
+2, & -1.5 \le 3t < 0 \quad \text{or} \quad -0.5 \le t < 0\\
+2e^{-3t/2}, & 0 \le 3t < 3 \quad \text{or} \quad 0 \le t < 1\\
+0, & \text{otherwise}
+\end{cases}
+\qquad (1.18a)
+$$
+
+Observe that the instants $t=-1.5$ and 3 in $f(t)$ correspond to the instants $t=-0.5$, and 1 in the compressed signal $f(3t)$.
+
+Figure 1.11c shows $f_e(t)$, which is $f(t)$ time-expanded by factor 2; consequently, it can be described mathematically as $f\!\left(\frac{t}{2}\right)$, which is obtained by replacing $t$ with $\frac{t}{2}$ in $f(t)$. Thus

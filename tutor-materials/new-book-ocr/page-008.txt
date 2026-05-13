@@ -1,0 +1,48 @@
+8       CHAPTER B       BACKGROUND
+
+        Now the magnitude of ejωt is unity regardless of the value of ω or t because ejωt = rejθ with r = 1.
+        Therefore, eαt determines the behavior of e(α+jω)t as t → ∞ and
+                                                                 
+                                         (α+jω)t        αt jωt    0      α<0
+                                    lim e        = lim e e =
+                                   t→∞             t→∞             ∞     α>0
+
+        In future discussions, you will find it very useful to remember rejθ as a number at a distance r from
+        the origin and at an angle θ with the horizontal axis of the complex plane.
+
+        A WARNING A BOUT C OMPUTING A NGLES WITH C ALCULATORS
+        From the Cartesian form a + jb, we can readily compute the polar form rejθ [see Eq. (B.5)].
+        Calculators provide ready conversion of rectangular into polar and vice versa. However, if a
+        calculator computes an angle of a complex number by using an inverse tangent function θ =
+        tan−1 (b/a), proper attention must be paid to the quadrant in which the number is located. For
+        instance, θ corresponding to the number −2 − j3 is tan−1 (−3/−2). This result is not the same
+        as tan−1 (3/2). The former is −123.7◦ , whereas the latter is 56.3◦ . A calculator cannot make
+        this distinction and can give a correct answer only for angles in the first and fourth quadrants.†
+        A calculator will read tan−1 (−3/−2) as tan−1 (3/2), which is clearly wrong. When you are
+        computing inverse trigonometric functions, if the angle appears in the second or third quadrant,
+        the answer of the calculator is off by 180◦ . The correct answer is obtained by adding or subtracting
+        180◦ to the value found with the calculator (either adding or subtracting yields the correct answer).
+        For this reason, it is advisable to draw the point in the complex plane and determine the quadrant
+        in which the point lies. This issue will be clarified by the following examples.
+
+
+    E X A M P L E B.1 Cartesian to Polar Form
+
+        Express the following numbers in polar form: (a) 2+j3, (b) −2+j1, (c) −2−j3, and (d) 1−j3.
+
+
+             (a)                                        √                          
+                                |z| =        22 + 32 =       13          z = tan−1 32 = 56.3◦
+        In this case the number is in the first quadrant, and a calculator will give the correct value of
+        56.3◦ . Therefore (see Fig. B.4a), we can write
+                                                        √        ◦
+                                               2 + j3 = 13 ej56.3
+
+             (b)                                        √                         1
+                             |z| =       (−2)2 + 12 =     5              z = tan−1 −2 = 153.4◦
+        In this case the angle is in the second quadrant (see Fig. B.4b), and therefore the answer
+        given by the calculator, tan−1 (1/−2) = −26.6◦ , is off by 180◦ . The correct answer is
+
+
+
+        † Calculators with two-argument inverse tangent functions will correctly compute angles.

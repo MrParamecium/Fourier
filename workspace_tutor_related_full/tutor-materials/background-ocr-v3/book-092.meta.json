@@ -1,0 +1,22 @@
+{
+  "subsection": "1.8-1",
+  "summary": "This page first derives the differential equation of an armature-controlled DC motor, relating input current to rotor position through torque, damping, and inertia. It then introduces the distinction between internal and external system descriptions and illustrates an external description using a black-box circuit example, showing that the measured input-output relation is y(t) = (1/5)f(t).",
+  "keywords": [
+    "DC motor",
+    "armature-controlled motor",
+    "torque",
+    "moment of inertia",
+    "viscous damping",
+    "differential equation",
+    "internal description",
+    "external description",
+    "black box",
+    "input-output relation",
+    "circuit analysis",
+    "zero initial conditions"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-092",
+  "figures": []
+}

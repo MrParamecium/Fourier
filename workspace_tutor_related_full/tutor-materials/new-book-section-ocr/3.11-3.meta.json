@@ -1,0 +1,18 @@
+{
+  "sectionId": "3.11-3",
+  "sourcePages": [
+    "page-310",
+    "page-311"
+  ],
+  "usedPages": [
+    "page-310",
+    "page-311"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "3.11-3 A Custom Filter Function",
+  "foundEnd": true,
+  "endBeforeLine": "3.11-4 Discrete-Time Convolution",
+  "endBeforeCode": "3.11-4",
+  "charCount": 2269
+}

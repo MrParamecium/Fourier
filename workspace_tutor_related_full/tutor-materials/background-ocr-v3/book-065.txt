@@ -1,0 +1,45 @@
+1.3  Some Useful Signal Operations
+
+65
+
+$f(t)$
+
+(a)
+
+$\phi(t)=f(-t)$
+
+(b)
+
+Fig. 1.12  Time inversion (reflection) of a signal.
+
+$$
+f_e(t)=f\left(\frac{t}{2}\right)=
+\begin{cases}
+2, & -1.5 \le \frac{t}{2} < 0 \quad \text{or} \quad -3 \le t < 0\\
+2e^{-t/4}, & 0 \le \frac{t}{2} < 3 \quad \text{or} \quad 0 \le t < 6\\
+0, & \text{otherwise}
+\end{cases}
+\qquad (1.18b)
+$$
+
+Observe that the instants $t=-1.5$ and 3 in $f(t)$ correspond to the instants $t=-3$ and 6 in the expanded signal $f\!\left(\frac{t}{2}\right)$. ■
+
+△ Exercise E1.6
+
+Show that the time-compression by a factor $n$ $(n>1)$ of a sinusoid results in a sinusoid of the same amplitude and phase, but with the frequency increased $n$-fold. Similarly the time expansion by a factor $n$ $(n>1)$ of a sinusoid results in a sinusoid of the same amplitude and phase, but with the frequency reduced by a factor $n$. Verify your conclusion by sketching a sinusoid $\sin 2t$ and the same sinusoid compressed by a factor 3 and expanded by a factor 2. ▽
+
+1.3-3  Time Inversion (Time Reversal)
+
+Consider the signal $f(t)$ in Fig. 1.12a. We can view $f(t)$ as a rigid wire frame hinged at the vertical axis. To time-invert $f(t)$, we rotate this frame $180^\circ$ about the vertical axis. This time inversion or folding [the reflection of $f(t)$ about the vertical axis] gives us the signal $\phi(t)$ (Fig. 1.12b). Observe that whatever happens in Fig. 1.12a at some instant $t$ also happens in Fig. 1.12b at the instant $-t$. Therefore
+
+$$
+\phi(-t)=f(t)
+$$
+
+and
+
+$$
+\phi(t)=f(-t) \qquad (1.19)
+$$
+
+Therefore, to time-invert a signal we replace $t$ with $-t$. Thus, the time inversion of signal $f(t)$ yields $f(-t)$. Consequently, the mirror image of $f(t)$ about the vertical axis is $f(-t)$. Recall also that the mirror image of $f(t)$ about the horizontal axis is $-f(t)$.

@@ -1,0 +1,32 @@
+{
+  "sectionId": "3.3",
+  "sourcePages": [
+    "page-245",
+    "page-246",
+    "page-247",
+    "page-248",
+    "page-249",
+    "page-250",
+    "page-251",
+    "page-252",
+    "page-253"
+  ],
+  "usedPages": [
+    "page-245",
+    "page-246",
+    "page-247",
+    "page-248",
+    "page-249",
+    "page-250",
+    "page-251",
+    "page-252",
+    "page-253"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "3.3 Some Useful Discrete-Time Signal Models 245",
+  "foundEnd": true,
+  "endBeforeLine": "3.3-1 Discrete-Time Impulse Function δ[n]",
+  "endBeforeCode": "3.3-1",
+  "charCount": 510
+}

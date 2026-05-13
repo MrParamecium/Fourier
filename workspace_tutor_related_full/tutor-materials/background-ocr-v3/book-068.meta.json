@@ -1,0 +1,29 @@
+{
+  "subsection": "1 Introduction to Signals and Systems",
+  "summary": "This page explains how to represent piecewise-defined signals using unit step functions and gate pulses. Through Examples 1.6 and 1.7, it decomposes signals into interval-specific components such as ramps, constants, and exponentials, then combines them into single expressions valid for all time.",
+  "keywords": [
+    "piecewise-defined signals",
+    "unit step function",
+    "gate pulse",
+    "ramp signal",
+    "signal decomposition",
+    "signal representation",
+    "Example 1.6",
+    "Example 1.7",
+    "exponential signal",
+    "interval by interval"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-068",
+  "figures": [
+    {
+      "fig_id": "Fig. 1.16",
+      "top": 0.0636,
+      "left": 0.1458,
+      "bottom": 0.2548,
+      "right": 0.6783,
+      "caption": "Fig. 1.16 Representation of a signal defined interval by interval."
+    }
+  ]
+}

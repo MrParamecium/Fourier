@@ -1,0 +1,22 @@
+{
+  "subsection": "1.7-1",
+  "summary": "This page introduces the classification of systems and lists major categories such as linear/nonlinear, time-varying, causal, lumped/distributed, and continuous/discrete systems. It then begins the subsection on linear and nonlinear systems by explaining the concept of linearity through additivity and homogeneity, leading to the superposition principle.",
+  "keywords": [
+    "classification of systems",
+    "linear systems",
+    "nonlinear systems",
+    "additivity",
+    "homogeneity",
+    "scaling property",
+    "superposition",
+    "causal systems",
+    "memoryless systems",
+    "dynamic systems",
+    "continuous-time systems",
+    "discrete-time systems"
+  ],
+  "has_math": true,
+  "page_type": "text",
+  "book_page": "book-079",
+  "figures": []
+}

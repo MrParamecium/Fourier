@@ -1,0 +1,41 @@
+86
+
+1 Introduction to Signals and Systems
+
+OH GREAT WIZARD! TELL ME WHAT THE STOCKS WILL BE DOING A YEAR FROM NOW.
+
+I NEED SOME TIME TO DIVINE.
+
+HOW MUCH TIME DO YOU NEED?
+
+A YEAR!
+
+Noncausal systems are realizable with time delay!
+
+may therefore be able to realize a noncausal system, provided that we are willing to accept a time delay in the output. Consider a system whose output $\hat{y}(t)$ is the same as $y(t)$ in Eq. (1.46) delayed by two seconds (Fig. 1.30c), so that
+
+$$
+\hat{y}(t)=y(t-2)
+$$
+
+$$
+=f(t-4)+f(t)
+$$
+
+Here the value of the output $\hat{y}$ at any instant $t$ is the sum of the values of the input $f$ at $t$ and at the instant four seconds earlier [at $(t-4)$]. In this case, the output at any instant $t$ does not depend on future values of the input, and the system is causal. The output of this system, which is $\hat{y}(t)$, is identical to that in Eq. (1.46) or Fig. 1.30b except for a delay of two seconds. Thus, a noncausal system may be realized or satisfactorily approximated in real time by using a causal system with a delay.
+
+A third reason for studying noncausal systems is that they provide an upper bound on the performance of causal systems. For example, if we wish to design a filter for separating a signal from noise, then the optimum filter is invariably a noncausal system. Although unrealizable, this noncausal system's performance acts as the upper limit on what can be achieved and gives us a standard for evaluating the performance of causal filters.
+
+At first glance, noncausal systems may seem inscrutable. Actually, there is nothing mysterious about these systems and their approximate realization through using physical systems with delay. If we want to know what will happen one year from now, we have two choices: go to a prophet (an unrealizable person) who can give the answers immediately, or go to a wise man and allow him a delay of one year to give us the answer! If the wise man is truly wise, he may even be able to shrewdly guess the future very closely with a delay of less than a year by studying trends. Such is the case with noncausal systems—nothing more and nothing less.
+
+△ Exercise E1.15
+
+Show that a system described by the equation below is noncausal:
+
+$$
+y(t)=\int_{t-5}^{t+5} f(\tau)\, d\tau
+$$
+
+Show that this system can be realized physically if we accept a delay of 5 seconds in the output.
+
+▽

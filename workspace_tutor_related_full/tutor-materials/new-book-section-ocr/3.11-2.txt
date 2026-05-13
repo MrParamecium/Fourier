@@ -1,0 +1,84 @@
+# Aquarius section OCR
+section_id: 3.11-2
+source_pages: page-308, page-309, page-310
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+3.11-2 System Responses Through Filtering
+MATLAB’s filter command provides an efficient way to evaluate the system response of a
+constant coefficient linear difference equation represented in delay form as
+
+∑_{k=0}^{N} a_k y[n - k] = ∑_{k=0}^{N} b_k x[n - k]
+
+(3.44)
+
+In the simplest form, filter requires three input arguments: a length-(N + 1) vector of
+feedforward coefficients [b_0,b_1,...,b_N], a length-(N + 1) vector of feedback coefficients
+[a_0,a_1,...,a_N], and an input vector.† Since no initial conditions are specified, the output
+corresponds to the system’s zero-state response.
+
+To serve as an example, consider a system described by y[n] − y[n − 1] + y[n − 2] = x[n]. When
+x[n] = δ[n], the zero-state response is equal to the impulse response h[n], which we compute over
+(0 ≤ n ≤ 30).
+
+>>  b = [1 0 0]; a = [1 -1 1];
+>>  n = (0:30); delta = @(n) 1.0.*(n==0);
+>>  h = filter(b,a,delta(n));
+>>  clf; stem(n,h,’k’); axis([-.5 30.5 -1.1 1.1]);
+>>  xlabel(’n’); ylabel(’h[n]’);
+
+† It is important to pay close attention to the inevitable notational differences found throughout engineering
+documents. In MATLAB help documents, coefficient subscripts begin at 1 rather than 0 to better conform
+with MATLAB indexing conventions. That is, MATLAB labels a_0 as a(1), b_0 as b(1), and so forth.
+
+[[PAGE page-309]]
+3.11 MATLAB: Discrete-Time Signals and Systems 309
+
+Figure 3.33  h[n] for y[n] − y[n − 1] + y[n − 2] = x[n].
+
+Figure 3.34  Resonant zero-state response y[n] for x[n] = cos (2πn/6)u[n].
+
+As shown in Fig. 3.33, h[n] appears to be (N0 = 6)-periodic for n ≥ 0. Since periodic signals are not absolutely summable, \(\sum_{n=-\infty}^{\infty} |h[n]|\) is not finite and the system is not BIBO-stable. Furthermore, the sinusoidal input x[n] = cos (2πn/6)u[n], which is (N0 = 6)-periodic for n ≥ 0, should generate a resonant zero-state response.
+
+>>  x = @(n) cos(2*pi*n/6).*(n>=0);
+>>  y = filter(b,a,x(n));
+>>  stem(n,y,’k’); xlabel(’n’); ylabel(’y[n]’);
+
+The response’s linear envelope, shown in Fig. 3.34, confirms a resonant response. The characteristic equation of the system is γ^2 − γ + 1, which has roots γ = e^{±jπ/3}. Since the input x[n] = cos (2πn/6)u[n] = (1/2)(e^{jπn/3} + e^{-jπn/3})u[n] coincides with the characteristic roots, a resonant response is guaranteed.
+
+By adding initial conditions, the filter command can also compute a system’s zero-input response and total response. Continuing the preceding example, consider finding the zero-input response for y[−1] = 1 and y[−2] = 2 over (0 ≤ n ≤ 30).
+
+>>  z_i = filtic(b,a,[1 2]);
+>>  y_0 = filter(b,a,zeros(size(n)),z_i);
+>>  stem(n,y_0,’k’); xlabel(’n’); ylabel(’y_{0} [n]’);
+>>  axis([-0.5 30.5 -2.1 2.1]);
+
+[[PAGE page-310]]
+310
+CHAPTER 3  TIME-DOMAIN ANALYSIS OF DISCRETE-TIME SYSTEMS
+
+2
+
+y₀[n]
+
+0
+
+−2
+
+0 5 10 15 20 25 30
+n
+Figure 3.35  Zero-input response y₀[n] for y[−1] = 1 and y[−2] = 2.
+
+There are many physical ways to implement a particular equation. MATLAB implements Eq. (3.44) by using the popular direct form II transposed structure.† Consequently, initial conditions must be compatible with this implementation structure. The signal-processing toolbox function filtic converts the traditional y[−1], y[−2], . . . , y[−N] initial conditions for use with the filter command. An input of zero is created with the zeros command. The dimensions of this zero input are made to match the vector n by using the size command. Finally, _{ } forces subscript text in the graphics window, and ^{ } forces superscript text. The results are shown in Fig. 3.35.
+
+Given y[−1] = 1 and y[−2] = 2 and an input x[n] = cos (2πn/6)u[n], the total response is easy to obtain with the filter command.
+
+>>  y_total = filter(b,a,x(n),z_i);
+
+Summing the zero-state and zero-input response gives the same result. Computing the total absolute error provides a check.
+
+>>  sum(abs(y_total-(y + y_0)))
+    ans = 1.8430e-014
+
+Within computer round-off, both methods return the same sequence.

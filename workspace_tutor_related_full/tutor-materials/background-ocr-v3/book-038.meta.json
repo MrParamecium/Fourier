@@ -1,0 +1,20 @@
+{
+  "subsection": "B.2",
+  "summary": "This page explains the condition for matrix multiplication to be defined: the number of columns of the first matrix must equal the number of rows of the second. It illustrates conformable matrices with numerical examples, emphasizes that matrix multiplication is generally not commutative, and introduces distributive properties and multiplication by the identity matrix.",
+  "keywords": [
+    "matrix multiplication",
+    "conformable matrices",
+    "dimensions",
+    "noncommutativity",
+    "AB != BA",
+    "commuting matrices",
+    "distributive property",
+    "identity matrix",
+    "premultiply",
+    "postmultiply"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-038",
+  "figures": []
+}

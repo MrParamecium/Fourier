@@ -1,0 +1,66 @@
+28
+
+Background
+
+The coefficients $k_2$ and $k_3$ corresponding to the complex conjugate factors are also conjugates of each other. This is generally true when the coefficients of a rational function are real. In such a case, we need to compute only one of the coefficients.
+
+2. Quadratic Factors
+
+Often we are required to combine the two terms arising from complex conjugate factors into one quadratic factor. For example, $F(x)$ in Eq. (B.38) can be expressed as
+
+$$
+F(x)=\frac{4x^2+2x+18}{(x+1)(x^2+4x+13)}=\frac{k_1}{x+1}+\frac{c_1x+c_2}{x^2+4x+13}
+$$
+
+The coefficient $k_1$ is found by the Heaviside method to be 2. Therefore,
+
+$$
+\frac{4x^2+2x+18}{(x+1)(x^2+4x+13)}=\frac{2}{x+1}+\frac{c_1x+c_2}{x^2+4x+13}
+\qquad\text{(B.40)}
+$$
+
+The values of $c_1$ and $c_2$ are determined by clearing fractions and equating the coefficients of similar powers of $x$ on both sides of the resulting equation. Clearing fractions on both sides of Eq. (B.40) yields
+
+$$
+4x^2+2x+18=2(x^2+4x+13)+(c_1x+c_2)(x+1)
+$$
+
+$$
+=(2+c_1)x^2+(8+c_1+c_2)x+(26+c_2)
+\qquad\text{(B.41)}
+$$
+
+Equating terms of similar powers yields $c_1=2$, $c_2=-8$, and
+
+$$
+\frac{4x^2+2x+18}{(x+1)(x^2+4x+13)}=\frac{2}{x+1}+\frac{2x-8}{x^2+4x+13}
+\qquad\text{(B.42)}
+$$
+
+Short-Cuts
+
+The values of $c_1$ and $c_2$ in Eq. (B.40) can also be determined by using short-cuts. After computing $k_1=2$ by the Heaviside method as before, we let $x=0$ on both sides of Eq. (B.40) to eliminate $c_1$. This gives us
+
+$$
+\frac{18}{13}=2+\frac{c_2}{13}
+$$
+
+Therefore,
+
+$$
+c_2=-8
+$$
+
+To determine $c_1$, we multiply both sides of Eq. (B.40) by $x$ and then let $x\to\infty$. Remember that when $x\to\infty$, only the terms of the highest power are significant. Therefore,
+
+$$
+4=k_1+c_1=2+c_1
+$$
+
+and
+
+$$
+c_1=2
+$$
+
+In the procedure discussed here, we let $x=0$ to determine $c_2$ and then multiply both sides by $x$ and let $x\to\infty$ to determine $c_1$. However, nothing is sacred about these values ($x=0$ or $x=\infty$). We use them because they reduce the number of

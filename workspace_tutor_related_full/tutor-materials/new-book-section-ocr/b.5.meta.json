@@ -1,0 +1,18 @@
+{
+  "sectionId": "b.5",
+  "sourcePages": [
+    "page-025",
+    "page-026"
+  ],
+  "usedPages": [
+    "page-025",
+    "page-026"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "B.5 Partial Fraction Expansion 25",
+  "foundEnd": true,
+  "endBeforeLine": "B.5-1 Method of Clearing Fractions",
+  "endBeforeCode": "b.5-1",
+  "charCount": 3411
+}

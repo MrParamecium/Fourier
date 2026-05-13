@@ -1,0 +1,16 @@
+{
+  "sectionId": "b.3",
+  "sourcePages": [
+    "page-020"
+  ],
+  "usedPages": [
+    "page-020"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "B.3 S KETCHING S IGNALS",
+  "foundEnd": true,
+  "endBeforeLine": "B.3-1 Monotonic Exponentials",
+  "endBeforeCode": "b.3-1",
+  "charCount": 123
+}

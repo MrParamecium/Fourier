@@ -1,0 +1,22 @@
+{
+  "sectionId": "3.7",
+  "sourcePages": [
+    "page-277",
+    "page-278",
+    "page-279",
+    "page-280"
+  ],
+  "usedPages": [
+    "page-277",
+    "page-278",
+    "page-279",
+    "page-280"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "3.7 The Unit Impulse Response h[n]",
+  "foundEnd": true,
+  "endBeforeLine": "3.7-1 The Closed-Form Solution of h[n]",
+  "endBeforeCode": "3.7-1",
+  "charCount": 1659
+}

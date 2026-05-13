@@ -1,0 +1,20 @@
+{
+  "sectionId": "3.4-1",
+  "sourcePages": [
+    "page-262",
+    "page-263",
+    "page-264"
+  ],
+  "usedPages": [
+    "page-262",
+    "page-263",
+    "page-264"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "3.4-1 Classification of Discrete-Time Systems",
+  "foundEnd": false,
+  "endBeforeLine": "",
+  "endBeforeCode": "",
+  "charCount": 6948
+}

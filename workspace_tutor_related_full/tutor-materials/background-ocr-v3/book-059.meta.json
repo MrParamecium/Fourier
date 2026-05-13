@@ -1,0 +1,30 @@
+{
+  "subsection": "1.2",
+  "summary": "This page classifies continuous-time signals as periodic or aperiodic and explains that a periodic signal must extend from negative infinity to positive infinity. It also shows that a periodic signal can be reconstructed by repeating any one-period segment, and introduces the related notions of everlasting, causal, noncausal, and anticausal signals.",
+  "keywords": [
+    "classification of signals",
+    "periodic signal",
+    "aperiodic signal",
+    "period",
+    "time shift",
+    "periodic extension",
+    "everlasting signal",
+    "causal signal",
+    "noncausal signal",
+    "anticausal signal",
+    "continuous-time signals"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-059",
+  "figures": [
+    {
+      "fig_id": "Fig. 1.6",
+      "top": 0.0557,
+      "left": 0.029,
+      "bottom": 0.1495,
+      "right": 0.5521,
+      "caption": "A periodic signal of period T₀."
+    }
+  ]
+}

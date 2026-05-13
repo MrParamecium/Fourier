@@ -1,0 +1,31 @@
+{
+  "subsection": "1.6",
+  "summary": "The page begins with Example 1.8, showing how to decompose the complex exponential e^{jt} into its even and odd components, yielding cos t and j sin t. It then introduces Section 1.6 on systems, defining systems in terms of inputs, outputs, and governing laws or mathematical models, and presents the black-box representation of a system along with the main areas of study: modeling, analysis, and design.",
+  "keywords": [
+    "systems",
+    "even and odd components",
+    "complex exponential",
+    "e^{jt}",
+    "cos t",
+    "j sin t",
+    "input-output relationship",
+    "mathematical model",
+    "black-box representation",
+    "system analysis",
+    "system design",
+    "signal processing"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-077",
+  "figures": [
+    {
+      "fig_id": "Fig. 1.25",
+      "top": 0.3983,
+      "left": 0.202,
+      "bottom": 0.4722,
+      "right": 0.4111,
+      "caption": "Representation of a system."
+    }
+  ]
+}

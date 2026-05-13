@@ -1,0 +1,24 @@
+{
+  "sectionId": "b.7-6",
+  "sourcePages": [
+    "page-049",
+    "page-050",
+    "page-051",
+    "page-052",
+    "page-053"
+  ],
+  "usedPages": [
+    "page-049",
+    "page-050",
+    "page-051",
+    "page-052",
+    "page-053"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "B.7-6 Matrix Operations",
+  "foundEnd": true,
+  "endBeforeLine": "B.7-7 Partial Fraction Expansions",
+  "endBeforeCode": "b.7-7",
+  "charCount": 8782
+}

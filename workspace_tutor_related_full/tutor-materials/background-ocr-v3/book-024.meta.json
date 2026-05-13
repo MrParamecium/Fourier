@@ -1,0 +1,30 @@
+{
+  "subsection": "B.5",
+  "summary": "The page concludes a determinant-based solution for a system of linear equations and includes Example CB.5, which shows how to use a computer program to solve the same system using Cramer's rule. It then introduces Section B.5 on partial fraction expansion, defining rational functions, distinguishing proper and improper functions, and beginning an example of polynomial long division to convert an improper rational function into a polynomial plus a proper fraction.",
+  "keywords": [
+    "Cramer's rule",
+    "determinant",
+    "computer solution",
+    "rational function",
+    "partial fraction expansion",
+    "proper function",
+    "improper function",
+    "polynomial division",
+    "linear time-invariant systems",
+    "Example CB.5",
+    "Section B.5"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-024",
+  "figures": [
+    {
+      "fig_id": "Fig. 1",
+      "top": 0.5,
+      "left": 0.0433,
+      "bottom": 0.5866,
+      "right": 0.539,
+      "caption": "Because this is an improper function, we divide the numerator by the denominator until the remainder has a lower degree than the denominator."
+    }
+  ]
+}

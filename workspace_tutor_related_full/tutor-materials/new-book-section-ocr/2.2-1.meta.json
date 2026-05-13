@@ -1,0 +1,18 @@
+{
+  "sectionId": "2.2-1",
+  "sourcePages": [
+    "page-161",
+    "page-162"
+  ],
+  "usedPages": [
+    "page-161",
+    "page-162"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "2.2-1 Some Insights into the Zero-Input Behavior of a System",
+  "foundEnd": false,
+  "endBeforeLine": "",
+  "endBeforeCode": "",
+  "charCount": 3036
+}

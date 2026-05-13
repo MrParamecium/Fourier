@@ -1,0 +1,23 @@
+{
+  "subsection": "1 Introduction to Signals and Systems",
+  "summary": "This page discusses a subtle point about linearity: additivity alone does not guarantee homogeneity, illustrated by an exercise involving the system e(t)=Re{c(t)}. It then introduces the decomposition property of linear systems, explaining that the total response is the sum of zero-input and zero-state responses, with an RC circuit example showing how initial conditions and input contribute separately to the output.",
+  "keywords": [
+    "linearity",
+    "additivity",
+    "homogeneity",
+    "superposition",
+    "Exercise E1.11",
+    "zero-input response",
+    "zero-state response",
+    "decomposition property",
+    "SISO systems",
+    "MIMO systems",
+    "initial conditions",
+    "RC circuit",
+    "system response"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-080",
+  "figures": []
+}

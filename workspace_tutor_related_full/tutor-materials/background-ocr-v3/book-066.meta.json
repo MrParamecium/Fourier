@@ -1,0 +1,31 @@
+{
+  "subsection": "1.3-4",
+  "summary": "This page concludes an example of time inversion by showing how a signal f(t) becomes f(-t), both graphically and in piecewise mathematical form. It then introduces combined time operations of the form f(at-b), explaining equivalent sequences of shifting and scaling, and begins the next section on useful signal models such as the step, impulse, and exponential functions.",
+  "keywords": [
+    "time inversion",
+    "signal transformation",
+    "f(-t)",
+    "time shifting",
+    "time scaling",
+    "combined operations",
+    "f(at-b)",
+    "piecewise signal",
+    "exponential signal",
+    "signal models",
+    "step function",
+    "impulse function"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-066",
+  "figures": [
+    {
+      "fig_id": "Fig. 1.13",
+      "top": 0.0563,
+      "left": 0.1863,
+      "bottom": 0.1755,
+      "right": 0.6378,
+      "caption": "Fig. 1.13 An example of time inversion, showing a signal f(t) in plot (a) and its time-inverted version f(-t) in plot (b)."
+    }
+  ]
+}

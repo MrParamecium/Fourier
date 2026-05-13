@@ -1,0 +1,42 @@
+{
+  "subsection": "1.7",
+  "summary": "This page contains end-of-section problems on testing system linearity and causality. The exercises ask the reader to verify homogeneity and additivity for a nonlinear input-output relation, analyze zero-state versus zero-input linearity in diode-capacitor circuits, and determine causality for several time-transformation systems.",
+  "keywords": [
+    "linearity",
+    "homogeneity",
+    "additivity",
+    "zero-state linearity",
+    "zero-input linearity",
+    "causality",
+    "noncausal systems",
+    "nonlinear circuits",
+    "input-output relationship",
+    "diodes",
+    "capacitor",
+    "inductor",
+    "initial conditions",
+    "time scaling",
+    "time reversal"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-102",
+  "figures": [
+    {
+      "fig_id": "Fig. P1.7-5",
+      "top": 0.1973,
+      "left": 0.2305,
+      "bottom": 0.3099,
+      "right": 0.6378,
+      "caption": "Fig. P1.7-5"
+    },
+    {
+      "fig_id": "Fig. P1.7-6",
+      "top": 0.3904,
+      "left": 0.2305,
+      "bottom": 0.4952,
+      "right": 0.7037,
+      "caption": "Fig. P1.7-6"
+    }
+  ]
+}

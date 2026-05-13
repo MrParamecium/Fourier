@@ -1,0 +1,47 @@
+Problems
+
+97
+
+$\sin t$ (a)
+
+$-\sin t$ (b)
+
+$2 \sin t$ (d)
+
+$\sin t$ (c)
+
+Fig. P1.1-1
+
+$f(t)$
+
+$f_1(t)$
+
+$f_2(t)$
+
+$f_3(t)$
+
+$f_4(t)$
+
+Fig. P1.1-2
+
+$x(t)$
+
+$y(t)$
+
+(a)
+
+$x(t)$
+
+$y(t)$
+
+(b)
+
+$x(t)$
+
+$y(t)$
+
+(c)
+
+Fig. P1.1-3
+
+(b) Repeat part (a) for the signal pair illustrated in Fig. P1.1-3c. Is your observation in part (a) still valid?

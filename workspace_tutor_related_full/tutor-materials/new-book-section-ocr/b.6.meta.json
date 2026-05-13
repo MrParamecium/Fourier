@@ -1,0 +1,18 @@
+{
+  "sectionId": "b.6",
+  "sourcePages": [
+    "page-036",
+    "page-037"
+  ],
+  "usedPages": [
+    "page-036",
+    "page-037"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "B.6 V ECTORS AND M ATRICES",
+  "foundEnd": true,
+  "endBeforeLine": "B.6-1 Some Deﬁnitions and Properties",
+  "endBeforeCode": "b.6-1",
+  "charCount": 4243
+}

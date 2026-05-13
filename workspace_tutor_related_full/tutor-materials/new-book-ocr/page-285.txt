@@ -1,0 +1,40 @@
+3.8  System Response to External Input: The Zero-State Response                                                                 285
+
+CONVOLUTION SUM FROM A TABLE
+Just as in the continuous-time case, we have prepared a table (Table 3.1) from which convolution
+sums may be determined directly for a variety of signal pairs. For example, the convolution in
+Ex. 3.20 can be read directly from this table (pair 4) as
+
+(0.8)^n u[n] ∗ (0.3)^n u[n] = \frac{(0.8)^{n+1} - (0.3)^{n+1}}{0.8 - 0.3} u[n] = 2[(0.8)^{n+1} - (0.3)^{n+1}]u[n]
+
+We shall demonstrate the use of the convolution table in the following example.
+
+TABLE 3.1   Select Convolution Sums
+
+No.     x1[n]                  x2[n]                  x1[n] ∗ x2[n] = x2[n] ∗ x1[n]
+
+1       δ[n − k]               x[n]                   x[n − k]
+
+2       γ^n u[n]               u[n]                   \left[\frac{1 - γ^{n+1}}{1 - γ}\right]u[n]
+
+3       u[n]                   u[n]                   (n + 1)u[n]
+
+4       γ1^n u[n]              γ2^n u[n]              \left[\frac{γ1^{n+1} - γ2^{n+1}}{γ1 - γ2}\right]u[n]      γ1 ≠ γ2
+
+5       u[n]                   nu[n]                  \frac{n(n + 1)}{2}u[n]
+
+6       γ^n u[n]               nu[n]                  \left[\frac{γ(γ^n - 1) + n(1 - γ)}{(1 - γ)^2}\right]u[n]
+
+7       nu[n]                  nu[n]                  \frac{1}{6}n(n − 1)(n + 1)u[n]
+
+8       γ^n u[n]               γ^n u[n]               (n + 1)γ^n u[n]
+
+9       nγ1^n u[n]             γ2^n u[n]              \frac{γ1γ2}{(γ1 − γ2)^2}\left[γ2^n − γ1^n + \frac{γ1 − γ2}{γ2}nγ1^n\right]u[n]      γ1 ≠ γ2
+
+10      |γ1|^n cos(βn + θ)u[n] |γ2|^n u[n]            \frac{1}{R}[|γ1|^{n+1} cos[β(n + 1) + θ − ϕ] − |γ2|^{n+1} cos(θ − ϕ)]u[n]
+
+                                                        R = [|γ1|^2 + |γ2|^2 − 2|γ1||γ2| cos β]^{1/2}
+
+                                                        ϕ = tan^−1\left[\frac{(|γ1| sin β)}{(|γ1| cos β − |γ2|)}\right]
+
+11      γ1^n u[−(n + 1)]       γ2^n u[n]              \frac{γ2}{γ1 − γ2}γ2^n u[n] + \frac{γ1}{γ1 − γ2}γ1^n u[−(n + 1)]      |γ1| > |γ2|

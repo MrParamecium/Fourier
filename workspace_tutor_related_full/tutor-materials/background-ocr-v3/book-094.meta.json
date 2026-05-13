@@ -1,0 +1,28 @@
+{
+  "subsection": "1.9",
+  "summary": "This page is a summary of the introductory chapter on signals and systems. It reviews definitions of signals and systems, explains signal energy and power, and classifies signals by time representation, amplitude type, periodicity, causality, energy/power content, and determinism versus randomness. It also begins introducing time shifting of signals.",
+  "keywords": [
+    "signals",
+    "systems",
+    "summary",
+    "signal energy",
+    "signal power",
+    "continuous-time signals",
+    "discrete-time signals",
+    "analog signals",
+    "digital signals",
+    "periodic signals",
+    "aperiodic signals",
+    "everlasting signals",
+    "causal signals",
+    "energy signals",
+    "power signals",
+    "deterministic signals",
+    "random signals",
+    "time shifting"
+  ],
+  "has_math": true,
+  "page_type": "text",
+  "book_page": "book-094",
+  "figures": []
+}

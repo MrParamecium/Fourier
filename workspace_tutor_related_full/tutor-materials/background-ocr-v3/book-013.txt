@@ -1,0 +1,59 @@
+13
+
+B.1 Complex Numbers
+
+$$\frac{z_1}{z_2} = \frac{(3 + j4)(2 - j3)}{(2 + j3)(2 - j3)} = \frac{18 - j1}{2^2 + 3^2} = \frac{18 - j1}{13} = \frac{18}{13} - j\frac{1}{13}$$
+
+Division: Polar Form
+
+$$\frac{z_1}{z_2} = \frac{5e^{j53.1^\circ}}{\sqrt{13}e^{j56.3^\circ}} = \frac{5}{\sqrt{13}} e^{j(53.1^\circ - 56.3^\circ)} = \frac{5}{\sqrt{13}} e^{-j3.2^\circ}$$
+
+It is clear from this example that multiplication and division are easier to accomplish in polar form than in Cartesian form.
+
+■ Example B.4
+
+For $z_1 = 2e^{j\pi/4}$ and $z_2 = 8e^{j\pi/3}$, find (a) $2z_1 - z_2$ (b) $\dfrac{1}{z_1}$ (c) $\dfrac{z_1}{z_2^2}$ (d) $\sqrt[3]{z_2}$
+
+(a) Since subtraction cannot be performed directly in polar form, we convert $z_1$ and $z_2$ to Cartesian form:
+
+$$z_1 = 2e^{j\pi/4} = 2\left(\cos \frac{\pi}{4} + j\sin \frac{\pi}{4}\right) = \sqrt{2} + j\sqrt{2}$$
+
+$$z_2 = 8e^{j\pi/3} = 8\left(\cos \frac{\pi}{3} + j\sin \frac{\pi}{3}\right) = 4 + j4\sqrt{3}$$
+
+Therefore,
+
+$$2z_1 - z_2 = 2(\sqrt{2} + j\sqrt{2}) - (4 + j4\sqrt{3})$$
+$$\qquad\qquad = (2\sqrt{2} - 4) + j(2\sqrt{2} - 4\sqrt{3})$$
+$$\qquad\qquad = -1.17 - j4.1$$
+
+(b)
+
+$$\frac{1}{z_1} = \frac{1}{2e^{j\pi/4}} = \frac{1}{2} e^{-j\pi/4}$$
+
+(c)
+
+$$\frac{z_1}{z_2^2} = \frac{2e^{j\pi/4}}{(8e^{j\pi/3})^2} = \frac{2e^{j\pi/4}}{64e^{j2\pi/3}} = \frac{1}{32} e^{j\left(\frac{\pi}{4} - \frac{2\pi}{3}\right)} = \frac{1}{32} e^{-j5\pi/12}$$
+
+(d)
+
+$$\sqrt[3]{z_2} = z_2^{1/3} = (8e^{j\pi/3})^{1/3} = 8^{1/3}(e^{j\pi/3})^{1/3} = 2e^{j\pi/9} \qquad \blacksquare$$
+
+⊙ Computer Example CB.3
+
+Determine $z_1z_2$ and $z_1/z_2$ if $z_1 = 3 + j4$ and $z_2 = 2 + j3$
+
+Multiplication and division: Cartesian Form
+
+```text
+z1=3+j*4; z2=2+j*3;
+z1z2=z1*z2
+z1z2=-6.000+17.000i
+z1_over_z2=z1/z2
+z1_over_z2=1.3486-0.0769i
+```
+
+Therefore
+
+$$(3 + j4)(2 + j3) = -6 + j17 \qquad \text{and} \qquad (3 + j4)/(2 + j3) = 1.3486 - 0.0769$$
+
+⊙

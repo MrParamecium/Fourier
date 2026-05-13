@@ -1,0 +1,16 @@
+{
+  "sectionId": "1.7-6",
+  "sourcePages": [
+    "page-109"
+  ],
+  "usedPages": [
+    "page-109"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "1.7-6 Analog and Digital Systems",
+  "foundEnd": true,
+  "endBeforeLine": "1.7-7 Invertible and Noninvertible Systems",
+  "endBeforeCode": "1.7-7",
+  "charCount": 392
+}

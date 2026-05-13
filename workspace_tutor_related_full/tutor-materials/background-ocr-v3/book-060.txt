@@ -1,0 +1,32 @@
+60
+
+1 Introduction to Signals and Systems
+
+$f(t)$
+
+(a)
+
+$f(t)$
+
+(b)
+
+Fig. 1.7  Generation of a periodic signal by periodic extension of its segment of one-period duration.
+
+Comment:
+A true everlasting signal cannot be generated in practice for obvious reasons. Why should we bother to postulate such a signal? In later chapters we shall see that certain signals (including an everlasting sinusoid) which cannot be generated in practice do serve a very useful purpose in the study of signals and systems.
+
+1.2-4  Energy and Power Signals
+
+A signal with finite energy is an energy signal, and a signal with finite and nonzero power is a power signal. Signals in Fig. 1.2a and 1.2b are examples of energy and power signals, respectively. Observe that power is the time average of energy. Since the averaging is over an infinitely large interval, a signal with finite energy has zero power, and a signal with finite power has infinite energy. Therefore, a signal cannot both be an energy and a power signal. If it is one, it cannot be the other. On the other hand, there are signals that are neither energy nor power signals. The ramp signal is such an example.
+
+Comments
+All practical signals have finite energies and are therefore energy signals. A power signal must necessarily have infinite duration; otherwise its power, which is its energy averaged over an infinitely large interval, will not approach a (nonzero) limit. Clearly, it is impossible to generate a true power signal in practice because such a signal has infinite duration and infinite energy.
+
+Also, because of periodic repetition, periodic signals for which the area under $|f(t)|^2$ over one period is finite are power signals; however, not all power signals are periodic.
+
+△ Exercise E1.4
+Show that an everlasting exponential $e^{-at}$ is neither an energy nor a power signal for any real value of $a$. However, if $a$ is imaginary, it is a power signal with power $P_f = 1$ regardless of the value of $a$. ▽
+
+1.2-5  Deterministic and Random Signals
+
+A signal whose physical description is known completely, either in a mathematical form or a graphic form, is a deterministic signal. A signal whose values

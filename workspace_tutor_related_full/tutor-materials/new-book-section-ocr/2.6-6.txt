@@ -1,0 +1,64 @@
+# Aquarius section OCR
+section_id: 2.6-6
+source_pages: page-209, page-210
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+2.6-6 Time Constant and Rate of Information Transmission
+In pulse communications systems, which convey information through pulse amplitudes, the
+rate of information transmission is proportional to the rate of pulse transmission. We shall
+demonstrate that to avoid the destruction of information caused by dispersion of pulses during their
+transmission through the channel (transmission medium), the rate of information transmission
+should not exceed the bandwidth of the communications channel.
+
+Since an input pulse spreads out by T_h seconds, the consecutive pulses should be spaced T_h
+seconds apart to avoid interference between pulses. Thus, the rate of pulse transmission should
+not exceed 1/T_h pulses/second. But 1/T_h = f_c, the channel’s bandwidth, so that we can transmit
+pulses through a communication channel at a rate of f_c pulses per second and still avoid significant
+interference between the pulses. The rate of information transmission is therefore proportional to
+the channel’s bandwidth (or to the reciprocal of its time constant).†
+
+The discussion of Secs. 2.6-2, 2.6-3, 2.6-4, 2.6-5, and 2.6-6) shows that the system time
+constant determines much of a system’s behavior—its filtering characteristics, rise time, pulse
+dispersion, and so on. In turn, the time constant is determined by the system’s characteristic roots.
+Clearly the characteristic roots and their relative amounts in the impulse response h(t) determine
+the behavior of a system.
+
+EXAMPLE 2.15  Intuitive Insights into Lowpass System Behavior
+Find the time constant T_h, rise time T_r, and cutoff frequency f_c for a lowpass system that
+has impulse response h(t) = te^{-t}u(t). Determine the maximum rate that pulses of 1 second
+
+† Theoretically, a channel of bandwidth f_c can transmit correctly up to 2f_c pulse amplitudes per second [4].
+Our derivation here, being very simple and qualitative, yields only half the theoretical limit. In practice it is
+not easy to attain the upper theoretical limit.
+
+[[PAGE page-210]]
+210
+CHAPTER 2  TIME-DOMAIN ANALYSIS OF CONTINUOUS-TIME SYSTEMS
+
+duration can be transmitted through the system so that interference is essentially avoided
+between adjacent pulses at the system output.
+
+The system impulse response h(t) = te^{-t}u(t), which looks similar to the impulse response of
+Fig. 2.21, has a peak value of e^{-1} = 0.3679 at a time t_0 = 1. According to Eq. (2.47) and using
+integration by parts, the system time constant is therefore
+
+T_h = \frac{\int_0^{\infty} te^{-t}\,dt}{e^{-1}} = e^1\left(-te^{-t}\big|_0^{\infty} + \int_0^{\infty} e^{-t}\,dt\right) = e^1\left(0 - e^{-t}\big|_0^{\infty}\right) = e^1(1) = 2.7183
+
+Thus,
+
+T_h = 2.7183 s,     T_r = T_h = 2.7183 s,     and     f_c = \frac{1}{T_h} = 0.3679 Hz
+
+Due to its lowpass nature, this system will spread an input pulse of 1 second to an output with
+width
+
+T_y = T_x + T_h = 1 + 2.7183 = 3.7183 s
+
+To avoid interference between pulses at the output, the pulse transmission rate should be no
+more than the reciprocal of the output pulse width. That is,
+
+maximum pulse transmission rate = \frac{1}{3.7183} = 0.2689 pulse/s
+
+By narrowing the input pulses, the pulse transmission rate could increase up to f_c = 0.3679
+pulse/s.

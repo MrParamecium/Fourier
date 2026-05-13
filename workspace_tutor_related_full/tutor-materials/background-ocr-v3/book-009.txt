@@ -1,0 +1,82 @@
+9
+
+B.1 Complex Numbers
+
+[Figure labels:]
+Im
+
+$2+j3$
+
+$\sqrt{13}$
+
+$56.3^\circ$
+
+$2$
+
+(a)
+
+Im
+
+$-2+j1$
+
+$\sqrt{5}$
+
+$1$
+
+$153.4^\circ$
+
+$-2$
+
+(b)
+
+Im
+
+$-2$
+
+$\sqrt{13}$
+
+$-123.7^\circ$
+
+$-3$
+
+$-2-j3$
+
+(c)
+
+Im
+
+$1$
+
+$-71.6^\circ$
+
+$\sqrt{10}$
+
+$-3$
+
+(d)
+
+Fig. B.4 From Cartesian to polar form.
+
+fourth quadrants. It will read $\tan^{-1}\left(\frac{-2}{3}\right)$ as $\tan^{-1}\left(\frac{2}{3}\right)$, which is clearly wrong. In computing inverse trigonometric functions, if the angle appears in the second or third quadrant, the answer of the calculator is off by $180^\circ$. The correct answer is obtained by adding or subtracting the $180^\circ$ to the value found with the calculator (either adding or subtracting yields the correct answer). For this reason it is advisable to draw the point in the complex plane and determine the quadrant in which the point lies. This issue will be clarified by the following examples.
+
+Example B.1
+
+Express the following numbers in polar form:
+
+(a) $2+j3$ \qquad (b) $-2+j1$ \qquad (c) $-2-j3$ \qquad (d) $1-j3$
+
+(a)
+
+$$|z|=\sqrt{2^2+3^2}=\sqrt{13} \qquad \angle z=\tan^{-1}\left(\frac{3}{2}\right)=56.3^\circ$$
+
+In this case the number is in the first quadrant, and a calculator will give the correct value of $56.3^\circ$. Therefore, (see Fig. B.4a)
+
+$$2+j3=\sqrt{13}e^{j56.3^\circ}$$
+
+(b)
+
+$$|z|=\sqrt{(-2)^2+1^2}=\sqrt{5} \qquad \angle z=\tan^{-1}\left(\frac{1}{-2}\right)=153.4^\circ$$
+
+In this case the angle is in the second quadrant (see Fig. B.4b), and therefore the answer given by the calculator $\left(\tan^{-1}\left(\frac{-1}{2}\right)=-26.6^\circ\right.$ or $\left.-206.6^\circ\right)$ is off by $180^\circ$. The correct answer is $(-26.6^\circ+180^\circ)=153.4^\circ$ or $-206.6^\circ$. Both values are correct because they represent the same angle. As a matter of convenience, we choose an angle whose numerical value is less than $180^\circ$, which in this case is $153.4^\circ$. Therefore,
+
+$$-2+j1=\sqrt{5}e^{j153.4^\circ}$$

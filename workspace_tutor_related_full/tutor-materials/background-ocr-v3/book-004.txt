@@ -1,0 +1,31 @@
+4
+
+$\cdot$ Background
+
+was
+
+$$
+x=\sqrt[3]{2+\sqrt{-121}}+\sqrt[3]{2-\sqrt{-121}}
+$$
+
+What was Cardano to make of this equation in the year 1545? In those days negative numbers were themselves suspect, and a square root of a negative number was doubly preposterous! Today we know that
+
+$$
+(2\pm j)^3=2\pm j11=2\pm \sqrt{-121}
+$$
+
+Therefore, Cardano's formula gives
+
+$$
+x=(2+j)+(2-j)=4
+$$
+
+We can readily verify that $x=4$ is indeed a solution of $x^3-15x-4=0$. Cardano tried to explain halfheartedly the presence of $\sqrt{-121}$ but ultimately dismissed the whole enterprise as being “as subtle as it is useless.” A generation later, however, Raphael Bombelli (1526-1573), after examining Cardano’s results, proposed acceptance of imaginary numbers as a necessary vehicle that would transport the mathematician from the real cubic equation to its real solution. In other words, while we begin and end with real numbers, we seem compelled to move into an unfamiliar world of imaginaries to complete our journey. To mathematicians of the day, this proposal seemed incredibly strange.7 Yet they could not dismiss the idea of imaginary numbers so easily because this concept yielded the real solution of an equation. It took two more centuries for the full importance of complex numbers to become evident in the works of Euler, Gauss, and Cauchy. Still, Bombelli deserves credit for recognizing that such numbers have a role to play in algebra.7
+
+In 1799, the German mathematician Karl Friedrich Gauss, at a ripe age of 22, proved the fundamental theorem of algebra, namely that every algebraic equation in one unknown has a root in the form of a complex number. He showed that every equation of the $n$th order has exactly $n$ solutions (roots), no more and no less. Gauss was also one of the first to give a coherent account of complex numbers and to interpret them as points in a complex plane. It is he who introduced the term complex numbers and paved the way for general and systematic use of complex numbers. The number system was once again broadened or generalized to include imaginary numbers. Ordinary (or real) numbers became a special case of generalized (or complex) numbers.
+
+The utility of complex numbers can be understood readily by an analogy with two neighboring countries $X$ and $Y$, as illustrated in Fig. B.1. If we want to travel from City $a$ to City $b$ (both in Country $X$), the shortest route is through Country $Y$, although the journey begins and ends in Country $X$. We may, if we desire, perform this journey by an alternate route that lies exclusively in $X$, but this alternate route is longer. In mathematics we have a similar situation with real numbers (Country $X$) and complex numbers (Country $Y$). All real-world problems must start with real numbers, and all the final results must also be in real numbers. But the derivation of results is considerably simplified by using complex numbers as an intermediary. It is also possible to solve all real-world problems by an alternate method, using real numbers exclusively, but such procedure would increase the work needlessly.
+
+B.1-2 Algebra of Complex Numbers
+
+A complex number $(a,b)$ or $a+jb$ can be represented graphically by a point whose Cartesian coordinates are $(a,b)$ in a complex plane (Fig. B.2). Let us denote this complex number by $z$ so that

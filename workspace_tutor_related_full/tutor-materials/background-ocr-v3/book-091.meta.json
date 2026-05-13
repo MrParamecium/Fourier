@@ -1,0 +1,31 @@
+{
+  "subsection": "1.8",
+  "summary": "This page continues the derivation of an input-output differential equation for a system by manipulating operator-form equations and substituting variables to obtain a first-order relation for the output. It also includes two exercises on deriving input-output relationships for an RLC circuit with different outputs, and introduces Example 1.12 on rotational systems and an armature-controlled DC motor.",
+  "keywords": [
+    "system model",
+    "input-output description",
+    "differential equation",
+    "operator D",
+    "RLC circuit",
+    "inductor voltage",
+    "capacitor voltage",
+    "rotational systems",
+    "torque",
+    "moment of inertia",
+    "DC motor",
+    "electromechanical systems"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-091",
+  "figures": [
+    {
+      "fig_id": "Fig. 1.33",
+      "top": 0.368,
+      "left": 0.0532,
+      "bottom": 0.4649,
+      "right": 0.5623,
+      "caption": "Fig. 1.33 Armature controlled dc motor."
+    }
+  ]
+}

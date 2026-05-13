@@ -1,0 +1,20 @@
+{
+  "subsection": "B.6-1",
+  "summary": "This page introduces matrices as ordered arrays of numbers, explains matrix order and square matrices, and shows how a system of simultaneous equations can be written compactly as the matrix-vector equation y = Ax. It then begins subsection B.6-1 by defining special square matrices, including diagonal matrices and the identity (unit) matrix.",
+  "keywords": [
+    "matrices",
+    "vectors",
+    "matrix order",
+    "square matrix",
+    "matrix notation",
+    "matrix-vector multiplication",
+    "simultaneous equations",
+    "diagonal matrix",
+    "identity matrix",
+    "unit matrix"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-035",
+  "figures": []
+}

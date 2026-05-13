@@ -1,0 +1,26 @@
+{
+  "sectionId": "1.1-2",
+  "sourcePages": [
+    "page-065",
+    "page-066",
+    "page-067",
+    "page-068",
+    "page-069",
+    "page-070"
+  ],
+  "usedPages": [
+    "page-065",
+    "page-066",
+    "page-067",
+    "page-068",
+    "page-069",
+    "page-070"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "1.1-2 Signal Power",
+  "foundEnd": false,
+  "endBeforeLine": "",
+  "endBeforeCode": "",
+  "charCount": 15922
+}

@@ -1,0 +1,37 @@
+{
+  "subsection": "B.1",
+  "summary": "This page introduces complex numbers in rectangular form as z = a + jb and identifies the real and imaginary parts as coordinates on the complex plane. It also explains the polar-coordinate representation, relating a and b to r and theta and expressing z as r(cos theta + j sin theta).",
+  "keywords": [
+    "complex numbers",
+    "complex plane",
+    "real part",
+    "imaginary part",
+    "rectangular form",
+    "polar form",
+    "polar coordinates",
+    "Re z",
+    "Im z",
+    "z = a + jb"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-005",
+  "figures": [
+    {
+      "fig_id": "Fig. B.1",
+      "top": 0.0472,
+      "left": 0.1668,
+      "bottom": 0.2137,
+      "right": 0.4511,
+      "caption": "Use of complex numbers can reduce the work."
+    },
+    {
+      "fig_id": "Fig. B.2",
+      "top": 0.454,
+      "left": 0.1323,
+      "bottom": 0.5763,
+      "right": 0.4996,
+      "caption": "Representation of a number in the complex plane."
+    }
+  ]
+}

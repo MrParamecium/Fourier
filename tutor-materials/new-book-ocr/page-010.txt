@@ -1,0 +1,53 @@
+10       CHAPTER B     BACKGROUND
+
+               We can easily verify these results using the MATLAB abs and angle commands. To
+         obtain units of degrees, we must multiply the radian result of the angle command by
+         180
+          π
+             . Furthermore, the angle command correctly computes angles for all four quadrants of
+         √ complex
+         the            plane. To provide an example, let us use MATLAB to verify that −2 + j1 =
+                     ◦                ◦
+            5e j153.4 = 2.2361e j153.4 .
+
+         >>   abs(-2+1j)
+              ans = 2.2361
+         >>   angle(-2+1j)*180/pi
+              ans = 153.4349
+
+         One can also use the cart2pol command to convert Cartesian to polar coordinates. Readers,
+         particularly those who are unfamiliar with MATLAB, will benefit by reading the overview in
+         Sec. B.7.
+
+
+
+
+     E X A M P L E B.2 Polar to Cartesian Form
+
+         Represent the following numbers in the complex plane and express them in Cartesian form:
+         (a) 2ejπ/3 , (b) 4e−j3π/4 , (c) 2ejπ/2 , (d) 3e−j3π , (e) 2ej4π , and (f) 2e−j4π .
+
+                                                     √
+         (a) 2ejπ/3 = 2(cos π/3 + j sin π/3) = 1 + j 3 √ (see√Fig. B.5a)
+         (b) 4e−j3π/4 = 4(cos 3π /4 − j sin 3π /4) = −2 2 − j2 2        (see Fig. B.5b)
+         (c) 2ejπ/2 = 2(cos π/2 + j sin π/2) = 2(0 + j1) = j2     (see Fig. B.5c)
+         (d) 3e−j3π = 3(cos 3π − j sin 3π ) = 3(−1 + j0) = −3       (see Fig. B.5d)
+         (e) 2ej4π = 2(cos 4π + j sin 4π ) = 2(1 + j0) = 2    (see Fig. B.5e)
+         (f) 2e−j4π = 2(cos 4π − j sin 4π ) = 2(1 − j0) = 2    (see Fig. B.5f)
+              We can readily verify these results using MATLAB. First, we use the exp function to
+         represent a number in polar form. Next, we use the real and imag commands to determine
+         the real and imaginary components of that number.
+                                                         √    To provide an example, let us use MATLAB
+         to verify the result of part (a): 2ejπ/3 = 1 + j 3 = 1 + j1.7321.
+
+         >>   real(2*exp(1j*pi/3))
+              ans = 1.0000
+         >>   imag(2*exp(1j*pi/3))
+              ans = 1.7321
+
+         Since MATLAB defaults to Cartesian form, we could have verified the entire result in one step.
+
+         >>   2*exp(1j*pi/3)
+              ans = 1.0000 + 1.7321i
+
+         One can also use the pol2cart command to convert polar to Cartesian coordinates.

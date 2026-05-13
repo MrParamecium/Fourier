@@ -1,0 +1,72 @@
+42
+
+The proofs of identities (B.71a) and (B.71b) are trivial. We can prove Eq. (B.71c) as follows. Let $\mathbf{A}$ be an $m \times n$ matrix and $\mathbf{B}$ an $n \times p$ matrix. Then, if
+
+$$
+\mathbf{C} = \mathbf{AB}
+$$
+
+from Eq. (B.56), we have
+
+$$
+c_{ik} = \sum_{j=1}^{n} a_{ij} b_{jk}
+$$
+
+and
+
+$$
+\dot{c}_{ik} = \sum_{j=1}^{n} \dot{a}_{ij} b_{jk} + \sum_{j=1}^{n} a_{ij} \dot{b}_{jk}
+\qquad\qquad (B.72)
+$$
+
+or
+
+$$
+\dot{c}_{ij} = d_{ij} + e_{ik}
+$$
+
+Equation (B.72) along with the multiplication rule clearly indicate that $d_{ik}$ is the $ik$th element of matrix $\dot{\mathbf{A}}\mathbf{B}$ and $e_{ik}$ is the $ik$th element of matrix $\mathbf{A}\dot{\mathbf{B}}$. Equation (B.71c) then follows.
+
+If we let $\mathbf{B} = \mathbf{A}^{-1}$ in Eq. (B.71c), we obtain
+
+$$
+\frac{d}{dt}(\mathbf{AA}^{-1}) = \frac{d\mathbf{A}}{dt}\mathbf{A}^{-1} + \mathbf{A}\frac{d}{dt}\mathbf{A}^{-1}
+$$
+
+But since
+
+$$
+\frac{d}{dt}(\mathbf{AA}^{-1}) = \frac{d}{dt}\mathbf{I} = 0
+$$
+
+we have
+
+$$
+\frac{d}{dt}(\mathbf{A}^{-1}) = -\mathbf{A}^{-1}\frac{d\mathbf{A}}{dt}\mathbf{A}^{-1}
+\qquad\qquad (B.73)
+$$
+
+B.6-4 The Characteristic Equation of a Matrix: The Cayley-Hamilton Theorem
+
+For an $(n \times n)$ square matrix $\mathbf{A}$, any vector $\mathbf{x}$ $(\mathbf{x} \ne 0)$ that satisfies the equation
+
+$$
+\mathbf{A}\mathbf{x} = \lambda \mathbf{x}
+\qquad\qquad (B.74)
+$$
+
+is an eigenvector (or characteristic vector), and $\lambda$ is the corresponding eigenvalue (or characteristic value) of $\mathbf{A}$. Equation (B.74) can be expressed as
+
+$$
+(\mathbf{A} - \lambda \mathbf{I})\mathbf{x} = 0
+\qquad\qquad (B.75)
+$$
+
+The solution for this set of homogeneous equations exists if and only if
+
+$$
+|\mathbf{A} - \lambda \mathbf{I}| = |\lambda \mathbf{I} - \mathbf{A}| = 0
+\qquad\qquad (B.76a)
+$$
+
+or

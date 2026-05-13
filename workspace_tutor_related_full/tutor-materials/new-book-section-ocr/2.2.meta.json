@@ -1,0 +1,40 @@
+{
+  "sectionId": "2.2",
+  "sourcePages": [
+    "page-151",
+    "page-152",
+    "page-153",
+    "page-154",
+    "page-155",
+    "page-156",
+    "page-157",
+    "page-158",
+    "page-159",
+    "page-160",
+    "page-161",
+    "page-162",
+    "page-163"
+  ],
+  "usedPages": [
+    "page-151",
+    "page-152",
+    "page-153",
+    "page-154",
+    "page-155",
+    "page-156",
+    "page-157",
+    "page-158",
+    "page-159",
+    "page-160",
+    "page-161",
+    "page-162",
+    "page-163"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "2.2 System Response to Internal Conditions: The Zero-Input Response 151",
+  "foundEnd": true,
+  "endBeforeLine": "2.2-1 Some Insights into the Zero-Input Behavior of a System",
+  "endBeforeCode": "2.2-1",
+  "charCount": 23142
+}

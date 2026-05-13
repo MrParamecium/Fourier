@@ -1,0 +1,32 @@
+1.1 Signals
+
+53
+
+$f(t)$
+
+(a)
+
+$t$
+
+$f(t)$
+
+(b)
+
+$t$
+
+Fig. 1.1 Examples of Signals: (a) a signal with finite energy (b) a signal with finite power.
+
+We can generalize this definition for a complex signal $f(t)$ as
+
+$$
+P_f=\lim_{T\to\infty}\frac{1}{T}\int_{-T/2}^{T/2} |f(t)|^2\,dt
+$$
+(1.4)
+
+Observe that the signal power $P_f$ is the time average (mean) of the signal amplitude squared, that is, the mean-squared value of $f(t)$. Indeed, the square root of $P_f$ is the familiar rms (root mean square) value of $f(t)$.
+
+The mean of an entity averaged over a large time interval approaching infinity exists if the entity is either periodic or has a statistical regularity. If such a condition is not satisfied, the average may not exist. For instance, a ramp signal $f(t)=t$ increases indefinitely as $|t|\to\infty$, and neither the energy nor the power exists for this signal.
+
+Comments
+
+The signal energy as defined in Eq. (1.1) or Eq. (1.2) does not indicate the actual energy of the signal because the signal energy depends not only on the signal, but also on the load. It can, however, be interpreted as the energy dissipated in a normalized load of a 1-ohm resistor if a voltage $f(t)$ were to be applied across the 1-ohm resistor (or if a current $f(t)$ were to be passed through the 1-ohm resistor). The measure of "energy" is, therefore, indicative of the energy capability of the signal and not the actual energy. For this reason the concepts of conservation of energy should not be applied to this “signal energy”. Parallel observation applies to “signal power” defined in Eq. (1.3) or (1.4). These measures are but convenient indicators of the signal size, which prove useful in many applications. For instance, if we approximate a signal $f(t)$ by another signal $g(t)$, the error in the approximation is $e(t)=f(t)-g(t)$. The energy (or power) of $e(t)$ is a convenient indicator of the goodness of the approximation. It provides us with a quantitative measure of determining the closeness of the approximation. In communication systems, during transmission over a channel, message signals are corrupted by unwanted signals (noise). The quality of the received signal is judged by the relative sizes of the

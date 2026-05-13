@@ -1,0 +1,19 @@
+{
+  "subsection": "B.6-3",
+  "summary": "This page introduces derivatives and integrals of matrices whose entries are functions of a variable, defining these operations elementwise. It provides an example matrix A(t), computes its derivative, writes the integral in elementwise form, and states basic differentiation identities for matrix sums, scalar multiples, and products.",
+  "keywords": [
+    "vectors and matrices",
+    "matrix derivatives",
+    "matrix integrals",
+    "time-varying matrix",
+    "elementwise differentiation",
+    "elementwise integration",
+    "product rule for matrices",
+    "matrix calculus",
+    "A(t)"
+  ],
+  "has_math": true,
+  "page_type": "text",
+  "book_page": "book-041",
+  "figures": []
+}

@@ -1,0 +1,18 @@
+{
+  "sectionId": "3.3-4",
+  "sourcePages": [
+    "page-251",
+    "page-252"
+  ],
+  "usedPages": [
+    "page-251",
+    "page-252"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "3.3-4 Discrete-Time Sinusoid cos (Ωn + θ)",
+  "foundEnd": true,
+  "endBeforeLine": "3.3-5 Discrete-Time Complex Exponential e^{jΩn}",
+  "endBeforeCode": "3.3-5",
+  "charCount": 1582
+}

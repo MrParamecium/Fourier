@@ -1,0 +1,27 @@
+Background
+
+B.1 Complex Numbers
+
+3
+
+Gerolamo Cardano (left) and Karl Friedrich Gauss (right).
+
+imaginary numbers plausible and acceptable to early mathematicians. They could dismiss $\sqrt{-1}$ as pure nonsense when it appeared as a solution to $x^2 + 1 = 0$ because this equation has no real solution. But in 1545, Gerolamo Cardano of Milan published Ars Magna. (The Great Art), the most important algebraic work of the Renaissance. In this book he gave a method of solving a general cubic equation in which a root of a negative number appeared in an intermediate step. According to his method, the solution to a third-order equation$\dagger$
+
+$$x^3 + ax + b = 0$$
+
+is given by
+
+$$x = \sqrt[3]{-\frac{b}{2} + \sqrt{\frac{b^2}{4} + \frac{a^3}{27}}} + \sqrt[3]{-\frac{b}{2} - \sqrt{\frac{b^2}{4} + \frac{a^3}{27}}}$$
+
+For example, to find a solution of $x^3 + 6x - 20 = 0$, we substitute $a = 6$, $b = -20$ in the above equation to obtain
+
+$$x = \sqrt[3]{10 + \sqrt{108}} + \sqrt[3]{10 - \sqrt{108}} = \sqrt[3]{20.392} - \sqrt[3]{0.392} = 2$$
+
+We can readily verify that 2 is indeed a solution of $x^3 + 6x - 20 = 0$. But when Cardano tried to solve the equation $x^3 - 15x - 4 = 0$ by this formula, his solution
+
+$\dagger$This equation is known as the depressed cubic equation. A general cubic equation
+
+$$y^3 + py^2 + qy + r = 0$$
+
+can always be reduced to a depressed cubic form by substituting $y = x - \frac{p}{3}$. Therefore any general cubic equation can be solved if we know the solution to the depressed cubic. The depressed cubic was independently solved, first by Scipione del Ferro (1465-1526) and then by Niccolo Fontana (1499-1557). The latter is better known in the history of mathematics as Tartaglia ("Stammerer"). Cardano learned the secret of the depressed cubic solution from Tartaglia. He then showed that by using the substitution $y = x - \frac{p}{3}$, a general cubic is reduced to a depressed cubic.

@@ -1,0 +1,18 @@
+{
+  "sectionId": "1.7-2",
+  "sourcePages": [
+    "page-102",
+    "page-103"
+  ],
+  "usedPages": [
+    "page-102",
+    "page-103"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "1.7-2 Time-Invariant and Time-Varying Systems",
+  "foundEnd": true,
+  "endBeforeLine": "1.7-3 Instantaneous and Dynamic Systems",
+  "endBeforeCode": "1.7-3",
+  "charCount": 4956
+}

@@ -1,0 +1,22 @@
+{
+  "sectionId": "3.5-1",
+  "sourcePages": [
+    "page-266",
+    "page-267",
+    "page-268",
+    "page-269"
+  ],
+  "usedPages": [
+    "page-266",
+    "page-267",
+    "page-268",
+    "page-269"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "3.5-1 Recursive (Iterative) Solution of Difference Equation",
+  "foundEnd": false,
+  "endBeforeLine": "",
+  "endBeforeCode": "",
+  "charCount": 7316
+}

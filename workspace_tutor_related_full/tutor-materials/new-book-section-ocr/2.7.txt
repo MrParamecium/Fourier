@@ -1,0 +1,16 @@
+# Aquarius section OCR
+section_id: 2.7
+source_pages: page-212, page-213, page-214, page-215, page-216, page-217, page-218, page-219
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+2.7 MATLAB: M-FILES
+M-files are stored sequences of MATLAB commands and help simplify complicated tasks. There are two types of M-file: script and function. Both types are simple text files and require a .m filename extension.
+Although M-files can be created by using any text editor, MATLAB’s built-in editor is the preferable choice because of its special features. As with any program, comments improve the readability of an M-file. Comments begin with the % character and continue through the end of the line.
+An M-file is executed by simply typing the filename (without the .m extension). To execute, M-files need to be located in the current directory or any other directory in the MATLAB path. New directories are easily added to the MATLAB path by using the addpath command.
+
+† This follows directly from Eq. (2.49) with λ = σ + jω0 and ϵ = σ.
+
+[[PAGE page-213]]
+2.7 MATLAB: M-Files                                                                 213

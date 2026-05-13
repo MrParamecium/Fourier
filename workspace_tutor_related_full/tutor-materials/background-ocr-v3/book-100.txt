@@ -1,0 +1,53 @@
+100
+
+1 Introduction to Signals and Systems
+
+1.4-5 Evaluate the following integrals:
+
+(a) $$\int_{-\infty}^{\infty} \delta(\tau) f(t-\tau)\, d\tau$$
+
+(b) $$\int_{-\infty}^{\infty} f(\tau)\delta(t-\tau)\, d\tau$$
+
+(c) $$\int_{-\infty}^{\infty} \delta(t)e^{-j\omega t}\, dt$$
+
+(d) $$\int_{-\infty}^{\infty} \delta(t-2)\sin \pi t\, dt$$
+
+(e) $$\int_{-\infty}^{\infty} \delta(t+3)e^{-t}\, dt$$
+
+(f) $$\int_{-\infty}^{\infty} (t^3+4)\delta(1-t)\, dt$$
+
+(g) $$\int_{-\infty}^{\infty} f(2-t)\delta(3-t)\, dt$$
+
+(h) $$\int_{-\infty}^{\infty} e^{(x-1)}\cos \left[\frac{\pi}{2}(x-5)\right]\delta(x-3)\, dx$$
+
+Hint: $\delta(x)$ is located at $x=0$. For example, $\delta(1-t)$ is located at $1-t=0$, and so on.
+
+1.4-6 (a) Find and sketch $df/dt$ for the signal $f(t)$ shown in Fig. P1.3-3.
+
+(b) Find and sketch $d^2f/dt^2$ for the signal $f(t)$ depicted in Fig. P1.4-2a.
+
+Fig. P1.4-7
+
+1.4-7 Find and sketch $$\int_{-\infty}^{t} f(x)\, dx$$ for the signal $f(t)$ illustrated in Fig. P1.4-7.
+
+1.4-8 Using the generalized function definition, show that $\delta(t)$ is an even function of $t$.
+
+Hint: Start with Eq. (1.24a) as the definition of $\delta(t)$. Now change variable $t=-x$ to show that
+
+$$\int_{-\infty}^{\infty} \phi(t)\delta(-t)\, dt=\phi(0)$$
+
+1.4-9 Prove that
+
+$$\delta(at)=\frac{1}{|a|}\delta(t)$$
+
+Hint: Show that
+
+$$\int_{-\infty}^{\infty} \phi(t)\delta(at)\, dt=\frac{1}{|a|}\phi(0)$$
+
+1.4-10 Show that
+
+$$\int_{-\infty}^{\infty} \delta'(t)\phi(t)\, dt=-\dot{\phi}(0)$$
+
+where $\phi(t)$ and $\dot{\phi}(t)$ are continuous at $t=0$, and $\phi(t)\to 0$ as $t\to \pm\infty$. This integral defines $\delta'(t)$ as a generalized function. Hint: Use integration by parts.
+
+1.4-11 A sinusoid $e^{\sigma t}\cos \omega t$ can be expressed as a sum of exponentials $e^{st}$ and $e^{-st}$ (Eq. (1.30c)) with complex frequencies $s=\sigma+j\omega$ and $s=\sigma-j\omega$. Locate in the complex plane the frequencies of the following sinusoids: (a) $\cos 3t$ (b) $e^{-3t}\cos 3t$ (c) $e^{2t}\cos 3t$ (d) $e^{-2t}$ (e) $e^{2t}$ (f) 5.

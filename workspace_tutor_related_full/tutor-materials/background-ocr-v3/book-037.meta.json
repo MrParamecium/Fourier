@@ -1,0 +1,17 @@
+{
+  "subsection": "B.6",
+  "summary": "This page introduces basic matrix operations in the section on vectors and matrices. It defines matrix addition, scalar multiplication, and matrix multiplication, including the element-by-element rule for addition and scalar scaling, and the row-by-column summation formula for computing entries of a matrix product.",
+  "keywords": [
+    "vectors and matrices",
+    "matrix addition",
+    "scalar multiplication",
+    "matrix multiplication",
+    "matrix order",
+    "row-column product",
+    "summation formula",
+    "element notation"
+  ],
+  "has_math": true,
+  "page_type": "text",
+  "book_page": "book-037"
+}

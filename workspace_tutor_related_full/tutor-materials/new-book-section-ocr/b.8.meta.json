@@ -1,0 +1,24 @@
+{
+  "sectionId": "b.8",
+  "sourcePages": [
+    "page-054",
+    "page-055",
+    "page-056",
+    "page-057",
+    "page-058"
+  ],
+  "usedPages": [
+    "page-054",
+    "page-055",
+    "page-056",
+    "page-057",
+    "page-058"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "B.8 A PPENDIX : U SEFUL M ATHEMATICAL F ORMULAS",
+  "foundEnd": true,
+  "endBeforeLine": "B.8-1 Some Useful Constants",
+  "endBeforeCode": "b.8-1",
+  "charCount": 124
+}

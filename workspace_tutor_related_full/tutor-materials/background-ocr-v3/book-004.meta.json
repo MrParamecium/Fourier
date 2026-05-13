@@ -1,0 +1,22 @@
+{
+  "subsection": "B.1",
+  "summary": "This page gives historical background on the emergence and acceptance of complex numbers, using Cardano’s cubic formula and the expression involving square roots of negative numbers to show how a real solution can arise through intermediate complex values. It discusses Bombelli’s role in legitimizing imaginary numbers, Gauss’s fundamental theorem of algebra and geometric interpretation of complex numbers, and introduces an analogy explaining why complex numbers are useful intermediaries in solving real-valued problems.",
+  "keywords": [
+    "complex numbers",
+    "imaginary numbers",
+    "Cardano",
+    "Bombelli",
+    "Gauss",
+    "fundamental theorem of algebra",
+    "cubic equation",
+    "roots of equations",
+    "complex plane",
+    "historical background",
+    "real numbers",
+    "algebra"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-004",
+  "figures": []
+}

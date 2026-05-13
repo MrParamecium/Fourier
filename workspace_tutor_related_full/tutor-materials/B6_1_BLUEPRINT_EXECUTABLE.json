@@ -1,0 +1,332 @@
+{
+  "section_id": "B.6-1",
+  "section_title": "Some Definitions and Properties",
+  "difficulty": "beginner",
+  "estimated_read_minutes": 6,
+  "lesson_version": "aquarius_std_v1",
+  "learning_objectives": [
+    "Read matrix notation without confusing row and column indices",
+    "Recognize diagonal, identity, zero, and symmetric matrices instantly",
+    "Compute a transpose correctly and understand what changes",
+    "Apply the exact condition for matrix equality"
+  ],
+  "visualization_need": {
+    "level": "static",
+    "reason": [
+      "classification_benefits_from_figure",
+      "pattern_recognition_benefits_from_figure",
+      "misconception_needs_visual_correction",
+      "wrong_vs_right_contrast_is_high_value"
+    ],
+    "recommended_assets": [
+      "wiki_figure",
+      "generated_image"
+    ]
+  },
+  "visual_plan": {
+    "primary_anchor": "both",
+    "rationale": "This section should feel visual from the start. Use Wikipedia/Wikimedia or similarly clean reference visuals when possible, and use generated comparison visuals only as fallback. The student should see indexing, matrix patterns, transpose movement, and equality conditions rather than infer them from prose.",
+    "cram": "Use visuals to make recognition and wrong-vs-right distinctions obvious in seconds.",
+    "standard": "Use visuals to make row-column indexing, matrix type patterns, transpose movement, and equality requirements immediately legible.",
+    "top_score": "Use visuals to expose subtle misreadings, wrong-vs-right contrasts, and exact structure-based traps."
+  },
+  "blocks": [
+    {
+      "type": "text_explanation",
+      "instruction": "Write the overview page for B.6-1. Keep it short. Tell the student that this section is not about heavy calculation yet; it is about seeing matrix structure correctly. Say explicitly that they should leave this section able to read entries, recognize matrix patterns, track transpose movement, and reject false equality fast. Target 70-100 words."
+    },
+    {
+      "type": "web_search_image",
+      "search_query": "Matrix mathematics rows columns Wikipedia Wikimedia",
+      "purpose": "Find a clean reference image that helps students see rows, columns, and entry locations immediately.",
+      "fallback": "generate_image",
+      "teaching_role": "definition_visual"
+    },
+    {
+      "type": "math_block",
+      "latex": "A = [a_{ij}]",
+      "explanation_instruction": "Explain that a matrix entry is labeled by row first, column second. State clearly that i tells you the row and j tells you the column. Keep it short and explicit."
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Teach matrix notation and order. Explain what an m x n matrix means, what a_{ij} means, and why students often confuse row and column order. Use one short concrete example such as 'a_{23} means row 2, column 3'. Keep it tight. Then explicitly point the student to the visual and tell them exactly what to notice. Target 100-130 words."
+    },
+    {
+      "type": "generate_image",
+      "tool": "openai/gpt-5.4-image-2",
+      "reason": "Need a wrong-vs-right structural teaching visual for matrix indexing if no suitable external reference image is found.",
+      "teaching_role": "concept_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Use this visual to memorize row-first, column-second indexing and reject the reversed reading fast.",
+        "standard": "Use this visual to connect the notation a_ij to a real matrix layout and contrast the correct reading with the common wrong reading.",
+        "top_score": "Use this visual to prevent row-column indexing mistakes under exam pressure by making the wrong interpretation visibly incorrect."
+      },
+      "prompt": "Pure white clean background, minimalist lecture-notes educational diagram, exactly one knowledge point, single clear reading path. Draw one medium-size matrix A with entries labeled a11, a12, a13, a21, a22, a23. Highlight one entry a23 with a soft blue box. Show a correct label 'row 2, column 3' in navy/teal and a crossed-out wrong label 'row 3, column 2' in muted red. Add one arrow from i to the row and one arrow from j to the column. No decorative clutter, no dense text, no poster styling.",
+      "style_hint": "lecture notes, academic, wrong vs right, matrix indexing"
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Teach the standard named matrix types: diagonal, identity (unit), zero, and symmetric. Do not just define them mechanically. Tell the student exactly what pattern to recognize with their eyes. For identity, mention lightly that it acts like a do-nothing multiplier when dimensions are compatible, but do not drift into full matrix multiplication yet. Keep it punchy and recognition-oriented. Target 120-150 words."
+    },
+    {
+      "type": "web_search_image",
+      "search_query": "identity matrix diagonal matrix symmetric matrix Wikimedia Commons Wikipedia",
+      "purpose": "Find a clean reference-style comparison image or diagram that helps students distinguish matrix types quickly.",
+      "fallback": "generate_image",
+      "teaching_role": "classification_visual"
+    },
+    {
+      "type": "generate_image",
+      "tool": "openai/gpt-5.4-image-2",
+      "reason": "Need a side-by-side recognition visual so the student can instantly distinguish diagonal, identity, zero, and symmetric matrices if a suitable external reference image is unavailable.",
+      "teaching_role": "classification_anchor",
+      "mode_specific_visual_use": {
+        "cram": "Use this visual as a quick recognition chart for matrix types.",
+        "standard": "Use this visual to clarify the differences between the standard named matrix patterns.",
+        "top_score": "Use this visual to reduce misclassification errors and sharpen structural recognition."
+      },
+      "prompt": "Pure white clean background, minimalist lecture-notes educational diagram, one knowledge point only: recognition of special matrix types. Show four small matrices side by side: diagonal, identity, zero, symmetric. Label each matrix clearly above it. Use one short cue under each: 'only main diagonal can be nonzero', 'ones on main diagonal', 'all entries zero', 'mirror across main diagonal'. Use navy, muted teal, soft gray and muted red only if needed for warning. Clean spacing, no clutter.",
+      "style_hint": "lecture notes, classification chart, restrained, clean"
+    },
+    {
+      "type": "math_block",
+      "latex": "A = B \\iff a_{ij} = b_{ij} \\text{ for all } i,j",
+      "explanation_instruction": "Explain that matrix equality is strict: the matrices must have the same order and every corresponding entry must match. Keep it short."
+    },
+    {
+      "type": "math_block",
+      "latex": "A^T = [a_{ji}], \\qquad (A^T)^T = A",
+      "explanation_instruction": "Explain that transpose swaps row and column positions, so an m x n matrix becomes n x m. Also say that transposing twice returns the original matrix."
+    },
+    {
+      "type": "text_explanation",
+      "instruction": "Write one compact teaching page that covers both transpose and equality, then immediately walk through one worked example. The worked example must do all of these: identify the order of a given matrix, say whether it is diagonal / identity / zero / symmetric, compute its transpose, and decide whether two matrices are equal. Keep the example compact and step-by-step, but do not over-explain. After the example, add a short lead-in sentence that tells the student the next visual will correct the most common wrong mental models. Target 170-220 words."
+    },
+    {
+      "type": "generate_image",
+      "tool": "openai/gpt-5.4-image-2",
+      "reason": "Need a visual correction block for transpose and equality misconceptions.",
+      "teaching_role": "trap_exposure",
+      "mode_specific_visual_use": {
+        "cram": "Use this visual to correct the two fastest point-losing mistakes: transpose changes position, and equality requires same order plus full entry match.",
+        "standard": "Use this visual to compare the wrong mental model with the correct one for transpose and equality.",
+        "top_score": "Use this visual to make subtle structure-based mistakes visibly obvious."
+      },
+      "prompt": "Pure white clean background, minimalist lecture-notes educational diagram, one knowledge point cluster only: transpose and equality correction. Left panel: matrix A and A^T with one number highlighted in both, showing same value but moved position. Add a short caption 'same values, new positions'. Right panel: one valid equality example with two identical 2x2 matrices and one invalid example where dimensions differ or one entry differs, with muted red cross on the invalid case. Clean spacing, navy / muted teal / soft gray, muted red only for wrong cases.",
+      "style_hint": "lecture notes, visual correction, transpose and equality, wrong vs right"
+    },
+    {
+      "type": "section_summary",
+      "instruction": "Summarize the 3 most important recognition rules from this section in bullet points of at most 20 words each. Include one bullet for indexing, one for transpose, and one for equality or matrix-type recognition. End with a one-sentence bridge to B.6-2 matrix algebra."
+    },
+    {
+      "type": "quiz_plan",
+      "target_questions": 6,
+      "question_range": {
+        "min": 5,
+        "max": 7
+      },
+      "knowledge_points": [
+        {
+          "id": "matrix_order_and_entry_reading",
+          "label": "Matrix order and entry notation",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "b61_q1",
+              "type": "multiple_choice",
+              "task_type": "core_concept_check",
+              "stem": "If A is a 3 x 4 matrix, what does the symbol a_{23} refer to?",
+              "options": [
+                "A. Row 3, column 2",
+                "B. Row 2, column 3",
+                "C. Column 2, row 3",
+                "D. The 23rd entry of A"
+              ],
+              "correct_option": "B",
+              "explanation": "The first index gives the row and the second index gives the column, so a_{23} means row 2, column 3.",
+              "wrong_option_explanations": {
+                "A": "This reverses the meaning of the two indices.",
+                "C": "Column-first reading is incorrect here.",
+                "D": "The subscripts are positional indices, not a serial entry number."
+              },
+              "hint": "Read the indices in row-column order.",
+              "needs_visual": true,
+              "visual_type": "wrong_vs_right_matrix_indexing",
+              "needs_demo": false,
+              "common_mistake_target": "row_column_confusion",
+              "if_wrong_then_review": "matrix notation and row-column indexing"
+            }
+          ]
+        },
+        {
+          "id": "special_matrix_recognition",
+          "label": "Recognizing standard matrix types",
+          "importance": "high",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "b61_q2",
+              "type": "multiple_choice",
+              "task_type": "mini_transfer_check",
+              "stem": "Which description identifies a symmetric matrix correctly?",
+              "options": [
+                "A. All diagonal entries are 1",
+                "B. All entries are 0 except those on the main diagonal",
+                "C. Entries mirror across the main diagonal so that a_{ij} = a_{ji}",
+                "D. The matrix must be rectangular"
+              ],
+              "correct_option": "C",
+              "explanation": "A symmetric matrix satisfies a_{ij} = a_{ji}, which means it mirrors across the main diagonal.",
+              "wrong_option_explanations": {
+                "A": "That describes the identity matrix, not every symmetric matrix.",
+                "B": "That describes a diagonal matrix.",
+                "D": "A symmetric matrix must be square, not rectangular."
+              },
+              "hint": "Think about reflection across the main diagonal.",
+              "needs_visual": true,
+              "visual_type": "matrix_structure_comparison",
+              "needs_demo": false,
+              "common_mistake_target": "matrix_type_misclassification",
+              "if_wrong_then_review": "diagonal vs identity vs symmetric"
+            }
+          ]
+        },
+        {
+          "id": "transpose_understanding",
+          "label": "Transpose understanding",
+          "importance": "high",
+          "exam_weight": "high",
+          "mastery_rule": {
+            "correct_streak_required": 2
+          },
+          "questions": [
+            {
+              "id": "b61_q3",
+              "type": "multiple_choice",
+              "task_type": "formula_trigger_check",
+              "stem": "If A is a 2 x 3 matrix, what is the order of A^T?",
+              "options": [
+                "A. 2 x 3",
+                "B. 3 x 2",
+                "C. 2 x 2",
+                "D. 3 x 3"
+              ],
+              "correct_option": "B",
+              "explanation": "Transposition swaps rows and columns, so a 2 x 3 matrix becomes a 3 x 2 matrix.",
+              "wrong_option_explanations": {
+                "A": "Transpose does not keep the same order unless the matrix is square.",
+                "C": "There is no reason for the result to become square here.",
+                "D": "The transpose only swaps dimensions; it does not create a square matrix."
+              },
+              "hint": "Swap rows and columns.",
+              "needs_visual": true,
+              "visual_type": "transpose_shape_change",
+              "needs_demo": false,
+              "common_mistake_target": "transpose_shape_confusion",
+              "if_wrong_then_review": "transpose definition"
+            },
+            {
+              "id": "b61_q4",
+              "type": "short_answer",
+              "task_type": "common_trap_check",
+              "stem": "A student says: 'Taking the transpose changes the values in the matrix.' Explain why this is wrong.",
+              "ideal_answer": "Transpose changes where the entries are placed, not their values. Each entry a_{ij} moves to position a_{ji}, so the values stay the same but their row-column locations are swapped.",
+              "grading_rubric": [
+                "Must say transpose swaps positions",
+                "Must say the entry values themselves do not change",
+                "Must mention row-column reversal or a_{ij} to a_{ji}"
+              ],
+              "explanation": "This checks whether the student understands transpose structurally rather than as a mysterious new operation.",
+              "hint": "Ask what happens to the location of a_{23}.",
+              "needs_visual": true,
+              "visual_type": "transpose_wrong_vs_right",
+              "needs_demo": false,
+              "common_mistake_target": "transpose_value_confusion",
+              "if_wrong_then_review": "transpose visual explanation"
+            }
+          ]
+        },
+        {
+          "id": "matrix_equality",
+          "label": "Matrix equality",
+          "importance": "high",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "b61_q5",
+              "type": "multiple_choice",
+              "task_type": "common_trap_check",
+              "stem": "Which statement about matrix equality is correct?",
+              "options": [
+                "A. Two matrices are equal if they have the same diagonal entries",
+                "B. Two matrices are equal if they have the same order only",
+                "C. Two matrices are equal only if they have the same order and all corresponding entries are equal",
+                "D. Two matrices are equal if they have the same transpose"
+              ],
+              "correct_option": "C",
+              "explanation": "Matrix equality is strict: same size and entry-by-entry equality are both required.",
+              "wrong_option_explanations": {
+                "A": "Matching only diagonal entries is not enough.",
+                "B": "Same order is necessary but not sufficient.",
+                "D": "Having the same transpose is not the definition being tested here."
+              },
+              "hint": "Equality means full entry-by-entry agreement.",
+              "needs_visual": true,
+              "visual_type": "matrix_equality_valid_vs_invalid",
+              "needs_demo": false,
+              "common_mistake_target": "partial_match_equality_error",
+              "if_wrong_then_review": "matrix equality condition"
+            }
+          ]
+        },
+        {
+          "id": "worked_example_transfer",
+          "label": "Putting the ideas together",
+          "importance": "medium",
+          "exam_weight": "medium",
+          "mastery_rule": {
+            "correct_streak_required": 1
+          },
+          "questions": [
+            {
+              "id": "b61_q6",
+              "type": "multiple_choice",
+              "task_type": "mini_transfer_check",
+              "stem": "A square matrix has zeros everywhere except possibly on the main diagonal. Which named matrix type does this describe?",
+              "options": [
+                "A. Symmetric matrix",
+                "B. Identity matrix",
+                "C. Diagonal matrix",
+                "D. Zero matrix"
+              ],
+              "correct_option": "C",
+              "explanation": "A diagonal matrix allows nonzero entries only on the main diagonal. Identity and zero matrices are special cases of diagonal matrices.",
+              "wrong_option_explanations": {
+                "A": "A symmetric matrix only requires mirror symmetry, not zero off-diagonal entries.",
+                "B": "Identity is more specific: all diagonal entries must be 1.",
+                "D": "Zero matrix is more specific: every entry must be 0."
+              },
+              "hint": "Ask which option is the broader category.",
+              "needs_visual": true,
+              "visual_type": "matrix_type_family_comparison",
+              "needs_demo": false,
+              "common_mistake_target": "special_case_vs_general_case_confusion",
+              "if_wrong_then_review": "special matrix types"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

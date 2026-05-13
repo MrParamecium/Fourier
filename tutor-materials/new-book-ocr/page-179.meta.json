@@ -1,0 +1,33 @@
+{
+  "chapter": "2",
+  "section": "2.4",
+  "subsection": null,
+  "title": "System Response to External Input: The Zero-State Response",
+  "summary": "This page is a figure page illustrating the convolution operation graphically. It shows the input and impulse response, their time-reversed and shifted forms, overlap areas for different shift values, and the resulting output c(t).",
+  "keywords": [
+    "convolution",
+    "zero-state response",
+    "graphical explanation",
+    "input signal",
+    "impulse response",
+    "time reversal",
+    "time shifting",
+    "overlap area",
+    "Figure 2.7"
+  ],
+  "has_math": true,
+  "page_type": "figure",
+  "book_page": "page-179",
+  "figures": [
+    {
+      "fig_id": "Figure 2.7",
+      "top": 0.0591,
+      "left": 0.1889,
+      "bottom": 0.7341,
+      "right": 0.6806,
+      "caption": "Graphical explanation of the convolution operation with subplots (a) through (i), showing x(t), g(t), flipped and shifted signals, overlap areas, and resulting c(t)",
+      "crop_file": "page-179-figure_2_7.png"
+    }
+  ],
+  "metadata_model": "openrouter:openai/gpt-5.4"
+}

@@ -1,0 +1,69 @@
+1.8 System Model: Input-Output Description
+
+91
+
+$$15x(t) + \frac{5}{D}x(t) = f(t) \qquad (1.58)$$
+
+Multiplying both sides of the above equation by $D$ (that is, differentiating the above equation), we obtain
+
+$$(15D + 5)x(t) = Df(t) \qquad (1.59a)$$
+
+or
+
+$$15\frac{dx}{dt} + 5x(t) = \frac{df}{dt} \qquad (1.59b)$$
+
+Moreover,
+
+$$x(t) = C\frac{dy}{dt}$$
+
+$$= \frac{1}{5}Dy(t)$$
+
+Substitution of this result in Eq. (1.59a) yields
+
+$$(3D + 1)y(t) = f(t) \qquad (1.60)$$
+
+or
+
+$$3\frac{dy}{dt} + y(t) = f(t) \qquad (1.61)$$
+
+Exercise E1.17
+
+For the $RLC$ circuit in Fig. 1.31, find the input-output relationship if the output is the inductor voltage $v_L(t)$.
+
+Hint: $v_L(t) = LDy(t) = Dy(t)$.  Answer: $(D^2 + 3D + 2)\,v_L(t) = D^2f(t)$
+
+Exercise E1.18
+
+For the $RLC$ circuit in Fig. 1.31, find the input-output relationship if the output is the capacitor voltage $v_C(t)$.
+
+Hint: $v_C(t) = \frac{1}{CD}y(t) = \frac{2}{D}y(t)$.  Answer: $(D^2 + 3D + 2)\,v_C(t) = 2f(t)$
+
+$f_f$
+
+$f(t)$
+
+$\theta(t)$
+
+$J$
+
+$B$
+
+$T(t)$
+
+$J$
+
+$B$
+
+$B\dot{\theta}(t)$
+
+(a)
+
+(b)
+
+Fig. 1.33  Armature controlled dc motor.
+
+Example 1.12
+
+In rotational systems, the equations of motion are similar to those in translational systems. In place of force $F$, we have torque $T$. In place of mass $M$, we have moment of inertia $J$ (the rotational mass), and in place of linear acceleration $\ddot{x}$, we have angular acceleration $\ddot{\theta}$. The equation of motion for rotational systems is $T = J\ddot{\theta}$ (in place of $F = M\ddot{x}$).
+
+A wide variety of electromechanical systems convert electrical signals into mechanical motion (mechanical energy) and vice versa. Here we consider a rather simple example of

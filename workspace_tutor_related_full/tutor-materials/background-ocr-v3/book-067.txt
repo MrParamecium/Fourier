@@ -1,0 +1,60 @@
+1.4 Some Useful Signal Models
+
+67
+
+(a)
+
+1
+
+$u(t)$
+
+$0 \qquad t$
+
+(b)
+
+1
+
+$e^{-a t}u(t)$
+
+$0 \qquad t$
+
+Fig. 1.14 (a) Unit step function $u(t)$ (b) exponential $e^{-a t}u(t)$.
+
+1. Unit Step Function u(t)
+
+In much of our discussion, the signals begin at $t=0$ (causal signals). Such signals can be conveniently described in terms of unit step function $u(t)$ shown in Fig. 1.14a. This function is defined by
+
+$$
+u(t)=
+\begin{cases}
+1 & t \ge 0 \\
+0 & t < 0
+\end{cases}
+\qquad (1.20)
+$$
+
+If we want a signal to start at $t=0$ (so that it has a value of zero for $t<0$), we only need to multiply the signal with $u(t)$. For instance, the signal $e^{-a t}$ represents an everlasting exponential that starts at $t=-\infty$. The causal form of this exponential illustrated in Fig. 1.14b can be described as $e^{-a t}u(t)$.
+
+The unit step function also proves very useful in specifying a function with different mathematical descriptions over different intervals. Examples of such functions appear in Fig. 1.11. These functions have different mathematical descriptions over different segments of time as seen from Eqs. (1.17), (1.18a), and (1.18b). Such a description often proves clumsy and inconvenient in mathematical treatment. Using the unit step function, we can describe such functions by a single expression that is valid for all $t$.
+
+(a)
+
+1
+
+$0 \qquad 2 \qquad 4 \qquad t$
+
+(b)
+
+1
+
+$0 \qquad 2 \qquad 4 \qquad t$
+
+$-1$
+
+Fig. 1.15 Representation of a rectangular pulse by step functions.
+
+Consider, for example, the rectangular pulse depicted in Fig. 1.15a. We can express such a pulse in terms of familiar step functions by observing that the pulse $f(t)$ can be expressed as the sum of the two delayed unit step functions as shown in Fig. 1.15b. The unit step function $u(t)$ delayed by $T$ seconds is $u(t-T)$. From Fig. 1.15b, it is clear that
+
+$$
+f(t)=u(t-2)-u(t-4)
+$$

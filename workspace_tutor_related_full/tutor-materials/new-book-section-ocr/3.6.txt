@@ -1,0 +1,312 @@
+# Aquarius section OCR
+section_id: 3.6
+source_pages: page-270, page-271, page-272, page-273, page-274, page-275, page-276, page-277
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+3.6 SYSTEM RESPONSE TO INTERNAL CONDITIONS:
+THE ZERO-INPUT RESPONSE
+The zero-input response y0[n] is the solution of Eq. (3.20) with x[n] = 0; that is,
+
+Q[E]y0[n] = 0
+
+or
+
+(E^N + a1E^{N-1} + · · · + aN-1E + aN)y0[n] = 0                                         (3.21)
+
+Although we can solve this equation systematically, even a cursory examination points to the solution. This equation states that a linear combination of y0[n] and advanced y0[n] is zero, not for some values of n, but for all n. Such a situation is possible if and only if y0[n] and advanced y0[n] have the same form. Only an exponential function γ^n has this property, as the following equation indicates:
+
+E^k{γ^n} = γ^{n+k} = γ^kγ^n
+
+This expression shows that γ^n advanced by k units is a constant (γ^k) times γ^n. Therefore, the solution of Eq. (3.21) must be of the form†
+
+y0[n] = cγ^n                                                                                 (3.22)
+
+To determine c and γ, we substitute this solution in Eq. (3.21). Since E^ky0[n] = y0[n + k] = cγ^{n+k}, this produces
+
+c(γ^N + a1γ^{N-1} + · · · + aN-1γ + aN)γ^n = 0
+
+For a nontrivial solution of this equation,
+
+γ^N + a1γ^{n-1} + · · · + aN-1γ + aN = 0                                             (3.23)
+
+or
+
+Q[γ] = 0
+
+Our solution cγ^n [Eq. (3.22)] is correct, provided γ satisfies Eq. (3.23). Now, Q[γ] is an Nth-order polynomial and can be expressed in the factored form (assuming all distinct roots):
+
+(γ - γ1)(γ - γ2) · · · (γ - γN) = 0
+
+Clearly, γ has N solutions γ1, γ2, . . . , γN and, therefore, Eq. (3.21) also has N solutions c1γ1^n, c2γ2^n, . . . , cnγN^n. In such a case, we have shown that the general solution is a linear combination
+
+† A signal of the form n^mγ^n also satisfies this requirement under certain conditions (repeated roots), discussed later.
+
+[[PAGE page-271]]
+3.6  System Response to Internal Conditions: The Zero-Input Response                                                                 271
+
+of the N solutions (see the footnote on page 153). Thus,
+
+
+y₀[n] = c₁γ₁ⁿ + c₂γ₂ⁿ + · · · + cₙγ_Nⁿ
+
+where γ₁, γ₂, . . . , γₙ are the roots of Eq. (3.23) and c₁, c₂, . . . , cₙ are arbitrary constants determined from N auxiliary conditions, generally given in the form of initial conditions. The polynomial Q[γ] is called the characteristic polynomial of the system, and Q[γ] = 0 [Eq. (3.23)] is the characteristic equation of the system. Moreover, γ₁, γ₂, . . . , γ_N, the roots of the characteristic equation, are called characteristic roots or characteristic values (also eigenvalues) of the system. The exponentials γᵢⁿ (i = 1, 2, . . . , N) are the characteristic modes or natural modes of the system. A characteristic mode corresponds to each characteristic root of the system, and the zero-input response is a linear combination of the characteristic modes of the system.
+
+EXAMPLE 3.13  Zero-Input Response of a Second-Order System with
+Real Roots
+
+The LTID system described by the difference equation
+
+y[n + 2] − 0.6y[n + 1] − 0.16y[n] = 5x[n + 2]
+
+has input x[n] = 4⁻ⁿu[n] and initial conditions y[−1] = 0 and y[−2] = 25/4. Determine the zero-input response y₀[n]. The zero-state response of this system is considered later, in Ex. 3.21.
+
+The system equation in operator notation is
+
+(E² − 0.6E − 0.16)y[n] = 5E²x[n]
+
+The characteristic polynomial is
+
+γ² − 0.6γ − 0.16 = (γ + 0.2)(γ − 0.8)
+
+The characteristic equation is
+
+(γ + 0.2)(γ − 0.8) = 0
+
+The characteristic roots are γ₁ = −0.2 and γ₂ = 0.8. The zero-input response is
+
+y₀[n] = c₁(−0.2)ⁿ + c₂(0.8)ⁿ                                                                 (3.24)
+
+To determine arbitrary constants c₁ and c₂, we set n = −1 and −2 in Eq. (3.24), then substitute y₀[−1] = 0 and y₀[−2] = 25/4 to obtain†
+
+0 = −5c₁ + (5/4)c₂
+25/4 = 25c₁ + (25/16)c₂    }  ⇒  c₁ = 1/4
+                                   c₂ = 4/5
+
+† The initial conditions y[−1] and y[−2] are the conditions given on the total response. But because the input does not start until n = 0, the zero-state response is zero for n < 0. Hence, at n = −1 and −2 the total response consists of the zero-input component only so that y[−1] = y₀[−1] and y[−2] = y₀[−2].
+
+[[PAGE page-272]]
+272
+CHAPTER 3  TIME-DOMAIN ANALYSIS OF DISCRETE-TIME SYSTEMS
+
+Therefore,
+
+y₀[n] = \frac{1}{5}(-0.2)^n + \frac{4}{5}(0.8)^n      n ≥ 0
+
+The reader can verify this solution by computing the first few terms using the iterative method
+(see Exs. 3.11 and 3.12).
+
+DRILL 3.11  Zero-Input Response of First-Order Systems
+Find and sketch the zero-input response for the systems described by the following
+equations:
+
+(a)  y[n + 1] − 0.8y[n] = 3x[n + 1]
+(b)  y[n + 1] + 0.8y[n] = 3x[n + 1]
+
+In each case the initial condition is y[−1] = 10. Verify the solutions by computing the first three
+terms using the iterative method.
+
+ANSWERS
+(a)  8(0.8)^n
+(b)  −8(−0.8)^n
+
+DRILL 3.12  Zero-Input Response of a Second-Order System with
+Real Roots
+Find the zero-input response of a system described by the equation
+
+y[n] + 0.3y[n − 1] − 0.1y[n − 2] = x[n] + 2x[n − 1]
+
+The initial conditions are y₀[−1] = 1 and y₀[−2] = 33. Verify the solution by computing the
+first three terms iteratively.
+
+ANSWER
+y₀[n] = (0.2)^n + 2(−0.5)^n
+
+Section 3.5-1 introduced the method of recursion to solve difference equations. As the next
+example illustrates, the zero-input response can likewise be found through recursion. Since it does
+
+[[PAGE page-273]]
+3.6  System Response to Internal Conditions: The Zero-Input Response  273
+
+not provide a closed-form solution, recursion is generally not the preferred method of solving
+difference equations.
+
+EXAMPLE 3.14  Iterative Solution to Zero-Input Response
+
+Using the initial conditions y[-1] = 2 and y[-2] = 1, use MATLAB to iteratively compute
+and then plot the zero-input response for the system described by (E^2 − 1.56E + 0.81)y[n] =
+(E + 3)x[n].
+
+>>  n = (-2:20)'; y = [1;2;zeros(length(n)-2,1)];
+>>  for k = 1:length(n)-2,
+>>      y(k+2) = 1.56*y(k+1)-0.81*y(k);
+>>  end;
+>>  clf; stem(n,y,'k'); xlabel('n'); ylabel('y[n]'); axis([-2 20 -1.5 2.5]);
+
+Figure 3.18  Zero-input response for Ex. 3.14.
+
+REPEATED ROOTS
+
+So far we have assumed the system to have N distinct characteristic roots γ1, γ2, . . . , γN with
+corresponding characteristic modes γ1^n, γ2^n, . . . , γN^n. If two or more roots coincide (repeated roots),
+the form of characteristic modes is modified. Direct substitution shows that if a root γ repeats r
+times (root of multiplicity r), the corresponding characteristic modes for this root are γ^n, nγ^n,
+n^2γ^n, . . . , n^(r−1)γ^n. Thus, if the characteristic equation of a system is
+
+Q[γ] = (γ − γ1)^r(γ − γr+1)(γ − γr+2) · · · (γ − γN)
+
+then the zero-input response of the system is
+
+y0[n] = (c1 + c2n + c3n^2 + · · · + crn^(r−1))γ1^n + cr+1γr+1^n + cr+2γr+2^n + · · · + cnγN^n
+
+[[PAGE page-274]]
+274    CHAPTER 3    TIME-DOMAIN ANALYSIS OF DISCRETE-TIME SYSTEMS
+
+EXAMPLE 3.15  Zero-Input Response of a Second-Order System with
+Repeated Roots
+
+Consider a second-order difference equation with repeated roots:
+
+(E^2 + 6E + 9)y[n] = (2E^2 + 6E)x[n]
+
+Determine the zero-input response y0[n] if the initial conditions are y0[-1] = −1/3 and
+y0[-2] = −2/9.
+
+The characteristic polynomial is γ^2 + 6γ + 9 = (γ + 3)^2, and we have a repeated characteristic
+root at γ = −3. The characteristic modes are (−3)^n and n(−3)^n. Hence, the zero-input response
+is
+
+y0[n] = (c1 + c2n)(−3)^n
+
+Although we can determine the constants c1 and c2 from the initial conditions following a
+procedure similar to Ex. 3.13, we instead use MATLAB to perform the needed calculations.
+
+>>  c = inv([(-3)^(-1) -1*(-3)^(-1);(-3)^(-2) -2*(-3)^(-2)])*[-1/3;-2/9]
+    c = 4
+        3
+
+Thus, the zero-input response is
+
+y0[n] = (4 + 3n)(−3)^n      n ≥ 0
+
+COMPLEX ROOTS
+As in the case of continuous-time systems, the complex roots of a discrete-time system will occur
+in pairs of conjugates if the system equation coefficients are real. Complex roots can be treated
+exactly as we would treat real roots. However, just as in the case of continuous-time systems, we
+can also use the real form of solution as an alternative.
+
+First we express the complex conjugate roots γ and γ* in polar form. If |γ| is the magnitude
+and β is the angle of γ, then
+
+γ = |γ|e^{jβ}    and    γ* = |γ|e^{−jβ}
+
+The zero-input response is given by
+
+y0[n] = c1γ^n + c2(γ*)^n = c1|γ|^n e^{jβn} + c2|γ|^n e^{−jβn}
+
+For a real system, c1 and c2 must be conjugates so that y0[n] is a real function of n. Let
+
+c1 = (c/2)e^{jθ}    and    c2 = (c/2)e^{−jθ}
+
+[[PAGE page-275]]
+3.6  System Response to Internal Conditions: The Zero-Input Response  275
+
+Then
+
+\(y_0[n] = \frac{c}{2}|\gamma|^n\left[e^{j(\beta n+\theta)} + e^{-j(\beta n+\theta)}\right] = c|\gamma|^n \cos(\beta n + \theta)\)                              (3.25)
+
+where \(c\) and \(\theta\) are arbitrary constants determined from the auxiliary conditions. This is the solution
+in real form, which avoids dealing with complex numbers.
+
+EXAMPLE 3.16  Zero-Input Response of a Second-Order System with
+Complex Roots
+
+Consider a second-order difference equation with complex-conjugate roots:
+
+\((E^2 - 1.56E + 0.81)y[n] = (E + 3)x[n]\)
+
+Determine the zero-input response \(y_0[n]\) if the initial conditions are \(y_0[-1] = 2\) and \(y_0[-2] = 1\).
+
+The characteristic polynomial is \((\gamma^2 - 1.56\gamma + 0.81) = (\gamma - 0.78 - j0.45)(\gamma - 0.78 + j0.45).\)
+The characteristic roots are \(0.78 \pm j0.45\); that is, \(0.9e^{\pm j(\pi/6)}\). We could immediately write the
+solution as
+
+\(y_0[n] = c(0.9)^n e^{j\pi n/6} + c^*(0.9)^n e^{-j\pi n/6}\)
+
+Setting \(n = -1\) and \(-2\) and using the initial conditions \(y_0[-1] = 2\) and \(y_0[-2] = 1\), we find
+\(c = 1.1550 - j0.2025 = 1.1726e^{-j0.1735}\) and \(c^* = 1.1550 + j0.2025 = 1.1726e^{j0.1735}.\)
+
+>>  gamma = roots([1 -1.56 0.81]);
+>>  c = inv([gamma(1)^(-1) gamma(2)^(-1);gamma(1)^(-2) gamma(2)^(-2)])*[2;1]
+   c = 1.1550 - 0.2025i
+       1.1550 + 0.2025i
+
+Alternatively, we could also find the unknown coefficient by using the real form of the
+solution, as given in Eq. (3.25). In the present case, the roots are \(0.9e^{\pm j(\pi/6)}\). Hence, \(|\gamma| = 0.9\)
+and \(\beta = \pi/6\), and the zero-input response, according to Eq. (3.25), is given by
+
+\(y_0[n] = c(0.9)^n \cos\left(\frac{\pi}{6}n + \theta\right)\)
+
+To determine the constants \(c\) and \(\theta\), we set \(n = -1\) and \(-2\) in this equation and substitute the
+initial conditions \(y_0[-1] = 2\) and \(y_0[-2] = 1\) to obtain
+
+\(2 = \frac{c}{0.9} \cos\left(-\frac{\pi}{6} + \theta\right) = \frac{c}{0.9}\left[\frac{\sqrt{3}}{2}\cos\theta + \frac{1}{2}\sin\theta\right]\)
+
+\(1 = \frac{c}{(0.9)^2} \cos\left(-\frac{\pi}{3} + \theta\right) = \frac{c}{0.81}\left[\frac{1}{2}\cos\theta + \frac{\sqrt{3}}{2}\sin\theta\right]\)
+
+[[PAGE page-276]]
+276    CHAPTER 3    TIME-DOMAIN ANALYSIS OF DISCRETE-TIME SYSTEMS
+
+or
+
+\[
+\frac{\sqrt{3}}{1.8} c\cos\theta + \frac{1}{1.8} c\sin\theta = 2
+\]
+\[
+\frac{1}{1.62} c\cos\theta + \frac{\sqrt{3}}{1.62} c\sin\theta = 1
+\]
+
+These are two simultaneous equations in two unknowns c cos \theta and c sin \theta. Solution of these equations yields
+
+\[
+c\cos\theta = 2.308
+\]
+\[
+c\sin\theta = -0.397
+\]
+
+Dividing c sin \theta by c cos \theta yields
+
+\[
+\tan\theta = \frac{-0.397}{2.308} = \frac{-0.172}{1}
+\]
+\[
+\theta = \tan^{-1}(-0.172) = -0.17\ \text{rad}
+\]
+
+Substituting \theta = -0.17 radian in c cos \theta = 2.308 yields c = 2.34 and
+
+\[
+y_0[n] = 2.34(0.9)^n \cos\left(\frac{\pi}{6}n - 0.17\right)\qquad n \ge 0
+\]
+
+Observe that here we have used radian units for both \beta and \theta. We also could have used the degree unit, although this practice is not recommended. The important consideration is to be consistent and to use the same units for both \beta and \theta.
+
+DRILL 3.13  Zero-Input Response of a Second-Order System with Complex Roots
+
+Find the zero-input response of a system described by the equation
+
+\[
+y[n] + 4y[n - 2] = 2x[n]
+\]
+
+The initial conditions are y_0[-1] = -1/(2\sqrt{2}) and y_0[-2] = 1/(4\sqrt{2}). Verify the solution by computing the first three terms iteratively.
+
+ANSWER
+
+\[
+y_0[n] = (2)^n \cos\left(\frac{\pi}{2}n - \frac{3\pi}{4}\right)
+\]
+
+[[PAGE page-277]]

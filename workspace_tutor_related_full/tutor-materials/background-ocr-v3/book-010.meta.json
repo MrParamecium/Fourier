@@ -1,0 +1,23 @@
+{
+  "subsection": "B.1",
+  "summary": "This page continues converting complex numbers from Cartesian to polar form, emphasizing correct angle determination by quadrant and noting when the inverse tangent result must be adjusted by 180 degrees. It also includes a MATLAB-based computer example using cart2pol and begins an example on converting exponential/polar complex numbers into Cartesian form using Euler's formula.",
+  "keywords": [
+    "complex numbers",
+    "polar form",
+    "Cartesian form",
+    "magnitude",
+    "phase angle",
+    "quadrants",
+    "inverse tangent",
+    "Euler formula",
+    "MATLAB",
+    "cart2pol",
+    "complex plane",
+    "rectangular to polar conversion",
+    "polar to rectangular conversion"
+  ],
+  "has_math": true,
+  "page_type": "example",
+  "book_page": "book-010",
+  "figures": []
+}

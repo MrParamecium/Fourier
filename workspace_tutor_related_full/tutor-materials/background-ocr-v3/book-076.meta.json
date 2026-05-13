@@ -1,0 +1,30 @@
+{
+  "subsection": "1.5-2",
+  "summary": "This page introduces the decomposition of any signal into its even and odd components using the identity f(t) = 1/2[f(t)+f(-t)] + 1/2[f(t)-f(-t)]. It then applies this result to the example f(t)=e^{-at}u(t), deriving explicit expressions for its even part and odd part and illustrating them in Fig. 1.24.",
+  "keywords": [
+    "even and odd components",
+    "signal decomposition",
+    "even function",
+    "odd function",
+    "unit step function",
+    "exponential signal",
+    "f(t)",
+    "f_e(t)",
+    "f_o(t)",
+    "Eq. (1.34)",
+    "Eq. (1.35)"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-076",
+  "figures": [
+    {
+      "fig_id": "Fig. 1.24",
+      "top": 0.0533,
+      "left": 0.2766,
+      "bottom": 0.3027,
+      "right": 0.7733,
+      "caption": "Fig. 1.24 Finding an even and odd components of a signal. The figure contains three plots: (a) a signal f(t), which is an exponential decay for t>=0; (b) its even component fe(t); and (c) its odd component fo(t)."
+    }
+  ]
+}

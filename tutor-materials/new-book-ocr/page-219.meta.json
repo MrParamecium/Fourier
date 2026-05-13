@@ -1,0 +1,42 @@
+{
+  "chapter": "2",
+  "section": "2.8",
+  "subsection": null,
+  "title": "MATLAB: M-Files",
+  "summary": "This page presents two graphical convolution snapshots, showing h(τ), x(t−τ), and their product for specific time instants. It also explains how MATLAB commands such as drawnow and pause can be used to animate or manually step through the convolution visualization.",
+  "keywords": [
+    "MATLAB",
+    "M-Files",
+    "graphical convolution",
+    "h(τ)",
+    "x(t−τ)",
+    "y(t)",
+    "drawnow",
+    "pause",
+    "animation"
+  ],
+  "has_math": true,
+  "page_type": "figure",
+  "book_page": "page-219",
+  "figures": [
+    {
+      "fig_id": "Figure 2.27",
+      "top": 0.0705,
+      "left": 0.225,
+      "bottom": 0.36,
+      "right": 0.7178,
+      "caption": "Graphical convolution at step t = 0.75 second.",
+      "crop_file": "page-219-figure_2_27.png"
+    },
+    {
+      "fig_id": "Figure 2.28",
+      "top": 0.3614,
+      "left": 0.225,
+      "bottom": 0.6582,
+      "right": 0.7178,
+      "caption": "Graphical convolution at step t = 2.25 seconds.",
+      "crop_file": "page-219-figure_2_28.png"
+    }
+  ],
+  "metadata_model": "openrouter:openai/gpt-5.4"
+}

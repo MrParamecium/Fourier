@@ -1,0 +1,101 @@
+45
+
+B.6  Vectors and Matrices
+
+Example B.13
+
+Let us consider the case where
+
+$$
+A=
+\begin{bmatrix}
+0 & 1\\
+-2 & -3
+\end{bmatrix}
+$$
+
+The eigenvalues are
+
+$$
+|\lambda I-A|=
+\begin{vmatrix}
+\lambda & -1\\
+2 & \lambda+3
+\end{vmatrix}
+=\lambda^2+3\lambda+2=(\lambda+1)(\lambda+2)=0
+$$
+
+Hence, $\lambda_1=-1,\ \lambda_2=-2$, and
+
+$$
+e^{At}=\beta_0I+\beta_1A
+$$
+
+in which
+
+$$
+\begin{bmatrix}
+\beta_0\\
+\beta_1
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 & -1\\
+1 & -2
+\end{bmatrix}^{-1}
+\begin{bmatrix}
+e^{-t}\\
+e^{-2t}
+\end{bmatrix}
+$$
+
+$$
+=
+\begin{bmatrix}
+2 & -1\\
+1 & -1
+\end{bmatrix}
+\begin{bmatrix}
+e^{-t}\\
+e^{-2t}
+\end{bmatrix}
+=
+\begin{bmatrix}
+2e^{-t}-e^{-2t}\\
+e^{-t}-e^{-2t}
+\end{bmatrix}
+$$
+
+and
+
+$$
+e^{At}=(2e^{-t}-e^{-2t})
+\begin{bmatrix}
+1 & 0\\
+0 & 1
+\end{bmatrix}
++(e^{-t}-e^{-2t})
+\begin{bmatrix}
+0 & 1\\
+-2 & -3
+\end{bmatrix}
+$$
+
+$$
+=
+\begin{bmatrix}
+2e^{-t}-e^{-2t} & (e^{-t}-e^{-2t})\\
+-2e^{-t}+2e^{-2t} & -e^{-t}+2e^{-2t}
+\end{bmatrix}
+\qquad \text{(B.84)}
+$$
+
+Computation of $A^k$
+
+As Eq. (B.83b) indicates, we can express $A^k$ as
+
+$$
+A^k=\beta_0I+\beta_1A+\cdots+\beta_{n-1}A^{n-1}
+$$
+
+in which the $\beta_i$ are given by Eq. (B.82b) with $f(\lambda_i)=\lambda_i^k$. For a completed example of the computation of $A^k$ by this method, see Example 13.12.

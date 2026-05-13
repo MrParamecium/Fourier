@@ -1,0 +1,102 @@
+%%KC_BLOCK%%<div class="kc-visual-plan" data-visual-plan-b64="eyJwcmltYXJ5X2FuY2hvciI6ImJvdGgiLCJyYXRpb25hbGUiOiJUaGlzIHNlY3Rpb24gaW50cm9kdWNlcyBub3RhdGlvbiBhbmQgdGhlIHZpc3VhbCBpZGVhIG9mIHNhbXBsaW5nLiBUaGUgZXhhY3QgZGVmaW5pdGlvbnMgYXJlIGJlc3QgdGF1Z2h0IHdpdGggTGFUZVgsIHdoaWxlIGEgc3RhbmRhcmQgc3RlbS1wbG90IHJlZmVyZW5jZSBhbmQgYSBzbWFsbCBpbnRlcmFjdGl2ZSBzYW1wbGluZyBkZW1vIG1ha2UgdGhlIGRpZmZlcmVuY2UgYmV0d2VlbiBjb250aW51b3VzLXRpbWUgY3VydmVzIGFuZCBkaXNjcmV0ZS10aW1lIHNlcXVlbmNlcyBpbW1lZGlhdGVseSB2aXNpYmxlLiBObyB0ZXh0Ym9vayBmaWd1cmUgY3JvcCBpcyBhdmFpbGFibGUsIHNvIGRvIG5vdCB1c2UgYSBwYWdlIHNjcmVlbnNob3QuIiwiY3JhbSI6IlVzZSB0aGUgc3RlbSBwbG90IGFuZCBzYW1wbGluZyBkZW1vIHRvIHF1aWNrbHkgaWRlbnRpZnkgd2hldGhlciBhIHByb2JsZW0gaXMgYXNraW5nIGFib3V0IFxcKHgodClcXCksIFxcKHhbbl1cXCksIG9yIFxcKHgoblQpXFwpLiIsInN0YW5kYXJkIjoiVXNlIHRoZSB2aXN1YWxzIHRvIGNvbm5lY3QgdGhlIGZvcm11bGEgXFwoeFtuXT14KG5UKVxcKSB0byBvbmUgcmVwcmVzZW50YXRpdmUgc2FtcGxlZCBleHBvbmVudGlhbCBleGFtcGxlLiIsInRvcF9zY29yZSI6IlVzZSB0aGUgZGVtbyB0byBub3RpY2UgdGhhdCBjaGFuZ2luZyBcXChUXFwpIGNoYW5nZXMgd2hpY2ggY29udGludW91cy10aW1lIHBvaW50cyBiZWNvbWUgdGhlIHNlcXVlbmNlLCB3aGlsZSB0aGUgaW5kZXggXFwoblxcKSByZW1haW5zIGludGVnZXItdmFsdWVkLiJ9" style="display:none;"></div>%%KC_END%%
+# 3.1 Introduction to Discrete-Time Signals and Systems
+
+> **Section Objective:** Understand how discrete-time signals are represented, processed by systems, and obtained by sampling continuous-time signals.
+
+---
+
+## Concepts In This Section
+
+- Discrete-time signal
+- Integer index \(n\)
+- Square-bracket notation \(x[n]\)
+- Discrete-time system
+- Uniform sampling
+- Sampling interval \(T\)
+
+## 1. Discrete-Time Signals Are Sequences
+
+A discrete-time signal is a **sequence of numbers**, not a smooth curve. It only has values at separated, integer-valued positions.
+
+The symbol \(n\) is an integer index: \(\ldots, -2, -1, 0, 1, 2, \ldots\). The notation \(x[n]\) means "the value of sequence \(x\) at index \(n\)."
+
+**Minimal example:** If \(x[0] = 3\), \(x[1] = 5\), and \(x[2] = 4\), then the sequence begins \(3, 5, 4, \ldots\)
+
+**Exam trigger:** Whenever you see values listed at integer indices, you are dealing with a discrete-time signal.
+
+**Common misuse:** Writing \(x(t)\) when the variable is an integer index. Parentheses signal continuous time; square brackets signal discrete time.
+
+$$x[n], \quad n \in \mathbb{Z}$$
+
+%%KC_BLOCK%%<div class="kc-visual-meta" data-visual-kind="web_reference_image" data-teaching-role="concept_anchor" data-visual-use-b64="eyJjcmFtIjoiVXNlIHRoZSB2ZXJ0aWNhbCBzdGVtcyBhcyB0aGUgZmFzdCByZWNvZ25pdGlvbiBjdWUgZm9yIGEgZGlzY3JldGUtdGltZSBzZXF1ZW5jZS4iLCJzdGFuZGFyZCI6IlVzZSB0aGUgZmlndXJlIHRvIGNvbm5lY3QgXFwoeFtuXVxcKSB3aXRoIGluZGV4ZWQgc2FtcGxlIHZhbHVlcy4iLCJ0b3Bfc2NvcmUiOiJVc2UgdGhlIHNlcGFyYXRlZCBzdGVtcyB0byBlbXBoYXNpemUgdGhhdCB0aGUgZ3JhcGggZG9lcyBub3QgaW1wbHkgdmFsdWVzIGJldHdlZW4gaW50ZWdlciBpbmRpY2VzLiJ9" style="display:none;"></div>%%KC_END%%
+![Wavelet](https://upload.wikimedia.org/wikipedia/commons/0/0d/Seismic_Wavelet.svg)
+*A stem plot of a discrete-time signal: each vertical stem marks one sample value at an integer index \(n\). Notice there are no values between the stems — the signal only exists at the marked integer positions.*
+%%KC_BLOCK%%<div class="kc-reference-source"><a href="https://upload.wikimedia.org/wikipedia/commons/0/0d/Seismic_Wavelet.svg" target="_blank" rel="noopener noreferrer">Reference image from Wikipedia</a></div>%%KC_END%%
+
+## 2. A Discrete-Time System Processes a Sequence
+
+A discrete-time system takes an **input sequence** \(x[n]\) and produces an **output sequence** \(y[n]\). A digital computer is the most familiar example: it operates on numbers indexed by integers, not on a continuously varying signal.
+
+**Representative example (no computation needed):** A system could take daily temperature readings \(x[n]\) — one number per day — and output a smoothed daily temperature sequence \(y[n]\).
+
+**Exam trigger:** Whenever a problem says "input sequence produces output sequence," draw this input-output picture.
+
+**Common misuse:** Thinking \(y[n]\) is a single number. It is an entire output sequence — one value for every integer index \(n\).
+
+$$x[n] \;\longrightarrow\; \text{discrete-time system} \;\longrightarrow\; y[n]$$
+
+## 3. Sampling Turns \(x(t)\) into \(x[n]\)
+
+If a continuous-time signal \(x(t)\) is sampled every \(T\) seconds, the discrete-time value at index \(n\) is the value of the original signal at time \(t = nT\).
+
+**Symbol meanings:**
+- \(x(t)\) — the original continuous-time signal
+- \(T\) — the sampling interval (seconds between samples)
+- \(n\) — an integer index (not a time in seconds)
+- \(x(nT)\) — the value of the continuous-time signal evaluated at time \(t = nT\)
+- \(x[n]\) — the discrete-time notation for that same sampled value
+
+The identity \(x[n] = x(nT)\) is a **notation bridge**: it says the \(n\)-th element of the discrete-time sequence equals the continuous-time signal evaluated at time \(nT\).
+
+**Exam trigger:** "Sampled every \(T\) seconds" means evaluate at \(t = nT\).
+
+**Common misuse:** Treating \(n\) as if it were time in seconds. The index \(n\) is dimensionless; the actual sample time is \(nT\).
+
+$$x[n] = x(nT)$$
+
+%%KC_BLOCK%%<div class="kc-visual-meta" data-visual-kind="interactive_demo" data-teaching-role="concept_anchor" data-visual-use-b64="eyJjcmFtIjoiVXNlIHRoZSBzbGlkZXIgdG8gbWVtb3JpemUgdGhlIGV4YW0gdHJpZ2dlcjogc2FtcGxpbmcgaW50ZXJ2YWwgXFwoVFxcKSBtZWFucyBldmFsdWF0ZSBhdCBcXCh0ID0gblRcXCkuIiwic3RhbmRhcmQiOiJVc2UgdGhlIGRlbW8gdG8gdW5kZXJzdGFuZCB3aHkgXFwoeFtuXSA9IHgoblQpXFwpIGlzIGEgbm90YXRpb24gYnJpZGdlLCBub3QgYSBuZXcgc2lnbmFsIGZvcm11bGEgZnJvbSBub3doZXJlLiIsInRvcF9zY29yZSI6IlVzZSB0aGUgZGVtbyB0byBzZXBhcmF0ZSB0aGUgaW5kZXggXFwoblxcKSwgc2FtcGxlIHRpbWUgXFwoblRcXCksIGFuZCBzYW1wbGUgdmFsdWUgXFwoeChuVClcXCkuIn0=" style="display:none;"></div><div class="kc-interactive-demo" data-demo-b64="eyJ0eXBlIjoiaW50ZXJhY3RpdmVfZGVtbyIsInRpdGxlIjoiU2FtcGxpbmcgYSBDb250aW51b3VzLVRpbWUgQ3VydmUiLCJ0ZWFjaGluZ19yb2xlIjoiY29uY2VwdF9hbmNob3IiLCJwdXJwb3NlIjoiTGV0IHN0dWRlbnRzIHNlZSBob3cgYSBzbW9vdGggY3VydmUgYmVjb21lcyBhIGRpc2NyZXRlLXRpbWUgc2VxdWVuY2Ugd2hlbiB2YWx1ZXMgYXJlIHRha2VuIG9ubHkgYXQgXFwodCA9IG5UXFwpLiIsImRlbW9fc3BlYyI6eyJyZW5kZXJpbmciOiJSZWFjdCArIENhbnZhcyIsImxheW91dCI6IlNob3cgb25lIGNvb3JkaW5hdGUgcGFuZWwuIERyYXcgdGhlIHNtb290aCBjb250aW51b3VzIGN1cnZlIFxcKHgodCkgPSBlXnstdH1cXCkgaW4gbGlnaHQgZ3JheS4gT3ZlcmxheSBzYW1wbGVkIHBvaW50cyBhbmQgdmVydGljYWwgc3RlbXMgYXQgXFwodCA9IG5UXFwpIGluIG5hdnkuIExhYmVsIHRoZSBob3Jpem9udGFsIGF4aXMgXFwodFxcKSBhbmQgc2hvdyBzbWFsbCBpbnRlZ2VyIGxhYmVscyBcXChuID0gMCwgMSwgMiwgXFxsZG90c1xcKSBuZWFyIHRoZSBzYW1wbGUgcG9pbnRzLiIsImNvbnRyb2xzIjpbeyJuYW1lIjoiU2FtcGxpbmcgaW50ZXJ2YWwgVCIsInR5cGUiOiJzbGlkZXIiLCJtaW4iOjAuMSwibWF4IjoxLCJzdGVwIjowLjEsImRlZmF1bHQiOjAuMn1dLCJzdHVkZW50X3Rhc2siOiJNb3ZlIHRoZSBcXChUXFwpIHNsaWRlciBhbmQgbm90aWNlIHRoYXQgbGFyZ2VyIFxcKFRcXCkgZ2l2ZXMgZmV3ZXIgc2FtcGxlZCBwb2ludHMgb3ZlciB0aGUgc2FtZSB0aW1lIHdpbmRvdywgd2hpbGUgdGhlIGluZGV4IFxcKG5cXCkgc3RpbGwgY291bnRzIHNhbXBsZXMgYXMgaW50ZWdlcnMuIiwid2hhdF90b19ub3RpY2UiOlsiVGhlIGdyYXkgY3VydmUgaXMgXFwoeCh0KVxcKSwgd2hpY2ggZXhpc3RzIGZvciBhbGwgY29udGludW91cyB0aW1lLiIsIlRoZSBuYXZ5IHN0ZW1zIGFyZSB0aGUgZGlzY3JldGUtdGltZSBzZXF1ZW5jZSB2YWx1ZXMgXFwoeFtuXVxcKS4iLCJcXCh4W25dXFwpIGlzIHNob3J0aGFuZCBmb3IgdGhlIHNhbXBsZSB0YWtlbiBhdCBcXCh0ID0gblRcXCkuIl19LCJtb2RlX3NwZWNpZmljX3Zpc3VhbF91c2UiOnsiY3JhbSI6IlVzZSB0aGUgc2xpZGVyIHRvIG1lbW9yaXplIHRoZSBleGFtIHRyaWdnZXI6IHNhbXBsaW5nIGludGVydmFsIFxcKFRcXCkgbWVhbnMgZXZhbHVhdGUgYXQgXFwodCA9IG5UXFwpLiIsInN0YW5kYXJkIjoiVXNlIHRoZSBkZW1vIHRvIHVuZGVyc3RhbmQgd2h5IFxcKHhbbl0gPSB4KG5UKVxcKSBpcyBhIG5vdGF0aW9uIGJyaWRnZSwgbm90IGEgbmV3IHNpZ25hbCBmb3JtdWxhIGZyb20gbm93aGVyZS4iLCJ0b3Bfc2NvcmUiOiJVc2UgdGhlIGRlbW8gdG8gc2VwYXJhdGUgdGhlIGluZGV4IFxcKG5cXCksIHNhbXBsZSB0aW1lIFxcKG5UXFwpLCBhbmQgc2FtcGxlIHZhbHVlIFxcKHgoblQpXFwpLiJ9fQ=="></div>%%KC_END%%
+
+$$x(nT) = e^{-nT}$$
+***Representative example:** Let \(x(t) = e^{-t}\).
+
+Sampling means substituting \(t = nT\) directly into the continuous-time expression:
+
+$$x(nT) = e^{-nT}$$
+
+This is not a new exponential law — it is straightforward substitution of the sample time \(nT\) for \(t\).
+
+**Symbol meanings:** \(n\) is the integer index, \(T\) is the sampling interval, and \(nT\) is the actual time at which the sample is taken.
+
+**Common trap:** Substituting \(n\) for \(t\) and writing \(e^{-n}\) — this forgets the factor \(T\) and gives the wrong expression.*
+
+$$x(nT) = e^{-0.1n}$$
+***Setting \(T = 0.1\) seconds:** The sample time becomes \(t = 0.1n\), so substituting into \(e^{-nT}\) gives:
+
+$$x(nT) = e^{-0.1n}$$
+
+**Quick check:**
+- At \(n = 0\): \(x(0) = e^{0} = 1\)
+- At \(n = 1\): \(x(0.1) = e^{-0.1}\)
+
+**Exam note:** Always substitute the given \(T\) before simplifying the discrete-time expression. Do not leave \(T\) as a symbol if a numerical value is provided.*
+
+---
+**📌 Key Takeaways**
+- A discrete-time signal \(x[n]\), \(n \in \mathbb{Z}\) is a sequence of numbers at integer indices, not a continuous curve.
+- A discrete-time system maps an input sequence to an output sequence: \(x[n] \to \text{system} \to y[n]\).
+- Uniform sampling connects continuous and discrete time: \(x[n] = x(nT)\), where \(T\) is the sampling interval.
+- For \(x(t) = e^{-t}\): sampling gives \(x(nT) = e^{-nT}\); with \(T = 0.1\), this becomes \(x(nT) = e^{-0.1n}\).
+
+*Next, we will use these basic discrete-time ideas to analyze how systems respond to input sequences.*
+
+%%KC_BLOCK%%<div class="kc-quiz-plan" data-quiz-b64="eyJ0eXBlIjoicXVpel9wbGFuIiwidGFyZ2V0X3F1ZXN0aW9ucyI6NiwicXVlc3Rpb25fcmFuZ2UiOnsibWluIjo1LCJtYXgiOjd9LCJrbm93bGVkZ2VfcG9pbnRzIjpbeyJpZCI6ImRpc2NyZXRlX3RpbWVfc2lnbmFsX2RlZmluaXRpb24iLCJsYWJlbCI6IkRpc2NyZXRlLXRpbWUgc2lnbmFsIGFzIGFuIGluZGV4ZWQgc2VxdWVuY2UiLCJpbXBvcnRhbmNlIjoiaGlnaCIsImV4YW1fd2VpZ2h0IjoiaGlnaCIsIm1hc3RlcnlfcnVsZSI6eyJjb3JyZWN0X3N0cmVha19yZXF1aXJlZCI6Mn0sInF1ZXN0aW9ucyI6W3siaWQiOiJrcDFfcTEiLCJ0eXBlIjoibXVsdGlwbGVfY2hvaWNlIiwic3RlbSI6IldoaWNoIGRlc2NyaXB0aW9uIGJlc3QgbWF0Y2hlcyBhIGRpc2NyZXRlLXRpbWUgc2lnbmFsPyIsIm9wdGlvbnMiOlsiQS4gQSBzbW9vdGggY3VydmUgZGVmaW5lZCBmb3IgZXZlcnkgcmVhbCB2YWx1ZSBvZiB0aW1lIiwiQi4gQSBzZXF1ZW5jZSBvZiBudW1iZXJzIGluZGV4ZWQgYnkgaW50ZWdlciB2YWx1ZXMiLCJDLiBBIHNpbmdsZSBudW1iZXIgcHJvZHVjZWQgYnkgYSBkaWdpdGFsIGNvbXB1dGVyIiwiRC4gQSBjb250aW51b3VzIHNpZ25hbCB0aGF0IGNhbm5vdCBiZSBzYW1wbGVkIl0sImNvcnJlY3Rfb3B0aW9uIjoiQiIsImV4cGxhbmF0aW9uIjoiQSBkaXNjcmV0ZS10aW1lIHNpZ25hbCBpcyBhIHNlcXVlbmNlIG9mIHZhbHVlcyBpbmRleGVkIGJ5IGludGVnZXJzIHN1Y2ggYXMgXFwobiA9IDAsIDEsIDIsIFxcbGRvdHNcXCkuIiwid3Jvbmdfb3B0aW9uX2V4cGxhbmF0aW9ucyI6eyJBIjoiVGhhdCBkZXNjcmliZXMgYSBjb250aW51b3VzLXRpbWUgc2lnbmFsLCB1c3VhbGx5IHdyaXR0ZW4gd2l0aCBwYXJlbnRoZXNlcyBzdWNoIGFzIFxcKHgodClcXCkuIiwiQyI6IkEgc2VxdWVuY2UgY29udGFpbnMgbWFueSBpbmRleGVkIHZhbHVlcywgbm90IGp1c3Qgb25lIG51bWJlci4iLCJEIjoiU2FtcGxpbmcgaXMgb25lIGNvbW1vbiB3YXkgdG8gY3JlYXRlIGEgZGlzY3JldGUtdGltZSBzaWduYWwuIn0sImhpbnQiOiJMb29rIGZvciBpbnRlZ2VyLWluZGV4ZWQgdmFsdWVzLiIsIm5lZWRzX3Zpc3VhbCI6ZmFsc2UsInNhbWVfcG9pbnRfdmFyaWFudCI6dHJ1ZX0seyJpZCI6ImtwMV9xMiIsInR5cGUiOiJtdWx0aXBsZV9jaG9pY2UiLCJzdGVtIjoiSW4gdGhlIG5vdGF0aW9uIFxcKHhbbl1cXCksIHdoYXQgZG9lcyBcXChuXFwpIHJlcHJlc2VudD8iLCJvcHRpb25zIjpbIkEuIEFueSByZWFsLXZhbHVlZCB0aW1lIHZhcmlhYmxlIiwiQi4gVGhlIHNhbXBsaW5nIGludGVydmFsIiwiQy4gQW4gaW50ZWdlciBpbmRleCBpbnRvIHRoZSBzZXF1ZW5jZSIsIkQuIFRoZSBvdXRwdXQgb2YgdGhlIHN5c3RlbSJdLCJjb3JyZWN0X29wdGlvbiI6IkMiLCJleHBsYW5hdGlvbiI6IlxcKG5cXCkgaXMgYW4gaW50ZWdlciBpbmRleC4gSXQgdGVsbHMgd2hpY2ggZW50cnkgb2YgdGhlIHNlcXVlbmNlIGlzIGJlaW5nIHJlZmVyZW5jZWQuIiwid3Jvbmdfb3B0aW9uX2V4cGxhbmF0aW9ucyI6eyJBIjoiQSByZWFsLXZhbHVlZCB0aW1lIHZhcmlhYmxlIGlzIHVzdWFsbHkgd3JpdHRlbiBhcyBcXCh0XFwpLCBub3QgXFwoblxcKS4iLCJCIjoiVGhlIHNhbXBsaW5nIGludGVydmFsIGlzIFxcKFRcXCksIG5vdCBcXChuXFwpLiIsIkQiOiJUaGUgb3V0cHV0IHNlcXVlbmNlIGlzIHVzdWFsbHkgd3JpdHRlbiBcXCh5W25dXFwpLiJ9LCJoaW50IjoiVGhlIHNxdWFyZSBicmFja2V0cyBhcmUgdGhlIGNsdWUuIiwibmVlZHNfdmlzdWFsIjpmYWxzZSwic2FtZV9wb2ludF92YXJpYW50Ijp0cnVlfV19LHsiaWQiOiJub3RhdGlvbl9kaWZmZXJlbmNlIiwibGFiZWwiOiJTcXVhcmUgYnJhY2tldHMgdmVyc3VzIHBhcmVudGhlc2VzIiwiaW1wb3J0YW5jZSI6ImhpZ2giLCJleGFtX3dlaWdodCI6Im1lZGl1bSIsIm1hc3RlcnlfcnVsZSI6eyJjb3JyZWN0X3N0cmVha19yZXF1aXJlZCI6MX0sInF1ZXN0aW9ucyI6W3siaWQiOiJrcDJfcTEiLCJ0eXBlIjoibXVsdGlwbGVfY2hvaWNlIiwic3RlbSI6IldoaWNoIG5vdGF0aW9uIGlzIHRoZSBiZXN0IG1hdGNoIGZvciBhIGNvbnRpbnVvdXMtdGltZSBzaWduYWw/Iiwib3B0aW9ucyI6WyJBLiBcXCh4W25dXFwpIiwiQi4gXFwoeCh0KVxcKSIsIkMuIFxcKHlbbl1cXCkiLCJELiBcXChuVFxcKSJdLCJjb3JyZWN0X29wdGlvbiI6IkIiLCJleHBsYW5hdGlvbiI6IlRoZSB0ZXh0Ym9vayByZXNlcnZlcyBwYXJlbnRoZXNlcyBmb3IgY29udGludW91cy10aW1lIHZhcmlhYmxlcyBzdWNoIGFzIFxcKHRcXCksIHNvIFxcKHgodClcXCkgaXMgY29udGludW91cy10aW1lIG5vdGF0aW9uLiIsIndyb25nX29wdGlvbl9leHBsYW5hdGlvbnMiOnsiQSI6IlxcKHhbbl1cXCkgaXMgZGlzY3JldGUtdGltZSBub3RhdGlvbi4iLCJDIjoiXFwoeVtuXVxcKSBpcyBhbHNvIGRpc2NyZXRlLXRpbWUgbm90YXRpb24sIHVzdWFsbHkgZm9yIGFuIG91dHB1dCBzZXF1ZW5jZS4iLCJEIjoiXFwoblRcXCkgaXMgYSBzYW1wbGUgdGltZSwgbm90IHRoZSBzaWduYWwgbm90YXRpb24gaXRzZWxmLiJ9LCJoaW50IjoiQ29udGludW91cy10aW1lIHVzZXMgXFwodFxcKS4iLCJuZWVkc192aXN1YWwiOmZhbHNlLCJzYW1lX3BvaW50X3ZhcmlhbnQiOmZhbHNlfV19LHsiaWQiOiJkaXNjcmV0ZV90aW1lX3N5c3RlbSIsImxhYmVsIjoiRGlzY3JldGUtdGltZSBzeXN0ZW0gaW5wdXQgYW5kIG91dHB1dCIsImltcG9ydGFuY2UiOiJtZWRpdW0iLCJleGFtX3dlaWdodCI6Im1lZGl1bSIsIm1hc3RlcnlfcnVsZSI6eyJjb3JyZWN0X3N0cmVha19yZXF1aXJlZCI6MX0sInF1ZXN0aW9ucyI6W3siaWQiOiJrcDNfcTEiLCJ0eXBlIjoibXVsdGlwbGVfY2hvaWNlIiwic3RlbSI6IkEgZGlzY3JldGUtdGltZSBzeXN0ZW0gdGFrZXMgXFwoeFtuXVxcKSBhbmQgcHJvZHVjZXMgXFwoeVtuXVxcKS4gV2hhdCBhcmUgXFwoeFtuXVxcKSBhbmQgXFwoeVtuXVxcKT8iLCJvcHRpb25zIjpbIkEuIE9uZSBpbnB1dCBudW1iZXIgYW5kIG9uZSBvdXRwdXQgbnVtYmVyIiwiQi4gVHdvIGNvbnRpbnVvdXMtdGltZSBjdXJ2ZXMiLCJDLiBBbiBpbnB1dCBzZXF1ZW5jZSBhbmQgYW4gb3V0cHV0IHNlcXVlbmNlIiwiRC4gVGhlIHNhbXBsaW5nIGludGVydmFsIGFuZCBzYW1wbGUgdGltZSJdLCJjb3JyZWN0X29wdGlvbiI6IkMiLCJleHBsYW5hdGlvbiI6IkEgZGlzY3JldGUtdGltZSBzeXN0ZW0gcHJvY2Vzc2VzIGEgd2hvbGUgaW5wdXQgc2VxdWVuY2UgXFwoeFtuXVxcKSB0byBwcm9kdWNlIGEgd2hvbGUgb3V0cHV0IHNlcXVlbmNlIFxcKHlbbl1cXCkuIiwid3Jvbmdfb3B0aW9uX2V4cGxhbmF0aW9ucyI6eyJBIjoiRWFjaCBub3RhdGlvbiByZWZlcnMgdG8gYSBzZXF1ZW5jZSwgbm90IGp1c3Qgb25lIGlzb2xhdGVkIG51bWJlci4iLCJCIjoiVGhlIHNxdWFyZSBicmFja2V0cyBpbmRpY2F0ZSBkaXNjcmV0ZS10aW1lIHNpZ25hbHMsIG5vdCBjb250aW51b3VzLXRpbWUgY3VydmVzLiIsIkQiOiJUaGUgc2FtcGxpbmcgaW50ZXJ2YWwgaXMgXFwoVFxcKSwgYW5kIHRoZSBzYW1wbGUgdGltZSBpcyBcXChuVFxcKS4ifSwiaGludCI6IlRoaW5rIGlucHV0IHNlcXVlbmNlIFxcKFxcdG9cXCkgc3lzdGVtIFxcKFxcdG9cXCkgb3V0cHV0IHNlcXVlbmNlLiIsIm5lZWRzX3Zpc3VhbCI6dHJ1ZSwidmlzdWFsX3R5cGUiOiJzaW1wbGVfaW5wdXRfb3V0cHV0X2Jsb2NrX2RpYWdyYW0iLCJzYW1lX3BvaW50X3ZhcmlhbnQiOmZhbHNlfV19LHsiaWQiOiJzYW1wbGluZ19pZGVudGl0eSIsImxhYmVsIjoiVW5pZm9ybSBzYW1wbGluZyBpZGVudGl0eSIsImltcG9ydGFuY2UiOiJoaWdoIiwiZXhhbV93ZWlnaHQiOiJoaWdoIiwibWFzdGVyeV9ydWxlIjp7ImNvcnJlY3Rfc3RyZWFrX3JlcXVpcmVkIjoyfSwicXVlc3Rpb25zIjpbeyJpZCI6ImtwNF9xMSIsInR5cGUiOiJtdWx0aXBsZV9jaG9pY2UiLCJzdGVtIjoiQSBjb250aW51b3VzLXRpbWUgc2lnbmFsIFxcKHgodClcXCkgaXMgc2FtcGxlZCBldmVyeSBcXChUXFwpIHNlY29uZHMuIFdoaWNoIGZvcm11bGEgY29ycmVjdGx5IGNvbm5lY3RzIHRoZSBzYW1wbGVkIHNlcXVlbmNlIHRvIHRoZSBvcmlnaW5hbCBzaWduYWw/Iiwib3B0aW9ucyI6WyJBLiBcXCh4W25dID0geChuVClcXCkiLCJCLiBcXCh4W25dID0geChUL24pXFwpIiwiQy4gXFwoeCh0KSA9IHhbblRdXFwpIiwiRC4gXFwoeFtuXSA9IFRcXCx4KG4pXFwpIl0sImNvcnJlY3Rfb3B0aW9uIjoiQSIsImV4cGxhbmF0aW9uIjoiVW5pZm9ybSBzYW1wbGluZyBldmFsdWF0ZXMgdGhlIGNvbnRpbnVvdXMtdGltZSBzaWduYWwgYXQgc2FtcGxlIHRpbWVzIFxcKHQgPSBuVFxcKSwgc28gXFwoeFtuXSA9IHgoblQpXFwpLiIsIndyb25nX29wdGlvbl9leHBsYW5hdGlvbnMiOnsiQiI6IlNhbXBsaW5nIHVzZXMgXFwoblRcXCksIG5vdCBcXChUL25cXCkuIiwiQyI6IlRoaXMgbWl4ZXMgY29udGludW91cy10aW1lIGFuZCBkaXNjcmV0ZS10aW1lIG5vdGF0aW9uIGluY29ycmVjdGx5LiIsIkQiOiJTYW1wbGluZyBkb2VzIG5vdCBtZWFuIG11bHRpcGx5aW5nIHRoZSBzaWduYWwgdmFsdWUgYnkgXFwoVFxcKS4ifSwiaGludCI6IlRoZSBzYW1wbGUgdGltZSBpcyBpbmRleCB0aW1lcyBpbnRlcnZhbC4iLCJuZWVkc192aXN1YWwiOmZhbHNlLCJzYW1lX3BvaW50X3ZhcmlhbnQiOnRydWV9LHsiaWQiOiJrcDRfcTIiLCJ0eXBlIjoibXVsdGlwbGVfY2hvaWNlIiwic3RlbSI6IldoZW4gdGhlIHNhbXBsaW5nIGludGVydmFsIFxcKFRcXCkgaXMgaW5jcmVhc2VkLCB3aGF0IGhhcHBlbnMgb3ZlciB0aGUgc2FtZSB0aW1lIHdpbmRvdz8iLCJvcHRpb25zIjpbIkEuIE1vcmUgc2FtcGxlIHBvaW50cyBhcHBlYXIgYmVjYXVzZSB0aGUgaW5kZXggXFwoblxcKSBpbmNyZWFzZXMgZmFzdGVyIiwiQi4gRmV3ZXIgc2FtcGxlIHBvaW50cyBhcHBlYXIgYmVjYXVzZSB0aGUgc2FtcGxlcyBhcmUgZmFydGhlciBhcGFydCBpbiB0aW1lIiwiQy4gVGhlIGNvbnRpbnVvdXMtdGltZSBjdXJ2ZSBkaXNhcHBlYXJzIiwiRC4gVGhlIHZhbHVlcyBzdG9wIGJlaW5nIGEgc2VxdWVuY2UiXSwiY29ycmVjdF9vcHRpb24iOiJCIiwiZXhwbGFuYXRpb24iOiJMYXJnZXIgXFwoVFxcKSBtZWFucyBzYW1wbGUgdGltZXMgXFwodCA9IG5UXFwpIGFyZSBzcGFjZWQgZmFydGhlciBhcGFydCwgc28gZmV3ZXIgc2FtcGxlcyBmaXQgaW4gdGhlIHNhbWUgdGltZSB3aW5kb3cuIiwid3Jvbmdfb3B0aW9uX2V4cGxhbmF0aW9ucyI6eyJBIjoiSW5jcmVhc2luZyBcXChUXFwpIHNwYWNlcyBzYW1wbGVzIGZhcnRoZXIgYXBhcnQsIG5vdCBjbG9zZXIgdG9nZXRoZXIuIiwiQyI6IlRoZSBvcmlnaW5hbCBjb250aW51b3VzLXRpbWUgY3VydmUgc3RpbGwgZXhpc3RzOyBzYW1wbGluZyBvbmx5IHNlbGVjdHMgcG9pbnRzIGZyb20gaXQuIiwiRCI6IlRoZSBzYW1wbGVkIHZhbHVlcyBhcmUgc3RpbGwgaW5kZXhlZCBieSBpbnRlZ2Vycywgc28gdGhleSBzdGlsbCBmb3JtIGEgc2VxdWVuY2UuIn0sImhpbnQiOiJXYXRjaCB0aGUgaG9yaXpvbnRhbCBzcGFjaW5nIGJldHdlZW4gc3RlbXMuIiwibmVlZHNfdmlzdWFsIjp0cnVlLCJ2aXN1YWxfdHlwZSI6ImludGVyYWN0aXZlX2RlbW9fb2JzZXJ2YXRpb24iLCJzYW1lX3BvaW50X3ZhcmlhbnQiOnRydWV9XX0seyJpZCI6InNhbXBsZWRfZXhwb25lbnRpYWxfZXhhbXBsZSIsImxhYmVsIjoiUmVwcmVzZW50YXRpdmUgc2FtcGxlZCBleHBvbmVudGlhbCIsImltcG9ydGFuY2UiOiJtZWRpdW0iLCJleGFtX3dlaWdodCI6Im1lZGl1bSIsIm1hc3RlcnlfcnVsZSI6eyJjb3JyZWN0X3N0cmVha19yZXF1aXJlZCI6MX0sInF1ZXN0aW9ucyI6W3siaWQiOiJrcDVfcTEiLCJ0eXBlIjoic2hvcnRfYW5zd2VyIiwic3RlbSI6IkdpdmVuIFxcKHgodCkgPSBlXnstdH1cXCkgYW5kIHNhbXBsaW5nIGludGVydmFsIFxcKFQgPSAwLjFcXCksIHdyaXRlIHRoZSBzYW1wbGVkIHNpZ25hbCBcXCh4KG5UKVxcKS4gU2hvdyB0aGUgc3Vic3RpdHV0aW9uIHN0ZXAuIiwiaWRlYWxfYW5zd2VyIjoiU2luY2Ugc2FtcGxpbmcgdXNlcyBcXCh0ID0gblRcXCksIHdlIGdldCBcXCh4KG5UKSA9IGVeey1uVH1cXCkuIFdpdGggXFwoVCA9IDAuMVxcKSwgdGhpcyBiZWNvbWVzIFxcKHgoblQpID0gZV57LTAuMW59XFwpLiIsImdyYWRpbmdfcnVicmljIjpbIk11c3Qgc3RhdGUgb3IgdXNlIFxcKHQgPSBuVFxcKSIsIk11c3Qgd3JpdGUgXFwoeChuVCkgPSBlXnstblR9XFwpIiwiTXVzdCBzdWJzdGl0dXRlIFxcKFQgPSAwLjFcXCkgdG8gZ2V0IFxcKGVeey0wLjFufVxcKSIsIk11c3Qgbm90IG9taXQgdGhlIGZhY3RvciBcXChUXFwpIl0sImV4cGxhbmF0aW9uIjoiVGhpcyBjaGVja3Mgd2hldGhlciB0aGUgc3R1ZGVudCB1bmRlcnN0YW5kcyBzYW1wbGluZyBhcyBzdWJzdGl0dXRpb24gaW50byB0aGUgY29udGludW91cy10aW1lIGV4cHJlc3Npb24uIiwiaGludCI6IlJlcGxhY2UgZXZlcnkgXFwodFxcKSB3aXRoIFxcKG5UXFwpLCB0aGVuIHBsdWcgaW4gXFwoVCA9IDAuMVxcKS4iLCJuZWVkc192aXN1YWwiOmZhbHNlLCJzYW1lX3BvaW50X3ZhcmlhbnQiOmZhbHNlfV19XX0=" style="display:none;"></div>%%KC_END%%

@@ -1,0 +1,26 @@
+# Aquarius section OCR
+section_id: 1.1
+source_pages: page-064, page-065
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+1.1 S IZE OF A S IGNAL
+     The size of any entity is a number that indicates the largeness or strength of that entity. Generally
+     speaking, the signal amplitude varies with time. How can a signal that exists over a certain time
+
+
+64
+
+[[PAGE page-065]]
+1.1   Size of a Signal         65
+
+interval with varying amplitude be measured by one number that will indicate the signal size or
+signal strength? Such a measure must consider not only the signal amplitude, but also its duration.
+For instance, if we are to devise a single number V as a measure of the size of a human being,
+we must consider not only his or her width (girth), but also the height. If we make a simplifying
+assumption that the shape of a person is a cylinder of variable radius r (which varies with the height
+h), then one possible measure of the size of a person of height H is the person’s volume V, given by
+                                                # H
+                                         V =π       r2 (h) dh
+                                                   0

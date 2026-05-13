@@ -1,0 +1,29 @@
+{
+  "subsection": "B.3-2",
+  "summary": "This page introduces the subsection on sketching an exponentially varying sinusoid of the form Ae^{-at}cos(ω0 t + θ). It begins a worked example for f(t)=4e^{-2t}cos(6t-60°), explaining that the exponential and cosine parts will be sketched separately before being combined, and starts with the decaying exponential 4e^{-2t}.",
+  "keywords": [
+    "B.3 Sketching Signals",
+    "B.3-2",
+    "exponentially varying sinusoid",
+    "decaying exponential",
+    "sinusoid",
+    "signal sketching",
+    "time constant",
+    "initial value",
+    "envelope",
+    "4e^{-2t}cos(6t-60°)"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-021",
+  "figures": [
+    {
+      "fig_id": "Fig. B.11",
+      "top": 0.0508,
+      "left": 0.1355,
+      "bottom": 0.342,
+      "right": 0.5208,
+      "caption": "Fig. B.11 Sketching an exponentially varying sinusoid"
+    }
+  ]
+}

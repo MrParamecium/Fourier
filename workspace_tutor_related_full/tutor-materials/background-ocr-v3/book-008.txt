@@ -1,0 +1,48 @@
+8
+
+In fact,
+
+$$e^{\pm jn\pi/2}=\pm j \qquad n=1,5,9,13,\ldots \qquad\qquad (B.13b)$$
+
+and
+
+$$e^{\pm jn\pi/2}=\mp j \qquad n=3,7,11,15,\ldots \qquad\qquad (B.13c)$$
+
+These results are summarized in Table B.1.
+
+Background
+
+TABLE B.1
+
+\[
+\begin{array}{c c c}
+r & \theta & re^{j\theta} \\[4pt]
+1 & 0 & e^{j0}=1 \\
+1 & \pm \pi & e^{\pm j\pi}=-1 \\
+1 & \pm n\pi & e^{\pm jn\pi}=-1 \qquad n\ \text{odd integer} \\
+1 & \pm 2\pi & e^{\pm j2\pi}=1 \\
+1 & \pm 2n\pi & e^{\pm j2n\pi}=1 \qquad n\ \text{integer} \\
+1 & \pm \pi/2 & e^{\pm j\pi/2}=\pm j \\
+1 & \pm n\pi/2 & e^{\pm jn\pi/2}=\pm j \qquad n=1,5,9,13,\ldots \\
+1 & \pm n\pi/2 & e^{\pm jn\pi/2}=\mp j \qquad n=3,7,11,15,\ldots
+\end{array}
+\]
+
+This discussion shows the usefulness of the graphic picture of $re^{j\theta}$. This picture is also helpful in several other applications. For example, to determine the limit of $e^{(\alpha+j\omega)t}$ as $t\to\infty$, we note that
+
+$$e^{(\alpha+j\omega)t}=e^{\alpha t}e^{j\omega t}$$
+
+Now the magnitude of $e^{j\omega t}$ is unity regardless of the value of $\omega$ or $t$ because $e^{j\omega t}=re^{j\theta}$ with $r=1$. Therefore, $e^{\alpha t}$ determines the behavior of $e^{(\alpha+j\omega)t}$ as $t\to\infty$ and
+
+$$\lim_{t\to\infty} e^{(\alpha+j\omega)t}=\lim_{t\to\infty} e^{\alpha t}e^{j\omega t}=
+\begin{cases}
+0 & \alpha<0\\
+\infty & \alpha>0
+\end{cases}
+\qquad (B.14)$$
+
+In future discussions you will find it very useful to remember $re^{j\theta}$ as a number at a distance $r$ from the origin and at an angle $\theta$ with the horizontal axis of the complex plane.
+
+A Warning About Using Electronic Calculators in Computing Angles
+
+From the Cartesian form $a+jb$ we can readily compute the polar form $re^{j\theta}$ [see Eq. (B.6)]. Electronic calculators provide ready conversion of rectangular into polar and vice versa. However, if a calculator computes an angle of a complex number using an inverse trigonometric function $\theta=\tan^{-1}(b/a)$, proper attention must be paid to the quadrant in which the number is located. For instance, $\theta$ corresponding to the number $-2-j3$ is $\tan^{-1}\left(\frac{-3}{-2}\right)$. This result is not the same as $\tan^{-1}\left(\frac{3}{2}\right)$. The former is $-123.7^\circ$, whereas the latter is $56.3^\circ$. An electronic calculator cannot make this distinction and can give a correct answer only for angles in the first and

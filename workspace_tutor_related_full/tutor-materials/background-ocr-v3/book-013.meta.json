@@ -1,0 +1,21 @@
+{
+  "subsection": "B.1",
+  "summary": "This page continues the discussion of complex-number operations, showing that division in polar form is simpler than in Cartesian form. It includes Example B.4, which works through subtraction, reciprocal, quotient involving powers, and cube root of complex numbers expressed in exponential form, and a computer example verifying multiplication and division for two complex numbers in Cartesian form.",
+  "keywords": [
+    "complex numbers",
+    "polar form",
+    "Cartesian form",
+    "complex division",
+    "complex multiplication",
+    "Euler form",
+    "reciprocal",
+    "powers of complex numbers",
+    "roots of complex numbers",
+    "Example B.4",
+    "computer example"
+  ],
+  "has_math": true,
+  "page_type": "example",
+  "book_page": "book-013",
+  "figures": []
+}

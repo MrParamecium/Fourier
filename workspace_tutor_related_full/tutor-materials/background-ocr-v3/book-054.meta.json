@@ -1,0 +1,29 @@
+{
+  "subsection": "1.1",
+  "summary": "This page explains how signal energy and power should be interpreted as measures of signal size rather than physical energy and power, noting that their units depend on whether the signal represents voltage or current. It also presents Example 1.1, which computes the energy of a decaying/nonperiodic signal and the average power and rms value of a periodic signal shown in Fig. 1.2.",
+  "keywords": [
+    "signal energy",
+    "signal power",
+    "units of energy and power",
+    "signal-to-noise power ratio",
+    "periodic signals",
+    "average power",
+    "rms value",
+    "Example 1.1",
+    "Fig. 1.2",
+    "integration"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-054",
+  "figures": [
+    {
+      "fig_id": "Fig. 1.2",
+      "top": 0.0593,
+      "left": 0.0414,
+      "bottom": 0.2125,
+      "right": 0.6736,
+      "caption": "Fig. 1.2 Signals for Example 1.1."
+    }
+  ]
+}

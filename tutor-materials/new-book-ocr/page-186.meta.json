@@ -1,0 +1,33 @@
+{
+  "chapter": "2",
+  "section": null,
+  "subsection": null,
+  "title": "Figure 2.10 Convolution of x(t) and g(t).",
+  "summary": "This page is a figure page illustrating the graphical convolution of x(t) and g(t). It shows the original signals, several overlap cases for different ranges of t, and the resulting output c(t) as a piecewise function plotted versus time.",
+  "keywords": [
+    "convolution",
+    "x(t)",
+    "g(t)",
+    "c(t)",
+    "graphical convolution",
+    "continuous-time systems",
+    "overlap",
+    "piecewise waveform",
+    "Figure 2.10"
+  ],
+  "has_math": true,
+  "page_type": "figure",
+  "book_page": "page-186",
+  "figures": [
+    {
+      "fig_id": "Figure 2.10",
+      "top": 0.0409,
+      "left": 0.1333,
+      "bottom": 0.7295,
+      "right": 0.6472,
+      "caption": "Convolution of x(t) and g(t), including subplots (a) through (i)",
+      "crop_file": "page-186-figure_2_10.png"
+    }
+  ],
+  "metadata_model": "openrouter:openai/gpt-5.4"
+}

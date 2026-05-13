@@ -1,0 +1,18 @@
+{
+  "sectionId": "3.9-1",
+  "sourcePages": [
+    "page-298",
+    "page-299"
+  ],
+  "usedPages": [
+    "page-298",
+    "page-299"
+  ],
+  "missingPages": [],
+  "foundStart": true,
+  "startLine": "3.9-1 External (BIBO) Stability",
+  "foundEnd": true,
+  "endBeforeLine": "3.9-2 Internal (Asymptotic) Stability",
+  "endBeforeCode": "3.9-2",
+  "charCount": 1014
+}

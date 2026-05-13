@@ -1,0 +1,32 @@
+{
+  "chapter": "2",
+  "section": "2.4",
+  "subsection": null,
+  "title": "System Response to External Input: The Zero-State Response",
+  "summary": "This page presents Figure 2.15 on interconnected systems, illustrating parallel and cascade interconnections and equivalent impulse responses. The text explains that cascaded LTIC systems have composite impulse response given by convolution and that the order of cascaded linear operations does not affect the overall impulse response because convolution is commutative.",
+  "keywords": [
+    "interconnected systems",
+    "parallel connection",
+    "cascade connection",
+    "impulse response",
+    "convolution",
+    "commutative property",
+    "LTIC systems",
+    "Figure 2.15"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "page-191",
+  "figures": [
+    {
+      "fig_id": "Figure 2.15",
+      "top": 0.0577,
+      "left": 0.1928,
+      "bottom": 0.5386,
+      "right": 0.5894,
+      "caption": "Interconnected systems block diagrams showing parallel, cascade, commutative cascade order, integration-system interchange, and derivative-integral equivalence",
+      "crop_file": "page-191-figure_2_15.png"
+    }
+  ],
+  "metadata_model": "openrouter:openai/gpt-5.4"
+}

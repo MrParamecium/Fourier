@@ -1,0 +1,31 @@
+{
+  "subsection": null,
+  "summary": "This page explains how the complex frequency plane (s-plane) characterizes signals of the form e^{st} using the real part \\u03c3 and imaginary part j\\u03c9. It distinguishes signals on the real axis, imaginary axis, left half-plane, and right half-plane, relating them to monotonic exponentials, constant-amplitude sinusoids, exponentially decaying sinusoids, and exponentially growing sinusoids. The page also gives examples of expressing cosines and exponentially weighted cosines as sums of complex exponentials.",
+  "keywords": [
+    "complex frequency plane",
+    "s-plane",
+    "left half-plane",
+    "right half-plane",
+    "imaginary axis",
+    "real axis",
+    "generalized sinusoids",
+    "complex exponential",
+    "exponentially decaying signals",
+    "exponentially growing signals",
+    "sinusoids",
+    "neper frequency"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-074",
+  "figures": [
+    {
+      "fig_id": "Fig. 1.22",
+      "top": 0.0666,
+      "left": 0.2587,
+      "bottom": 0.2694,
+      "right": 0.682,
+      "caption": "Complex frequency plane."
+    }
+  ]
+}

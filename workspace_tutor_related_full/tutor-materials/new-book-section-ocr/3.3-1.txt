@@ -1,0 +1,30 @@
+# Aquarius section OCR
+section_id: 3.3-1
+source_pages: page-245, page-246
+cut_start_found: yes
+cut_end_found: yes
+
+--- OCR ---
+3.3-1 Discrete-Time Impulse Function δ[n]
+The discrete-time counterpart of the continuous-time impulse function δ(t) is δ[n], a Kronecker delta function, defined by
+
+δ[n] = { 1    n = 0
+         0    n ≠ 0
+
+This function, also called the unit impulse sequence, is shown in Fig. 3.6a. The shifted impulse sequence δ[n − m] is depicted in Fig. 3.6b. Unlike its continuous-time counterpart δ(t) (the Dirac delta), the Kronecker delta is a very simple function, requiring no special esoteric knowledge of distribution theory.
+
+δ[n]
+1
+n
+(a)
+
+δ[n − m]
+1
+...
+m   n
+(b)
+
+Figure 3.6  Discrete-time impulse function: (a) unit impulse sequence and (b) shifted impulse sequence.
+
+[[PAGE page-246]]
+246    CHAPTER 3    TIME-DOMAIN ANALYSIS OF DISCRETE-TIME SYSTEMS

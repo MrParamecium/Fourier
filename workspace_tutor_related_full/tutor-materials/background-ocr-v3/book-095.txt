@@ -1,0 +1,21 @@
+1.9 Summary
+
+95
+
+signal time-expanded by factor $a$ is given by $f\left(\frac{t}{a}\right)$. The same signal time-inverted is given by $f(-t)$.
+
+The unit step function $u(t)$ is very useful in representing causal signals and signals with different mathematical descriptions over different intervals.
+
+In the classical definition, the unit impulse function $\delta(t)$ is characterized by unit area, and the fact that it is concentrated at a single instant $t = 0$. The impulse function has a sampling (or sifting) property, which states that the area under the product of a function with a unit impulse is equal to the value of that function at the instant where the impulse is located (assuming the function to be continuous at the impulse location). In the modern approach, the impulse function is viewed as a generalized function and is defined by the sampling property.
+
+The exponential function $e^{st}$, where $s$ is complex, encompasses a large class of signals that includes a constant, a monotonic exponential, a sinusoid, and an exponentially varying sinusoid.
+
+A signal that is symmetrical about the vertical axis ($t = 0$) is an even function of time, and a signal that is antisymmetrical about the vertical axis is an odd function of time. The product of an even function with an odd function results in an odd function. However, the product of an even function with an even function or an odd function with an odd function results in an even function. The area under an odd function from $t = -a$ to $a$ is always zero regardless of the value of $a$. On the other hand, the area under an even function from $t = -a$ to $a$ is two times the area under the same function from $t = 0$ to $a$ (or from $t = -a$ to 0). Every signal can be expressed as a sum of odd and even function of time.
+
+A system processes input signals to produce output signals (response). The input is the cause and the output is its effect. In general, the output is affected by two causes: the internal conditions of the system (such as the initial conditions) and the external input.
+
+Systems can be classified in several ways:
+1. Linear systems are characterized by the linearity property, which implies superposition; if several causes (such as various inputs and initial conditions) are acting on a linear system, the total effect (response) is the sum of the responses from each cause, assuming that all the remaining causes are absent. A system is nonlinear if it is not linear.
+2. Time-invariant systems are characterized by the fact that system parameters do not change with time. The parameters of time-varying parameter systems change with time.
+3. For memoryless (or instantaneous) systems, the system response at any instant $t$ depends only on the present value of the input (value at $t$). For systems with memory (also known as dynamic systems), the system response at any instant $t$ depends not only on the present value of the input, but also on the past values of the input (values before $t$).
+4. In contrast, if a system response at $t$ also depends on the future values of the input (values of input beyond $t$), the system is noncausal. In causal systems, the response does not depend on the future values of the input. Because of the dependence of the response on the future values of input, the effect (response)

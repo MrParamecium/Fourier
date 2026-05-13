@@ -1,0 +1,101 @@
+23
+
+B.4 Cramer’s Rule
+
+$$
+\begin{bmatrix}
+a_{11} & a_{12} & \cdots & a_{1n}\\
+a_{21} & a_{22} & \cdots & a_{2n}\\
+\cdot & \cdot & & \cdot\\
+\cdot & \cdot & & \cdot\\
+\cdot & \cdot & & \cdot\\
+a_{n1} & a_{n2} & \cdots & a_{nn}
+\end{bmatrix}
+\begin{bmatrix}
+x_1\\
+x_2\\
+\vdots\\
+x_n
+\end{bmatrix}
+=
+\begin{bmatrix}
+y_1\\
+y_2\\
+\vdots\\
+y_n
+\end{bmatrix}
+\qquad\text{(B.30)}
+$$
+
+We denote the matrix on the left-hand side formed by the elements $a_{ij}$ as $\mathbf{A}$. The determinant of $\mathbf{A}$ is denoted by $|\mathbf{A}|$. If the determinant $|\mathbf{A}|$ is not zero, the set of equations (B.29) has a unique solution given by Cramer’s formula
+
+$$x_k=\frac{|\mathbf{D}_k|}{|\mathbf{A}|}\qquad k=1,2,\ldots,n \qquad\text{(B.31)}$$
+
+where $|\mathbf{D}_k|$ is obtained by replacing the $k$th column of $|\mathbf{A}|$ by the column on the right-hand side of Eq. (B.30) (with elements $y_1,y_2,\ldots,y_n$).
+
+We shall demonstrate the use of this rule with an example.
+
+Example B.7
+
+Using Cramer’s rule, solve the following simultaneous linear equations in three unknowns:
+
+$$2x_1+x_2+x_3=3$$
+
+$$x_1+3x_2-x_3=7$$
+
+$$x_1+x_2+x_3=1$$
+
+In matrix form these equations can be expressed as
+
+$$
+\begin{bmatrix}
+2 & 1 & 1\\
+1 & 3 & -1\\
+1 & 1 & 1
+\end{bmatrix}
+\begin{bmatrix}
+x_1\\
+x_2\\
+x_3
+\end{bmatrix}
+=
+\begin{bmatrix}
+3\\
+7\\
+1
+\end{bmatrix}
+$$
+
+Here,
+
+$$
+|\mathbf{A}|=
+\begin{vmatrix}
+2 & 1 & 1\\
+1 & 3 & -1\\
+1 & 1 & 1
+\end{vmatrix}
+=4
+$$
+
+Since $|\mathbf{A}|=4\ne 0$, a unique solution exists for $x_1$, $x_2$, and $x_3$. This solution is provided by Cramer’s rule (B.31) as follows:
+
+$$
+x_1=\frac{1}{|\mathbf{A}|}
+\begin{vmatrix}
+3 & 1 & 1\\
+7 & 3 & -1\\
+1 & 1 & 1
+\end{vmatrix}
+=\frac{8}{4}=2
+$$
+
+$$
+x_2=\frac{1}{|\mathbf{A}|}
+\begin{vmatrix}
+2 & 3 & 1\\
+1 & 7 & -1\\
+1 & 1 & 1
+\end{vmatrix}
+=\frac{4}{4}=1
+$$

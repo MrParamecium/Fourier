@@ -1,0 +1,67 @@
+26
+
+Background
+
+B.5-2 Partial Fractions: The Heaviside “Cover-Up” Method
+
+1. Unrepeated Factors of $Q(x)$
+
+We shall first consider the partial fraction expansion of $F(x)=P(x)/Q(x)$, in which all the factors of $Q(x)$ are unrepeated. Consider the proper function
+
+$$
+F(x)=\frac{b_m x^m+b_{m-1}x^{m-1}+\cdots+b_1x+b_0}{x^n+a_{n-1}x^{n-1}+\cdots+a_1x+a_0}
+\qquad m<n
+$$
+
+$$
+=\frac{P(x)}{(x-\lambda_1)(x-\lambda_2)\cdots(x-\lambda_n)}
+\qquad\text{(B.35a)}
+$$
+
+We can show that $F(x)$ in Eq. (B.35a) can be expressed as the sum of partial fractions
+
+$$
+F(x)=\frac{k_1}{x-\lambda_1}+\frac{k_2}{x-\lambda_2}+\cdots+\frac{k_n}{x-\lambda_n}
+\qquad\text{(B.35b)}
+$$
+
+To determine the coefficient $k_1$, we multiply both sides of Eq. (B.35b) by $x-\lambda_1$ and then let $x=\lambda_1$. This yields
+
+$$
+\left.(x-\lambda_1)F(x)\right|_{x=\lambda_1}
+=
+k_1+\left.\frac{k_2(x-\lambda_1)}{(x-\lambda_2)}+\frac{k_3(x-\lambda_1)}{(x-\lambda_3)}+\cdots+\frac{k_n(x-\lambda_1)}{(x-\lambda_n)}\right|_{x=\lambda_1}
+$$
+
+On the right-hand side, all the terms except $k_1$ vanish. Therefore,
+
+$$
+k_1=\left.(x-\lambda_1)F(x)\right|_{x=\lambda_1}
+\qquad\text{(B.36)}
+$$
+
+Similarly, we can show that
+
+$$
+k_r=\left.(x-\lambda_r)F(x)\right|_{x=\lambda_r}
+\qquad r=1,\,2,\,\cdots,\,n
+\qquad\text{(B.37)}
+$$
+
+■ Example B.9
+
+Expand the following rational function $F(x)$ into partial fractions:
+
+$$
+F(x)=\frac{2x^2+9x-11}{(x+1)(x-2)(x+3)}
+=
+\frac{k_1}{x+1}+\frac{k_2}{x-2}+\frac{k_3}{x+3}
+$$
+
+To determine $k_1$, we let $x=-1$ in $(x+1)F(x)$. Note that $(x+1)F(x)$ is obtained from $F(x)$ by omitting the term $(x+1)$ from its denominator. Therefore, to compute $k_1$ corresponding to the factor $(x+1)$, we cover up the term $(x+1)$ in the denominator of $F(x)$ and then substitute $x=-1$ in the remaining expression. (Mentally conceal the term $(x+1)$ in $F(x)$ with a finger and then let $x=-1$ in the remaining expression.) The procedure is explained step by step below.
+
+$$
+F(x)=\frac{2x^2+9x-11}{(x+1)(x-2)(x+3)}
+$$
+
+Step 1: Cover up (conceal) the factor $(x+1)$ from $F(x)$:

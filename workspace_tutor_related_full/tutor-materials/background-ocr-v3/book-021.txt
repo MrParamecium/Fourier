@@ -1,0 +1,31 @@
+21
+
+B.3 Sketching Signals
+
+(a)
+
+(b)
+
+(c)
+
+Fig. B.11 Sketching an exponentially varying sinusoid
+
+B.3-2 The Exponentially Varying Sinusoid
+
+We now discuss sketching an exponentially varying sinusoid
+
+$$
+f(t)=Ae^{-at}\cos(\omega_0 t+\theta)
+$$
+
+Let us consider a specific example
+
+$$
+f(t)=4e^{-2t}\cos(6t-60^\circ) \qquad \text{(B.26)}
+$$
+
+We shall sketch $4e^{-2t}$ and $\cos(6t-60^\circ)$ separately and then multiply them.
+
+(i) Sketching $4e^{-2t}$
+
+This monotonically decaying exponential has a time constant of $1/2$ second and an initial value of 4 at $t=0$. Therefore, its values at $t=0.5$, 1, 1.5, and 2 are

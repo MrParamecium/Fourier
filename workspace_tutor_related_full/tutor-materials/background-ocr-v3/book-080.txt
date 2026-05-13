@@ -1,0 +1,36 @@
+80
+
+1 Introduction to Signals and Systems
+
+$k_1c_1+k_2c_2 \longrightarrow k_1e_1+k_2e_2$ \hfill (1.40)
+
+This is true for all $c_1$ and $c_2$.
+
+It may appear that additivity implies homogeneity. Unfortunately, there are cases where homogeneity does not follow from additivity. See the case in Exercise E1.11 below.
+
+△ Exercise E1.11  
+Show that a system with the input (cause) $c(t)$ and the output (effect) $e(t)$ related by $e(t)=\operatorname{Re}\{c(t)\}$ satisfies the additivity property but violates the homogeneity property. Hence, such a system is not linear.  
+Hint: show that Eq. (1.39) is not satisfied when $k$ is complex. ▽
+
+Response of a Linear System
+
+For the sake of simplicity, we discuss below only single-input, single-output (SISO) systems. But the discussion can be readily extended to multiple-input, multiple-output (MIMO) systems.
+
+A system's output for $t\geq 0$ is the result of two independent causes: the initial conditions of the system (or the system state) at $t=0$ and the input $f(t)$ for $t\geq 0$. If a system is to be linear, the output must be the sum of the two components resulting from these two causes: first, the zero-input response component that results only from the initial conditions at $t=0$ with the input $f(t)=0$ for $t\geq 0$, and then the zero-state response component that results only from the input $f(t)$ for $t\geq 0$ when the initial conditions (at $t=0$) are assumed to be zero. When all the appropriate initial conditions are zero, the system is said to be in zero state. The system output is zero when the input is zero only if the system is in zero state.
+
+In summary, a linear system response can be expressed as the sum of a zero-input and a zero-state component:
+
+Total response $=$ zero-input response $+$ zero-state response \hfill (1.41)
+
+This property of linear systems which permits the separation of an output into components resulting from the initial conditions and from the input is called the decomposition property.
+
+For the $RC$ circuit of Fig. 1.26, the response $y(t)$ was found to be [see Eq. (1.36c)]
+
+$$
+y(t)=\underbrace{v_C(0)}_{\text{z-i component}}+\underbrace{Rf(t)+\frac{1}{C}\int_0^t f(\tau)\,d\tau}_{\text{z-s component}}
+$$
+\hfill (1.42)
+
+From Eq. (1.42), it is clear that if the input $f(t)=0$ for $t\geq 0$, the output $y(t)=v_C(0)$. Hence $v_C(0)$ is the zero-input component of the response $y(t)$. Similarly, if the system state (the voltage $v_C$ in this case) is zero at $t=0$, the output is given by the second component on the right-hand side of Eq. (1.42). Clearly this is the zero-state component of the response $y(t)$.
+
+In addition to the decomposition property, linearity implies that both the zero-input and zero-state components must obey the principle of superposition with respect to each of their respective causes. For example, if we increase the initial condition $k$-fold, the zero-input component must also increase $k$-fold. Similarly, if we increase the input $k$-fold, the zero-state component must also increase $k$-fold.

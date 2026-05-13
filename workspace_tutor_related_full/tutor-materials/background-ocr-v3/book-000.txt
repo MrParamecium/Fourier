@@ -1,0 +1,58 @@
+9.3  Unit Impulse Response $h[k]$ 583  
+9.4  System Response to External Input: Zero-State Response 585  
+9.5  Classical solution of Linear Difference Equations 598  
+9.6  System Stability 603  
+9.7  Appendix 9.1: Determining Impulse Response 609  
+9.8  Summary 610  
+
+10  Fourier Analysis of Discrete-Time Signals 617
+
+10.1  Periodic Signal Representation by Discrete-Time Fourier Series 617  
+10.2  Aperiodic Signal Representation by Fourier Integral 624  
+10.3  Properties of DTFT 633  
+10.4  DTFT Connection With the Continuous-Time Fourier transform 636  
+10.5  Discrete-Time Linear System analysis by DTFT 638  
+10.6  Signal Processing Using DFT and FFT 641  
+10.7  Generalization of DTFT to the $z$-Transform 659  
+10.8  Summary 662  
+
+11  Discrete-Time System Analysis Using the $z$-Transform 668
+
+11.1  The $Z$-Transform 668  
+11.2  Some Properties of the $Z$-Transform 680  
+11.3  $Z$-Transform Solution of Linear Difference Equations 685  
+11.4  System Realization 693  
+11.5  Connection Between the Laplace and the $Z$-Transform 695  
+11.6  Sampled-Data (Hybrid) Systems 697  
+11.7  The Bilateral $Z$-Transform 704  
+11.8  Summary 710  
+
+12  Frequency Response and Digital Filters 716
+
+12.1  Frequency Response of Discrete-Time Systems 716  
+12.2  Frequency Response From Pole-Zero Location 722  
+12.3  Digital Filters 729  
+12.4  Filter Design Criteria 731  
+12.5  Recursive Filter Design: The Impulse Invariance Method 734  
+12.6  Recursive Filter Design: The Bilinear Transformation Method 740  
+12.7  Nonrecursive Filters 756  
+12.8  Nonrecursive Filter Design 761  
+12.9  Summary 777  
+
+13  State-Space Analysis 784
+
+13.1  Introduction 785  
+13.2  Systematic Procedure for Determining State Equations 788  
+13.3  Solution of State Equations 798  
+13.4  Linear Transformation of State Vector 811  
+13.5  Controllability and Observability 818  
+13.6  State-Space Analysis of Discrete-Time Systems 823  
+13.7  Summary 830  
+
+Answers to Selected Problems 837  
+
+Supplementary Reading 843  
+
+Index 844  
+
+x

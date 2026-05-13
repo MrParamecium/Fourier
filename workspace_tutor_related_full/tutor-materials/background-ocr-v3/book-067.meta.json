@@ -1,0 +1,36 @@
+{
+  "subsection": "1.4",
+  "summary": "This page introduces the unit step function u(t) as a basic model for causal signals that begin at t = 0. It shows how multiplying a signal by u(t) creates a causal version, as in e^{-at}u(t), and demonstrates how step functions can represent piecewise-defined signals such as a rectangular pulse using delayed steps.",
+  "keywords": [
+    "unit step function",
+    "u(t)",
+    "causal signals",
+    "exponential signal",
+    "e^{-at}u(t)",
+    "delayed step function",
+    "rectangular pulse",
+    "piecewise signal representation",
+    "signal models"
+  ],
+  "has_math": true,
+  "page_type": "mixed",
+  "book_page": "book-067",
+  "figures": [
+    {
+      "fig_id": "Fig. 1.14",
+      "top": 0.0557,
+      "left": 0.0775,
+      "bottom": 0.1574,
+      "right": 0.5333,
+      "caption": "Fig. 1.14 (a) Unit step function u(t) (b) exponential e-atu(t)."
+    },
+    {
+      "fig_id": "Fig. 1.15",
+      "top": 0.3777,
+      "left": 0.0995,
+      "bottom": 0.4722,
+      "right": 0.5098,
+      "caption": "Fig. 1.15 Representation of a rectangular pulse by step functions."
+    }
+  ]
+}

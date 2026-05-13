@@ -1,0 +1,37 @@
+70
+
+1 Introduction to Signals and Systems
+
+(a)
+
+(b)
+
+Fig. 1.19 A unit impulse and its approximation.
+
+(a)
+
+(b)
+
+(c)
+
+Fig. 1.20 Other possible approximations to a unit impulse.
+
+approaches zero while its area remains at unity. For example, the exponential pulse $\alpha e^{-\alpha t}u(t)$ in Fig. 1.20a becomes taller and narrower as $\alpha$ increases. In the limit as $\alpha \rightarrow \infty$, the pulse height $\rightarrow \infty$, and its width or duration $\rightarrow 0$. Yet, the area under the pulse is unity regardless of the value of $\alpha$ because
+
+$$\int_{0}^{\infty} \alpha e^{-\alpha t}\,dt = 1 \qquad (1.22)$$
+
+The pulses in Figs. 1.20b and 1.20c behave in a similar fashion.
+
+From Eq. (1.21), it follows that the function $k\delta(t)=0$ for all $t\neq 0$, and its area is $k$. Thus, $k\delta(t)$ is an impulse function whose area is $k$ (in contrast to the unit impulse function, whose area is 1).
+
+Multiplication of a Function by an Impulse
+
+Let us now consider what happens when we multiply the unit impulse $\delta(t)$ by a function $\phi(t)$ that is known to be continuous at $t=0$. Since the impulse exists only at $t=0$, and the value of $\phi(t)$ at $t=0$ is $\phi(0)$, we obtain
+
+$$\phi(t)\delta(t)=\phi(0)\delta(t) \qquad (1.23a)$$
+
+Similarly, if $\phi(t)$ is multiplied by an impulse $\delta(t-T)$ (impulse located at $t=T$), then
+
+$$\phi(t)\delta(t-T)=\phi(T)\delta(t-T) \qquad (1.23b)$$
+
+provided $\phi(t)$ is continuous at $t=T$.

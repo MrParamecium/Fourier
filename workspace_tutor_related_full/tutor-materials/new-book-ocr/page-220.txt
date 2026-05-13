@@ -1,0 +1,43 @@
+220
+CHAPTER 2  TIME-DOMAIN ANALYSIS OF CONTINUOUS-TIME SYSTEMS
+
+h(τ) [solid], x(t−τ) [dashed], h(τ)x(t−τ) [gray]
+
+2
+0
+−2
+−1  −0.5  0  0.5  1  1.5  2  2.5  3  3.5  4
+τ
+
+2
+1
+0
+−1
+−1  −0.5  0  0.5  1  1.5  2  2.5  3  3.5  4
+y(t)=∫ h(τ)x(t−τ)
+ dτ
+t
+
+Figure 2.29  Graphical convolution at step t = 2.85 seconds.
+
+2.8 APPENDIX: DETERMINING THE IMPULSE RESPONSE
+
+In Eq. (2.13), we showed that for an LTIC system S specified by Eq. (2.11), the unit impulse response h(t) can be expressed as
+
+h(t) = b0δ(t) + characteristic modes				(2.51)
+
+To determine the characteristic mode terms in Eq. (2.51), let us consider a system S0 whose input x(t) and the corresponding output w(t) are related by
+
+Q(D)w(t) = x(t)				(2.52)
+
+Observe that both the systems S and S0 have the same characteristic polynomial; namely, Q(λ), and, consequently, the same characteristic modes. Moreover, S0 is the same as S with P(D) = 1, that is, b0 = 0. Therefore, according to Eq. (2.51), the impulse response of S0 consists of characteristic mode terms only without an impulse at t = 0. Let us denote this impulse response of S0 by yn(t). Observe that yn(t) consists of characteristic modes of S and therefore may be viewed as a zero-input response of S. Now yn(t) is the response of S0 to input δ(t). Therefore, according to Eq. (2.52),
+
+Q(D)yn(t) = δ(t)
+
+or
+
+(D^N + a1D^(N−1) + ··· + aN−1D + aN)yn(t) = δ(t)
+
+or
+
+yn^(N)(t) + a1y_n^(N−1)(t) + ··· + aN−1y_n^(1)(t) + aNy_n(t) = δ(t)
