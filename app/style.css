@@ -46,7 +46,7 @@
   --shadow-md: 0 4px 6px -1px rgba(15,23,42,0.05), 0 2px 4px -1px rgba(15,23,42,0.03);
   --shadow-input: 0 2px 10px rgba(15,23,42,0.04), 0 0 0 1px rgba(15,23,42,0.05) inset;
   --shadow-card: 0 12px 32px rgba(15,23,42,0.08);
-  
+
   /* Dimensions & Radius */
   --radius-sm: 6px;
   --radius-md: 10px;
@@ -24458,212 +24458,6 @@ h6,
   }
 }
 
-/* FINAL COMPACT SCRAPBOOK EDGE BUTTONS: keep paper style without covering pager. */
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn,
-#learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle,
-#learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle {
-  gap: 7px !important;
-  height: 38px !important;
-  min-height: 38px !important;
-  padding: 7px 12px !important;
-  border-width: 2px !important;
-  border-radius: 10px !important;
-  box-shadow: 3px 3px 0 #1e293b !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn {
-  left: clamp(18px, 2vw, 30px) !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn::before,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn::before,
-#learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle::before,
-#learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle::before {
-  top: -8px !important;
-  left: -8px !important;
-  width: 42px !important;
-  height: 16px !important;
-  background: repeating-linear-gradient(90deg, #f9a8d4, #f9a8d4 5px, rgba(255,255,255,0.42) 5px, rgba(255,255,255,0.42) 10px) !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label,
-#learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-label,
-#learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-label {
-  font-size: 14px !important;
-  font-weight: 800 !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label::after,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label::after,
-#learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-label::after,
-#learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-label::after {
-  bottom: 1px !important;
-  height: 9px !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon,
-#learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon,
-#learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon svg,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon svg,
-#learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon svg,
-#learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon svg {
-  width: 18px !important;
-  height: 18px !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon svg,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon svg,
-#learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon svg,
-#learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon svg {
-  stroke-width: 3.2 !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn:hover,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn:hover {
-  transform: translateY(calc(-50% - 2px)) rotate(0deg) !important;
-  box-shadow: 4px 4px 0 #1e293b !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle:hover,
-#learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle:hover {
-  transform: translateY(-2px) rotate(0deg) !important;
-  box-shadow: 4px 4px 0 #1e293b !important;
-}
-
-/* FINAL TINY EDGE BUTTONS: keep More Lecture / More Q&A on their panel edges. */
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn,
-#learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle,
-#learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle {
-  gap: 5px !important;
-  height: 32px !important;
-  min-height: 32px !important;
-  padding: 5px 9px !important;
-  border-width: 2px !important;
-  border-radius: 9px !important;
-  box-shadow: 2px 2px 0 #1e293b !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn {
-  left: 12px !important;
-  right: auto !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) .learn-chat-topbar,
-#learnView #learnBody.chapter-overview-split-active .learn-chat-topbar {
-  right: 12px !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle,
-#learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle {
-  margin-left: auto !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn::before,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn::before,
-#learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle::before,
-#learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle::before {
-  top: -6px !important;
-  left: -6px !important;
-  width: 30px !important;
-  height: 11px !important;
-  background: repeating-linear-gradient(90deg, #f9a8d4, #f9a8d4 4px, rgba(255,255,255,0.42) 4px, rgba(255,255,255,0.42) 8px) !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label,
-#learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-label,
-#learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-label {
-  font-size: 12px !important;
-  line-height: 1 !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label::after,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label::after,
-#learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-label::after,
-#learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-label::after {
-  bottom: 0 !important;
-  height: 7px !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon,
-#learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon,
-#learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon svg,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon svg,
-#learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon svg,
-#learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon svg {
-  width: 14px !important;
-  height: 14px !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn:hover,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn:hover {
-  transform: translateY(calc(-50% - 1px)) rotate(0deg) !important;
-  box-shadow: 3px 3px 0 #1e293b !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle:hover,
-#learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle:hover {
-  transform: translateY(-1px) rotate(0deg) !important;
-  box-shadow: 3px 3px 0 #1e293b !important;
-}
-
-/* FINAL Q&A EDGE ANCHOR: make the topbar shrink-wrap so More Q&A can sit at the far right. */
-#learnView #learnBody:not(.chapter-overview-active) .learn-chat-topbar,
-#learnView #learnBody.chapter-overview-split-active .learn-chat-topbar {
-  position: absolute !important;
-  top: 18px !important;
-  left: auto !important;
-  right: 12px !important;
-  width: max-content !important;
-  min-width: 0 !important;
-  max-width: calc(100% - 24px) !important;
-  display: flex !important;
-  justify-content: flex-end !important;
-  align-items: center !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  background: transparent !important;
-  border: 0 !important;
-  border-bottom: 0 !important;
-  box-shadow: none !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-  pointer-events: none !important;
-  transform: none !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) .learn-chat-topbar::before,
-#learnView #learnBody:not(.chapter-overview-active) .learn-chat-topbar::after,
-#learnView #learnBody.chapter-overview-split-active .learn-chat-topbar::before,
-#learnView #learnBody.chapter-overview-split-active .learn-chat-topbar::after {
-  content: none !important;
-  display: none !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle,
-#learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle {
-  position: relative !important;
-  right: auto !important;
-  left: auto !important;
-  margin: 0 !important;
-  transform: rotate(1deg) !important;
-  pointer-events: auto !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle:hover,
-#learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle:hover {
-  transform: translateY(-1px) rotate(0deg) !important;
-}
-
 /* FINAL SUBSECTION CARD CLEANUP: remove the little yellow tape above B.x-y labels. */
 #learnView #learnBody.chapter-overview-active .chapter-overview-subcard.chapter-overview-subrow .chapter-overview-subcard-marker::before,
 #learnView #learnBody.chapter-overview-active .chapter-overview-subcard.chapter-overview-subrow .chapter-overview-subcard-marker::after,
@@ -25914,6 +25708,566 @@ h6,
   box-shadow: none !important;
   opacity: 0.55 !important;
 }
+
+/* FINAL LEARN QA FLATTENING: last rule wins over all older panel chrome. */
+#learnView #learnBody:not(.chapter-overview-active) #learnChatCol,
+#learnView #learnBody.chapter-overview-split-active #learnChatCol,
+#learnView #learnBody[data-panel-focus="normal"] #learnChatCol,
+#learnView #learnBody[data-panel-focus="qa-wide"] #learnChatCol,
+#learnView #learnBody[data-panel-focus="qa-full"] #learnChatCol,
+#learnView #learnChatCol {
+  background:
+    radial-gradient(circle at 38% 20%, rgba(125, 211, 252, 0.5), transparent 38%),
+    radial-gradient(circle at 58% 92%, rgba(110, 231, 183, 0.42), transparent 42%),
+    linear-gradient(180deg, #f4f7f9 0%, #eefbf6 100%) !important;
+  border: 0 !important;
+  border-left: 0 !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+}
+
+#learnView #learnChatCol .ambient-background {
+  position: absolute !important;
+  inset: 0 !important;
+  width: auto !important;
+  height: auto !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+  overflow: hidden !important;
+}
+
+#learnView #learnChatCol .orb-edu-blue {
+  top: -14% !important;
+  left: -20% !important;
+  width: 105% !important;
+  height: 62% !important;
+}
+
+#learnView #learnChatCol .orb-edu-green {
+  right: -22% !important;
+  bottom: -18% !important;
+  width: 105% !important;
+  height: 58% !important;
+}
+
+#learnView #learnBody:not(.chapter-overview-active) #learnChatCol .learn-chat-topbar,
+#learnView #learnBody.chapter-overview-split-active #learnChatCol .learn-chat-topbar,
+#learnView #learnBody[data-panel-focus="normal"] #learnChatCol .learn-chat-topbar,
+#learnView #learnBody[data-panel-focus="qa-wide"] #learnChatCol .learn-chat-topbar,
+#learnView #learnBody[data-panel-focus="qa-full"] #learnChatCol .learn-chat-topbar,
+#learnView #learnChatCol .learn-chat-topbar,
+#learnView #learnChatCol .learn-chat-scroll,
+#learnView #learnChatCol .learn-web-section,
+#learnView #learnChatCol #learnChatEmptyState,
+#learnView #learnChatCol .edu-tutor-empty-inner,
+#learnView #learnChatCol .learn-followup-bar,
+#learnView #learnChatCol .glass-panel,
+#learnView #learnChatCol .edu-tutor-composer,
+#learnView #learnChatCol .followup-bubble {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+#learnView #learnChatCol .learn-chat-scroll::before,
+#learnView #learnChatCol .learn-chat-scroll::after,
+#learnView #learnChatCol #learnChatEmptyState::before,
+#learnView #learnChatCol #learnChatEmptyState::after,
+#learnView #learnChatCol .learn-followup-bar::before,
+#learnView #learnChatCol .learn-followup-bar::after,
+#learnView #learnChatCol .edu-tutor-composer::before,
+#learnView #learnChatCol .edu-tutor-composer::after,
+#learnView #learnChatCol .glass-panel::before,
+#learnView #learnChatCol .glass-panel::after {
+  content: none !important;
+  display: none !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+#learnView #learnChatCol .learn-chat-topbar {
+  margin: 0 !important;
+  padding: 18px 18px 8px !important;
+}
+
+#learnView #learnChatCol .learn-chat-scroll {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 44px 18px 0 !important;
+  overflow: visible !important;
+  width: 100% !important;
+  max-width: none !important;
+}
+
+#learnView #learnChatCol #learnChatEmptyState {
+  position: relative !important;
+  inset: auto !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 0 10px !important;
+  min-height: 0 !important;
+}
+
+#learnView #learnChatCol .edu-tutor-empty-inner {
+  width: 100% !important;
+  max-width: none !important;
+  padding: 0 !important;
+}
+
+#learnView #learnChatCol .learn-followup-bar {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 18px 14px !important;
+}
+
+#learnView #learnChatCol .edu-tutor-composer {
+  margin-top: 0 !important;
+  padding: 0 !important;
+}
+
+#learnView #learnChatCol .input-wrapper {
+  margin: 0 !important;
+  border: 1px solid rgba(226, 232, 240, 0.9) !important;
+  border-radius: 20px !important;
+  background: rgba(255, 255, 255, 0.94) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.85), 0 10px 24px rgba(15,23,42,0.05) !important;
+}
+
+#learnView #learnChatCol .edu-tutor-actions {
+  margin-top: 10px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+#learnView #learnChatCol .action-chip,
+#learnView #learnChatCol .edu-mode-toggle,
+#learnView #learnChatCol .network-on,
+#learnView #learnChatCol .network-off,
+#learnView #learnChatCol .edu-tutor-native-select {
+  box-shadow: none !important;
+}
+
+/* FINAL NO-FRAME QA LOCK: everything in the right panel becomes one continuous surface. */
+#learnView #learnChatCol,
+#learnView #learnBody:not(.chapter-overview-active) #learnChatCol,
+#learnView #learnBody.chapter-overview-split-active #learnChatCol,
+#learnView #learnBody[data-panel-focus="qa-wide"] #learnChatCol,
+#learnView #learnBody[data-panel-focus="qa-full"] #learnChatCol {
+  background: linear-gradient(180deg, rgba(244, 247, 249, 0.98) 0%, rgba(238, 251, 246, 0.98) 100%) !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-left: 0 !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+}
+
+#learnView #learnChatCol::before,
+#learnView #learnChatCol::after,
+#learnView #learnBody:not(.chapter-overview-active) #learnChatCol::before,
+#learnView #learnBody.chapter-overview-split-active #learnChatCol::before {
+  content: none !important;
+  display: none !important;
+}
+
+#learnView #learnChatCol .learn-chat-topbar,
+#learnView #learnChatCol .learn-chat-scroll,
+#learnView #learnChatCol .learn-web-section,
+#learnView #learnChatCol #learnChatEmptyState,
+#learnView #learnChatCol .edu-tutor-empty-inner,
+#learnView #learnChatCol .learn-followup-bar,
+#learnView #learnChatCol .glass-panel,
+#learnView #learnChatCol .edu-tutor-composer,
+#learnView #learnChatCol .followup-bubble {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+#learnView #learnChatCol .learn-chat-topbar {
+  margin: 0 !important;
+  padding: 18px 18px 8px !important;
+}
+
+#learnView #learnChatCol .learn-chat-scroll {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 44px 18px 0 !important;
+  overflow: visible !important;
+}
+
+#learnView #learnChatCol #learnChatEmptyState {
+  position: relative !important;
+  inset: auto !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 0 10px !important;
+  min-height: 0 !important;
+}
+
+#learnView #learnChatCol .edu-tutor-empty-inner {
+  max-width: none !important;
+  width: 100% !important;
+  padding: 0 !important;
+}
+
+#learnView #learnChatCol .learn-followup-bar {
+  margin: 0 !important;
+  padding: 0 18px 14px !important;
+}
+
+#learnView #learnChatCol .edu-tutor-composer {
+  padding: 0 !important;
+  margin-top: 0 !important;
+}
+
+#learnView #learnChatCol .input-wrapper {
+  margin: 0 !important;
+  border: 1px solid rgba(226, 232, 240, 0.9) !important;
+  border-radius: 20px !important;
+  background: rgba(255, 255, 255, 0.94) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.85), 0 10px 24px rgba(15,23,42,0.05) !important;
+}
+
+#learnView #learnChatCol .edu-tutor-actions {
+  margin-top: 10px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+#learnView #learnChatCol .action-chip,
+#learnView #learnChatCol .edu-mode-toggle,
+#learnView #learnChatCol .network-on,
+#learnView #learnChatCol .network-off,
+#learnView #learnChatCol .edu-tutor-native-select {
+  box-shadow: none !important;
+}
+
+/* FINAL FRAMELESS QA SURFACE: remove outer boxes and keep one continuous glass panel. */
+#learnView #learnChatCol {
+  border-left: 0 !important;
+  box-shadow: none !important;
+}
+
+#learnView #learnChatCol .learn-chat-topbar {
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  margin: 0 !important;
+  padding: 18px 20px 8px !important;
+}
+
+#learnView #learnChatCol .learn-chat-scroll {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+  padding: 0 18px 12px !important;
+}
+
+#learnView #learnChatCol .learn-chat-empty-state,
+#learnView #learnChatCol .edu-tutor-empty,
+#learnView #learnChatCol .edu-tutor-empty-inner {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+#learnView #learnChatCol .learn-chat-empty-state {
+  padding-top: 56px !important;
+  padding-bottom: 28px !important;
+}
+
+#learnView #learnChatCol .learn-followup-bar {
+  margin: 0 18px 18px !important;
+  border: 0 !important;
+}
+
+#learnView #learnChatCol .glass-panel,
+#learnView #learnChatCol .edu-tutor-composer {
+  background: rgba(255, 255, 255, 0.52) !important;
+  border: 0 !important;
+  box-shadow: 0 16px 30px rgba(2, 132, 199, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.7) !important;
+}
+
+#learnView #learnChatCol .input-wrapper {
+  border: 0 !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 6px 18px rgba(15,23,42,0.04) !important;
+}
+
+#learnView #learnChatCol .edu-tutor-actions {
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+#learnView #learnChatCol .edu-tutor-native-select,
+#learnView #learnChatCol .action-chip,
+#learnView #learnChatCol .edu-mode-toggle,
+#learnView #learnChatCol .network-on,
+#learnView #learnChatCol .network-off {
+  border-radius: 999px !important;
+  box-shadow: none !important;
+}
+
+#learnView #learnChatCol .edu-tutor-empty-rule {
+  display: none !important;
+}
+
+/* FINAL SURFACE FLATTENING: remove the last remaining panel boxes so top-to-bottom feels continuous. */
+#learnView #learnChatCol::before,
+#learnView #learnChatCol::after {
+  content: none !important;
+  display: none !important;
+}
+
+#learnView #learnChatCol {
+  background: linear-gradient(180deg, rgba(244, 247, 249, 0.96) 0%, rgba(238, 251, 246, 0.96) 100%) !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+#learnView #learnChatCol .learn-chat-topbar {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+  padding: 18px 18px 8px !important;
+}
+
+#learnView #learnChatScroll {
+  flex: 1 1 auto !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 18px 10px !important;
+  margin: 0 !important;
+}
+
+#learnView #learnChatCol .learn-web-section {
+  border: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  margin: 0 0 18px !important;
+}
+
+#learnView #learnChatCol #learnChatEmptyState,
+#learnView #learnChatCol .edu-tutor-empty-inner,
+#learnView #learnChatCol .widget-icon {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+#learnView #learnChatCol #learnChatEmptyState {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 54px 0 14px !important;
+}
+
+#learnView #learnChatCol .edu-tutor-empty-inner {
+  padding: 0 !important;
+}
+
+#learnView #learnChatCol .learn-followup-bar {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+  padding: 0 18px 18px !important;
+}
+
+#learnView #learnChatCol .glass-panel,
+#learnView #learnChatCol .edu-tutor-composer {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+#learnView #learnChatCol .input-wrapper {
+  border: 1px solid rgba(226, 232, 240, 0.92) !important;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.04) !important;
+}
+
+#learnView #learnChatCol .edu-tutor-actions {
+  margin-top: 10px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+}
+
+#learnView #learnChatCol .action-chip,
+#learnView #learnChatCol .edu-mode-toggle,
+#learnView #learnChatCol .network-on,
+#learnView #learnChatCol .network-off,
+#learnView #learnChatCol .edu-tutor-native-select {
+  box-shadow: none !important;
+}
+
+/* =========================================================
+   TUTOR AGENT GLASSMORPHISM UI OVERRIDES
+   ========================================================= */
+
+/* 设置聊天列的底层背景为浅通透色，以衬托氛围光球 */
+#learnView #learnChatCol {
+  background: #F4F7F9 !important;
+  background-image: none !important;
+  border-left: 1px solid rgba(255, 255, 255, 0.8) !important;
+  box-shadow: -10px 0 30px rgba(0,0,0,0.02) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+#learnView #learnChatCol::before { display: none !important; }
+
+#learnView #learnChatCol > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* 彻底重置 Empty State 样式 */
+#learnView #learnChatEmptyState {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  min-height: auto !important;
+  padding: 40px !important;
+}
+
+#learnView #learnChatEmptyState::before,
+#learnView #learnChatEmptyState::after {
+  display: none !important;
+}
+
+/* 导师徽章图标 */
+#learnView .widget-icon {
+  width: 58px; height: 58px; margin: 0 auto 16px auto; border-radius: 18px;
+  background: linear-gradient(135deg, #E0F2FE, #BAE6FD); border: 1px solid #FFFFFF;
+  box-shadow: 0 8px 16px -4px rgba(2, 132, 199, 0.15), inset 0 2px 4px rgba(255,255,255,0.8);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px; color: #0284C7;
+}
+
+#learnView .empty-title {
+  font-size: 26px !important; font-weight: 700 !important; margin-bottom: 8px !important;
+  color: #0F172A !important; font-family: 'Quicksand', 'Nunito', sans-serif !important; border: none !important;
+}
+
+#learnView .empty-subtitle {
+  font-size: 14px !important; color: #64748B !important; font-weight: 500 !important; margin-top: 0 !important;
+}
+
+/* 荧光笔标签 */
+#learnView .tag-group {
+  display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap;
+}
+#learnView .edu-tag {
+  font-size: 12px !important; font-weight: 600 !important; padding: 6px 14px !important; border-radius: 12px !important;
+  display: inline-flex !important; align-items: center !important; gap: 6px !important;
+  border: 1px solid rgba(255, 255, 255, 0.8) !important; font-family: 'Inter', sans-serif !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important; text-transform: none !important; letter-spacing: 0 !important;
+}
+#learnView .tag-formula { background: #E0F2FE !important; color: #0369A1 !important; }
+#learnView .tag-screenshot { background: #F3E8FF !important; color: #6B21A8 !important; }
+#learnView .tag-trap { background: #FFEDD5 !important; color: #C2410C !important; }
+
+/* 玻璃拟态输入面板重构 */
+#learnView #learnFollowupBar {
+  background: rgba(255, 255, 255, 0.65) !important;
+  backdrop-filter: blur(30px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(30px) saturate(150%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.9) !important;
+  box-shadow: 0 20px 40px -10px rgba(2, 132, 199, 0.08), inset 0 1px 0 rgba(255, 255, 255, 1) !important;
+  border-radius: 24px !important;
+  padding: 16px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  margin: 0 24px 24px !important;
+  width: auto !important;
+  max-width: none !important;
+}
+
+#learnView #learnFollowupBar::before,
+#learnView #learnFollowupBar::after {
+  display: none !important;
+}
+
+/* 打字输入区 */
+#learnView .input-wrapper {
+  display: flex; align-items: flex-end; gap: 10px;
+  background: rgba(255, 255, 255, 0.85); border: 1px solid #E2E8F0;
+  border-radius: 16px; padding: 6px 6px 6px 12px;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.02), 0 4px 6px -1px rgba(0,0,0,0.02);
+  transition: 0.3s ease;
+}
+#learnView .input-wrapper:focus-within {
+  background: #FFFFFF; border-color: #7DD3FC;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.01), 0 0 0 4px rgba(2, 132, 199, 0.1);
+}
+
+#learnView .btn-clip {
+  color: #94A3B8 !important; font-size: 22px !important; padding: 8px !important; border-radius: 10px !important;
+  transition: 0.2s !important; border: none !important; background: transparent !important;
+  display: flex !important; align-items: center !important; justify-content: center !important;
+  height: 40px !important; width: 40px !important; box-shadow: none !important; margin-bottom: 2px !important;
+}
+#learnView .btn-clip:hover { color: #0284C7 !important; background: #E0F2FE !important; }
+
+#learnView .input-field {
+  flex: 1 !important; border: none !important; background: transparent !important; outline: none !important;
+  color: #0F172A !important; font-size: 15px !important; font-weight: 500 !important; box-shadow: none !important;
+  padding: 10px 0 !important; min-height: 44px !important; max-height: 120px !important; overflow-y: auto !important;
+}
+
+#learnView .btn-send {
+  width: 40px !important; height: 40px !important; min-width: 40px !important; border-radius: 12px !important;
+  background: #0284C7 !important; color: #FFFFFF !important; font-size: 20px !important;
+  display: flex !important; align-items: center !important; justify-content: center !important;
+  box-shadow: 0 4px 10px rgba(2, 132, 199, 0.25) !important; transition: 0.2s !important; border: none !important;
+  margin-bottom: 2px !important;
+}
+#learnView .btn-send:hover { background: #0369A1 !important; transform: translateY(-1px) !important; box-shadow: 0 6px 14px rgba(2, 132, 199, 0.35) !important; }
+#learnView .btn-send:disabled { opacity: 0.5 !important; background: #94A3B8 !important; box-shadow: none !important; cursor: not-allowed !important; transform: none !important;}
+
+/* 底部功能栏 (Model & Web) */
+#learnView .bottom-actions { display: flex; justify-content: flex-end; gap: 8px; position: relative; }
+
+#learnView .action-chip {
+  border: 1px solid #E2E8F0 !important; background: rgba(255, 255, 255, 0.8) !important; color: #475569 !important;
+  font-size: 13px !important; font-weight: 600 !important; padding: 0 16px !important; border-radius: 12px !important;
+  display: inline-flex !important; align-items: center !important; gap: 6px !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important; box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important; height: 36px !important;
+}
+#learnView .action-chip:hover { background: #FFFFFF !important; color: #0284C7 !important; border-color: #BAE6FD !important; box-shadow: 0 4px 8px rgba(2, 132, 199, 0.08) !important; }
+
+#learnView .network-on { background: #E0F2FE !important; border-color: #BAE6FD !important; color: #0284C7 !important; padding: 0 10px !important;}
+#learnView .network-off { background: rgba(255, 255, 255, 0.4) !important; border-color: transparent !important; color: #94A3B8 !important; box-shadow: none !important; padding: 0 10px !important;}
+
+/* 下拉菜单 */
+#learnView .edu-mode-menu {
+  position: absolute !important; bottom: calc(100% + 8px) !important; right: 46px !important; width: 220px !important;
+  border: 1px solid rgba(255,255,255,1) !important; border-radius: 16px !important; background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(24px) !important; box-shadow: 0 10px 30px -5px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.02) !important;
+  padding: 6px !important; opacity: 0; pointer-events: none; transform: translateY(10px) scale(0.96); transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); z-index: 100;
+}
+#learnView .edu-mode-menu.show { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
+
+#learnView .edu-mode-option {
+  width: 100% !important; display: grid !important; grid-template-columns: 28px minmax(0, 1fr) !important; align-items: center !important; gap: 10px !important; padding: 10px 11px !important; border: 0 !important; border-radius: 11px !important; background: transparent !important; color: #0f172a !important; text-align: left !important; cursor: pointer !important;
+}
+#learnView .edu-mode-option:hover { background: rgba(15, 23, 42, 0.045) !important; }
+#learnView .edu-mode-option.selected { background: #f0f9ff !important; }
+#learnView .edu-mode-icon { font-size: 19px !important; text-align: center !important; }
+#learnView .edu-mode-option strong { display: block !important; color: #0f172a !important; font-size: 13px !important; font-weight: 800 !important; line-height: 1.2 !important; }
+#learnView .edu-mode-option small { display: block !important; margin-top: 2px !important; color: #64748b !important; font-size: 11px !important; font-weight: 600 !important; line-height: 1.2 !important; }
 
 /* FINAL SIDEBAR BRAND CLEANUP: Hyperknow-style plain brand row, no card frame. */
 .app .sidebar .sidebar-journal-decor {
@@ -29802,4 +30156,366 @@ body {
   border-color: #1e293b !important;
   box-shadow: none !important;
   opacity: 0.55 !important;
+}
+
+
+/* CODEx_FINAL_QA_FUSED_SURFACE_FIX: one continuous tutor surface, no stacked outer boxes. */
+#learnView #learnChatCol,
+#learnView #learnBody:not(.chapter-overview-active) #learnChatCol,
+#learnView #learnBody.chapter-overview-split-active #learnChatCol,
+#learnView #learnBody[data-panel-focus="normal"] #learnChatCol,
+#learnView #learnBody[data-panel-focus="qa-wide"] #learnChatCol,
+#learnView #learnBody[data-panel-focus="qa-full"] #learnChatCol {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+  padding: 24px 20px 18px !important;
+  background:
+    radial-gradient(ellipse 120% 62% at 52% 12%, rgba(125, 211, 252, 0.42), transparent 68%),
+    radial-gradient(ellipse 128% 66% at 58% 100%, rgba(110, 231, 183, 0.34), transparent 70%),
+    linear-gradient(180deg, #f4f7f9 0%, #eefbf6 100%) !important;
+  border: 0 !important;
+  border-left: 0 !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+}
+
+#learnView #learnChatCol .ambient-background {
+  display: none !important;
+}
+
+#learnView #learnChatCol .learn-chat-topbar,
+#learnView #learnChatCol .learn-chat-scroll,
+#learnView #learnChatCol .learn-web-section,
+#learnView #learnChatCol #learnChatEmptyState,
+#learnView #learnChatCol .edu-tutor-empty-inner,
+#learnView #learnChatCol .learn-followup-bar,
+#learnView #learnChatCol .glass-panel,
+#learnView #learnChatCol .edu-tutor-composer,
+#learnView #learnChatCol .followup-bubble {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+#learnView #learnChatCol .learn-chat-scroll::before,
+#learnView #learnChatCol .learn-chat-scroll::after,
+#learnView #learnChatCol #learnChatEmptyState::before,
+#learnView #learnChatCol #learnChatEmptyState::after,
+#learnView #learnChatCol .learn-followup-bar::before,
+#learnView #learnChatCol .learn-followup-bar::after,
+#learnView #learnChatCol .edu-tutor-composer::before,
+#learnView #learnChatCol .edu-tutor-composer::after,
+#learnView #learnChatCol .glass-panel::before,
+#learnView #learnChatCol .glass-panel::after {
+  content: none !important;
+  display: none !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+#learnView #learnChatCol .learn-chat-topbar {
+  margin: 0 !important;
+  padding: 14px 14px 6px !important;
+}
+
+#learnView #learnChatCol .learn-chat-scroll {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 18px 14px 8px !important;
+  overflow: visible !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+  width: 100% !important;
+  max-width: none !important;
+}
+
+#learnView #learnChatCol #learnChatEmptyState {
+  position: relative !important;
+  inset: auto !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 42px 0 12px !important;
+  min-height: 0 !important;
+  flex: 1 1 auto !important;
+}
+
+#learnView #learnChatCol .learn-followup-bar {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 14px 6px !important;
+  overflow: visible !important;
+}
+
+#learnView #learnChatCol .edu-tutor-composer {
+  margin-top: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
+}
+
+#learnView #learnChatCol .input-wrapper {
+  margin: 0 !important;
+  border: 1px solid rgba(226, 232, 240, 0.78) !important;
+  border-radius: 20px !important;
+  background: rgba(255, 255, 255, 0.84) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 8px 20px rgba(15,23,42,0.045) !important;
+}
+
+#learnView #learnChatCol .bottom-actions,
+#learnView #learnChatCol .edu-tutor-actions {
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 8px !important;
+  flex-wrap: wrap !important;
+  margin-top: 10px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  overflow: visible !important;
+}
+
+#learnView #learnChatCol .action-chip,
+#learnView #learnChatCol .edu-mode-toggle,
+#learnView #learnChatCol .network-on,
+#learnView #learnChatCol .network-off,
+#learnView #learnChatCol .edu-tutor-native-select {
+  box-shadow: none !important;
+}
+
+#learnView #learnChatCol .edu-mode-toggle,
+#learnView #learnChatCol #webSearchToggleBtnLearn {
+  height: 40px !important;
+  min-height: 40px !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+}
+
+#learnView #learnChatCol .edu-mode-toggle {
+  padding: 0 14px !important;
+  gap: 6px !important;
+}
+
+#learnView #learnChatCol #webSearchToggleBtnLearn {
+  width: 42px !important;
+  min-width: 42px !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+}
+
+#learnView #learnChatCol #webSearchToggleBtnLearn i,
+#learnView #learnChatCol #learnModeCurrentIcon {
+  display: block !important;
+  line-height: 1 !important;
+}
+
+#learnView #learnChatCol #webSearchToggleBtnLearn i {
+  transform: translateY(-1px) !important;
+  font-size: 18px !important;
+}
+
+#learnView #learnChatCol .edu-mode-menu {
+  right: 0 !important;
+  bottom: calc(100% + 10px) !important;
+  width: min(248px, calc(100vw - 40px)) !important;
+  transform-origin: bottom right !important;
+  overflow: visible !important;
+}
+
+#learnView #learnChatCol .edu-mode-option {
+  align-items: center !important;
+}
+
+/* CODEx_FINAL_QA_CONTROLS_MATCH_REFERENCE: remove composer focus shell and use reference dropdown/network controls. */
+#learnView #learnChatCol #learnFollowupBar,
+#learnView #learnChatCol #learnFollowupBar:focus,
+#learnView #learnChatCol #learnFollowupBar:focus-within,
+#learnView #learnChatCol .learn-followup-bar,
+#learnView #learnChatCol .learn-followup-bar:focus,
+#learnView #learnChatCol .learn-followup-bar:focus-within,
+#learnView #learnChatCol .glass-panel,
+#learnView #learnChatCol .glass-panel:focus,
+#learnView #learnChatCol .glass-panel:focus-within,
+#learnView #learnChatCol .edu-tutor-composer,
+#learnView #learnChatCol .edu-tutor-composer:focus,
+#learnView #learnChatCol .edu-tutor-composer:focus-within {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-color: transparent !important;
+  border-radius: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+#learnView #learnChatCol .input-wrapper:focus-within {
+  background: #ffffff !important;
+  border-color: #7dd3fc !important;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.01), 0 0 0 4px rgba(2,132,199,0.1) !important;
+}
+
+#learnView #learnChatCol .edu-mode-menu {
+  width: 200px !important;
+  right: 48px !important;
+  bottom: calc(100% + 8px) !important;
+  padding: 6px !important;
+  border-radius: 16px !important;
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  border: 1px solid rgba(255,255,255,1) !important;
+  box-shadow: 0 10px 30px -5px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.02) !important;
+}
+
+#learnView #learnChatCol .edu-mode-option {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  grid-template-columns: none !important;
+  padding: 10px 12px !important;
+  border-radius: 10px !important;
+}
+
+#learnView #learnChatCol .edu-mode-option:hover {
+  background: rgba(0, 0, 0, 0.04) !important;
+}
+
+#learnView #learnChatCol .edu-mode-option.selected {
+  background: #f0f9ff !important;
+}
+
+#learnView #learnChatCol .edu-mode-icon {
+  width: 24px !important;
+  min-width: 24px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 20px !important;
+  line-height: 1 !important;
+}
+
+#learnView #learnChatCol .mode-icon-fast { color: #f59e0b !important; }
+#learnView #learnChatCol .mode-icon-balanced { color: #0284c7 !important; }
+#learnView #learnChatCol .mode-icon-detailed { color: #8b5cf6 !important; }
+
+#learnView #learnChatCol .edu-mode-option strong {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
+}
+
+#learnView #learnChatCol .edu-mode-option small {
+  font-size: 11px !important;
+  margin-top: 2px !important;
+  color: #64748b !important;
+}
+
+#learnView #learnChatCol .action-chip {
+  border: 1px solid transparent !important;
+  color: #475569 !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  padding: 8px 16px !important;
+  border-radius: 12px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+#learnView #learnChatCol .edu-mode-toggle {
+  background: rgba(255, 255, 255, 0.8) !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important;
+}
+
+#learnView #learnChatCol .edu-mode-toggle:hover {
+  background: #ffffff !important;
+  color: #0284c7 !important;
+  border-color: #bae6fd !important;
+  box-shadow: 0 4px 8px rgba(2, 132, 199, 0.08) !important;
+}
+
+#learnView #learnChatCol #webSearchToggleBtnLearn {
+  width: auto !important;
+  min-width: 44px !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  padding: 8px 12px !important;
+  border-radius: 12px !important;
+}
+
+#learnView #learnChatCol #webSearchToggleBtnLearn.network-on,
+#learnView #learnChatCol .network-on {
+  background: #e0f2fe !important;
+  border-color: #bae6fd !important;
+  color: #0284c7 !important;
+  box-shadow: 0 2px 8px rgba(2, 132, 199, 0.15) !important;
+}
+
+#learnView #learnChatCol #webSearchToggleBtnLearn.network-on:hover,
+#learnView #learnChatCol .network-on:hover {
+  background: #bae6fd !important;
+}
+
+#learnView #learnChatCol #webSearchToggleBtnLearn.network-off,
+#learnView #learnChatCol .network-off {
+  background: rgba(255, 255, 255, 0.4) !important;
+  border-color: transparent !important;
+  color: #94a3b8 !important;
+  box-shadow: none !important;
+}
+
+#learnView #learnChatCol #webSearchToggleBtnLearn.network-off:hover,
+#learnView #learnChatCol .network-off:hover {
+  background: rgba(255, 255, 255, 0.7) !important;
+  color: #64748b !important;
+}
+
+#learnView #learnChatCol #webSearchToggleBtnLearn i,
+#learnView #learnChatCol #learnModeCurrentIcon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  transform: none !important;
+}
+
+/* CODEx_ABSOLUTE_QA_FOCUS_FRAME_KILL: beat legacy long selectors that redraw the blue composer shell on click. */
+#learnView #learnBody #learnChatCol #learnFollowupBar,
+#learnView #learnBody #learnChatCol #learnFollowupBar:focus,
+#learnView #learnBody #learnChatCol #learnFollowupBar:focus-within,
+#learnView #learnBody:not(.explain-collapsed):not(.chat-collapsed) #learnChatCol #learnFollowupBar,
+#learnView #learnBody:not(.explain-collapsed):not(.chat-collapsed) #learnChatCol #learnFollowupBar:focus-within,
+#learnView #learnBody.explain-collapsed:not(.chat-collapsed) #learnChatCol #learnFollowupBar,
+#learnView #learnBody.explain-collapsed:not(.chat-collapsed) #learnChatCol #learnFollowupBar:focus-within,
+#learnView #learnBody[data-panel-focus="normal"] #learnChatCol #learnFollowupBar,
+#learnView #learnBody[data-panel-focus="normal"] #learnChatCol #learnFollowupBar:focus-within,
+#learnView #learnBody[data-panel-focus="qa-wide"] #learnChatCol #learnFollowupBar,
+#learnView #learnBody[data-panel-focus="qa-wide"] #learnChatCol #learnFollowupBar:focus-within,
+#learnView #learnBody[data-panel-focus="qa-full"] #learnChatCol #learnFollowupBar,
+#learnView #learnBody[data-panel-focus="qa-full"] #learnChatCol #learnFollowupBar:focus-within {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-color: transparent !important;
+  border-radius: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  filter: none !important;
+  transform: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
