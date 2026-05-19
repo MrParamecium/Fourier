@@ -11,7 +11,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Nunito:wght@400;600;700;800&family=Quicksand:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
-
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -67,7 +66,7 @@
       }
     }
   </script>
-  <link rel="stylesheet" href="style.css?v=1778674210">
+  <link rel="stylesheet" href="style.css?v=1778674253">
   <link rel="icon" type="image/jpeg" href="aquarius-logo.jpg?v=1778524702">
 
   <style>
@@ -1754,7 +1753,7 @@
             </svg>
           </button>
           <button class="logo-icon logo-icon-brand" id="sidebarLogoExpandBtn" type="button" title="Expand sidebar" aria-label="Expand sidebar">
-            <img src="aquarius-logo.jpg?v=1778524702" class="aquarius-sticker-svg" alt="">
+            <i class="ph-fill ph-planet aquarius-brand-planet" aria-hidden="true"></i>
           </button>
           <div class="logo-text logo-text-brand">Aquarius</div>
         </div>
@@ -1765,11 +1764,7 @@
         <div class="sidebar-nav" id="sidebarPrimaryNav">
           <button class="sidebar-link" id="navSyllabusBtn" type="button" title="Syllabus">
             <span class="sidebar-link-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M4 6h16"></path>
-                <path d="M4 12h16"></path>
-                <path d="M4 18h10"></path>
-              </svg>
+              <i class="ph-bold ph-map-trifold" aria-hidden="true"></i>
             </span>
             <span>Syllabus</span>
           </button>
@@ -1780,10 +1775,7 @@
           </div>
           <button class="sidebar-link" id="navRecentBtn" type="button" title="Recent">
             <span class="sidebar-link-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="9"></circle>
-                <path d="M12 7v5l3 3"></path>
-              </svg>
+              <i class="ph-bold ph-clock-counter-clockwise" aria-hidden="true"></i>
             </span>
             <span>Recent</span>
           </button>
@@ -1796,72 +1788,37 @@
           </div>
           <button class="sidebar-link" id="navLibraryBtn" type="button" title="Library">
             <span class="sidebar-link-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-              </svg>
+              <i class="ph-bold ph-books" aria-hidden="true"></i>
             </span>
             <span>Library</span>
           </button>
           <button class="sidebar-link" id="navCourseTrackerBtn" type="button" title="Course Tracker">
             <span class="sidebar-link-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M8 2v4"></path>
-                <path d="M16 2v4"></path>
-                <rect x="3" y="5" width="18" height="16" rx="3"></rect>
-                <path d="M3 10h18"></path>
-                <path d="M8 15h.01"></path>
-                <path d="M12 15h.01"></path>
-                <path d="M16 15h.01"></path>
-              </svg>
+              <i class="ph-bold ph-calendar-check" aria-hidden="true"></i>
             </span>
             <span>Course Tracker</span>
           </button>
           <button class="sidebar-link" id="navHomeworkBtn" type="button" title="Homework">
             <span class="sidebar-link-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M9 3h6"></path>
-                <path d="M10 3a2 2 0 0 0-2 2v1h8V5a2 2 0 0 0-2-2"></path>
-                <path d="M8 5H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"></path>
-                <path d="M8 12h5"></path>
-                <path d="M8 16h8"></path>
-              </svg>
+              <i class="ph-bold ph-pencil-line" aria-hidden="true"></i>
             </span>
             <span>Homework</span>
           </button>
           <button class="sidebar-link" id="navMistakeNotebookBtn" type="button" title="Mistake Notebook">
             <span class="sidebar-link-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M5 4.5A2.5 2.5 0 0 1 7.5 2H19v18H7.5A2.5 2.5 0 0 0 5 22V4.5z"></path>
-                <path d="M9 7h6"></path>
-                <path d="M9 11h4"></path>
-                <path d="M15.5 15.5l3 3"></path>
-                <circle cx="14" cy="14" r="2.5"></circle>
-              </svg>
+              <i class="ph-bold ph-notebook" aria-hidden="true"></i>
             </span>
             <span>Mistake Notebook</span>
           </button>
           <button class="sidebar-link sidebar-link-preference" id="navPreferenceBtn" type="button" title="Preferences">
             <span class="sidebar-link-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <circle cx="10" cy="8" r="3.2"></circle>
-                <path d="M4.5 19a5.5 5.5 0 0 1 9.8-3.4"></path>
-                <path d="M17.5 12.5v2"></path>
-                <path d="M17.5 20.5v1"></path>
-                <path d="M13.8 16.7l1.7 1"></path>
-                <path d="M19.5 17.7l1.7-1"></path>
-                <circle cx="17.5" cy="17.8" r="2.2"></circle>
-              </svg>
+              <i class="ph-bold ph-user" aria-hidden="true"></i>
             </span>
             <span>Preferences</span>
           </button>
           <button class="sidebar-link sidebar-link-feedback" id="navFeedbackBtn" type="button" title="Feedback Board">
             <span class="sidebar-link-icon">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path>
-                <path d="M8 9h8"></path>
-                <path d="M8 13h5"></path>
-              </svg>
+              <i class="ph-bold ph-chat-circle-dots" aria-hidden="true"></i>
             </span>
             <span>Feedback Board</span>
           </button>
@@ -1871,10 +1828,7 @@
       <div class="sidebar-footer" id="sidebarFooter">
         <button class="sidebar-settings-btn" id="sidebarSettingsBtn" type="button" title="Settings">
           <span class="sidebar-settings-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"></path>
-              <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06A1.7 1.7 0 0 0 15 19.4a1.7 1.7 0 0 0-1 .6 1.7 1.7 0 0 0-.4 1.1V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-.4-1.1 1.7 1.7 0 0 0-1-.6 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-.6-1 1.7 1.7 0 0 0-1.1-.4H3a2 2 0 1 1 0-4h.09a1.7 1.7 0 0 0 1.1-.4 1.7 1.7 0 0 0 .6-1 1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-.6 1.7 1.7 0 0 0 .4-1.1V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 .4 1.1 1.7 1.7 0 0 0 1 .6 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.7 1.7 0 0 0 19.4 9c.23.33.58.56 1 .6.18.02.36.02.54.01H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.1.4 1.7 1.7 0 0 0-.41.99z"></path>
-            </svg>
+            <i class="ph-bold ph-gear" aria-hidden="true"></i>
           </span>
           <span>Settings</span>
         </button>
@@ -1925,74 +1879,88 @@
       </div>
 
 
-      <div class="welcome" id="welcomeScreen">
-        <div style="position:absolute; top:-20%; left:20%; width:60vw; height:60vh; background:radial-gradient(circle, rgba(56,189,248,0.15) 0%, rgba(2,6,23,0) 70%); filter:blur(40px); pointer-events:none;"></div>
-        <div style="position:absolute; bottom:-10%; right:10%; width:50vw; height:50vh; background:radial-gradient(circle, rgba(129,140,248,0.15) 0%, rgba(2,6,23,0) 70%); filter:blur(60px); pointer-events:none;"></div>
-        <div class="journal-doodle journal-doodle-wave" aria-hidden="true"></div>
-        <div class="journal-doodle journal-doodle-grid" aria-hidden="true"></div>
-        <div class="welcome-inner" style="position:relative; z-index:10; max-width:1100px; width:100%; display:flex; flex-direction:row; align-items:center; justify-content:center; gap:64px; padding:40px;">
-          <div class="journal-cover-stack" style="flex:0 0 350px; display:flex; justify-content:center; perspective:1000px;">
-            <div class="journal-tape journal-tape-cover" aria-hidden="true"></div>
-            <button id="welcomeCoverBtn" class="welcome-cover-btn" type="button" aria-label="Open library and switch course">
-              <div style="background:var(--border); width:100%; aspect-ratio:3/4; border-radius:8px; box-shadow:0 20px 40px rgba(15,23,42,0.1), 0 0 0 1px rgba(15,23,42,0.05); overflow:hidden; position:relative; transform:rotateY(5deg) scale(0.95); transition:transform 0.4s ease;">
-              <img src="latest_cover.png" style="width:100%; height:100%; object-fit:cover; display:block;" onerror="this.src=''" />
-              <div style="position:absolute; top:0; left:0; bottom:0; width:12px; background:linear-gradient(to right, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 100%);"></div>
-              </div>
-            </button>
-          </div>
+      <div class="welcome home-ask-workspace" id="welcomeScreen">
+        <div class="home-ask-ambient" aria-hidden="true"></div>
 
-          <div class="journal-hero-copy" style="flex:1; display:flex; flex-direction:column; align-items:flex-start; text-align:left;">
-
-            <h1 style="font-family:'Inter', sans-serif; font-size:42px; font-weight:700; color:var(--text-primary); letter-spacing:-1px; margin:0 0 16px; line-height:1.2;">
-              Linear Systems & Signals
-            </h1>
-
-            <p style="font-size:16px; color:var(--text-secondary); max-width:500px; margin:0 0 24px; line-height:1.6; font-weight:500;">
-              Interactive deep learning book with generative visualizations, code, and dynamic math.
-            </p>
-
-            <div style="display:flex; align-items:center; gap:16px; margin-bottom:48px;">
-               <span style="font-size:13px; font-weight:600; color:var(--text-secondary); background:var(--border); padding:6px 12px; border-radius:6px; letter-spacing:0.5px;">B.P. LATHI • 3RD EDITION</span>
+        <div class="home-ask-stage">
+          <section class="home-ask-empty" aria-label="Ask your Tutor">
+            <div class="home-ask-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M3 9.25 12 4l9 5.25-9 5.25L3 9.25Z" fill="currentColor"></path>
+                <path d="M6.6 12.15v3.05c0 1.62 2.42 3.05 5.4 3.05s5.4-1.43 5.4-3.05v-3.05L12 15.3l-5.4-3.15Z" fill="currentColor" opacity=".78"></path>
+                <path d="M19 10.25v4.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+              </svg>
             </div>
+            <h1>Ask your Tutor</h1>
+            <p>Paste a formula, a screenshot, or a confusing line.</p>
+            <div class="home-ask-tags">
+              <span class="home-ask-tag home-ask-tag-formula">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 18c2.5-1.2 3.2-11.2 7-11.2 2.1 0 2.2 2.9 4 2.9.9 0 1.7-.6 2.4-1.7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>
+                Formula
+              </span>
+              <span class="home-ask-tag home-ask-tag-screenshot">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3v4H3M17 3v4h4M7 21v-4H3M17 21v-4h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><rect x="7" y="7" width="10" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2"></rect></svg>
+                Screenshot
+              </span>
+              <span class="home-ask-tag home-ask-tag-trap">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 21 20H3L12 4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path><path d="M12 9v5M12 17.5h.01" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>
+                Exam Trap
+              </span>
+            </div>
+          </section>
 
-          <div class="journal-formula-strip" aria-hidden="true">x(t) -> concepts -> formulas -> confidence</div>
-          <div class="search-box" id="searchBox" style="margin:0 !important; max-width:600px !important;">
-            <div class="journal-tape journal-tape-search" aria-hidden="true"></div>
+          <div class="search-box home-ask-composer" id="searchBox">
             <div class="attach-preview" id="attachPreviewMain"></div>
-            <div class="search-box-row">
-              <button class="attach-btn" id="attachBtnMain" title="Attach image, PDF, or Word (.docx) — max 20MB">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+            <div class="search-box-row home-ask-input-row">
+              <button class="attach-btn home-ask-attach" id="attachBtnMain" title="Attach image, PDF, or Word (.docx) — max 20MB" aria-label="Attach image, PDF, or Word">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.4 12.7 13.8 7.3a3.1 3.1 0 0 1 4.4 4.4l-7.1 7.1a5 5 0 0 1-7.1-7.1l7.4-7.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
               </button>
-              <textarea class="search-input" id="userInput"
-                placeholder="Ask me to explain a concept, solve a problem, or walk through a topic…"
-                rows="1"></textarea>
+              <textarea class="search-input" id="userInput" placeholder="Ask a question about this course..." rows="1" wrap="off"></textarea>
+              <button class="search-send home-ask-send" id="sendBtn" disabled aria-label="Send question">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 20 4l-5.2 16-3.2-6.9L4 12Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path><path d="m11.6 13.1 4.6-4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>
+              </button>
             </div>
-            <div class="search-box-toolbar">
-              <select id="answerLengthToggleMain" class="select-css search-box-select" title="Explanation Style">
+            <div class="search-box-toolbar home-ask-toolbar">
+              <select id="answerLengthToggleMain" class="select-css search-box-select home-ask-select hidden" title="Explanation Style" style="display:none;">
                 <option value="fast">Fast</option>
                 <option value="balanced" selected>Balanced</option>
                 <option value="detailed">Detailed</option>
               </select>
-              <button id="webSearchToggleBtnMain" class="icon-toggle-btn active search-box-web-toggle" title="Enable Web Search">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <line x1="2" y1="12" x2="22" y2="12"></line>
-                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                </svg>
-                <span>Web</span>
+              <button class="home-mode-toggle" id="homeModeToggleBtn" type="button" aria-label="Explanation style">
+                <span class="home-mode-icon icon-balanced" id="homeModeCurrentIcon" aria-hidden="true"><i class="ph-bold ph-scales"></i></span>
+                <span id="homeModeCurrentText">Balanced</span>
+                <svg class="qa-caret-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 14 5-5 5 5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
               </button>
-              <button class="search-send" id="sendBtn" disabled>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="22" y1="2" x2="11" y2="13"></line>
-                  <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              <button id="webSearchToggleBtnMain" class="icon-toggle-btn active search-box-web-toggle home-ask-web-toggle" title="Enable Web Search">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"></circle>
+                  <path d="M3.5 12h17M12 3.5c2.3 2.4 3.4 5.2 3.4 8.5s-1.1 6.1-3.4 8.5C9.7 18.1 8.6 15.3 8.6 12S9.7 5.9 12 3.5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path>
                 </svg>
               </button>
             </div>
           </div>
           <input type="file" id="fileInputMain" accept="image/*,.pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" style="display:none">
 
-          <div class="chips" id="quickChips" style="margin-top: 16px;"></div>
+          <div class="home-feature-actions" aria-label="Tutor tools">
+            <button class="home-feature-chip" type="button" data-prompt="Explain the key concept from the section I am studying.">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 15.5 14.5 5l4.5 4.5L8.5 20H4v-4.5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path><path d="m13 6.5 4.5 4.5" fill="none" stroke="currentColor" stroke-width="2"></path></svg>
+              <span>Concept Explanation</span>
+            </button>
+            <button class="home-feature-chip" type="button" data-prompt="Generate personal study materials for this topic.">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"></rect><path d="M8 8h8M8 12h8M8 16h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>
+              <span>Study Materials</span>
+            </button>
+            <button class="home-feature-chip" type="button" data-prompt="Help me solve a problem step by step.">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="16" r="3" fill="none" stroke="currentColor" stroke-width="2"></circle><circle cx="17" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="2"></circle><path d="M9.5 14 14.5 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>
+              <span>Problem Solving</span>
+            </button>
+            <button class="home-feature-chip" type="button" data-prompt="Create a visualization for this concept.">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2"></rect><path d="M8 16V9M12 16v-4M16 16V7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>
+              <span>Visualization</span>
+            </button>
           </div>
+
+          <div class="chips home-ask-chips" id="quickChips"></div>
         </div>
       </div>
 
@@ -2167,13 +2135,6 @@
                   <div class="orb orb-edu-green" style="position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.35; width: 45vw; height: 45vh; background: #6EE7B7; bottom: -10%; right: -5%; animation-delay: -5s; animation: float 25s infinite alternate-reverse ease-in-out;"></div>
               </div>
 
-              <div class="learn-chat-topbar">
-                <div class="learn-chat-window-actions" aria-label="Q&A window controls">
-                  <button class="learn-chat-window-btn" id="learnChatShrinkBtn" type="button" title="Shrink Q&A to movable window" aria-label="Shrink Q&A to movable window">□</button>
-                  <button class="learn-chat-window-btn" id="learnChatMinimizeBtn" type="button" title="Minimize Q&A to bubble" aria-label="Minimize Q&A to bubble">−</button>
-                </div>
-              </div>
-
               <div class="learn-chat-scroll" id="learnChatScroll">
                 <!-- Web Sources Section (Keep existing IDs) -->
                 <div class="learn-web-section hidden" id="learnWebSection">
@@ -2189,14 +2150,27 @@
                 <!-- 全新的 Tutor 空白页提示 -->
                 <div class="learn-chat-empty-state edu-tutor-empty" id="learnChatEmptyState" aria-hidden="true" style="position: relative; z-index: 10;">
                   <div class="widget-icon">
-                    <i class="ph-fill ph-graduation-cap"></i>
+                    <svg class="qa-hero-icon" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M3 9.25 12 4l9 5.25-9 5.25L3 9.25Z" fill="currentColor"/>
+                      <path d="M6.6 12.15v3.05c0 1.62 2.42 3.05 5.4 3.05s5.4-1.43 5.4-3.05v-3.05L12 15.3l-5.4-3.15Z" fill="currentColor" opacity=".78"/>
+                      <path d="M19 10.25v4.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
                   </div>
                   <h2 class="empty-title">Ask your Tutor</h2>
                   <p class="empty-subtitle">Paste a formula, a screenshot, or a confusing line.</p>
                   <div class="tag-group">
-                    <span class="edu-tag tag-formula"><i class="ph-bold ph-function"></i> Formula</span>
-                    <span class="edu-tag tag-screenshot"><i class="ph-bold ph-crop"></i> Screenshot</span>
-                    <span class="edu-tag tag-trap"><i class="ph-bold ph-warning-circle"></i> Exam Trap</span>
+                    <span class="edu-tag tag-formula">
+                      <svg class="qa-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 18c2.5-1.2 3.2-11.2 7-11.2 2.1 0 2.2 2.9 4 2.9.9 0 1.7-.6 2.4-1.7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                      Formula
+                    </span>
+                    <span class="edu-tag tag-screenshot">
+                      <svg class="qa-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3v4H3M17 3v4h4M7 21v-4H3M17 21v-4h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="7" y="7" width="10" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+                      Screenshot
+                    </span>
+                    <span class="edu-tag tag-trap">
+                      <svg class="qa-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 21 20H3L12 4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 9v5M12 17.5h.01" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                      Exam Trap
+                    </span>
                   </div>
                 </div>
               </div>
@@ -2207,11 +2181,11 @@
 
                 <div class="input-wrapper">
                   <button class="btn-clip" id="attachBtnLearn" title="Attach image, PDF, or Word (.docx)">
-                    <i class="ph-bold ph-paperclip"></i>
+                    <svg class="qa-button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.4 12.7 13.8 7.3a3.1 3.1 0 0 1 4.4 4.4l-7.1 7.1a5 5 0 0 1-7.1-7.1l7.4-7.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                   </button>
                   <textarea class="input-field" id="learnFollowupInput" placeholder="Ask a question about this page..." rows="1" wrap="off"></textarea>
                   <button class="btn-send" id="learnFollowupBtn" disabled>
-                    <i class="ph-bold ph-paper-plane-tilt"></i>
+                    <svg class="qa-button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 20 4l-5.2 16-3.2-6.9L4 12Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m11.6 13.1 4.6-4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
                   </button>
                 </div>
 
@@ -2225,27 +2199,36 @@
 
                   <div class="edu-mode-menu" id="learnModeMenu" aria-label="Explanation style menu">
                     <button class="edu-mode-option" type="button" data-learn-mode="fast">
-                      <span class="edu-mode-icon mode-icon-fast"><i class="ph-bold ph-lightning"></i></span>
-                      <span><strong>Fast</strong><small>Quick & concise answers</small></span>
+                      <span class="edu-mode-icon icon-fast"><i class="ph-bold ph-lightning"></i></span>
+                      <div class="edu-mode-text">
+                        <strong>Fast</strong>
+                        <small>Quick & concise answers</small>
+                      </div>
                     </button>
                     <button class="edu-mode-option selected" type="button" data-learn-mode="balanced">
-                      <span class="edu-mode-icon mode-icon-balanced"><i class="ph-bold ph-scales"></i></span>
-                      <span><strong>Balanced</strong><small>Optimal detail & speed</small></span>
+                      <span class="edu-mode-icon icon-balanced"><i class="ph-bold ph-scales"></i></span>
+                      <div class="edu-mode-text">
+                        <strong>Balanced</strong>
+                        <small>Optimal detail & speed</small>
+                      </div>
                     </button>
                     <button class="edu-mode-option" type="button" data-learn-mode="detailed">
-                      <span class="edu-mode-icon mode-icon-detailed"><i class="ph-bold ph-magnifying-glass"></i></span>
-                      <span><strong>Detailed</strong><small>Deep & thorough analysis</small></span>
+                      <span class="edu-mode-icon icon-detailed"><i class="ph-bold ph-magnifying-glass"></i></span>
+                      <div class="edu-mode-text">
+                        <strong>Detailed</strong>
+                        <small>Deep & thorough analysis</small>
+                      </div>
                     </button>
                   </div>
 
                   <button class="action-chip edu-mode-toggle" id="learnModeToggleBtn" type="button" aria-expanded="false" aria-controls="learnModeMenu">
-                    <i class="ph-bold ph-scales" id="learnModeCurrentIcon"></i>
+                    <span class="edu-mode-icon icon-balanced" id="learnModeCurrentIcon" aria-hidden="true"><i class="ph-bold ph-scales"></i></span>
                     <span id="learnModeCurrentText">Balanced</span>
-                    <i class="ph-bold ph-caret-up" style="font-size: 10px; margin-left: 2px;"></i>
+                    <svg class="qa-caret-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 14 5-5 5 5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
                   </button>
 
                   <button id="webSearchToggleBtnLearn" class="action-chip network-on" title="Web Search: ON">
-                    <i class="ph-bold ph-globe" style="font-size: 18px;"></i>
+                    <svg class="qa-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.5 12h17M12 3.5c2.3 2.4 3.4 5.2 3.4 8.5s-1.1 6.1-3.4 8.5C9.7 18.1 8.6 15.3 8.6 12S9.7 5.9 12 3.5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
                   </button>
                 </div>
               </div>
@@ -2469,7 +2452,9 @@
                   <div class="feedback-card-kicker">Public Discussion</div>
                   <h2>Suggestions from users</h2>
                 </div>
-                <button id="feedbackRefreshBtn" class="feedback-secondary-btn" type="button">Refresh</button>
+                <button id="feedbackRefreshBtn" class="feedback-secondary-btn feedback-refresh-icon-btn" type="button" aria-label="Refresh suggestions" title="Refresh suggestions">
+                  <i class="ph-bold ph-arrow-clockwise" aria-hidden="true"></i>
+                </button>
               </div>
               <div id="feedbackList" class="feedback-list">
                 <div class="feedback-empty">No suggestions yet. Be the first to pin one here.</div>
@@ -3147,6 +3132,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <script src="config.js?v=1778524701"></script>
-  <script src="app.js?v=1778674210"></script>
+  <script src="app.js?v=1778674253"></script>
 </body>
 </html>

@@ -5184,8 +5184,6 @@ const answerLengthToggleLearnPopover = document.getElementById('answerLengthTogg
 const webSearchToggleBtnLearnPopover = document.getElementById('webSearchToggleBtnLearnPopover');
 const answerLengthToggleMain = document.getElementById('answerLengthToggleMain');
 const webSearchToggleBtnMain = document.getElementById('webSearchToggleBtnMain');
-const learnChatShrinkBtn = document.getElementById('learnChatShrinkBtn');
-const learnChatMinimizeBtn = document.getElementById('learnChatMinimizeBtn');
 const learnChatPopoverDockBtn = document.getElementById('learnChatPopoverDockBtn');
 const learnChatPopoverCloseBtn = document.getElementById('learnChatPopoverCloseBtn');
 const learnResizerPanel = document.getElementById('learnResizer');
@@ -5193,6 +5191,10 @@ const learnExplainOverlayRail = document.getElementById('learnExplainOverlayRail
 const learnExplainBottomRail = document.getElementById('learnExplainBottomRail');
 const learnKpPrevBtn      = document.getElementById('learnKpPrevBtn');
 const learnKpNextBtn      = document.getElementById('learnKpNextBtn');
+
+document.getElementById('learnChatShrinkBtn')?.remove();
+document.getElementById('learnChatMinimizeBtn')?.remove();
+document.querySelectorAll('.learn-chat-window-actions').forEach(node => node.remove());
 const learnKpTitle        = document.getElementById('learnKpTitle');
 const learnLecturePageIndicator = document.getElementById('learnLecturePageIndicator');
 const learnFocusPageIndicator = document.getElementById('learnFocusPageIndicator');
@@ -12924,8 +12926,20 @@ function bindOverviewSubsectionCards() {
 
 function updateLearnChatEmptyState() {
   if (!learnChatEmptyState || !learnChatContent) return;
-  const hasChat = Boolean(learnChatContent.textContent.trim());
+  const hasChat = Boolean(learnChatContent.children.length || learnChatContent.textContent.trim());
   learnChatEmptyState.classList.toggle('hidden', hasChat);
+  if (hasChat) {
+    learnChatEmptyState.style.setProperty('display', 'none', 'important');
+    learnChatEmptyState.style.setProperty('visibility', 'hidden', 'important');
+    learnChatEmptyState.style.setProperty('opacity', '0', 'important');
+  } else {
+    learnChatEmptyState.style.removeProperty('display');
+    learnChatEmptyState.style.removeProperty('visibility');
+    learnChatEmptyState.style.removeProperty('opacity');
+  }
+  learnChatContent.classList.toggle('is-chat-active', hasChat);
+  learnChatContent.closest('#learnChatCol')?.classList.toggle('is-chat-active', hasChat);
+  learnChatContent.closest('#learnChatScroll')?.classList.toggle('is-chat-active', hasChat);
   if (isTextbookFocusQaOpen) syncTextbookFocusQaFromLearnChat();
 }
 
@@ -13491,8 +13505,6 @@ if (learnFocusBtn) learnFocusBtn.addEventListener('click', () => advanceLearnPan
 if (learnExplainToggleBtn) learnExplainToggleBtn.addEventListener('click', () => advanceLearnPanelFocus('lecture'));
 if (learnExplainRestoreBtn) learnExplainRestoreBtn.addEventListener('click', () => advanceLearnPanelFocus('lecture'));
 if (learnChatRestoreBtn) learnChatRestoreBtn.addEventListener('click', openLearnQaSidebar);
-if (learnChatMinimizeBtn) learnChatMinimizeBtn.addEventListener('click', minimizeLearnQaToBubble);
-if (learnChatShrinkBtn) learnChatShrinkBtn.addEventListener('click', shrinkLearnQaToPopover);
 
 if (learnChatFab) {
   learnChatFab.addEventListener('click', () => {
@@ -16448,6 +16460,17 @@ quickChips.querySelectorAll('.chip').forEach(btn => {
   });
 });
 
+document.querySelectorAll('.home-feature-chip').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const prompt = btn.getAttribute('data-prompt') || '';
+    if (!prompt || !userInput) return;
+    userInput.value = prompt;
+    autoResize(userInput);
+    setSendState();
+    userInput.focus();
+  });
+});
+
 renderSyllabus();
 updateRecentConversationsUI();
 autoResize(userInput);
@@ -16671,6 +16694,38 @@ if (learnResizer && learnExplainCol && learnChatCol) {
 }
 
 const webSearchBtnLearn = document.getElementById('webSearchToggleBtnLearn');
+const homeModeToggleBtn = document.getElementById('homeModeToggleBtn');
+const homeModeCurrentText = document.getElementById('homeModeCurrentText');
+const homeModeCurrentIcon = document.getElementById('homeModeCurrentIcon');
+const homeModeSequence = ['fast', 'balanced', 'detailed'];
+const homeModeCopy = {
+  fast: { label: 'Fast', iconClass: 'icon-fast', phClass: 'ph-bold ph-lightning' },
+  balanced: { label: 'Balanced', iconClass: 'icon-balanced', phClass: 'ph-bold ph-scales' },
+  detailed: { label: 'Detailed', iconClass: 'icon-detailed', phClass: 'ph-bold ph-magnifying-glass' }
+};
+
+function syncHomeModeToggle() {
+  if (!answerLengthToggleMain) return;
+  const value = answerLengthToggleMain.value || 'balanced';
+  const mode = homeModeCopy[value] || homeModeCopy.balanced;
+  if (homeModeCurrentText) homeModeCurrentText.textContent = mode.label;
+  if (homeModeCurrentIcon) {
+    homeModeCurrentIcon.className = `home-mode-icon ${mode.iconClass}`;
+    homeModeCurrentIcon.innerHTML = `<i class="${mode.phClass}"></i>`;
+  }
+}
+
+if (homeModeToggleBtn && answerLengthToggleMain) {
+  syncHomeModeToggle();
+  homeModeToggleBtn.addEventListener('click', () => {
+    const current = answerLengthToggleMain.value || 'balanced';
+    const next = homeModeSequence[(homeModeSequence.indexOf(current) + 1) % homeModeSequence.length] || 'balanced';
+    answerLengthToggleMain.value = next;
+    answerLengthToggleMain.dispatchEvent(new Event('change', { bubbles: true }));
+    syncHomeModeToggle();
+  });
+}
+
 if (webSearchToggleBtnMain) {
   webSearchToggleBtnMain.addEventListener('click', () => {
     webSearchToggleBtnMain.classList.toggle('active');
@@ -16732,9 +16787,9 @@ const learnModeMenu = document.getElementById('learnModeMenu');
 const learnModeCurrentText = document.getElementById('learnModeCurrentText');
 const learnModeCurrentIcon = document.getElementById('learnModeCurrentIcon');
 const learnModeCopy = {
-  fast: { label: 'Fast', iconClass: 'ph-bold ph-lightning' },
-  balanced: { label: 'Balanced', iconClass: 'ph-bold ph-scales' },
-  detailed: { label: 'Detailed', iconClass: 'ph-bold ph-magnifying-glass' }
+  fast: { label: 'Fast', iconClass: 'icon-fast', phClass: 'ph-bold ph-lightning' },
+  balanced: { label: 'Balanced', iconClass: 'icon-balanced', phClass: 'ph-bold ph-scales' },
+  detailed: { label: 'Detailed', iconClass: 'icon-detailed', phClass: 'ph-bold ph-magnifying-glass' }
 };
 
 function syncLearnModeMenu() {
@@ -16742,8 +16797,9 @@ function syncLearnModeMenu() {
   if (answerLengthToggleLearn && answerLengthToggleLearn.value !== value) answerLengthToggleLearn.value = value;
   if (learnModeCurrentText) learnModeCurrentText.textContent = learnModeCopy[value]?.label || 'Balanced';
   if (learnModeCurrentIcon) {
-    learnModeCurrentIcon.textContent = '';
-    learnModeCurrentIcon.className = learnModeCopy[value]?.iconClass || 'ph-bold ph-scales';
+    const mode = learnModeCopy[value] || learnModeCopy.balanced;
+    learnModeCurrentIcon.className = `edu-mode-icon ${mode.iconClass}`;
+    learnModeCurrentIcon.innerHTML = `<i class="${mode.phClass}"></i>`;
   }
   learnModeMenu?.querySelectorAll('.edu-mode-option').forEach(option => {
     option.classList.toggle('selected', option.dataset.learnMode === value);
@@ -17352,6 +17408,28 @@ function updateRecentConversations(source = 'unknown') {
       overflow: hidden !important;
     }
 
+    #learnView #learnBody.chat-collapsed #learnChatCol {
+      display: none !important;
+      width: 0 !important;
+      min-width: 0 !important;
+      max-width: 0 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      border: 0 !important;
+      box-shadow: none !important;
+      background: none !important;
+      background-image: none !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+      overflow: hidden !important;
+    }
+
+    #learnView #learnBody.chat-collapsed #learnChatCol::before,
+    #learnView #learnBody.chat-collapsed #learnChatCol::after {
+      content: none !important;
+      display: none !important;
+    }
+
     #learnView #learnChatCol .ambient-background {
       position: absolute !important;
       inset: 0 !important;
@@ -17509,8 +17587,8 @@ function updateRecentConversations(source = 'unknown') {
 
     #learnView #learnChatCol .edu-mode-toggle,
     #learnView #learnChatCol #webSearchToggleBtnLearn {
-      height: 40px !important;
-      min-height: 40px !important;
+      height: 38px !important;
+      min-height: 38px !important;
       align-items: center !important;
       justify-content: center !important;
       line-height: 1 !important;
@@ -17528,15 +17606,14 @@ function updateRecentConversations(source = 'unknown') {
       display: inline-flex !important;
     }
 
-    #learnView #learnChatCol #webSearchToggleBtnLearn i,
+    #learnView #learnChatCol #webSearchToggleBtnLearn .qa-inline-icon,
     #learnView #learnChatCol #learnModeCurrentIcon {
       display: block !important;
       line-height: 1 !important;
     }
 
-    #learnView #learnChatCol #webSearchToggleBtnLearn i {
+    #learnView #learnChatCol #webSearchToggleBtnLearn .qa-inline-icon {
       transform: translateY(-1px) !important;
-      font-size: 18px !important;
     }
 
     #learnView #learnChatCol .bottom-actions {
@@ -17553,7 +17630,7 @@ function updateRecentConversations(source = 'unknown') {
     #learnView #learnChatCol .edu-mode-menu {
       right: 0 !important;
       bottom: calc(100% + 10px) !important;
-      width: min(248px, calc(100vw - 40px)) !important;
+      width: min(210px, calc(100vw - 40px)) !important;
       transform-origin: bottom right !important;
       overflow: visible !important;
     }
@@ -17593,29 +17670,50 @@ function updateRecentConversations(source = 'unknown') {
     }
 
     #learnView #learnChatCol .edu-mode-menu {
-      width: 200px !important;
-      right: 48px !important;
+      width: 210px !important;
+      right: 46px !important;
       bottom: calc(100% + 8px) !important;
       padding: 6px !important;
       border-radius: 16px !important;
-      background: rgba(255, 255, 255, 0.85) !important;
-      backdrop-filter: blur(24px) saturate(180%) !important;
-      -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
-      border: 1px solid rgba(255,255,255,1) !important;
-      box-shadow: 0 10px 30px -5px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.02) !important;
+      background: rgba(255, 255, 255, 0.95) !important;
+      backdrop-filter: blur(24px) saturate(120%) !important;
+      -webkit-backdrop-filter: blur(24px) saturate(120%) !important;
+      border: 1px solid rgba(226, 232, 240, 0.8) !important;
+      box-shadow: 0 12px 32px -4px rgba(15, 23, 42, 0.08), 0 4px 12px rgba(15, 23, 42, 0.04) !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 4px !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+      transform: translateY(10px) scale(0.96) !important;
+      transform-origin: bottom right !important;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+      z-index: 100 !important;
+    }
+
+    #learnView #learnChatCol .edu-mode-menu.show {
+      opacity: 1 !important;
+      pointer-events: auto !important;
+      transform: translateY(0) scale(1) !important;
     }
 
     #learnView #learnChatCol .edu-mode-option {
+      width: 100% !important;
       display: flex !important;
-      align-items: center !important;
-      gap: 12px !important;
+      align-items: flex-start !important;
+      gap: 10px !important;
       grid-template-columns: none !important;
-      padding: 10px 12px !important;
-      border-radius: 10px !important;
+      padding: 9px 11px !important;
+      border: none !important;
+      border-radius: 12px !important;
+      background: transparent !important;
+      text-align: left !important;
+      cursor: pointer !important;
+      transition: all 0.2s ease !important;
     }
 
-    #learnView #learnChatCol .edu-mode-option:hover {
-      background: rgba(0, 0, 0, 0.04) !important;
+    #learnView #learnChatCol .edu-mode-option:hover:not(.selected) {
+      background: rgba(241, 245, 249, 0.8) !important;
     }
 
     #learnView #learnChatCol .edu-mode-option.selected {
@@ -17623,29 +17721,47 @@ function updateRecentConversations(source = 'unknown') {
     }
 
     #learnView #learnChatCol .edu-mode-icon {
-      width: 24px !important;
-      min-width: 24px !important;
-      display: inline-flex !important;
+      width: 20px !important;
+      min-width: 20px !important;
+      height: 20px !important;
+      min-height: 20px !important;
+      display: flex !important;
       align-items: center !important;
       justify-content: center !important;
       font-size: 20px !important;
       line-height: 1 !important;
+      flex-shrink: 0 !important;
     }
 
-    #learnView #learnChatCol .mode-icon-fast { color: #f59e0b !important; }
-    #learnView #learnChatCol .mode-icon-balanced { color: #0284c7 !important; }
-    #learnView #learnChatCol .mode-icon-detailed { color: #8b5cf6 !important; }
-
-    #learnView #learnChatCol .edu-mode-option strong {
-      font-size: 13px !important;
-      font-weight: 600 !important;
-      line-height: 1.2 !important;
+    #learnView #learnChatCol .edu-mode-icon i {
+      display: block !important;
+      font-size: 20px !important;
+      line-height: 1 !important;
     }
 
-    #learnView #learnChatCol .edu-mode-option small {
-      font-size: 11px !important;
-      margin-top: 2px !important;
+    #learnView #learnChatCol .icon-fast { color: #f59e0b !important; }
+    #learnView #learnChatCol .icon-balanced { color: #0284c7 !important; }
+    #learnView #learnChatCol .icon-detailed { color: #8b5cf6 !important; }
+
+    #learnView #learnChatCol .edu-mode-text {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 4px !important;
+      min-width: 0 !important;
+    }
+
+    #learnView #learnChatCol .edu-mode-text strong {
+      color: #0f172a !important;
+      font-size: 14px !important;
+      font-weight: 700 !important;
+      line-height: 1.16 !important;
+    }
+
+    #learnView #learnChatCol .edu-mode-text small {
       color: #64748b !important;
+      font-size: 12px !important;
+      font-weight: 500 !important;
+      line-height: 1.3 !important;
     }
 
     #learnView #learnChatCol .action-chip {
@@ -17665,6 +17781,11 @@ function updateRecentConversations(source = 'unknown') {
     #learnView #learnChatCol .edu-mode-toggle {
       background: rgba(255, 255, 255, 0.8) !important;
       border-color: #e2e8f0 !important;
+      height: 38px !important;
+      min-height: 38px !important;
+      padding: 0 13px !important;
+      gap: 6px !important;
+      border-radius: 14px !important;
       box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important;
     }
 
@@ -17711,7 +17832,7 @@ function updateRecentConversations(source = 'unknown') {
       color: #64748b !important;
     }
 
-    #learnView #learnChatCol #webSearchToggleBtnLearn i,
+    #learnView #learnChatCol #webSearchToggleBtnLearn .qa-inline-icon,
     #learnView #learnChatCol #learnModeCurrentIcon {
       display: inline-flex !important;
       align-items: center !important;
@@ -17744,6 +17865,184 @@ function updateRecentConversations(source = 'unknown') {
       transform: none !important;
       backdrop-filter: none !important;
       -webkit-backdrop-filter: none !important;
+    }
+
+    #learnView #learnChatCol #learnFollowupBar,
+    #learnView #learnChatCol #learnFollowupBar:focus,
+    #learnView #learnChatCol #learnFollowupBar:focus-within,
+    #learnView #learnBody #learnChatCol #learnFollowupBar,
+    #learnView #learnBody #learnChatCol #learnFollowupBar:focus,
+    #learnView #learnBody #learnChatCol #learnFollowupBar:focus-within,
+    #learnView #learnBody:not(.explain-collapsed):not(.chat-collapsed) #learnChatCol #learnFollowupBar,
+    #learnView #learnBody:not(.explain-collapsed):not(.chat-collapsed) #learnChatCol #learnFollowupBar:focus-within,
+    #learnView #learnBody.explain-collapsed:not(.chat-collapsed) #learnChatCol #learnFollowupBar,
+    #learnView #learnBody.explain-collapsed:not(.chat-collapsed) #learnChatCol #learnFollowupBar:focus-within,
+    #learnView #learnBody[data-panel-focus="normal"] #learnChatCol #learnFollowupBar,
+    #learnView #learnBody[data-panel-focus="normal"] #learnChatCol #learnFollowupBar:focus-within,
+    #learnView #learnBody[data-panel-focus="qa-wide"] #learnChatCol #learnFollowupBar,
+    #learnView #learnBody[data-panel-focus="qa-wide"] #learnChatCol #learnFollowupBar:focus-within,
+    #learnView #learnBody[data-panel-focus="qa-full"] #learnChatCol #learnFollowupBar,
+    #learnView #learnBody[data-panel-focus="qa-full"] #learnChatCol #learnFollowupBar:focus-within {
+      position: relative !important;
+      width: min(900px, calc(100% - 28px)) !important;
+      max-width: 900px !important;
+      min-height: 132px !important;
+      margin: 0 auto 8px !important;
+      padding: 18px 18px 18px !important;
+      display: block !important;
+      overflow: visible !important;
+      background: rgba(255, 255, 255, 0.94) !important;
+      background-image: none !important;
+      border: 1px solid rgba(226, 232, 240, 0.95) !important;
+      border-radius: 18px !important;
+      box-shadow: 0 16px 34px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.98) !important;
+      backdrop-filter: blur(24px) saturate(140%) !important;
+      -webkit-backdrop-filter: blur(24px) saturate(140%) !important;
+    }
+
+    #learnView #learnChatCol #learnFollowupBar .input-wrapper,
+    #learnView #learnChatCol #learnFollowupBar .input-wrapper:focus-within {
+      position: relative !important;
+      display: grid !important;
+      grid-template-columns: 42px minmax(0, 1fr) 48px !important;
+      align-items: start !important;
+      gap: 10px !important;
+      width: 100% !important;
+      min-height: 58px !important;
+      margin: 0 !important;
+      padding: 2px 0 0 !important;
+      background: transparent !important;
+      background-image: none !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      outline: 0 !important;
+    }
+
+    #learnView #learnChatCol #learnFollowupBar .btn-clip {
+      width: 38px !important;
+      height: 38px !important;
+      min-width: 38px !important;
+      min-height: 38px !important;
+      margin-top: 4px !important;
+      padding: 0 !important;
+      color: #94a3b8 !important;
+      background: transparent !important;
+      border: 0 !important;
+      border-radius: 12px !important;
+      box-shadow: none !important;
+    }
+
+    #learnView #learnChatCol #learnFollowupBar .input-field {
+      min-height: 44px !important;
+      max-height: 84px !important;
+      padding: 8px 6px !important;
+      color: #0f172a !important;
+      font-size: 15px !important;
+      font-weight: 600 !important;
+      line-height: 1.35 !important;
+      background: transparent !important;
+      border: 0 !important;
+      outline: 0 !important;
+      box-shadow: none !important;
+      resize: none !important;
+    }
+
+    #learnView #learnChatCol #learnFollowupBar .input-field::placeholder {
+      color: #94a3b8 !important;
+      font-weight: 750 !important;
+    }
+
+    #learnView #learnChatCol #learnFollowupBar .btn-send {
+      position: absolute !important;
+      top: 12px !important;
+      right: 12px !important;
+      width: 44px !important;
+      height: 44px !important;
+      min-width: 44px !important;
+      min-height: 44px !important;
+      padding: 0 !important;
+      border-radius: 13px !important;
+      background: #cbd5e1 !important;
+      color: #ffffff !important;
+      box-shadow: none !important;
+      transform: none !important;
+    }
+
+    #learnView #learnChatCol #learnFollowupBar .bottom-actions {
+      position: absolute !important;
+      right: 18px !important;
+      bottom: 18px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: flex-end !important;
+      gap: 10px !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow: visible !important;
+    }
+
+    #learnView #learnChatCol #learnFollowupBar .edu-mode-toggle {
+      height: 38px !important;
+      min-height: 38px !important;
+      padding: 0 15px !important;
+      border-radius: 14px !important;
+      background: rgba(255, 255, 255, 0.92) !important;
+      border: 1px solid rgba(226, 232, 240, 0.95) !important;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.05) !important;
+    }
+
+    #learnView #learnChatCol #learnFollowupBar #webSearchToggleBtnLearn {
+      width: auto !important;
+      min-width: 44px !important;
+      height: 38px !important;
+      min-height: 38px !important;
+      padding: 0 13px !important;
+      border-radius: 14px !important;
+    }
+
+    #learnView #learnChatCol.is-chat-active #learnChatEmptyState,
+    #learnView #learnChatCol.is-chat-active .learn-chat-empty-state,
+    #learnView #learnChatScroll.is-chat-active #learnChatEmptyState,
+    #learnView #learnChatScroll.is-chat-active .learn-chat-empty-state,
+    #learnView #learnChatContent.is-chat-active + #learnChatEmptyState {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+      width: 0 !important;
+      height: 0 !important;
+      min-height: 0 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    #learnView #learnChatScroll.is-chat-active,
+    #learnView #learnChatCol.is-chat-active #learnChatScroll {
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: center !important;
+      align-items: stretch !important;
+      overflow-y: auto !important;
+      padding: 26px 24px 18px !important;
+    }
+
+    #learnView #learnChatContent.is-chat-active,
+    #learnView #learnChatCol.is-chat-active #learnChatContent {
+      display: flex !important;
+      flex: 0 1 auto !important;
+      width: 100% !important;
+      max-width: 560px !important;
+      margin: auto !important;
+      align-self: center !important;
+      justify-content: center !important;
+      gap: 14px !important;
+    }
+
+    #learnView #learnChatContent.is-chat-active .followup-bubble,
+    #learnView #learnChatCol.is-chat-active #learnChatContent .followup-bubble {
+      width: 100% !important;
+      margin: 0 !important;
     }
   `;
   document.head.appendChild(style);
