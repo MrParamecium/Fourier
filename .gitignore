@@ -34,3 +34,4 @@ workspace/app-mirror/debug/
 archive/
 workspace/memory/visual-audit-*/
 .local/
+.vercel
