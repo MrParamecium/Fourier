@@ -195,7 +195,7 @@ function buildSectionOcr(sectionId, pageNames = []) {
     charCount: body.length
   };
   const header = [
-    '# Aquarius section OCR',
+    '# Fourier section OCR',
     `section_id: ${sectionId}`,
     `source_pages: ${usedPages.join(', ') || 'none'}`,
     `cut_start_found: ${start.found ? 'yes' : 'no'}`,

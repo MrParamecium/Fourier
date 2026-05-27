@@ -151,7 +151,7 @@ const AUTH_RETURN_TARGET_KEY = 'aquarius-auth-return-target';
 let currentUser = null;  // { uid, name, email, imageUrl }
 let userMemory  = {};    // loaded from backend after login
 
-const DEFAULT_PREFERENCE_PROFILE = `# Aquarius Learning Profile
+const DEFAULT_PREFERENCE_PROFILE = `# Fourier Learning Profile
 
 ## Current Goal
 - Prepare for Linear Systems & Signals with enough conceptual understanding to solve exam problems confidently.
@@ -944,7 +944,7 @@ function getPreferenceProfileMarkdown() {
 function summarizePreferenceProfile(markdown) {
   const text = String(markdown || '').replace(/^#+\s*/gm, '').replace(/[-*]\s+/g, '').trim();
   const lines = text.split('\n').map(line => line.trim()).filter(Boolean);
-  const preferred = lines.find(line => /intuition|formula|exam|visual|step|example|理解|公式|考试|图/i.test(line)) || lines[0] || 'Tell Aquarius how you like to learn.';
+  const preferred = lines.find(line => /intuition|formula|exam|visual|step|example|理解|公式|考试|图/i.test(line)) || lines[0] || 'Tell Fourier how you like to learn.';
   return preferred.length > 88 ? `${preferred.slice(0, 86)}...` : preferred;
 }
 
