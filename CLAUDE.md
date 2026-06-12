@@ -64,4 +64,4 @@ Before broad edits: read `workspace/memory/MEMORY.md` and the newest `workspace/
 ## Deployment
 
 - Backend: `Dockerfile` (node + python image) → Render (`aquarius-5ss0.onrender.com`), port 9000.
-- Frontend: `vercel.json` serves `app/` as a static site; it talks to the Render backend via `app/config.js`.
+- Frontend: `vercel.json` serves `app/` as a static site (`aquarius-seven.vercel.app`); it talks to the Render backend via `app/config.js`. **Pushing to origin main auto-deploys the Vercel frontend** (verified 2026-06-12, ~1 min). Releases bump the visible version in `app/index.html` (sidebar + Settings), the `app.js?v=` / `style.css?v=` query params, and the three package.json versions together.
