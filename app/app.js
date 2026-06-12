@@ -13558,14 +13558,18 @@ async function openLearnMode(sectionId, sectionTitle, subsections = [], options 
     if (learnIntroMeta) learnIntroMeta.innerHTML = '';
     learnIntroText.textContent = 'Loading section preview...';
 
-    if (learnAbort) learnAbort.abort();
-    learnAbort = new AbortController();
+    // startLesson() above already owns learnAbort for its in-flight lesson
+    // request; aborting or replacing it here kills that request and strands
+    // the pane on "Preparing lesson...". Chain the intro fetch to the same
+    // lifecycle with its own controller instead.
+    const introAbort = new AbortController();
+    if (learnAbort) learnAbort.signal.addEventListener('abort', () => introAbort.abort(), { once: true });
     try {
       const res = await fetch(`${API_BASE}/api/section`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ sectionId, sectionTitle, mode: 'intro', language: 'en', bookSource: currentBook }),
-        signal: learnAbort.signal
+        signal: introAbort.signal
       });
       const data = await readApiJson(res, 'section preview request');
       learnPages = data.bookPages || [];
