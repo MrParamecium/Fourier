@@ -15435,10 +15435,17 @@ function markdownToHtml(md) {
       inCode = false; codeBuf = [];
     }
   };
-  const flushMath = () => {
+  const flushMath = (closed = true) => {
     if (inMath) {
-      // output as raw $$ block - MathJax will render it
-      html += `<div class="math-block">$$\n${mathBuf.join('\n')}\n$$</div>`;
+      if (closed) {
+        // output as raw $$ block - MathJax will render it
+        html += `<div class="math-block">$$\n${mathBuf.join('\n')}\n$$</div>`;
+      } else if (mathBuf.length) {
+        // Never properly closed (blank line or EOF). Real display math has no
+        // paragraph breaks, so treat the buffer as ordinary markdown instead of
+        // dumping a raw $$ block that MathJax can't render (prose-in-math bug).
+        html += markdownToHtml(mathBuf.join('\n'));
+      }
       inMath = false; mathBuf = [];
     }
   };
@@ -15480,6 +15487,13 @@ $$</div>`;
       continue;
     }
     if (inMath) {
+      if (!t) {
+        // Blank line: real display math never spans a paragraph break, so an
+        // unclosed $$ ends here instead of swallowing the rest of the document.
+        flushMath(false);
+        flushList();
+        continue;
+      }
       if (/\$\$\s*$/.test(t)) {
         const cleaned = raw.replace(/\s*\$\$\s*$/, '');
         if (cleaned.trim()) mathBuf.push(cleaned);
@@ -15528,7 +15542,7 @@ $$</div>`;
     html += `<p>${inlineFormat(t)}</p>`;
   }
 
-  flushList(); flushCode(); flushMath();
+  flushList(); flushCode(); flushMath(false);
   // Restore raw HTML table placeholders
   html = html.replace(/\x00TABLE_(\d+)\x00/g, (_, idx) => htmlTablePlaceholders[Number(idx)] || '');
 
