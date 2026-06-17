@@ -47731,12 +47731,14 @@ body.learn-resizing #learnView #learnBody #learnChatCol {
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
-#learnView .learn-body.chapter-overview-active #learnExplainPager { display: none !important; }
+#learnView .learn-body.chapter-overview-active #learnExplainPager,
+#learnView .learn-body.chapter-overview-split-active #learnExplainPager { display: none !important; }
 
-/* Reserve room above the pager so content doesn't slide under it. */
-#learnView #learnExplainScroll.learn-explain-scroll,
-#learnView #learnExplainScroll {
-  padding-bottom: 130px !important;
+/* Reserve room above the pager so content doesn't slide under it — but only
+ * in lesson mode, where the pager actually shows. In chapter-overview modes
+ * the pager is hidden and the extra padding would leave dead space. */
+#learnView .learn-body:not(.chapter-overview-active):not(.chapter-overview-split-active) #learnExplainScroll {
+  padding-bottom: 130px;
 }
 
 /* --- Issue 6: Make overflowing equations scrollable --- */
@@ -47772,37 +47774,46 @@ body.learn-resizing #learnView #learnBody #learnChatCol {
   max-width: 100%;
 }
 
-/* --- Issue 7: Quick Check legibility --- */
-#kcModal #kcQuestion,
-#kcModal #kcQuestion * {
-  font-size: 18px !important;
-  line-height: 1.75 !important;
+/* --- Issue 7: Quick Check legibility ---
+ * Use container-level rules so MathJax can scale glyphs from the inherited
+ * font-size. The previous `#kcQuestion *` selector at !important stomped
+ * every nested span and broke math glyph metrics. */
+#kcModal #kcQuestion {
+  font-size: 18px;
+  line-height: 1.75;
 }
 #kcModal #kcQuestion mjx-container {
   font-size: 1.15em !important;
 }
 #kcModal #kcOptions .kc-option-btn {
-  font-size: 16px !important;
-  line-height: 1.7 !important;
-  padding: 14px 16px !important;
+  font-size: 16px;
+  line-height: 1.7;
+  padding: 14px 16px;
 }
 #kcModal #kcOptions .kc-option-btn mjx-container {
   font-size: 1.1em !important;
 }
-#kcModal #kcAnswer,
-#kcModal #kcAnswer * {
-  font-size: 16px !important;
-  line-height: 1.75 !important;
+#kcModal #kcAnswer {
+  font-size: 16px;
+  line-height: 1.75;
 }
 #kcModal #kcAnswer mjx-container {
   font-size: 1.1em !important;
 }
 #kcModal #kcHint {
-  font-size: 15px !important;
+  font-size: 15px;
 }
 #kcModal #kcAnswerInput,
 #kcModal #kcAskInput {
-  font-size: 16px !important;
+  font-size: 16px;
+}
+
+/* --- Issue 8: Quick Check "Next" button states (formerly inline styles) ---
+   "finish" reuses the button's inline default (green); only "continue" overrides. */
+#kcModal #kcNextBtn[data-kc-end-state="continue"] {
+  background: #38BDF8;
+  border-color: #0284C7;
+  box-shadow: 0 4px 0px #0284C7;
 }
 
 /* --- Issue 5: Completion indicators in syllabus --- */

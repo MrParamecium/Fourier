@@ -16105,20 +16105,14 @@ function inlineFormat(text) {
         const nextSub = (typeof window.__ftutorPeekNextSubsection === 'function')
           ? window.__ftutorPeekNextSubsection(kcSectionId, kcSectionTitle)
           : null;
-        _nextBtn.dataset.kcAtEnd = '1';
+        _nextBtn.dataset.kcEndState = nextSub ? 'continue' : 'finish';
         _nextBtn.style.display = 'inline-block';
         if (nextSub) {
           _nextBtn.textContent = 'Next Topic →';
           _nextBtn.title = `Continue to: ${nextSub.title}`;
-          _nextBtn.style.background = '#38BDF8';
-          _nextBtn.style.borderColor = '#0284C7';
-          _nextBtn.style.boxShadow = '0 4px 0px #0284C7';
         } else {
           _nextBtn.textContent = 'Back to Syllabus';
           _nextBtn.title = 'You finished this lesson — return to the syllabus.';
-          _nextBtn.style.background = '#10B981';
-          _nextBtn.style.borderColor = '#059669';
-          _nextBtn.style.boxShadow = '0 4px 0px #059669';
         }
       }
       renderProgress();
@@ -16478,14 +16472,11 @@ function inlineFormat(text) {
     stNextBtn.addEventListener('click', () => {
       // Issue 8: after mastery-complete, the same button advances to the next
       // sub-sub-chapter (or returns to the syllabus when none is left).
-      if (stNextBtn.dataset.kcAtEnd === '1') {
+      if (stNextBtn.dataset.kcEndState) {
         try { saveQuizProgress(); } catch(_) {}
         modal.style.display = 'none';
         // Reset button so the next quiz opens with the default look.
-        stNextBtn.dataset.kcAtEnd = '';
-        stNextBtn.style.background = '#10b981';
-        stNextBtn.style.borderColor = '#059669';
-        stNextBtn.style.boxShadow = '0 4px 0px #059669';
+        delete stNextBtn.dataset.kcEndState;
         stNextBtn.textContent = 'Next Knowledge Point';
         stNextBtn.style.display = 'none';
         const advance = window.__ftutorAdvanceSubsection;
@@ -19823,6 +19814,12 @@ function updateRecentConversations(source = 'unknown') {
   window.__ftutorIsCompleted = isCompleted;
 
   // ── Apply completion indicators to the syllabus DOM ───────────────
+  // Diff-then-write: each DOM mutation here is a potential reflow + mutation
+  // record, so skip when state is already correct.
+  function setClassIfChanged(el, cls, want) {
+    if (!el) return;
+    if (el.classList.contains(cls) !== want) el.classList.toggle(cls, want);
+  }
   function applyCompletionIndicators() {
     const root = document.getElementById('courseSyllabus');
     if (!root) return;
@@ -19830,7 +19827,7 @@ function updateRecentConversations(source = 'unknown') {
 
     root.querySelectorAll('.syllabus-subsection').forEach(btn => {
       const sub = btn.getAttribute('data-subsection') || btn.textContent.trim();
-      btn.classList.toggle('is-completed', isCompleted(sub, sub));
+      setClassIfChanged(btn, 'is-completed', isCompleted(sub, sub));
     });
     root.querySelectorAll('.syllabus-section-wrap').forEach(wrap => {
       const sectionBtn = wrap.querySelector('.syllabus-section');
@@ -19843,7 +19840,7 @@ function updateRecentConversations(source = 'unknown') {
         const t = sectionBtn.getAttribute('data-section') || sectionBtn.textContent.trim();
         done = isCompleted(t, t);
       }
-      sectionBtn.classList.toggle('is-completed', done);
+      setClassIfChanged(sectionBtn, 'is-completed', done);
     });
     const items = root.querySelectorAll('.syllabus-item');
     data.forEach((chapter, chIdx) => {
@@ -19860,16 +19857,20 @@ function updateRecentConversations(source = 'unknown') {
           if (isCompleted(t, t)) done += 1;
         });
       });
-      const old = chBtn.querySelector('.chapter-progress');
-      if (old) old.remove();
+      let badge = chBtn.querySelector('.chapter-progress');
       if (total > 0) {
-        const badge = document.createElement('span');
-        badge.className = 'chapter-progress';
-        if (done === total) badge.classList.add('is-done');
-        badge.textContent = done === total ? '✓ done' : (done + '/' + total);
-        chBtn.appendChild(badge);
+        const wantText = done === total ? '✓ done' : (done + '/' + total);
+        if (!badge) {
+          badge = document.createElement('span');
+          badge.className = 'chapter-progress';
+          chBtn.appendChild(badge);
+        }
+        if (badge.textContent !== wantText) badge.textContent = wantText;
+        setClassIfChanged(badge, 'is-done', done === total);
+      } else if (badge) {
+        badge.remove();
       }
-      chBtn.classList.toggle('is-completed', total > 0 && done === total);
+      setClassIfChanged(chBtn, 'is-completed', total > 0 && done === total);
     });
   }
   window.__ftutorApplyCompletionIndicators = applyCompletionIndicators;
@@ -19905,6 +19906,11 @@ function updateRecentConversations(source = 'unknown') {
         const chIdx = Number(btn.getAttribute('data-idx'));
         const chapter = data[chIdx];
         if (!chapter || !Array.isArray(chapter.sections) || !chapter.sections.length) return;
+        // The original handler (renderSyllabus) toggles `is-open` on the panel
+        // synchronously before our handler runs. Skip on collapse so clicking an
+        // open chapter just closes it instead of re-opening the overview.
+        const panel = document.getElementById('syllabus-' + chIdx);
+        if (!panel || !isAccordionOpen(panel)) return;
         const first = chapter.sections[0];
         const firstObj = typeof first === 'string' ? { title: first, subsections: [] } : first;
         if (!firstObj || !firstObj.title) return;
@@ -20042,41 +20048,66 @@ function updateRecentConversations(source = 'unknown') {
     const title = (typeof learnSectionTitle !== 'undefined' ? learnSectionTitle : window.learnSectionTitle) || '';
     return { id, title };
   }
+  function setDisabledIfChanged(btn, want) {
+    if (!btn) return;
+    if (!!btn.disabled !== !!want) btn.disabled = !!want;
+  }
+  function setTextIfChanged(el, text) {
+    if (el && el.textContent !== text) el.textContent = text;
+  }
+  function setAttrIfChanged(el, name, value) {
+    if (el && el.getAttribute(name) !== value) el.setAttribute(name, value);
+  }
+  // rAF-coalesced. Without this, MathJax typesetting inside #learnView can fire
+  // the MutationObservers below thousands of times per typeset cycle and wedge
+  // the main thread (blocks contextmenu / devtools events).
+  let _pagerScheduled = false;
+  let _lastAtEnd = false;
   function refreshPager() {
+    if (_pagerScheduled) return;
+    _pagerScheduled = true;
+    requestAnimationFrame(() => { _pagerScheduled = false; refreshPagerNow(); });
+  }
+  function refreshPagerNow() {
     if (!pager || !pagerPrevBtn || !pagerNextBtn) return;
     const learnView = document.getElementById('learnView');
     const learnVisible = learnView && !learnView.classList.contains('hidden') && inLessonMode();
     if (!learnVisible) {
-      pager.classList.add('hidden');
+      setClassIfChanged(pager, 'hidden', true);
+      _lastAtEnd = false;
       return;
     }
     const { points, idx } = getKnowledgePointState();
     const total = Math.max(points.length, 1);
     const cur = Math.min(Math.max(idx, 0), total - 1);
-    pager.classList.remove('hidden');
-    if (pagerPos) pagerPos.textContent = (cur + 1) + ' / ' + total;
-    pagerPrevBtn.disabled = cur <= 0;
+    setClassIfChanged(pager, 'hidden', false);
+    setTextIfChanged(pagerPos, (cur + 1) + ' / ' + total);
+    setDisabledIfChanged(pagerPrevBtn, cur <= 0);
     const atEnd = cur >= total - 1;
     const { id, title } = currentSectionRefs();
     if (atEnd) {
       const next = peekNextSubsection(id, title);
       if (next) {
-        pagerNextBtn.disabled = false;
-        pagerNextBtn.classList.add('is-next-topic');
-        if (pagerNextLabel) pagerNextLabel.textContent = 'Next topic';
-        pagerNextBtn.title = 'Continue to: ' + next.title;
+        setDisabledIfChanged(pagerNextBtn, false);
+        setClassIfChanged(pagerNextBtn, 'is-next-topic', true);
+        setTextIfChanged(pagerNextLabel, 'Next topic');
+        setAttrIfChanged(pagerNextBtn, 'title', 'Continue to: ' + next.title);
       } else {
-        pagerNextBtn.disabled = true;
-        pagerNextBtn.classList.remove('is-next-topic');
-        if (pagerNextLabel) pagerNextLabel.textContent = 'End';
-        pagerNextBtn.title = 'You finished the syllabus.';
+        setDisabledIfChanged(pagerNextBtn, true);
+        setClassIfChanged(pagerNextBtn, 'is-next-topic', false);
+        setTextIfChanged(pagerNextLabel, 'End');
+        setAttrIfChanged(pagerNextBtn, 'title', 'You finished the syllabus.');
       }
     } else {
-      pagerNextBtn.disabled = false;
-      pagerNextBtn.classList.remove('is-next-topic');
-      if (pagerNextLabel) pagerNextLabel.textContent = 'Next';
-      pagerNextBtn.title = 'Next page';
+      setDisabledIfChanged(pagerNextBtn, false);
+      setClassIfChanged(pagerNextBtn, 'is-next-topic', false);
+      setTextIfChanged(pagerNextLabel, 'Next');
+      setAttrIfChanged(pagerNextBtn, 'title', 'Next page');
     }
+    // Mark completion only on the false→true transition into the final page,
+    // not on every rAF tick that lands while the user is sitting at the end.
+    if (atEnd && !_lastAtEnd && (id || title)) markCompleted(id, title);
+    _lastAtEnd = atEnd;
   }
   window.__ftutorRefreshPager = refreshPager;
 
@@ -20088,7 +20119,7 @@ function updateRecentConversations(source = 'unknown') {
         advanceSubsection(id, title, -1);
       }
       if (typeof animateLectureNavButton === 'function') animateLectureNavButton(-1);
-      setTimeout(refreshPager, 60);
+      refreshPager();
     });
   }
   if (pagerNextBtn) {
@@ -20100,49 +20131,47 @@ function updateRecentConversations(source = 'unknown') {
         advanceSubsection(id, title, +1);
       }
       if (typeof animateLectureNavButton === 'function') animateLectureNavButton(1);
-      setTimeout(refreshPager, 60);
+      refreshPager();
     });
   }
 
-  // Watch learn view for class/state changes; light interval to catch
-  // text-only updates (page indicator changes don't fire mutations
-  // we observe otherwise).
-  const learnViewEl = document.getElementById('learnView');
-  if (learnViewEl) {
-    const mo = new MutationObserver(() => refreshPager());
-    mo.observe(learnViewEl, { attributes: true, attributeFilter: ['class', 'data-panel-focus'], subtree: true });
-  }
-  setInterval(refreshPager, 700);
-
-  // Mark a subsection complete the moment the user reaches the last page.
-  function maybeMarkAtEnd() {
-    if (!inLessonMode()) return;
-    const { points, idx } = getKnowledgePointState();
-    if (!points.length) return;
-    if (idx >= points.length - 1) {
-      const { id, title } = currentSectionRefs();
-      if (id || title) markCompleted(id, title);
-    }
-  }
-  setInterval(maybeMarkAtEnd, 1500);
+  // Observe only the learn-body class flag (lesson vs chapter-overview mode)
+  // and the lecture page indicator's text — NOT the whole #learnView subtree.
+  // The previous `subtree:true` on `#learnView` re-fired on every class change
+  // produced by MathJax typesetting, which saturated the main thread.
+  [
+    ['learnBody',                 { attributes: true, attributeFilter: ['class'] }],
+    ['learnLecturePageIndicator', { childList: true, characterData: true, subtree: true }],
+    ['learnView',                 { attributes: true, attributeFilter: ['class'] }],
+  ].forEach(([id, opts]) => {
+    const el = document.getElementById(id);
+    if (el) new MutationObserver(refreshPager).observe(el, opts);
+  });
 
   // ── Issue 3: Auto-open syllabus panel after login ─────────────────
+  // Run once when the welcome screen first becomes visible, then disconnect.
+  // Returns true when the panel ends up open (already-open counts), so callers
+  // know to stop watching.
+  const welcomeEl = document.getElementById('welcomeScreen');
   function autoOpenSyllabus() {
     try {
       const panel = document.getElementById('sidebarSyllabusPanel');
-      const welcome = document.getElementById('welcomeScreen');
-      if (!panel || !welcome) return;
-      if (welcome.classList.contains('hidden')) return;
-      if (typeof toggleSyllabusPanel === 'function') toggleSyllabusPanel(true);
+      if (!panel || !welcomeEl) return false;
+      if (welcomeEl.classList.contains('hidden')) return false;
+      if (typeof isAccordionOpen === 'function' && isAccordionOpen(panel)) return true;
+      if (typeof toggleSyllabusPanel === 'function') {
+        toggleSyllabusPanel(true);
+        return true;
+      }
     } catch(_) {}
+    return false;
   }
-  const welcomeEl = document.getElementById('welcomeScreen');
   if (welcomeEl) {
     const wm = new MutationObserver(() => {
-      if (!welcomeEl.classList.contains('hidden')) autoOpenSyllabus();
+      if (autoOpenSyllabus()) wm.disconnect();
     });
     wm.observe(welcomeEl, { attributes: true, attributeFilter: ['class'] });
-    setTimeout(autoOpenSyllabus, 400);
+    setTimeout(() => { if (autoOpenSyllabus()) wm.disconnect(); }, 400);
   }
 })();
 
