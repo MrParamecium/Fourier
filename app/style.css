@@ -35861,17 +35861,21 @@ body {
   box-shadow: 0 24px 34px rgba(15,23,42,0.18) !important;
 }
 
-/* Lesson page background: clean book paper, no red margin rules. */
+/* Lesson page background: clean book paper, no red margin rules.
+   The dark "desk" vignette is persistent (not flip-gated) so the page edge
+   reads as a real book page at rest, not just mid-animation. */
 #learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) #learnExplainScroll,
 #learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .learn-explain-scroll {
   padding: clamp(24px, 4vh, 48px) clamp(32px, 5vw, 82px) clamp(38px, 5vh, 64px) !important;
   background:
-    radial-gradient(circle at 20% 8%, rgba(255,255,255,0.86), transparent 34%),
-    radial-gradient(circle at 82% 18%, rgba(244,232,205,0.22), transparent 34%),
+    radial-gradient(ellipse 78% 86% at 50% 50%, transparent 56%, rgba(36,24,12,0.22) 88%, rgba(28,20,10,0.34) 100%),
+    radial-gradient(circle at 20% 8%, rgba(255,255,255,0.40), transparent 34%),
+    radial-gradient(circle at 82% 18%, rgba(244,232,205,0.18), transparent 34%),
     var(--theme-page-surface-soft) !important;
   background-image:
-    radial-gradient(circle at 20% 8%, rgba(255,255,255,0.86), transparent 34%),
-    radial-gradient(circle at 82% 18%, rgba(244,232,205,0.22), transparent 34%),
+    radial-gradient(ellipse 78% 86% at 50% 50%, transparent 56%, rgba(36,24,12,0.22) 88%, rgba(28,20,10,0.34) 100%),
+    radial-gradient(circle at 20% 8%, rgba(255,255,255,0.40), transparent 34%),
+    radial-gradient(circle at 82% 18%, rgba(244,232,205,0.18), transparent 34%),
     var(--theme-page-surface-soft) !important;
 }
 
@@ -35891,8 +35895,9 @@ body {
     radial-gradient(circle at 52% 12%, rgba(255,255,255,0.9), transparent 42%),
     linear-gradient(180deg, #fffefb 0%, #fbf5e9 100%) !important;
   box-shadow:
-    0 26px 60px rgba(15,23,42,0.16),
-    0 0 0 1px rgba(120, 94, 61, 0.10),
+    0 38px 88px rgba(20,12,4,0.42),
+    0 18px 40px rgba(20,12,4,0.30),
+    0 0 0 1px rgba(82, 58, 28, 0.28),
     inset 0 1px 0 rgba(255,255,255,0.9),
     inset 20px 0 30px rgba(88,63,35,0.055),
     inset -20px 0 30px rgba(88,63,35,0.045) !important;
