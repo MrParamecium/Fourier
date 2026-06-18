@@ -5809,8 +5809,6 @@ const webSearchToggleBtnMain = document.getElementById('webSearchToggleBtnMain')
 const learnChatPopoverDockBtn = document.getElementById('learnChatPopoverDockBtn');
 const learnChatPopoverCloseBtn = document.getElementById('learnChatPopoverCloseBtn');
 const learnResizerPanel = document.getElementById('learnResizer');
-const learnExplainOverlayRail = document.getElementById('learnExplainOverlayRail');
-const learnExplainBottomRail = document.getElementById('learnExplainBottomRail');
 const learnKpPrevBtn      = document.getElementById('learnKpPrevBtn');
 const learnKpNextBtn      = document.getElementById('learnKpNextBtn');
 
@@ -5818,7 +5816,6 @@ document.getElementById('learnChatShrinkBtn')?.remove();
 document.getElementById('learnChatMinimizeBtn')?.remove();
 document.querySelectorAll('.learn-chat-window-actions').forEach(node => node.remove());
 const learnKpTitle        = document.getElementById('learnKpTitle');
-const learnLecturePageIndicator = document.getElementById('learnLecturePageIndicator');
 const learnFocusPageIndicator = document.getElementById('learnFocusPageIndicator');
 const learnTopbarActions = document.querySelector('#learnView .learn-topbar-actions');
 const learnToolbarCenter = document.querySelector('#learnExplainToolbar .learn-toolbar-center');
@@ -12622,8 +12619,7 @@ function renderCurrentKnowledgePoint() {
     const learnKpNextBtn = document.getElementById('learnKpNextBtn');
     if (learnKpPrevBtn) learnKpPrevBtn.disabled = true;
     if (learnKpNextBtn) learnKpNextBtn.disabled = true;
-    const indicator = document.getElementById('learnLecturePageIndicator');
-    if (indicator) indicator.textContent = '1 / 1';
+    window.__ftutorRefreshPager?.();
     return;
   }
   currentKnowledgePointIndex = Math.max(0, Math.min(currentKnowledgePointIndex, learnKnowledgePoints.length - 1));
@@ -12650,10 +12646,9 @@ function renderCurrentKnowledgePoint() {
   if (learnKpNextBtn) learnKpNextBtn.disabled = currentKnowledgePointIndex === learnKnowledgePoints.length - 1;
   if (lecturePrevOverlayBtn) lecturePrevOverlayBtn.disabled = currentKnowledgePointIndex === 0;
   if (lectureNextOverlayBtn) lectureNextOverlayBtn.disabled = currentKnowledgePointIndex === learnKnowledgePoints.length - 1;
-  
-  const indicator = document.getElementById('learnLecturePageIndicator');
-  if (indicator) indicator.textContent = `${currentKnowledgePointIndex + 1} / ${learnKnowledgePoints.length}`;
-  
+
+  window.__ftutorRefreshPager?.();
+
   if (learnExplainScroll) learnExplainScroll.scrollTop = 0;
   syncFocusModeContent();
 
@@ -13734,7 +13729,6 @@ function clearLearnRenderedContent(message = 'Preparing lesson...') {
   if (learnKpNextBtn) learnKpNextBtn.disabled = true;
   if (lecturePrevOverlayBtn) lecturePrevOverlayBtn.disabled = true;
   if (lectureNextOverlayBtn) lectureNextOverlayBtn.disabled = true;
-  if (learnLecturePageIndicator) learnLecturePageIndicator.textContent = '';
   if (learnFocusContent) learnFocusContent.innerHTML = '';
   if (learnFocusPageIndicator) learnFocusPageIndicator.textContent = '';
 }
@@ -14810,11 +14804,6 @@ function _setLearnMode(mode) {
       learnChatColPanel.style.minWidth = '0';
       learnChatColPanel.style.maxWidth = '100%';
     }
-  }
-  if (learnExplainOverlayRail) learnExplainOverlayRail.style.display = 'none';
-  if (learnExplainBottomRail) learnExplainBottomRail.style.display = (isLessonLikeLayout && mode === 'lecture') ? '' : 'none';
-  if (learnLecturePageIndicator) {
-    learnLecturePageIndicator.style.display = (isLessonLikeLayout && mode === 'lecture') ? '' : 'none';
   }
   if (lecturePrevOverlayBtn) lecturePrevOverlayBtn.classList.toggle('hidden', mode !== 'lecture' || !isLessonLikeLayout);
   if (lectureNextOverlayBtn) lectureNextOverlayBtn.classList.toggle('hidden', mode !== 'lecture' || !isLessonLikeLayout);
@@ -20137,13 +20126,12 @@ function updateRecentConversations(source = 'unknown') {
   bindPager(pagerPrevBtn, -1);
   bindPager(pagerNextBtn, +1);
 
-  // Observe only the learn-body class flag (lesson vs chapter-overview mode)
-  // and the lecture page indicator's text — NOT the whole #learnView subtree.
+  // Observe only the learn-body class flag (lesson vs chapter-overview mode).
   // The previous `subtree:true` on `#learnView` re-fired on every class change
-  // produced by MathJax typesetting, which saturated the main thread.
+  // produced by MathJax typesetting, which saturated the main thread. KP-change
+  // refreshes now call `__ftutorRefreshPager` directly in renderCurrentKnowledgePoint.
   [
     ['learnBody',                 { attributes: true, attributeFilter: ['class'] }],
-    ['learnLecturePageIndicator', { childList: true, characterData: true, subtree: true }],
     ['learnView',                 { attributes: true, attributeFilter: ['class'] }],
   ].forEach(([id, opts]) => {
     const el = document.getElementById(id);
