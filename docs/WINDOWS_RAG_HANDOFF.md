@@ -1,6 +1,10 @@
 # Windows RAG Handoff - Fourier Tutor Agent
 
-Date: 2026-05-21
+Date: 2026-05-21 · **Updated 2026-06-19** — env var names corrected from `WINDOWS_RAG_*` to the
+live `RAGFLOW_*` names; materials runtime tree corrected from root `materials/` to
+`workspace/materials/`; bridge function name corrected from `retrieveFromWindowsRag` to
+`retrieveFromRagFlow`. The RAGFlow integration is live (Option A below); the env vars on this page
+match what `app/ws-bridge.js` actually reads.
 
 This handoff is for continuing Fourier Tutor Agent RAG work on a Windows computer with Codex/API access.
 
@@ -39,8 +43,8 @@ Important memory summary:
 - The product is now named Fourier Tutor Agent.
 - The runtime app is root `app/`.
 - The server/bridge entry is `app/ws-bridge.js`.
-- Runtime materials are root `materials/`.
-- `workspace/` is the broader workbench and memory area.
+- Runtime materials are `workspace/materials/` (preferred over root `materials/` via the content-validated fallback in `ws-bridge.js:86` — see `docs/sync-policy.md`).
+- `workspace/` is the broader workbench and memory area, and now also the canonical materials tree.
 - Current retrieval is RAG-lite: OCR-aware page/keyword retrieval, not semantic chunk retrieval.
 - Desired upgrade: chunk OCR/materials, embed chunks, store vectors, retrieve semantically, optionally rerank, return citations, then feed selected chunks into the existing tutor answer pipeline.
 
@@ -93,15 +97,16 @@ Do not commit API keys. Put local keys into `.env` only on the machine that runs
 
 ## Do Not Casually Delete
 
-- `materials/`
-- `workspace/materials/`
-- Chapter 2 recrops and metadata
+- `workspace/materials/` (**canonical runtime tree** — bridge prefers this; deleting breaks every section)
+- `materials/` (legacy fallback mirror; OK to consolidate later but not now)
+- Chapter 2 recrops and metadata (protected per CLAUDE.md hard constraint, in BOTH trees)
 - `workspace/memory/`
 - `app/section-page-map*.json`
 - `app/section-figure-map-new.json`
 - Fourier logo files in `app/`
 
-The app still relies on several JSON maps and assets directly under `app/`.
+The app still relies on several JSON maps and assets directly under `app/` (root-relative path is a
+hard constraint per CLAUDE.md).
 
 ## Existing RAG-Lite Behavior
 
@@ -132,17 +137,14 @@ Recommended integration:
 
 - Ingest textbook/OCR/content into RAGFlow datasets.
 - Use RAGFlow retrieval API from `app/ws-bridge.js`.
-- Do not use RAGFlow's full chat endpoint for Fourier's main answer unless Harrison explicitly asks.
+- Do not use RAGFlow's full chat endpoint for Fourier's main answer unless FlyM1ss explicitly asks.
 - Keep Fourier's teaching prompt and UX in the Node app.
 
-Expected bridge shape:
+Live bridge shape (see `app/ws-bridge.js:3178`):
 
 ```js
-const ragResults = await retrieveFromWindowsRag({
+const ragResults = await retrieveFromRagFlow({
   query,
-  bookSource,
-  sectionId,
-  userProfile,
   topK: 8
 });
 ```
@@ -218,14 +220,25 @@ Milestone 1 should be:
 4. Compare retrieval against current RAG-lite for 10-20 real questions.
 5. Only then patch `app/ws-bridge.js` to optionally call Windows RAG.
 
-Suggested environment variable in `app/.env`:
+Live environment variables in `app/.env` (read by `app/ws-bridge.js:124-141`):
 
 ```text
-WINDOWS_RAG_URL=http://WINDOWS_LAN_IP:PORT/retrieve
-WINDOWS_RAG_ENABLED=false
+RAGFLOW_ENABLED=true
+RAGFLOW_BASE_URL=http://WINDOWS_LAN_IP:PORT
+RAGFLOW_API_KEY=...                 # optional Bearer token
+RAGFLOW_DATASET_IDS=ds_a,ds_b       # required when enabled
+RAGFLOW_DOCUMENT_IDS=               # optional, comma-separated
+RAGFLOW_RETRIEVAL_PATH=/api/v1/retrieval   # override only if RAGFlow changes API path
+RAGFLOW_TOP_K=8
+RAGFLOW_PAGE_SIZE=8
+RAGFLOW_TIMEOUT_MS=8000
+RAGFLOW_SIMILARITY_THRESHOLD=0.2
+RAGFLOW_VECTOR_SIMILARITY_WEIGHT=0.5
+RAGFLOW_PROXY=                      # optional HTTP proxy URL
 ```
 
-Then `app/ws-bridge.js` can fall back to existing RAG-lite when the Windows service is unavailable.
+When `RAGFLOW_ENABLED=false` or `RAGFLOW_BASE_URL` is empty or `RAGFLOW_DATASET_IDS` is empty,
+`retrieveFromRagFlow` returns `null` and `app/ws-bridge.js` falls back to existing RAG-lite.
 
 ## Integration Guardrails
 

@@ -26,18 +26,45 @@ app/
 
 ## Runtime Materials
 
+The running app reads materials from **`workspace/materials/`** by default (verified by
+`app/ws-bridge.js:86` `resolveExistingDir`). Root `materials/` is a legacy fallback mirror kept for
+backward compatibility — see `docs/sync-policy.md` for the full sync rules.
+
+Canonical tree (read by the bridge):
+
 ```text
-materials/
+workspace/materials/
 ├── new-book-pages/
 ├── new-book-ocr/
+├── new-book-section-ocr/
 ├── new-book-figures/
-├── lesson-cache/
+├── lesson-cache/                  (173 section directories — live)
+├── background-ocr-v3/
+├── background-pages-split/
+├── prompts/                       (agent-a-planner.md, agent-b-tutor.md, schemas)
+├── exam-priority/
+├── formula-catalog/
 ├── build_new_section_map.py
 ├── generate_chapter_ocr_local.py
 └── extract_new_book_figs.py
 ```
 
-`materials/` contains the material files the app reads directly or expects beside the material scripts. The scripts currently rely on their location, so they remain in this directory.
+Legacy fallback mirror (kept but not currently read):
+
+```text
+materials/
+├── new-book-pages/
+├── new-book-ocr/
+├── new-book-figures/
+├── lesson-cache/                  (42 section directories — stale, 131 dirs behind workspace)
+├── build_new_section_map.py
+├── generate_chapter_ocr_local.py
+└── extract_new_book_figs.py
+```
+
+The bridge prefers `workspace/materials/` when either `background-ocr-v3/` or `new-book-ocr/`
+exists under it. Both subdirs exist in a normal checkout, so workspace wins. Writing to root
+`materials/` has no runtime effect.
 
 ## Tools
 
@@ -57,7 +84,11 @@ workspace/
 └── app-mirror/
 ```
 
-This directory is the broader workbench: project memory, mirrored materials, old workspace context, and extraction experiments. It is useful for research and recovery, but the running app primarily uses root `app/` and root `materials/`.
+This directory is the broader workbench and the **canonical materials tree**: project memory,
+the live materials/ subtree (preferred by the bridge), mirrored prompts and OCR data, and
+extraction experiments. The running app uses root `app/` (UI + bridge code) and
+`workspace/materials/` (assets). Root `materials/` is a legacy fallback mirror — see
+`docs/sync-policy.md`.
 
 ## Local-Only Files
 
@@ -111,4 +142,4 @@ Kept `workspace/app-mirror/` as a lightweight code mirror for reference, but rem
 1. Read `workspace/memory/MEMORY.md`.
 2. Read the newest files in `workspace/memory/`.
 3. Run `npm run check`.
-4. Avoid deleting Chapter 2 figure crops or metadata unless Harrison explicitly asks.
+4. Avoid deleting Chapter 2 figure crops or metadata unless FlyM1ss explicitly asks.
