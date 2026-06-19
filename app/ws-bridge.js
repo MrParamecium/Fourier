@@ -4733,9 +4733,7 @@ async function agentB_execute(sectionId, blueprint, bookPages, webSources, langu
                 if (!b.description && planned.description) b.description = planned.description;
             }
             if (b.type === 'book_image' && b.source_page && !b.fig_id) {
-                const metaPath = fs.existsSync(path.join(OCR_DIR_NEW, `${b.source_page}.meta.json`))
-                    ? path.join(OCR_DIR_NEW, `${b.source_page}.meta.json`)
-                    : path.join(OCR_DIR_NEW, `${b.source_page}.meta.json`);
+                const metaPath = path.join(OCR_DIR_NEW, `${b.source_page}.meta.json`);
                 if (fs.existsSync(metaPath)) {
                     const meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
                     const figs = meta.figures || [];
@@ -5092,9 +5090,7 @@ async function blueprintToMarkdown(blocks, pageImages, visualPlan = null, bookPa
                 }
 
                 const metaPath = sourcePage
-                    ? (fs.existsSync(path.join(OCR_DIR_NEW, `${sourcePage}.meta.json`))
-                        ? path.join(OCR_DIR_NEW, `${sourcePage}.meta.json`)
-                        : path.join(OCR_DIR_NEW, `${sourcePage}.meta.json`))
+                    ? path.join(OCR_DIR_NEW, `${sourcePage}.meta.json`)
                     : null;
                 let cropUrl = null;
 
@@ -5271,9 +5267,15 @@ async function blueprintToMarkdown(blocks, pageImages, visualPlan = null, bookPa
 }
 
 /**
- * 生成小节完整讲解 — now powered by dual-agent pipeline
+ * 生成小节完整讲解 — now powered by dual-agent pipeline.
+ *
+ * Fail-fast policy (Phase 0, 2026-06-19): if Agent A returns no blueprint or
+ * unrecoverable JSON, this function throws. The old `buildFallbackBlueprint`
+ * path was deliberately removed so a degraded lesson never silently masks an
+ * Agent A regression. Callers must surface the error to the user (or log it
+ * in pregen) — do not re-introduce a fallback blueprint without an explicit
+ * design discussion.
  */
-
 async function generateSectionLesson(sectionId, sectionTitle, bookPages, webSources, language = 'en', bookSource = 'new') {
     // ── Agent A: Plan ──────────────────────────────────────────────────────────
     let blueprint = null;
