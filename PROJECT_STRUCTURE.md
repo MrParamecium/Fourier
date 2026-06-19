@@ -70,10 +70,11 @@ exists under it. Both subdirs exist in a normal checkout, so workspace wins. Wri
 
 ```text
 tools/
-└── tools/tutor_craft.py
+├── test-lesson-open-no-hang.js
+└── test-ui-friction-v123.js
 ```
 
-`tools/` contains optional maintenance scripts. These are not the app entry point.
+`tools/` contains Playwright e2e regression scripts. These are not the app entry point and require `npx playwright install chromium` before they run.
 
 ## Working Materials And Memory
 
