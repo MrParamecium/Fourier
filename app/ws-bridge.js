@@ -6156,6 +6156,78 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
+    if (pathname === '/api/intent' && req.method === 'POST') {
+        // Triage: does this turn need the grounded teaching pipeline (textbook
+        // retrieval + web search + multi-step generation), or is it casual
+        // chit-chat that only needs a short reply? Fail-safe: default to grounded
+        // so a real question is never wrongly skipped.
+        try {
+            const data = await readJsonBody(req);
+            const question = compactWhitespace(data.prompt || data.question || '');
+            const language = data.language === 'zh' ? 'zh' : 'en';
+            const history = Array.isArray(data.history) ? data.history : [];
+            const sectionTitle = compactWhitespace(data.sectionTitle || data.sectionId || '');
+            if (!question) {
+                res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' });
+                res.end(JSON.stringify({ error: 'Missing prompt/question' }));
+                return;
+            }
+            let grounded = true;
+            let reply = '';
+            try {
+                const historyText = history.slice(-3)
+                    .map(h => `${h && h.role === 'assistant' ? 'Tutor' : 'Student'}: ${compactWhitespace((h && h.content) || '')}`)
+                    .filter(line => line.length > 8)
+                    .join('\n')
+                    .slice(0, 1200);
+                const classifyRaw = await callOpenRouterChat({
+                    model: 'anthropic/claude-haiku-4.5',
+                    timeoutMs: 15000,
+                    temperature: 0,
+                    maxTokens: 200,
+                    messages: [
+                        {
+                            role: 'system',
+                            content: 'You triage messages for a Signals & Systems tutoring app. Decide whether the student\'s latest message needs the full grounded teaching pipeline (textbook retrieval + web search + a structured explanation), or is a casual/simple turn (greeting, thanks, acknowledgement, small-talk) that only needs a short friendly reply. A short message can still be grounded if, in context, it is a real course question (e.g. "why?", "再详细点"). When unsure, choose grounded. Respond with STRICT JSON only, no prose: {"grounded": true|false, "reply": "<if not grounded: one short warm reply in the student\'s language inviting a course question; else empty string>"}'
+                        },
+                        {
+                            role: 'user',
+                            content: [
+                                sectionTitle ? `Current section: ${sectionTitle}` : '',
+                                historyText ? `Recent conversation:\n${historyText}` : '',
+                                `Student's latest message: ${question}`,
+                                `Reply language: ${language === 'zh' ? 'Chinese' : 'English'}`
+                            ].filter(Boolean).join('\n\n')
+                        }
+                    ]
+                });
+                const parsed = tryParseJsonLoose(classifyRaw);
+                if (parsed && typeof parsed.grounded === 'boolean') {
+                    grounded = parsed.grounded;
+                    reply = grounded ? '' : compactWhitespace(parsed.reply || '');
+                }
+            } catch (err) {
+                console.warn('[intent] classification failed; defaulting to grounded:', err.message);
+                grounded = true;
+                reply = '';
+            }
+            if (!grounded && !reply) {
+                reply = language === 'zh'
+                    ? '你好！👋 想学哪个知识点、或者有题目，直接问我就行。'
+                    : 'Hi! 👋 What would you like to learn or work on? Ask me a concept or a problem.';
+            }
+            console.log(`[intent] "${question.slice(0, 60)}" -> grounded=${grounded}`);
+            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+            res.end(JSON.stringify({ grounded, reply }));
+        } catch (err) {
+            console.error('[API /api/intent] Error:', err);
+            // Hard failure: tell the client to fall back to the grounded flow.
+            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+            res.end(JSON.stringify({ grounded: true, reply: '' }));
+        }
+        return;
+    }
+
     if (pathname === '/api/ask' && req.method === 'POST') {
         try {
             const data = await readJsonBody(req);

@@ -17653,6 +17653,26 @@ async function callAsk(prompt, signal, extra = {}) {
   return data;
 }
 
+// Lightweight triage call: does this turn need the grounded pipeline?
+// Fail-safe: any error or unexpected shape resolves to { grounded: true } so we
+// degrade to the normal grounded flow rather than wrongly skipping it.
+async function callIntent(prompt, signal, extra = {}) {
+  try {
+    const fetchOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt, uid: getUid(), bookSource: currentBook, ...extra })
+    };
+    if (signal) fetchOptions.signal = signal;
+    const res = await fetch(`${API_BASE}/api/intent`, fetchOptions);
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || typeof data.grounded !== 'boolean') return { grounded: true, reply: '' };
+    return data;
+  } catch (_) {
+    return { grounded: true, reply: '' };
+  }
+}
+
 function replayLiveSearchEvents(container, events = [], finalSources = [], lang = 'en') {
   if (!container) return;
   const liveSources = container.querySelector('.search-live-sources');
@@ -17692,6 +17712,22 @@ function replayLiveSearchEvents(container, events = [], finalSources = [], lang 
 
 function buildSearchProgressMarkup(context = 'answer', lang = 'en') {
   const isZh = lang === 'zh';
+  if (context === 'thinking') {
+    return `
+    <div class="search-progress-card" aria-live="polite">
+      <div class="search-progress-head">
+        <div class="search-progress-kicker">${isZh ? '生成中' : 'Working'}</div>
+        <div class="search-progress-title">${isZh ? '思考中…' : 'Thinking…'}</div>
+        <div class="search-progress-summary">${isZh ? '正在判断怎么回答最合适。' : 'Figuring out the best way to answer.'}</div>
+      </div>
+      <div class="search-progress-list">
+        <div class="search-step">
+          <span class="step-icon step-spinner" aria-hidden="true"></span>
+          <span class="search-step-label">${isZh ? '判断中' : 'Deciding'}</span>
+        </div>
+      </div>
+    </div>`;
+  }
   const copy = isZh ? {
     kicker: '生成中',
     title: '正在准备可靠回答',
@@ -17813,7 +17849,7 @@ async function sendQuestion(rawPrompt, source = 'auto') {
   setReferencesOpen(false);
   renderMainConversationThread({
     pendingPrompt: prompt,
-    pendingAssistantHtml: buildSearchProgressMarkup(isFollowup ? 'followup' : 'answer', detectLang(prompt)),
+    pendingAssistantHtml: buildSearchProgressMarkup('thinking', detectLang(prompt)),
     pendingAssistantClass: 'main-chat-turn-pending'
   });
   answerScroll.scrollTop = isFollowup ? answerScroll.scrollHeight : 0;
@@ -17822,6 +17858,39 @@ async function sendQuestion(rawPrompt, source = 'auto') {
   if (currentAbortController) currentAbortController.abort();
   currentAbortController = new AbortController();
   stopBtn.classList.remove('hidden');
+
+  // ── Triage: casual/non-question turns skip the grounded pipeline entirely ──
+  let groundedTurn = true;
+  let casualReply = '';
+  if (!hasReadableAttachments) {
+    const intent = await callIntent(prompt, currentAbortController.signal, {
+      history: tutorState.chatHistory.slice(-6),
+      language: detectLang(prompt)
+    });
+    groundedTurn = intent.grounded !== false;
+    casualReply = groundedTurn ? '' : (intent.reply || '');
+  }
+  if (!groundedTurn) {
+    currentAbortController = null;
+    stopBtn.classList.add('hidden');
+    tutorState.chatHistory.push(
+      { role: 'user', content: prompt },
+      { role: 'assistant', content: casualReply }
+    );
+    tutorState.currentBookPages = [];
+    tutorState.currentWebSources = [];
+    renderBookPages([]);
+    renderMainConversationThread();
+    answerScroll.scrollTop = isFollowup ? answerScroll.scrollHeight : 0;
+    setStatus('Done', 'done');
+    return;
+  }
+  // Grounded turn: swap the neutral "Thinking…" card for the grounded one.
+  renderMainConversationThread({
+    pendingPrompt: prompt,
+    pendingAssistantHtml: buildSearchProgressMarkup(isFollowup ? 'followup' : 'answer', detectLang(prompt)),
+    pendingAssistantClass: 'main-chat-turn-pending'
+  });
 
   let step = 1;
   renderStepState(step);
