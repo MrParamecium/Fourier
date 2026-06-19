@@ -10,10 +10,6 @@
     "pregen:bg-ch1": "node app/scripts/pregen-background-chapter1.js",
     "check": "node --check app/ws-bridge.js && node --check app/app.js"
   },
-  "dependencies": {
-    "pptxgenjs": "^4.0.1",
-    "ws": "^8.19.0"
-  },
   "devDependencies": {
     "playwright": "^1.60.0"
   }

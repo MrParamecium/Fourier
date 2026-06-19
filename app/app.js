@@ -114,29 +114,7 @@ function initIntroLanding() {
   onScroll();
 }
 
-function createIntroCosmos() {
-  const container = document.getElementById('introWebglContainer');
-  if (container) {
-    while (container.firstChild) container.removeChild(container.firstChild);
-  }
-  return {
-    destroy() {}
-  };
-}
 
-function renderHyperknowLinks(webSources) {
-  if (!webSources || !webSources.length) return '';
-  const cleaned = sortSourcesByType(webSources)
-    .filter(s => s && s.url)
-    .slice(0, 10);
-  if (!cleaned.length) return '';
-  return `<section class="hyperknow-links-container">
-    <div class="hyperknow-links-header">Searching Web ✓</div>
-    <div class="hyperknow-links-list">
-      ${renderWebSourceCards(cleaned, { compact: true, showBuckets: false })}
-    </div>
-  </section>`;
-}
 
 
 // ════════════════════════════════════════════════════════════════
@@ -314,10 +292,6 @@ function getFirstLearnTarget() {
   return null;
 }
 
-function prepareLearnReturnTarget(target = null) {
-  setAuthReturnIntent('learn');
-  setAuthReturnTarget(target || getFirstLearnTarget());
-}
 
 function prepareWorkspaceReturnTarget() {
   setAuthReturnIntent('workspace');
@@ -327,9 +301,7 @@ function prepareWorkspaceReturnTarget() {
 function continueToPendingLearnTarget() {
   const target = consumeAuthReturnTarget();
   if (!target) return false;
-  if (target.book && target.book !== currentBook) {
-    setBook(target.book, { preserveView: true });
-  }
+  // target.book ignored — 2nd Edition retired 2026-06-19.
   if (target.type === 'overview' || shouldOpenSectionAsChapterOverview(target.sectionId, target.sectionTitle, target.subsections || [])) {
     openChapterOverviewMode(target.sectionId, target.sectionTitle, target.subsections || []);
   } else {
@@ -1430,10 +1402,6 @@ function updateHomeworkItem(id, patch, options = {}) {
   return getCurrentHomeworkSet()?.problems || [];
 }
 
-function homeworkPreviewText(item) {
-  const text = (item.body || item.explanation || '').trim().replace(/\s+/g, ' ');
-  return text ? text.slice(0, 96) : 'No problem text yet';
-}
 
 function homeworkStatusLabel(status) {
   if (status === 'Done') return 'Done';
@@ -2665,56 +2633,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initClerk();
 });
 
-function fallbackLocalUid() {
-  // No Clerk available - use persistent localStorage uid
-  const uid = localStorage.getItem('tutorUid') || (() => {
-    const id = 'local_' + Math.random().toString(36).slice(2, 10);
-    localStorage.setItem('tutorUid', id);
-    return id;
-  })();
-  currentUser = { uid, name: 'You', isGuest: false };
-  fetch(`${API_BASE}/api/memory?uid=${encodeURIComponent(uid)}`)
-    .then(r => r.ok ? r.json() : {})
-    .then(mem => {
-      userMemory = mem || {};
-      // Fallback: if server doesn't have quiz, restore from localStorage
-      if (!userMemory.quiz) {
-        const saved = localStorage.getItem('tutorQuiz');
-        if (saved) try { userMemory.quiz = JSON.parse(saved); } catch (_) {}
-      } else {
-        // Keep localStorage in sync
-        localStorage.setItem('tutorQuiz', JSON.stringify(userMemory.quiz));
-      }
-      if (!userMemory.preferenceProfile || !userMemory.preferenceProfile.markdown) {
-        userMemory.preferenceProfile = {
-          markdown: DEFAULT_PREFERENCE_PROFILE,
-          updatedAt: new Date().toISOString(),
-          source: 'default',
-          manualEdited: false
-        };
-      }
-      if (userMemory && userMemory.quiz && !userMemory.quiz.timeline) {
-        userMemory.quiz.timeline = 'two_weeks';
-      }
-      if (userMemory && userMemory.quiz && !userMemory.quiz.goal && userMemory.quiz.track) {
-        userMemory.quiz.goal = userMemory.quiz.track;
-      }
-      updateLearnModeBadge(userMemory && userMemory.quiz ? userMemory.quiz.track : null);
-      const quizDone = userMemory.quiz && ['track', 'math', 'timeline', 'preference', 'priority'].every(k => {
-        const v = userMemory.quiz[k];
-        return Array.isArray(v) ? v.length > 0 : !!v;
-      });
-      updatePreferenceSidebarSummary();
-      renderUserBadge();
-      const shouldEnter = allowAuthNavigation || authRedirectInProgress;
-      if (shouldEnter && !quizDone) showQuiz();
-    })
-    .catch(() => {
-      renderUserBadge();
-      const shouldEnter = allowAuthNavigation || authRedirectInProgress;
-      if (shouldEnter) showQuiz();
-    });
-}
 
 // Helper: get current uid for API calls
 function getUid() {
@@ -2932,12 +2850,10 @@ window.openRecentConversationMenu = function(timestamp, anchorEl) {
   }, 0);
 }
 
-// ── Language Toggle ──────────────────────────────────────────────────────────
-let currentBook = 'new'; // always 3rd Ed
-
-document.addEventListener('DOMContentLoaded', () => {
-  setBook(currentBook, { preserveView: true }); // init book state without hijacking startup view
-});
+// 2nd Edition was retired 2026-06-19. The bookSource value is hardcoded to 'new'
+// (3rd Edition) and shipped to the server unchanged for backward compatibility
+// with the bookSource query parameter on /api/section and /api/ask.
+const currentBook = 'new';
 
 const welcomeScreen = document.getElementById('welcomeScreen');
 const answerScreen  = document.getElementById('answerScreen');
@@ -3601,7 +3517,7 @@ async function processFile(file, list, previewId) {
     return;
   }
   const type = getAttachmentType(file);
-  const dataUrl = await readAsDataUrl(file);
+  const dataUrl = await readFileAsDataUrl(file);
   const attachment = {
     type,
     name: file.name,
@@ -3627,14 +3543,6 @@ async function processFile(file, list, previewId) {
   setSendState();
 }
 
-function readAsDataUrl(file) {
-  return new Promise((res, rej) => {
-    const r = new FileReader();
-    r.onload = () => res(r.result);
-    r.onerror = rej;
-    r.readAsDataURL(file);
-  });
-}
 
 function setupAttachBtn(btnId, fileInputId, inputEl) {
   const btn = document.getElementById(btnId);
@@ -3755,10 +3663,6 @@ function isB8TextbookOnlySection(sectionId = '', sectionTitle = '') {
   return /\bB\.8\b(?!-\d)/i.test(`${sectionId || ''} ${sectionTitle || ''}`);
 }
 
-function isB73VectorOperationsSection(sectionId = '', sectionTitle = '') {
-  const text = compactWhitespace(`${sectionId || ''} ${sectionTitle || ''}`);
-  return /\bB\.7-3\b/i.test(text) || (/Vector Operations/i.test(text) && /\bB\.7\b/i.test(text));
-}
 
 function getB8TextbookOnlyMarkdown() {
   return B8_TEXTBOOK_ONLY_MARKDOWN;
@@ -3808,230 +3712,9 @@ if (referencesToggleBtn) {
 // PRE-GENERATED SECTION PREVIEWS (Background + Chapter 1)
 // No API call needed - instant display on click
 // ═══════════════════════════════════════════════════════════
-const SECTION_PREVIEWS = {
-  // ── Background ──────────────────────────────────────────
-  'B.1 Complex Numbers': { emoji: '🔢', refs: 3,
-    zh: '复数是信号处理的核心语言。这一节介绍虚数单位 j、代数运算、极坐标与直角坐标互转,以及共轭与模长。掌握后,你能看懂绝大多数公式中的 e^jω。',
-    en: 'Complex numbers are the language of signal processing. This section covers the imaginary unit j, algebraic operations, polar ↔ rectangular conversion, conjugates, and magnitude - the foundation for understanding e^jω in any formula.'
-  },
-  'B.1-1 A Historical Note': { emoji: '📜', refs: 1,
-    zh: '复数的诞生并非一帆风顺--这段历史讲述数学家们如何被迫接受"不存在"的数,并最终发现它是解方程与工程分析不可缺少的工具。',
-    en: 'Complex numbers were not accepted overnight. This section traces how mathematicians were forced to embrace "impossible" numbers, ultimately making them indispensable for solving equations and engineering analysis.'
-  },
-  'B.1-2 Algebra of Complex Numbers': { emoji: '➕', refs: 2,
-    zh: '加减乘除、共轭、取模、辐角--本节系统练习复数四则运算,并在直角坐标与极坐标之间自如转换,是后续一切运算的基础。',
-    en: 'Add, subtract, multiply, divide, conjugate, modulus, argument - this section drills complex arithmetic in both rectangular and polar form, the foundation for all subsequent operations.'
-  },
-  'B.2 Sinusoids': { emoji: '〰️', refs: 4,
-    zh: '正弦信号是工程中最基础的信号。这节讲振幅、频率、相位,以及多个同频正弦信号叠加的化简技巧。',
-    en: 'Sinusoids are the most fundamental signal in engineering. This section covers amplitude, frequency, phase, and how to combine multiple same-frequency sinusoids into one.'
-  },
-  'B.2-1 Addition of Sinusoids': { emoji: '🎵', refs: 2,
-    zh: '两个或多个同频正弦信号相加时,结果仍是同频正弦信号。本节介绍如何利用复数/相量法快速求合成后的振幅与相位--考试必考技能。',
-    en: 'The sum of same-frequency sinusoids is still a sinusoid. This section shows how to use phasors / complex numbers to quickly find the resulting amplitude and phase - a must-know exam skill.'
-  },
-  'B.3 Sketching Signals': { emoji: '📈', refs: 3,
-    zh: '学会快速画出信号波形是分析的基本功。本节介绍单调指数信号(增长与衰减)和指数调幅正弦信号的草图画法,帮你建立直觉。',
-    en: 'Being able to sketch signal waveforms quickly is a core skill. This section covers monotonic exponentials (growth and decay) and exponentially modulated sinusoids - essential for reading and drawing time-domain plots.'
-  },
-  'B.3-1 Monotonic Exponentials': { emoji: '📉', refs: 2,
-    zh: 'e^(at) 是系统响应中最常出现的函数。本节练习根据 a 的正负、大小快速判断曲线形状,并在坐标系上准确勾勒出来。',
-    en: 'e^(at) appears constantly in system responses. This section trains you to sketch growth or decay curves by reading the sign and magnitude of a - quickly and accurately.'
-  },
-  'B.3-2 The Exponentially Varying Sinusoid': { emoji: '🌊', refs: 2,
-    zh: '指数调幅正弦信号形如 e^(at)cos(ωt),是电路暂态响应的核心形态。本节讲解如何根据衰减包络和振荡频率快速画出草图。',
-    en: 'The signal e^(at)cos(ωt) appears in transient circuit responses. This section teaches you to sketch it quickly using its exponential envelope and oscillation frequency.'
-  },
-  "B.4 Cramer's Rule": { emoji: '🔣', refs: 2,
-    zh: '克拉默法则用行列式求解线性方程组,在电路节点分析和系统方程中常用。本节帮你快速掌握这个工具,让联立方程不再是障碍。',
-    en: "Cramer's Rule solves linear systems using determinants - widely used in circuit node analysis. This section gives you a fast, reliable method to tackle simultaneous equations."
-  },
-  'B.5 Partial Fraction Expansion': { emoji: '➗', refs: 6,
-    zh: '部分分式展开是拉普拉斯逆变换的核心工具。本节系统讲解待定系数法、Heaviside 覆盖法、复数根与重复根,是后续章节的必备基础。',
-    en: 'Partial fraction expansion is essential for inverse Laplace transforms. This section covers the method of clearing fractions, Heaviside cover-up, complex roots, and repeated roots - prerequisite for later chapters.'
-  },
-  'B.5-1 Method of Clearing Fractions': { emoji: '🔧', refs: 1,
-    zh: '通过两边同乘分母,将有理函数化为多项式方程后比较系数,求出各项系数。这是最基础、最通用的方法。',
-    en: 'Multiply both sides by the denominator to convert to a polynomial equation and match coefficients. This is the most general approach for any partial fraction problem.'
-  },
-  'B.5-2 Heaviside Cover-Up Method': { emoji: '🎩', refs: 1,
-    zh: '覆盖法:直接用极点值代入,遮住对应因子后求残差。对单极点情形速度极快,考场首选。',
-    en: 'Cover-up method: substitute each pole value directly, covering the corresponding factor to find its residue. Extremely fast for simple poles - the go-to exam technique.'
-  },
-  'B.5-3 Complex and Repeated Roots': { emoji: '🌀', refs: 1,
-    zh: '当极点为复数或重复极点时,展开方式有所不同。本节讲清楚对应的系数公式和求解技巧,避免考试踩坑。',
-    en: 'When poles are complex or repeated, the expansion requires different formulas. This section explains the correct techniques for both cases to avoid common exam mistakes.'
-  },
-  'B.5-4 Hybrid Method': { emoji: '🔀', refs: 1,
-    zh: '混合法将覆盖法与待定系数法结合,处理混有不同类型极点的复杂分式,兼顾速度与准确性。',
-    en: 'The hybrid method combines cover-up and coefficient matching to handle fractions with mixed pole types - balancing speed and accuracy for complex problems.'
-  },
-  'B.5-5 Improper F(x) with m=n': { emoji: '⚠️', refs: 1,
-    zh: '当分子次数等于分母次数(m=n)时,需要先做多项式除法提取整式部分,再对余式做部分分式展开。',
-    en: 'When the numerator degree equals the denominator degree (m=n), perform polynomial long division first to extract the integer part before expanding the remainder.'
-  },
-  'B.5-6 Modified Partial Fractions': { emoji: '🛠️', refs: 1,
-    zh: '改进的部分分式方法处理一些特殊结构,使后续反变换更加便捷,常出现在系统分析题目的最后一步。',
-    en: 'Modified partial fractions handle special structures to make the subsequent inverse transform easier - often the final step in system analysis problems.'
-  },
-  'B.6 Vectors and Matrices': { emoji: '🧮', refs: 5,
-    zh: '矩阵和向量贯穿整个系统分析。本节覆盖矩阵定义、运算、转置、特征方程,以及矩阵指数与矩阵幂,为状态空间分析奠定基础。',
-    en: 'Matrices and vectors permeate system analysis. This section covers definitions, operations, transpose, characteristic equations, and matrix exponentials/powers - the foundation for state-space analysis.'
-  },
-  'B.6-1 Some Definitions and Properties': { emoji: '📋', refs: 1,
-    zh: '行向量、列向量、方阵、零矩阵、单位矩阵......建立矩阵运算的基本词汇表,后续所有内容的出发点。',
-    en: 'Row vectors, column vectors, square matrices, zero matrix, identity matrix - build the vocabulary for matrix operations. Everything else starts here.'
-  },
-  'B.6-2 Matrix Algebra': { emoji: '✖️', refs: 1,
-    zh: '矩阵加法、数乘、矩阵乘法、逆矩阵的求法与条件。重点理解矩阵乘法不满足交换律,以及逆矩阵的存在条件。',
-    en: 'Addition, scalar multiplication, matrix multiplication, and matrix inversion. Key insight: matrix multiplication is not commutative, and inverses exist only under specific conditions.'
-  },
-  'B.6-3 Derivatives and Integrals of a Matrix': { emoji: '∂', refs: 1,
-    zh: '对矩阵逐元素求导或积分,在状态方程的推导和解法中经常用到。本节明确运算规则并给出实例。',
-    en: 'Element-wise differentiation and integration of matrices appear frequently in deriving and solving state equations. This section defines the rules with concrete examples.'
-  },
-  'B.6-4 The Characteristic Equation of a Matrix': { emoji: '🎯', refs: 1,
-    zh: '特征方程 det(λI - A) = 0 的根就是特征值,决定了系统的固有频率与稳定性。本节从定义出发,手把手推导求解方法。',
-    en: 'The roots of det(λI - A) = 0 are the eigenvalues, which determine the natural frequencies and stability of a system. This section derives and solves the characteristic equation step by step.'
-  },
-  'B.6-5 Computation of Exponential and Power of a Matrix': { emoji: '🔋', refs: 1,
-    zh: '矩阵指数 e^(At) 是线性系统时域解的核心。本节介绍利用特征值分解计算矩阵指数与矩阵幂的方法。',
-    en: 'The matrix exponential e^(At) is central to the time-domain solution of linear systems. This section shows how to compute it using eigenvalue decomposition.'
-  },
-  'B.7 Miscellaneous': { emoji: '🔍', refs: 2,
-    zh: "本节收录实用但零散的数学工具,重点是 L'Hôpital 法则--处理极限中的 0/0 或 ∞/∞ 不定型,在频率响应分析中非常有用。",
-    en: "This section collects handy math tools, with emphasis on L'Hôpital's Rule for resolving 0/0 or ∞/∞ indeterminate limits - frequently needed in frequency response analysis."
-  },
-  "B.7-1 L'Hôpital's Rule": { emoji: '📉', refs: 2,
-    zh: "当极限出现不定型时,L'Hôpital 法则允许对分子分母分别求导后再取极限。本节通过例题讲清楚适用条件与使用步骤。",
-    en: "When a limit yields an indeterminate form, L'Hôpital's Rule lets you differentiate numerator and denominator separately before taking the limit. This section clarifies when and how to apply it."
-  },
-
-  // ── Chapter 1 ────────────────────────────────────────────
-  '1.1 Size of a Signal': { emoji: '📏', refs: 3,
-    zh: '如何衡量一个信号有多"大"?本节引入信号能量和信号功率的定义,区分能量信号与功率信号,是所有后续分析的起点。',
-    en: 'How do you measure how "big" a signal is? This section defines signal energy and power, distinguishes energy signals from power signals - the starting point for all subsequent analysis.'
-  },
-  '1.2 Classification of Signals': { emoji: '🗂️', refs: 5,
-    zh: '连续时间 vs 离散时间、模拟 vs 数字、周期 vs 非周期、能量 vs 功率、确定性 vs 随机--这节逐一澄清五大分类维度,建立你的信号分类框架。',
-    en: 'Continuous-time vs discrete-time, analog vs digital, periodic vs aperiodic, energy vs power, deterministic vs random - this section clarifies all five classification dimensions and builds your signal taxonomy.'
-  },
-  '1.2-1 Continuous-Time and Discrete-Time Signals': { emoji: '⏱️', refs: 1,
-    zh: '连续时间信号在每一个时刻都有定义;离散时间信号只在整数时刻有值。两者的数学表示和运算规则各有不同。',
-    en: 'Continuous-time signals are defined at every instant; discrete-time signals exist only at integer time steps. Their representations and operations differ fundamentally.'
-  },
-  '1.2-2 Analog and Digital Signals': { emoji: '🔌', refs: 1,
-    zh: '模拟信号幅度连续,数字信号幅度量化为有限个离散值。这对概念与连续/离散时间相互独立,理解它们的区别避免混淆。',
-    en: 'Analog signals have continuous amplitude; digital signals have quantized amplitude. This distinction is independent of continuous/discrete time - understanding both avoids confusion.'
-  },
-  '1.2-3 Periodic and Aperiodic Signals': { emoji: '🔁', refs: 1,
-    zh: '周期信号以固定周期 T 无限重复,非周期信号则不然。判断信号是否周期性是傅里叶分析的第一步。',
-    en: 'Periodic signals repeat with a fixed period T; aperiodic signals do not. Determining periodicity is the first step in Fourier analysis.'
-  },
-  '1.2-4 Energy and Power Signals': { emoji: '⚡', refs: 1,
-    zh: '有限能量、零平均功率的信号称为能量信号;有限平均功率、无限能量的称为功率信号。两类信号的数学工具不同。',
-    en: 'Finite energy, zero average power → energy signal; finite average power, infinite energy → power signal. Each class uses different mathematical tools in analysis.'
-  },
-  '1.2-5 Deterministic and Random Signals': { emoji: '🎲', refs: 1,
-    zh: '确定性信号可以用精确的数学表达式描述;随机信号需要用概率统计来刻画。本节只简要介绍概念,随机信号在更高级的课程中深入讨论。',
-    en: 'Deterministic signals can be described by exact mathematical expressions; random signals require probability and statistics. This section introduces the concept briefly - random signals are covered in depth in advanced courses.'
-  },
-  '1.3 Some Useful Signal Operations': { emoji: '⚙️', refs: 4,
-    zh: '时间平移(延迟/超前)、时间尺度变换(压缩/拉伸)、时间反转,以及这些操作的组合顺序--掌握这些,你能看懂任何时域图形变换题。',
-    en: 'Time shifting (delay/advance), time scaling (compress/stretch), time reversal, and their combined order - master these to solve any time-domain waveform transformation problem.'
-  },
-  '1.3-1 Time Shifting': { emoji: '⏩', refs: 1,
-    zh: '将信号 x(t) 替换为 x(t-t0) 得到延迟信号,x(t+t0) 得到超前信号。本节用图示清楚说明正负方向的直觉。',
-    en: 'Replacing x(t) with x(t-t0) delays the signal; x(t+t0) advances it. This section uses diagrams to build clear intuition for the direction of shift.'
-  },
-  '1.3-2 Time Scaling': { emoji: '🔍', refs: 1,
-    zh: 'x(at) 当 a>1 时信号在时间轴上压缩,0<a<1 时拉伸。本节练习快速判断压缩/拉伸方向和比例。',
-    en: 'x(at) compresses the signal when a>1, stretches it when 0<a<1. This section drills quick identification of direction and ratio of scaling.'
-  },
-  '1.3-3 Time Inversion (Time Reversal)': { emoji: '↩️', refs: 1,
-    zh: 'x(-t) 是 x(t) 关于纵轴的镜像翻转,也称时间反转。这是卷积运算中常需要的基本操作。',
-    en: 'x(-t) is the mirror image of x(t) about the vertical axis - also called time reversal. This operation appears frequently in convolution computations.'
-  },
-  '1.3-4 Combined Operations': { emoji: '🔄', refs: 1,
-    zh: '当多种操作组合时,顺序至关重要:先平移后缩放与先缩放后平移的结果不同。本节通过例题讲清楚正确的操作顺序。',
-    en: 'Order matters when combining operations: shift-then-scale gives a different result from scale-then-shift. This section uses worked examples to clarify the correct sequence.'
-  },
-  '1.4 Some Useful Signal Models': { emoji: '📐', refs: 4,
-    zh: '单位阶跃 u(t)、单位冲激 δ(t)、斜坡函数、矩形脉冲......这些"理想信号"是所有系统分析的基本积木,本节讲清楚它们的定义与相互关系。',
-    en: 'Unit step u(t), unit impulse δ(t), ramp function, rectangular pulse - these idealized signals are the building blocks of all system analysis. This section defines them and explains their relationships.'
-  },
-  '1.5 Even and Odd Functions': { emoji: '⚖️', refs: 3,
-    zh: '任何信号都能唯一分解为偶分量和奇分量之和。本节讲解性质、乘积规则,以及如何把任意信号拆成 Even + Odd,这在傅里叶分析中极为有用。',
-    en: 'Any signal can be uniquely decomposed into even and odd parts. This section covers properties, product rules, and how to split any signal - a technique heavily used in Fourier analysis.'
-  },
-  '1.5-1 Some Properties of Even and Odd Functions': { emoji: '🔵', refs: 1,
-    zh: '偶函数乘偶函数得偶函数;奇函数乘奇函数得偶函数;偶×奇得奇函数。这些乘积规则在化简积分时非常省力。',
-    en: 'Even × even = even; odd × odd = even; even × odd = odd. These product rules greatly simplify integrals and are essential for Fourier series calculations.'
-  },
-  '1.5-2 Even and Odd Components of a Signal': { emoji: '⚔️', refs: 1,
-    zh: '任意信号 x(t) 的偶分量为 [x(t)+x(-t)]/2,奇分量为 [x(t)-x(-t)]/2。本节通过例题练习分解与重组。',
-    en: 'The even part of x(t) is [x(t)+x(-t)]/2 and the odd part is [x(t)-x(-t)]/2. This section practices decomposition and reconstruction with worked examples.'
-  },
-  '1.6 Systems': { emoji: '📦', refs: 2,
-    zh: '系统就是对信号进行处理的"黑箱"。本节引入系统的基本概念与数学描述,说明输入-输出关系的含义,是后续所有系统分类和分析的出发点。',
-    en: 'A system is a "black box" that processes signals. This section introduces the fundamental concept and mathematical description of systems - the starting point for all classification and analysis.'
-  },
-  '1.7 Classification of Systems': { emoji: '🔬', refs: 7,
-    zh: '线性 vs 非线性、时不变 vs 时变、即时 vs 动态、因果 vs 非因果、集总 vs 分布参数......考试高频考点全在这一节,帮你建立清晰的判断标准。',
-    en: 'Linear vs nonlinear, time-invariant vs time-varying, instantaneous vs dynamic, causal vs noncausal, lumped vs distributed - all high-frequency exam topics are here. Build clear criteria for each classification.'
-  },
-  '1.7-1 Linear and Nonlinear Systems': { emoji: '📊', refs: 1,
-    zh: '线性系统满足叠加原理:齐次性(缩放输入)和可加性(多个输入叠加)。这是后续所有分析方法成立的根本前提。',
-    en: 'A linear system obeys superposition: homogeneity (scaling the input) and additivity (summing inputs). This is the fundamental assumption behind all subsequent analysis methods.'
-  },
-  '1.7-2 Time-Invariant and Time-Varying Parameter Systems': { emoji: '🕐', refs: 1,
-    zh: '时不变系统的响应不随时间平移而改变:输入延迟 t0,输出也同样延迟 t0。时变系统的参数随时间变化,分析更为复杂。',
-    en: 'A time-invariant system: delaying the input by t0 delays the output by t0. Time-varying systems have parameters that change with time, making analysis significantly more complex.'
-  },
-  '1.7-3 Instantaneous and Dynamic Systems': { emoji: '⚡', refs: 1,
-    zh: '即时系统(无记忆系统)的当前输出只取决于当前输入;动态系统(有记忆系统)的输出还取决于过去的输入或状态。',
-    en: 'Instantaneous (memoryless) systems: output depends only on the current input. Dynamic (memory) systems: output also depends on past inputs or stored state.'
-  },
-  '1.7-4 Causal and Noncausal Systems': { emoji: '⏱️', refs: 1,
-    zh: '因果系统的输出不会早于输入出现,符合物理实现的因果律。非因果系统在理论分析中有用,但不能直接实时实现。',
-    en: 'Causal systems produce no output before the input occurs - physically realizable. Noncausal systems are useful in theory but cannot be implemented in real-time.'
-  },
-  '1.7-5 Lumped-Parameter and Distributed-Parameter Systems': { emoji: '🔌', refs: 1,
-    zh: '集总参数系统用常微分方程描述(如 RLC 电路);分布参数系统用偏微分方程描述(如传输线)。本节简要说明二者的适用边界。',
-    en: 'Lumped-parameter systems are described by ordinary differential equations (e.g. RLC circuits); distributed-parameter systems by partial differential equations (e.g. transmission lines). This section clarifies when each applies.'
-  },
-  '1.7-6 Continuous-Time and Discrete-Time Systems': { emoji: '📡', refs: 1,
-    zh: '连续时间系统处理连续信号,用微分方程描述;离散时间系统处理序列,用差分方程描述。数字信号处理是离散时间系统的典型应用。',
-    en: 'Continuous-time systems process continuous signals (described by differential equations); discrete-time systems process sequences (described by difference equations). Digital signal processing is a prime example.'
-  },
-  '1.7-7 Analog and Digital Systems': { emoji: '💾', refs: 1,
-    zh: '模拟系统处理连续幅度信号;数字系统处理量化信号。现代工程中两者往往通过 ADC/DAC 相互转换,协同工作。',
-    en: 'Analog systems handle continuously-valued signals; digital systems handle quantized signals. In modern engineering, both coexist and interact through ADC/DAC converters.'
-  },
-  '1.8 System Model: Input-Output Description': { emoji: '🔄', refs: 3,
-    zh: '输入-输出(外部)描述从整体视角建模,不关注内部结构,只看信号进出的关系。本节还对比了内部描述(状态空间)的概念与适用场景。',
-    en: 'The input-output (external) description models the system from a black-box perspective, focusing only on the relationship between inputs and outputs. This section also introduces the internal (state-space) description.'
-  },
-  '1.8-1 Internal and External Descriptions of a System': { emoji: '🏗️', refs: 2,
-    zh: '外部描述(传递函数)适合 LTI 系统;内部描述(状态方程)适合更一般的情形。理解两者的联系与取舍是系统建模的核心能力。',
-    en: 'External description (transfer function) suits LTI systems; internal description (state equations) handles more general cases. Understanding their relationship is the core competency of system modeling.'
-  },
-  '1.9 Summary': { emoji: '📝', refs: 2,
-    zh: '第一章精华回顾:信号的分类与运算、系统概念与七大分类维度、常用信号模型。考前 5 分钟必刷,把整章知识串联一遍。',
-    en: "Chapter 1 recap: signal classification and operations, the concept of systems and all seven classification dimensions, useful signal models. A must-read 5-minute review before exams."
-  }
-};
-
-
 // ── SECTION_PREVIEWS_NEW (auto-generated) ──
 const SECTION_PREVIEWS_NEW = {
   "1.1 Size of a Signal": {
-    "en": "Signal energy and power are the fundamental metrics for measuring how 'big' a signal really is-not in amplitude, but in total content. These normalized measures (based on a 1-ohm load) become essential tools for comparing signals, analyzing approximation errors, and understanding signal-to-noise ratios on exams.",
-    "zh": "信号能量和功率是衡量信号\"大小\"的基本指标--不是振幅,而是总体内容。这些归一化度量(基于1欧姆负载)成为比较信号、分析近似误差和理解信噪比的必要工具。",
-    "emoji": "⚡",
-    "refs": 8
-  },
-  "1.1": {
     "en": "Signal energy and power are the fundamental metrics for measuring how 'big' a signal really is-not in amplitude, but in total content. These normalized measures (based on a 1-ohm load) become essential tools for comparing signals, analyzing approximation errors, and understanding signal-to-noise ratios on exams.",
     "zh": "信号能量和功率是衡量信号\"大小\"的基本指标--不是振幅,而是总体内容。这些归一化度量(基于1欧姆负载)成为比较信号、分析近似误差和理解信噪比的必要工具。",
     "emoji": "⚡",
@@ -4043,19 +3726,7 @@ const SECTION_PREVIEWS_NEW = {
     "emoji": "📏",
     "refs": 1
   },
-  "1.1-2": {
-    "en": "Signal energy and power are the fundamental metrics for quantifying how 'big' a signal really is. Energy (the integral of squared magnitude) works perfectly for signals that die out, while power (time-averaged energy) handles signals that persist forever-and you'll need to know which one applies to pass any exam problem involving signal classification.",
-    "zh": "信号能量和功率是量化信号\"大小\"的基本指标。能量(幅度平方的积分)适用于衰减的信号,而功率(能量的时间平均)则用于永不衰减的信号--在任何涉及信号分类的考试题中,你都需要知道何时使用哪一个。",
-    "emoji": "📏",
-    "refs": 1
-  },
   "1.10 Internal Description: The State-Space Description": {
-    "en": "State-space descriptions capture the internal dynamics of a system by tracking key variables (like capacitor voltages and inductor currents) from which all other signals can be reconstructed. This internal view is essential for understanding system behavior, designing controllers, and identifying whether a system is truly controllable and observable-properties that determine if you can actually steer and measure what matters.",
-    "zh": "状态空间描述通过跟踪系统的关键变量(如电容器电压和电感器电流)来捕捉系统的内部动态,所有其他信号都可以从这些变量重构出来。这种内部视角对于理解系统行为、设计控制器以及识别系统是否真正可控和可观测至关重要--这些性质决定了你是否能够真正控制和测量重要的量。",
-    "emoji": "⚙️",
-    "refs": 3
-  },
-  "1.10": {
     "en": "State-space descriptions capture the internal dynamics of a system by tracking key variables (like capacitor voltages and inductor currents) from which all other signals can be reconstructed. This internal view is essential for understanding system behavior, designing controllers, and identifying whether a system is truly controllable and observable-properties that determine if you can actually steer and measure what matters.",
     "zh": "状态空间描述通过跟踪系统的关键变量(如电容器电压和电感器电流)来捕捉系统的内部动态,所有其他信号都可以从这些变量重构出来。这种内部视角对于理解系统行为、设计控制器以及识别系统是否真正可控和可观测至关重要--这些性质决定了你是否能够真正控制和测量重要的量。",
     "emoji": "⚙️",
@@ -4067,19 +3738,7 @@ const SECTION_PREVIEWS_NEW = {
     "emoji": "⚙️",
     "refs": 1
   },
-  "1.10-2": {
-    "en": "These problems push you to translate real circuits and mechanical systems into state-variable form-the language that makes higher-order systems solvable. You'll practice identifying which voltages and currents matter as states, then writing the differential equations that govern them, skills that show up constantly on exams and in system modeling.",
-    "zh": "这些题目要求你将实际电路和机械系统转化为状态变量形式--这是求解高阶系统的关键语言。你将练习识别哪些电压和电流作为状态变量,然后写出控制它们的微分方程,这些技能在考试和系统建模中频繁出现。",
-    "emoji": "⚙️",
-    "refs": 1
-  },
   "1.11 MATLAB: Working with Functions": {
-    "en": "Plotting oscillatory functions in MATLAB requires more finesse than you might think-too few sample points and your beautiful cosine wave becomes a jagged mess. This section shows why choosing the right sampling density (typically 100 points per oscillation) is essential for capturing fast-changing signals accurately, and introduces practical MATLAB commands like anonymous functions and axis formatting to make your plots publication-ready.",
-    "zh": "在MATLAB中绘制振荡函数需要比你想象的更多技巧--样本点太少,你的余弦波就会变成锯齿状的混乱。本节展示为什么选择正确的采样密度(通常每个振荡100个点)对于准确捕捉快速变化的信号至关重要,并介绍实用的MATLAB命令(如匿名函数和坐标轴格式化)来使你的图表达到出版质量。",
-    "emoji": "📈",
-    "refs": 2
-  },
-  "1.11": {
     "en": "Plotting oscillatory functions in MATLAB requires more finesse than you might think-too few sample points and your beautiful cosine wave becomes a jagged mess. This section shows why choosing the right sampling density (typically 100 points per oscillation) is essential for capturing fast-changing signals accurately, and introduces practical MATLAB commands like anonymous functions and axis formatting to make your plots publication-ready.",
     "zh": "在MATLAB中绘制振荡函数需要比你想象的更多技巧--样本点太少,你的余弦波就会变成锯齿状的混乱。本节展示为什么选择正确的采样密度(通常每个振荡100个点)对于准确捕捉快速变化的信号至关重要,并介绍实用的MATLAB命令(如匿名函数和坐标轴格式化)来使你的图表达到出版质量。",
     "emoji": "📈",
@@ -4091,19 +3750,7 @@ const SECTION_PREVIEWS_NEW = {
     "emoji": "⚡",
     "refs": 1
   },
-  "1.11-1": {
-    "en": "Anonymous functions let you define mathematical expressions on the fly in MATLAB without creating separate files-perfect for quickly testing exponentially damped sinusoids and other signals you'll encounter in homework and exams. The @ symbol syntax makes it easy to evaluate your function at any input, whether a single point or an entire vector for plotting.",
-    "zh": "匿名函数让你在MATLAB中快速定义数学表达式,无需创建单独的文件--非常适合快速测试指数衰减正弦波和其他信号处理中常见的信号。使用@符号语法可以轻松在任意输入点(单个点或整个向量)处计算函数值,便于绘图。",
-    "emoji": "⚡",
-    "refs": 1
-  },
   "1.11-2 Relational Operators and the Unit Step Function": {
-    "en": "The unit step function is a fundamental building block in signals and systems, and MATLAB's relational operators make it surprisingly simple to define and visualize. This section shows how to use the >= operator to create u(t) as an anonymous function, then tackles two practical plotting pitfalls-axis scaling that hides your signal and the jagged appearance of discontinuities-that every student encounters when first coding step functions.",
-    "zh": "单位阶跃函数是信号与系统中的基本构件,MATLAB的关系运算符使其定义和可视化变得出奇地简单。本节展示如何使用>=运算符将u(t)创建为匿名函数,然后解决两个实际绘图问题--隐藏信号的轴缩放和不连续性的锯齿状外观--这是每个学生首次编写阶跃函数时都会遇到的问题。",
-    "emoji": "📊",
-    "refs": 1
-  },
-  "1.11-2": {
     "en": "The unit step function is a fundamental building block in signals and systems, and MATLAB's relational operators make it surprisingly simple to define and visualize. This section shows how to use the >= operator to create u(t) as an anonymous function, then tackles two practical plotting pitfalls-axis scaling that hides your signal and the jagged appearance of discontinuities-that every student encounters when first coding step functions.",
     "zh": "单位阶跃函数是信号与系统中的基本构件,MATLAB的关系运算符使其定义和可视化变得出奇地简单。本节展示如何使用>=运算符将u(t)创建为匿名函数,然后解决两个实际绘图问题--隐藏信号的轴缩放和不连续性的锯齿状外观--这是每个学生首次编写阶跃函数时都会遇到的问题。",
     "emoji": "📊",
@@ -4115,19 +3762,7 @@ const SECTION_PREVIEWS_NEW = {
     "emoji": "📊",
     "refs": 1
   },
-  "1.11-3": {
-    "en": "Time shifting and scaling aren't just abstract concepts-they're operations you can visualize directly in MATLAB using anonymous functions. This section shows how to plot transformed versions of a function like g(2t+1), breaking down what happens when you compress time and shift the waveform left, with concrete examples using causal exponential cosines that help you see exactly where the signal turns on.",
-    "zh": "时间移位和缩放不仅仅是抽象概念--你可以在MATLAB中使用匿名函数直接可视化这些操作。本节展示如何绘制函数的变换版本(如g(2t+1)),分解时间压缩和波形左移时发生的情况,并使用因果指数余弦的具体例子帮助你看到信号的确切开启点。",
-    "emoji": "📊",
-    "refs": 1
-  },
   "1.11-4 MATLAB: Working with Functions": {
-    "en": "MATLAB transforms abstract signal operations into visual reality-this section shows how to plot reflected and time-shifted versions of signals like g(-t+1) and composite functions, then tackles numerical integration to estimate signal energy without solving integrals by hand. These practical coding skills bridge theory and the computational tools you'll use on exams and in labs.",
-    "zh": "MATLAB 将抽象的信号运算转化为可视化现实--本节展示如何绘制反射和时移信号(如 g(-t+1) 和复合函数),然后介绍数值积分来估计信号能量,无需手工求解积分。这些实用的编程技能连接了理论与你在考试和实验中使用的计算工具。",
-    "emoji": "📊",
-    "refs": 2
-  },
-  "1.11-4": {
     "en": "MATLAB transforms abstract signal operations into visual reality-this section shows how to plot reflected and time-shifted versions of signals like g(-t+1) and composite functions, then tackles numerical integration to estimate signal energy without solving integrals by hand. These practical coding skills bridge theory and the computational tools you'll use on exams and in labs.",
     "zh": "MATLAB 将抽象的信号运算转化为可视化现实--本节展示如何绘制反射和时移信号(如 g(-t+1) 和复合函数),然后介绍数值积分来估计信号能量,无需手工求解积分。这些实用的编程技能连接了理论与你在考试和实验中使用的计算工具。",
     "emoji": "📊",
@@ -4139,19 +3774,7 @@ const SECTION_PREVIEWS_NEW = {
     "emoji": "📋",
     "refs": 2
   },
-  "1.12": {
-    "en": "This chapter wrap-up consolidates everything you've learned about signals and systems-from energy calculations to stability conditions. You'll see how all the classifications (continuous vs. discrete, periodic vs. aperiodic, causal vs. noncausal) fit together, plus a MATLAB drill to cement your computational skills before moving to more complex topics.",
-    "zh": "本章总结整合了你所学的信号与系统的全部内容--从能量计算到稳定性条件。你将看到所有分类(连续与离散、周期与非周期、因果与非因果)如何相互关联,以及一个MATLAB练习来巩固你的计算技能,为后续更复杂的主题做准备。",
-    "emoji": "📋",
-    "refs": 2
-  },
   "1.2 Determining Power and RMS Value": {
-    "en": "Power and RMS values reveal how much energy a signal carries-and for sinusoids, these quantities depend only on amplitude, not frequency or phase. This section walks through calculating power for both real sinusoids and complex exponentials using time-averaging, then introduces time scaling operations that compress or stretch signals by replacing t with at, a fundamental manipulation you'll use constantly when analyzing system responses.",
-    "zh": "功率和RMS值揭示了信号携带的能量大小--对于正弦信号,这些量仅取决于幅度,与频率或相位无关。本节通过时间平均法演示如何计算实正弦和复指数信号的功率,随后介绍时间缩放操作,通过将t替换为at来压缩或拉伸信号,这是分析系统响应时经常使用的基本操作。",
-    "emoji": "⚡",
-    "refs": 4
-  },
-  "1.2": {
     "en": "Power and RMS values reveal how much energy a signal carries-and for sinusoids, these quantities depend only on amplitude, not frequency or phase. This section walks through calculating power for both real sinusoids and complex exponentials using time-averaging, then introduces time scaling operations that compress or stretch signals by replacing t with at, a fundamental manipulation you'll use constantly when analyzing system responses.",
     "zh": "功率和RMS值揭示了信号携带的能量大小--对于正弦信号,这些量仅取决于幅度,与频率或相位无关。本节通过时间平均法演示如何计算实正弦和复指数信号的功率,随后介绍时间缩放操作,通过将t替换为at来压缩或拉伸信号,这是分析系统响应时经常使用的基本操作。",
     "emoji": "⚡",
@@ -4163,19 +3786,7 @@ const SECTION_PREVIEWS_NEW = {
     "emoji": "⏱️",
     "refs": 1
   },
-  "1.2-1": {
-    "en": "Time shifting is the foundation of how signals move through systems-delay a signal by replacing t with (t-T), and you've got the core operation behind every filter and communication system. This section breaks down why positive delays shift right and negative delays shift left, with visual examples that make the pattern stick for exam problems.",
-    "zh": "时间移位是信号在系统中运动的基础--通过用(t-T)替换t来延迟信号,这是每个滤波器和通信系统背后的核心操作。本节解释为什么正延迟向右移动,负延迟向左移动,并通过可视化示例帮助你掌握考试中的相关问题。",
-    "emoji": "⏱️",
-    "refs": 1
-  },
   "1.2-2 Time Scaling": {
-    "en": "Time scaling reveals how speeding up or slowing down a signal changes its mathematical form-compress by factor a and you get x(at), expand and you get x(t/a), with t=0 always staying put as your anchor. This operation is essential for understanding how systems respond to signals played at different rates, a skill you'll need for both continuous and discrete signal problems on exams.",
-    "zh": "时间缩放揭示了信号加速或减速如何改变其数学形式--压缩因子a得到x(at),扩展得到x(t/a),而t=0始终保持不变作为锚点。这个操作对于理解系统如何响应以不同速率播放的信号至关重要,是连续和离散信号问题考试中必需的技能。",
-    "emoji": "⏱️",
-    "refs": 1
-  },
-  "1.2-2": {
     "en": "Time scaling reveals how speeding up or slowing down a signal changes its mathematical form-compress by factor a and you get x(at), expand and you get x(t/a), with t=0 always staying put as your anchor. This operation is essential for understanding how systems respond to signals played at different rates, a skill you'll need for both continuous and discrete signal problems on exams.",
     "zh": "时间缩放揭示了信号加速或减速如何改变其数学形式--压缩因子a得到x(at),扩展得到x(t/a),而t=0始终保持不变作为锚点。这个操作对于理解系统如何响应以不同速率播放的信号至关重要,是连续和离散信号问题考试中必需的技能。",
     "emoji": "⏱️",
@@ -4187,19 +3798,7 @@ const SECTION_PREVIEWS_NEW = {
     "emoji": "🔄",
     "refs": 1
   },
-  "1.2-3": {
-    "en": "Time reversal flips a signal backward in time by replacing t with -t, creating a mirror image across the vertical axis. This simple substitution is fundamental to understanding signal transformations and appears constantly in convolution, correlation, and system analysis-making it essential for predicting how signals behave under time manipulation.",
-    "zh": "时间反转通过将 t 替换为 -t 来将信号向后翻转,在垂直轴上创建镜像。这个简单的替换对于理解信号变换至关重要,在卷积、相关性和系统分析中频繁出现,是预测信号在时间操作下行为的关键。",
-    "emoji": "🔄",
-    "refs": 1
-  },
   "1.2-4 Some Useful Signal Operations": {
-    "en": "Time reversal, scaling, and shifting rarely happen in isolation-this section shows how to combine them systematically. You'll see why x(2t - 6) can be built two different ways, and why the *order* of operations matters for getting the right answer on exams.",
-    "zh": "时间反转、缩放和平移很少单独出现--本节系统地展示如何组合它们。你将看到为什么 x(2t - 6) 可以用两种不同的方式构建,以及为什么操作的*顺序*对于在考试中得到正确答案至关重要。",
-    "emoji": "🔄",
-    "refs": 1
-  },
-  "1.2-4": {
     "en": "Time reversal, scaling, and shifting rarely happen in isolation-this section shows how to combine them systematically. You'll see why x(2t - 6) can be built two different ways, and why the *order* of operations matters for getting the right answer on exams.",
     "zh": "时间反转、缩放和平移很少单独出现--本节系统地展示如何组合它们。你将看到为什么 x(2t - 6) 可以用两种不同的方式构建,以及为什么操作的*顺序*对于在考试中得到正确答案至关重要。",
     "emoji": "🔄",
@@ -4211,19 +3810,7 @@ const SECTION_PREVIEWS_NEW = {
     "emoji": "⏱️",
     "refs": 3
   },
-  "1.3": {
-    "en": "Time shifting shows how signals move left or right on the time axis-delay a signal by replacing t with (t-1), advance it by replacing t with (t+1). This fundamental operation appears constantly in real systems like audio processing and control, where you need to account for transmission delays or predict future behavior.",
-    "zh": "时间移位展示了信号如何在时间轴上左右移动--用(t-1)替换t可以延迟信号,用(t+1)替换t可以提前信号。这个基本操作在音频处理和控制系统等实际应用中无处不在,用来处理传输延迟或预测未来行为。",
-    "emoji": "⏱️",
-    "refs": 3
-  },
   "1.3-2 Classification of Signals": {
-    "en": "Signals come in five distinct flavors, and mixing them up is a common exam trap. This section separates continuous-time from analog, periodic from energy signals, and deterministic from random-each classification answers a different question about how a signal behaves. Getting these distinctions right is essential for choosing the right analysis tools later.",
-    "zh": "信号有五种不同的分类方式,混淆它们是常见的考试陷阱。本节区分连续时间与模拟信号、周期与能量信号、确定性与随机信号--每种分类都回答了关于信号如何表现的不同问题。正确理解这些区别对于后续选择合适的分析工具至关重要。",
-    "emoji": "🏷️",
-    "refs": 1
-  },
-  "1.3-2": {
     "en": "Signals come in five distinct flavors, and mixing them up is a common exam trap. This section separates continuous-time from analog, periodic from energy signals, and deterministic from random-each classification answers a different question about how a signal behaves. Getting these distinctions right is essential for choosing the right analysis tools later.",
     "zh": "信号有五种不同的分类方式,混淆它们是常见的考试陷阱。本节区分连续时间与模拟信号、周期与能量信号、确定性与随机信号--每种分类都回答了关于信号如何表现的不同问题。正确理解这些区别对于后续选择合适的分析工具至关重要。",
     "emoji": "🏷️",
@@ -4235,19 +3822,7 @@ const SECTION_PREVIEWS_NEW = {
     "emoji": "🔄",
     "refs": 1
   },
-  "1.3-3": {
-    "en": "Periodic signals repeat themselves forever-they satisfy x(t) = x(t + T0) for some fundamental period T0-while aperiodic signals don't follow this pattern. This classification is crucial for exam problems because periodic signals unlock powerful analysis tools like Fourier series, whereas aperiodic signals require different techniques like Fourier transforms.",
-    "zh": "周期信号永远重复自身--满足 x(t) = x(t + T0),其中 T0 是基本周期--而非周期信号则不遵循这种模式。这种分类对考试至关重要,因为周期信号能够使用傅里叶级数等强大的分析工具,而非周期信号则需要傅里叶变换等不同的技术。",
-    "emoji": "🔄",
-    "refs": 1
-  },
   "1.3-5 Some Useful Signal Models": {
-    "en": "Energy and power signals represent two mutually exclusive categories that classify real-world signals-most practical signals are energy signals with finite total energy, while power signals require infinite duration and constant average power. This section also separates deterministic signals (completely predictable from a mathematical formula) from random signals (described only through probability), setting the stage for the fundamental signal models like steps, impulses, and exponentials that appear throughout systems analysis.",
-    "zh": "能量信号和功率信号是两个互斥的分类,用来描述实际信号--大多数实际信号是具有有限总能量的能量信号,而功率信号需要无限持续时间和恒定平均功率。本节还区分了确定性信号(可以从数学公式完全预测)和随机信号(仅通过概率描述),为系统分析中出现的基本信号模型(如阶跃、冲激和指数函数)奠定基础。",
-    "emoji": "📊",
-    "refs": 1
-  },
-  "1.3-5": {
     "en": "Energy and power signals represent two mutually exclusive categories that classify real-world signals-most practical signals are energy signals with finite total energy, while power signals require infinite duration and constant average power. This section also separates deterministic signals (completely predictable from a mathematical formula) from random signals (described only through probability), setting the stage for the fundamental signal models like steps, impulses, and exponentials that appear throughout systems analysis.",
     "zh": "能量信号和功率信号是两个互斥的分类,用来描述实际信号--大多数实际信号是具有有限总能量的能量信号,而功率信号需要无限持续时间和恒定平均功率。本节还区分了确定性信号(可以从数学公式完全预测)和随机信号(仅通过概率描述),为系统分析中出现的基本信号模型(如阶跃、冲激和指数函数)奠定基础。",
     "emoji": "📊",
@@ -4259,19 +3834,7 @@ const SECTION_PREVIEWS_NEW = {
     "emoji": "📋",
     "refs": 1
   },
-  "1.3-6": {
-    "en": "This problem set reinforces the foundational signal classifications that appear throughout signals and systems-from distinguishing energy versus power signals to determining periodicity in composite waveforms. These exercises are essential for building intuition about how signals behave under time scaling and transformations, skills you'll need to tackle more complex system analysis.",
-    "zh": "这套习题强化了信号与系统中的基础信号分类--从区分能量信号与功率信号到确定复合波形的周期性。这些练习对于建立信号在时间缩放和变换下的行为直觉至关重要,这些技能是解决更复杂系统分析问题所必需的。",
-    "emoji": "📋",
-    "refs": 1
-  },
   "1.4-1 The Unit Step Function u(t)": {
-    "en": "The unit step function u(t) is your gateway to representing causal signals-those that start at t=0 and stay silent before. This section shows how multiplying any signal by u(t) instantly makes it causal, and how combining shifted step functions lets you build piecewise signals like rectangular pulses with a single elegant expression instead of messy case definitions.",
-    "zh": "单位阶跃函数u(t)是表示因果信号的关键工具--这些信号从t=0开始,之前保持为零。本节展示如何将任何信号乘以u(t)使其变为因果信号,以及如何组合移位的阶跃函数用单一表达式构建分段信号(如矩形脉冲),而不需要繁琐的分段定义。",
-    "emoji": "📍",
-    "refs": 1
-  },
-  "1.4-1": {
     "en": "The unit step function u(t) is your gateway to representing causal signals-those that start at t=0 and stay silent before. This section shows how multiplying any signal by u(t) instantly makes it causal, and how combining shifted step functions lets you build piecewise signals like rectangular pulses with a single elegant expression instead of messy case definitions.",
     "zh": "单位阶跃函数u(t)是表示因果信号的关键工具--这些信号从t=0开始,之前保持为零。本节展示如何将任何信号乘以u(t)使其变为因果信号,以及如何组合移位的阶跃函数用单一表达式构建分段信号(如矩形脉冲),而不需要繁琐的分段定义。",
     "emoji": "📍",
@@ -4283,19 +3846,7 @@ const SECTION_PREVIEWS_NEW = {
     "emoji": "⚡",
     "refs": 1
   },
-  "1.4-2": {
-    "en": "The unit impulse δ(t) is a mathematical idealization of an infinitely tall, infinitesimally narrow pulse that carries exactly one unit of area-the foundation for analyzing how systems respond to sudden shocks. This section shows why the impulse matters: it's the building block for representing any signal and the key to understanding convolution and system response in signals and systems.",
-    "zh": "单位冲激函数δ(t)是一个数学理想化模型,表示无限高、无穷窄但面积为1的脉冲--是分析系统对突然冲击响应的基础。本节揭示冲激函数的重要性:它是表示任意信号的基本单元,也是理解卷积和系统响应的关键。",
-    "emoji": "⚡",
-    "refs": 1
-  },
   "1.4-3 The Exponential Function est": {
-    "en": "The exponential function e^st is the foundation of signal analysis-when s is complex (σ + jω), it captures both decay/growth and oscillation in a single elegant expression. This section builds from singularity functions (impulse, step, ramp) to show why e^st appears everywhere in system responses and Fourier analysis, making it essential for solving differential equations and understanding LTI behavior.",
-    "zh": "指数函数e^st是信号分析的基础--当s为复数(σ + jω)时,它在一个优雅的表达式中同时捕捉衰减/增长和振荡。本节从奇异函数(冲激、阶跃、斜坡)出发,说明为什么e^st在系统响应和傅里叶分析中无处不在,这对求解微分方程和理解LTI系统行为至关重要。",
-    "emoji": "📈",
-    "refs": 2
-  },
-  "1.4-3": {
     "en": "The exponential function e^st is the foundation of signal analysis-when s is complex (σ + jω), it captures both decay/growth and oscillation in a single elegant expression. This section builds from singularity functions (impulse, step, ramp) to show why e^st appears everywhere in system responses and Fourier analysis, making it essential for solving differential equations and understanding LTI behavior.",
     "zh": "指数函数e^st是信号分析的基础--当s为复数(σ + jω)时,它在一个优雅的表达式中同时捕捉衰减/增长和振荡。本节从奇异函数(冲激、阶跃、斜坡)出发,说明为什么e^st在系统响应和傅里叶分析中无处不在,这对求解微分方程和理解LTI系统行为至关重要。",
     "emoji": "📈",
@@ -4307,19 +3858,7 @@ const SECTION_PREVIEWS_NEW = {
     "emoji": "📈",
     "refs": 5
   },
-  "1.5": {
-    "en": "The complex exponential e^(st) is the Swiss Army knife of signals-it unifies constants, decaying/growing exponentials, sinusoids, and damped oscillations into a single framework. By plotting complex frequency s = σ + jω on the s-plane, you gain geometric insight into system behavior that's essential for Laplace transforms and stability analysis on exams.",
-    "zh": "复指数函数 e^(st) 是信号分析的万能工具--它将常数、衰减/增长指数、正弦波和阻尼振荡统一在一个框架内。通过在 s 平面上绘制复频率 s = σ + jω,你可以获得对系统行为的几何直观理解,这对拉普拉斯变换和考试中的稳定性分析至关重要。",
-    "emoji": "📈",
-    "refs": 5
-  },
   "1.5-1 Even and Odd Functions": {
-    "en": "Symmetry is a powerful shortcut in signal analysis-even and odd functions reveal hidden structure that simplifies calculations throughout the course. This section defines these mirror-image properties mathematically and shows how multiplying even and odd functions together follows predictable rules, a pattern you'll exploit repeatedly in Fourier analysis and convolution problems.",
-    "zh": "对称性是信号分析中的强大捷径--偶函数和奇函数揭示了隐藏的结构,可以简化整个课程中的计算。本节从数学角度定义了这些镜像性质,并展示了偶函数和奇函数相乘如何遵循可预测的规则,这是你在傅里叶分析和卷积问题中会反复利用的模式。",
-    "emoji": "🪞",
-    "refs": 1
-  },
-  "1.5-1": {
     "en": "Symmetry is a powerful shortcut in signal analysis-even and odd functions reveal hidden structure that simplifies calculations throughout the course. This section defines these mirror-image properties mathematically and shows how multiplying even and odd functions together follows predictable rules, a pattern you'll exploit repeatedly in Fourier analysis and convolution problems.",
     "zh": "对称性是信号分析中的强大捷径--偶函数和奇函数揭示了隐藏的结构,可以简化整个课程中的计算。本节从数学角度定义了这些镜像性质,并展示了偶函数和奇函数相乘如何遵循可预测的规则,这是你在傅里叶分析和卷积问题中会反复利用的模式。",
     "emoji": "🪞",
@@ -4331,19 +3870,7 @@ const SECTION_PREVIEWS_NEW = {
     "emoji": "🔄",
     "refs": 1
   },
-  "1.5-2": {
-    "en": "Every signal can be split into even and odd parts-a decomposition that simplifies integration and reveals hidden symmetries. This section shows why integrals of odd functions vanish over symmetric intervals and provides the exact formulas to extract both components from any signal, with exponential decay as a concrete example.",
-    "zh": "任何信号都可以分解为偶部分和奇部分--这种分解简化了积分运算并揭示了隐藏的对称性。本节说明为什么奇函数在对称区间上的积分为零,并提供从任意信号中提取两个分量的精确公式,以指数衰减为具体例子。",
-    "emoji": "🔄",
-    "refs": 1
-  },
   "1.6 Systems": {
-    "en": "Systems are the engines that transform signals-whether it's an RC circuit filtering noise or a digital processor computing outputs. This section extends even/odd decomposition to complex signals using conjugate symmetry, then pivots to the big picture: how systems are modeled, analyzed, and designed through terminal relationships and interconnection laws. You'll see why the black-box view matters for everything from circuit analysis to control design.",
-    "zh": "系统是转换信号的引擎--无论是RC电路滤除噪声还是数字处理器计算输出。本节将偶/奇分解扩展到复信号,使用共轭对称性和共轭反对称性,然后转向全局视角:系统如何通过端子关系和互连定律进行建模、分析和设计。你将看到黑箱视图为什么对从电路分析到控制设计的一切都很重要。",
-    "emoji": "⚙️",
-    "refs": 2
-  },
-  "1.6": {
     "en": "Systems are the engines that transform signals-whether it's an RC circuit filtering noise or a digital processor computing outputs. This section extends even/odd decomposition to complex signals using conjugate symmetry, then pivots to the big picture: how systems are modeled, analyzed, and designed through terminal relationships and interconnection laws. You'll see why the black-box view matters for everything from circuit analysis to control design.",
     "zh": "系统是转换信号的引擎--无论是RC电路滤除噪声还是数字处理器计算输出。本节将偶/奇分解扩展到复信号,使用共轭对称性和共轭反对称性,然后转向全局视角:系统如何通过端子关系和互连定律进行建模、分析和设计。你将看到黑箱视图为什么对从电路分析到控制设计的一切都很重要。",
     "emoji": "⚙️",
@@ -4355,19 +3882,7 @@ const SECTION_PREVIEWS_NEW = {
     "emoji": "🔀",
     "refs": 9
   },
-  "1.7": {
-    "en": "Every linear system splits into two independent pieces: what happens because of initial conditions (zero-input response) and what happens because of the input signal (zero-state response). This decomposition, proven through the superposition principle, is why constant-coefficient differential equations perfectly describe real circuits and systems-and it's essential for predicting system behavior on exams.",
-    "zh": "每个线性系统都可以分解为两个独立的部分:由初始条件引起的响应(零输入响应)和由输入信号引起的响应(零状态响应)。通过叠加原理证明的这种分解方法,解释了为什么常系数微分方程能够完美描述实际电路和系统--这对于考试中预测系统行为至关重要。",
-    "emoji": "🔀",
-    "refs": 9
-  },
   "1.7-1 Classification of Systems": {
-    "en": "Systems fall into eight distinct categories-linear or nonlinear, causal or noncausal, stable or unstable-and knowing which type you're dealing with determines everything about how you analyze it. This section focuses on linearity, the most powerful property in signals and systems: if input x1 produces output y1 and input x2 produces output y2, then x1+x2 must produce y1+y2 (superposition). Mastering system classification is essential for exam problems because it tells you which tools and theorems you can actually use.",
-    "zh": "系统分为八大类别--线性或非线性、因果或非因果、稳定或不稳定--而你处理的系统类型决定了分析方法的一切。本节重点讨论线性性,这是信号与系统中最强大的性质:如果输入x1产生输出y1,输入x2产生输出y2,那么x1+x2必须产生y1+y2(叠加原理)。掌握系统分类对考试至关重要,因为它告诉你哪些工具和定理实际上可以使用。",
-    "emoji": "🏗️",
-    "refs": 2
-  },
-  "1.7-1": {
     "en": "Systems fall into eight distinct categories-linear or nonlinear, causal or noncausal, stable or unstable-and knowing which type you're dealing with determines everything about how you analyze it. This section focuses on linearity, the most powerful property in signals and systems: if input x1 produces output y1 and input x2 produces output y2, then x1+x2 must produce y1+y2 (superposition). Mastering system classification is essential for exam problems because it tells you which tools and theorems you can actually use.",
     "zh": "系统分为八大类别--线性或非线性、因果或非因果、稳定或不稳定--而你处理的系统类型决定了分析方法的一切。本节重点讨论线性性,这是信号与系统中最强大的性质:如果输入x1产生输出y1,输入x2产生输出y2,那么x1+x2必须产生y1+y2(叠加原理)。掌握系统分类对考试至关重要,因为它告诉你哪些工具和定理实际上可以使用。",
     "emoji": "🏗️",
@@ -4379,19 +3894,7 @@ const SECTION_PREVIEWS_NEW = {
     "emoji": "⏱️",
     "refs": 1
   },
-  "1.7-2": {
-    "en": "Time-invariant systems have a special superpower: delay the input, and the output gets delayed by exactly the same amount. This section reveals why this commutativity property matters-it's the defining characteristic that separates well-behaved, predictable systems from time-varying ones that break this rule. You'll see why this distinction is crucial for analyzing real circuits and signals on exams.",
-    "zh": "时不变系统有一个特殊的性质:输入延迟多少,输出就延迟多少。本节揭示了这种交换性为什么重要--它是区分行为良好、可预测系统与违反此规则的时变系统的决定性特征。你将看到为什么这种区分对于在考试中分析真实电路和信号至关重要。",
-    "emoji": "⏱️",
-    "refs": 1
-  },
   "1.7-3 Classification of Systems": {
-    "en": "A system's behavior can change with time or stay consistent-and this distinction fundamentally shapes how you analyze it. This section separates time-invariant systems (where delaying the input delays the output by the same amount) from time-varying ones using concrete counterexamples, then introduces whether a system responds instantaneously or depends on past values. Mastering this classification is essential because LTI systems unlock powerful analysis tools like convolution and Fourier methods.",
-    "zh": "系统的行为可能随时间变化,也可能保持一致--这种区别从根本上影响你的分析方法。本节通过具体反例区分时不变系统(输入延迟会导致输出相同延迟)和时变系统,然后介绍系统是瞬时响应还是依赖过去值。掌握这种分类至关重要,因为LTI系统能够解锁卷积和傅里叶等强大的分析工具。",
-    "emoji": "⏱️",
-    "refs": 1
-  },
-  "1.7-3": {
     "en": "A system's behavior can change with time or stay consistent-and this distinction fundamentally shapes how you analyze it. This section separates time-invariant systems (where delaying the input delays the output by the same amount) from time-varying ones using concrete counterexamples, then introduces whether a system responds instantaneously or depends on past values. Mastering this classification is essential because LTI systems unlock powerful analysis tools like convolution and Fourier methods.",
     "zh": "系统的行为可能随时间变化,也可能保持一致--这种区别从根本上影响你的分析方法。本节通过具体反例区分时不变系统(输入延迟会导致输出相同延迟)和时变系统,然后介绍系统是瞬时响应还是依赖过去值。掌握这种分类至关重要,因为LTI系统能够解锁卷积和傅里叶等强大的分析工具。",
     "emoji": "⏱️",
@@ -4403,19 +3906,7 @@ const SECTION_PREVIEWS_NEW = {
     "emoji": "⏰",
     "refs": 1
   },
-  "1.7-4": {
-    "en": "A system's ability to 'remember' past inputs separates the practical from the impossible-memoryless systems respond instantly to the current input alone, while dynamic systems carry memory of what came before. Causality adds a crucial constraint: causal systems cannot peek into the future, making them the only kind you'll find in real circuits and physical devices. This section dissects when systems have memory, when they don't, and why noncausal systems are useful in theory but forbidden in real-time applications.",
-    "zh": "系统是否具有'记忆'能力决定了它的本质--无记忆系统仅对当前输入做出瞬时响应,而动态系统则保留过去输入的信息。因果性施加了一个关键约束:因果系统无法预知未来,这使其成为实际电路和物理设备中唯一可行的类型。本节剖析系统何时具有记忆、何时没有记忆,以及为什么非因果系统在理论中有用但在实时应用中被禁用。",
-    "emoji": "⏰",
-    "refs": 1
-  },
   "1.7-5 Continuous-Time and Discrete-Time Systems": {
-    "en": "Noncausal systems look into the future-an impossible feat in the real world, but a clever time delay can make them practically useful. This section contrasts the mathematical ideal of noncausal behavior with physical reality, then pivots to the fundamental distinction between continuous-time and discrete-time systems, showing how sampling bridges the two worlds.",
-    "zh": "非因果系统能够预知未来--这在现实中是不可能的,但巧妙的时间延迟可以使其在实践中变得有用。本节对比了非因果行为的数学理想与物理现实,然后转向连续时间系统和离散时间系统的根本区别,展示采样如何连接这两个世界。",
-    "emoji": "⏱️",
-    "refs": 1
-  },
-  "1.7-5": {
     "en": "Noncausal systems look into the future-an impossible feat in the real world, but a clever time delay can make them practically useful. This section contrasts the mathematical ideal of noncausal behavior with physical reality, then pivots to the fundamental distinction between continuous-time and discrete-time systems, showing how sampling bridges the two worlds.",
     "zh": "非因果系统能够预知未来--这在现实中是不可能的,但巧妙的时间延迟可以使其在实践中变得有用。本节对比了非因果行为的数学理想与物理现实,然后转向连续时间系统和离散时间系统的根本区别,展示采样如何连接这两个世界。",
     "emoji": "⏱️",
@@ -4427,19 +3918,7 @@ const SECTION_PREVIEWS_NEW = {
     "emoji": "🔄",
     "refs": 1
   },
-  "1.7-7": {
-    "en": "Can you always recover the input from the output? Invertible systems preserve all input information through a one-to-one mapping, while noninvertible systems (like rectifiers) lose information by collapsing multiple inputs into the same output. This distinction is crucial for understanding when equalization and signal recovery are possible-and when they're fundamentally impossible.",
-    "zh": "你能否总是从输出恢复输入信号?可逆系统通过一一映射保留所有输入信息,而不可逆系统(如整流器)会将多个输入映射到同一输出,导致信息丢失。这个区分对于判断何时可以进行均衡和信号恢复至关重要。",
-    "emoji": "🔄",
-    "refs": 1
-  },
   "1.7-8 Stable and Unstable Systems": {
-    "en": "A system's stability determines whether bounded inputs produce bounded outputs-the foundation of reliable signal processing. This section distinguishes between invertible and non-invertible systems, then applies BIBO stability tests to classify real systems like differentiators and time-scaling operations, showing why some amplify disturbances while others remain controlled.",
-    "zh": "系统的稳定性决定了有界输入是否产生有界输出--这是可靠信号处理的基础。本节区分可逆和不可逆系统,然后对微分器和时间缩放等实际系统应用BIBO稳定性测试,说明为什么某些系统会放大干扰而其他系统保持受控。",
-    "emoji": "⚖️",
-    "refs": 1
-  },
-  "1.7-8": {
     "en": "A system's stability determines whether bounded inputs produce bounded outputs-the foundation of reliable signal processing. This section distinguishes between invertible and non-invertible systems, then applies BIBO stability tests to classify real systems like differentiators and time-scaling operations, showing why some amplify disturbances while others remain controlled.",
     "zh": "系统的稳定性决定了有界输入是否产生有界输出--这是可靠信号处理的基础。本节区分可逆和不可逆系统,然后对微分器和时间缩放等实际系统应用BIBO稳定性测试,说明为什么某些系统会放大干扰而其他系统保持受控。",
     "emoji": "⚖️",
@@ -4451,19 +3930,7 @@ const SECTION_PREVIEWS_NEW = {
     "emoji": "⚙️",
     "refs": 6
   },
-  "1.8": {
-    "en": "The differential operator D notation transforms messy integral equations into clean algebraic expressions-this section shows how to write input-output relationships for circuits and mechanical systems in a form that's much easier to manipulate. You'll see RC circuits and mass-spring-dashpot systems expressed using operators, a skill that directly simplifies solving for system responses on exams.",
-    "zh": "微分算子D记号将复杂的积分方程转化为简洁的代数表达式--本节展示如何用算子形式写出电路和机械系统的输入-输出关系。你将看到RC电路和质量-弹簧-阻尼器系统如何用算子表示,这项技能能直接简化考试中求解系统响应的过程。",
-    "emoji": "⚙️",
-    "refs": 6
-  },
   "1.8-1 System Model: Input-Output Description": {
-    "en": "Every physical system needs a mathematical language-this section shows how Kirchhoff's laws and component models translate circuits into input-output equations. You'll see the RLC circuit example worked through step-by-step, establishing the foundation for all the differential equations you'll solve on exams.",
-    "zh": "每个物理系统都需要一种数学语言--本节展示基尔霍夫定律和元件模型如何将电路转化为输入输出方程。你将看到RLC电路示例的逐步推导,为考试中要解决的所有微分方程奠定基础。",
-    "emoji": "⚡",
-    "refs": 1
-  },
-  "1.8-1": {
     "en": "Every physical system needs a mathematical language-this section shows how Kirchhoff's laws and component models translate circuits into input-output equations. You'll see the RLC circuit example worked through step-by-step, establishing the foundation for all the differential equations you'll solve on exams.",
     "zh": "每个物理系统都需要一种数学语言--本节展示基尔霍夫定律和元件模型如何将电路转化为输入输出方程。你将看到RLC电路示例的逐步推导,为考试中要解决的所有微分方程奠定基础。",
     "emoji": "⚡",
@@ -4475,31 +3942,13 @@ const SECTION_PREVIEWS_NEW = {
     "emoji": "🔧",
     "refs": 1
   },
-  "1.8-2": {
-    "en": "Mechanical systems follow the same mathematical rules as electrical circuits-Newton's second law replaces Kirchhoff's laws, but the differential equations look identical. This section shows how masses, springs, and dampers combine to create the mechanical analogs of resistors, capacitors, and inductors, giving you a unified framework for analyzing everything from car suspensions to seismic sensors.",
-    "zh": "机械系统遵循与电路相同的数学规则--牛顿第二定律取代基尔霍夫定律,但微分方程形式完全相同。本节展示质量、弹簧和阻尼器如何组合成电阻、电容和电感的机械类似物,为你提供一个统一的框架来分析从汽车悬架到地震传感器的各种系统。",
-    "emoji": "🔧",
-    "refs": 1
-  },
   "1.8-3 Electromechanical Systems": {
     "en": "DC motors bridge electricity and motion-this section shows how current input becomes rotational output through the interplay of electromagnetic torque, inertia, and friction. You'll derive the fundamental differential equation governing motor behavior, a critical model for control systems and exam problems involving real-world actuators.",
     "zh": "直流电动机将电能转化为机械运动--本节展示电流输入如何通过电磁转矩、转动惯量和摩擦力的相互作用转化为旋转输出。你将推导控制电动机行为的基本微分方程,这是控制系统和涉及实际执行器的考试问题的关键模型。",
     "emoji": "⚙️",
     "refs": 1
   },
-  "1.8-3": {
-    "en": "DC motors bridge electricity and motion-this section shows how current input becomes rotational output through the interplay of electromagnetic torque, inertia, and friction. You'll derive the fundamental differential equation governing motor behavior, a critical model for control systems and exam problems involving real-world actuators.",
-    "zh": "直流电动机将电能转化为机械运动--本节展示电流输入如何通过电磁转矩、转动惯量和摩擦力的相互作用转化为旋转输出。你将推导控制电动机行为的基本微分方程,这是控制系统和涉及实际执行器的考试问题的关键模型。",
-    "emoji": "⚙️",
-    "refs": 1
-  },
   "1.9 Internal and External Descriptions of a System": {
-    "en": "A system's behavior can be described two completely different ways: from the outside (what you measure at the terminals) or from the inside (every signal flowing through it). This section reveals why a black-box input-output relationship can hide internal dynamics-using a capacitor circuit to show how initial conditions and hidden states matter for real systems, and introducing the critical concepts of controllability and observability.",
-    "zh": "系统的行为可以用两种完全不同的方式描述:从外部观察(在端子处测量的信号)或从内部分析(系统内部的每个信号)。本节揭示了为什么黑箱输入输出关系会隐藏内部动态--通过电容电路示例说明初始条件和隐藏状态的重要性,并引入可控性和可观测性这两个关键概念。",
-    "emoji": "🔍",
-    "refs": 2
-  },
-  "1.9": {
     "en": "A system's behavior can be described two completely different ways: from the outside (what you measure at the terminals) or from the inside (every signal flowing through it). This section reveals why a black-box input-output relationship can hide internal dynamics-using a capacitor circuit to show how initial conditions and hidden states matter for real systems, and introducing the critical concepts of controllability and observability.",
     "zh": "系统的行为可以用两种完全不同的方式描述:从外部观察(在端子处测量的信号)或从内部分析(系统内部的每个信号)。本节揭示了为什么黑箱输入输出关系会隐藏内部动态--通过电容电路示例说明初始条件和隐藏状态的重要性,并引入可控性和可观测性这两个关键概念。",
     "emoji": "🔍",
@@ -4907,12 +4356,6 @@ const SECTION_PREVIEWS_NEW = {
     "emoji": "📐",
     "refs": 7
   },
-  "1.4": {
-    "en": "Piecewise signals like triangles aren't as complicated as they look-unit step functions let you write them as clean mathematical expressions. This section shows how to decompose a triangular waveform into ramps and gates, then reconstruct it using step functions, a technique that's essential for analyzing real-world signals in exams and applications.",
-    "zh": "三角形波形这样的分段信号看起来很复杂,但单位阶跃函数能让你用简洁的数学表达式描述它们。本节展示如何将三角波形分解为斜坡和门脉冲,然后用阶跃函数重新组合,这是考试和实际应用中分析真实信号的关键技巧。",
-    "emoji": "📐",
-    "refs": 7
-  },
   "B.2-2 Sinusoids in Terms of Exponentials": {
     "en": "Euler's formula reveals the hidden connection between sinusoids and complex exponentials, showing that cos(ωt) and sin(ωt) are actually the real and imaginary parts of e^(jωt). This perspective transforms how you analyze AC circuits, modulation, and frequency-domain problems-mastering this bridge is essential for understanding why engineers prefer working with complex exponentials on exams.",
     "zh": "欧拉公式揭示了正弦波与复指数之间的隐藏联系,表明 cos(ωt) 和 sin(ωt) 实际上是 e^(jωt) 的实部和虚部。这个视角改变了你分析交流电路、调制和频域问题的方式--掌握这个桥梁对于理解工程师为什么更喜欢在考试中使用复指数至关重要。",
@@ -5236,195 +4679,6 @@ Object.assign(SECTION_PREVIEWS_NEW, {
   }
 });
 
-// ── Syllabus: OLD book (2nd Ed, scanned) ──────────────────────────────
-const syllabusDataOld = [
-  {
-    chapter: 'B Background',
-    sections: [
-      { title: 'B.1 Complex Numbers', subsections: ['B.1-1 A Historical Note', 'B.1-2 Algebra of Complex Numbers'] },
-      { title: 'B.2 Sinusoids', subsections: ['B.2-1 Addition of Sinusoids'] },
-      { title: 'B.3 Sketching Signals', subsections: ['B.3-1 Monotonic Exponentials', 'B.3-2 The Exponentially Varying Sinusoid'] },
-      { title: 'B.4 Cramer\'s Rule', subsections: [] },
-      { title: 'B.5 Partial Fraction Expansion', subsections: ['B.5-1 Method of Clearing Fractions', 'B.5-2 Heaviside Cover-Up Method', 'B.5-3 Complex and Repeated Roots', 'B.5-4 Hybrid Method', 'B.5-5 Improper F(x) with m=n', 'B.5-6 Modified Partial Fractions'] },
-      { title: 'B.6 Vectors and Matrices', subsections: ['B.6-1 Some Definitions and Properties', 'B.6-2 Matrix Algebra', 'B.6-3 Derivatives and Integrals of a Matrix', 'B.6-4 The Characteristic Equation of a Matrix', 'B.6-5 Computation of Exponential and Power of a Matrix'] },
-      { title: 'B.7 Miscellaneous', subsections: ['B.7-1 L\'Hôpital\'s Rule'] }
-    ]
-  },
-  {
-    chapter: 'Chapter 1: Introduction to Signals and Systems',
-    sections: [
-      { title: '1.1 Size of a Signal', subsections: [] },
-      { title: '1.2 Classification of Signals', subsections: ['1.2-1 Continuous-Time and Discrete-Time Signals', '1.2-2 Analog and Digital Signals', '1.2-3 Periodic and Aperiodic Signals', '1.2-4 Energy and Power Signals', '1.2-5 Deterministic and Random Signals'] },
-      { title: '1.3 Some Useful Signal Operations', subsections: ['1.3-1 Time Shifting', '1.3-2 Time Scaling', '1.3-3 Time Inversion (Time Reversal)', '1.3-4 Combined Operations'] },
-      { title: '1.4 Some Useful Signal Models', subsections: [] },
-      { title: '1.5 Even and Odd Functions', subsections: ['1.5-1 Some Properties of Even and Odd Functions', '1.5-2 Even and Odd Components of a Signal'] },
-      { title: '1.6 Systems', subsections: [] },
-      { title: '1.7 Classification of Systems', subsections: ['1.7-1 Linear and Nonlinear Systems', '1.7-2 Time-Invariant and Time-Varying Parameter Systems', '1.7-3 Instantaneous and Dynamic Systems', '1.7-4 Causal and Noncausal Systems', '1.7-5 Lumped-Parameter and Distributed-Parameter Systems', '1.7-6 Continuous-Time and Discrete-Time Systems', '1.7-7 Analog and Digital Systems'] },
-      { title: '1.8 System Model: Input-Output Description', subsections: ['1.8-1 Internal and External Descriptions of a System'] },
-      { title: '1.9 Summary', subsections: [] }
-    ]
-  },
-  {
-    chapter: 'Chapter 2: Time-Domain Analysis of Continuous-Time Systems',
-    sections: [
-      '2.1 Introduction',
-      '2.2 Zero-Input response',
-      '2.3 Unit Impulse response h(t)',
-      '2.4 Zero-State Response',
-      '2.5 Differential equations',
-      '2.6 System Stability',
-      '2.7 Intuitive Insights',
-      '2.8 Appendix',
-      '2.9 Summary'
-    ]
-  },
-  {
-    chapter: 'Chapter 3: Fourier Series',
-    sections: [
-      '3.1 Signals and Vectors',
-      '3.2 Correlation',
-      '3.3 Orthogonal Signal Set',
-      '3.4 Trigonometric Fourier Series',
-      '3.5 Exponential Fourier Series',
-      '3.6 Numerical Computation',
-      '3.7 LTIC Periodic Response',
-      '3.8 Appendix',
-      '3.9 Summary'
-    ]
-  },
-  {
-    chapter: 'Chapter 4: Fourier Transform',
-    sections: [
-      '4.1 Fourier Integral',
-      '4.2 Useful Functions',
-      '4.3 Properties',
-      '4.4 LTIC Systems',
-      '4.5 Filters',
-      '4.6 Signal Energy',
-      '4.7 Amplitude Modulation',
-      '4.8 Angle Modulation',
-      '4.9 Window Functions',
-      '4.10 Summary'
-    ]
-  },
-  {
-    chapter: 'Chapter 5: Sampling',
-    sections: [
-      '5.1 The Sampling Theorem',
-      '5.2 Numerical Computation of Fourier Transform: DFT',
-      '5.3 The Fast Fourier Transform (FFT)',
-      '5.4 Appendix 5.1',
-      '5.5 Summary'
-    ]
-  },
-  {
-    chapter: 'Chapter 6: Continuous-Time System Analysis Using the Laplace Transform',
-    sections: [
-      '6.1 The Laplace Transform',
-      '6.2 Properties of the Laplace Transform',
-      '6.3 Solution of Differential and Integro-Differential Equations',
-      '6.4 Analysis of Electrical Networks',
-      '6.5 Block Diagrams',
-      '6.6 System Realization',
-      '6.7 Application to Feedback and Controls',
-      '6.8 The Bilateral Laplace Transform',
-      '6.9 Appendix 6.1',
-      '6.10 Summary'
-    ]
-  },
-  {
-    chapter: 'Chapter 7: Frequency Response and Analog Filters',
-    sections: [
-      '7.1 Frequency Response of an LTIC System',
-      '7.2 Bode Plots',
-      '7.3 Control System Design Using Frequency Response',
-      '7.4 Filter Design by Placement of Poles and Zeros',
-      '7.5 Butterworth Filters',
-      '7.6 Chebyshev Filters',
-      '7.7 Frequency Transformations',
-      '7.8 Filters for Distortionless Transmission',
-      '7.9 Summary'
-    ]
-  },
-  {
-    chapter: 'Chapter 8: Discrete-Time Signals and Systems',
-    sections: [
-      '8.1 Introduction',
-      '8.2 Some Useful Discrete-Time Signal Models',
-      '8.3 Sampling Continuous-Time Sinusoids and Aliasing',
-      '8.4 Useful Signal Operations',
-      '8.5 Examples of Discrete-Time Systems',
-      '8.6 Summary'
-    ]
-  },
-  {
-    chapter: 'Chapter 9: Time-Domain Analysis of Discrete-Time Systems',
-    sections: [
-      '9.1 Discrete-Time System Equations',
-      '9.2 Zero-Input Response',
-      '9.3 Unit Impulse Response h[k]',
-      '9.4 Zero-State Response',
-      '9.5 Classical Solution of Linear Difference Equations',
-      '9.6 System Stability',
-      '9.7 Appendix 9.1',
-      '9.8 Summary'
-    ]
-  },
-  {
-    chapter: 'Chapter 10: Fourier Analysis of Discrete-Time Signals',
-    sections: [
-      '10.1 Periodic Signal Representation by DTFS',
-      '10.2 Aperiodic Signal Representation by Fourier Integral',
-      '10.3 Properties of DTFT',
-      '10.4 DTFT Connection With Continuous-Time Fourier Transform',
-      '10.5 Discrete-Time Linear System Analysis by DTFT',
-      '10.6 Signal Processing Using DFT and FFT',
-      '10.7 Generalization of DTFT to the Z-Transform',
-      '10.8 Summary'
-    ]
-  },
-  {
-    chapter: 'Chapter 11: Discrete-Time System Analysis Using the Z-Transform',
-    sections: [
-      '11.1 The Z-Transform',
-      '11.2 Properties of the Z-Transform',
-      '11.3 Z-Transform Solution of Linear Difference Equations',
-      '11.4 System Realization',
-      '11.5 Connection Between the Laplace and the Z-Transform',
-      '11.6 Sampled-Data (Hybrid) Systems',
-      '11.7 The Bilateral Z-Transform',
-      '11.8 Summary'
-    ]
-  },
-  {
-    chapter: 'Chapter 12: Frequency Response and Digital Filters',
-    sections: [
-      '12.1 Frequency Response of Discrete-Time Systems',
-      '12.2 Frequency Response From Pole-Zero Location',
-      '12.3 Digital Filters',
-      '12.4 Filter Design Criteria',
-      '12.5 Recursive Filter Design: Impulse Invariance Method',
-      '12.6 Recursive Filter Design: Bilinear Transformation Method',
-      '12.7 Nonrecursive Filters',
-      '12.8 Nonrecursive Filter Design',
-      '12.9 Summary'
-    ]
-  },
-  {
-    chapter: 'Chapter 13: State-Space Analysis',
-    sections: [
-      '13.1 Introduction',
-      '13.2 Systematic Procedure for Determining State Equations',
-      '13.3 Solution of State Equations',
-      '13.4 Linear Transformation of State Vector',
-      '13.5 Controllability and Observability',
-      '13.6 State-Space Analysis of Discrete-Time Systems',
-      '13.7 Summary'
-    ]
-  }
-];
-
-// ── Syllabus: NEW book (3rd Ed, digital) ──────────────────────────────
 const syllabusDataNew = [
   {
     chapter: 'B Background',
@@ -5592,46 +4846,8 @@ const syllabusDataNew = [
   }
 ];
 
-// Active syllabus (switches with book toggle)
-let syllabusData = currentBook === 'new' ? syllabusDataNew : syllabusDataOld;
-
-// ── Book toggle ──────────────────────────────────────────────
-function setBook(book, options = {}) {
-  const preserveView = Boolean(options && options.preserveView);
-  const previousBook = currentBook;
-  currentBook = book;
-  localStorage.setItem('tutorBook', book);
-  syllabusData = book === 'new' ? syllabusDataNew : syllabusDataOld;
-  const btn = document.getElementById('bookToggleBtn');
-  const label = document.getElementById('bookToggleLabel');
-  if (btn && label) {
-    if (book === 'new') {
-      label.textContent = '3rd Ed';
-      btn.classList.add('book-new');
-      btn.title = 'Currently: 3rd Edition (digital) - click to switch to 2nd Edition';
-    } else {
-      label.textContent = '2nd Ed';
-      btn.classList.remove('book-new');
-      btn.title = 'Currently: 2nd Edition (scanned) - click to switch to 3rd Edition';
-    }
-  }
-  // Re-render syllabus and reset state
-  renderSyllabus();
-updateRecentConversationsUI();
-  tutorState.learnSectionId = null;
-    tutorState.sessionStartTime = Date.now();
-  tutorState.learnSectionTitle = null;
-  if (previousBook !== book) {
-    tutorState.currentBookPages = [];
-    tutorState.learnBookPages = [];
-    renderBookPages([]);
-    renderBookSources([]);
-  }
-  if (!preserveView) {
-    showWelcome();
-  }
-  console.log(`[Book] Switched to ${book === 'new' ? '3rd Ed (new)' : '2nd Ed (old)'}`);
-}
+// Active syllabus (2nd Ed retired 2026-06-19; new book is the only book)
+const syllabusData = syllabusDataNew;
 
 function escapeHtml(value) {
   return String(value || '')
@@ -7389,14 +6605,6 @@ function getActiveLearnTrack() {
   return (userMemory && userMemory.quiz && userMemory.quiz.track) || 'standard';
 }
 
-function getPrimaryAnchorLabel(anchor) {
-  switch (anchor) {
-    case 'book_figure': return 'Textbook anchor';
-    case 'matplotlib': return 'Matplotlib visual';
-    case 'both': return 'Textbook + visual';
-    default: return 'Visual plan';
-  }
-}
 
 function getTeachingRoleLabel(role) {
   switch (role) {
@@ -7464,12 +6672,6 @@ function getVisualBlockNodes(entry) {
   return nodes;
 }
 
-function createVisualChip(text, tone = 'default') {
-  const chip = document.createElement('span');
-  chip.className = `learn-visual-chip learn-visual-chip-${tone}`;
-  chip.textContent = text;
-  return chip;
-}
 
 function getPairedVisualSubtitle(track, bookEntry, genEntry) {
   const bookRole = getTeachingRoleLabel(bookEntry?.role || '').toLowerCase();
@@ -8014,27 +7216,6 @@ function setupInteractiveDemoCanvas(canvas, ctx, height = 260, minWidth = 320) {
   return { width, height };
 }
 
-function drawInteractiveDemoArrow(ctx, x1, y1, x2, y2, color = '#2563eb', width = 3, dashed = false) {
-  const angle = Math.atan2(y2 - y1, x2 - x1);
-  ctx.save();
-  ctx.strokeStyle = color;
-  ctx.fillStyle = color;
-  ctx.lineWidth = width;
-  if (dashed) ctx.setLineDash([7, 6]);
-  ctx.beginPath();
-  ctx.moveTo(x1, y1);
-  ctx.lineTo(x2, y2);
-  ctx.stroke();
-  if (!dashed) {
-    ctx.beginPath();
-    ctx.moveTo(x2, y2);
-    ctx.lineTo(x2 - 10 * Math.cos(angle - Math.PI / 6), y2 - 10 * Math.sin(angle - Math.PI / 6));
-    ctx.lineTo(x2 - 10 * Math.cos(angle + Math.PI / 6), y2 - 10 * Math.sin(angle + Math.PI / 6));
-    ctx.closePath();
-    ctx.fill();
-  }
-  ctx.restore();
-}
 
 function drawInteractiveDemoAxes(ctx, width, height, options = {}) {
   const pad = options.pad ?? 42;
@@ -8066,19 +7247,6 @@ function drawInteractiveDemoAxes(ctx, width, height, options = {}) {
   return { toX, originY, minT, maxT, pad };
 }
 
-function drawInteractiveDemoRoundedRect(ctx, x, y, width, height, radius) {
-  ctx.beginPath();
-  ctx.moveTo(x + radius, y);
-  ctx.lineTo(x + width - radius, y);
-  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-  ctx.lineTo(x + width, y + height - radius);
-  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-  ctx.lineTo(x + radius, y + height);
-  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-  ctx.lineTo(x, y + radius);
-  ctx.quadraticCurveTo(x, y, x + radius, y);
-  ctx.closePath();
-}
 
 function hydrateChapterOneDemo(node, demo) {
   const demoType = inferChapterOneDemoType(demo);
@@ -11840,6 +11008,8 @@ function resetLearnKnowledgePointState() {
   if (learnKpNextBtn) learnKpNextBtn.disabled = true;
 }
 
+// SYNC: keep identical to ws-bridge.js compactWhitespace.
+// Node/browser split keeps two copies; drift risk is real but tolerated.
 function compactWhitespace(value) {
   return String(value || '').replace(/\s+/g, ' ').trim();
 }
@@ -12880,15 +12050,6 @@ function buildOverviewPreludePointsFromMarkdown(markdown = '', chooserHtml = '')
   return points.length > 1 ? points : [];
 }
 
-function ensureOverviewPreludePagination(markdown = '', chooserHtml = '') {
-  if (_learnLayoutMode !== 'overview_lesson' || learnKnowledgePoints.length > 1) return false;
-  const fallbackPoints = buildOverviewPreludePointsFromMarkdown(markdown, chooserHtml);
-  if (fallbackPoints.length <= 1) return false;
-  learnKnowledgePoints = fallbackPoints;
-  currentLessonTrailingHtml = '';
-  currentKnowledgePointIndex = 0;
-  return true;
-}
 
 // Returns false when the move was a no-op. The "no-op" reason is overloaded:
 // it can mean (a) no knowledge points loaded, (b) a page-turn animation is in
@@ -12996,16 +12157,6 @@ function syncFocusModeContent() {
   }, 40);
 }
 
-function openLearnFocusMode() {
-  if (!learnFocusModal || !learnFocusContent) return;
-  learnFocusModal.classList.remove('hidden');
-  document.body.style.overflow = 'hidden';
-  syncFocusModeContent();
-  // Also bind the test button in focus mode
-  setTimeout(() => {
-    bindStartTestBtnIfPresent();
-  }, 50);
-}
 
 function closeLearnFocusMode() {
   if (!learnFocusModal) return;
@@ -13227,13 +12378,6 @@ function applyLearnChatCollapsedState() {
   }
 }
 
-function toggleLearnChatPanel(forceOpen = null) {
-  const nextCollapsed = typeof forceOpen === 'boolean'
-    ? !forceOpen
-    : !isLearnChatCollapsed;
-  isLearnChatCollapsed = nextCollapsed;
-  applyLearnChatCollapsedState();
-}
 
 function openLearnQaSidebar() {
   learnPanelFocus = 'normal';
@@ -13249,12 +12393,6 @@ function minimizeLearnQaToBubble() {
   applyLearnChatCollapsedState();
 }
 
-function shrinkLearnQaToPopover() {
-  learnPanelFocus = 'normal';
-  isLearnChatCollapsed = true;
-  applyLearnChatCollapsedState();
-  setLearnChatPopoverOpen(true);
-}
 
 function applyLearnExplainCollapsedState() {
   const isOverviewLayout = false;
@@ -13292,13 +12430,6 @@ function applyLearnExplainCollapsedState() {
   }
 }
 
-function toggleLearnExplainPanel(forceOpen = null) {
-  const nextCollapsed = typeof forceOpen === 'boolean'
-    ? !forceOpen
-    : !isLearnExplainCollapsed;
-  isLearnExplainCollapsed = nextCollapsed;
-  applyLearnExplainCollapsedState();
-}
 
 function setLearnChatPopoverOpen(open) {
   isLearnChatPopoverOpen = !!open;
@@ -13840,6 +12971,7 @@ function sourceTypeLabel(type) {
   }[type] || 'Web';
 }
 
+// SYNC: keep identical to ws-bridge.js sourceTypeRank.
 function sourceTypeRank(type) {
   return {
     video: 1,
@@ -13853,6 +12985,9 @@ function sourceTypeRank(type) {
   }[type] || 99;
 }
 
+// KNOWN DIVERGENCE with ws-bridge.js sortSourcesByType: this client-side
+// copy does NOT deprioritize wikipedia.org. The server pre-sorts before
+// sending, so re-deprioritizing here would double-penalize wikipedia.
 function sortSourcesByType(sources = []) {
   return [...sources].sort((a, b) => {
     const ra = sourceTypeRank(a.sourceType);
@@ -13978,15 +13113,11 @@ async function openLearnModeKeepToc(sectionId, sectionTitle, parentOverviewConte
 }
 
 function getSectionPreview(sectionId, sectionTitle) {
-  const previewsSource = currentBook === 'new'
-    ? (typeof SECTION_PREVIEWS_NEW !== 'undefined' ? SECTION_PREVIEWS_NEW : SECTION_PREVIEWS)
-    : SECTION_PREVIEWS;
   const parsed = parseSectionTitleParts(sectionTitle || sectionId, sectionId || sectionTitle, '');
   const sectionCode = parsed.code || null;
-  return previewsSource[sectionTitle] || previewsSource[sectionId]
-    || (sectionCode ? previewsSource[sectionCode] : null)
-    || SECTION_PREVIEWS[sectionTitle] || SECTION_PREVIEWS[sectionId]
-    || (sectionCode ? SECTION_PREVIEWS[sectionCode] : null)
+  return SECTION_PREVIEWS_NEW[sectionTitle]
+    || SECTION_PREVIEWS_NEW[sectionId]
+    || (sectionCode ? SECTION_PREVIEWS_NEW[sectionCode] : null)
     || null;
 }
 
@@ -14171,21 +13302,6 @@ function parseOverviewSubsectionTitle(subTitle, idx = 0) {
   };
 }
 
-function buildOverviewSubsectionChooserHtml(subsections = []) {
-  return `
-    <section class="chapter-overview-list-block chapter-overview-list-block-inline">
-      <div class="chapter-overview-list-head">
-        <div>
-          <div class="chapter-overview-list-eyebrow">Study sequence</div>
-          <h2 class="chapter-overview-list-title">Subsections</h2>
-        </div>
-      </div>
-      <div class="chapter-overview-grid">
-        ${buildOverviewSubsectionCardsHtml(subsections)}
-      </div>
-    </section>
-  `;
-}
 
 function renderChapterOverviewContent(sectionId, sectionTitle, subsections = [], options = {}) {
   if (!learnExplainContent) return;
@@ -17241,17 +16357,6 @@ function clearToc() {
   tocNav.innerHTML = '<div class="toc-empty"><p>Select a section<br>from the syllabus<br>to begin.</p></div>';
 }
 
-function buildTocFromSyllabus(chapterTitle, sections) {
-  const items = [];
-  if (chapterTitle) items.push({ title: chapterTitle, depth: 1, anchor: '' });
-  (sections || []).forEach(sec => {
-    items.push({ title: sec.sectionId + ' ' + (sec.title || sec.sectionTitle || ''), depth: 2, anchor: '' });
-    (sec.subsections || []).forEach(sub => {
-      items.push({ title: sub.sectionId + ' ' + (sub.title || sub.sectionTitle || ''), depth: 3, anchor: '' });
-    });
-  });
-  buildToc(items);
-}
 
 function getTocContextForCurrentLesson() {
   const sectionId = String(tutorState.learnSectionId || '').trim();
@@ -17523,14 +16628,6 @@ function renderWebSourcesInline(webSources = []) {
   webSourcesInline.innerHTML = renderWebSourceCards(webSources, { compact: true, showBuckets: true });
 }
 
-function renderExplanation(markdown) {
-  answerContent.innerHTML = markdownToHtml(markdown || '暂无讲解内容');
-  bindExpandableLessonImages(answerContent);
-  if (window.MathJax && window.MathJax.typesetPromise) {
-    window.MathJax.typesetPromise([answerContent]).catch(() => {});
-  }
-  setTimeout(() => buildTocFromContent(answerContent), 80);
-}
 
 function renderMainConversationThread(options = {}) {
   if (!answerContent) return;
@@ -17767,14 +16864,6 @@ function buildSearchProgressMarkup(context = 'answer', lang = 'en') {
 
 let loadingTimer = null;
 
-function startStepAnimation() {
-  let step = 1;
-  renderStepState(step);
-  loadingTimer = setInterval(() => {
-    step = Math.min(3, step + 1);
-    renderStepState(step);
-  }, 1200);
-}
 
 function stopStepAnimation() {
   if (loadingTimer) {

@@ -1,9 +1,0 @@
-1.9 Summary
-
-93
-
-Fig. 1.34 A system that cannot be described by external measurements.
-
-The equivalent system as seen from the system’s external terminals is depicted in Fig. 1.34b. Clearly, for the external description, the capacitor does not exist. For most systems, the external and internal descriptions are identical, but there are a few exceptions, as in the present case, where the external description gives an inadequate picture of the systems. This happens when the system is uncontrollable and/or unobservable. Figures 1.35a and 1.35b show a structural representation of simple uncontrollable and unobservable systems respectively. In Fig. 1.35a we note that part of the system (subsystem $S_2$) inside the box cannot be controlled by the input $f(t)$. In Fig. 1.35b some of the system outputs (those in subsystem $S_2$) cannot be observed from the output terminals. If we try to describe either of these systems by applying an external input $f(t)$ and then measuring the output $y(t)$, the measurement will not characterize the complete system but only the part of the system (here $S_1$) that is both controllable and observable (linked to both the input and output). Such systems are undesirable in practice and should be avoided in any system design. The system in Fig. 1.35a can be shown to be neither controllable nor observable. It can be represented structurally as a combination of the systems in Figs. 1.35a and 1.35b.
-
-Fig. 1.35 Structures of uncontrollable and unobservable systems.

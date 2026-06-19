@@ -87,37 +87,25 @@ const TUTOR_MATERIALS_DIR = resolveExistingDir([
     path.join(PROJECT_ROOT, 'workspace', 'materials'),
     path.join(PROJECT_ROOT, 'materials')
 ], 'materials directory', (candidate) => {
-    return fs.existsSync(path.join(candidate, 'background-ocr-v3'))
-        || fs.existsSync(path.join(candidate, 'new-book-ocr'));
+    return fs.existsSync(path.join(candidate, 'new-book-ocr'));
 });
 
-const OCR_DIR_OLD = path.join(TUTOR_MATERIALS_DIR, 'background-ocr-v3');
-const PAGE_IMAGE_DIR_OLD = path.join(TUTOR_MATERIALS_DIR, 'background-pages-split');
 const OCR_DIR_NEW = path.join(TUTOR_MATERIALS_DIR, 'new-book-ocr');
 const SECTION_OCR_DIR_NEW = path.join(TUTOR_MATERIALS_DIR, 'new-book-section-ocr');
 const PAGE_IMAGE_DIR_NEW = path.join(TUTOR_MATERIALS_DIR, 'new-book-pages');
 const FIGURE_IMAGE_DIR_NEW = path.join(TUTOR_MATERIALS_DIR, 'new-book-figures');
 const PYTHON_BIN = process.env.TUTOR_PYTHON_BIN || '/Library/Frameworks/Python.framework/Versions/3.12/bin/python3';
 
-// Helper: resolve dirs based on bookSource param
-function getBookDirs(bookSource) {
-    if (bookSource === 'new') {
-        return { ocrDir: OCR_DIR_NEW, pageImageDir: PAGE_IMAGE_DIR_NEW };
-    }
-    return { ocrDir: OCR_DIR_OLD, pageImageDir: PAGE_IMAGE_DIR_OLD };
+// Helper: resolve dirs (single-book — 2nd Edition was retired 2026-06-19)
+function getBookDirs(_bookSource) {
+    return { ocrDir: OCR_DIR_NEW, pageImageDir: PAGE_IMAGE_DIR_NEW };
 }
 
-function getPageImageUrl(bookSource, pageImage) {
+function getPageImageUrl(_bookSource, pageImage) {
     const filename = path.basename(String(pageImage || ''));
     if (!filename) return '';
-    return bookSource === 'new'
-        ? `/new-pages/${filename}`
-        : `/old-pages/${filename}`;
+    return `/new-pages/${filename}`;
 }
-
-// Default (backward compat)
-const OCR_DIR = OCR_DIR_OLD;
-const PAGE_IMAGE_DIR = PAGE_IMAGE_DIR_OLD;
 const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
@@ -141,12 +129,10 @@ const RAGFLOW_VECTOR_SIMILARITY_WEIGHT = Number(process.env.RAGFLOW_VECTOR_SIMIL
 const RAGFLOW_RETRIEVAL_PATH = process.env.RAGFLOW_RETRIEVAL_PATH || '/api/v1/retrieval';
 
 function getOpenAIKey() {
-    loadLocalEnvFile();
     return process.env.OPENAI_API_KEY || '';
 }
 
 function getOpenRouterKey() {
-    loadLocalEnvFile();
     return process.env.OPENROUTER_API_KEY || '';
 }
 
@@ -398,6 +384,8 @@ function pruneForbiddenGenerateImageBlocks(blueprint) {
     return blueprint;
 }
 
+// SYNC: keep identical to app.js compactWhitespace.
+// Node/browser split keeps two copies; drift risk is real but tolerated.
 function compactWhitespace(value) {
     return String(value || '').replace(/\s+/g, ' ').trim();
 }
@@ -816,7 +804,7 @@ function loadNewBookFigureIndex() {
     }
 }
 
-function getAllowedNewBookFigures(sectionId = '', bookPages = [], bookSource = 'old') {
+function getAllowedNewBookFigures(sectionId = '', bookPages = [], bookSource = 'new') {
     if (bookSource !== 'new') return new Set();
 
     const code = extractSectionCode(sectionId);
@@ -864,7 +852,7 @@ function findAllowedFigureForBlock(figures, block, allowedFigureFiles) {
     }) || null;
 }
 
-function hasDisallowedNewBookPageFallback(markdown, sectionId = '', bookPages = [], bookSource = 'old') {
+function hasDisallowedNewBookPageFallback(markdown, sectionId = '', bookPages = [], bookSource = 'new') {
     if (bookSource !== 'new') return false;
     const src = String(markdown || '');
     return /\]\(\/pages\/page-\d+\.png\)/.test(src);
@@ -1014,7 +1002,7 @@ function enforceSectionSpecificLessonPolish(sectionId = '', markdown = '') {
     return src;
 }
 
-function hasDisallowedNewBookFigureRefs(markdown, sectionId = '', bookPages = [], bookSource = 'old') {
+function hasDisallowedNewBookFigureRefs(markdown, sectionId = '', bookPages = [], bookSource = 'new') {
     if (bookSource !== 'new') return false;
     const src = String(markdown || '');
     const allowed = getAllowedNewBookFigures(sectionId, bookPages, bookSource);
@@ -1022,7 +1010,7 @@ function hasDisallowedNewBookFigureRefs(markdown, sectionId = '', bookPages = []
     return refs.some(file => !allowed.has(path.basename(file)));
 }
 
-function hasNewBookFigureUnavailablePlaceholder(markdown, bookSource = 'old') {
+function hasNewBookFigureUnavailablePlaceholder(markdown, bookSource = 'new') {
     if (bookSource !== 'new') return false;
     return /\*\(Figure unavailable:/i.test(String(markdown || ''));
 }
@@ -1108,15 +1096,14 @@ function loadBookIndexForDir(ocrDir, pagePattern = /^book-\d{3}\.meta\.json$/i) 
     return entries;
 }
 
-const BOOK_INDEX_OLD = loadBookIndexForDir(OCR_DIR_OLD, /^book-\d{3}\.meta\.json$/i);
 const BOOK_INDEX_NEW = loadBookIndexForDir(OCR_DIR_NEW, /^page-\d{3}\.meta\.json$/i);
 
-function getBookIndex(ocrDir = OCR_DIR_OLD) {
-    return ocrDir === OCR_DIR_NEW ? BOOK_INDEX_NEW : BOOK_INDEX_OLD;
+function getBookIndex(_ocrDir) {
+    return BOOK_INDEX_NEW;
 }
 
-// section-page-map.json: 精确的小节->书页映射（由 OCR 文本扫描生成）
-function loadSectionPageMap(filename = 'section-page-map.json') {
+// section-page-map-*.json: 精确的小节->书页映射（由 OCR 文本扫描生成）
+function loadSectionPageMap(filename) {
     const mapPath = path.join(__dirname, filename);
     try {
         return JSON.parse(fs.readFileSync(mapPath, 'utf8'));
@@ -1125,20 +1112,12 @@ function loadSectionPageMap(filename = 'section-page-map.json') {
         return {};
     }
 }
-const SECTION_PAGE_MAP = loadSectionPageMap('section-page-map.json');
 const SECTION_PAGE_MAP_NEW = loadSectionPageMap('section-page-map-new.json');
 const SECTION_FIGURE_MAP_NEW = loadSectionPageMap('section-figure-map-new.json');
 const NEW_BOOK_FIGURE_INDEX = loadNewBookFigureIndex();
-console.log(`[Index] Section maps loaded: old=${Object.keys(SECTION_PAGE_MAP).length}, new=${Object.keys(SECTION_PAGE_MAP_NEW).length}`);
+console.log(`[Index] Section maps loaded: new=${Object.keys(SECTION_PAGE_MAP_NEW).length}`);
 console.log(`[Index] Section figure map loaded: new=${Object.keys(SECTION_FIGURE_MAP_NEW).length}`);
 console.log(`[Index] New-book figure index loaded: pages=${Object.keys(NEW_BOOK_FIGURE_INDEX).length}`);
-
-function getActiveSectionPageMap(ocrDir = OCR_DIR_OLD) {
-    if (ocrDir === OCR_DIR_NEW) {
-        return loadSectionPageMap('section-page-map-new.json');
-    }
-    return loadSectionPageMap('section-page-map.json');
-}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // USER MEMORY
@@ -1161,7 +1140,7 @@ function formulaCatalogFileForSection(sectionId = '') {
     return path.join(FORMULA_CATALOG_DIR, `${safeCode}.formulas.json`);
 }
 
-function readVerifiedFormulaCatalog(sectionId = '', bookSource = 'old') {
+function readVerifiedFormulaCatalog(sectionId = '', bookSource = 'new') {
     if (bookSource !== 'new') return null;
     const file = formulaCatalogFileForSection(sectionId);
     if (!file || !fs.existsSync(file)) return null;
@@ -1206,7 +1185,7 @@ function buildVerifiedFormulaPromptSection(catalog) {
     return lines.join('\n');
 }
 
-function hasLessonCacheFile(sectionId, memory, bookSource = 'old', cacheVariant = 'lesson') {
+function hasLessonCacheFile(sectionId, memory, bookSource = 'new', cacheVariant = 'lesson') {
     const key = buildLessonCacheKey(memory, bookSource, cacheVariant);
     if (!key) return false;
     const normId = normalizeSectionId(sectionId);
@@ -1280,13 +1259,13 @@ function getB8FormulaAppendix(sectionId = '', sectionTitle = '') {
     return B8_FORMULA_APPENDIX_MARKDOWN;
 }
 
-function buildLessonCacheKey(_memory, bookSource = 'old', cacheVariant = 'lesson') {
+function buildLessonCacheKey(_memory, bookSource = 'new', cacheVariant = 'lesson') {
     const sourceKey = bookSource === 'new' ? 'new' : 'old';
     const variantKey = cacheVariant && cacheVariant !== 'lesson' ? `__${cacheVariant}` : '';
     return `${sourceKey}${variantKey}__${LESSON_CACHE_VERSION}`;
 }
 
-function readLessonCache(sectionId, memory, bookSource = 'old', cacheVariant = 'lesson') {
+function readLessonCache(sectionId, memory, bookSource = 'new', cacheVariant = 'lesson') {
     const key = buildLessonCacheKey(memory, bookSource, cacheVariant);
     if (!key) return null;
     const normId = normalizeSectionId(sectionId);
@@ -1320,7 +1299,7 @@ function readLessonCache(sectionId, memory, bookSource = 'old', cacheVariant = '
     } catch (_) { return null; }
 }
 
-function writeLessonCache(sectionId, memory, lesson, bookSource = 'old', cacheVariant = 'lesson') {
+function writeLessonCache(sectionId, memory, lesson, bookSource = 'new', cacheVariant = 'lesson') {
     const key = buildLessonCacheKey(memory, bookSource, cacheVariant);
     if (!key) return;
     const normId = normalizeSectionId(sectionId);
@@ -1338,7 +1317,7 @@ function writeLessonCache(sectionId, memory, lesson, bookSource = 'old', cacheVa
     }
 }
 
-function scoreLegacyLessonCacheFile(fileName, memory, bookSource = 'old') {
+function scoreLegacyLessonCacheFile(fileName, memory, bookSource = 'new') {
     // On disk, legacy cache names use '=' for ':' and '~' for '|' (Windows-safe);
     // decode so the substring patterns below match the original key format.
     fileName = String(fileName || '').replace(/=/g, ':').replace(/~/g, '|');
@@ -1398,7 +1377,7 @@ function stripLegacyGeneratedImageBlocks(markdown) {
     return src;
 }
 
-function readLegacyLessonCacheFallback(sectionId, memory, bookSource = 'old') {
+function readLegacyLessonCacheFallback(sectionId, memory, bookSource = 'new') {
     // Anonymous requests (memory=null, the /api/section default) still get the
     // best generic legacy lesson: scoreLegacyLessonCacheFile defaults to the
     // standard track via normalizeQuizProfile({}).
@@ -2474,7 +2453,7 @@ function scoreBookEntry(entry, keywords, question) {
     return score;
 }
 
-function selectRelevantBooks(question, keywords, minCount = 3, maxCount = 5, ocrDir = OCR_DIR_OLD) {
+function selectRelevantBooks(question, keywords, minCount = 3, maxCount = 5, ocrDir = OCR_DIR_NEW) {
     const activeIndex = getBookIndex(ocrDir);
     const ranked = activeIndex
         .map(entry => ({ entry, score: scoreBookEntry(entry, keywords, question) }))
@@ -2487,7 +2466,7 @@ function selectRelevantBooks(question, keywords, minCount = 3, maxCount = 5, ocr
     return fallback.map(item => item.entry);
 }
 
-async function selectBooksFromAttachmentText(attachmentText = '', fallbackQuestion = '', ocrDir = OCR_DIR_OLD) {
+async function selectBooksFromAttachmentText(attachmentText = '', fallbackQuestion = '', ocrDir = OCR_DIR_NEW) {
     const text = compactWhitespace(attachmentText || '').slice(0, 12000);
     const question = compactWhitespace(fallbackQuestion || '');
     if (!text) return [];
@@ -2519,20 +2498,20 @@ function readOCRText(filePath, maxChars = 5000) {
     }
 }
 
-function getSectionOcrPath(sectionId = '', bookSource = 'old') {
+function getSectionOcrPath(sectionId = '', bookSource = 'new') {
     if (bookSource !== 'new') return '';
     const code = extractSectionCode(sectionId);
     if (!code) return '';
     return path.join(SECTION_OCR_DIR_NEW, `${code.replace(/[^a-z0-9._-]+/gi, '_')}.txt`);
 }
 
-function readSectionOCRText(sectionId = '', bookSource = 'old', maxChars = 50000) {
+function readSectionOCRText(sectionId = '', bookSource = 'new', maxChars = 50000) {
     const sectionOcrPath = getSectionOcrPath(sectionId, bookSource);
     if (!sectionOcrPath || !fs.existsSync(sectionOcrPath)) return '';
     return readOCRText(sectionOcrPath, maxChars);
 }
 
-function attachSectionOcrToPages(sectionId = '', bookPages = [], bookSource = 'old') {
+function attachSectionOcrToPages(sectionId = '', bookPages = [], bookSource = 'new') {
     if (bookSource !== 'new' || !Array.isArray(bookPages) || !bookPages.length) return bookPages;
     const sectionOcrText = readSectionOCRText(sectionId, bookSource, 50000);
     if (!sectionOcrText) return bookPages;
@@ -2844,6 +2823,7 @@ function classifySourceType(url = '', title = '') {
     return 'web';
 }
 
+// SYNC: keep identical to app.js sourceTypeRank.
 function sourceTypeRank(type = 'web') {
     return {
         video: 1,
@@ -2876,6 +2856,9 @@ function enrichSources(sources) {
     });
 }
 
+// KNOWN DIVERGENCE with app.js sortSourcesByType: this server-side copy
+// also deprioritizes wikipedia.org within same type rank. The client copy
+// in app.js skips that step (it sorts what the server already pre-sorted).
 function sortSourcesByType(sources = []) {
     return [...sources].sort((a, b) => {
         const ra = sourceTypeRank(a.sourceType);
@@ -3483,7 +3466,7 @@ function extractSectionCode(sectionId) {
     return m ? m[1].toLowerCase() : compactWhitespace(sectionId || '').toLowerCase();
 }
 
-function matchesBookSourcePageId(pageId = '', bookSource = 'old') {
+function matchesBookSourcePageId(pageId = '', bookSource = 'new') {
     const page = compactWhitespace(pageId || '').toLowerCase();
     if (!page) return false;
     return bookSource === 'new'
@@ -3491,88 +3474,49 @@ function matchesBookSourcePageId(pageId = '', bookSource = 'old') {
         : /^book-\d{3}$/.test(page);
 }
 
-function filterPagesForBookSource(items = [], bookSource = 'old') {
+function filterPagesForBookSource(items = [], bookSource = 'new') {
     return (Array.isArray(items) ? items : []).filter(item => matchesBookSourcePageId(item && item.page, bookSource));
 }
 
-function getPagesForSection(sectionId, ocrDir = OCR_DIR_OLD) {
+function getPagesForSection(sectionId, _ocrDir) {
     const code = extractSectionCode(sectionId);
     if (!code) return [];
 
-    const isNewBook = ocrDir === OCR_DIR_NEW;
-    const activeMap = isNewBook ? SECTION_PAGE_MAP_NEW : SECTION_PAGE_MAP;
-    const activeIndex = getBookIndex(ocrDir);
-
-    // For new book: build pages from OCR dir directly
-    if (isNewBook) {
-        const codeUpper = code.toUpperCase().replace(/^([a-z])/, c => c.toUpperCase());
-        const mapKey = Object.keys(activeMap).find(
-            k => k.toLowerCase() === code.toLowerCase() || k.toLowerCase() === codeUpper.toLowerCase()
-        );
-        if (mapKey) {
-            const pageNames = activeMap[mapKey];
-            return pageNames.map(pn => ({
+    const codeUpper = code.toUpperCase().replace(/^([a-z])/, c => c.toUpperCase());
+    const mapKey = Object.keys(SECTION_PAGE_MAP_NEW).find(
+        k => k.toLowerCase() === code.toLowerCase() || k.toLowerCase() === codeUpper.toLowerCase()
+    );
+    if (mapKey) {
+        const pageNames = SECTION_PAGE_MAP_NEW[mapKey];
+        return pageNames.map(pn => ({
+            page: pn,
+            pageImage: pn + '.png',
+            image: getPageImageUrl('new', `${pn}.png`),
+            textPath: path.join(OCR_DIR_NEW, `${pn}.txt`),
+            subsection: code,
+            title: sectionId,
+            summary: '',
+            keywords: []
+        }));
+    }
+    // parent fallback
+    const parentCode = code.replace(/-\d+$/, '');
+    if (parentCode !== code) {
+        const parentKey = Object.keys(SECTION_PAGE_MAP_NEW).find(k => k.toLowerCase() === parentCode.toLowerCase());
+        if (parentKey) {
+            return SECTION_PAGE_MAP_NEW[parentKey].map(pn => ({
                 page: pn,
                 pageImage: pn + '.png',
                 image: getPageImageUrl('new', `${pn}.png`),
                 textPath: path.join(OCR_DIR_NEW, `${pn}.txt`),
-                subsection: code,
+                subsection: parentCode,
                 title: sectionId,
                 summary: '',
                 keywords: []
             }));
         }
-        // parent fallback
-        const parentCode = code.replace(/-\d+$/, '');
-        if (parentCode !== code) {
-            const parentKey = Object.keys(activeMap).find(k => k.toLowerCase() === parentCode.toLowerCase());
-            if (parentKey) {
-                return activeMap[parentKey].map(pn => ({
-                    page: pn,
-                    pageImage: pn + '.png',
-                    image: getPageImageUrl('new', `${pn}.png`),
-                    textPath: path.join(OCR_DIR_NEW, `${pn}.txt`),
-                    subsection: parentCode,
-                    title: sectionId,
-                    summary: '',
-                    keywords: []
-                }));
-            }
-        }
-        return [];
     }
-
-    // Old book: existing logic
-    const codeUpper = code.toUpperCase().replace(/^([a-z])/, c => c.toUpperCase());
-    const mapKey = Object.keys(SECTION_PAGE_MAP).find(
-        k => k.toLowerCase() === code || k.toLowerCase() === codeUpper.toLowerCase()
-    );
-    if (mapKey) {
-        const pageNames = SECTION_PAGE_MAP[mapKey];
-        const pages = pageNames.map(pn => activeIndex.find(e => e.page === pn)).filter(Boolean);
-        if (pages.length > 0) return pages;
-    }
-
-    const parentCode = code.replace(/-\d+$/, '');
-    if (parentCode !== code) {
-        const parentKey = Object.keys(SECTION_PAGE_MAP).find(
-            k => k.toLowerCase() === parentCode
-        );
-        if (parentKey) {
-            const pageNames = SECTION_PAGE_MAP[parentKey];
-            const pages = pageNames.map(pn => activeIndex.find(e => e.page === pn)).filter(Boolean);
-            if (pages.length > 0) return pages;
-        }
-    }
-
-    const exact = activeIndex.filter(entry => {
-        const sub = extractSectionCode(entry.subsection);
-        return sub === code || sub.startsWith(code + '-');
-    });
-    if (exact.length > 0) return exact;
-
-    const raw = compactWhitespace(sectionId || '').toLowerCase();
-    return activeIndex.filter(entry => entry.searchBlob.includes(raw));
+    return [];
 }
 
 /**
@@ -4348,7 +4292,7 @@ function focusOcrTextForSection(sectionId = '', sectionTitle = '', rawText = '')
  * Agent A — Lesson Architect (OpenAI GPT-5.4)
  * Reads OCR + existing page images, outputs a Rendering Blueprint JSON.
  */
-async function agentA_plan(sectionId, sectionTitle, bookPages, webSources, language = 'en', bookSource = 'old') {
+async function agentA_plan(sectionId, sectionTitle, bookPages, webSources, language = 'en', bookSource = 'new') {
     const ocrPages = bookPages.map(p => ({
         pageId: p.page,
         text: Object.prototype.hasOwnProperty.call(p, 'ocrOverrideText')
@@ -4366,7 +4310,7 @@ async function agentA_plan(sectionId, sectionTitle, bookPages, webSources, langu
     // Gives Agent A full context even for math-heavy pages with no extracted figure crops.
     const pageInfo = {};
     for (const p of localBookPages) {
-        const metaPath = path.join((p.textPath ? path.dirname(p.textPath) : OCR_DIR), `${p.page}.meta.json`);
+        const metaPath = path.join((p.textPath ? path.dirname(p.textPath) : OCR_DIR_NEW), `${p.page}.meta.json`);
         if (fs.existsSync(metaPath)) {
             const meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
             if (meta.figures && meta.figures.length) {
@@ -4643,7 +4587,7 @@ function getSummaryHintForSection(sectionId = '', sectionTitle = '') {
     return '';
 }
 
-async function agentB_execute(sectionId, blueprint, bookPages, webSources, language = 'en', bookSource = 'old') {
+async function agentB_execute(sectionId, blueprint, bookPages, webSources, language = 'en', bookSource = 'new') {
     const systemPrompt = fs.readFileSync(
         path.join(TUTOR_MATERIALS_DIR, 'prompts', 'agent-b-tutor.md'),
         'utf8'
@@ -4659,7 +4603,7 @@ async function agentB_execute(sectionId, blueprint, bookPages, webSources, langu
     for (const p of localBookPages) {
         existingPageImages[p.page] = `/pages/${p.pageImage}`;
         // Load figure metadata for precision crop
-        const metaPath = path.join((p.textPath ? path.dirname(p.textPath) : OCR_DIR), `${p.page}.meta.json`);
+        const metaPath = path.join((p.textPath ? path.dirname(p.textPath) : OCR_DIR_NEW), `${p.page}.meta.json`);
         if (fs.existsSync(metaPath)) {
             const meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
             if (meta.figures && meta.figures.length) {
@@ -4791,7 +4735,7 @@ async function agentB_execute(sectionId, blueprint, bookPages, webSources, langu
             if (b.type === 'book_image' && b.source_page && !b.fig_id) {
                 const metaPath = fs.existsSync(path.join(OCR_DIR_NEW, `${b.source_page}.meta.json`))
                     ? path.join(OCR_DIR_NEW, `${b.source_page}.meta.json`)
-                    : path.join(OCR_DIR_OLD, `${b.source_page}.meta.json`);
+                    : path.join(OCR_DIR_NEW, `${b.source_page}.meta.json`);
                 if (fs.existsSync(metaPath)) {
                     const meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
                     const figs = meta.figures || [];
@@ -4823,7 +4767,7 @@ async function agentB_execute(sectionId, blueprint, bookPages, webSources, langu
     throw new Error(`[Agent B:${sectionId}] invalid JSON after retry; refusing raw markdown fallback to avoid malformed lesson formatting.`);
 }
 
-async function collectSectionWebSources(sectionId, sectionTitle, bookSource = 'old') {
+async function collectSectionWebSources(sectionId, sectionTitle, bookSource = 'new') {
     const queries = [];
     const cleanTitle = compactWhitespace(sectionTitle || '');
     if (cleanTitle) {
@@ -4994,12 +4938,6 @@ function extractPlannedKnowledgeHeading(plannedBlock = null) {
     return '';
 }
 
-function renderedBlockStartsWithKnowledgeHeading(block = null) {
-    if (!block || typeof block !== 'object') return false;
-    if (block.type !== 'text_explanation' && block.type !== 'analogy') return false;
-    return /^\s*##\s+/.test(String(block.content || ''));
-}
-
 function normalizeKnowledgeHeadingText(text = '') {
     return compactWhitespace(String(text || ''))
         .replace(/^\s*##\s+/, '')
@@ -5062,7 +5000,7 @@ function isKnowledgeBearingRenderedBlock(block = null) {
     return false;
 }
 
-async function blueprintToMarkdown(blocks, pageImages, visualPlan = null, bookPages = [], sectionId = '', bookSource = 'old', plannedBlocks = []) {
+async function blueprintToMarkdown(blocks, pageImages, visualPlan = null, bookPages = [], sectionId = '', bookSource = 'new', plannedBlocks = []) {
     const parts = [];
     const allowedSourcePages = new Set((Array.isArray(bookPages) ? bookPages : []).map(p => compactWhitespace((p && p.page) || '')));
     const allowedNewBookFigures = getAllowedNewBookFigures(sectionId, bookPages, bookSource);
@@ -5156,7 +5094,7 @@ async function blueprintToMarkdown(blocks, pageImages, visualPlan = null, bookPa
                 const metaPath = sourcePage
                     ? (fs.existsSync(path.join(OCR_DIR_NEW, `${sourcePage}.meta.json`))
                         ? path.join(OCR_DIR_NEW, `${sourcePage}.meta.json`)
-                        : path.join(OCR_DIR_OLD, `${sourcePage}.meta.json`))
+                        : path.join(OCR_DIR_NEW, `${sourcePage}.meta.json`))
                     : null;
                 let cropUrl = null;
 
@@ -5335,261 +5273,8 @@ async function blueprintToMarkdown(blocks, pageImages, visualPlan = null, bookPa
 /**
  * 生成小节完整讲解 — now powered by dual-agent pipeline
  */
-function buildSyntheticProfileMemory(baseMemory, overrides = {}) {
-    const baseQuiz = normalizeQuizProfile((baseMemory && baseMemory.quiz) ? baseMemory.quiz : {});
-    const nextQuiz = normalizeQuizProfile({ ...baseQuiz, ...overrides });
-    return { ...(baseMemory || {}), quiz: nextQuiz };
-}
 
-function sectionIdToBlueprintCandidates(sectionId = '') {
-    const raw = compactWhitespace(sectionId || '');
-    if (!raw) return [];
-
-    const normalized = raw
-        .replace(/\s+/g, ' ')
-        .replace(/_/g, '-')
-        .trim();
-
-    const variants = new Set();
-    variants.add(normalized);
-    variants.add(normalized.replace(/\./g, '_'));
-    variants.add(normalized.replace(/\./g, '_').replace(/-/g, '_'));
-    variants.add(normalized.replace(/\./g, '-'));
-    variants.add(normalized.toUpperCase());
-    const compactAlphaNumeric = normalized.replace(/\./g, '').replace(/-/g, '_');
-    variants.add(compactAlphaNumeric);
-    variants.add(compactAlphaNumeric.toUpperCase());
-
-    const files = [];
-    for (const base of variants) {
-        const upper = base.toUpperCase();
-        files.push(`${upper}_BLUEPRINT_EXECUTABLE.json`);
-    }
-    return [...new Set(files)];
-}
-
-function loadExternalBlueprint(sectionId = '') {
-    console.log(`[Blueprint] External blueprint disabled globally for ${sectionId}; forcing Agent A -> Agent B pipeline.`);
-    return null;
-}
-
-async function prewarmLessonVariants(sectionId, sectionTitle, bookPages, baseMemory, bookSource = 'new', language = 'en') {
-    return { scheduled: 0, generated: 0, disabled: true };
-}
-
-function findFallbackBookImageBlock(sectionId, bookPages, language = 'en', bookSource = 'old') {
-    const allowedNewBookFigures = getAllowedNewBookFigures(sectionId, bookPages, bookSource);
-
-    for (const page of bookPages || []) {
-        const metaPath = path.join((page && page.textPath ? path.dirname(page.textPath) : OCR_DIR), `${page.page}.meta.json`);
-        if (!fs.existsSync(metaPath)) continue;
-        try {
-            const meta = JSON.parse(fs.readFileSync(metaPath, 'utf8'));
-            const figures = Array.isArray(meta.figures) ? meta.figures.filter((fig) => {
-                const crop = path.basename(String((fig && fig.crop_file) || ''));
-                return !crop || bookSource !== 'new' || allowedNewBookFigures.has(crop);
-            }) : [];
-            if (!figures.length) continue;
-            const canonical = figures.find(f => /complex plane|real axis|imaginary axis|signal|system|block diagram|unit step|impulse|phasor|polar|fraction|pole|zero|response|waveform/i.test(`${f.fig_id || ''} ${f.caption || ''}`)) || figures[0];
-            return {
-                type: 'book_image',
-                source_page: page.page,
-                fig_id: canonical.fig_id || null,
-                crop_hint: 'full',
-                teaching_role: 'concept_anchor',
-                mode_specific_visual_use: {
-                    cram: 'Use this textbook figure for fast pattern recognition.',
-                    standard: 'Use this textbook figure to anchor the core concept before the generated teaching visual refines it.',
-                    top_score: 'Use this textbook figure to compare notation details, traps, and edge cases.'
-                },
-                caption_instruction: language === 'zh'
-                    ? '写一句中文 caption，说明这张教材图展示了什么，以及它为什么能锚定本节的核心概念。'
-                    : 'Write a one-sentence caption explaining what this textbook figure shows and why it anchors the core idea of this section.'
-            };
-        } catch (err) {
-            console.warn(`[Pipeline] Failed to inspect figure metadata for ${sectionId} / ${page.page}: ${err.message}`);
-        }
-    }
-
-    return null;
-}
-
-function buildFallbackQuizPlan(sectionId, sectionTitle, language = 'en') {
-    const label = compactWhitespace(sectionTitle || sectionId || 'this section');
-    const isZh = language === 'zh';
-    return {
-        type: 'quiz_plan',
-        target_questions: 4,
-        question_range: { min: 4, max: 5 },
-        knowledge_points: [
-            {
-                id: `${String(sectionId || 'section').replace(/[^a-zA-Z0-9]+/g, '_').toLowerCase()}_core`,
-                label,
-                importance: 'high',
-                exam_weight: 'high',
-                mastery_rule: { correct_streak_required: 2 },
-                questions: isZh ? [
-                    {
-                        id: 'core_q1',
-                        type: 'multiple_choice',
-                        stem: `关于 ${label}，下面哪种说法最准确？`,
-                        options: [
-                            'A. 只要记结论，不需要理解图像和公式之间的关系',
-                            'B. 要同时看懂定义、图像/结构含义，以及题目里怎么考',
-                            'C. 这节内容只能靠死记硬背，无法用结构理解',
-                            'D. 这节重点只是符号变形，和实际题型无关'
-                        ],
-                        correct_option: 'B',
-                        explanation: '本节应把定义、结构/图像以及考试中的识别方式连起来理解。',
-                        wrong_option_explanations: {
-                            A: '只背结论很容易在变式题里出错。',
-                            C: '这节通常存在可理解的结构关系，不只是死记。',
-                            D: '考试会直接考你是否理解这些结构含义。'
-                        },
-                        hint: '想想这节真正想让学生“看懂什么、会判断什么”。',
-                        needs_visual: false,
-                        same_point_variant: false
-                    },
-                    {
-                        id: 'core_q2',
-                        type: 'short_answer',
-                        stem: `用 1-2 句话说明：学习 ${label} 时，最应该先抓住的核心关系是什么？`,
-                        ideal_answer: '应先抓住本节的核心定义或结构关系，再把它和图像/公式表示对应起来，最后知道考试会怎么变形来考。',
-                        grading_rubric: [
-                            '提到核心定义或结构关系',
-                            '提到图像/公式表示的对应',
-                            '提到考试或题型中的应用判断'
-                        ],
-                        explanation: '这题检查学生是否真的抓住了本节主线，而不是只抄局部结论。',
-                        hint: '不要背细节，先说“这节最核心的关系”是什么。',
-                        needs_visual: false,
-                        same_point_variant: false
-                    }
-                ] : [
-                    {
-                        id: 'core_q1',
-                        type: 'multiple_choice',
-                        stem: `Which statement best captures the main learning goal of ${label}?`,
-                        options: [
-                            'A. Memorize the final result without connecting it to the visual or structural meaning',
-                            'B. Understand the core definition, the visual/structural meaning, and how the idea appears in exam questions',
-                            'C. Treat the topic as pure symbol manipulation with no conceptual structure',
-                            'D. Focus only on terminology because the exam never tests interpretation'
-                        ],
-                        correct_option: 'B',
-                        explanation: 'Strong understanding in this section means connecting the definition, the structure/visual meaning, and the exam-facing interpretation.',
-                        wrong_option_explanations: {
-                            A: 'Memorization alone usually breaks on variants and trap questions.',
-                            C: 'The section is meant to be understood structurally, not as empty symbol pushing.',
-                            D: 'Interpretation is exactly what many exam questions probe.'
-                        },
-                        hint: 'Pick the option that combines meaning, representation, and exam use.',
-                        needs_visual: false,
-                        same_point_variant: false
-                    },
-                    {
-                        id: 'core_q2',
-                        type: 'short_answer',
-                        stem: `In 1-2 sentences, explain the core relationship a student should notice first when learning ${label}.`,
-                        ideal_answer: 'The student should first identify the section\'s central definition or structural relationship, then connect it to the visual or symbolic representation and to the typical exam interpretation.',
-                        grading_rubric: [
-                            'Must mention the core definition or structural relationship',
-                            'Must connect it to a visual or symbolic representation',
-                            'Must mention exam interpretation or problem-solving use'
-                        ],
-                        explanation: 'This checks whether the student sees the main thread of the section instead of isolated facts.',
-                        hint: 'Start with “the main relationship is...” rather than listing details.',
-                        needs_visual: false,
-                        same_point_variant: false
-                    }
-                ]
-            }
-        ]
-    };
-}
-
-function buildFallbackBlueprint(sectionId, sectionTitle, bookPages, language = 'en', rawAgentAOutput = '', bookSource = 'old') {
-    const isZh = language === 'zh';
-    const title = compactWhitespace(sectionTitle || sectionId || 'Untitled section');
-    const ocrSnippets = (bookPages || []).slice(0, 3).map((page) => readOCRText(page.textPath, 900)).filter(Boolean);
-    const summaryBits = uniqueStrings([
-        title,
-        ...((bookPages || []).map(page => page && page.summary).filter(Boolean)),
-        ...((bookPages || []).flatMap(page => Array.isArray(page && page.keywords) ? page.keywords : [])),
-        compactWhitespace(String(rawAgentAOutput || '').replace(/[{}\[\]`*_>#]/g, ' ')).slice(0, 240)
-    ], 8);
-    const conceptHints = summaryBits.filter(Boolean).slice(0, 4).join('; ');
-    const bookImageBlock = findFallbackBookImageBlock(sectionId, bookPages, language, bookSource);
-    const visualPromptTail = isZh
-        ? `围绕知识点“${title}”制作一张讲义风格教学图。优先表达核心关系、结构变化或做题时最容易混淆的对比。可参考这些线索：${conceptHints || title}。`
-        : `Create a lecture-notes teaching visual for the knowledge point "${title}". Focus on the core relationship, structural change, or most exam-relevant contrast. Helpful context: ${conceptHints || title}.`;
-
-    const blocks = [
-        {
-            type: 'text_explanation',
-            instruction: isZh
-                ? `以“## Overview”开头，用中文写 90-130 字的小节总览，面向零基础学生。说明这节在讲什么、为什么重要、学完后会什么。尽量贴近教材原文，不要空泛。可以参考这些 OCR 线索：${ocrSnippets.join(' / ') || title}`
-                : `Start with "## Overview" and write a 90-130 word beginner-friendly overview in English. Explain what this section is about, why it matters, and what the student will be able to do after it. Stay grounded in the textbook wording. OCR hints: ${ocrSnippets.join(' / ') || title}`
-        }
-    ];
-
-    if (bookImageBlock) blocks.push(bookImageBlock);
-
-    blocks.push(
-        {
-            type: 'generate_image',
-            tool: 'openai/gpt-5.4-image-2',
-            reason: bookImageBlock
-                ? 'Agent A failed to return valid JSON, so generate a clean teaching visual while preserving textbook anchoring.'
-                : 'Agent A failed to return valid JSON, so synthesize the missing visual anchor with gptimage2 instead of returning a text-only lesson.',
-            teaching_role: bookImageBlock ? 'comparison_anchor' : 'concept_anchor',
-            mode_specific_visual_use: {
-                cram: 'Use this generated visual to recognize the pattern or move within seconds.',
-                standard: 'Use this generated visual to make the core idea intuitive with one clear reading path.',
-                top_score: 'Use this generated visual to expose subtle distinctions, traps, or parameter changes.'
-            },
-            prompt: `${visualPromptTail}`,
-            style_hint: 'lecture notes, academic, clean, restrained color boxes, exam-oriented, one concept only'
-        },
-        {
-            type: 'text_explanation',
-            instruction: isZh
-                ? `以“## Core idea”开头，用中文写 120-180 字，抓住 ${title} 的一个核心关系来讲清楚。要把定义/结构、图像直觉、以及考试里最容易出错的点连起来，最多举一个最小例子。`
-                : `Start with "## Core idea" and write 120-180 words that teach one central relationship in ${title}. Connect the definition or structure, the visual intuition, and the most likely exam trap. Use at most one minimal example.`
-        },
-        {
-            type: 'section_summary',
-            instruction: isZh
-                ? '总结本节最关键的 3 个 takeaway，每条尽量不超过 20 个字，并补一句过渡到下一节的话。'
-                : 'Summarize the 3 most critical takeaways from this section in bullets of at most 20 words each, then add one transition sentence to the next section.'
-        },
-        buildFallbackQuizPlan(sectionId, title, language)
-    );
-
-    const visualPlan = {
-        primary_anchor: bookImageBlock ? 'both' : 'generated_image',
-        rationale: bookImageBlock
-            ? 'Agent A JSON failed, so keep one textbook figure as the factual anchor and add one generated gptimage2 teaching visual to preserve clarity.'
-            : 'Agent A JSON failed, so rely on one generated gptimage2 teaching visual instead of returning a text-only lesson.',
-        cram: 'Use the visual to recognize the exam pattern quickly.',
-        standard: 'Use the visual to clarify the core concept with a single clear path.',
-        top_score: 'Use the visual to highlight subtle distinctions, traps, or variants.'
-    };
-
-    return {
-        section_id: sectionId,
-        section_title: title,
-        difficulty: 'beginner',
-        estimated_read_minutes: 5,
-        learning_objectives: isZh
-            ? [`理解 ${title} 的核心关系`, '能把图像/结构和公式意义对上', '知道题目里最容易怎么考']
-            : [`Understand the core relationship in ${title}`, 'Connect the visual or structural meaning to the formula or notation', 'Recognize the most exam-relevant interpretation or trap'],
-        visual_plan: visualPlan,
-        blocks
-    };
-}
-
-async function generateSectionLesson(sectionId, sectionTitle, bookPages, webSources, language = 'en', bookSource = 'old') {
+async function generateSectionLesson(sectionId, sectionTitle, bookPages, webSources, language = 'en', bookSource = 'new') {
     // ── Agent A: Plan ──────────────────────────────────────────────────────────
     let blueprint = null;
     let agentARaw = '';
@@ -5623,68 +5308,6 @@ async function generateSectionLesson(sectionId, sectionTitle, bookPages, webSour
         console.error(`[LessonFinalize:${sectionId}] finalizeLesson failed:`, err && err.stack ? err.stack : err);
         throw err;
     }
-}
-
-/** Legacy single-agent lesson (kept for reference, not used) */
-async function _legacyGenerateSectionLesson(sectionId, sectionTitle, bookPages, webSources) {
-    const bookContext = buildBookContext(bookPages.map(p => ({
-        ...p,
-        ocrText: readOCRText(p.textPath, 4000)
-    })));
-    const webContext = buildWebContext(webSources);
-
-    const prompt = [
-        `学生正在学习小节：${sectionTitle || sectionId}`,
-        '',
-        '教材原文：',
-        bookContext,
-        '',
-        '联网补充资料：',
-        webContext,
-        '',
-        '输出要求：',
-        '1. 用中文，面向完全零基础的学生，语气亲切自然。',
-        '2. 用 Markdown 输出，结构清晰。',
-        '3. 按书本顺序逐块讲解，每块对应一个知识点。',
-        '4. 数学公式用 LaTeX，块级公式写成 $$...$$，行内公式写成 $...$。',
-        '5. 优先基于教材，网页资料作为延伸补充，在结尾单独一节"延伸阅读"里提及。',
-        '6. 最后给出 1-2 道"理解检验"小问题（不是考试题，是帮助学生自查的）。',
-        '7. 不要出现 [书页N] / [来源N] 引用标注。'
-    ].join('\n');
-
-    return callOpenRouterChat({
-        model: 'anthropic/claude-haiku-4.5',
-        timeoutMs: 120000,
-        temperature: 0.3,
-        maxTokens: 4000,
-        messages: [
-            { role: 'system', content: '你是一位耐心、准确、会讲人话的理工科导师。你的目标是让完全没学过这门课的学生在短时间内真正理解这个知识点。' },
-            { role: 'user', content: prompt }
-        ]
-    });
-}
-
-/**
- * 通用 Python3 runner — executes scriptPath with a single string argument
- */
-function runPython3(scriptPath, arg, timeoutMs = 30000) {
-    return new Promise((resolve, reject) => {
-        const child = spawn(PYTHON_BIN, [scriptPath, arg], {
-            env: { ...process.env, MPLBACKEND: 'Agg' },
-            stdio: ['ignore', 'pipe', 'pipe']
-        });
-        let stdout = '';
-        let stderr = '';
-        const timer = setTimeout(() => { child.kill('SIGKILL'); reject(new Error(`${PYTHON_BIN} timeout`)); }, timeoutMs);
-        child.stdout.on('data', d => { stdout += d.toString('utf8'); });
-        child.stderr.on('data', d => { stderr += d.toString('utf8'); });
-        child.on('error', e => { clearTimeout(timer); reject(e); });
-        child.on('close', code => {
-            clearTimeout(timer);
-            if (code !== 0) return reject(new Error(stderr || `exit ${code}`));
-            resolve(stdout.trim());
-        });
-    });
 }
 
 /**
@@ -6536,7 +6159,7 @@ const server = http.createServer(async (req, res) => {
             status: 'ok',
             mode: 'tutor-rag-ui',
             indexedPages: {
-                old: getBookIndex(OCR_DIR_OLD).length,
+                old: getBookIndex(OCR_DIR_NEW).length,
                 new: getBookIndex(OCR_DIR_NEW).length
             },
             apiAsk: true,
@@ -6734,28 +6357,12 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
-    if (pathname.startsWith('/old-pages/')) {
-        const filename = pathname.replace(/^\/old-pages\//, '');
-        serveStaticFromDir(res, PAGE_IMAGE_DIR_OLD, filename);
-        return;
-    }
-
-    if (pathname.startsWith('/new-pages/')) {
-        const filename = pathname.replace(/^\/new-pages\//, '');
+    // /new-pages/* serves the active (3rd Ed) book pages.
+    // /pages/* is kept as a back-compat alias for cached lesson markdown that
+    // still references the old root; both now serve from PAGE_IMAGE_DIR_NEW.
+    if (pathname.startsWith('/new-pages/') || pathname.startsWith('/pages/')) {
+        const filename = pathname.replace(/^\/(?:new-pages|pages)\//, '');
         serveStaticFromDir(res, PAGE_IMAGE_DIR_NEW, filename);
-        return;
-    }
-
-    if (pathname.startsWith('/pages/')) {
-        const filename = pathname.replace(/^\/pages\//, '');
-        // Backward compatibility for existing cached markdown/images.
-        const oldPath = path.join(PAGE_IMAGE_DIR_OLD, filename);
-        const newPath = path.join(PAGE_IMAGE_DIR_NEW, filename);
-        if (fs.existsSync(oldPath)) {
-            serveStaticFromDir(res, PAGE_IMAGE_DIR_OLD, filename);
-        } else {
-            serveStaticFromDir(res, PAGE_IMAGE_DIR_NEW, filename);
-        }
         return;
     }
 
@@ -6793,7 +6400,7 @@ const server = http.createServer(async (req, res) => {
         }
 
         // Last resort: full page
-        serveStaticFromDir(res, PAGE_IMAGE_DIR, `${pageId}.png`);
+        serveStaticFromDir(res, PAGE_IMAGE_DIR_NEW, `${pageId}.png`);
         return;
     }
 
@@ -6844,7 +6451,7 @@ if (IS_PREGEN_CLI) {
         console.log('Tutor Agent Bridge');
         console.log('='.repeat(64));
         console.log(`HTTP Server : http://localhost:${HTTP_PORT}`);
-        console.log(`Indexed OCR : old=${BOOK_INDEX_OLD.length}, new=${BOOK_INDEX_NEW.length} pages`);
+        console.log(`Indexed OCR : new=${BOOK_INDEX_NEW.length} pages`);
         console.log(`Skill Script: ${SKILL_SCRIPT}`);
         console.log('');
         console.log('Endpoints:');
