@@ -6797,12 +6797,6 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
-    if (pathname.startsWith('/generated/')) {
-        const filename = pathname.replace(/^\/generated\//, '');
-        serveStaticFromDir(res, GENERATED_DIR, filename);
-        return;
-    }
-
     const staticDir = __dirname;
     const requestedFile = pathname === '/' ? 'index.html' : pathname.replace(/^\//, '');
     const filePath = path.join(staticDir, requestedFile);
