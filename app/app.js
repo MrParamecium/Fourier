@@ -841,17 +841,6 @@ async function initClerk() {
     });
   }
 
-  // Also listen for sign-in completion (e.g., after OAuth redirect)
-  if (clerkInstance) {
-    clerkInstance.addListener(({ user }) => {
-      if (user && !currentUser) {
-        hideAuthOverlay();
-        const shouldEnter = allowAuthNavigation || authRedirectInProgress || hasPendingAuthReturnIntent();
-        if (shouldEnter) onUserSignedIn(user);
-        else syncCurrentUserWithoutNavigation(user);
-      }
-    });
-  }
 }
 
 async function onUserSignedIn(user) {
