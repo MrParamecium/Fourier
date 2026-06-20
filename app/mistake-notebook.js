@@ -8,11 +8,17 @@
 //   - window.MathJax                       (CDN)
 //
 // Public surface (free-name lookup from app.js):
-//   - loadMistakeNotebook, saveMistakeNotebook, getCurrentMistake,
-//     updateMistakeItem, addMistakeNotebookItem, addMistakeImageFile,
-//     addMistakeNoteImageFile, isMistakeNotebookVisible,
-//     handleMistakeNotebookPaste, renderMistakeNotebook,
-//     bindMistakeNotebookControls, runMistakeAi
+//   - addMistakeNotebookItem  (app.js Quick-Check Add-Mistake button)
+//   - renderMistakeNotebook   (app.js showMistakeNotebookView)
+//   - bindMistakeNotebookControls (called at app.js top-level once)
+//   - readFileAsDataUrl       (also used by app.js processFile in the
+//                              attachments pipeline — will move to a shared
+//                              util when Phase 2 #15 extracts attachments)
+//   - the loadMistakeNotebook/saveMistakeNotebook/getCurrentMistake/
+//     updateMistakeItem/addMistakeImageFile/addMistakeNoteImageFile/
+//     isMistakeNotebookVisible/handleMistakeNotebookPaste/runMistakeAi/
+//     and resizer/normalize/typeset helpers are module-private in practice
+//     (no current external callers) but live in the same script-global env
 //   - DOM consts: mistakeNotebookView, navMistakeNotebookBtn,
 //     mistakeNotebookCloseBtn, mistakeImageInput, mistakeSearchInput,
 //     mistakeCountPill, mistakeList, mistakeEmptyPanel, mistakeDetailContent,
