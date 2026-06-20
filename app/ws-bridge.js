@@ -1393,7 +1393,7 @@ const {
     compactWhitespace,
     normalizeQuizProfile,
     callOpenRouterChat,
-    usersDir: require('path').join(__dirname, 'users'),
+    usersDir: path.join(__dirname, 'users'),
 });
 
 function serveStaticFile(res, filePath) {

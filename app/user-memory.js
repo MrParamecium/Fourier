@@ -15,6 +15,9 @@
  * Factory pattern follows Phase 1 #4 (ragflow-client.js) — bridge injects
  * its utilities so this module doesn't pull from a not-yet-extracted shared
  * utils module.
+ *
+ * The factory is NOT side-effect-free: it mkdirSyncs USERS_DIR and
+ * SESSIONS_DIR on call. Call it once at bridge startup, not per-request.
  */
 'use strict';
 
