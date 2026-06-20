@@ -1410,8 +1410,12 @@ function readLegacyLessonCacheFallback(sectionId, memory, bookSource = 'new') {
     }
 }
 
+function sanitizeUid(uid) {
+    return String(uid || '').replace(/[^a-zA-Z0-9_\-]/g, '_').slice(0, 64);
+}
+
 function getUserMemoryPath(uid) {
-    const safe = String(uid || '').replace(/[^a-zA-Z0-9_\-]/g, '_').slice(0, 64);
+    const safe = sanitizeUid(uid);
     if (!safe) return null;
     return path.join(USERS_DIR, `${safe}.json`);
 }
@@ -1432,6 +1436,104 @@ function writeUserMemory(uid, data) {
     const p = getUserMemoryPath(uid);
     if (!p) return;
     fs.writeFileSync(p, JSON.stringify(data, null, 2), 'utf8');
+}
+
+// ── Chat sessions (multi-session, Phase 1) ───────────────────────────────────
+// Per-uid persisted conversations, one JSON file per session. File-based behind
+// this thin interface so the storage layer can be swapped for a database later
+// (see docs/multi-session.md). The host filesystem is ephemeral, so this is not
+// durable across redeploys yet — that's the documented Phase-1 tradeoff.
+const SESSIONS_DIR = path.join(USERS_DIR, 'sessions');
+try { if (!fs.existsSync(SESSIONS_DIR)) fs.mkdirSync(SESSIONS_DIR, { recursive: true }); } catch (_) {}
+
+function getSessionsDirForUid(uid) {
+    const safe = sanitizeUid(uid);
+    return safe ? path.join(SESSIONS_DIR, safe) : null;
+}
+function isValidSessionId(id) {
+    return /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(String(id || ''));
+}
+function getSessionPath(uid, id) {
+    const dir = getSessionsDirForUid(uid);
+    if (!dir || !isValidSessionId(id)) return null; // UUID-only guards path traversal
+    return path.join(dir, `${id}.json`);
+}
+function readSessionFile(uid, id) {
+    const p = getSessionPath(uid, id);
+    if (!p) return null;
+    try { return JSON.parse(fs.readFileSync(p, 'utf8')); } catch (_) { return null; }
+}
+function writeSessionFileAtomic(uid, session) {
+    const p = getSessionPath(uid, session && session.id);
+    if (!p) return false;
+    try {
+        fs.mkdirSync(path.dirname(p), { recursive: true });
+        const tmp = `${p}.tmp-${process.pid}-${Date.now()}`;
+        fs.writeFileSync(tmp, JSON.stringify(session, null, 2), 'utf8');
+        fs.renameSync(tmp, p); // atomic replace: a concurrent reader never sees a half-written file
+        return true;
+    } catch (e) {
+        console.warn('[sessions] write failed:', e.message);
+        return false;
+    }
+}
+function sessionMetaOf(s) {
+    return {
+        id: s.id,
+        title: s.customTitle || s.title || 'Untitled',
+        origin: s.origin || 'main',
+        sectionId: s.sectionId || '',
+        sectionTitle: s.sectionTitle || '',
+        starred: !!s.starred,
+        createdAt: s.createdAt,
+        updatedAt: s.updatedAt,
+        messageCount: Array.isArray(s.messages) ? s.messages.length : 0
+    };
+}
+function listSessionsForUid(uid) {
+    const dir = getSessionsDirForUid(uid);
+    if (!dir || !fs.existsSync(dir)) return [];
+    const out = [];
+    for (const f of fs.readdirSync(dir)) {
+        if (!f.endsWith('.json')) continue;
+        try { out.push(sessionMetaOf(JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8')))); } catch (_) {}
+    }
+    out.sort((a, b) => String(b.updatedAt || '').localeCompare(String(a.updatedAt || '')));
+    return out;
+}
+function deleteSessionForUid(uid, id) {
+    const p = getSessionPath(uid, id);
+    if (!p || !fs.existsSync(p)) return false;
+    try { fs.unlinkSync(p); return true; } catch (_) { return false; }
+}
+// Persist one Q&A turn. No sessionId (or unknown) -> create a new session and
+// return its id; existing id -> append the turn. Returns the session id (or null).
+function persistSessionTurn(uid, sessionId, { userText, aiText, origin, sectionId, sectionTitle } = {}) {
+    const safe = sanitizeUid(uid);
+    if (!safe) return null;
+    const now = new Date().toISOString();
+    const userMsg = { role: 'user', content: String(userText || ''), ts: now };
+    const aiMsg = { role: 'assistant', content: String(aiText || ''), ts: now };
+    let session = sessionId ? readSessionFile(uid, sessionId) : null;
+    if (session) {
+        session.messages = Array.isArray(session.messages) ? session.messages : [];
+        session.messages.push(userMsg, aiMsg);
+        session.updatedAt = now;
+        if (origin) session.origin = origin;
+        if (sectionId) session.sectionId = sectionId;
+        if (sectionTitle) session.sectionTitle = sectionTitle;
+        return writeSessionFileAtomic(uid, session) ? session.id : null;
+    }
+    const id = crypto.randomUUID();
+    session = {
+        id, uid: safe, origin: origin || 'main',
+        title: String(userText || 'New chat').slice(0, 80),
+        customTitle: '', starred: false,
+        sectionId: sectionId || '', sectionTitle: sectionTitle || 'General Q&A',
+        createdAt: now, updatedAt: now,
+        messages: [userMsg, aiMsg]
+    };
+    return writeSessionFileAtomic(uid, session) ? id : null;
 }
 
 function cleanFeedbackText(value, maxLen = 1200) {
@@ -5411,6 +5513,30 @@ const server = http.createServer(async (req, res) => {
     // GET /api/memory?uid=xxx  →  return user memory
     // POST /api/memory          →  create or patch user memory
     // ──────────────────────────────────────────────────
+    if (pathname === '/api/sessions' && req.method === 'GET') {
+        const uid = parsedUrl.query.uid;
+        if (!uid) { res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' }); res.end(JSON.stringify({ error: 'Missing uid' })); return; }
+        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+        res.end(JSON.stringify({ sessions: listSessionsForUid(uid) }));
+        return;
+    }
+    if (pathname.startsWith('/api/sessions/') && (req.method === 'GET' || req.method === 'DELETE')) {
+        const uid = parsedUrl.query.uid;
+        const sessionId = decodeURIComponent(pathname.slice('/api/sessions/'.length));
+        if (!uid) { res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8' }); res.end(JSON.stringify({ error: 'Missing uid' })); return; }
+        if (req.method === 'GET') {
+            const session = readSessionFile(uid, sessionId);
+            if (!session) { res.writeHead(404, { 'Content-Type': 'application/json; charset=utf-8' }); res.end(JSON.stringify({ error: 'Session not found' })); return; }
+            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+            res.end(JSON.stringify(session));
+            return;
+        }
+        const ok = deleteSessionForUid(uid, sessionId);
+        res.writeHead(ok ? 200 : 404, { 'Content-Type': 'application/json; charset=utf-8' });
+        res.end(JSON.stringify(ok ? { ok: true } : { error: 'Session not found' }));
+        return;
+    }
+
     if (pathname === '/api/memory') {
         if (req.method === 'GET') {
             const uid = parsedUrl.query.uid;
@@ -6089,6 +6215,21 @@ const server = http.createServer(async (req, res) => {
             // Post-process pure python outputs into images
             explanation = await processEmbeddedPython(explanation, GENERATED_DIR);
 
+            // Persist this turn to the user's chat session (create on the first turn,
+            // append after). Best-effort: never let storage break the response.
+            let savedSessionId = data.session_id || data.sessionId || null;
+            if (uid) {
+                try {
+                    savedSessionId = persistSessionTurn(uid, savedSessionId, {
+                        userText: question,
+                        aiText: explanation,
+                        origin: 'main',
+                        sectionId,
+                        sectionTitle: sectionTitle || 'General Q&A'
+                    }) || savedSessionId;
+                } catch (e) { console.warn('[sessions] persist failed:', e.message); }
+            }
+
             res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
             const textbookStep = ragFlowUsed
                 ? (
@@ -6099,6 +6240,7 @@ const server = http.createServer(async (req, res) => {
                 : `✅ 找到 ${relatedBooks.length} 个相关书页`;
             res.end(JSON.stringify({
                 explanation,
+                session_id: savedSessionId,
                 bookPages: relatedBooks.map(item => ({
                     page: item.page,
                     image: item.image || (item.pageImage ? getPageImageUrl(data.bookSource, item.pageImage) : ''),
