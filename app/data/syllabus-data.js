@@ -1136,5 +1136,4 @@ const syllabusDataNew = [
   }
 ];
 
-// Active syllabus (2nd Ed retired 2026-06-19; new book is the only book)
 const syllabusData = syllabusDataNew;
