@@ -8,8 +8,9 @@ Friction CSS). Phase 1 #4 merged (#22, RAGFlow client). Phase 1 #5 merged
 (#23, user memory + feedback + sessions). Phase 1 #6 merged (#24, LLM
 client wrappers). Phase 1 #7 merged (#25, lesson cache). Phase 1 #8
 merged (#26, static routes). Phase 1 #9 merged (#27, search helpers).
-Phase 1 #10 in PR (login cosmos scene — narrowed scope). Phase 1 #11 not
-yet started.
+Phase 1 #10 merged (#28, login cosmos scene — narrowed scope). Phase 1
+#11 in PR (inline style block). Phase 1 complete after #11 merges; Phase
+2 starts next.
 
 This is the single source of truth for the multi-phase refactor of the
 Fourier Tutor Agent repo. It is the canonical document — `workspace/memory/`
@@ -116,7 +117,7 @@ candidates depend on `markdownToHtml`.
 | 8 | Static-file route handlers | `app/ws-bridge.js` L1234-1268 (helpers) + L5538-5615 (routes) | ~110 | **In PR.** Extracted to `app/static-routes.js`. Module exposes a single `handleStaticRoute(req, res, pathname) → bool` consolidator; the bridge's request handler now calls it once near the end of the chain instead of inlining 5 if-blocks. `serveStaticFile` / `serveStaticFromDir` stay private to the module (no external callers after the consolidation). Plan's original 278-line estimate counted surrounding handler context that hadn't yet been factored out of the request handler. |
 | 9 | Search helpers (DuckDuckGo + Wikipedia + Wikimedia) | `app/ws-bridge.js` L1811-2029 (4 search wrappers + 3 helpers) | ~140 | **In PR.** Extracted to `app/search-helpers.js`. 4 public wrappers: `duckDuckGoSearch`, `wikipediaSearch`, `wikimediaCommonsImageSearch`, `wikipediaPageImageSearch`. `extractDuckDuckGoResults`, `normalizeWikiImageCandidate`, `WIKIMEDIA_HEADERS` stay private. `scoreReferenceImageCandidate` and `filterReferenceCandidatesForQuery` stay in ws-bridge.js — they carry tutor-domain knowledge (matrix/identity heuristics, particle-physics blocklist), not pure search-wrapper logic. |
 | 10 | Login cosmos Three.js scene (narrowed scope) | `app/app.js` L451-590 (`createLoginCosmos`) | 140 | **In PR.** Extracted to `app/login-cosmos.js` as a classic-script IIFE that publishes `window.createLoginCosmos`. The existing call site in `openLoginView()` (`if (!loginScene && window.THREE) loginScene = createLoginCosmos();`) is unchanged. The original plan's broader "Login intro + landing + auth overlay" scope is tightly coupled to Clerk auth and DOM lifecycle — defer to Phase 2 #16 (Clerk auth + return-intent). Cache-busters bumped on app.js + new login-cosmos.js to `?v=1334`. |
-| 11 | Inline `<style>` block in `index.html` | `app/index.html` L73–1600 | 1,528 | Halves `index.html`. Clean `.intro-landing-new` boundary. |
+| 11 | Inline `<style>` block in `index.html` | `app/index.html` L74–1601 | 1,526 | **In PR.** Extracted to `app/css/inline-styles.css`, loaded by a single `<link>` at the same document position the inline `<style>` block occupied (after `style.css` and `css/ui-friction-v123.css`) so cascade order is byte-for-byte preserved. index.html drops from 3153 to 1627 lines (-48%); per CLAUDE.md, the global JSON map filenames at `app/` root remain untouched. |
 
 Plus 4 small items (section-preview helpers ~76 lines, splash/loading UI
 ~41 lines, web-sources rendering ~143 lines, build orchestration in
