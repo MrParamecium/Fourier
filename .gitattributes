@@ -1,0 +1,20 @@
+# Normalize all text to LF in the repo. Windows tools (GitHub Desktop, some
+# editors) otherwise rewrite files with CRLF on save, producing 99-file
+# "diffs" that are pure line-ending churn (last seen 2026-06-20).
+* text=auto eol=lf
+
+# Shell scripts must stay LF even on Windows checkouts.
+*.sh text eol=lf
+
+# Binary assets — never touch.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.otf binary
+*.zip binary
