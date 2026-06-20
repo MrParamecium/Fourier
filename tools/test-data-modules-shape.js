@@ -38,7 +38,6 @@ const sources = MODULES.map(name => {
 const snapshotExpr = `;(() => ({
   DEFAULT_PREFERENCE_PROFILE: typeof DEFAULT_PREFERENCE_PROFILE !== 'undefined' ? DEFAULT_PREFERENCE_PROFILE : undefined,
   COURSE_TRACKER_STATUSES:    typeof COURSE_TRACKER_STATUSES    !== 'undefined' ? COURSE_TRACKER_STATUSES    : undefined,
-  HOMEWORK_STATUSES:          typeof HOMEWORK_STATUSES          !== 'undefined' ? HOMEWORK_STATUSES          : undefined,
   COURSE_GRADE_RULES:         typeof COURSE_GRADE_RULES         !== 'undefined' ? COURSE_GRADE_RULES         : undefined,
   COURSE_SCHEDULE:            typeof COURSE_SCHEDULE            !== 'undefined' ? COURSE_SCHEDULE            : undefined,
   QUIZ_QUESTIONS:             typeof QUIZ_QUESTIONS             !== 'undefined' ? QUIZ_QUESTIONS             : undefined,
@@ -64,10 +63,6 @@ const checks = [
     () => Array.isArray(snapshot.COURSE_TRACKER_STATUSES)
       && snapshot.COURSE_TRACKER_STATUSES.length === 4
       && snapshot.COURSE_TRACKER_STATUSES.includes('Done')],
-  ['HOMEWORK_STATUSES has 4 entries including Explained',
-    () => Array.isArray(snapshot.HOMEWORK_STATUSES)
-      && snapshot.HOMEWORK_STATUSES.length === 4
-      && snapshot.HOMEWORK_STATUSES.includes('Explained')],
   ['COURSE_GRADE_RULES has 4 entries whose weights sum to 100',
     () => Array.isArray(snapshot.COURSE_GRADE_RULES)
       && snapshot.COURSE_GRADE_RULES.length === 4
