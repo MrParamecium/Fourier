@@ -2,16 +2,15 @@
 
 Owner: FlyM1ss
 Started: 2026-06-19
-Status: Phase 0 merged (#15). Phase 1 complete (#17, #20-29). Phase 2 — 5
-of 7 items merged in one self-driven loop on 2026-06-20: #12
-mistake-notebook (#30), #14 preference-profile (#31), #15 attachments
-(#32), #16 clerk-auth (#33), #17 recent-conversations (#34); version
-1.3.5 → 1.4.0. Two Phase 2 items deferred — #13 Homework (frontend DOM
-removed in Phase 0 cleanup but JS subsystem + /api/homework endpoint
-remain, needs owner ratification before delete-vs-restore) and #19 Glass
-+ chapter-overview CSS (13 scattered regions across style.css with
-interleaved non-glass rules, needs visual-diff verification beyond
-smoke). app.js: 17,650 → 14,963 (-2,687, -15%).
+Status: Phase 0 merged (#15). Phase 1 complete (#17, #20-29). Phase 2 — 6
+of 7 items merged on 2026-06-20: #12 mistake-notebook (#30), #14
+preference-profile (#31), #15 attachments (#32), #16 clerk-auth (#33),
+#17 recent-conversations (#34), and #13 Homework deletion (#36) after
+the owner ratified the aggressive delete-all path. Version 1.3.5 →
+1.4.1. Only #19 Glass + chapter-overview CSS remains deferred (13
+scattered regions across style.css with interleaved non-glass rules,
+needs visual-diff verification beyond smoke). app.js: 17,650 → 14,434
+(-3,216, -18.2%). style.css: 45,286 → 44,845 (-441).
 
 This is the single source of truth for the multi-phase refactor of the
 Fourier Tutor Agent repo. It is the canonical document — `workspace/memory/`
@@ -139,7 +138,7 @@ Plan one-PR-per-item; expect 2-3 review rounds per.
 | # | Extraction | Location | Lines |
 |---|---|---|---|
 | 12 | Mistake Notebook subsystem | `app/app.js` L1779–2270 + index.html view | 491 |
-| 13 | Homework subsystem | `app/app.js` L1288–1778 + `/api/homework` | 491 |
+| 13 | ~~Homework subsystem~~ — **DELETED in #36** (not extracted). DOM was already removed in Phase 0; the JS subsystem + `/api/homework` endpoint + `/homework-assets/*` static route + supporting helpers + 441 lines of CSS were dead code. Owner ratified the aggressive delete-all path; net diff −1096 lines. | — | — |
 | 14 | Preference profile subsystem | `app/app.js` L1007–1152, L2271–2399 | 274 |
 | 15 | Attachments pipeline (parse + preview + DOCX) | `app/app.js` L3216–3760 | 545 |
 | 16 | Clerk auth + return-intent state machine | `app/app.js` L147–855 | 700 |
