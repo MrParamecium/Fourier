@@ -8,7 +8,10 @@
     "start": "node app/ws-bridge.js",
     "build:section-ocr": "node app/scripts/build-new-book-section-ocr.js",
     "pregen:bg-ch1": "node app/scripts/pregen-background-chapter1.js",
-    "check": "node --check app/ws-bridge.js && node --check app/app.js && node --check app/markdown-engine.js && node --check app/data/preferences.js && node --check app/data/course-metadata.js && node --check app/data/quiz-questions.js && node --check app/data/syllabus-data.js"
+    "check": "node --check app/ws-bridge.js && node --check app/app.js && node --check app/markdown-engine.js && node --check app/data/preferences.js && node --check app/data/course-metadata.js && node --check app/data/quiz-questions.js && node --check app/data/syllabus-data.js",
+    "test:shape": "node tools/test-data-modules-shape.js",
+    "test:ui-friction": "node tools/test-ui-friction-v123.js",
+    "test:lesson": "node tools/test-lesson-open-no-hang.js"
   },
   "devDependencies": {
     "playwright": "^1.60.0"

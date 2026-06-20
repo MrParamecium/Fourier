@@ -1,14 +1,11 @@
 /*
- * UI Friction Fix Pack v1.2.3 (extracted 2026-06-20 in Phase 1 #3).
- * Source: app/style.css L45288-45494 in commit 2517839
+ * UI Friction Fix Pack v1.2.3 (originated 2026-06-17, extracted from
+ * style.css EOF in Phase 1 #3, PR #21).
+ * Issues fixed: page-flip discoverability, equation overflow,
+ * Quick-Check legibility, completion indicators.
  * Loaded by app/index.html via classic <link>; cascade order matters,
  * keep this <link> AFTER style.css so the overrides remain authoritative.
  */
-/* ============================================================
- * UI Friction Fix Pack v1.2.3 (2026-06-17)
- * Issues fixed: page-flip discoverability, equation overflow,
- * Quick-Check legibility, completion indicators.
- * ============================================================ */
 
 /* --- Issue 1: Always-visible bottom pager bar --- */
 #learnExplainPager {
