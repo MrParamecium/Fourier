@@ -3,7 +3,8 @@
 Owner: FlyM1ss
 Started: 2026-06-19
 Status: Phase 0 merged (#15). Phase 1 #1 merged (#17, markdown engine).
-Phase 1 #2 in PR (static data islands). Phase 1 #3+ not yet started.
+Phase 1 #2 merged (#20, static data islands). Phase 1 #3 in PR (UI Friction
+CSS). Phase 1 #4+ not yet started.
 
 This is the single source of truth for the multi-phase refactor of the
 Fourier Tutor Agent repo. It is the canonical document — `workspace/memory/`
@@ -102,7 +103,7 @@ candidates depend on `markdownToHtml`.
 |---|---|---|---|---|
 | 1 | Markdown engine (`markdownToHtml`, `inlineFormat`, `parseMdTable`, `decodeHtmlEntities`) | `app/app.js` L15310–15600 | 290 | **Merged in #17.** Leverage move — unlocks Phase 2 #12-14, #17. |
 | 2 | Static-data islands (`DEFAULT_PREFERENCE_PROFILE`, `SECTION_PREVIEWS_NEW`, `syllabusDataNew`, `QUIZ_QUESTIONS`, course tables) | `app/app.js` (scattered) | ~1,250 | **In PR.** Plan's original ~4,500 estimate counted surrounding render functions; islands themselves are ~1,250 lines of pure read-only data. Extracted as classic-script JS data modules under `app/data/` instead of JSON because consumers run on the initial-render path; async JSON loading would force gating across ~30 read sites and push the PR out of Tier 1. Hard invariant "root-relative" interpretation: data files live at `app/data/`, served at `/data/*`. |
-| 3 | UI Friction Fix Pack v1.2.3 CSS | `app/style.css` L47659–47865 | 207 | Already self-contained at EOF, has `test-ui-friction-v123.js` covering it. |
+| 3 | UI Friction Fix Pack v1.2.3 CSS | `app/style.css` L45288–45494 (was L47659–47865 before Phase 0/1 deletions) | 207 | **In PR.** Extracted to `app/css/ui-friction-v123.css`, loaded after `style.css` to preserve cascade order. `test-ui-friction-v123.js` re-verified the pager rule + Quick-Check `kc-option-btn` override resolve from the new file. |
 | 4 | RAGFlow client | `app/ws-bridge.js` L3054–3215 | 175 | Pure HTTP wrapper, single caller. |
 | 5 | User memory + feedback IO | `app/ws-bridge.js` L1434–1747 | 314 | Self-contained. Pre-positions Phase 4 DB swap. |
 | 6 | LLM client wrappers (`callOpenRouterChat`, `callOpenAIChat`, JSON repair) | `app/ws-bridge.js` L143–152 + L2092–2286 | 210 | Tightens Sonnet/Opus boundary. |
