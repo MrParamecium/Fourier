@@ -2,15 +2,16 @@
 
 Owner: FlyM1ss
 Started: 2026-06-19
-Status: Phase 0 merged (#15). Phase 1 #1 merged (#17, markdown engine).
-Phase 1 #2 merged (#20, static data islands). Phase 1 #3 merged (#21, UI
-Friction CSS). Phase 1 #4 merged (#22, RAGFlow client). Phase 1 #5 merged
-(#23, user memory + feedback + sessions). Phase 1 #6 merged (#24, LLM
-client wrappers). Phase 1 #7 merged (#25, lesson cache). Phase 1 #8
-merged (#26, static routes). Phase 1 #9 merged (#27, search helpers).
-Phase 1 #10 merged (#28, login cosmos scene — narrowed scope). Phase 1
-#11 in PR (inline style block). Phase 1 complete after #11 merges; Phase
-2 starts next.
+Status: Phase 0 merged (#15). Phase 1 complete (#17, #20-29). Phase 2 — 5
+of 7 items merged in one self-driven loop on 2026-06-20: #12
+mistake-notebook (#30), #14 preference-profile (#31), #15 attachments
+(#32), #16 clerk-auth (#33), #17 recent-conversations (#34); version
+1.3.5 → 1.4.0. Two Phase 2 items deferred — #13 Homework (frontend DOM
+removed in Phase 0 cleanup but JS subsystem + /api/homework endpoint
+remain, needs owner ratification before delete-vs-restore) and #19 Glass
++ chapter-overview CSS (13 scattered regions across style.css with
+interleaved non-glass rules, needs visual-diff verification beyond
+smoke). app.js: 17,650 → 14,963 (-2,687, -15%).
 
 This is the single source of truth for the multi-phase refactor of the
 Fourier Tutor Agent repo. It is the canonical document — `workspace/memory/`
