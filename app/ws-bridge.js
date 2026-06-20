@@ -142,6 +142,16 @@ const MIME_TYPES = {
     '.txt': 'text/plain; charset=utf-8'
 };
 
+const { handleStaticRoute } = require('./static-routes')({
+    mimeTypes: MIME_TYPES,
+    generatedDir: GENERATED_DIR,
+    homeworkDir: HOMEWORK_DIR,
+    pageImageDirNew: PAGE_IMAGE_DIR_NEW,
+    tutorMaterialsDir: TUTOR_MATERIALS_DIR,
+    appDir: __dirname,
+    isHomeworkImage,
+});
+
 function setCORSHeaders(res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -1230,42 +1240,6 @@ const {
     callOpenRouterChat,
     usersDir: path.join(__dirname, 'users'),
 });
-
-function serveStaticFile(res, filePath) {
-    const ext = path.extname(filePath).toLowerCase();
-    const contentType = MIME_TYPES[ext] || 'application/octet-stream';
-    // No-cache for JS/HTML/CSS to ensure fresh code always loads
-    const noCache = ['.js', '.html', '.css'].includes(ext);
-
-    fs.readFile(filePath, (err, data) => {
-        if (err) {
-            res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
-            res.end('Not found');
-            return;
-        }
-
-        const headers = { 'Content-Type': contentType };
-        if (noCache) {
-            headers['Cache-Control'] = 'no-store, no-cache, must-revalidate';
-            headers['Pragma'] = 'no-cache';
-        }
-        res.writeHead(200, headers);
-        res.end(data);
-    });
-}
-
-function serveStaticFromDir(res, baseDir, requestedName) {
-    const safeName = path.basename(requestedName || '');
-    const filePath = path.join(baseDir, safeName);
-
-    if (!filePath.startsWith(baseDir)) {
-        res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
-        res.end('Forbidden');
-        return;
-    }
-
-    serveStaticFile(res, filePath);
-}
 
 function naturalCompare(a, b) {
     return String(a || '').localeCompare(String(b || ''), undefined, { numeric: true, sensitivity: 'base' });
@@ -5535,84 +5509,7 @@ const server = http.createServer(async (req, res) => {
         return;
     }
 
-    if (pathname.startsWith('/generated/')) {
-        const filename = pathname.replace(/^\/generated\//, '');
-        serveStaticFile(res, path.join(GENERATED_DIR, filename));
-        return;
-    }
-
-    if (pathname.startsWith('/homework-assets/')) {
-        const rest = pathname.replace(/^\/homework-assets\//, '');
-        const parts = rest.split('/').map(part => decodeURIComponent(part || ''));
-        const setName = path.basename(parts[0] || '');
-        const fileName = path.basename(parts.slice(1).join('/') || '');
-        if (!setName || !fileName || !isHomeworkImage(fileName)) {
-            res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
-            res.end('bad homework asset');
-            return;
-        }
-        serveStaticFromDir(res, path.join(HOMEWORK_DIR, setName), fileName);
-        return;
-    }
-
-    // /new-pages/* serves the active (3rd Ed) book pages.
-    // /pages/* is kept as a back-compat alias for cached lesson markdown that
-    // still references the old root; both now serve from PAGE_IMAGE_DIR_NEW.
-    if (pathname.startsWith('/new-pages/') || pathname.startsWith('/pages/')) {
-        const filename = pathname.replace(/^\/(?:new-pages|pages)\//, '');
-        serveStaticFromDir(res, PAGE_IMAGE_DIR_NEW, filename);
-        return;
-    }
-
-    if (pathname.startsWith('/figures/')) {
-        const filename = pathname.replace(/^\/figures\//, '');
-        const figurePath = path.join(TUTOR_MATERIALS_DIR, 'new-book-figures', filename);
-        serveStaticFile(res, figurePath);
-        return;
-    }
-
-    // /api/crop?page=book-016&fig=Fig.+B.6  — serves pre-cropped figure PNG
-    if (pathname === '/api/crop') {
-        const query  = url.parse(req.url, true).query;
-        const pageId = (query.page || '').replace(/[^a-zA-Z0-9-_]/g, '');
-        const figId  = query.fig || '';
-        if (!pageId) { res.writeHead(400); res.end('missing page'); return; }
-
-        const CROPS_DIR = path.join(GENERATED_DIR, 'crops');
-
-        // Build expected pre-cropped filename: book-016--Fig--B-6.png
-        const safeFigId = figId.replace(/[^a-zA-Z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
-        const cropFile  = `${pageId}--${safeFigId}.png`;
-        const cropPath  = path.join(CROPS_DIR, cropFile);
-
-        if (fs.existsSync(cropPath)) {
-            serveStaticFromDir(res, CROPS_DIR, cropFile);
-            return;
-        }
-
-        // Fuzzy fallback: find any crop for this page
-        if (fs.existsSync(CROPS_DIR)) {
-            const all = fs.readdirSync(CROPS_DIR);
-            const match = all.find(f => f.startsWith(pageId + '--'));
-            if (match) { serveStaticFromDir(res, CROPS_DIR, match); return; }
-        }
-
-        // Last resort: full page
-        serveStaticFromDir(res, PAGE_IMAGE_DIR_NEW, `${pageId}.png`);
-        return;
-    }
-
-    const staticDir = __dirname;
-    const requestedFile = pathname === '/' ? 'index.html' : pathname.replace(/^\//, '');
-    const filePath = path.join(staticDir, requestedFile);
-
-    if (!filePath.startsWith(staticDir)) {
-        res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
-        res.end('Forbidden');
-        return;
-    }
-
-    serveStaticFile(res, filePath);
+    if (handleStaticRoute(req, res, pathname)) return;
 });
 
 const IS_PREGEN_CLI = require.main === module && process.argv[2] === '--pregen-section';
