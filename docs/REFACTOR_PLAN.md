@@ -6,8 +6,9 @@ Status: Phase 0 merged (#15). Phase 1 #1 merged (#17, markdown engine).
 Phase 1 #2 merged (#20, static data islands). Phase 1 #3 merged (#21, UI
 Friction CSS). Phase 1 #4 merged (#22, RAGFlow client). Phase 1 #5 merged
 (#23, user memory + feedback + sessions). Phase 1 #6 merged (#24, LLM
-client wrappers). Phase 1 #7 merged (#25, lesson cache). Phase 1 #8 in
-PR (static routes). Phase 1 #9+ not yet started.
+client wrappers). Phase 1 #7 merged (#25, lesson cache). Phase 1 #8
+merged (#26, static routes). Phase 1 #9 in PR (search helpers). Phase 1
+#10+ not yet started.
 
 This is the single source of truth for the multi-phase refactor of the
 Fourier Tutor Agent repo. It is the canonical document — `workspace/memory/`
@@ -112,7 +113,7 @@ candidates depend on `markdownToHtml`.
 | 6 | LLM client wrappers (`callOpenRouterChat`, `callOpenAIChat`, JSON repair) | `app/ws-bridge.js` L109-118 (URLs + key getters) + L1744-1937 (4 functions) | 204 | **In PR.** Extracted to `app/llm-client.js` as a factory module. `tryParseJsonLoose` and the private `repairJsonLatexEscapes` helper move together because the LaTeX-escape repair is only meaningful for model JSON output. ws-bridge llm-client require is placed BEFORE the user-memory require so the latter's destructure of `callOpenRouterChat` sees a defined `const` binding (function-decl hoisting no longer covers it). |
 | 7 | Lesson cache reader/writer + filename hygiene | `app/ws-bridge.js` L1093-1098 (constants) + L1152-1375 (8 functions, interleaved) | ~165 | **In PR.** Extracted to `app/lesson-cache.js` as a factory module. **Owns the `aquarius_visual_latex_v2` LESSON_CACHE_VERSION string** — the Hard Invariant. Lesson-format helpers (`prepareLessonForCache`, `collectLessonFormatIssues`, `assertLessonFormatClean`) stay in ws-bridge.js and are injected as deps, because they're also called outside the cache path (live generation, pregen). `FORMULA_CATALOG_DIR` and `BLUEPRINT_DIR` constants stay in ws-bridge.js — different concern. |
 | 8 | Static-file route handlers | `app/ws-bridge.js` L1234-1268 (helpers) + L5538-5615 (routes) | ~110 | **In PR.** Extracted to `app/static-routes.js`. Module exposes a single `handleStaticRoute(req, res, pathname) → bool` consolidator; the bridge's request handler now calls it once near the end of the chain instead of inlining 5 if-blocks. `serveStaticFile` / `serveStaticFromDir` stay private to the module (no external callers after the consolidation). Plan's original 278-line estimate counted surrounding handler context that hadn't yet been factored out of the request handler. |
-| 9 | Search helpers (DuckDuckGo + Wikipedia + Wikimedia) | `app/ws-bridge.js` L2546–2810 | 265 | Pure HTTP wrappers. |
+| 9 | Search helpers (DuckDuckGo + Wikipedia + Wikimedia) | `app/ws-bridge.js` L1811-2029 (4 search wrappers + 3 helpers) | ~140 | **In PR.** Extracted to `app/search-helpers.js`. 4 public wrappers: `duckDuckGoSearch`, `wikipediaSearch`, `wikimediaCommonsImageSearch`, `wikipediaPageImageSearch`. `extractDuckDuckGoResults`, `normalizeWikiImageCandidate`, `WIKIMEDIA_HEADERS` stay private. `scoreReferenceImageCandidate` and `filterReferenceCandidatesForQuery` stay in ws-bridge.js — they carry tutor-domain knowledge (matrix/identity heuristics, particle-physics blocklist), not pure search-wrapper logic. |
 | 10 | Login intro / cosmos / landing experience | `app/app.js` L41–126, L498–639 + `app/index.html` L1603–1797 | 350 | Decorative, fails visibly if broken. |
 | 11 | Inline `<style>` block in `index.html` | `app/index.html` L73–1600 | 1,528 | Halves `index.html`. Clean `.intro-landing-new` boundary. |
 
