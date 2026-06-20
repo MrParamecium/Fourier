@@ -102,7 +102,7 @@ module.exports = function createSearchHelpers(deps) {
     async function wikipediaSearch(query) {
         try {
             const endpoint = `https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&srlimit=2&format=json&origin=*`;
-            const payload = await httpRequestJson(endpoint, { method: 'GET', headers: { 'Accept': 'application/json', 'User-Agent': 'TutorAgent/1.0 (educational-app; contact@example.com)' } }, null, 10000);
+            const payload = await httpRequestJson(endpoint, { method: 'GET', headers: WIKIMEDIA_HEADERS }, null, 10000);
             if (!payload || !payload.query || !Array.isArray(payload.query.search)) return [];
             return payload.query.search.map(item => ({
                 title: item.title || '',
