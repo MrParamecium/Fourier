@@ -1374,6 +1374,9 @@ function readLegacyLessonCacheFallback(sectionId, memory, bookSource = 'new') {
     }
 }
 
+// Keep this require BEFORE the ./user-memory require below: user-memory's
+// destructure references callOpenRouterChat as a const binding, which is
+// not hoisted. Reordering will throw ReferenceError on bridge boot.
 const { callOpenRouterChat, callOpenAIChat, tryParseJsonLoose } = require('./llm-client')({
     httpRequestJson,
     extractTextContent,
