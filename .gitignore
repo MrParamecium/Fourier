@@ -35,3 +35,6 @@ archive/
 workspace/memory/visual-audit-*/
 .local/
 .vercel
+
+# UI smoke run artifact (regenerated each run by tools/smoke.js)
+tools/smoke-report.md
