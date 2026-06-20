@@ -5,8 +5,9 @@ Started: 2026-06-19
 Status: Phase 0 merged (#15). Phase 1 #1 merged (#17, markdown engine).
 Phase 1 #2 merged (#20, static data islands). Phase 1 #3 merged (#21, UI
 Friction CSS). Phase 1 #4 merged (#22, RAGFlow client). Phase 1 #5 merged
-(#23, user memory + feedback + sessions). Phase 1 #6 in PR (LLM client
-wrappers). Phase 1 #7+ not yet started.
+(#23, user memory + feedback + sessions). Phase 1 #6 merged (#24, LLM
+client wrappers). Phase 1 #7 in PR (lesson cache). Phase 1 #8+ not yet
+started.
 
 This is the single source of truth for the multi-phase refactor of the
 Fourier Tutor Agent repo. It is the canonical document — `workspace/memory/`
@@ -109,7 +110,7 @@ candidates depend on `markdownToHtml`.
 | 4 | RAGFlow client | `app/ws-bridge.js` L112-129 (env consts) + L3120-3279 (functions) | 178 | **In PR.** Extracted to `app/ragflow-client.js` as a factory module — bridge injects `compactWhitespace` / `normalizeUrl` / `httpRequestJson` to avoid a premature shared-utils module. **Pattern precedent for #5+**: when an extracted module needs ws-bridge utilities, prefer dep-injection via a factory over re-defining the utility or pulling it from a not-yet-extracted utils module. Plan's original L3054–3215 estimate was off by ~70 lines due to Phase 0 deletions; functions actually sat at L3120-3279 with the env constants at L112-129. |
 | 5 | User memory + feedback + sessions IO | `app/ws-bridge.js` L1387-1800 | 414 | **In PR.** Extracted to `app/user-memory.js` as a factory module (same pattern as #4). Co-extracted the per-uid sessions interface added in PR #18, since `persistSessionTurn` and `readSessionFile` are part of the same on-disk JSON layout under `USERS_DIR`. Scope grew from the plan's 314 lines because the sessions interface (~150 lines) and the `USERS_DIR`/`FEEDBACK_BOARD_PATH`/`SESSIONS_DIR` constants weren't part of the original count. Pre-positions Phase 4 DB swap. |
 | 6 | LLM client wrappers (`callOpenRouterChat`, `callOpenAIChat`, JSON repair) | `app/ws-bridge.js` L109-118 (URLs + key getters) + L1744-1937 (4 functions) | 204 | **In PR.** Extracted to `app/llm-client.js` as a factory module. `tryParseJsonLoose` and the private `repairJsonLatexEscapes` helper move together because the LaTeX-escape repair is only meaningful for model JSON output. ws-bridge llm-client require is placed BEFORE the user-memory require so the latter's destructure of `callOpenRouterChat` sees a defined `const` binding (function-decl hoisting no longer covers it). |
-| 7 | Lesson cache reader/writer + filename hygiene | `app/ws-bridge.js` L1209–1432 | 224 | Single source of truth for `aquarius_visual_latex_v2`. |
+| 7 | Lesson cache reader/writer + filename hygiene | `app/ws-bridge.js` L1093-1098 (constants) + L1152-1375 (8 functions, interleaved) | ~165 | **In PR.** Extracted to `app/lesson-cache.js` as a factory module. **Owns the `aquarius_visual_latex_v2` LESSON_CACHE_VERSION string** — the Hard Invariant. Lesson-format helpers (`prepareLessonForCache`, `collectLessonFormatIssues`, `assertLessonFormatClean`) stay in ws-bridge.js and are injected as deps, because they're also called outside the cache path (live generation, pregen). `FORMULA_CATALOG_DIR` and `BLUEPRINT_DIR` constants stay in ws-bridge.js — different concern. |
 | 8 | Static-file route handlers | `app/ws-bridge.js` L6533–6810 | 278 | Already isolated. |
 | 9 | Search helpers (DuckDuckGo + Wikipedia + Wikimedia) | `app/ws-bridge.js` L2546–2810 | 265 | Pure HTTP wrappers. |
 | 10 | Login intro / cosmos / landing experience | `app/app.js` L41–126, L498–639 + `app/index.html` L1603–1797 | 350 | Decorative, fails visibly if broken. |
