@@ -1410,8 +1410,12 @@ function readLegacyLessonCacheFallback(sectionId, memory, bookSource = 'new') {
     }
 }
 
+function sanitizeUid(uid) {
+    return String(uid || '').replace(/[^a-zA-Z0-9_\-]/g, '_').slice(0, 64);
+}
+
 function getUserMemoryPath(uid) {
-    const safe = String(uid || '').replace(/[^a-zA-Z0-9_\-]/g, '_').slice(0, 64);
+    const safe = sanitizeUid(uid);
     if (!safe) return null;
     return path.join(USERS_DIR, `${safe}.json`);
 }
@@ -1442,9 +1446,6 @@ function writeUserMemory(uid, data) {
 const SESSIONS_DIR = path.join(USERS_DIR, 'sessions');
 try { if (!fs.existsSync(SESSIONS_DIR)) fs.mkdirSync(SESSIONS_DIR, { recursive: true }); } catch (_) {}
 
-function sanitizeUid(uid) {
-    return String(uid || '').replace(/[^a-zA-Z0-9_\-]/g, '_').slice(0, 64);
-}
 function getSessionsDirForUid(uid) {
     const safe = sanitizeUid(uid);
     return safe ? path.join(SESSIONS_DIR, safe) : null;
