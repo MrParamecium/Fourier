@@ -22,6 +22,14 @@
 
 const fs = require('fs');
 const path = require('path');
+const url = require('url');
+
+// Anchored startsWith for path-traversal guards. The naive `filePath.startsWith(baseDir)`
+// admits sibling-directory escape: '/parent/app2/x'.startsWith('/parent/app') === true.
+// Anchoring on path.sep (or exact match) closes that gap.
+function isUnder(filePath, baseDir) {
+    return filePath === baseDir || filePath.startsWith(baseDir + path.sep);
+}
 
 /**
  * @param {{
@@ -79,7 +87,7 @@ module.exports = function createStaticRoutes(deps) {
         const safeName = path.basename(requestedName || '');
         const filePath = path.join(baseDir, safeName);
 
-        if (!filePath.startsWith(baseDir)) {
+        if (!isUnder(filePath, baseDir)) {
             res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
             res.end('Forbidden');
             return;
@@ -132,7 +140,7 @@ module.exports = function createStaticRoutes(deps) {
 
         // /api/crop?page=book-016&fig=Fig.+B.6  — serves pre-cropped figure PNG
         if (pathname === '/api/crop') {
-            const query = require('url').parse(req.url, true).query;
+            const query = url.parse(req.url, true).query;
             const pageId = (query.page || '').replace(/[^a-zA-Z0-9-_]/g, '');
             const figId = query.fig || '';
             if (!pageId) { res.writeHead(400); res.end('missing page'); return true; }
@@ -165,7 +173,7 @@ module.exports = function createStaticRoutes(deps) {
         const requestedFile = pathname === '/' ? 'index.html' : pathname.replace(/^\//, '');
         const filePath = path.join(APP_DIR, requestedFile);
 
-        if (!filePath.startsWith(APP_DIR)) {
+        if (!isUnder(filePath, APP_DIR)) {
             res.writeHead(403, { 'Content-Type': 'text/plain; charset=utf-8' });
             res.end('Forbidden');
             return true;
