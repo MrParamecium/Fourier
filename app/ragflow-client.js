@@ -1,14 +1,28 @@
 /*
  * RAGFlow retrieval client (extracted from ws-bridge.js in Phase 1 #4).
- * Pure HTTP wrapper around the RAGFlow /api/v1/retrieval endpoint plus the
- * chunk -> bookPage normalization used by /api/ask.
+ *
+ * Owns three things:
+ *   1. The RAGFLOW_* env constants (read once when the factory is called).
+ *   2. An HTTP wrapper around the RAGFlow /api/v1/retrieval endpoint
+ *      (retrieveFromRagFlow).
+ *   3. The chunk -> bookPage normalization + local/RAG dedup-merge used by
+ *      /api/ask (ragFlowChunksToBookPages, mergeAskBookContexts, plus four
+ *      private helpers).
  *
  * Exports a factory so the bridge can inject its own utility implementations
  * (compactWhitespace, normalizeUrl, httpRequestJson) without circular requires
- * and without forcing a premature shared-utils module.
+ * and without forcing a premature shared-utils module. Phase 1 #5+ extractions
+ * that need the same utilities should follow this pattern.
  */
 'use strict';
 
+/**
+ * @param {{
+ *   compactWhitespace: (value: any) => string,
+ *   normalizeUrl: (u: string) => string,
+ *   httpRequestJson: (url: string, options?: object, body?: string|null, timeoutMs?: number) => Promise<any>,
+ * }} deps
+ */
 module.exports = function createRagFlowClient(deps) {
     const compactWhitespace = deps && deps.compactWhitespace;
     const normalizeUrl = deps && deps.normalizeUrl;
