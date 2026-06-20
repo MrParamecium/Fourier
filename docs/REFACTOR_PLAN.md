@@ -4,8 +4,8 @@ Owner: FlyM1ss
 Started: 2026-06-19
 Status: Phase 0 merged (#15). Phase 1 #1 merged (#17, markdown engine).
 Phase 1 #2 merged (#20, static data islands). Phase 1 #3 merged (#21, UI
-Friction CSS). Phase 1 #4 in PR (RAGFlow client). Phase 1 #5+ not yet
-started.
+Friction CSS). Phase 1 #4 merged (#22, RAGFlow client). Phase 1 #5 in PR
+(user memory + feedback + sessions). Phase 1 #6+ not yet started.
 
 This is the single source of truth for the multi-phase refactor of the
 Fourier Tutor Agent repo. It is the canonical document — `workspace/memory/`
@@ -106,7 +106,7 @@ candidates depend on `markdownToHtml`.
 | 2 | Static-data islands (`DEFAULT_PREFERENCE_PROFILE`, `SECTION_PREVIEWS_NEW`, `syllabusDataNew`, `QUIZ_QUESTIONS`, course tables) | `app/app.js` (scattered) | ~1,250 | **In PR.** Plan's original ~4,500 estimate counted surrounding render functions; islands themselves are ~1,250 lines of pure read-only data. Extracted as classic-script JS data modules under `app/data/` instead of JSON because consumers run on the initial-render path; async JSON loading would force gating across ~30 read sites and push the PR out of Tier 1. Hard invariant "root-relative" interpretation: data files live at `app/data/`, served at `/data/*`. |
 | 3 | UI Friction Fix Pack v1.2.3 CSS | `app/style.css` L45288–45494 (was L47659–47865 before Phase 0/1 deletions) | 207 | **Merged in #21.** Extracted to `app/css/ui-friction-v123.css`, loaded after `style.css` to preserve cascade order. `test-ui-friction-v123.js` re-verified the pager rule + Quick-Check `kc-option-btn` override resolve from the new file. |
 | 4 | RAGFlow client | `app/ws-bridge.js` L112-129 (env consts) + L3120-3279 (functions) | 178 | **In PR.** Extracted to `app/ragflow-client.js` as a factory module — bridge injects `compactWhitespace` / `normalizeUrl` / `httpRequestJson` to avoid a premature shared-utils module. **Pattern precedent for #5+**: when an extracted module needs ws-bridge utilities, prefer dep-injection via a factory over re-defining the utility or pulling it from a not-yet-extracted utils module. Plan's original L3054–3215 estimate was off by ~70 lines due to Phase 0 deletions; functions actually sat at L3120-3279 with the env constants at L112-129. |
-| 5 | User memory + feedback IO | `app/ws-bridge.js` L1434–1747 | 314 | Self-contained. Pre-positions Phase 4 DB swap. |
+| 5 | User memory + feedback + sessions IO | `app/ws-bridge.js` L1387-1800 | 414 | **In PR.** Extracted to `app/user-memory.js` as a factory module (same pattern as #4). Co-extracted the per-uid sessions interface added in PR #18, since `persistSessionTurn` and `readSessionFile` are part of the same on-disk JSON layout under `USERS_DIR`. Scope grew from the plan's 314 lines because the sessions interface (~150 lines) and the `USERS_DIR`/`FEEDBACK_BOARD_PATH`/`SESSIONS_DIR` constants weren't part of the original count. Pre-positions Phase 4 DB swap. |
 | 6 | LLM client wrappers (`callOpenRouterChat`, `callOpenAIChat`, JSON repair) | `app/ws-bridge.js` L143–152 + L2092–2286 | 210 | Tightens Sonnet/Opus boundary. |
 | 7 | Lesson cache reader/writer + filename hygiene | `app/ws-bridge.js` L1209–1432 | 224 | Single source of truth for `aquarius_visual_latex_v2`. |
 | 8 | Static-file route handlers | `app/ws-bridge.js` L6533–6810 | 278 | Already isolated. |
