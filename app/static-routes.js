@@ -6,17 +6,16 @@
  *     no-cache headers on JS/HTML/CSS so the owner doesn't get stale code
  *     after a release)
  *   - handleStaticRoute(req, res, pathname) — the consolidated static-route
- *     dispatcher. Handles /generated/, /homework-assets/, /new-pages/,
- *     /pages/, /figures/, /api/crop (pre-cropped figure PNG with fuzzy
- *     fallback), and the catch-all `app/`-relative file lookup that ends
- *     the request handler.
+ *     dispatcher. Handles /generated/, /new-pages/, /pages/, /figures/,
+ *     /api/crop (pre-cropped figure PNG with fuzzy fallback), and the
+ *     catch-all `app/`-relative file lookup that ends the request handler.
  *
  * Returns true when the route was handled, false to let the API handler
  * keep going. The bridge's request handler used to inline all of this; now
  * it calls handleStaticRoute once near the end of its chain.
  *
- * Factory pattern follows Phase 1 #4-#7. Bridge injects MIME map, the
- * resource directory constants, and the isHomeworkImage filter.
+ * Factory pattern follows Phase 1 #4-#7. Bridge injects MIME map and the
+ * resource directory constants.
  */
 'use strict';
 
@@ -35,29 +34,23 @@ function isUnder(filePath, baseDir) {
  * @param {{
  *   mimeTypes: Record<string, string>,
  *   generatedDir: string,
- *   homeworkDir: string,
  *   pageImageDirNew: string,
  *   tutorMaterialsDir: string,
  *   appDir: string,
- *   isHomeworkImage: (fileName: string) => boolean,
  * }} deps
  */
 module.exports = function createStaticRoutes(deps) {
     const MIME_TYPES = deps && deps.mimeTypes;
     const GENERATED_DIR = deps && deps.generatedDir;
-    const HOMEWORK_DIR = deps && deps.homeworkDir;
     const PAGE_IMAGE_DIR_NEW = deps && deps.pageImageDirNew;
     const TUTOR_MATERIALS_DIR = deps && deps.tutorMaterialsDir;
     const APP_DIR = deps && deps.appDir;
-    const isHomeworkImage = deps && deps.isHomeworkImage;
     if (!MIME_TYPES || typeof MIME_TYPES !== 'object'
         || typeof GENERATED_DIR !== 'string' || !GENERATED_DIR
-        || typeof HOMEWORK_DIR !== 'string' || !HOMEWORK_DIR
         || typeof PAGE_IMAGE_DIR_NEW !== 'string' || !PAGE_IMAGE_DIR_NEW
         || typeof TUTOR_MATERIALS_DIR !== 'string' || !TUTOR_MATERIALS_DIR
-        || typeof APP_DIR !== 'string' || !APP_DIR
-        || typeof isHomeworkImage !== 'function') {
-        throw new Error('static-routes: missing required deps {mimeTypes, generatedDir, homeworkDir, pageImageDirNew, tutorMaterialsDir, appDir, isHomeworkImage}');
+        || typeof APP_DIR !== 'string' || !APP_DIR) {
+        throw new Error('static-routes: missing required deps {mimeTypes, generatedDir, pageImageDirNew, tutorMaterialsDir, appDir}');
     }
 
     function serveStaticFile(res, filePath) {
@@ -105,20 +98,6 @@ module.exports = function createStaticRoutes(deps) {
         if (pathname.startsWith('/generated/')) {
             const filename = pathname.replace(/^\/generated\//, '');
             serveStaticFile(res, path.join(GENERATED_DIR, filename));
-            return true;
-        }
-
-        if (pathname.startsWith('/homework-assets/')) {
-            const rest = pathname.replace(/^\/homework-assets\//, '');
-            const parts = rest.split('/').map(part => decodeURIComponent(part || ''));
-            const setName = path.basename(parts[0] || '');
-            const fileName = path.basename(parts.slice(1).join('/') || '');
-            if (!setName || !fileName || !isHomeworkImage(fileName)) {
-                res.writeHead(400, { 'Content-Type': 'text/plain; charset=utf-8' });
-                res.end('bad homework asset');
-                return true;
-            }
-            serveStaticFromDir(res, path.join(HOMEWORK_DIR, setName), fileName);
             return true;
         }
 

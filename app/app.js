@@ -116,13 +116,9 @@ function initIntroLanding() {
 
 
 const COURSE_TRACKER_STORAGE_KEY = 'aquariusCourseTrackerFall2025';
-// COURSE_TRACKER_STATUSES, HOMEWORK_STATUSES, COURSE_GRADE_RULES, COURSE_SCHEDULE moved to data/course-metadata.js (Phase 1 #2).
-const HOMEWORK_STORAGE_KEY = 'aquariusHomework.v1';
-const HOMEWORK_EXPLANATION_STORAGE_KEY = 'aquariusHomeworkExplanations.v1';
-// MISTAKE_NOTEBOOK_STORAGE_KEY moved to mistake-notebook.js (Phase 2 #12).
-let currentHomeworkSetId = null;
-let currentHomeworkId = null;
-// currentMistakeId moved to mistake-notebook.js (Phase 2 #12).
+// COURSE_TRACKER_STATUSES, COURSE_GRADE_RULES, COURSE_SCHEDULE moved to data/course-metadata.js (Phase 1 #2).
+// MISTAKE_NOTEBOOK_STORAGE_KEY + currentMistakeId moved to mistake-notebook.js (Phase 2 #12).
+// Homework subsystem (HOMEWORK_* keys, currentHomework* state, ~485 LOC) deleted in Phase 2 #13 — DOM was removed in Phase 0 and nothing else consumed it.
 
 function loadCourseTrackerState() {
   try {
@@ -214,492 +210,6 @@ function renderCourseTracker() {
   }
 }
 
-function createHomeworkSet(title, problems = []) {
-  const now = new Date().toISOString();
-  return {
-    id: `hw-set-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-    title: title || 'HW1',
-    problems: Array.isArray(problems) ? problems : [],
-    createdAt: now,
-    updatedAt: now
-  };
-}
-
-function normalizeHomeworkProblem(item = {}, index = 0) {
-  const now = new Date().toISOString();
-  return {
-    id: item.id || `homework-${Date.now()}-${Math.random().toString(36).slice(2, 7)}-${index}`,
-    title: item.title || `Problem ${index + 1}`,
-    body: item.body || '',
-    status: HOMEWORK_STATUSES.includes(item.status) ? item.status : 'Todo',
-    explanation: item.explanation || '',
-    qa: Array.isArray(item.qa) ? item.qa : [],
-    images: Array.isArray(item.images) ? item.images.filter(Boolean) : [],
-    createdAt: item.createdAt || now,
-    updatedAt: item.updatedAt || now
-  };
-}
-
-function normalizeHomeworkStore(raw) {
-  if (raw && Array.isArray(raw.sets)) {
-    const sets = raw.sets.map((set, setIndex) => ({
-      id: set.id || `hw-set-${Date.now()}-${setIndex}`,
-      title: set.title || `HW${setIndex + 1}`,
-      problems: Array.isArray(set.problems) ? set.problems.map(normalizeHomeworkProblem) : [],
-      createdAt: set.createdAt || new Date().toISOString(),
-      updatedAt: set.updatedAt || new Date().toISOString()
-    }));
-    return { version: 2, activeSetId: raw.activeSetId || sets[0]?.id || null, sets };
-  }
-  if (Array.isArray(raw)) {
-    const migrated = createHomeworkSet('HW1', raw.map(normalizeHomeworkProblem));
-    return { version: 2, activeSetId: migrated.id, sets: [migrated] };
-  }
-  const first = createHomeworkSet('HW1', []);
-  return { version: 2, activeSetId: first.id, sets: [first] };
-}
-
-async function refreshHomeworkStoreFromServer() {
-  try {
-    const res = await fetch(`${API_BASE}/api/homework`);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    const store = normalizeHomeworkStore(data);
-    store.activeSetId = currentHomeworkSetId || store.activeSetId || store.sets[0]?.id || null;
-    if (!store.sets.some(set => set.id === store.activeSetId)) store.activeSetId = store.sets[0]?.id || null;
-    saveHomeworkStore(store);
-    currentHomeworkSetId = store.activeSetId;
-    return store;
-  } catch (err) {
-    setHomeworkSaveState(`Could not load HW folder: ${err.message}`, 'error');
-    return loadHomeworkStore();
-  }
-}
-
-function loadHomeworkStore() {
-  try {
-    const raw = JSON.parse(localStorage.getItem(HOMEWORK_STORAGE_KEY) || 'null');
-    const store = normalizeHomeworkStore(raw);
-    if (!store.sets.length) {
-      const first = createHomeworkSet('HW1', []);
-      store.sets = [first];
-      store.activeSetId = first.id;
-    }
-    if (!store.sets.some(set => set.id === store.activeSetId)) store.activeSetId = store.sets[0].id;
-    return store;
-  } catch {
-    const first = createHomeworkSet('HW1', []);
-    return { version: 2, activeSetId: first.id, sets: [first] };
-  }
-}
-
-function saveHomeworkStore(store) {
-  try {
-    localStorage.setItem(HOMEWORK_STORAGE_KEY, JSON.stringify(normalizeHomeworkStore(store)));
-  } catch {}
-}
-
-function getCurrentHomeworkSet(store = loadHomeworkStore()) {
-  if (!currentHomeworkSetId) currentHomeworkSetId = store.activeSetId || store.sets[0]?.id || null;
-  return store.sets.find(set => set.id === currentHomeworkSetId) || store.sets[0] || null;
-}
-
-function getCurrentHomework(itemsOrSet = getCurrentHomeworkSet()) {
-  const problems = Array.isArray(itemsOrSet)
-    ? itemsOrSet
-    : Array.isArray(itemsOrSet?.problems) ? itemsOrSet.problems : [];
-  const item = problems.find(problem => problem.id === currentHomeworkId) || problems[0] || null;
-  return item ? applyHomeworkProgress(item) : null;
-}
-
-function loadHomeworkProgress() {
-  try {
-    const data = JSON.parse(localStorage.getItem(HOMEWORK_EXPLANATION_STORAGE_KEY) || '{}');
-    return data && typeof data === 'object' ? data : {};
-  } catch {
-    return {};
-  }
-}
-
-function saveHomeworkProgress(progress) {
-  try {
-    localStorage.setItem(HOMEWORK_EXPLANATION_STORAGE_KEY, JSON.stringify(progress || {}));
-  } catch {}
-}
-
-function applyHomeworkProgress(problem) {
-  const progress = loadHomeworkProgress()[problem.id] || {};
-  return {
-    ...problem,
-    status: progress.status || problem.status || 'Todo',
-    explanation: progress.explanation || problem.explanation || '',
-    qa: Array.isArray(progress.qa) ? progress.qa : (Array.isArray(problem.qa) ? problem.qa : [])
-  };
-}
-
-function updateHomeworkStore(mutator) {
-  const store = loadHomeworkStore();
-  mutator(store);
-  store.activeSetId = currentHomeworkSetId || store.activeSetId || store.sets[0]?.id || null;
-  saveHomeworkStore(store);
-  return store;
-}
-
-function homeworkProblemAttachments(item) {
-  return (Array.isArray(item?.images) ? item.images : [])
-    .filter(image => image && (image.dataUrl || image.url))
-    .map((image, index) => ({
-      type: 'image',
-      name: image.name || `${item.title || 'homework-problem'}-${index + 1}.png`,
-      dataUrl: image.dataUrl || image.url,
-      mimeType: image.mimeType || 'image/png'
-    }));
-}
-
-function setHomeworkSaveState(message, tone = 'idle') {
-  if (!homeworkSaveState) return;
-  homeworkSaveState.textContent = message || '';
-  homeworkSaveState.dataset.tone = tone;
-}
-
-function updateHomeworkItem(id, patch, options = {}) {
-  const progress = loadHomeworkProgress();
-  progress[id] = { ...(progress[id] || {}), ...patch, updatedAt: new Date().toISOString() };
-  saveHomeworkProgress(progress);
-  if (!options.silent) setHomeworkSaveState('Saved locally', 'ok');
-  return getCurrentHomeworkSet()?.problems || [];
-}
-
-
-function homeworkStatusLabel(status) {
-  if (status === 'Done') return 'Done';
-  if (status === 'Explained') return 'Explained';
-  if (status === 'Working') return 'Working';
-  return 'Todo';
-}
-
-function renderHomework() {
-  if (!homeworkView) return;
-  const store = loadHomeworkStore();
-  if (!currentHomeworkSetId) currentHomeworkSetId = store.activeSetId || store.sets[0]?.id || null;
-  if (!store.sets.some(set => set.id === currentHomeworkSetId)) currentHomeworkSetId = store.sets[0]?.id || null;
-  store.activeSetId = currentHomeworkSetId;
-  saveHomeworkStore(store);
-  const currentSet = getCurrentHomeworkSet(store);
-  const items = (currentSet?.problems || []).map(applyHomeworkProgress);
-  if (!currentHomeworkId && items.length) currentHomeworkId = items[0].id;
-  if (currentHomeworkId && !items.some(item => item.id === currentHomeworkId)) {
-    currentHomeworkId = items[0]?.id || null;
-  }
-
-  renderHomeworkSetSelect(store);
-
-  if (homeworkCountPill) {
-    homeworkCountPill.textContent = String(items.length);
-    homeworkCountPill.title = `${items.length} problems in ${currentSet?.title || 'HW'}`;
-  }
-
-  if (homeworkProblemList) {
-    homeworkProblemList.innerHTML = items.length
-      ? items.map((item, index) => `
-        <button class="homework-list-item ${item.id === currentHomeworkId ? 'active' : ''}" data-homework-id="${escapeHtml(item.id)}" type="button" title="${escapeHtml(`${item.title || `Problem ${index + 1}`} · ${homeworkStatusLabel(item.status)}`)}" aria-label="${escapeHtml(`${item.title || `Problem ${index + 1}`} ${homeworkStatusLabel(item.status)}`)}">
-          <span class="homework-list-index">${index + 1}</span>
-          <span class="homework-status-dot" data-status="${escapeHtml(item.status || 'Todo')}"></span>
-        </button>
-      `).join('')
-      : '<div class="homework-list-empty">No problems</div>';
-
-    homeworkProblemList.querySelectorAll('.homework-list-item').forEach(btn => {
-      btn.addEventListener('click', () => {
-        currentHomeworkId = btn.dataset.homeworkId;
-        if (homeworkQaPanel) homeworkQaPanel.classList.add('hidden');
-        renderHomework();
-      });
-    });
-  }
-
-  const current = getCurrentHomework(items);
-  const hasCurrent = Boolean(current);
-  if (homeworkEmptyPanel) homeworkEmptyPanel.classList.toggle('hidden', hasCurrent);
-  if (homeworkDetailContent) homeworkDetailContent.classList.toggle('hidden', !hasCurrent);
-  if (!current) {
-    if (homeworkQaList) homeworkQaList.innerHTML = '<div class="homework-qa-empty">Create a problem first, then Q&A will live here.</div>';
-    return;
-  }
-
-  if (homeworkTitleInput) homeworkTitleInput.value = current.title || '';
-  if (homeworkStatusSelect) homeworkStatusSelect.value = HOMEWORK_STATUSES.includes(current.status) ? current.status : 'Todo';
-  if (homeworkProblemInput) homeworkProblemInput.value = current.body || '';
-  renderHomeworkImages(current);
-  if (homeworkExplanation) {
-    homeworkExplanation.innerHTML = current.explanation
-      ? markdownToHtml(current.explanation)
-      : 'No explanation yet. Generate one when you are ready.';
-    if (window.MathJax && window.MathJax.typesetPromise) {
-      window.MathJax.typesetPromise([homeworkExplanation]).catch(() => {});
-    }
-  }
-  renderHomeworkQa(current);
-  setHomeworkSaveState(current.updatedAt ? `Saved ${new Date(current.updatedAt).toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}` : 'Ready', 'idle');
-}
-
-function renderHomeworkSetSelect(store = loadHomeworkStore()) {
-  if (!homeworkSetSelect) return;
-  homeworkSetSelect.innerHTML = store.sets.map((set, index) => {
-    const count = Array.isArray(set.problems) ? set.problems.length : 0;
-    const label = `${set.title || `HW${index + 1}`} (${count})`;
-    return `<option value="${escapeHtml(set.id)}"${set.id === currentHomeworkSetId ? ' selected' : ''}>${escapeHtml(label)}</option>`;
-  }).join('');
-}
-
-function renderHomeworkImages(item) {
-  if (!homeworkImageStrip) return;
-  const images = Array.isArray(item?.images) ? item.images : [];
-  if (!images.length) {
-    homeworkImageStrip.innerHTML = '<div class="homework-image-empty">No problem image found in this HW folder.</div>';
-    return;
-  }
-  homeworkImageStrip.innerHTML = images.map((image, index) => `
-    <figure class="homework-image-card homework-problem-image-card">
-      <button class="homework-image-preview" type="button" data-homework-image-index="${index}" aria-label="Preview ${escapeHtml(image.name || `image ${index + 1}`)}">
-        <img src="${escapeHtml(image.dataUrl || image.url || '')}" alt="${escapeHtml(image.name || `Homework image ${index + 1}`)}">
-      </button>
-    </figure>
-  `).join('');
-  homeworkImageStrip.querySelectorAll('[data-homework-image-index]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const idx = Number(btn.dataset.homeworkImageIndex || 0);
-      const image = images[idx];
-      const src = image?.dataUrl || image?.url;
-      if (src) openAttachmentImageModal(src, image.name || 'Homework image');
-    });
-  });
-}
-
-function renderHomeworkQa(item) {
-  if (!homeworkQaList) return;
-  const qa = Array.isArray(item?.qa) ? item.qa : [];
-  if (!item) {
-    homeworkQaList.innerHTML = '<div class="homework-qa-empty">Create a problem first, then Q&A will live here.</div>';
-    return;
-  }
-  if (!qa.length) {
-    homeworkQaList.innerHTML = '<div class="homework-qa-empty">Ask follow-up questions after you add or explain this problem.</div>';
-    return;
-  }
-  homeworkQaList.innerHTML = qa.map(turn => `
-    <div class="homework-qa-turn ${turn.role === 'user' ? 'is-user' : 'is-assistant'}">
-      <div class="homework-qa-role">${turn.role === 'user' ? 'You' : 'Fourier'}</div>
-      <div class="homework-qa-body">${turn.role === 'assistant' ? markdownToHtml(turn.content || '') : escapeHtml(turn.content || '').replace(/\n/g, '<br>')}</div>
-    </div>
-  `).join('');
-  homeworkQaList.scrollTop = homeworkQaList.scrollHeight;
-  if (window.MathJax && window.MathJax.typesetPromise) {
-    window.MathJax.typesetPromise([homeworkQaList]).catch(() => {});
-  }
-}
-
-function syncHomeworkFromInputs(options = {}) {
-  const current = getCurrentHomework();
-  if (!current) return;
-  const patch = {
-    status: HOMEWORK_STATUSES.includes(homeworkStatusSelect?.value) ? homeworkStatusSelect.value : current.status || 'Todo'
-  };
-  updateHomeworkItem(current.id, patch, options);
-  if (!options.skipRenderList) renderHomework();
-}
-
-function buildHomeworkExplainPrompt(item) {
-  return [
-    '请讲解这道作业题。你必须同时看题目文本和学生实际问题，不要跳过题目内容。',
-    '目标：先判断题目在考什么知识点，再给出清晰步骤、关键公式、常见错误，以及最后可以检查答案的方式。',
-    '如果题目缺少条件，请明确指出缺什么，并给出下一步应该问什么。',
-    '',
-    `作业题目：\n${item.body || item.title || ''}`,
-    homeworkProblemAttachments(item).length ? `\n题目图片：已附上 ${homeworkProblemAttachments(item).length} 张图片，请一起阅读。` : ''
-  ].join('\n');
-}
-
-async function generateHomeworkExplanation() {
-  syncHomeworkFromInputs({ silent: true, skipRenderList: true });
-  const current = getCurrentHomework();
-  if (!current) return;
-  if (!(current.body || '').trim()) {
-    setHomeworkSaveState('Paste the problem text first.', 'error');
-    homeworkProblemInput?.focus();
-    return;
-  }
-  const original = homeworkExplainBtn ? homeworkExplainBtn.textContent : '';
-  if (homeworkExplainBtn) {
-    homeworkExplainBtn.disabled = true;
-    homeworkExplainBtn.textContent = 'Generating...';
-  }
-  if (homeworkExplanation) homeworkExplanation.textContent = 'Generating a problem-specific explanation...';
-  setHomeworkSaveState('Asking Fourier...', 'busy');
-  try {
-    const prompt = buildHomeworkExplainPrompt(current);
-    const data = await callAsk(prompt, undefined, {
-      mode: 'ask',
-      useWebSearch: true,
-      language: detectLang(prompt),
-      answerLength: 'detailed',
-      attachments: homeworkProblemAttachments(current)
-    });
-    const explanation = data.explanation || '';
-    updateHomeworkItem(current.id, {
-      explanation,
-      status: 'Explained',
-      qa: Array.isArray(current.qa) ? current.qa : []
-    }, { silent: true });
-    setHomeworkSaveState('Explanation generated', 'ok');
-    renderHomework();
-  } catch (err) {
-    if (homeworkExplanation) homeworkExplanation.innerHTML = `<div class="error-box"><strong>AI failed</strong><p>${escapeHtml(err.message || String(err))}</p></div>`;
-    setHomeworkSaveState(`Failed: ${err.message || err}`, 'error');
-  } finally {
-    if (homeworkExplainBtn) {
-      homeworkExplainBtn.disabled = false;
-      homeworkExplainBtn.textContent = original;
-    }
-  }
-}
-
-async function sendHomeworkQuestion() {
-  syncHomeworkFromInputs({ silent: true, skipRenderList: true });
-  const current = getCurrentHomework();
-  const question = (homeworkQaInput?.value || '').trim();
-  if (!current || !question) return;
-  if (!(current.body || '').trim()) {
-    setHomeworkSaveState('Add the problem text before asking.', 'error');
-    return;
-  }
-  if (homeworkQaInput) homeworkQaInput.value = '';
-  const qa = Array.isArray(current.qa) ? [...current.qa] : [];
-  qa.push({ role: 'user', content: question, createdAt: new Date().toISOString() });
-  updateHomeworkItem(current.id, { qa }, { silent: true });
-  renderHomeworkQa({ ...current, qa });
-
-  const original = homeworkQaSendBtn ? homeworkQaSendBtn.textContent : '';
-  if (homeworkQaSendBtn) {
-    homeworkQaSendBtn.disabled = true;
-    homeworkQaSendBtn.textContent = 'Asking...';
-  }
-  setHomeworkSaveState('Answering follow-up...', 'busy');
-  try {
-    const prompt = [
-      '你正在围绕同一道作业题回答学生追问。',
-      '必须先参考作业题目，再回答学生这次的问题；如果已有讲解，也要保持一致。',
-      '',
-      `作业题目：\n${current.body || current.title || ''}`,
-      homeworkProblemAttachments(current).length ? `题目图片：已附上 ${homeworkProblemAttachments(current).length} 张图片，请一起参考。` : '',
-      '',
-      `已有讲解：\n${current.explanation || '(还没有生成讲解)'}`,
-      '',
-      `学生追问：\n${question}`
-    ].join('\n');
-    const history = [
-      { role: 'user', content: `作业题目：\n${current.body || ''}` },
-      current.explanation ? { role: 'assistant', content: current.explanation } : null,
-      ...qa.slice(-8)
-    ].filter(Boolean);
-    const data = await callAsk(prompt, undefined, {
-      mode: 'followup',
-      history,
-      useWebSearch: true,
-      language: detectLang(`${current.body || ''}\n${question}`),
-      answerLength: 'balanced',
-      attachments: homeworkProblemAttachments(current)
-    });
-    const answer = data.explanation || '';
-    const nextQa = [...qa, { role: 'assistant', content: answer, createdAt: new Date().toISOString() }];
-    updateHomeworkItem(current.id, { qa: nextQa }, { silent: true });
-    setHomeworkSaveState('Follow-up answered', 'ok');
-    renderHomework();
-  } catch (err) {
-    const failedQa = [...qa, { role: 'assistant', content: `AI failed: ${err.message || String(err)}`, createdAt: new Date().toISOString() }];
-    updateHomeworkItem(current.id, { qa: failedQa }, { silent: true });
-    setHomeworkSaveState(`Failed: ${err.message || err}`, 'error');
-    renderHomework();
-  } finally {
-    if (homeworkQaSendBtn) {
-      homeworkQaSendBtn.disabled = false;
-      homeworkQaSendBtn.textContent = original;
-    }
-  }
-}
-
-function bindHomeworkControls() {
-  if (homeworkSetSelect) {
-    homeworkSetSelect.addEventListener('change', () => {
-      currentHomeworkSetId = homeworkSetSelect.value;
-      currentHomeworkId = null;
-      updateHomeworkStore(store => {
-        store.activeSetId = currentHomeworkSetId;
-      });
-      renderHomework();
-    });
-  }
-  if (homeworkAddSetBtn) homeworkAddSetBtn.addEventListener('click', () => {
-    refreshHomeworkStoreFromServer().then(() => {
-      renderHomework();
-      setHomeworkSaveState('HW folder refreshed.', 'ok');
-    });
-  });
-  if (homeworkAddBtn) homeworkAddBtn.addEventListener('click', () => {
-    refreshHomeworkStoreFromServer().then(() => {
-      renderHomework();
-      setHomeworkSaveState('HW folder refreshed.', 'ok');
-    });
-  });
-  if (homeworkEmptyAddBtn) homeworkEmptyAddBtn.addEventListener('click', () => {
-    refreshHomeworkStoreFromServer().then(() => {
-      renderHomework();
-      setHomeworkSaveState('HW folder refreshed.', 'ok');
-    });
-  });
-  if (homeworkSaveBtn) homeworkSaveBtn.addEventListener('click', () => syncHomeworkFromInputs());
-  if (homeworkExplainBtn) homeworkExplainBtn.addEventListener('click', generateHomeworkExplanation);
-  if (homeworkQaSendBtn) homeworkQaSendBtn.addEventListener('click', sendHomeworkQuestion);
-  if (homeworkQaBubbleBtn) {
-    homeworkQaBubbleBtn.addEventListener('click', () => {
-      if (!homeworkQaPanel) return;
-      homeworkQaPanel.classList.toggle('hidden');
-      if (!homeworkQaPanel.classList.contains('hidden')) homeworkQaInput?.focus();
-    });
-  }
-  if (homeworkQaCloseBtn) {
-    homeworkQaCloseBtn.addEventListener('click', () => {
-      if (homeworkQaPanel) homeworkQaPanel.classList.add('hidden');
-    });
-  }
-  if (homeworkDeleteBtn) {
-    homeworkDeleteBtn.addEventListener('click', () => {
-      setHomeworkSaveState('Delete files from the project HW folder to remove preloaded problems.', 'idle');
-    });
-  }
-  if (homeworkImageInput) {
-    homeworkImageInput.addEventListener('click', () => {
-      setHomeworkSaveState('Images are preloaded from the project HW folder.', 'idle');
-    });
-  }
-  [
-    [homeworkStatusSelect, 'change']
-  ].forEach(([el, eventName]) => {
-    if (!el) return;
-    el.addEventListener(eventName, () => {
-      syncHomeworkFromInputs({ silent: true, skipRenderList: false });
-      setHomeworkSaveState('Saved locally', 'ok');
-    });
-  });
-  if (homeworkQaInput) {
-    homeworkQaInput.addEventListener('keydown', event => {
-      if (event.key === 'Enter' && !event.shiftKey && !event.isComposing) {
-        event.preventDefault();
-        sendHomeworkQuestion();
-      }
-    });
-  }
-}
 
 // Mistake Notebook subsystem (loadMistakeNotebook through runMistakeAi) moved
 // to app/mistake-notebook.js (Phase 2 #12).
@@ -953,7 +463,6 @@ const answerScreen  = document.getElementById('answerScreen');
 const learnView     = document.getElementById('learnView');
 const settingsView  = document.getElementById('settingsView');
 const feedbackView = document.getElementById('feedbackView');
-const homeworkView = document.getElementById('homeworkView');
 const courseTrackerView = document.getElementById('courseTrackerView');
 const loginView     = document.getElementById('loginView');
 const appShell      = document.querySelector('.app');
@@ -985,31 +494,6 @@ function setFeedbackSubmitButtonLabel(label) {
   `;
 }
 
-const homeworkCloseBtn = document.getElementById('homeworkCloseBtn');
-const homeworkAddBtn = document.getElementById('homeworkAddBtn');
-const homeworkEmptyAddBtn = document.getElementById('homeworkEmptyAddBtn');
-const homeworkSetSelect = document.getElementById('homeworkSetSelect');
-const homeworkAddSetBtn = document.getElementById('homeworkAddSetBtn');
-const homeworkCountPill = document.getElementById('homeworkCountPill');
-const homeworkProblemList = document.getElementById('homeworkProblemList');
-const homeworkEmptyPanel = document.getElementById('homeworkEmptyPanel');
-const homeworkDetailContent = document.getElementById('homeworkDetailContent');
-const homeworkTitleInput = document.getElementById('homeworkTitleInput');
-const homeworkStatusSelect = document.getElementById('homeworkStatusSelect');
-const homeworkProblemInput = document.getElementById('homeworkProblemInput');
-const homeworkImageInput = document.getElementById('homeworkImageInput');
-const homeworkImageStrip = document.getElementById('homeworkImageStrip');
-const homeworkExplainBtn = document.getElementById('homeworkExplainBtn');
-const homeworkSaveBtn = document.getElementById('homeworkSaveBtn');
-const homeworkDeleteBtn = document.getElementById('homeworkDeleteBtn');
-const homeworkSaveState = document.getElementById('homeworkSaveState');
-const homeworkExplanation = document.getElementById('homeworkExplanation');
-const homeworkQaBubbleBtn = document.getElementById('homeworkQaBubbleBtn');
-const homeworkQaPanel = document.getElementById('homeworkQaPanel');
-const homeworkQaCloseBtn = document.getElementById('homeworkQaCloseBtn');
-const homeworkQaList = document.getElementById('homeworkQaList');
-const homeworkQaInput = document.getElementById('homeworkQaInput');
-const homeworkQaSendBtn = document.getElementById('homeworkQaSendBtn');
 const courseTrackerCloseBtn = document.getElementById('courseTrackerCloseBtn');
 const courseTrackerResetBtn = document.getElementById('courseTrackerResetBtn');
 const courseTrackerTableBody = document.getElementById('courseTrackerTableBody');
@@ -1027,7 +511,6 @@ const loginClerkStage = document.getElementById('loginClerkStage');
 const loginForm = document.getElementById('loginForm');
 
 bindPreferenceControls();
-bindHomeworkControls();
 bindMistakeNotebookControls();
 
 const SIDEBAR_ACCORDION_MS = 380;
@@ -1137,9 +620,6 @@ if (feedbackRefreshBtn) {
 }
 if (feedbackSubmitBtn) {
   feedbackSubmitBtn.addEventListener('click', submitFeedbackItem);
-}
-if (homeworkCloseBtn) {
-  homeworkCloseBtn.addEventListener('click', showWelcome);
 }
 if (courseTrackerCloseBtn) {
   courseTrackerCloseBtn.addEventListener('click', showWelcome);
@@ -11996,7 +11476,6 @@ function showWelcome() {
   if (settingsView) settingsView.classList.add('hidden');
   if (preferenceView) preferenceView.classList.add('hidden');
   if (feedbackView) feedbackView.classList.add('hidden');
-  if (homeworkView) homeworkView.classList.add('hidden');
   if (courseTrackerView) courseTrackerView.classList.add('hidden');
   if (mistakeNotebookView) mistakeNotebookView.classList.add('hidden');
   if (loginView) loginView.classList.add('hidden');
@@ -12018,7 +11497,6 @@ function showAnswer(question) {
   if (settingsView) settingsView.classList.add('hidden');
   if (preferenceView) preferenceView.classList.add('hidden');
   if (feedbackView) feedbackView.classList.add('hidden');
-  if (homeworkView) homeworkView.classList.add('hidden');
   if (courseTrackerView) courseTrackerView.classList.add('hidden');
   if (mistakeNotebookView) mistakeNotebookView.classList.add('hidden');
   if (loginView) loginView.classList.add('hidden');
@@ -12037,7 +11515,6 @@ function showLearnView() {
   if (settingsView) settingsView.classList.add('hidden');
   if (preferenceView) preferenceView.classList.add('hidden');
   if (feedbackView) feedbackView.classList.add('hidden');
-  if (homeworkView) homeworkView.classList.add('hidden');
   if (courseTrackerView) courseTrackerView.classList.add('hidden');
   if (mistakeNotebookView) mistakeNotebookView.classList.add('hidden');
   if (loginView) loginView.classList.add('hidden');
@@ -12056,7 +11533,6 @@ function showSettingsView() {
   if (settingsView) settingsView.classList.remove('hidden');
   if (preferenceView) preferenceView.classList.add('hidden');
   if (feedbackView) feedbackView.classList.add('hidden');
-  if (homeworkView) homeworkView.classList.add('hidden');
   if (courseTrackerView) courseTrackerView.classList.add('hidden');
   if (mistakeNotebookView) mistakeNotebookView.classList.add('hidden');
   if (loginView) loginView.classList.add('hidden');
@@ -12076,7 +11552,6 @@ function showPreferenceView() {
   if (settingsView) settingsView.classList.add('hidden');
   if (preferenceView) preferenceView.classList.remove('hidden');
   if (feedbackView) feedbackView.classList.add('hidden');
-  if (homeworkView) homeworkView.classList.add('hidden');
   if (courseTrackerView) courseTrackerView.classList.add('hidden');
   if (mistakeNotebookView) mistakeNotebookView.classList.add('hidden');
   if (loginView) loginView.classList.add('hidden');
@@ -12095,7 +11570,6 @@ function showFeedbackView() {
   if (settingsView) settingsView.classList.add('hidden');
   if (preferenceView) preferenceView.classList.add('hidden');
   if (feedbackView) feedbackView.classList.remove('hidden');
-  if (homeworkView) homeworkView.classList.add('hidden');
   if (courseTrackerView) courseTrackerView.classList.add('hidden');
   if (mistakeNotebookView) mistakeNotebookView.classList.add('hidden');
   if (loginView) loginView.classList.add('hidden');
@@ -12384,7 +11858,6 @@ function showCourseTrackerView() {
   if (settingsView) settingsView.classList.add('hidden');
   if (preferenceView) preferenceView.classList.add('hidden');
   if (feedbackView) feedbackView.classList.add('hidden');
-  if (homeworkView) homeworkView.classList.add('hidden');
   if (courseTrackerView) courseTrackerView.classList.remove('hidden');
   if (mistakeNotebookView) mistakeNotebookView.classList.add('hidden');
   if (loginView) loginView.classList.add('hidden');
@@ -12404,7 +11877,6 @@ function showMistakeNotebookView() {
   if (settingsView) settingsView.classList.add('hidden');
   if (preferenceView) preferenceView.classList.add('hidden');
   if (feedbackView) feedbackView.classList.add('hidden');
-  if (homeworkView) homeworkView.classList.add('hidden');
   if (courseTrackerView) courseTrackerView.classList.add('hidden');
   if (mistakeNotebookView) mistakeNotebookView.classList.remove('hidden');
   if (loginView) loginView.classList.add('hidden');
@@ -12436,7 +11908,6 @@ function showLoginView() {
   if (settingsView) settingsView.classList.add('hidden');
   if (preferenceView) preferenceView.classList.add('hidden');
   if (feedbackView) feedbackView.classList.add('hidden');
-  if (homeworkView) homeworkView.classList.add('hidden');
   if (courseTrackerView) courseTrackerView.classList.add('hidden');
   if (mistakeNotebookView) mistakeNotebookView.classList.add('hidden');
   if (loginView) loginView.classList.remove('hidden');

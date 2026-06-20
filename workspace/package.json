@@ -1,6 +1,6 @@
 {
   "name": "fourier-tutor-agent",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "private": true,
   "description": "Fourier Tutor Agent web UI and API bridge",
   "main": "app/ws-bridge.js",

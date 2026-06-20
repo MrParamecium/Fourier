@@ -1,9 +1,9 @@
-// Static data: course tracker statuses, homework statuses, grade rules, lecture schedule.
+// Static data: course tracker statuses, grade rules, lecture schedule.
 // Loaded as a classic <script> before app.js. Pure data, no closures.
 // Extracted in Phase 1 #2 of the refactor plan.
+// HOMEWORK_STATUSES removed in Phase 2 #13 with the Homework subsystem.
 
 const COURSE_TRACKER_STATUSES = ['Not started', 'In progress', 'Done', 'Review'];
-const HOMEWORK_STATUSES = ['Todo', 'Working', 'Explained', 'Done'];
 
 const COURSE_GRADE_RULES = [
   { label: 'Homework', detail: '10 HWs', weight: 20 },

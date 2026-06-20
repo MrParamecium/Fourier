@@ -122,8 +122,6 @@ const GENERATED_DIR = path.join(__dirname, 'generated');
 try { if (!fs.existsSync(GENERATED_DIR)) fs.mkdirSync(GENERATED_DIR, { recursive: true }); } catch (_) {}
 const DEBUG_DIR = path.join(__dirname, 'debug');
 try { if (!fs.existsSync(DEBUG_DIR)) fs.mkdirSync(DEBUG_DIR, { recursive: true }); } catch (_) {}
-const HOMEWORK_DIR = path.join(PROJECT_ROOT, 'HW');
-try { if (!fs.existsSync(HOMEWORK_DIR)) fs.mkdirSync(HOMEWORK_DIR, { recursive: true }); } catch (_) {}
 
 const { processEmbeddedPython, normalizePythonCode } = require('./process-python.js');
 
@@ -145,11 +143,9 @@ const MIME_TYPES = {
 const { handleStaticRoute } = require('./static-routes')({
     mimeTypes: MIME_TYPES,
     generatedDir: GENERATED_DIR,
-    homeworkDir: HOMEWORK_DIR,
     pageImageDirNew: PAGE_IMAGE_DIR_NEW,
     tutorMaterialsDir: TUTOR_MATERIALS_DIR,
     appDir: __dirname,
-    isHomeworkImage,
 });
 
 function setCORSHeaders(res) {
@@ -1241,67 +1237,6 @@ const {
     usersDir: path.join(__dirname, 'users'),
 });
 
-function naturalCompare(a, b) {
-    return String(a || '').localeCompare(String(b || ''), undefined, { numeric: true, sensitivity: 'base' });
-}
-
-function isHomeworkImage(fileName) {
-    return /\.(png|jpe?g|webp|gif)$/i.test(String(fileName || ''));
-}
-
-function problemTitleFromFile(fileName, index) {
-    const base = path.basename(fileName || '', path.extname(fileName || ''));
-    const match = base.match(/(?:^|[^0-9])(?:q|p|problem|题)?\s*0*([0-9]+)/i);
-    const num = match ? Number(match[1]) : index + 1;
-    return `Problem ${num}`;
-}
-
-function imageFileToDataUrl(filePath, mimeType) {
-    try {
-        const data = fs.readFileSync(filePath);
-        return `data:${mimeType || 'image/png'};base64,${data.toString('base64')}`;
-    } catch (_) {
-        return '';
-    }
-}
-
-function readHomeworkSets() {
-    if (!fs.existsSync(HOMEWORK_DIR)) return [];
-    return fs.readdirSync(HOMEWORK_DIR, { withFileTypes: true })
-        .filter(entry => entry.isDirectory() && !entry.name.startsWith('.'))
-        .sort((a, b) => naturalCompare(a.name, b.name))
-        .map(entry => {
-            const setDir = path.join(HOMEWORK_DIR, entry.name);
-            const images = fs.readdirSync(setDir, { withFileTypes: true })
-                .filter(file => file.isFile() && isHomeworkImage(file.name))
-                .map(file => file.name)
-                .sort(naturalCompare);
-            const problems = images.map((fileName, index) => {
-                const imagePath = path.join(setDir, fileName);
-                const mimeType = MIME_TYPES[path.extname(fileName).toLowerCase()] || 'image/png';
-                const id = `${entry.name}/${fileName}`.replace(/[^a-zA-Z0-9_\-/.\u4e00-\u9fa5]/g, '_');
-                return {
-                    id,
-                    title: problemTitleFromFile(fileName, index),
-                    body: `${entry.name} ${problemTitleFromFile(fileName, index)}. Use the attached problem image as the source.`,
-                    status: 'Todo',
-                    explanation: '',
-                    qa: [],
-                    images: [{
-                        name: fileName,
-                        url: `/homework-assets/${encodeURIComponent(entry.name)}/${encodeURIComponent(fileName)}`,
-                        dataUrl: imageFileToDataUrl(imagePath, mimeType),
-                        mimeType
-                    }]
-                };
-            });
-            return {
-                id: entry.name,
-                title: entry.name,
-                problems
-            };
-        });
-}
 
 async function readRequestBody(req) {
     return new Promise((resolve, reject) => {
@@ -4780,18 +4715,6 @@ const server = http.createServer(async (req, res) => {
             console.error('[API /api/preference/draft] Error:', err);
             res.writeHead(500, { 'Content-Type': 'application/json; charset=utf-8' });
             res.end(JSON.stringify({ error: err.message || 'Preference draft failed' }));
-        }
-        return;
-    }
-
-    if (pathname === '/api/homework' && req.method === 'GET') {
-        try {
-            const sets = readHomeworkSets();
-            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-            res.end(JSON.stringify({ version: 2, sets }));
-        } catch (err) {
-            res.writeHead(500, { 'Content-Type': 'application/json; charset=utf-8' });
-            res.end(JSON.stringify({ error: err.message || 'Failed to read homework folder' }));
         }
         return;
     }
