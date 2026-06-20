@@ -233,9 +233,6 @@ module.exports = function createLessonCache(deps) {
     return {
         LESSON_CACHE_VERSION,
         LESSON_CACHE_MISS_MESSAGE,
-        LESSON_CACHE_DIR,
-        normalizeSectionId,
-        buildLessonCacheKey,
         hasLessonCacheFile,
         readLessonCache,
         writeLessonCache,

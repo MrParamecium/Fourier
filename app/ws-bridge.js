@@ -1096,9 +1096,6 @@ const BLUEPRINT_DIR = path.join(TUTOR_MATERIALS_DIR, '');
 const {
     LESSON_CACHE_VERSION,
     LESSON_CACHE_MISS_MESSAGE,
-    LESSON_CACHE_DIR,
-    normalizeSectionId,
-    buildLessonCacheKey,
     hasLessonCacheFile,
     readLessonCache,
     writeLessonCache,
@@ -4784,9 +4781,7 @@ const server = http.createServer(async (req, res) => {
                         if (normalizedCachedLesson !== cachedLesson) {
                             writeLessonCache(sectionId, baseLessonMemory, normalizedCachedLesson, data.bookSource);
                         }
-                        const activeCacheKey = buildLessonCacheKey(baseLessonMemory, data.bookSource);
-                        const activeCacheExists = !!activeCacheKey
-                            && fs.existsSync(path.join(LESSON_CACHE_DIR, normalizeSectionId(sectionId), `${activeCacheKey}.${LESSON_CACHE_VERSION}.en.md`));
+                        const activeCacheExists = hasLessonCacheFile(sectionId, baseLessonMemory, data.bookSource);
 
                         if (hasVisualMetadataMarkup(normalizedCachedLesson)
                             && !hasDisallowedNewBookPageFallback(normalizedCachedLesson, sectionId, rawPages, data.bookSource)
