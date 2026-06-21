@@ -34228,7 +34228,7 @@ body {
 
 #learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-heading h2,
 #learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content,
-#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content p,
+#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content p {
   font-family: "Zilla Slab", Georgia, serif !important;
 }
 
@@ -34245,7 +34245,7 @@ body {
 
 #learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) code,
 #learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) pre,
-#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) kbd,
+#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) kbd {
   font-family: "Fira Code", ui-monospace, SFMono-Regular, Menlo, monospace !important;
 }
 
