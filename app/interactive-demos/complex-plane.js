@@ -6,10 +6,10 @@
 //   - window.typesetMath, window.ResizeObserver           (CDN / browser)
 //
 // Public surface (free-name lookup from the dispatcher in app.js):
-//   - renderComplexPlaneDemo(node, demo, demoSpec, demoControls)
+//   - renderComplexPlaneDemo(node, demo, demoControls)
 // Preserve `node._complexResizeObserver` — introspected by external callers.
 
-function renderComplexPlaneDemo(node, demo, demoSpec, demoControls) {
+function renderComplexPlaneDemo(node, demo, demoControls) {
       const controls = demoControls;
       const state = Object.create(null);
       controls.forEach((control) => {

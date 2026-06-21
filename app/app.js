@@ -3703,7 +3703,7 @@ function hydrateInteractiveDemos(root) {
     }
 
     if (isComplexPlaneDemo) {
-      renderComplexPlaneDemo(node, demo, demoSpec, demoControls);
+      renderComplexPlaneDemo(node, demo, demoControls);
       return;
     }
 
