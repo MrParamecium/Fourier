@@ -36779,9 +36779,7 @@ body {
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content blockquote,
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .lecture-note-card,
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .kc-container,
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .kc-explain-card,
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .math-block,
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .formula-block {
+#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .math-block {
   width: 100% !important;
   max-width: none !important;
   margin-left: 0 !important;
@@ -36789,8 +36787,7 @@ body {
 }
 
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .lecture-note-card,
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .kc-container,
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .kc-explain-card {
+#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .kc-container {
   padding-left: clamp(16px, 2vw, 26px) !important;
   padding-right: clamp(16px, 2vw, 26px) !important;
 }
@@ -36815,9 +36812,7 @@ body {
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content blockquote,
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .lecture-note-card,
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .kc-container,
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .kc-explain-card,
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .math-block,
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .formula-block {
+#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .math-block {
   width: 100% !important;
   max-width: none !important;
   margin-left: 0 !important;
@@ -36825,8 +36820,7 @@ body {
 }
 
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .lecture-note-card,
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .kc-container,
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .kc-explain-card {
+#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .kc-container {
   padding-left: clamp(16px, 2vw, 26px) !important;
   padding-right: clamp(16px, 2vw, 26px) !important;
 }
@@ -36851,9 +36845,7 @@ body {
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content blockquote,
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .lecture-note-card,
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .kc-container,
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .kc-explain-card,
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .math-block,
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .formula-block {
+#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .math-block {
   width: 100% !important;
   max-width: none !important;
   margin-left: 0 !important;
@@ -36861,8 +36853,7 @@ body {
 }
 
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .lecture-note-card,
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .kc-container,
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .kc-explain-card {
+#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .kc-container {
   padding-left: clamp(16px, 2vw, 26px) !important;
   padding-right: clamp(16px, 2vw, 26px) !important;
 }
@@ -36894,9 +36885,7 @@ body {
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content li,
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content blockquote,
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .kc-container,
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .kc-explain-card,
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .math-block,
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .formula-block {
+#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .math-block {
   width: 100% !important;
   max-width: none !important;
   margin-left: 0 !important;
@@ -38452,9 +38441,7 @@ body {
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content blockquote,
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .lecture-note-card,
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .kc-container,
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .kc-explain-card,
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .math-block,
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .formula-block {
+#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .math-block {
   width: 100% !important;
   max-width: none !important;
   margin-left: 0 !important;
@@ -38462,8 +38449,7 @@ body {
 }
 
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .lecture-note-card,
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .kc-container,
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .kc-explain-card {
+#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content .kc-container {
   padding-left: clamp(16px, 2vw, 26px) !important;
   padding-right: clamp(16px, 2vw, 26px) !important;
 }
