@@ -138,11 +138,16 @@ Secondary nits (Sev-3, not in this PR):
 - Optional registry module extraction (`app/interactive-demos/registry.js`).
   Defers an eventual interactive-demos subsystem extraction (Phase 2 #18
   candidate per §5).
-- The 4 non-table family values that legitimately miss the lookup
-  (`complex_plane`, `sinusoid`, `algebra_brief`, `brief`) are handled
-  upstream of the lookup (flag-based branches) or downstream
-  (`renderBriefDemoFallback` / matrix-conformability default). Not
-  documented in-code per project style; this entry is the record.
+- The 6 non-table family values that legitimately miss the lookup are
+  fully handled elsewhere in the dispatcher — coverage is complete:
+  - `opposite_rotations` — `isOppositeRotationDemo` branch ABOVE the lookup.
+  - `complex_plane` — `isComplexPlaneDemo` branch ABOVE.
+  - `sinusoid` — `isSinusoidDemo` branch ABOVE.
+  - `matrix_conformability` — final unconditional
+    `renderMatrixConformabilityDemo` after the `!isMatrixDemo` check.
+  - `algebra_brief` and `brief` — `renderBriefDemoFallback` via the
+    `!isMatrixDemo` branch.
+  Not documented in-code per project style; this entry is the record.
 
 ---
 
