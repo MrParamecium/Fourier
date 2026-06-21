@@ -51,7 +51,9 @@ matches what's happening today. Don't reorder.
 
 ## #21 — `hydrateInteractiveDemos` family map
 
-Single dispatcher, 1,242 lines, 18 distinct demo handlers.
+Single dispatcher, 1,242 lines, 19 distinct demo handlers (corrected from the
+original 18-count during PR #21 implementation — the missing arm was
+`isSinusoidDemo`, see Derived list below).
 
 **Module-scope dependencies** (must be passed in or imported by the split files):
 
@@ -64,7 +66,7 @@ Single dispatcher, 1,242 lines, 18 distinct demo handlers.
 - `getDemoControlValue` — L2931
 - `escapeHtml`, `decodeInlineMarkdownFragment`, `formatInteractiveDemoNumber` — generic helpers
 
-**Family branches** (15 explicit + 3 derived = 18 handlers):
+**Family branches** (15 explicit + 4 derived = 19 handlers):
 
 Explicit `family === '...'`:
 1. `convolution_lab`
@@ -87,6 +89,7 @@ Derived (matched on controls + text, not on `family`):
 16. `isComplexPlaneDemo` — controls `slider_a`+`slider_b`, react_canvas framework, text matches `/complex number|rectangular|polar|complex plane/i`, NOT `/sinusoid|same frequency|cosine wave|phasor sum/i`.
 17. `isPhasorDemo` — same control shape but the negation of `isComplexPlaneDemo`'s text test.
 18. `isOppositeRotationDemo` — `family === 'opposite_rotations'` (overlaps with the explicit list — treat as a refinement).
+19. `isSinusoidDemo` — `demo.demo_type === 'sinusoid_phasor_projection'` OR (`demo.type === 'interactive_demo'` AND text matches `/sinusoid/i` AND `/phasor|amplitude|frequency|phase/i`). Dispatcher arm at L3986 of pre-#21 app.js. Missing from the original 18-handler inventory; corrected during the PR #21 implementation.
 
 **Suggested split:**
 
