@@ -108,6 +108,47 @@ const sharedViews = [
         await openSubtopic(page, SUBTOPIC);
         await page.waitForTimeout(800); // let KaTeX settle
     } },
+    // The next 3 views (added with Phase 3 PR #21 baseline refresh per
+    // docs/phase3_plan.md §5.6) target the surfaces PR #22 directly governs.
+    // They build on view 06's already-loaded lesson — no need to renavigate.
+    { name: '07-lesson-pager-states', setup: async (page) => {
+        // Force the pager to its last-subsection state so the next-button
+        // disabled treatment is visible. We do this by reaching the
+        // sentinel "is at end" state without leaving the lesson:
+        // hover the next-button to surface its hover treatment.
+        await page.evaluate(() => {
+            const nextBtn = document.querySelector('#learnKpNextBtn, #learnFocusNextBtn');
+            if (nextBtn) nextBtn.scrollIntoView({ block: 'center' });
+        });
+        const nextBtn = page.locator('#learnKpNextBtn, #learnFocusNextBtn').first();
+        await nextBtn.hover({ force: true }).catch(() => {});
+        await page.waitForTimeout(300);
+    } },
+    { name: '08-lesson-lecture-toolbar', setup: async (page) => {
+        // qa-wide focuses the QA column to ~2/3 width and is one of the
+        // most-overridden states across both #22's runtime inject*Styles
+        // sites and #20's banner cluster.
+        await page.evaluate(() => {
+            const shell = document.getElementById('learnBody');
+            if (shell) shell.dataset.panelFocus = 'qa-wide';
+            window.dispatchEvent(new Event('resize'));
+        });
+        await page.waitForTimeout(400);
+    } },
+    { name: '09-lesson-qa-column', setup: async (page) => {
+        // qa-full collapses lecture entirely and exposes the followup-bar
+        // glass panel + chat composer chrome. Also exercise :focus-within
+        // on the followup bar so PR #22's hover/focus rules are captured.
+        await page.evaluate(() => {
+            const shell = document.getElementById('learnBody');
+            if (shell) shell.dataset.panelFocus = 'qa-full';
+            window.dispatchEvent(new Event('resize'));
+        });
+        await page.waitForTimeout(300);
+        await page.locator('#learnFollowupBar input, #learnFollowupBar textarea').first()
+            .focus({ timeout: 2000 }).catch(() => {});
+        await page.waitForTimeout(300);
+    } },
 ];
 
 // ---------- shared helpers (mirror smoke.js — kept independent on purpose) ----------
