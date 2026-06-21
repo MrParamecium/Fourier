@@ -2221,6 +2221,22 @@ function hydrateChapterOneDemo(node, demo) {
   render();
 }
 
+const INTERACTIVE_DEMO_FAMILY_RENDERERS = {
+  signal_transform: renderSignalTransformFallback,
+  energy_power: renderEnergyPowerFallback,
+  sampling_quantization: renderSamplingQuantizationFallback,
+  system_property: renderSystemPropertyFallback,
+  exponential_envelope: renderExponentialEnvelopeFallback,
+  matrix_locator: renderMatrixLocatorFallback,
+  parameter_response: renderParameterResponseFallback,
+  pointwise_multiplication: renderPointwiseMultiplicationFallback,
+  convolution_lab: renderConvolutionLabDemo,
+  pole_zero_roc_lab: renderPoleZeroRocLabDemo,
+  frequency_response_lab: renderFrequencyResponseLabDemo,
+  transform_rule_lab: renderTransformRuleLabDemo,
+  sequence_system_lab: renderSequenceSystemLabDemo,
+};
+
 function hydrateInteractiveDemos(root) {
   if (!root) return;
   const seenDemoKeys = new Set();
@@ -2289,68 +2305,9 @@ function hydrateInteractiveDemos(root) {
       return;
     }
 
-    if (family === 'signal_transform') {
-      renderSignalTransformFallback(node, demo);
-      return;
-    }
-
-    if (family === 'energy_power') {
-      renderEnergyPowerFallback(node, demo);
-      return;
-    }
-
-    if (family === 'sampling_quantization') {
-      renderSamplingQuantizationFallback(node, demo);
-      return;
-    }
-
-    if (family === 'system_property') {
-      renderSystemPropertyFallback(node, demo);
-      return;
-    }
-
-    if (family === 'exponential_envelope') {
-      renderExponentialEnvelopeFallback(node, demo);
-      return;
-    }
-
-    if (family === 'matrix_locator') {
-      renderMatrixLocatorFallback(node, demo);
-      return;
-    }
-
-    if (family === 'parameter_response') {
-      renderParameterResponseFallback(node, demo);
-      return;
-    }
-
-    if (family === 'pointwise_multiplication') {
-      renderPointwiseMultiplicationFallback(node, demo);
-      return;
-    }
-
-    if (family === 'convolution_lab') {
-      renderConvolutionLabDemo(node, demo);
-      return;
-    }
-
-    if (family === 'pole_zero_roc_lab') {
-      renderPoleZeroRocLabDemo(node, demo);
-      return;
-    }
-
-    if (family === 'frequency_response_lab') {
-      renderFrequencyResponseLabDemo(node, demo);
-      return;
-    }
-
-    if (family === 'transform_rule_lab') {
-      renderTransformRuleLabDemo(node, demo);
-      return;
-    }
-
-    if (family === 'sequence_system_lab') {
-      renderSequenceSystemLabDemo(node, demo);
+    const familyRenderer = INTERACTIVE_DEMO_FAMILY_RENDERERS[family];
+    if (familyRenderer) {
+      familyRenderer(node, demo);
       return;
     }
 

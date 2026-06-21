@@ -104,6 +104,53 @@ CSS extraction is byte-fidelity verified and visual-diff confirmed.
 
 ---
 
+## 2b. PR #23 (interactive-demos family lookup) follow-ups
+
+PR #23 (deferred 1b) shipped — the 13 `if (family === 'X')` arms in
+`hydrateInteractiveDemos` collapsed into `INTERACTIVE_DEMO_FAMILY_RENDERERS`.
+Net `app/app.js` −43 lines. Self-review (4-lens adversarial) approved.
+
+**Harness coverage gap surfaced during review — Sev-1 against future
+refactors of this code path, not this PR.** The 9-view visual-diff harness
+opens exactly one lesson (1.1-1 Signal Energy), whose only
+`kc-interactive-demo` has `demo_type: energy_cross_term`, which is in
+`CHAPTER_ONE_DEMO_TYPES`. The dispatcher short-circuits at the
+`if (isChapterOneDemo)` branch BEFORE the new lookup is reached. None of
+the 13 family keys are exercised by views 06/07/08/09. A typo in any key
+(e.g., `pole_zero_roc_lab` → `pole_zero_ROC_lab`) or a renderer-name
+mismatch would silently fall through to `renderBriefDemoFallback` and
+visual-diff would still report 0.000% green. PR #23 was confirmed safe
+by hand-walking all 13 mappings against `app/interactive-demos/*.js`
+function declarations during review; future PRs touching this code MUST
+NOT rely on visual-diff alone.
+
+**Entry point for harness expansion:** add a 10th view that opens a
+Chapter-2+ subtopic whose primary demo's `family` is one of the 13
+table keys (e.g., a `convolution_lab` or `pole_zero_roc_lab` subtopic
+with a cached lesson). Then this code path becomes regression-covered.
+The user has explicitly scheduled visual-diff harness expansion as the
+next session focus.
+
+Secondary nits (Sev-3, not in this PR):
+- Optional `Object.create(null)` for the table (prototype-pollution
+  hardening). Today safe — `inferInteractiveDemoFamily` returns a closed
+  enum of literal strings, none collide with `Object.prototype`.
+- Optional registry module extraction (`app/interactive-demos/registry.js`).
+  Defers an eventual interactive-demos subsystem extraction (Phase 2 #18
+  candidate per §5).
+- The 6 non-table family values that legitimately miss the lookup are
+  fully handled elsewhere in the dispatcher — coverage is complete:
+  - `opposite_rotations` — `isOppositeRotationDemo` branch ABOVE the lookup.
+  - `complex_plane` — `isComplexPlaneDemo` branch ABOVE.
+  - `sinusoid` — `isSinusoidDemo` branch ABOVE.
+  - `matrix_conformability` — final unconditional
+    `renderMatrixConformabilityDemo` after the `!isMatrixDemo` check.
+  - `algebra_brief` and `brief` — `renderBriefDemoFallback` via the
+    `!isMatrixDemo` branch.
+  Not documented in-code per project style; this entry is the record.
+
+---
+
 ## 3. PR #20a/b/c Pass 2 follow-ups (the bulk of the deferred work)
 
 The original plan §6 target for PR #20 was **~5,600 net lines deleted**
