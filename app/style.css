@@ -38771,26 +38771,6 @@ body {
   margin: 2px 0 8px !important;
 }
 
-#mistakeNotebookView .mistake-draft-actions {
-  display: inline-flex !important;
-  gap: 8px !important;
-  align-items: center !important;
-}
-
-#mistakeNotebookView .mistake-draft-actions .mistake-mini-btn {
-  min-height: 32px !important;
-  height: 32px !important;
-  padding: 0 11px !important;
-  border-radius: 12px !important;
-  font-size: 12px !important;
-}
-
-#mistakeNotebookView .mistake-draft-actions .mistake-mini-btn:disabled {
-  opacity: 0.45 !important;
-  cursor: not-allowed !important;
-  transform: none !important;
-}
-
 #mistakeNotebookView .mistake-draft-notes-output {
   min-height: 156px !important;
   padding: 14px 16px !important;
