@@ -2,8 +2,9 @@
 // Loaded as a classic <script> BEFORE app.js. Reaches into the shared script-global lexical env.
 //
 // External globals used at call time:
-//   - escapeHtml                                          (app.js)
-//   - window.typesetMath, window.ResizeObserver           (CDN / browser)
+//   - escapeHtml                                                            (app.js)
+//   - applyCanvasDpr, drawCanvasArrow, coalesceFrames                       (helpers.js — Phase 3 Step F)
+//   - window.typesetMath, window.ResizeObserver                             (CDN / browser)
 //
 // Public surface (free-name lookup from the dispatcher in app.js):
 //   - renderSinusoidPhasorDemo(node, demo)
@@ -75,33 +76,13 @@ function renderSinusoidPhasorDemo(node, demo) {
         : state.pausedAt;
       const sizeCanvas = (canvas, ctx, fallbackHeight) => {
         if (!canvas || !ctx) return { width: 0, height: 0 };
-        const dpr = Math.max(window.devicePixelRatio || 1, 1);
         const rect = canvas.getBoundingClientRect();
         const parentWidth = canvas.parentElement ? canvas.parentElement.clientWidth : 0;
         const width = Math.max(Math.floor(rect.width || parentWidth || 0), 180);
-        const height = fallbackHeight;
-        canvas.width = Math.floor(width * dpr);
-        canvas.height = Math.floor(height * dpr);
-        canvas.style.width = '100%';
-        canvas.style.height = `${height}px`;
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        return { width, height };
+        return applyCanvasDpr(canvas, ctx, width, fallbackHeight);
       };
       const drawArrow = (ctx, x1, y1, x2, y2, color, width = 3) => {
-        const angle = Math.atan2(y2 - y1, x2 - x1);
-        ctx.strokeStyle = color;
-        ctx.fillStyle = color;
-        ctx.lineWidth = width;
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(x2, y2);
-        ctx.lineTo(x2 - 10 * Math.cos(angle - Math.PI / 6), y2 - 10 * Math.sin(angle - Math.PI / 6));
-        ctx.lineTo(x2 - 10 * Math.cos(angle + Math.PI / 6), y2 - 10 * Math.sin(angle + Math.PI / 6));
-        ctx.closePath();
-        ctx.fill();
+        drawCanvasArrow(ctx, x1, y1, x2, y2, color, { width });
       };
       const drawGrid = (ctx, width, height, left, right, top, bottom, midY) => {
         ctx.strokeStyle = '#e2e8f0';
@@ -268,14 +249,7 @@ function renderSinusoidPhasorDemo(node, demo) {
           playBtn.textContent = 'Pause';
         }
       });
-      let pendingFrame = 0;
-      const rerender = () => {
-        if (pendingFrame) return;
-        pendingFrame = window.requestAnimationFrame(() => {
-          pendingFrame = 0;
-          drawDemo();
-        });
-      };
+      const rerender = coalesceFrames(drawDemo);
       if (window.ResizeObserver && shell) {
         const observer = new ResizeObserver(rerender);
         observer.observe(shell);

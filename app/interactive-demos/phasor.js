@@ -2,8 +2,9 @@
 // Loaded as a classic <script> BEFORE app.js. Reaches into the shared script-global lexical env.
 //
 // External globals used at call time:
-//   - escapeHtml, decodeInlineMarkdownFragment            (app.js)
-//   - window.typesetMath, window.ResizeObserver           (CDN / browser)
+//   - escapeHtml, decodeInlineMarkdownFragment                              (app.js)
+//   - applyCanvasDpr, drawCanvasArrow, coalesceFrames                       (helpers.js — Phase 3 Step F)
+//   - window.typesetMath, window.ResizeObserver                             (CDN / browser)
 //
 // Public surface (free-name lookup from the dispatcher in app.js):
 //   - renderPhasorDemo(node, demo, demoSpec)
@@ -80,7 +81,6 @@ function renderPhasorDemo(node, demo, demoSpec) {
 
       const sizeCanvas = (canvas, ctx, height) => {
         if (!canvas || !ctx) return { width: 0, height: 0 };
-        const dpr = Math.max(window.devicePixelRatio || 1, 1);
         const parentEl = canvas.parentElement;
         const parentStyle = parentEl ? window.getComputedStyle(parentEl) : null;
         const horizontalPadding = parentStyle
@@ -88,32 +88,11 @@ function renderPhasorDemo(node, demo, demoSpec) {
           : 0;
         const availableWidth = Math.floor((parentEl ? parentEl.clientWidth : 0) - horizontalPadding);
         const width = Math.max(availableWidth || 0, 160);
-        canvas.width = Math.floor(width * dpr);
-        canvas.height = Math.floor(height * dpr);
-        canvas.style.width = '100%';
-        canvas.style.height = `${height}px`;
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        return { width, height };
+        return applyCanvasDpr(canvas, ctx, width, height);
       };
 
       const drawArrow = (ctx, x1, y1, x2, y2, color) => {
-        const headLength = 10;
-        const dx = x2 - x1;
-        const dy = y2 - y1;
-        const angle = Math.atan2(dy, dx);
-        ctx.strokeStyle = color;
-        ctx.fillStyle = color;
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(x2, y2);
-        ctx.lineTo(x2 - headLength * Math.cos(angle - Math.PI / 6), y2 - headLength * Math.sin(angle - Math.PI / 6));
-        ctx.lineTo(x2 - headLength * Math.cos(angle + Math.PI / 6), y2 - headLength * Math.sin(angle + Math.PI / 6));
-        ctx.closePath();
-        ctx.fill();
+        drawCanvasArrow(ctx, x1, y1, x2, y2, color);
       };
 
       const drawPlane = () => {
@@ -304,14 +283,7 @@ function renderPhasorDemo(node, demo, demoSpec) {
           controlsEl.appendChild(btn);
         });
 
-      let pendingPhasorFrame = 0;
-      const rerender = () => {
-        if (pendingPhasorFrame) return;
-        pendingPhasorFrame = window.requestAnimationFrame(() => {
-          pendingPhasorFrame = 0;
-          renderPhasor();
-        });
-      };
+      const rerender = coalesceFrames(renderPhasor);
       if (window.ResizeObserver && shellEl) {
         const observer = new ResizeObserver(rerender);
         observer.observe(shellEl);

@@ -2,8 +2,9 @@
 // Loaded as a classic <script> BEFORE app.js. Reaches into the shared script-global lexical env.
 //
 // External globals used at call time:
-//   - escapeHtml, decodeInlineMarkdownFragment            (app.js)
-//   - window.typesetMath, window.ResizeObserver           (CDN / browser)
+//   - escapeHtml, decodeInlineMarkdownFragment                              (app.js)
+//   - applyCanvasDpr, drawCanvasArrow, coalesceFrames                       (helpers.js — Phase 3 Step F)
+//   - window.typesetMath, window.ResizeObserver                             (CDN / browser)
 //
 // Public surface (free-name lookup from the dispatcher in app.js):
 //   - renderComplexPlaneDemo(node, demo, demoControls)
@@ -76,38 +77,14 @@ function renderComplexPlaneDemo(node, demo, demoControls) {
 
       const sizeCanvas = () => {
         if (!canvas || !ctx) return { width: 0, height: 0 };
-        const dpr = Math.max(window.devicePixelRatio || 1, 1);
         const rect = canvas.getBoundingClientRect();
         const width = Math.max(Math.floor(rect.width || 0), 320);
         const height = Math.max(300, Math.min(430, Math.floor(width * 0.58)));
-        canvas.width = Math.floor(width * dpr);
-        canvas.height = Math.floor(height * dpr);
-        canvas.style.width = '100%';
-        canvas.style.height = `${height}px`;
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        return { width, height };
+        return applyCanvasDpr(canvas, ctx, width, height);
       };
 
       const drawArrow = (x1, y1, x2, y2, color, width = 3, dashed = false) => {
-        const angle = Math.atan2(y2 - y1, x2 - x1);
-        ctx.save();
-        ctx.strokeStyle = color;
-        ctx.fillStyle = color;
-        ctx.lineWidth = width;
-        if (dashed) ctx.setLineDash([7, 6]);
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
-        ctx.stroke();
-        if (!dashed) {
-          ctx.beginPath();
-          ctx.moveTo(x2, y2);
-          ctx.lineTo(x2 - 11 * Math.cos(angle - Math.PI / 6), y2 - 11 * Math.sin(angle - Math.PI / 6));
-          ctx.lineTo(x2 - 11 * Math.cos(angle + Math.PI / 6), y2 - 11 * Math.sin(angle + Math.PI / 6));
-          ctx.closePath();
-          ctx.fill();
-        }
-        ctx.restore();
+        drawCanvasArrow(ctx, x1, y1, x2, y2, color, { width, dashed, headLength: 11 });
       };
 
       const drawComplexPlane = () => {
@@ -272,14 +249,7 @@ function renderComplexPlaneDemo(node, demo, demoControls) {
           controlsEl.appendChild(btn);
         });
 
-      let pendingComplexFrame = 0;
-      const rerender = () => {
-        if (pendingComplexFrame) return;
-        pendingComplexFrame = window.requestAnimationFrame(() => {
-          pendingComplexFrame = 0;
-          renderComplexDemo();
-        });
-      };
+      const rerender = coalesceFrames(renderComplexDemo);
       if (window.ResizeObserver && shellEl) {
         const observer = new ResizeObserver(rerender);
         observer.observe(shellEl);
