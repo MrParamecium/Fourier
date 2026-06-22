@@ -536,7 +536,11 @@ async function collectLessonFamilies(page, { earlyExitOn } = {}) {
             ).then(() => true).catch(() => false);
             if (!changed) break;
         }
-        await page.waitForTimeout(150);
+        // Brief settle slack after the page-turn animation so the next
+        // iteration's hydration wait fires against a stable DOM. 300ms
+        // matches the pre-Phase-3.5 timing (eca09ad) — shorter values
+        // intermittently raced the convolution-lab canvas paint.
+        await page.waitForTimeout(300);
     }
     return families;
 }
@@ -563,6 +567,20 @@ async function runPageCView(page, viewName, { isFirstPageCView }) {
                 section: candidate.section,
                 title: candidate.title,
             });
+            // openSubtopic returns when content text is non-trivial, but
+            // the pager next-button state lags briefly — wait for the KP
+            // count to stabilize so collectLessonFamilies' first iteration
+            // doesn't race a single-KP transitional state and bail early.
+            await page.waitForFunction(
+                () => {
+                    const next = document.querySelector('#learnKpNextBtn');
+                    const frame = document.querySelector('#learnExplainContent .lesson-page-frame');
+                    return next && frame; // both rendered
+                },
+                null,
+                { timeout: 5000 }
+            ).catch(() => {});
+            await page.waitForTimeout(400);
             const families = await collectLessonFamilies(page, { earlyExitOn: candidate.expected });
             if (!families.has(candidate.expected)) {
                 lastErr = new Error(`expected ${candidate.expected}, got [${Array.from(families).join(',')}]`);
