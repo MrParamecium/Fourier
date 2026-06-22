@@ -13,10 +13,10 @@
 // Preserve `node._chapterOneDemoResizeObserver` — introspected by external callers.
 //
 // External free-names used at call time:
-//   - escapeHtml                                        (app.js)
-//   - inferChapterOneDemoType                           (dispatcher.js)
-//   - coalesceFrames                                    (helpers.js)
-//   - window.ResizeObserver                             (browser)
+//   - escapeHtml                                                            (app.js)
+//   - inferChapterOneDemoType, fmt                                          (dispatcher.js)
+//   - applyCanvasDpr, drawCanvasArrow, coalesceFrames                       (helpers.js)
+//   - window.ResizeObserver                                                 (browser)
 
 function hydrateChapterOneDemo(node, demo) {
   const demoType = inferChapterOneDemoType(demo);
@@ -46,27 +46,17 @@ function hydrateChapterOneDemo(node, demo) {
   const ctx = canvas && canvas.getContext ? canvas.getContext('2d') : null;
   const shellEl = node.querySelector('.chapter-demo-shell');
 
-  const fmt = (value, digits = 2) => {
-    const num = Number(value);
-    if (!Number.isFinite(num)) return '0';
-    return Number((Math.abs(num) < 1e-9 ? 0 : num).toFixed(digits)).toString();
-  };
   const setReadouts = (items) => {
     readoutsEl.innerHTML = items.map((item) => `<div class="chapter-demo-readout">${item}</div>`).join('');
   };
   const setupCanvas = (height = 260) => {
     if (!canvas || !ctx) return { width: 0, height: 0 };
-    const dpr = Math.max(window.devicePixelRatio || 1, 1);
     const width = Math.max(Math.floor(canvas.parentElement?.clientWidth || canvas.clientWidth || 0), 320);
-    canvas.width = Math.floor(width * dpr);
-    canvas.height = Math.floor(height * dpr);
-    canvas.style.width = '100%';
-    canvas.style.height = `${height}px`;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const sized = applyCanvasDpr(canvas, ctx, width, height);
     ctx.clearRect(0, 0, width, height);
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, width, height);
-    return { width, height };
+    return sized;
   };
   const drawAxis = (width, y, minT = -4, maxT = 6, pad = 42) => {
     const toX = (t) => pad + ((t - minT) / (maxT - minT)) * (width - pad * 2);
@@ -90,22 +80,7 @@ function hydrateChapterOneDemo(node, demo) {
     return toX;
   };
   const drawArrow = (x1, y1, x2, y2, color = '#2563eb', width = 3) => {
-    const angle = Math.atan2(y2 - y1, x2 - x1);
-    ctx.save();
-    ctx.strokeStyle = color;
-    ctx.fillStyle = color;
-    ctx.lineWidth = width;
-    ctx.beginPath();
-    ctx.moveTo(x1, y1);
-    ctx.lineTo(x2, y2);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(x2, y2);
-    ctx.lineTo(x2 - 10 * Math.cos(angle - Math.PI / 6), y2 - 10 * Math.sin(angle - Math.PI / 6));
-    ctx.lineTo(x2 - 10 * Math.cos(angle + Math.PI / 6), y2 - 10 * Math.sin(angle + Math.PI / 6));
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
+    drawCanvasArrow(ctx, x1, y1, x2, y2, color, { width });
   };
   const drawRoundedRect = (x, y, width, height, radius) => {
     ctx.beginPath();
