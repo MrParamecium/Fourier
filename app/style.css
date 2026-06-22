@@ -43727,22 +43727,6 @@ body {
   object-position: center center !important;
 }
 
-/* Final Mistake Notebook split: 50/50 starts as a default, then the user controls it. */
-#mistakeNotebookView .mistake-note-columns {
-  --mistake-note-left: 0.5fr;
-  --mistake-note-right: 0.5fr;
-  display: grid !important;
-  grid-template-columns:
-    minmax(220px, var(--mistake-note-left))
-    12px
-    minmax(220px, var(--mistake-note-right)) !important;
-  grid-template-rows: none !important;
-  gap: 12px !important;
-  align-items: start !important;
-  min-height: 0 !important;
-  height: auto !important;
-}
-
 #mistakeNotebookView .mistake-note-resizer {
   width: 12px !important;
   min-height: 240px !important;
@@ -44410,11 +44394,6 @@ body {
   padding: 18px 20px !important;
 }
 
-#mistakeNotebookView .mistake-notes-input,
-#mistakeNotebookView .mistake-draft-notes-output {
-  min-height: 150px !important;
-}
-
 #mistakeNotebookView .mistake-note-images {
   min-height: 46px !important;
   margin-top: 10px !important;
@@ -44422,14 +44401,6 @@ body {
 
 #mistakeNotebookView .mistake-note-image-empty {
   min-height: 46px !important;
-}
-
-@media (max-width: 980px) {
-  #mistakeNotebookView .mistake-note-columns {
-    min-height: auto !important;
-    height: auto !important;
-    grid-template-rows: auto 12px auto !important;
-  }
 }
 
 /* Mistake Notebook note cards length tune 2: a bit more room for generated notes. */
