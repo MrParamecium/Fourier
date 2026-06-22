@@ -17,6 +17,30 @@ const path = require('path');
 const MASK_CSS = `
     /* login cosmos Three.js canvas — Phase 1 #10 */
     #introWebglContainer { visibility: hidden !important; }
+    /* Phase 3.5 v2 view 19: login-view WebGL backdrop + decorative doodles
+       drift across runs (random sparkle/tilt seeds in clerk-auth.js + CSS
+       keyframes). Mask the canvas + freeze the decorative motion so the
+       Glass card chrome stays diffable. */
+    #loginWebglContainer { visibility: hidden !important; }
+    #loginView .login-card.tilt-element {
+        transform: none !important;
+        transition: none !important;
+        animation: none !important;
+    }
+    #loginView .login-doodle,
+    #loginView .login-map-card,
+    #loginView .login-scrap-note,
+    #loginView .login-practice-log,
+    #loginView .login-sticky-note,
+    #loginView .login-mini-ticket {
+        animation: none !important;
+        transition: none !important;
+    }
+    /* Phase 3.5 v2 view 23: textbook focus dialog injects raster page images.
+       Hide the image content (still keeps the Glass card chrome) so a missing
+       textbook page doesn't fail the capture. */
+    #textbookFocusDialog .textbook-focus-single-page,
+    #textbookFocusDialog .textbook-focus-scroll-page img { visibility: hidden !important; }
     /* in-flight panel transitions */
     .is-animating { transition: none !important; animation: none !important; }
     /* relative timestamps in Recent Conversations drift between runs */
@@ -61,6 +85,22 @@ async function enterGuestMode(page, base) {
     await page.click('#guestModeBtnLogin[data-bound-guest-mode="1"]', { timeout: 25000 });
     await page.click('#quizCloseBtn');
     await page.waitForSelector('#navSyllabusBtn', { timeout: 10000 });
+}
+
+// Page D bootstrap (Phase 3.5 v2): navigate to BASE and dismiss the intro
+// landing so the login Glass surface (FINAL LOGIN LIQUID GLASS L43321+) is
+// visible. Does NOT enter guest mode — clicking `#guestModeBtnLogin` would
+// transition into the workspace. After this returns the page sits on the
+// login card with the Three.js cosmos canvas masked.
+async function enterLoginView(page, base) {
+    await page.goto(base, { waitUntil: 'domcontentloaded' });
+    await page.click('#introGetStartedBtn');
+    await page.waitForSelector('#loginView:not(.hidden)', { timeout: 10000 });
+    // Wait for the bound-guest-mode attribute as proof clerk-auth.js
+    // initLoginExperience() ran — the same readiness signal enterGuestMode
+    // uses one click later. Without it, the login card buttons may still be
+    // mid-bind on slow runs.
+    await page.waitForSelector('#guestModeBtnLogin[data-bound-guest-mode="1"]', { timeout: 25000 });
 }
 
 async function ensureSyllabusOpen(page) {
@@ -226,6 +266,7 @@ module.exports = {
     MASK_CSS,
     waitForHealth,
     enterGuestMode,
+    enterLoginView,
     ensureSyllabusOpen,
     openSubtopic,
     resetHomeChromeState,

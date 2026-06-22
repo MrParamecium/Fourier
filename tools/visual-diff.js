@@ -26,6 +26,7 @@ const {
     MASK_CSS,
     waitForHealth,
     enterGuestMode,
+    enterLoginView,
     ensureSyllabusOpen,
     openSubtopic,
     resetHomeChromeState,
@@ -125,7 +126,53 @@ const COVERAGE_REPORT_PATH = path.join(TOOLS, 'visual-diff-coverage.json');
 // Re-add if a future phase touches global rules.
 //
 // Views 01-09 = Phase 3 PR #21 baseline. Views 10-18 = Phase 3.5 PR #44
-// expansion. See docs/superpowers/specs/2026-06-22-harness-expansion-design.md.
+// expansion. Views 19-25 = Phase 3.5 v2 (Glass coverage gate for Step G.3 /
+// Phase 2 #19). See docs/superpowers/specs/2026-06-22-harness-expansion-design.md
+// + docs/phase3_deferred.md §7d.8.
+
+// Pagination helper used by Phase 3.5 v2 views 21 + 22 to walk the lesson
+// pager until a sentinel selector lands in the current KP. Watches
+// `[data-lesson-page]` changes (or the sentinel itself) to gate "advance
+// complete" — runLearnPageTurn's 720ms animation lock (app.js L2474) is
+// NOT mirrored on the next-button disabled state, so successive clicks
+// within the lock silently no-op. Each iteration waits ≤2s; the outer
+// loop is capped at 25 to fail-fast on a stuck pager.
+//
+// No per-page-seen loopback guard — throttled clicks (which leave the
+// pager on the same data-lesson-page) would falsely trigger it. The 25-
+// iter cap and the `if (!clicked) break` next-button-disabled exit
+// terminate genuine end-of-pager cases.
+async function advanceLessonUntil(page, sentinelSelector) {
+    const readPage = () => page.evaluate(() => document
+        .querySelector('#learnExplainContent .lesson-page-frame')
+        ?.getAttribute('data-lesson-page') || '');
+    for (let i = 0; i < 25; i++) {
+        if (await page.$(sentinelSelector)) return;
+        const prior = await readPage();
+        const clicked = await page.evaluate(() => {
+            const btn = document.querySelector('#learnKpNextBtn:not([disabled])');
+            if (!btn) return false;
+            btn.click();
+            return true;
+        });
+        if (!clicked) break;
+        await page.waitForFunction(
+            ({ prev, sel }) => {
+                if (document.querySelector(sel)) return true;
+                const cur = document.querySelector('#learnExplainContent .lesson-page-frame')
+                    ?.getAttribute('data-lesson-page');
+                // Strict !==prev — when prev=='' (first read raced settle)
+                // an empty cur stays falsy, so the wait still times out
+                // rather than early-resolving on null-equals-anything.
+                return Boolean(cur) && cur !== prev;
+            },
+            { prev: prior, sel: sentinelSelector },
+            { timeout: 2000 },
+        ).catch(() => {});
+    }
+    await page.waitForSelector(sentinelSelector, { timeout: 3000 });
+}
+
 const sharedViews = [
     // ----- Page A (lesson-loaded guest mode) -----
     { name: '01-guest-home', page: 'A', setup: async (page) => {
@@ -310,6 +357,164 @@ const sharedViews = [
         name: '18-lesson-pole-zero-roc', page: 'C',
         setup: async (page) => runPageCView(page, '18-lesson-pole-zero-roc'),
     },
+    // ----- Phase 3.5 v2 (Glass coverage for Step G.3 / Phase 2 #19) -----
+    //
+    // The 18-view harness left 7 distinct Glass banner clusters uncovered:
+    // FINAL LOGIN LIQUID GLASS (L43321+), FINAL COLLAPSED SIDEBAR GLASS FIX
+    // (L43241+), ABSOLUTE EOF KEY TAKEAWAYS GLASS LOCK (L39295+), ABSOLUTE
+    // EOF QUICK CHECK GLASS LOCK (L39494+), TEXTBOOK FOCUS GLASS LOCK
+    // (L42981+), ANSWER WORKSPACE LIQUID GLASS (L41934+), and TRUE EOF QUICK
+    // SETUP GLASS MODAL (L40258+). Key Takeaways and Quick Check live on
+    // SEPARATE KP pages — the lesson parser at parseLessonKnowledgePoints
+    // (app.js L2179, L2200) produces a 'summary' KP (containing
+    // .learn-key-takeaways-list) followed by a 'quiz' KP (containing
+    // #testBannerCard), so each banner needs its own view + screenshot.
+    // Adding the 7 views below brings every Phase 2 #19 banner under pixel-
+    // diff so Glass + chapter-overview CSS extraction can ship without
+    // banner-by-banner hand-walking.
+
+    // ----- Page D (pre-guest login surface) -----
+    // View 19 — Page D — login card visible (intro dismissed, guest not
+    // entered). Covers FINAL LOGIN LIQUID GLASS banner at app/style.css
+    // L43321+ + .login-* tokens at L43326+. The login Three.js cosmos
+    // canvas (#loginWebglContainer) is masked via MASK_CSS so the per-run
+    // particle seed cannot drift.
+    { name: '19-login-screen', page: 'D', setup: async (page) => {
+        // initLoginExperience() may schedule a rAF/tilt setup; settle a
+        // couple frames + 200ms slack before capture.
+        await page.evaluate(() => new Promise(r =>
+            requestAnimationFrame(() => requestAnimationFrame(r))));
+        await page.waitForTimeout(200);
+        const visible = await page.evaluate(() =>
+            !document.getElementById('loginView')?.classList.contains('hidden')
+        );
+        assertOrThrow(visible, 'view 19: #loginView is still hidden after enterLoginView');
+    } },
+    // ----- Page A continued (lesson chrome class flips + lesson tail) -----
+    // View 20 — Page A — force `.app.sidebar-collapsed` + `#leftSidebar.collapsed`
+    // per setWorkspaceSidebarCollapsed (app.js L7443) so the FINAL COLLAPSED
+    // SIDEBAR GLASS FIX cluster at L43241+ is exercised. resetLessonChromeState
+    // strips view 15/16's `.chapter-overview-active*` classes so the underlying
+    // lesson layout doesn't bleed in. Reversible cleanup not required — view
+    // 21 is the next Page A view and does its own state reset.
+    { name: '20-sidebar-collapsed', page: 'A', setup: async (page) => {
+        await resetLessonChromeState(page);
+        await page.evaluate(() => {
+            document.querySelector('.app')?.classList.add('sidebar-collapsed');
+            document.getElementById('leftSidebar')?.classList.add('collapsed');
+        });
+        await page.evaluate(() => new Promise(r =>
+            requestAnimationFrame(() => requestAnimationFrame(r))));
+        await page.waitForTimeout(200);
+    } },
+    // View 21 — Page A — paginate to the SUMMARY KP page (where
+    // parseLessonKnowledgePoints at app.js L2179-2192 emits a {type:
+    // 'summary', title: '📌 Key Takeaways'} block containing the bullet
+    // list that decorateLectureContent later promotes to
+    // `.learn-key-takeaways-list`). Covers ABSOLUTE EOF KEY TAKEAWAYS
+    // GLASS LOCK at style.css L39295+. View 20 left the sidebar collapsed;
+    // reset before pagination so the lesson chrome lines up with the views
+    // 06-09 baselines.
+    { name: '21-lesson-key-takeaways', page: 'A', setup: async (page) => {
+        await resetLessonChromeState(page);
+        await page.evaluate(() => {
+            document.querySelector('.app')?.classList.remove('sidebar-collapsed');
+            document.getElementById('leftSidebar')?.classList.remove('collapsed');
+        });
+        await advanceLessonUntil(page, '.learn-key-takeaways-list');
+    } },
+    // View 22 — Page A — continue paginating from view 21 (which left the
+    // pager on the summary KP) to the FINAL "quiz" KP where
+    // buildLessonTestBannerHtml emits `#testBannerCard`. Covers ABSOLUTE
+    // EOF QUICK CHECK GLASS LOCK at style.css L39494+. The Quick Check
+    // banner is rendered with inline `margin-top:40px` so end-aligned
+    // scrollIntoView lifts the full banner into the 800px viewport.
+    { name: '22-lesson-quick-check', page: 'A', setup: async (page) => {
+        await advanceLessonUntil(page, '#testBannerCard');
+        await page.evaluate(() => {
+            document.getElementById('testBannerCard')?.scrollIntoView({
+                block: 'end', behavior: 'instant',
+            });
+        });
+    } },
+    // View 23 — Page A — show `#textbookFocusModal` + add body class
+    // `textbook-focus-active`. The TEXTBOOK FOCUS GLASS LOCK cluster at
+    // style.css L42981+ uses `#textbookFocusModal#textbookFocusModal`
+    // doubled-ID selectors gated by the modal's `:not(.hidden)` state, not
+    // the body class — the body class is only needed by L3110-3111 to hide
+    // the floating learn-chat-fab. Both are set so the captured frame
+    // mirrors the production state. §1.1-1 has no `#learnBookOverlay`
+    // images registered, so openTextbookFocusMode (app.js L3293) can't run;
+    // inject a single 1×1 placeholder so the dialog's scroll body isn't
+    // empty (MASK_CSS hides the raster).
+    { name: '23-textbook-focus', page: 'A', setup: async (page) => {
+        await page.evaluate(() => {
+            const modal = document.getElementById('textbookFocusModal');
+            const content = document.getElementById('textbookFocusContent');
+            const indicator = document.getElementById('textbookFocusPageIndicator');
+            if (!modal || !content) return;
+            document.body.classList.add('textbook-focus-active');
+            modal.classList.remove('hidden');
+            // 1×1 transparent PNG keeps the <img> a valid resource (no broken-
+            // image glyph) while MASK_CSS hides the rendered pixels.
+            const placeholder = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+P+/HgAFBAJ/wlseKgAAAABJRU5ErkJggg==';
+            content.innerHTML = `
+                <div class="textbook-focus-scroll">
+                    <div class="textbook-focus-scroll-page">
+                        <img class="textbook-focus-single-page" src="${placeholder}" alt="mock page">
+                    </div>
+                </div>
+            `;
+            if (indicator) indicator.textContent = '1 / 1';
+        });
+    } },
+    // ----- Page B continued (Home Ask overlays) -----
+    // View 24 — Page B — show `#answerScreen` (class `.answer hidden`) with
+    // stubbed `#answerContent` so the ANSWER WORKSPACE LIQUID GLASS cluster
+    // at L41934+ is exercised without making an LLM call. Mirrors showAnswer
+    // (app.js L6080) including the topbar.classList.remove('hidden') flip
+    // so the captured frame matches the production Glass surface (topbar
+    // sits above the answer panel in real use). destroyLoginScene() is
+    // skipped because Page B never entered the login flow. The previous
+    // Page B view (14-feedback-board) left #feedbackView visible — close
+    // it first along with the other sibling panels showAnswer also hides.
+    { name: '24-answer-workspace', page: 'B', setup: async (page) => {
+        await page.evaluate(() => {
+            document.getElementById('feedbackView')?.classList.add('hidden');
+            document.getElementById('preferenceView')?.classList.add('hidden');
+            document.getElementById('courseTrackerView')?.classList.add('hidden');
+            document.getElementById('mistakeNotebookView')?.classList.add('hidden');
+            document.getElementById('settingsView')?.classList.add('hidden');
+            document.getElementById('learnView')?.classList.add('hidden');
+            document.getElementById('welcomeScreen')?.classList.add('hidden');
+            const topbar = document.getElementById('topbar');
+            topbar?.classList.remove('hidden');
+            const ans = document.getElementById('answerScreen');
+            const content = document.getElementById('answerContent');
+            if (content) {
+                content.innerHTML = `
+                    <div class="kc-summary"><p>Phase 3.5 v2 harness placeholder.</p>
+                    <p>Glass workspace pixel-diff target.</p></div>
+                `;
+            }
+            ans?.classList.remove('hidden');
+        });
+    } },
+    // View 25 — Page B — force `#quizOverlay` to display:flex per
+    // index.html L1388 (inline style="display:none"). Covers TRUE EOF
+    // QUICK SETUP GLASS MODAL at L40258+. The chrome (card, title, backdrop
+    // blur) is captured; the per-step option-chip descendants rendered by
+    // renderQuizStep (app.js L271) are NOT — see docs/phase3_deferred.md
+    // §7d.12 for the deferred follow-up. Previous view 24 left
+    // #answerScreen visible — the overlay's full-viewport backdrop covers
+    // it so cascade noise from beneath is not a concern.
+    { name: '25-quick-setup-modal', page: 'B', setup: async (page) => {
+        await page.evaluate(() => {
+            const overlay = document.getElementById('quizOverlay');
+            if (overlay) overlay.style.display = 'flex';
+        });
+        await page.waitForSelector('#quizOverlay', { timeout: 3000, state: 'visible' });
+    } },
 ];
 
 // ---------- helpers (visual-diff-specific) ----------
@@ -681,31 +886,37 @@ let cachePresent = new Set();
         }, { css: MASK_CSS });
 
         // Lazy per-page bootstraps. Each pageKey is bootstrapped on first
-        // request and reused for subsequent views with the same key. The
-        // three keys all run the same factory today; keeping them as a Set
-        // (instead of distinct factory functions) flags that any divergence
-        // would need explicit per-key branching rather than silent drift.
-        const VALID_PAGE_KEYS = new Set(['A', 'B', 'C']);
-        const bootstrapPage = async () => {
+        // request and reused for subsequent views with the same key. A/B/C
+        // bootstrap into guest mode; D stops at the login surface (no guest
+        // entry) so the FINAL LOGIN LIQUID GLASS cluster can be captured.
+        // Adding a fourth key here requires a matching branch below — silent
+        // fall-through would re-enter guest mode and never reach the new
+        // surface.
+        const VALID_PAGE_KEYS = new Set(['A', 'B', 'C', 'D']);
+        const bootstrapPage = async (key) => {
             const p = await context.newPage();
-            await enterGuestMode(p, BASE);
+            if (key === 'D') {
+                await enterLoginView(p, BASE);
+            } else {
+                await enterGuestMode(p, BASE);
+            }
             return p;
         };
         const pageMap = new Map();
         const getPage = async (key) => {
             if (pageMap.has(key)) return pageMap.get(key);
             if (!VALID_PAGE_KEYS.has(key)) throw new Error(`unknown page key "${key}"`);
-            const p = await bootstrapPage();
+            const p = await bootstrapPage(key);
             pageMap.set(key, p);
             return p;
         };
 
-        // Pre-warm all three pages concurrently — each enterGuestMode is
-        // ~5s, so parallelizing saves ~10s/run. Subsequent getPage() calls
-        // inside the view loop hit the Map cache as no-op reads. If this
-        // ever surfaces a bridge race (parallel /api/section + /api/ask
-        // serialization), revert this Promise.all to a sequential pair
-        // and add a // TODO: parallel bootstrap deferred — <reason>.
+        // Pre-warm all four pages concurrently — each enterGuestMode (and
+        // enterLoginView) is ~5s, so parallelizing saves ~15s/run. Subsequent
+        // getPage() calls inside the view loop hit the Map cache as no-op
+        // reads. If this ever surfaces a bridge race (parallel /api/section
+        // + /api/ask serialization), revert this Promise.all to a sequential
+        // pair and add a // TODO: parallel bootstrap deferred — <reason>.
         await Promise.all(Array.from(VALID_PAGE_KEYS).map((k) => getPage(k)));
 
         for (const view of sharedViews) {
