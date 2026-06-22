@@ -643,12 +643,10 @@ async function collectLessonFamilies(page) {
         fs.appendFileSync(REPORT_PATH, coverageLines.join('\n') + '\n');
 
         // Persist machine-readable coverage so a future regression run that
-        // picks a different candidate is visible in `git diff`. Use ISO
-        // timestamp — the spec's "static" placeholder was a Workflow-context
-        // artifact; in a Node CLI runner an ISO timestamp is fine and helps
-        // post-hoc debugging.
+        // picks a different candidate is visible in `git diff`. No timestamp:
+        // re-running --check shouldn't dirty the working tree. The audit
+        // value is in entries (sectionId + asserted family).
         const coverage = {
-            generatedAt: new Date().toISOString(),
             mode: MODE,
             entries: global.__pageCResults || [],
         };
