@@ -188,6 +188,180 @@ const sharedViews = [
             .focus({ timeout: 2000 }).catch(() => {});
         await page.waitForTimeout(300);
     } },
+    // View 10 — Page B — focuses #userInput inside #searchBox.home-ask-composer
+    // so the :focus-within cascade fires on the composer (10 #20c top-4 sites).
+    // #searchBox itself is a <div> and not focusable — focusing the inner
+    // textarea is what triggers :focus-within.
+    { name: '10-home-ask-focused', page: 'B', setup: async (page) => {
+        // Close any feature popovers and reset menu state.
+        await page.evaluate(() => {
+            document.querySelectorAll('.feature-close-btn').forEach(b => {
+                if (b.offsetParent !== null) b.click();
+            });
+            document.getElementById('homeModeMenu')?.classList.remove('show');
+        });
+        await page.focus('#userInput');
+        const focused = await page.evaluate(() =>
+            !!document.querySelector('#searchBox.home-ask-composer')?.matches(':focus-within')
+        );
+        assertOrThrow(focused, 'view 10: #searchBox.home-ask-composer does not match :focus-within after focusing #userInput');
+        await page.waitForTimeout(150);
+    } },
+    // View 11 — Page B — forces #homeModeMenu.home-mode-menu.show via
+    // classList.add (bypasses #homeModeToggleBtn click handler so a stray
+    // document.click cannot auto-close the menu mid-screenshot). The
+    // MASK_CSS .home-mode-menu.show transition guard ensures we don't
+    // capture mid-transition.
+    { name: '11-home-mode-menu-open', page: 'B', setup: async (page) => {
+        await page.evaluate(() => {
+            // Reset composer focus from previous view; otherwise the focused
+            // textarea cursor leaks into this capture.
+            document.activeElement?.blur?.();
+            const menu = document.getElementById('homeModeMenu');
+            const toggle = document.getElementById('homeModeToggleBtn');
+            menu?.classList.add('show');
+            toggle?.setAttribute('aria-expanded', 'true');
+        });
+        const open = await page.evaluate(() =>
+            document.getElementById('homeModeMenu')?.classList.contains('show')
+        );
+        assertOrThrow(open, 'view 11: #homeModeMenu does not have .show class after forcing');
+        await page.waitForTimeout(200);
+    } },
+    // View 12 — Page B — preference profile resting state.
+    { name: '12-preference-page', page: 'B', setup: async (page) => {
+        await page.evaluate(() => {
+            document.getElementById('homeModeMenu')?.classList.remove('show');
+        });
+        await page.click('#navPreferenceBtn');
+        await page.waitForSelector('#preferenceView:not(.hidden)', { timeout: 5000 });
+        // Wait for the markdown preview to render at least one signal block.
+        await page.waitForSelector('#preferenceProfilePreview', { timeout: 5000 });
+        await page.waitForTimeout(300);
+    } },
+    // View 13 — Page B — course tracker resting state.
+    { name: '13-course-tracker', page: 'B', setup: async (page) => {
+        await page.click('#navCourseTrackerBtn');
+        await page.waitForSelector('#courseTrackerView:not(.hidden)', { timeout: 5000 });
+        // Tracker timeline renders synchronously from COURSE_SCHEDULE — wait
+        // for at least one .course-timeline-item article (the body is a div,
+        // not a <table>, so we walk children rather than `tr`).
+        await page.waitForFunction(
+            () => document.querySelectorAll('#courseTrackerTableBody .course-timeline-item').length > 0,
+            { timeout: 5000 }
+        );
+        await page.waitForTimeout(200);
+    } },
+    // View 14 — Page B — feedback board resting state. loadFeedbackBoard()
+    // is async; wait until the "Loading suggestions..." placeholder is gone.
+    { name: '14-feedback-board', page: 'B', setup: async (page) => {
+        await page.click('#navFeedbackBtn');
+        await page.waitForSelector('#feedbackView:not(.hidden)', { timeout: 5000 });
+        await page.waitForFunction(() => {
+            const v = document.getElementById('feedbackView');
+            if (!v || v.classList.contains('hidden')) return false;
+            return !v.textContent.includes('Loading suggestions');
+        }, { timeout: 10000 });
+        await page.waitForTimeout(300);
+    } },
+    // View 15 — Page A — forces learnBody.classList.add('chapter-overview-active')
+    // to flip the `:not(.chapter-overview-active)` negation that 30+ #20a rules
+    // toggle against. Runs after view 09 (qa-full state) — uses
+    // resetLessonChromeState to recover.
+    { name: '15-lesson-chapter-overview', page: 'A', setup: async (page) => {
+        await resetLessonChromeState(page);
+        await page.evaluate(() => {
+            document.getElementById('learnBody')?.classList.add('chapter-overview-active');
+            if (typeof window.__ftutorRefreshPager === 'function') window.__ftutorRefreshPager();
+        });
+        await page.waitForTimeout(300);
+    } },
+    // View 16 — Page A — forces learnBody.classList.add('chapter-overview-split-active')
+    // — companion to view 15, exercises the split-active class negations.
+    // resetLessonChromeState removes chapter-overview-active from view 15
+    // before adding split-active so the captures stay distinct.
+    { name: '16-lesson-chapter-overview-split', page: 'A', setup: async (page) => {
+        await resetLessonChromeState(page);
+        await page.evaluate(() => {
+            document.getElementById('learnBody')?.classList.add('chapter-overview-split-active');
+            if (typeof window.__ftutorRefreshPager === 'function') window.__ftutorRefreshPager();
+        });
+        await page.waitForTimeout(300);
+    } },
+    // View 17 — Page C — Chapter 3 §3.8-1 with hard-asserted family routing
+    // to convolution_lab. Tries candidates in PAGE_C_VIEWS[0].candidates
+    // in order; on success the chosen section ID + asserted family are
+    // written to tools/visual-diff-coverage.json + the dispatcher-coverage
+    // report block. Page C bootstrap (enterGuestMode) already ran — for
+    // subsequent candidates we re-enter via clearGuestSessionAndReenter.
+    { name: '17-lesson-convolution', page: 'C', setup: async (page) => {
+        const view = PAGE_C_VIEWS.find(v => v.viewName === '17-lesson-convolution');
+        assertOrThrow(view, 'view 17 missing from PAGE_C_VIEWS');
+        let lastErr;
+        let firstAttempt = true;
+        for (const candidate of view.candidates) {
+            if (!resolveLessonCachePath(path.resolve(__dirname, '..'), candidate.sectionId)) {
+                continue;
+            }
+            try {
+                if (!firstAttempt) {
+                    // Re-enter guest mode cleanly between candidates.
+                    await clearGuestSessionAndReenter(page);
+                }
+                firstAttempt = false;
+                await openSubtopic(page, {
+                    chapter: candidate.chapter,
+                    section: candidate.section,
+                    title: candidate.title,
+                });
+                const families = await collectLessonFamilies(page);
+                if (!families.has(candidate.expected)) {
+                    lastErr = new Error(`expected ${candidate.expected}, got [${Array.from(families).join(',')}]`);
+                    continue;
+                }
+                global.__pageCResults.push({ viewName: view.viewName, sectionId: candidate.sectionId,
+                    expected: candidate.expected, families: Array.from(families) });
+                await closeSyllabusForCapture(page);
+                return; // success
+            } catch (err) {
+                lastErr = err;
+            }
+        }
+        throw new Error(`view 17 exhausted candidates: ${lastErr && lastErr.message}`);
+    } },
+    // View 18 — Page C — Chapter 4 §4.11-1 with hard-asserted family routing
+    // to pole_zero_roc_lab. Same candidate-fallback pattern as view 17. Page
+    // C is sticky from view 17, so we always need to re-enter cleanly.
+    { name: '18-lesson-pole-zero-roc', page: 'C', setup: async (page) => {
+        const view = PAGE_C_VIEWS.find(v => v.viewName === '18-lesson-pole-zero-roc');
+        assertOrThrow(view, 'view 18 missing from PAGE_C_VIEWS');
+        let lastErr;
+        for (const candidate of view.candidates) {
+            if (!resolveLessonCachePath(path.resolve(__dirname, '..'), candidate.sectionId)) {
+                continue;
+            }
+            try {
+                await clearGuestSessionAndReenter(page);
+                await openSubtopic(page, {
+                    chapter: candidate.chapter,
+                    section: candidate.section,
+                    title: candidate.title,
+                });
+                const families = await collectLessonFamilies(page);
+                if (!families.has(candidate.expected)) {
+                    lastErr = new Error(`expected ${candidate.expected}, got [${Array.from(families).join(',')}]`);
+                    continue;
+                }
+                global.__pageCResults.push({ viewName: view.viewName, sectionId: candidate.sectionId,
+                    expected: candidate.expected, families: Array.from(families) });
+                await closeSyllabusForCapture(page);
+                return;
+            } catch (err) {
+                lastErr = err;
+            }
+        }
+        throw new Error(`view 18 exhausted candidates: ${lastErr && lastErr.message}`);
+    } },
 ];
 
 // ---------- diff core ----------
@@ -226,10 +400,110 @@ function preFlightCacheCheck(repoRoot) {
     }
 }
 
+// Clear guest-mode session state (sessionStorage `guestUid` +
+// `aquarius-auth-return-intent`) and re-enter guest mode from the intro
+// screen. Needed by Page C views because: a) the bootstrap calls
+// enterGuestMode once and we need to swap lessons between candidates, and
+// b) on plain reload the app skips the intro (`aquarius-auth-return-intent`
+// triggers hasPendingAuthReturnIntent → shouldShowIntroLanding returns false).
+async function clearGuestSessionAndReenter(page) {
+    await page.evaluate(() => {
+        try { sessionStorage.removeItem('guestUid'); } catch (_) {}
+        try { sessionStorage.removeItem('aquarius-auth-return-intent'); } catch (_) {}
+    });
+    await enterGuestMode(page, BASE);
+}
+
+// Collapse the syllabus panel before a Page C capture. openSubtopic leaves
+// the syllabus open with the chosen chapter + sibling chapters expanded; on
+// re-runs the sibling expansion state can drift (e.g. §4.12 chevron-open vs
+// chevron-closed) which leaks into the diff. Closing the panel removes the
+// syllabus surface entirely so only lesson chrome remains under pixel diff.
+async function closeSyllabusForCapture(page) {
+    await page.evaluate(() => {
+        const panel = document.getElementById('sidebarSyllabusPanel');
+        if (panel && panel.classList.contains('is-open')) {
+            // Prefer the toggle button so app state stays consistent; fall
+            // back to direct classList removal if the button isn't present.
+            const btn = document.getElementById('navSyllabusBtn');
+            if (btn) btn.click();
+            else panel.classList.remove('is-open');
+        }
+    });
+    // Wait for the close animation to finish.
+    await page.waitForSelector('#sidebarSyllabusPanel:not(.is-open):not(.is-animating)', { timeout: 3000 }).catch(() => {});
+    await page.waitForTimeout(200);
+}
+
+// Walk every knowledge-point page in the currently-loaded lesson, accumulate
+// the set of inferred families for hydrated `.kc-interactive-demo` nodes that
+// also have a child <canvas> or <svg> (proof a family-specific renderer
+// painted, not the brief-fallback). Throws on cache-miss or empty hydration.
+async function collectLessonFamilies(page) {
+    const text = await page.locator('#learnExplainContent').innerText().catch(() => '');
+    if (text.includes('This section has not been prepared yet')) {
+        throw new Error('cache miss — lesson rendered the "section not prepared" banner');
+    }
+
+    const families = new Set();
+    const seenKpKeys = new Set();
+    const maxIters = 25; // safety against infinite loops on broken pagers
+    for (let i = 0; i < maxIters; i++) {
+        await settleLesson(page);
+        // Collect families on the current KP page.
+        const pageFamilies = await page.evaluate(() => {
+            if (typeof window.inferInteractiveDemoFamily !== 'function') {
+                throw new Error('window.inferInteractiveDemoFamily missing — app.js export removed?');
+            }
+            if (typeof window.parseBase64JsonAttr !== 'function') {
+                throw new Error('window.parseBase64JsonAttr missing — app.js export removed?');
+            }
+            const out = [];
+            document.querySelectorAll('.kc-interactive-demo').forEach((n) => {
+                if (n.dataset.hydrated !== '1') return;
+                if (!n.querySelector('canvas, svg')) return;
+                const b64 = n.dataset.demoB64 || n.getAttribute('data-demo-b64');
+                const demo = window.parseBase64JsonAttr(b64);
+                if (!demo) return;
+                out.push(window.inferInteractiveDemoFamily(demo));
+            });
+            return out;
+        });
+        pageFamilies.forEach((f) => families.add(f));
+
+        // Record current KP signature to detect end-of-pager.
+        const kpKey = await page.evaluate(() => {
+            const ind = document.getElementById('learnLecturePageIndicator');
+            return ind ? ind.textContent : null;
+        });
+        if (kpKey && seenKpKeys.has(kpKey)) break; // pager looped back
+        if (kpKey) seenKpKeys.add(kpKey);
+
+        // Try to advance to the next KP. If pager is at-end, the button is
+        // disabled — bail.
+        const advanced = await page.evaluate(() => {
+            const btn = document.querySelector('#learnKpNextBtn:not([disabled])');
+            if (!btn) return false;
+            btn.click();
+            return true;
+        });
+        if (!advanced) break;
+        await page.waitForTimeout(300);
+    }
+    return families;
+}
+
 // ---------- runner ----------
 (async () => {
     const repoRoot = path.resolve(__dirname, '..');
     preFlightCacheCheck(repoRoot);
+
+    // Collector for Page C family-routing assertions. Hoisted via `global`
+    // so view setups (closures) can push without threading the array through
+    // captureView's signature. Read by the report-writer at the bottom of
+    // this IIFE.
+    const __pageCResults = [];
+    global.__pageCResults = __pageCResults;
     const outDir = MODE === 'baseline' ? BASELINE_DIR : CURRENT_DIR;
     fs.mkdirSync(outDir, { recursive: true });
     if (MODE === 'check') fs.mkdirSync(DIFF_DIR, { recursive: true });
@@ -353,6 +627,33 @@ function preFlightCacheCheck(repoRoot) {
             lines.push(`| ${r.view} | ${r.status} | ${mismatch} | ${ratio} | ${r.error || ''} |`);
         }
         fs.writeFileSync(REPORT_PATH, lines.join('\n') + '\n');
+
+        // Dispatcher coverage summary — separate from the main table to keep
+        // the per-view list dense rather than 16 empty cells.
+        const coverageLines = ['', '## Dispatcher coverage', '',
+            'Family-table renderer routing confirmed for the following Chapter 2+ views:',
+            ''];
+        if (global.__pageCResults && global.__pageCResults.length) {
+            for (const r of global.__pageCResults) {
+                coverageLines.push(`- **${r.viewName}** → sectionId \`${r.sectionId}\`, families seen \`[${r.families.join(', ')}]\`, asserted \`${r.expected}\` ✓`);
+            }
+        } else {
+            coverageLines.push('- (no Page C views ran or all errored)');
+        }
+        fs.appendFileSync(REPORT_PATH, coverageLines.join('\n') + '\n');
+
+        // Persist machine-readable coverage so a future regression run that
+        // picks a different candidate is visible in `git diff`. Use ISO
+        // timestamp — the spec's "static" placeholder was a Workflow-context
+        // artifact; in a Node CLI runner an ISO timestamp is fine and helps
+        // post-hoc debugging.
+        const coverage = {
+            generatedAt: new Date().toISOString(),
+            mode: MODE,
+            entries: global.__pageCResults || [],
+        };
+        fs.writeFileSync(COVERAGE_REPORT_PATH, JSON.stringify(coverage, null, 2) + '\n');
+
         console.log(`\n[visual-diff] report → ${REPORT_PATH}`);
     }
     process.exit(exitCode);
