@@ -42274,10 +42274,6 @@ body {
   -webkit-backdrop-filter: blur(34px) saturate(190%) brightness(1.06) !important;
 }
 
-.followup-bar-row {
-  gap: 16px !important;
-}
-
 .followup-input {
   min-height: 58px !important;
   border: 0 !important;
