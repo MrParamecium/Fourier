@@ -28,6 +28,8 @@
 //   - renderComplexPlaneDemo, renderSinusoidPhasorDemo, renderPhasorDemo,
 //     renderMatrixConformabilityDemo, renderBriefDemoFallback
 //   - All renderXxxFallback / renderXxxLabDemo family functions
+// External free-names dispatcher.js reaches from helpers.js:
+//   - applyCanvasDpr (used by setupInteractiveDemoCanvas)
 
 function getDemoControlValue(control, state) {
   const raw = state[control.key];
@@ -222,17 +224,12 @@ window.inferInteractiveDemoFamily = inferInteractiveDemoFamily;
 
 function setupInteractiveDemoCanvas(canvas, ctx, height = 260, minWidth = 320) {
   if (!canvas || !ctx) return { width: 0, height: 0 };
-  const dpr = Math.max(window.devicePixelRatio || 1, 1);
   const width = Math.max(Math.floor(canvas.parentElement?.clientWidth || canvas.clientWidth || 0), minWidth);
-  canvas.width = Math.floor(width * dpr);
-  canvas.height = Math.floor(height * dpr);
-  canvas.style.width = '100%';
-  canvas.style.height = `${height}px`;
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const sized = applyCanvasDpr(canvas, ctx, width, height);
   ctx.clearRect(0, 0, width, height);
   ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, width, height);
-  return { width, height };
+  return sized;
 }
 
 
