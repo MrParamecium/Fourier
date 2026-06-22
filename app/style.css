@@ -41169,61 +41169,12 @@ body {
   pointer-events: none !important;
 }
 
-.welcome.home-ask-workspace .home-ask-icon {
-  width: 30px !important;
-  height: 30px !important;
-  margin: 0 0 16px !important;
-  color: #0284c7 !important;
-}
-
-.welcome.home-ask-workspace .home-ask-empty h1 {
-  margin: 0 !important;
-  color: #151827 !important;
-  font-family: "Source Serif 4", Georgia, "Times New Roman", serif !important;
-  font-size: clamp(38px, 4.6vw, 58px) !important;
-  line-height: 1.02 !important;
-  font-weight: 760 !important;
-  letter-spacing: 0 !important;
-}
-
-.welcome.home-ask-workspace .home-ask-empty p {
-  width: min(540px, 100%) !important;
-  margin: 16px auto 0 !important;
-  color: rgba(38, 82, 118, 0.76) !important;
-  font-family: "Nunito", "Inter", sans-serif !important;
-  font-size: clamp(16px, 1.35vw, 22px) !important;
-  line-height: 1.24 !important;
-  font-weight: 800 !important;
-}
-
 .welcome.home-ask-workspace .home-ask-tags {
   width: min(520px, 100%) !important;
   margin: 26px auto 0 !important;
   gap: 12px !important;
   flex-wrap: nowrap !important;
   pointer-events: auto !important;
-}
-
-.welcome.home-ask-workspace .home-ask-tag {
-  min-height: 36px !important;
-  padding: 0 17px !important;
-  border: 2px solid rgba(255, 255, 255, 0.88) !important;
-  border-radius: 999px !important;
-  background: rgba(255, 255, 255, 0.28) !important;
-  box-shadow:
-    0 10px 24px rgba(148, 47, 62, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
-  font-family: "Nunito", "Inter", sans-serif !important;
-  font-size: 14px !important;
-  font-weight: 900 !important;
-  line-height: 1 !important;
-  gap: 8px !important;
-  white-space: nowrap !important;
-}
-
-.welcome.home-ask-workspace .home-ask-tag svg {
-  width: 16px !important;
-  height: 16px !important;
 }
 
 .welcome.home-ask-workspace .home-ask-composer,
@@ -41278,15 +41229,6 @@ body {
   align-items: start !important;
   min-height: 64px !important;
   gap: 14px !important;
-}
-
-.welcome.home-ask-workspace .home-ask-attach,
-.welcome.home-ask-workspace .home-ask-send {
-  width: 40px !important;
-  min-width: 40px !important;
-  height: 40px !important;
-  min-height: 40px !important;
-  border-radius: 14px !important;
 }
 
 .welcome.home-ask-workspace #userInput.search-input {
@@ -41353,20 +41295,10 @@ body {
   text-overflow: ellipsis !important;
 }
 
-.welcome.home-ask-workspace .home-mode-icon {
-  width: 22px !important;
-  height: 22px !important;
-}
-
 .welcome.home-ask-workspace #webSearchToggleBtnMain.home-ask-web-toggle {
   width: 48px !important;
   min-width: 48px !important;
   padding: 0 !important;
-}
-
-.welcome.home-ask-workspace #webSearchToggleBtnMain.home-ask-web-toggle svg {
-  width: 20px !important;
-  height: 20px !important;
 }
 
 .welcome.home-ask-workspace #homeModeMenu.home-mode-menu {
@@ -41384,53 +41316,6 @@ body {
   backdrop-filter: blur(30px) saturate(170%) !important;
   -webkit-backdrop-filter: blur(30px) saturate(170%) !important;
   z-index: 1300 !important;
-}
-
-.welcome.home-ask-workspace #homeModeMenu .home-mode-option {
-  min-height: 48px !important;
-  padding: 8px 10px !important;
-  border-radius: 13px !important;
-}
-
-.welcome.home-ask-workspace .home-feature-actions {
-  display: none !important;
-}
-
-.welcome.home-ask-workspace .home-feature-chip {
-  flex: 1 1 0 !important;
-  min-width: 0 !important;
-  height: 38px !important;
-  padding: 0 13px !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.74) !important;
-  border-radius: 999px !important;
-  background: rgba(255, 255, 255, 0.22) !important;
-  color: #3c4962 !important;
-  box-shadow:
-    0 10px 22px rgba(148, 47, 62, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.78) !important;
-  font-family: "Nunito", "Inter", sans-serif !important;
-  font-size: 13px !important;
-  font-weight: 850 !important;
-  gap: 7px !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-}
-
-.welcome.home-ask-workspace .home-feature-chip svg {
-  width: 15px !important;
-  height: 15px !important;
-  flex: 0 0 15px !important;
-}
-
-.welcome.home-ask-workspace .home-feature-chip span {
-  min-width: 0 !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-}
-
-.welcome.home-ask-workspace:has(#homeModeMenu.home-mode-menu.show) .home-feature-actions {
-  display: none !important;
 }
 
 @media (max-width: 1180px) {
