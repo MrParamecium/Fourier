@@ -22,6 +22,18 @@ const { spawn } = require('child_process');
 const { chromium } = require('playwright');
 const pixelmatch = require('pixelmatch').default;
 const { PNG } = require('pngjs');
+const {
+    MASK_CSS,
+    waitForHealth,
+    enterGuestMode,
+    ensureSyllabusOpen,
+    openSubtopic,
+    openSubtopicInFreshGuest,
+    resetLessonChromeState,
+    settleLesson,
+    assertOrThrow,
+    resolveLessonCachePath,
+} = require('./test-utils.js');
 
 const PORT = Number(process.env.TUTOR_VDIFF_PORT || 9125);
 const BASE = `http://127.0.0.1:${PORT}`;
@@ -43,21 +55,48 @@ if (!MODE) {
     process.exit(2);
 }
 
-// CSS to mask non-deterministic regions before screenshotting.
-// Add selectors here when a new always-animating element shows up.
-const MASK_CSS = `
-    /* login cosmos Three.js canvas — Phase 1 #10 */
-    #introWebglContainer { visibility: hidden !important; }
-    /* in-flight panel transitions */
-    .is-animating { transition: none !important; animation: none !important; }
-    /* relative timestamps in Recent Conversations would drift between runs */
-    .sidebar-recent-list .recent-timestamp,
-    .sidebar-recent-list time { visibility: hidden !important; }
-`;
-
 const SUBTOPIC = { id: '1_1-1', title: '1.1-1 Signal Energy',
     chapter: 'Chapter 1: Signals and Systems',
     section: '1.1 Size of a Signal' };
+
+// Page C lesson candidates per view. Each view tries candidates in order;
+// the first whose hydrated demos include `expected` family is used.
+// On swap, the view file MUST be renamed to reflect the actual family
+// (see docs/superpowers/specs/2026-06-22-harness-expansion-design.md).
+const PAGE_C_VIEWS = [
+    {
+        viewName: '17-lesson-convolution',
+        candidates: [
+            { sectionId: '3.8-1', expected: 'convolution_lab',
+              chapter: 'Chapter 3: Time-Domain Analysis of Discrete-Time Systems',
+              section: '3.8 System Response to External Input: The Zero-State Response',
+              title:   '3.8-1 Graphical Procedure for the Convolution Sum' },
+            { sectionId: '3.8-2', expected: 'convolution_lab',
+              chapter: 'Chapter 3: Time-Domain Analysis of Discrete-Time Systems',
+              section: '3.8 System Response to External Input: The Zero-State Response',
+              title:   '3.8-2 Interconnected Systems' },
+            { sectionId: '3.8-3', expected: 'convolution_lab',
+              chapter: 'Chapter 3: Time-Domain Analysis of Discrete-Time Systems',
+              section: '3.8 System Response to External Input: The Zero-State Response',
+              title:   '3.8-3 Total Response' },
+        ],
+    },
+    {
+        viewName: '18-lesson-pole-zero-roc',
+        candidates: [
+            { sectionId: '4.11-1', expected: 'pole_zero_roc_lab',
+              chapter: 'Chapter 4: Continuous-Time System Analysis Using the Laplace Transform',
+              section: '4.11 The Bilateral Laplace Transform',
+              title:   '4.11-1 Properties of the Bilateral Laplace Transform' },
+            { sectionId: '4.11-2', expected: 'pole_zero_roc_lab',
+              chapter: 'Chapter 4: Continuous-Time System Analysis Using the Laplace Transform',
+              section: '4.11 The Bilateral Laplace Transform',
+              title:   '4.11-2 Using the Bilateral Transform for Linear System Analysis' },
+        ],
+    },
+];
+
+const COVERAGE_REPORT_PATH = path.join(TOOLS, 'visual-diff-coverage.json');
 
 // ---------- view definitions ----------
 // One long-lived page bootstrapped through enterGuestMode; each setup() takes
@@ -71,7 +110,7 @@ const SUBTOPIC = { id: '1_1-1', title: '1.1-1 Signal Energy',
 // radius and its decorative font-swap noise made deterministic diffs painful.
 // Re-add if a future phase touches global rules.
 const sharedViews = [
-    { name: '01-guest-home', setup: async (page) => {
+    { name: '01-guest-home', page: 'A', setup: async (page) => {
         await page.evaluate(() => {
             document.querySelectorAll('.feature-close-btn').forEach(b => {
                 if (b.offsetParent !== null) b.click();
@@ -79,27 +118,27 @@ const sharedViews = [
         });
         await page.waitForTimeout(300);
     } },
-    { name: '02-syllabus-open', setup: async (page) => {
+    { name: '02-syllabus-open', page: 'A', setup: async (page) => {
         await ensureSyllabusOpen(page);
         await page.waitForTimeout(400);
     } },
-    { name: '03-mistake-notebook', setup: async (page) => {
+    { name: '03-mistake-notebook', page: 'A', setup: async (page) => {
         await page.click('#navMistakeNotebookBtn');
         await page.waitForSelector('#mistakeNotebookView:not(.hidden)', { timeout: 5000 });
         await page.waitForTimeout(400);
     } },
-    { name: '04-recent-conversations', setup: async (page) => {
+    { name: '04-recent-conversations', page: 'A', setup: async (page) => {
         await page.click('#mistakeNotebookCloseBtn').catch(() => {});
         await page.waitForSelector('#mistakeNotebookView.hidden', { timeout: 3000 }).catch(() => {});
         await page.click('#navRecentBtn');
         await page.waitForTimeout(700);
     } },
-    { name: '05-settings', setup: async (page) => {
+    { name: '05-settings', page: 'A', setup: async (page) => {
         await page.click('#sidebarSettingsBtn');
         await page.waitForSelector('.settings-page-version', { timeout: 5000 });
         await page.waitForTimeout(400);
     } },
-    { name: '06-lesson-view', setup: async (page) => {
+    { name: '06-lesson-view', page: 'A', setup: async (page) => {
         await page.evaluate(() => {
             document.querySelectorAll('.feature-close-btn').forEach(b => {
                 if (b.offsetParent !== null) b.click();
@@ -111,7 +150,7 @@ const sharedViews = [
     // The next 3 views (added with Phase 3 PR #21 baseline refresh per
     // docs/phase3_plan.md §5.6) target the surfaces PR #22 directly governs.
     // They build on view 06's already-loaded lesson — no need to renavigate.
-    { name: '07-lesson-pager-states', setup: async (page) => {
+    { name: '07-lesson-pager-states', page: 'A', setup: async (page) => {
         // Force the pager to its last-subsection state so the next-button
         // disabled treatment is visible. We do this by reaching the
         // sentinel "is at end" state without leaving the lesson:
@@ -124,7 +163,7 @@ const sharedViews = [
         await nextBtn.hover({ force: true }).catch(() => {});
         await page.waitForTimeout(300);
     } },
-    { name: '08-lesson-lecture-toolbar', setup: async (page) => {
+    { name: '08-lesson-lecture-toolbar', page: 'A', setup: async (page) => {
         // qa-wide focuses the QA column to ~2/3 width and is one of the
         // most-overridden states across both #22's runtime inject*Styles
         // sites and #20's banner cluster.
@@ -135,7 +174,7 @@ const sharedViews = [
         });
         await page.waitForTimeout(400);
     } },
-    { name: '09-lesson-qa-column', setup: async (page) => {
+    { name: '09-lesson-qa-column', page: 'A', setup: async (page) => {
         // qa-full collapses lecture entirely and exposes the followup-bar
         // glass panel + chat composer chrome. Also exercise :focus-within
         // on the followup bar so PR #22's hover/focus rules are captured.
@@ -150,76 +189,6 @@ const sharedViews = [
         await page.waitForTimeout(300);
     } },
 ];
-
-// ---------- shared helpers (mirror smoke.js — kept independent on purpose) ----------
-function waitForHealth(timeoutMs = 15000) {
-    const deadline = Date.now() + timeoutMs;
-    return new Promise((resolve, reject) => {
-        const tryOnce = () => {
-            fetch(`${BASE}/health`).then(r => r.ok ? resolve() : retry()).catch(retry);
-        };
-        const retry = () => {
-            if (Date.now() > deadline) return reject(new Error('bridge /health never came up'));
-            setTimeout(tryOnce, 300);
-        };
-        tryOnce();
-    });
-}
-
-async function enterGuestMode(page) {
-    await page.goto(BASE, { waitUntil: 'domcontentloaded' });
-    await page.click('#introGetStartedBtn');
-    await page.click('#guestModeBtnLogin[data-bound-guest-mode="1"]', { timeout: 25000 });
-    await page.click('#quizCloseBtn');
-    await page.waitForSelector('#navSyllabusBtn', { timeout: 10000 });
-    await page.addStyleTag({ content: MASK_CSS });
-}
-
-async function ensureSyllabusOpen(page) {
-    for (let attempt = 0; attempt < 4; attempt++) {
-        const stable = await page.locator('#sidebarSyllabusPanel.is-open:not(.is-animating)').count();
-        if (stable > 0) return;
-        await page.click('#navSyllabusBtn').catch(() => {});
-        try {
-            await page.waitForSelector('#sidebarSyllabusPanel.is-open:not(.is-animating)', { timeout: 2500 });
-            return;
-        } catch (_) { /* try again */ }
-    }
-    throw new Error('could not open syllabus panel');
-}
-
-async function openSubtopic(page, sub, waitMs = 25000) {
-    await ensureSyllabusOpen(page);
-    await page.click(`#courseSyllabus .syllabus-chapter:has-text("${sub.chapter}")`);
-    await page.click(`#courseSyllabus .syllabus-section[data-section="${sub.section}"]`);
-    const card = page.locator(`.chapter-overview-subcard[data-sublesson-title="${sub.title}"]`);
-    await card.waitFor({ state: 'visible', timeout: 10000 });
-    let entered = false;
-    const sawOpenLog = { value: false };
-    const listener = m => { if (/\[openLearnMode\]/.test(m.text())) sawOpenLog.value = true; };
-    page.on('console', listener);
-    try {
-        for (let i = 0; i < 5 && !entered; i++) {
-            await card.click();
-            const t0 = Date.now();
-            while (Date.now() - t0 < 2000) {
-                if (sawOpenLog.value) { entered = true; break; }
-                await page.waitForTimeout(100);
-            }
-        }
-    } finally {
-        page.off('console', listener);
-    }
-    if (!entered) throw new Error(`subtopic "${sub.title}" click never fired openLearnMode`);
-    const content = page.locator('#learnExplainContent');
-    const deadline = Date.now() + waitMs;
-    while (Date.now() < deadline) {
-        const text = (await content.innerText().catch(() => '')) || '';
-        if (text && !text.includes('Preparing lesson...') && text.length > 80) return;
-        await page.waitForTimeout(300);
-    }
-    throw new Error(`subtopic "${sub.title}" never rendered`);
-}
 
 // ---------- diff core ----------
 function readPng(p) {
@@ -241,9 +210,26 @@ function comparePng(baselinePath, currentPath, diffPath) {
     return { mismatch, ratio: mismatch / total, total };
 }
 
+function preFlightCacheCheck(repoRoot) {
+    const missing = [];
+    for (const view of PAGE_C_VIEWS) {
+        for (const candidate of view.candidates) {
+            const resolved = resolveLessonCachePath(repoRoot, candidate.sectionId);
+            if (!resolved) missing.push(`${view.viewName} candidate ${candidate.sectionId}`);
+        }
+    }
+    if (missing.length === PAGE_C_VIEWS.reduce((n, v) => n + v.candidates.length, 0)) {
+        throw new Error('cache missing for ALL Page C candidates — run pregen or sync workspace/materials/lesson-cache/ before --baseline or --check');
+    }
+    if (missing.length > 0) {
+        console.warn(`[visual-diff] cache missing for some candidates (will be skipped during fallback): ${missing.join(', ')}`);
+    }
+}
+
 // ---------- runner ----------
 (async () => {
     const repoRoot = path.resolve(__dirname, '..');
+    preFlightCacheCheck(repoRoot);
     const outDir = MODE === 'baseline' ? BASELINE_DIR : CURRENT_DIR;
     fs.mkdirSync(outDir, { recursive: true });
     if (MODE === 'check') fs.mkdirSync(DIFF_DIR, { recursive: true });
@@ -262,13 +248,13 @@ function comparePng(baselinePath, currentPath, diffPath) {
     const results = [];
 
     try {
-        await waitForHealth();
+        await waitForHealth(BASE);
         const browser = await chromium.launch();
         const captureView = async (view, page) => {
             const dest = path.join(outDir, `${view.name}.png`);
             try {
                 await view.setup(page);
-                await page.evaluate(() => document.fonts && document.fonts.ready).catch(() => {});
+                await settleLesson(page);
                 await page.screenshot({ path: dest, fullPage: false });
                 console.log(`  ✓ ${view.name}`);
                 if (MODE === 'check') {
@@ -292,20 +278,68 @@ function comparePng(baselinePath, currentPath, diffPath) {
             }
         };
 
-        // One guest-mode bootstrap (injects MASK_CSS) then walk sharedViews
-        // in order. Each setup() leaves the page in a clean enough state for
-        // the next view to reset.
-        const sharedPage = await browser.newPage({ viewport: VIEWPORT });
-        await enterGuestMode(sharedPage);
-        for (const view of sharedViews) await captureView(view, sharedPage);
-        await sharedPage.close().catch(() => {});
+        // One BrowserContext owns the MASK_CSS via addInitScript so every page
+        // derived from the context inherits the mask before first paint.
+        const context = await browser.newContext({ viewport: VIEWPORT });
+        await context.addInitScript(({ css }) => {
+            const inject = () => {
+                const s = document.createElement('style');
+                s.textContent = css;
+                document.head.appendChild(s);
+            };
+            if (document.head) inject();
+            else document.addEventListener('DOMContentLoaded', inject);
+        }, { css: MASK_CSS });
+
+        // Lazy per-page bootstraps. Each pageKey is bootstrapped on first
+        // request and reused for subsequent views with the same key.
+        const PAGE_BOOTSTRAPS = {
+            A: async () => {
+                const p = await context.newPage();
+                await enterGuestMode(p, BASE);
+                return p;
+            },
+            B: async () => {
+                const p = await context.newPage();
+                await enterGuestMode(p, BASE);
+                return p;
+            },
+            C: async () => {
+                const p = await context.newPage();
+                await enterGuestMode(p, BASE);
+                return p;
+            },
+        };
+        const pageMap = new Map();
+        const getPage = async (key) => {
+            if (pageMap.has(key)) return pageMap.get(key);
+            const factory = PAGE_BOOTSTRAPS[key];
+            if (!factory) throw new Error(`unknown page key "${key}"`);
+            const p = await factory();
+            pageMap.set(key, p);
+            return p;
+        };
+
+        for (const view of sharedViews) {
+            const pageKey = view.page || 'A';
+            const page = await getPage(pageKey);
+            await captureView(view, page);
+        }
+
+        for (const p of pageMap.values()) {
+            await p.close().catch(() => {});
+        }
+        await context.close().catch(() => {});
         await browser.close();
     } catch (err) {
         console.error('[visual-diff] FATAL', err);
         exitCode = 1;
     } finally {
         server.kill('SIGTERM');
-        await new Promise(r => setTimeout(r, 500));
+        await new Promise((resolve) => {
+            const t = setTimeout(resolve, 2000);
+            server.once('exit', () => { clearTimeout(t); resolve(); });
+        });
     }
 
     if (MODE === 'check') {
