@@ -2209,14 +2209,7 @@ function hydrateChapterOneDemo(node, demo) {
     ], 'reverse');
   }
 
-  let pendingFrame = 0;
-  const rerender = () => {
-    if (pendingFrame) return;
-    pendingFrame = window.requestAnimationFrame(() => {
-      pendingFrame = 0;
-      render();
-    });
-  };
+  const rerender = coalesceFrames(render);
   if (window.ResizeObserver && shellEl) {
     const observer = new ResizeObserver(rerender);
     observer.observe(shellEl);

@@ -38,9 +38,7 @@ function applyCanvasDpr(canvas, ctx, width, height) {
 }
 
 function drawCanvasArrow(ctx, x1, y1, x2, y2, color, opts) {
-  const width = (opts && opts.width != null) ? opts.width : 3;
-  const dashed = !!(opts && opts.dashed);
-  const headLength = (opts && opts.headLength != null) ? opts.headLength : 10;
+  const { width = 3, dashed = false, headLength = 10 } = opts || {};
   const angle = Math.atan2(y2 - y1, x2 - x1);
   ctx.save();
   ctx.strokeStyle = color;
