@@ -33972,6 +33972,8 @@ body {
   max-width: none !important;
   min-width: 0 !important;
   border-right: 1px solid var(--border) !important;
+  container-type: inline-size !important;
+  container-name: overview-book-pane !important;
 }
 
 #learnView #learnBody.chapter-overview-active #learnChatCol,
@@ -34006,14 +34008,6 @@ body {
 }
 
 /* OVERVIEW DOCKED-QA READABILITY LOCK: keep notes readable when the Q&A pane narrows the book. */
-#learnView #learnBody.chapter-overview-active #learnExplainCol,
-#learnView #learnBody.chapter-overview-active .learn-explain-col,
-#learnView #learnBody.chapter-overview-split-active #learnExplainCol,
-#learnView #learnBody.chapter-overview-split-active .learn-explain-col {
-  container-type: inline-size !important;
-  container-name: overview-book-pane !important;
-}
-
 #learnView #learnBody.chapter-overview-active .chapter-overview-grid > .chapter-overview-subcard.chapter-overview-note,
 #learnView #learnBody.chapter-overview-split-active .chapter-overview-grid > .chapter-overview-subcard.chapter-overview-note {
   grid-template-columns: minmax(0, 1fr) 32px !important;
