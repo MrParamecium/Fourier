@@ -33,6 +33,7 @@ const {
     settleLesson,
     assertOrThrow,
     resolveLessonCachePath,
+    closeFeaturePopovers,
 } = require('./test-utils.js');
 
 const PORT = Number(process.env.TUTOR_VDIFF_PORT || 9125);
@@ -128,11 +129,7 @@ const COVERAGE_REPORT_PATH = path.join(TOOLS, 'visual-diff-coverage.json');
 const sharedViews = [
     // ----- Page A (lesson-loaded guest mode) -----
     { name: '01-guest-home', page: 'A', setup: async (page) => {
-        await page.evaluate(() => {
-            document.querySelectorAll('.feature-close-btn').forEach(b => {
-                if (b.offsetParent !== null) b.click();
-            });
-        });
+        await closeFeaturePopovers(page);
         await page.waitForTimeout(300);
     } },
     { name: '02-syllabus-open', page: 'A', setup: async (page) => {
@@ -156,11 +153,7 @@ const sharedViews = [
         await page.waitForTimeout(400);
     } },
     { name: '06-lesson-view', page: 'A', setup: async (page) => {
-        await page.evaluate(() => {
-            document.querySelectorAll('.feature-close-btn').forEach(b => {
-                if (b.offsetParent !== null) b.click();
-            });
-        });
+        await closeFeaturePopovers(page);
         await openSubtopic(page, SUBTOPIC);
         await page.waitForTimeout(800); // let KaTeX settle
     } },
@@ -209,11 +202,7 @@ const sharedViews = [
     // textarea is what triggers :focus-within.
     { name: '10-home-ask-focused', page: 'B', setup: async (page) => {
         // Close any feature popovers and reset menu state.
-        await page.evaluate(() => {
-            document.querySelectorAll('.feature-close-btn').forEach(b => {
-                if (b.offsetParent !== null) b.click();
-            });
-        });
+        await closeFeaturePopovers(page);
         await resetHomeChromeState(page);
         await page.focus('#userInput');
         const focused = await page.evaluate(() =>
@@ -289,7 +278,6 @@ const sharedViews = [
         await resetLessonChromeState(page);
         await page.evaluate(() => {
             document.getElementById('learnBody')?.classList.add('chapter-overview-active');
-            if (typeof window.__ftutorRefreshPager === 'function') window.__ftutorRefreshPager();
         });
         await page.waitForTimeout(300);
     } },
@@ -301,7 +289,6 @@ const sharedViews = [
         await resetLessonChromeState(page);
         await page.evaluate(() => {
             document.getElementById('learnBody')?.classList.add('chapter-overview-split-active');
-            if (typeof window.__ftutorRefreshPager === 'function') window.__ftutorRefreshPager();
         });
         await page.waitForTimeout(300);
     } },
@@ -313,14 +300,14 @@ const sharedViews = [
     // report block. Page C bootstrap (enterGuestMode) already ran for the
     // first candidate — runPageCView handles the re-enter for the rest.
     {
-        name: '17-lesson-convolution', page: 'C', alreadySettled: true,
+        name: '17-lesson-convolution', page: 'C',
         setup: async (page) => runPageCView(page, '17-lesson-convolution', { isFirstPageCView: true }),
     },
     // View 18 — Page C — Chapter 4 §4.11-1 with hard-asserted family routing
     // to pole_zero_roc_lab. Page C is sticky from view 17, so we always need
     // to re-enter cleanly — runPageCView treats this as not-first.
     {
-        name: '18-lesson-pole-zero-roc', page: 'C', alreadySettled: true,
+        name: '18-lesson-pole-zero-roc', page: 'C',
         setup: async (page) => runPageCView(page, '18-lesson-pole-zero-roc', { isFirstPageCView: false }),
     },
 ];
@@ -340,14 +327,18 @@ function comparePng(baselinePath, currentPath, diffPath) {
         return { mismatch: a.width * a.height, ratio: 1, total: a.width * a.height,
                  error: `size mismatch: baseline ${a.width}x${a.height} vs current ${b.width}x${b.height}` };
     }
-    const diff = new PNG({ width: a.width, height: a.height });
-    const mismatch = pixelmatch(a.data, b.data, diff.data, a.width, a.height,
+    // First pass: count only. pixelmatch accepts `null` for the output buffer
+    // and skips all per-pixel writes. On a clean run (all 18 at 0.000%) this
+    // saves ~8 MB allocation × 18 views vs. unconditionally constructing a
+    // PNG diff buffer up front.
+    const mismatch = pixelmatch(a.data, b.data, null, a.width, a.height,
         { threshold: PIXELMATCH_THRESHOLD });
     const total = a.width * a.height;
-    // On a clean run (all 18 at 0.000%) we'd otherwise serialize ~3.7MB
-    // through PNG.sync.write + writeFileSync per view for zero diagnostic
-    // value. Only write when there's actual divergence.
     if (mismatch > 0) {
+        // Re-run with a real diff buffer so we can write the visual diff PNG.
+        const diff = new PNG({ width: a.width, height: a.height });
+        pixelmatch(a.data, b.data, diff.data, a.width, a.height,
+            { threshold: PIXELMATCH_THRESHOLD });
         fs.writeFileSync(diffPath, PNG.sync.write(diff));
     }
     return { mismatch, ratio: mismatch / total, total };
@@ -403,36 +394,21 @@ async function clearGuestSessionAndReenter(page) {
 // chevron-closed) which leaks into the diff. Closing the panel removes the
 // syllabus surface entirely so only lesson chrome remains under pixel diff.
 async function closeSyllabusForCapture(page) {
-    // Wait for any in-flight open-animation to finish before we click —
-    // clicking during is-animating can re-toggle to is-open instead of closing.
-    await page.waitForSelector('#sidebarSyllabusPanel:not(.is-animating)', { timeout: 3000 }).catch(() => {});
-    await page.evaluate(() => {
-        const panel = document.getElementById('sidebarSyllabusPanel');
-        if (!panel) return;
-        // Re-read state inside evaluate so we don't act on a stale snapshot.
-        if (!panel.classList.contains('is-open')) return;
-        // Prefer the toggle button so app state stays consistent; fall
-        // back to direct classList removal if the button isn't present.
-        const btn = document.getElementById('navSyllabusBtn');
-        if (btn) btn.click();
-        else panel.classList.remove('is-open');
-    });
-    // Wait for the close animation to finish. Hard-fail if the panel never
-    // closes — silent timeout would hide a real regression on the visible
-    // syllabus chrome. assertOrThrow gives a clear error rather than a
-    // silently-suppressed Playwright timeout.
-    try {
-        await page.waitForSelector('#sidebarSyllabusPanel:not(.is-open):not(.is-animating)', { timeout: 3000 });
-    } catch (err) {
-        // Tolerate the case where the panel is already closed/missing —
-        // openSubtopic does not leave the panel open in all flows, and the
-        // earlier evaluate would have early-returned. Only fail loudly if
-        // the panel exists AND is still .is-open.
-        const stillOpen = await page.evaluate(() =>
-            document.getElementById('sidebarSyllabusPanel')?.classList.contains('is-open')
-        );
-        assertOrThrow(!stillOpen, `closeSyllabusForCapture: panel still .is-open after 3s (${err.message})`);
-    }
+    const isOpen = await page.evaluate(() =>
+        document.getElementById('sidebarSyllabusPanel')?.classList.contains('is-open') || false
+    );
+    if (!isOpen) return;
+    await page.click('#navSyllabusBtn');
+    // Wait until the panel no longer has .is-open / .is-animating in its
+    // classList. Use evaluate-poll (not waitForSelector) because the panel
+    // gets `.hidden` after close and Playwright's default visibility check
+    // would time out on the now-display:none element. We're checking
+    // class state, not visibility.
+    await page.waitForFunction(() => {
+        const el = document.getElementById('sidebarSyllabusPanel');
+        if (!el) return true;
+        return !el.classList.contains('is-open') && !el.classList.contains('is-animating');
+    }, null, { timeout: 3000 });
     await page.waitForTimeout(200);
 }
 
@@ -470,8 +446,18 @@ async function collectLessonFamilies(page, { earlyExitOn } = {}) {
             null,
             { timeout: 2000 }
         ).catch(() => {}); // best-effort — collect what's there
-        // Collect families on the current KP page.
-        const pageFamilies = await page.evaluate(() => {
+        // Collect families on the current KP page + read priorKey in one
+        // round-trip. priorKey: article.lesson-page-frame's data-lesson-page
+        // attribute (set in buildLessonPageFrameHtml at app/app.js L3308 =
+        // `${currentKnowledgePointIndex + 1}`). The IDs
+        // #learnFocusPageIndicator / #learnLecturePageIndicator are only
+        // populated by the learn-focus modal flow, not the regular pager.
+        // NOTE: clicking next-btn is deliberately kept in a second evaluate
+        // below, AFTER the early-exit / loop-back checks. Merging the click
+        // into this read would advance the pager one step past the early-
+        // exit KP, leaving a different lesson page on screen at screenshot
+        // time and breaking the pixel-neutral contract.
+        const { families: pageFamilies, priorKey } = await page.evaluate(() => {
             if (typeof window.inferInteractiveDemoFamily !== 'function') {
                 throw new Error('window.inferInteractiveDemoFamily missing — app.js export removed?');
             }
@@ -487,27 +473,19 @@ async function collectLessonFamilies(page, { earlyExitOn } = {}) {
                 if (!demo) return;
                 out.push(window.inferInteractiveDemoFamily(demo));
             });
-            return out;
+            const frame = document.querySelector('#learnExplainContent .lesson-page-frame');
+            const key = frame ? frame.getAttribute('data-lesson-page') : null;
+            return { families: out, priorKey: key };
         });
         pageFamilies.forEach((f) => families.add(f));
 
         if (earlyExitOn && families.has(earlyExitOn)) break;
-
-        // Record current KP signature via the article.lesson-page-frame's
-        // data-lesson-page attribute (set in buildLessonPageFrameHtml at
-        // app/app.js L3308 = `${currentKnowledgePointIndex + 1}`). The IDs
-        // #learnFocusPageIndicator / #learnLecturePageIndicator are only
-        // populated by the learn-focus modal flow, not the regular pager.
-        const priorKey = await page.evaluate(() => {
-            const frame = document.querySelector('#learnExplainContent .lesson-page-frame');
-            return frame ? frame.getAttribute('data-lesson-page') : null;
-        });
         if (priorKey && seenKpKeys.has(priorKey)) break; // pager looped back
         if (priorKey) seenKpKeys.add(priorKey);
 
         // Try to advance to the next KP. If pager is at-end, the button is
-        // disabled — bail. Note: `learnKpNextBtn` lives inside the lesson
-        // shell but `moveLearnKnowledgePoint` early-returns when
+        // disabled — bail. `learnKpNextBtn` lives inside the lesson shell
+        // but `moveLearnKnowledgePoint` early-returns when
         // `isLearnPageTurning` is true; the 150ms tail after each successful
         // turn below + settleLesson at loop top keep the lock clear.
         const advanced = await page.evaluate(() => {
@@ -642,9 +620,10 @@ let cachePresent = new Set();
             try {
                 await view.setup(page);
                 // Page C views call settleLesson inside collectLessonFamilies
-                // (per KP) + a 200ms slack via closeSyllabusForCapture. Skip
-                // the redundant ~300-400ms settle here when the view opts in.
-                if (!view.alreadySettled) {
+                // (per KP) + a 200ms slack via closeSyllabusForCapture, so
+                // they skip the redundant ~300-400ms settle here. Derived
+                // from view.page rather than a per-view flag.
+                if (view.page !== 'C') {
                     await settleLesson(page);
                 }
                 await page.screenshot({ path: dest, fullPage: false });
@@ -688,32 +667,20 @@ let cachePresent = new Set();
 
         // Lazy per-page bootstraps. Each pageKey is bootstrapped on first
         // request and reused for subsequent views with the same key. The
-        // three factories are identical today; the map shape is intentional
-        // so a future Page can diverge (e.g. log in as a real user, seed
-        // local storage) without rewriting the dispatch loop.
-        const PAGE_BOOTSTRAPS = {
-            A: async () => {
-                const p = await context.newPage();
-                await enterGuestMode(p, BASE);
-                return p;
-            },
-            B: async () => {
-                const p = await context.newPage();
-                await enterGuestMode(p, BASE);
-                return p;
-            },
-            C: async () => {
-                const p = await context.newPage();
-                await enterGuestMode(p, BASE);
-                return p;
-            },
+        // three keys all run the same factory today; keeping them as a Set
+        // (instead of distinct factory functions) flags that any divergence
+        // would need explicit per-key branching rather than silent drift.
+        const VALID_PAGE_KEYS = new Set(['A', 'B', 'C']);
+        const bootstrapPage = async () => {
+            const p = await context.newPage();
+            await enterGuestMode(p, BASE);
+            return p;
         };
         const pageMap = new Map();
         const getPage = async (key) => {
             if (pageMap.has(key)) return pageMap.get(key);
-            const factory = PAGE_BOOTSTRAPS[key];
-            if (!factory) throw new Error(`unknown page key "${key}"`);
-            const p = await factory();
+            if (!VALID_PAGE_KEYS.has(key)) throw new Error(`unknown page key "${key}"`);
+            const p = await bootstrapPage();
             pageMap.set(key, p);
             return p;
         };

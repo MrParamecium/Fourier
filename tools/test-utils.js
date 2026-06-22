@@ -118,6 +118,18 @@ async function openSubtopic(page, sub, waitMs = 25000) {
     throw new Error(`subtopic "${sub.title}" never rendered within ${waitMs}ms`);
 }
 
+// Close any visible feature-popover help bubbles. Several Page A/B views
+// open with a `.feature-close-btn` element rendered into the page; click
+// every one that is currently in the layout (offsetParent !== null) so
+// transient highlight chrome doesn't leak into the screenshot.
+async function closeFeaturePopovers(page) {
+    await page.evaluate(() => {
+        document.querySelectorAll('.feature-close-btn').forEach(b => {
+            if (b.offsetParent !== null) b.click();
+        });
+    });
+}
+
 // Reset Home/sidebar chrome state left over from a previous Page B view
 // (e.g. view 11 forced `#homeModeMenu.show` + `aria-expanded='true'` on the
 // toggle button). View 12+ navigation strips `.show` but inherits the stale
@@ -214,4 +226,5 @@ module.exports = {
     settleLesson,
     assertOrThrow,
     resolveLessonCachePath,
+    closeFeaturePopovers,
 };
