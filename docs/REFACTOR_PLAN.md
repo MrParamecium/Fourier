@@ -2,7 +2,7 @@
 
 Owner: FlyM1ss
 Started: 2026-06-19
-Last refreshed: 2026-06-22 (after PR #43)
+Last refreshed: 2026-06-22 (after PR #44 — Phase 3.5 harness expansion)
 Status:
 
 - **Phase 0** merged (#15).
@@ -10,7 +10,7 @@ Status:
 - **Phase 2** — 6 of 7 items merged on 2026-06-20. Only #19
   (Glass + chapter-overview CSS, 16,402 lines) and #18 (interactive
   demos subsystem, ~1,500 lines after #21) remain — both unblocked but
-  deferred until the visual-diff harness expands beyond 9 views.
+  scheduled after Phase 3 Pass 2.
 - **Phase 3 Pass 1** complete on 2026-06-21..22 — 6 PRs merged:
   - #38 (PR #21) hydrateInteractiveDemos split into 19 family modules.
   - 589be97 visual-diff baseline refresh + 3 lesson-chrome views.
@@ -18,6 +18,14 @@ Status:
   - #40 / #41 / #42 (PR #20a/b/c Pass 1) orphan-selector strips.
   - #43 (PR #23) dispatcher arms → `INTERACTIVE_DEMO_FAMILY_RENDERERS`
     lookup table.
+- **Phase 3.5** (visual-diff harness expansion) shipped 2026-06-22 in
+  PR #44 (f28055b after review fixes). Harness grew from 9 → 18 views
+  across 3 page topologies (A/B/C), covering 2 of 13 dispatcher family
+  keys (`convolution_lab`, `pole_zero_roc_lab`), Home Ask
+  `:focus-within` + mode-menu `.show`, preference + course-tracker +
+  feedback-board resting states, and `chapter-overview-active` /
+  `chapter-overview-split-active` lesson chrome class flips. Roadmap
+  steps B–F are now **partially** unblocked — see the matrix below.
 - **Phase 3 Pass 2** is the active frontier — see §"Roadmap from
   here". Deferred punch-list lives in `docs/phase3_deferred.md`.
 
@@ -179,34 +187,46 @@ Largest cleanups. Detailed PR-by-PR plan lives in
 
 ### Phase 3.5 — Visual-diff harness expansion (gating prereq for #20 Pass 2)
 
-**Status: not started. User-confirmed next focus.**
+**Status: Shipped in PR #44 (f28055b after review fixes), 2026-06-22.**
 
-The 9-view baseline currently exercises only one lesson (Background §1
-"Signal Energy"), which short-circuits at `isChapterOneDemo` BEFORE the
-#21 family lookup. None of the 13 lookup-table keys are regression-covered.
-This is documented in `docs/phase3_deferred.md` §2b as a Sev-1 risk
-against future refactors of the dispatcher.
+Harness grew from 9 → 18 views across 3 page topologies (Page A / B / C
+with lazy bootstrap). Coverage delivered:
 
-Until the harness expands, **#20 Pass 2 cannot land safely** — 5,373
-`!important` declarations live in the #20 range and the only signal
-proving cascade preservation is pixel-diff. Each new view must capture
-overrides the current 9 views miss.
+- **2 of 13 dispatcher family keys** — `convolution_lab` (view 17 via
+  Chapter 3 §3.8-1; candidate fallback list [3.8-1, 3.8-2, 3.8-3,
+  3.11-4]) and `pole_zero_roc_lab` (view 18 via Chapter 4 §4.11-1).
+  Family routing is hard-asserted by walking every KP page and checking
+  for hydrated `.kc-interactive-demo` with a `<canvas>`/`<svg>` child;
+  brief-fallback hydration does not count.
+- **2 of top-4 #20c selectors in override-active state** — view 10 fires
+  `:focus-within` on `#searchBox.home-ask-composer`; view 11 forces
+  `#homeModeMenu.home-mode-menu.show` via classList + aria-expanded.
+- **#20b resting-state surfaces** — views 12/13/14 cover preference,
+  course-tracker, and feedback-board.
+- **#20a lesson-chrome class flips** — views 15/16 toggle
+  `learnBody.chapter-overview-active` and `chapter-overview-split-active`
+  to exercise the 30+ `:not(.chapter-overview-active)` negations.
+- **Shared test utilities** — `tools/test-utils.js` now owns
+  `enterGuestMode`, `openSubtopic`, `MASK_CSS`, `settleLesson`,
+  `resetHomeChromeState`, `resetLessonChromeState`,
+  `resolveLessonCachePath`, `assertOrThrow`, `waitForHealth`. Both
+  `visual-diff.js` and `smoke.js` consume from it.
+- **MASK_CSS** moved to BrowserContext-level via `addInitScript` so all
+  pages inherit the mask before first paint.
 
-Minimum view additions before #20 Pass 2:
+What's still NOT covered (recorded in `docs/phase3_deferred.md` §"Phase
+3.5 follow-ups"): 11 remaining family-table keys, state-variant
+(`:hover`/`:active`/`:focus`) coverage on the #20b/#20c top selectors,
+`#webSearchToggleBtnMain.home-ask-web-toggle` overrides, login/intro
+surfaces. The "Roadmap from here" matrix below records the partial
+unblock status per dependent PR.
 
-1. **Chapter-2+ family-routed lesson** — opens a section whose primary
-   demo's `family` is one of the 13 table keys (e.g., `convolution_lab`
-   or `pole_zero_roc_lab`). Closes the #43 dispatcher gap.
-2. **Hover / focus / disabled states** on the lecture toolbar, pager
-   buttons, and Home-Ask composer (#20 Pass 2 surfaces).
-3. **Logged-in Home with Ask focused** — the `home-ask-stage`,
-   `home-mode-menu`, `home-ask-composer`, and `home-ask-web-toggle`
-   selectors (top-4 #20c duplications, ~70 override occurrences).
-4. **Preference page + course-tracker + feedback-board** — #20b
-   surfaces; not covered today.
-
-After harness expansion lands, refresh baseline; that becomes the
-pre-#20-Pass-2 reference.
+Original §Phase 3.5 motivation (preserved for audit): the 9-view
+baseline used to exercise only one lesson (Background §1 "Signal
+Energy"), short-circuiting at `isChapterOneDemo` before the #21 family
+lookup. None of the 13 lookup-table keys were regression-covered until
+PR #44 added views 17–18. The spec doc that drove the PR is
+`docs/superpowers/specs/2026-06-22-harness-expansion-design.md`.
 
 ## Phase 4 — Deferred
 
@@ -225,13 +245,13 @@ Phase 4 (DB) opens.
 
 | Step | Work item | Source of truth | Gating prereq |
 |---|---|---|---|
-| **A** | **Visual-diff harness expansion** (Phase 3.5 above) | this plan §"Phase 3.5" | none — start anytime |
-| **B** | **PR #20a Pass 2** — lesson + lecture override-chain collapse, ~1,200 lines net delete | `docs/PHASE3_PLAN.md` §6 + `docs/phase3_deferred.md` §3a | A |
-| **C** | **PR #20b Pass 2** — preference + MN + course-tracker + feedback-board collapse, ~900 lines | same + `docs/phase3_deferred.md` §3b | A; recommend B first to validate technique |
-| **D** | **PR #20c Pass 2** — Home Ask + answer-workspace + login + intro collapse, ~3,500 lines | same + `docs/phase3_deferred.md` §3c | A; recommend B+C first |
-| **E** | **PR #20c RUNTIME-INJECTED CSS OVERRIDE banner deletion** (L33581 + L43149) | `docs/phase3_deferred.md` §3d | D landed |
-| **F** | **PR #21 Pass 2** — shared `app/interactive-demos/helpers.js` (~600 lines) | `docs/phase3_deferred.md` §1a + `PHASE3_PLAN.md` §4.4 | A (so visual-diff confirms `drawArrow` / `sizeCanvas` reconciliation) |
-| **G** | **Phase 2 #18 + #19** — interactive demos subsystem (~1,500) + Glass/chapter-overview CSS (16,402) | this plan Phase 2 table | E, F; #19 also needs harness re-expansion for Glass surfaces |
+| **A** | **Visual-diff harness expansion** (Phase 3.5 above) | this plan §"Phase 3.5" | **Shipped in PR #44 (f28055b), 2026-06-22.** |
+| **B** | **PR #20a Pass 2** — lesson + lecture override-chain collapse, ~1,200 lines net delete | `docs/PHASE3_PLAN.md` §6 + `docs/phase3_deferred.md` §3a | A **partially unblocked**: views 06/07/15/16 cover layout + `chapter-overview-active` / `split-active` class flips; pager `:active`/`:focus-visible` state variants still uncovered. #20a top selectors are layout-mostly and `:hover` is covered by view 07, so cascade-collapse risk is reduced but not eliminated. |
+| **C** | **PR #20b Pass 2** — preference + MN + course-tracker + feedback-board collapse, ~900 lines | same + `docs/phase3_deferred.md` §3b | A **partially unblocked**: views 03/12/13/14 cover resting state. `:hover`/`:disabled`/`:focus` variants on `.feedback-board-card` (27×), `.preference-profile-preview` (18×), `.preference-preview-card` (14×), `.preference-primary-btn` (10×) NOT covered. Pass 2 must NOT touch state-variant overrides without expanding the harness. Recommend B first to validate technique. |
+| **D** | **PR #20c Pass 2** — Home Ask + answer-workspace + login + intro collapse, ~3,500 lines | same + `docs/phase3_deferred.md` §3c | A **partially unblocked**: views 10/11 cover composer `:focus-within` + mode-menu `.show` cascade. `#webSearchToggleBtnMain.home-ask-web-toggle` (21× — single most-duplicated #20c selector) state variants NOT covered. login/intro NOT covered. Recommend B+C first. |
+| **E** | **PR #20c RUNTIME-INJECTED CSS OVERRIDE banner deletion** (L33581 + L43149) | `docs/phase3_deferred.md` §3d | D landed; A **partially unblocked** — banner selectors inside Home Ask / preference / course-tracker / feedback-board / lesson chrome resting state are covered. Login/intro banner selectors remain unprotected; per-selector audit required. |
+| **F** | **PR #21 Pass 2** — shared `app/interactive-demos/helpers.js` (~600 lines) | `docs/phase3_deferred.md` §1a + `PHASE3_PLAN.md` §4.4 | A **partially unblocked — 2 of 13 families covered.** `drawArrow`/`sizeCanvas` reconciliation is regression-protected for `convolution_lab` and `pole_zero_roc_lab` paths only. The 11 other family renderers still require hand-walking per #43. |
+| **G** | **Phase 2 #18 + #19** — interactive demos subsystem (~1,500) + Glass/chapter-overview CSS (16,402) | this plan Phase 2 table | E, F; #19 also needs harness re-expansion for Glass surfaces (separate harness expansion when G lands — listed in phase3_deferred.md §"Phase 3.5 follow-ups"). |
 
 **Then** address the deferred punch-list (`docs/phase3_deferred.md`):
 
