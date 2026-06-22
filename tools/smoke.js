@@ -19,7 +19,7 @@ const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
 const { chromium } = require('playwright');
-const { waitForHealth, enterGuestMode, ensureSyllabusOpen, openSubtopic } = require('./test-utils.js');
+const { waitForHealth, enterGuestMode, openSubtopic } = require('./test-utils.js');
 
 const PORT = Number(process.env.TUTOR_SMOKE_PORT || 9124);
 const BASE = `http://127.0.0.1:${PORT}`;

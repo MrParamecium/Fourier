@@ -118,6 +118,18 @@ async function openSubtopic(page, sub, waitMs = 25000) {
     throw new Error(`subtopic "${sub.title}" never rendered within ${waitMs}ms`);
 }
 
+// Close any visible feature-popover help bubbles. Several Page A/B views
+// open with a `.feature-close-btn` element rendered into the page; click
+// every one that is currently in the layout (offsetParent !== null) so
+// transient highlight chrome doesn't leak into the screenshot.
+async function closeFeaturePopovers(page) {
+    await page.evaluate(() => {
+        document.querySelectorAll('.feature-close-btn').forEach(b => {
+            if (b.offsetParent !== null) b.click();
+        });
+    });
+}
+
 // Reset Home/sidebar chrome state left over from a previous Page B view
 // (e.g. view 11 forced `#homeModeMenu.show` + `aria-expanded='true'` on the
 // toggle button). View 12+ navigation strips `.show` but inherits the stale
@@ -159,19 +171,26 @@ async function settleLesson(page) {
     await page.evaluate(() => document.fonts && document.fonts.ready).catch(() => {});
     // Force chromium to materialize the system fallback fonts before screenshot.
     // document.fonts.ready resolves on font *load*; this forces *rasterization*
-    // so a cold font cache run does not leak into pixel diffs.
-    await page.evaluate(async () => {
-        if (document.fonts && typeof document.fonts.load === 'function') {
-            try {
-                await Promise.all([
-                    document.fonts.load('1em sans-serif'),
-                    document.fonts.load('400 1em sans-serif'),
-                    document.fonts.load('400 1em serif'),
-                    document.fonts.load('400 1em monospace'),
-                ]);
-            } catch (_) {}
-        }
-    });
+    // so a cold font cache run does not leak into pixel diffs. Once a page
+    // has rasterized them, the cache is sticky for the page lifetime — gate
+    // on a per-page sentinel so second-and-later settles skip this 50-150ms
+    // round-trip. MathJax typesetting + rAFs + the 150ms slack below still
+    // run on every call.
+    if (!page.__ftutorFontsRasterized) {
+        await page.evaluate(async () => {
+            if (document.fonts && typeof document.fonts.load === 'function') {
+                try {
+                    await Promise.all([
+                        document.fonts.load('1em sans-serif'),
+                        document.fonts.load('400 1em sans-serif'),
+                        document.fonts.load('400 1em serif'),
+                        document.fonts.load('400 1em monospace'),
+                    ]);
+                } catch (_) {}
+            }
+        });
+        page.__ftutorFontsRasterized = true;
+    }
     await page.evaluate(async () => {
         if (window.MathJax && window.MathJax.startup && window.MathJax.startup.promise) {
             try { await window.MathJax.startup.promise; } catch (_) {}
@@ -214,4 +233,5 @@ module.exports = {
     settleLesson,
     assertOrThrow,
     resolveLessonCachePath,
+    closeFeaturePopovers,
 };
