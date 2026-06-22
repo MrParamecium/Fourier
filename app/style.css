@@ -14161,35 +14161,6 @@ h6,
   margin-bottom: 24px;
 }
 
-.course-tracker-stat-card,
-.course-tracker-card {
-  background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,251,255,0.98));
-  border: 3px solid #cbd5e1;
-  border-radius: 28px;
-  box-shadow: 0 12px 0 -5px #f8fafc, 0 12px 0 1px #bfd0e2, 0 28px 34px rgba(15, 23, 42, 0.08);
-}
-
-.course-tracker-stat-card,
-.course-tracker-card {
-  padding: 22px;
-}
-
-.course-tracker-stat-value {
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
-  font-family: "Quicksand", "Nunito", sans-serif;
-  font-size: 42px;
-  font-weight: 800;
-  color: #0f172a;
-  line-height: 1;
-}
-
-.course-tracker-stat-value span:last-child {
-  font-size: 22px;
-  color: #94a3b8;
-}
-
 .course-tracker-progress-bar {
   height: 14px;
   margin-top: 18px;
@@ -14336,14 +14307,6 @@ h6,
 .course-tracker-reset-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 0 #cbd5e1;
-}
-
-.course-tracker-table-wrap {
-  max-height: min(62vh, 720px);
-  overflow: auto;
-  border: 2px solid #dbe4ee;
-  border-radius: 22px;
-  background: #ffffff;
 }
 
 /* Mistake Notebook: image-based problem review with AI notes. */
