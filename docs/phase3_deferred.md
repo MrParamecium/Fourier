@@ -160,28 +160,123 @@ work that requires per-property override-chain analysis.
 
 ### 3a. PR #20a Pass 2 — lesson + lecture surface override collapse
 
-**What:** Per plan §6.2 Pass 2, for each top-21 duplicated selector
-inside style.css L33346-35958 (post-PR adjusted range):
-1. Read every override of the selector top-to-bottom.
-2. Compute the effective final declaration per property (last
-   `!important` value per property wins — all overrides use `!important`).
-3. Move the collapsed rule UP to the first banner where the selector
-   appears.
-4. Delete the now-redundant later passes.
+**Status (2026-06-22): partially complete.** Step B in the
+`REFACTOR_PLAN.md` roadmap shipped 5 sections (S1+S2+S3+S4+S6+wrap-up)
+plus the original plan target was rescoped after discovery work
+surfaced that the 1,200-line plan estimate was structurally
+unreachable. Deferred follow-ups: §3a.i (S5 feedback-tones — the
+5-banner cascade analysis described below) and §3a.ii (B25 textbook
+mode lock + remaining low/medium-confidence cluster-G findings).
 
-Plan target: ~1,200 lines net delete.
+#### What shipped in Step B (Pass 2, 2026-06-22)
 
-**Why deferred:** The plan acknowledges this is the riskiest sub-step:
-the 9-view visual-diff harness covers only the default state of each
-view (no exhaustive hover / focus / disabled / narrow-viewport
-combinatorics). A naive "consolidate at first declaration site"
-LOSES property overrides if a later banner re-declares only a subset
-of properties. Per-property timeline construction is mandatory.
+- **PR #46 — S1 title-scale collapse** — delete byte-identical
+  duplicate banner (11 lines).
+- **PR #47 — S2 sidebar-home icon collapse** — 3 banners (B14/B16/B24)
+  → 1 base + 1 minimal state-variant. Caught a dead-code finding:
+  B24's gradient + colored box-shadow on the icon never rendered
+  (B14's higher-spec `:not(.active)` resets always won). Synthesis's
+  "preserve every property mention" generator was wrong; correct
+  collapse drops the dead gradient (24 lines).
+- **PR #48 — S3 Q&A docked container merge** — fold B8 container-type
+  + container-name into B7 (6 lines).
+- **PR #49 — S4 mistake-notebook duplicate cleanup** — INVERTED from
+  the synthesis's recommended direction. B28's doubled-ID
+  `#mistakeNotebookView#mistakeNotebookView` (2, 1, 0) is actively
+  beating the LATER liquid-glass-redesign rules at L36408+ which set
+  a 2-column grid, different margin-top, different alignment. The
+  actual dead code is B30 (single-ID, every property either
+  identical to B28 or overridden by B28 at higher spec). 84 lines.
+- **PR #50 — S6 BOOK SURFACE cascade dedup** — 4 of 5 high-confidence
+  cluster-G findings (3 dead declarations in B2 already losing to B5
+  in the cascade, 1 dead `.lecture-overlay-btn` selector in B5, 1
+  longhand-shorthand redundancy in B5, 1 duplicate disabled/hidden
+  rule in B6) (20 lines).
+- **PR #51 — Step B wrap-up** — final cluster-G finding B15 [1]
+  (#learnViewSelector margin-right superseded by B17's margin shorthand)
+  + this doc refresh + project memory bump (4 lines).
 
-**Entry point:** identify the duplicated selectors first
-(`grep -oE '^[#\.][^{,]+,?\s*$' app/style.css | sort | uniq -c | sort -rn`
-filtered to the #20a range). Build a per-selector property-timeline
-table before any edit.
+**Cumulative Step B delta: ~169 lines deleted, not the 1,200 plan
+estimate.**
+
+#### Why the 1,200-line plan target proved unreachable
+
+The plan §6.1 target was set before per-property timeline analysis
+revealed the structure of the cluster:
+- Pass 1 (#40/#41/#42) already shipped 165 lines of orphan deletes —
+  the easy wins were already taken before Pass 2 started.
+- L33581 LEARN Q&A RUNTIME INJECTION OVERRIDE banner (~90 lines) was
+  deferred §3d, removing it from the available pool.
+- Banner 32 (Preference page liquid glass) starts at L35828, not
+  L35958. The plan's L35958 line cutoff was off by ~130 lines.
+- Most "duplicates" in this cluster are NOT byte-identical — they are
+  banners at different specificities defending against each other's
+  later overrides. The cascade is structurally load-bearing in many
+  places that look duplicated on selector-text inspection alone.
+- The 7-cluster discovery missed cross-banner interactions with the
+  LATER #20b range (L36408+ for mistake-notebook, L38504+ for
+  feedback tones). Two of the originally proposed S4/S5 sections
+  needed direction inversion (S4 shipped inverted) or full deferral
+  (S5).
+
+Realistic Step B ceiling, post-analysis: ~320 lines if all 5 sections
+shipped + a polished S5. The 880-line gap to the original 1,200 target
+is structural, not a deferral.
+
+#### 3a.i — DEFERRED: S5 feedback-author-tones (5-banner cascade)
+
+Banners B19 (EOF FEEDBACK AUTHOR COLORS), B20 (TRUE FINAL FEEDBACK
+AUTHOR TONES), B22 (FINAL FEEDBACK AUTHOR COLOR LOCK), B23 (FEEDBACK
+AUTHOR TONE LOCK), plus a DUPLICATE "EOF FEEDBACK AUTHOR COLORS"
+banner at L38504+ in the #20b range — all interact. Cluster C's
+discovery scoped to L33346–L35828 and missed the L38504+ banner just
+like cluster E missed L36408+ (the bug that surfaced the S4 inversion).
+
+**Specific cascade risk:** B19's
+`.feedback-reply.is-left[class*="tone-"] .feedback-reply-context` rule
+at (1, 5, 0) sets `border-color: rgba(var(--author-rgb), 0.22)`
+LITERAL. B22 at (1, 4, 0) sets `border-color: var(--author-mid)`,
+which B23 resolves to `rgba(var(--author-rgb), 0.24)` — deleting B19's
+context rule shifts the border alpha 0.22 → 0.24. The single
+`14-feedback-board` harness view doesn't exercise tone-1..5 hover or
+active variants, so a 0.02-alpha border shift may not register at
+0.20% threshold but is a real visual change.
+
+**Entry point for next session:** scope the property-timeline
+workflow to L34893–L38565 (not just the cluster's banner range).
+Walk every `.feedback-thread`, `.feedback-reply`,
+`.feedback-reply-meta`, `.feedback-reply-context`,
+`.feedback-thread::after`, `.feedback-reply::before` declaration; tag
+by (specificity, source-line). Identify what's safe to collapse vs
+what's beating the L38504+ duplicate banner. Estimate: ~140 lines
+recoverable.
+
+#### 3a.ii — DEFERRED: cluster-G low/medium-confidence findings
+
+- **B25 (Textbook mode lock):** background shorthand allegedly
+  overridden by background-image. Synthesis was vague about the
+  property and the line numbers were partially drifted. Need a
+  fresh per-property check. ~4 lines.
+- **B15 [2]:** `.learn-topbar-actions:has(#learnClose.learn-close)`
+  rule looked dead because `#learnClose { display: none }`, but
+  `#learnClose` IS rendered in the DOM (HTML L629; JS at app.js:891
+  + 5334 wires it), so `:has()` still matches. NOT a delete.
+- **B17 [1]:** dead `:not()` selectors in a grouped rule — line
+  references drifted post-merge and the selector pattern couldn't
+  be re-located; needs a fresh grep. ~2 lines if real.
+- **B18 [1]:** `.home-mode-menu-icon i { font-size }` redundancy
+  with parent — but 3 LATER identical-selector rules at L39324,
+  L40268, L40829 each set a DIFFERENT font-size (30/25/22px),
+  defeating both inheritance and the cluster-G assumption. The
+  cluster of 4 duplicate selectors should be its own deferred item.
+  ~4 lines if rationalized.
+
+**Discovery-agent scoping lesson:** for any banner-cluster discovery,
+the property-timeline analysis must walk the cascade to file end, not
+stop at the cluster's banner boundary. Both the cluster-E and cluster-C
+discovery missed cross-banner overrides outside the cluster range.
+Future Step C / Step D discovery prompts should explicitly require
+"grep the full file for every selector before declaring a rule dead."
 
 ### 3b. PR #20b Pass 2 — preference + MN + course-tracker + feedback-board
 

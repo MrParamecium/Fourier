@@ -34547,10 +34547,6 @@ body {
   gap: 0 !important;
 }
 
-#learnView#learnView .learn-topbar-actions #learnViewSelector {
-  margin-right: 0 !important;
-}
-
 /* Sidebar Home icon cleanup: keep the glass nav pill, remove the extra box around the house icon. */
 .app .sidebar .sidebar-home-link#navHomeBtn .sidebar-link-icon::before,
 .app .sidebar .sidebar-home-link#navHomeBtn .sidebar-link-icon::after {
