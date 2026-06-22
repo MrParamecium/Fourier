@@ -2,7 +2,7 @@
 
 Owner: FlyM1ss
 Started: 2026-06-19
-Last refreshed: 2026-06-22 (after PR #60/#61 — Step G.1+G.2 / Phase 2 #18 complete)
+Last refreshed: 2026-06-22 (after PR #62 — Phase 3.5 v2 harness expansion, Glass coverage gate cleared)
 Status:
 
 - **Phase 0** merged (#15).
@@ -10,8 +10,8 @@ Status:
 - **Phase 2** — 7 of 8 items merged. #18 (interactive demos subsystem)
   shipped 2026-06-22 in PR #60 + #61 (Step G.1 + G.2; −1,042 lines from
   app.js across two new files: dispatcher.js 584L + chapter-one.js 473L).
-  Only #19 (Glass + chapter-overview CSS, 16,402 lines) remains — gated
-  on Phase 3.5 follow-up harness re-expansion for Glass surfaces.
+  #19 (Glass + chapter-overview CSS, 16,402 lines) is now **unblocked**
+  after PR #62 (Phase 3.5 v2) closed the Glass-surface coverage gap.
 - **Phase 3 Pass 1** complete on 2026-06-21..22 — 6 PRs merged:
   - #38 (PR #21) hydrateInteractiveDemos split into 19 family modules.
   - 589be97 visual-diff baseline refresh + 3 lesson-chrome views.
@@ -19,14 +19,21 @@ Status:
   - #40 / #41 / #42 (PR #20a/b/c Pass 1) orphan-selector strips.
   - #43 (PR #23) dispatcher arms → `INTERACTIVE_DEMO_FAMILY_RENDERERS`
     lookup table.
-- **Phase 3.5** (visual-diff harness expansion) shipped 2026-06-22 in
-  PR #44 (f28055b after review fixes). Harness grew from 9 → 18 views
-  across 3 page topologies (A/B/C), covering 2 of 13 dispatcher family
-  keys (`convolution_lab`, `pole_zero_roc_lab`), Home Ask
+- **Phase 3.5** (visual-diff harness expansion v1) shipped 2026-06-22
+  in PR #44 (f28055b after review fixes). Harness grew from 9 → 18
+  views across 3 page topologies (A/B/C), covering 2 of 13 dispatcher
+  family keys (`convolution_lab`, `pole_zero_roc_lab`), Home Ask
   `:focus-within` + mode-menu `.show`, preference + course-tracker +
   feedback-board resting states, and `chapter-overview-active` /
   `chapter-overview-split-active` lesson chrome class flips. Roadmap
-  steps B–F are now **partially** unblocked — see the matrix below.
+  steps B–F are **partially** unblocked — see the matrix below.
+- **Phase 3.5 v2** (Glass-coverage expansion) shipped 2026-06-22 in
+  PR #62 (89a6e4c). Harness grew from 18 → 25 views with a new Page D
+  bootstrap (`enterLoginView`). 7 new views close every Glass banner
+  cluster that gated Step G.3: login (L43321+), collapsed sidebar
+  (L43241+), Key Takeaways (L39295+), Quick Check (L39494+), textbook-
+  focus (L42981+), answer workspace (L41934+), quick-setup modal
+  (L40258+). #19 (Glass + chapter-overview CSS) is now unblocked.
 - **Phase 3 Pass 2** is the active frontier — see §"Roadmap from
   here". Deferred punch-list lives in `docs/phase3_deferred.md`.
 
@@ -252,7 +259,7 @@ Phase 4 (DB) opens.
 | **D** | **PR #20c Pass 2** — Home Ask + answer-workspace + login + intro collapse. **Partially shipped 2026-06-22 across PRs #56/#57/#58 (−147 lines).** S3 (login + intro) verified at 0 deletable lines — plan §6.1 inverted-preference assumption wrong against current file state, see `docs/phase3_deferred.md` §3c.ii. S4 RUNTIME-INJECTED banners also verified 0 — see row E below. Remaining home-Ask state-variant candidates (~145 lines, safe-on-cascade but harness can't pixel-verify) deferred — see `docs/phase3_deferred.md` §3c.i. Original ~3,500-line target rescoped — structural-ceiling note in §3c. | `docs/PHASE3_PLAN.md` §6 + `docs/phase3_deferred.md` §3c | A **partially unblocked**: views 10/11 cover composer `:focus-within` + mode-menu `.show` cascade. State variants on `#webSearchToggleBtnMain.home-ask-web-toggle` (21× — single most-duplicated #20c selector) NOT covered. login/intro NOT covered. |
 | **E** | **PR #20c RUNTIME-INJECTED CSS OVERRIDE banner deletion** (L33490 + L42594). **Shipped 2026-06-22 inside Step D evaluation: VERIFIED LOAD-BEARING — neither banner deleted.** Plan §3d entry-point check confirmed style.css banners win on doubled-/tripled-ID specificity vs `runtime-collapsed.css` rules that set DIFFERENT values on the same properties. See `docs/phase3_deferred.md` §3d for the per-banner per-property analysis. | `docs/phase3_deferred.md` §3d | D evaluated; banners stay. |
 | **F** | **PR #21 Pass 2** — shared `app/interactive-demos/helpers.js`. **Shipped 2026-06-22 in PR #59 (82d4ade).** Extracted `applyCanvasDpr`, `drawCanvasArrow`, `coalesceFrames` across complex-plane / sinusoid-phasor / phasor + the chapter-one demo rerender in app.js. Net repo delta **−18 lines**, well below the deferred-doc §1a "~600 lines" aspirational estimate — see `docs/phase3_deferred.md` §1a for the plan-inventory correction. | `docs/phase3_deferred.md` §1a + `PHASE3_PLAN.md` §4.4 | F shipped. |
-| **G** | **Phase 2 #18 + #19** — interactive demos subsystem + Glass/chapter-overview CSS. **#18 shipped 2026-06-22 across PRs #60 (G.1) and #61 (G.2) — net app.js delta −1,042 lines.** G.1 extracted the dispatcher + spec helpers + lab-shell + Laplace flow renderer (584 lines to `app/interactive-demos/dispatcher.js`). G.2 extracted `hydrateChapterOneDemo` (473 lines to `app/interactive-demos/chapter-one.js`) and consolidated its local helpers against helpers.js + dispatcher.js (drawArrow → drawCanvasArrow shim, setupCanvas → applyCanvasDpr delegate, removed redundant local `fmt`). **#19 (Glass + chapter-overview CSS, 16,402 lines) NOT shipped** — explicitly gated on Phase 3.5 follow-up harness expansion for Glass surfaces. See `docs/phase3_deferred.md` §7 for the harness gap inventory. | this plan Phase 2 table | #18 done; #19 still gated on harness re-expansion. |
+| **G** | **Phase 2 #18 + #19** — interactive demos subsystem + Glass/chapter-overview CSS. **#18 shipped 2026-06-22 across PRs #60 (G.1) and #61 (G.2) — net app.js delta −1,042 lines.** G.1 extracted the dispatcher + spec helpers + lab-shell + Laplace flow renderer (584 lines to `app/interactive-demos/dispatcher.js`). G.2 extracted `hydrateChapterOneDemo` (473 lines to `app/interactive-demos/chapter-one.js`) and consolidated its local helpers against helpers.js + dispatcher.js. **G.3 (#19 Glass + chapter-overview CSS, 16,402 lines) NOW UNBLOCKED** — Phase 3.5 v2 harness expansion (PR #62, 89a6e4c) added 7 Glass-coverage views (login / collapsed sidebar / Key Takeaways / Quick Check / textbook focus / answer workspace / quick-setup modal) bringing the harness to 25 views. The Glass surface gap that gated this step is closed; Step G.3 can ship without banner-by-banner hand-walking. | this plan Phase 2 table | #18 done; #19 unblocked — ready for extraction. |
 
 **Then** address the deferred punch-list (`docs/phase3_deferred.md`):
 
