@@ -35625,13 +35625,6 @@ body {
   margin-bottom: 18px !important;
 }
 
-#mistakeNotebookView .mistake-notebook-grid {
-  display: grid !important;
-  grid-template-columns: 1fr !important;
-  grid-template-rows: auto auto !important;
-  gap: 18px !important;
-}
-
 #mistakeNotebookView .mistake-list-card {
   padding: 18px !important;
 }
@@ -35640,56 +35633,14 @@ body {
   margin-bottom: 12px !important;
 }
 
-#mistakeNotebookView .mistake-list {
-  display: grid !important;
-  grid-auto-flow: column !important;
-  grid-auto-columns: minmax(260px, 320px) !important;
-  grid-template-columns: none !important;
-  gap: 12px !important;
-  max-height: none !important;
-  overflow-x: auto !important;
-  overflow-y: hidden !important;
-  padding: 2px 4px 8px 2px !important;
-  scroll-snap-type: x proximity !important;
-}
-
-#mistakeNotebookView .mistake-list-item {
-  min-height: 96px !important;
-  scroll-snap-align: start !important;
-}
-
 #mistakeNotebookView .mistake-detail-card {
   padding: clamp(20px, 2.4vw, 34px) !important;
-}
-
-#mistakeNotebookView .mistake-detail-content {
-  display: grid !important;
-  grid-template-rows: auto auto auto !important;
-  gap: 20px !important;
 }
 
 #mistakeNotebookView .mistake-detail-head {
   align-items: center !important;
   padding-bottom: 16px !important;
   border-bottom: 1px solid rgba(255,255,255,0.36) !important;
-}
-
-#mistakeNotebookView .mistake-workspace {
-  display: grid !important;
-  grid-template-columns: minmax(420px, 1.18fr) minmax(360px, 0.82fr) !important;
-  gap: clamp(18px, 2.2vw, 28px) !important;
-  margin-top: 0 !important;
-  align-items: stretch !important;
-}
-
-#mistakeNotebookView .mistake-image-frame {
-  min-height: clamp(460px, 48vh, 660px) !important;
-}
-
-#mistakeNotebookView .mistake-notes-panel {
-  display: grid !important;
-  grid-template-rows: auto auto auto minmax(220px, 1fr) auto auto auto !important;
-  align-content: start !important;
 }
 
 #mistakeNotebookView .mistake-notes-input {
@@ -35700,47 +35651,12 @@ body {
   min-height: 92px !important;
 }
 
-#mistakeNotebookView .mistake-actions {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto !important;
-  align-items: center !important;
-}
-
 #mistakeNotebookView .mistake-danger-btn {
   min-width: 94px !important;
 }
 
-#mistakeNotebookView .mistake-ai-answer-panel {
-  margin-top: 0 !important;
-  max-height: min(34vh, 360px) !important;
-  overflow: auto !important;
-}
-
 #mistakeNotebookView .mistake-empty-panel {
   min-height: 430px !important;
-}
-
-@media (max-width: 1180px) {
-  #mistakeNotebookView .mistake-workspace {
-    grid-template-columns: 1fr !important;
-  }
-
-  #mistakeNotebookView .mistake-ai-answer-panel {
-    max-height: none !important;
-  }
-}
-
-@media (max-width: 820px) {
-  #mistakeNotebookView .mistake-notebook-toolbar {
-    grid-template-columns: 1fr !important;
-  }
-
-  #mistakeNotebookView .mistake-list {
-    grid-auto-columns: minmax(230px, 82vw) !important;
-  }
-
-  #mistakeNotebookView .mistake-actions {
-    grid-template-columns: 1fr !important;
-  }
 }
 
 /* Final page-number glass lock: override older sticky-note/dashed badge rules. */
