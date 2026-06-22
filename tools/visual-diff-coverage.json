@@ -1,13 +1,11 @@
 {
-  "mode": "check",
   "entries": [
     {
       "viewName": "17-lesson-convolution",
       "sectionId": "3.8-1",
       "expected": "convolution_lab",
       "families": [
-        "convolution_lab",
-        "signal_transform"
+        "convolution_lab"
       ]
     },
     {

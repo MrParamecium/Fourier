@@ -34,14 +34,10 @@ const MASK_CSS = `
        Math.random() UID per session (clerk-auth.js startGuestMode); without
        this mask view 05 drifts every run at 0.013%. .settings-user-meta is
        a dedicated leaf node that holds ONLY the "UID: XXXXXX" line, so
-       masking it preserves the rest of the Account card. Selector needs
-       higher specificity AND must come later in the cascade than the
-       existing override at style.css L33281 ('#settingsView
-       .settings-user-meta { color:...62%; }'). The addInitScript runs at
-       DOMContentLoaded — BEFORE the app's <link rel=stylesheet>, so we
-       lean on selector specificity rather than cascade order. The
-       html#__mask__ + #settingsView qualifier gives us 2 IDs vs the
-       override's 1 ID + 1 class. */
+       masking it preserves the rest of the Account card.
+       !important + 2-ID specificity beats both the inline
+       style="color:#94a3b8" and the L33281 author rule, regardless of
+       cascade order. */
     html #settingsView .settings-user-meta { color: transparent !important; text-shadow: none !important; }
 `;
 
@@ -82,8 +78,8 @@ async function ensureSyllabusOpen(page) {
 
 async function openSubtopic(page, sub, waitMs = 25000) {
     await ensureSyllabusOpen(page);
-    // Exact-text match — `:has-text` is substring-based and would prefix-match
-    // future "Chapter 4" vs "Chapter 14" expansion.
+    // Substring match; count!==1 guard below catches ambiguity (e.g.
+    // "Chapter 1" prefix-matching a future "Chapter 14").
     const chapter = page.locator('#courseSyllabus .syllabus-chapter', { hasText: sub.chapter });
     const chapterCount = await chapter.count();
     if (chapterCount !== 1) {
@@ -122,9 +118,18 @@ async function openSubtopic(page, sub, waitMs = 25000) {
     throw new Error(`subtopic "${sub.title}" never rendered within ${waitMs}ms`);
 }
 
-async function openSubtopicInFreshGuest(page, sub, base) {
-    await enterGuestMode(page, base);
-    return openSubtopic(page, sub);
+// Reset Home/sidebar chrome state left over from a previous Page B view
+// (e.g. view 11 forced `#homeModeMenu.show` + `aria-expanded='true'` on the
+// toggle button). View 12+ navigation strips `.show` but inherits the stale
+// `aria-expanded`; no current selector keys off it, but the harness should
+// not be silently order-dependent. Parallel to resetLessonChromeState.
+async function resetHomeChromeState(page) {
+    await page.evaluate(() => {
+        const menu = document.getElementById('homeModeMenu');
+        const toggle = document.getElementById('homeModeToggleBtn');
+        menu?.classList.remove('show');
+        toggle?.setAttribute('aria-expanded', 'false');
+    });
 }
 
 // Reset lesson chrome state left over from a previous view on the same page.
@@ -204,7 +209,7 @@ module.exports = {
     enterGuestMode,
     ensureSyllabusOpen,
     openSubtopic,
-    openSubtopicInFreshGuest,
+    resetHomeChromeState,
     resetLessonChromeState,
     settleLesson,
     assertOrThrow,

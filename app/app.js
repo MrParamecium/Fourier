@@ -1070,10 +1070,6 @@ function decodeBase64Utf8(raw) {
     }
   }
 }
-// Exposed for tools/visual-diff.js family-verification eval — do not remove
-// without updating tools/test-utils.js / tools/visual-diff.js.
-window.decodeBase64Utf8 = decodeBase64Utf8;
-
 function parseBase64JsonAttr(raw) {
   if (!raw) return null;
   try {
