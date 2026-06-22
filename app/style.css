@@ -33376,7 +33376,6 @@ body {
   width: 100% !important;
   max-width: none !important;
   margin: 0 !important;
-  padding: 0 !important;
   overflow-y: auto !important;
   overflow-x: hidden !important;
 }
@@ -33398,8 +33397,6 @@ body {
   flex: 1 0 auto !important;
   box-sizing: border-box !important;
   margin: 0 !important;
-  border-radius: 0 !important;
-  padding: clamp(58px, 6vh, 90px) clamp(76px, 7vw, 128px) clamp(54px, 6vh, 86px) !important;
 }
 
 @media (max-width: 900px) {
@@ -33706,10 +33703,6 @@ body {
     radial-gradient(circle at 20% 8%, rgba(255,255,255,0.86), transparent 34%),
     radial-gradient(circle at 82% 18%, rgba(244,232,205,0.22), transparent 34%),
     var(--theme-page-surface-soft) !important;
-  background-image:
-    radial-gradient(circle at 20% 8%, rgba(255,255,255,0.86), transparent 34%),
-    radial-gradient(circle at 82% 18%, rgba(244,232,205,0.22), transparent 34%),
-    var(--theme-page-surface-soft) !important;
 }
 
 #learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-frame {
@@ -33749,10 +33742,6 @@ body {
 
 #learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content p {
   margin-bottom: 1.18em !important;
-}
-
-#learnView #learnExplainToolbar .lecture-overlay-btn {
-  display: none !important;
 }
 
 #learnView .learn-explain-scroll {
@@ -33913,15 +33902,6 @@ body {
 #learnView#learnView #lectureNextOverlayBtn.lecture-page-corner {
   left: auto !important;
   right: clamp(18px, 2.4vw, 34px) !important;
-}
-
-#learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner:disabled,
-#learnView#learnView #lectureNextOverlayBtn.lecture-page-corner:disabled,
-#learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner.hidden,
-#learnView#learnView #lectureNextOverlayBtn.lecture-page-corner.hidden {
-  opacity: 0 !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
 }
 
 #learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner::before,
