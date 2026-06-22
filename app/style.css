@@ -34525,17 +34525,24 @@ body {
     inset 0 1px 0 #ffffff !important;
 }
 
-.app .sidebar .sidebar-home-link#navHomeBtn .sidebar-link-icon,
-.app .sidebar .sidebar-home-link#navHomeBtn:not(.active) .sidebar-link-icon,
-.app .sidebar .sidebar-home-link#navHomeBtn.active .sidebar-link-icon,
-.app .sidebar .sidebar-home-link#navHomeBtn:hover .sidebar-link-icon {
+.app .sidebar .sidebar-home-link#navHomeBtn .sidebar-link-icon {
+  width: 24px !important;
+  min-width: 24px !important;
+  height: 24px !important;
   border: 0 !important;
   border-radius: 0 !important;
   background: transparent !important;
   background-image: none !important;
   box-shadow: none !important;
   outline: 0 !important;
+  color: #0284c7 !important;
   transform: none !important;
+}
+
+.app .sidebar .sidebar-home-link#navHomeBtn:hover .sidebar-link-icon,
+.app .sidebar .sidebar-home-link#navHomeBtn.active .sidebar-link-icon {
+  color: #0ea5e9 !important;
+  transform: translateY(-1px) !important;
 }
 
 /* Page close controls removal: Home is now the global return path. */
@@ -34571,22 +34578,6 @@ body {
 }
 
 /* Sidebar Home icon cleanup: keep the glass nav pill, remove the extra box around the house icon. */
-.app .sidebar .sidebar-home-link#navHomeBtn .sidebar-link-icon,
-.app .sidebar .sidebar-home-link#navHomeBtn:hover .sidebar-link-icon,
-.app .sidebar .sidebar-home-link#navHomeBtn.active .sidebar-link-icon {
-  width: 24px !important;
-  min-width: 24px !important;
-  height: 24px !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  background-image: none !important;
-  box-shadow: none !important;
-  outline: 0 !important;
-  color: #0284c7 !important;
-  transform: none !important;
-}
-
 .app .sidebar .sidebar-home-link#navHomeBtn .sidebar-link-icon::before,
 .app .sidebar .sidebar-home-link#navHomeBtn .sidebar-link-icon::after {
   content: none !important;
@@ -35338,15 +35329,6 @@ body {
   pointer-events: none !important;
 }
 
-.app .sidebar .sidebar-home-link#navHomeBtn .sidebar-link-icon {
-  background:
-    radial-gradient(circle at 30% 20%, rgba(255,255,255,0.92), rgba(255,255,255,0.34) 54%, rgba(125,211,252,0.20)) !important;
-  color: #0284c7 !important;
-  box-shadow:
-    0 8px 18px rgba(14,165,233,0.14),
-    inset 0 1px 0 rgba(255,255,255,0.86) !important;
-}
-
 .app .sidebar .sidebar-home-link#navHomeBtn:hover,
 .app .sidebar .sidebar-home-link#navHomeBtn.active {
   background:
@@ -35356,12 +35338,6 @@ body {
   box-shadow:
     0 12px 28px rgba(14,165,233,0.12),
     inset 0 1px 0 rgba(255,255,255,0.94) !important;
-}
-
-.app .sidebar .sidebar-home-link#navHomeBtn:hover .sidebar-link-icon,
-.app .sidebar .sidebar-home-link#navHomeBtn.active .sidebar-link-icon {
-  color: #0ea5e9 !important;
-  transform: translateY(-1px) !important;
 }
 
 .app.sidebar-collapsed #leftSidebar .sidebar-home-link#navHomeBtn,
