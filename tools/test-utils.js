@@ -30,6 +30,19 @@ const MASK_CSS = `
     input, textarea, [contenteditable="true"] { caret-color: transparent !important; }
     /* home-mode menu transitions during forced .show flip */
     .home-mode-menu.show { transition: none !important; animation: none !important; }
+    /* Settings → Account card UID line. startGuestMode() generates a fresh
+       Math.random() UID per session (clerk-auth.js startGuestMode); without
+       this mask view 05 drifts every run at 0.013%. .settings-user-meta is
+       a dedicated leaf node that holds ONLY the "UID: XXXXXX" line, so
+       masking it preserves the rest of the Account card. Selector needs
+       higher specificity AND must come later in the cascade than the
+       existing override at style.css L33281 ('#settingsView
+       .settings-user-meta { color:...62%; }'). The addInitScript runs at
+       DOMContentLoaded — BEFORE the app's <link rel=stylesheet>, so we
+       lean on selector specificity rather than cascade order. The
+       html#__mask__ + #settingsView qualifier gives us 2 IDs vs the
+       override's 1 ID + 1 class. */
+    html #settingsView .settings-user-meta { color: transparent !important; text-shadow: none !important; }
 `;
 
 function waitForHealth(base, timeoutMs = 15000) {
@@ -139,6 +152,21 @@ async function resetLessonChromeState(page) {
 // captureView before every screenshot.
 async function settleLesson(page) {
     await page.evaluate(() => document.fonts && document.fonts.ready).catch(() => {});
+    // Force chromium to materialize the system fallback fonts before screenshot.
+    // document.fonts.ready resolves on font *load*; this forces *rasterization*
+    // so a cold font cache run does not leak into pixel diffs.
+    await page.evaluate(async () => {
+        if (document.fonts && typeof document.fonts.load === 'function') {
+            try {
+                await Promise.all([
+                    document.fonts.load('1em sans-serif'),
+                    document.fonts.load('400 1em sans-serif'),
+                    document.fonts.load('400 1em serif'),
+                    document.fonts.load('400 1em monospace'),
+                ]);
+            } catch (_) {}
+        }
+    });
     await page.evaluate(async () => {
         if (window.MathJax && window.MathJax.startup && window.MathJax.startup.promise) {
             try { await window.MathJax.startup.promise; } catch (_) {}
