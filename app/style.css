@@ -13917,24 +13917,6 @@ h6,
   color: #64748b;
 }
 
-.preference-save-state[data-tone="working"] {
-  border-color: #7dd3fc;
-  background: #f0f9ff;
-  color: #0284c7;
-}
-
-.preference-save-state[data-tone="saved"] {
-  border-color: #86efac;
-  background: #f0fdf4;
-  color: #15803d;
-}
-
-.preference-save-state[data-tone="error"] {
-  border-color: #fca5a5;
-  background: #fff1f2;
-  color: #be123c;
-}
-
 .preference-profile-editor,
 .preference-ai-input {
   width: 100%;
@@ -25821,39 +25803,6 @@ body {
   color: #ffffff !important;
   box-shadow: 0 7px 0 #0f78aa, 0 16px 32px rgba(14, 116, 144, 0.28) !important;
   z-index: 95 !important;
-}
-
-/* FINAL PREFERENCE CARD PIN LOCK: replace the profile-card tape with a red push pin. */
-.preference-profile-card .preference-card-tape {
-  top: -21px !important;
-  left: 50% !important;
-  width: 38px !important;
-  height: 38px !important;
-  border: 3px solid #7f1d1d !important;
-  border-radius: 999px !important;
-  background:
-    radial-gradient(circle at 36% 28%, rgba(255, 255, 255, 0.86) 0 5px, transparent 6px),
-    radial-gradient(circle at 64% 66%, rgba(127, 29, 29, 0.38) 0 10px, transparent 11px),
-    linear-gradient(135deg, #fb7185 0%, #ef4444 48%, #b91c1c 100%) !important;
-  box-shadow:
-    0 5px 0 #7f1d1d,
-    0 14px 24px rgba(127, 29, 29, 0.24),
-    inset -5px -6px 9px rgba(127, 29, 29, 0.32) !important;
-  transform: translateX(-50%) rotate(-8deg) !important;
-}
-
-.preference-profile-card .preference-card-tape::after {
-  content: "" !important;
-  position: absolute !important;
-  left: 50% !important;
-  bottom: -19px !important;
-  width: 4px !important;
-  height: 20px !important;
-  border-radius: 999px !important;
-  background: linear-gradient(180deg, #7f1d1d 0%, rgba(127, 29, 29, 0.22) 100%) !important;
-  box-shadow: 3px 4px 6px rgba(127, 29, 29, 0.18) !important;
-  transform: translateX(-50%) rotate(5deg) !important;
-  z-index: -1 !important;
 }
 
 /* ABSOLUTE EOF PAGER TEXT + ARROW FIX:
