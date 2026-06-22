@@ -35060,17 +35060,6 @@ body {
   color: var(--author-ink) !important;
 }
 
-/* Final lesson title scale lock: keep chapter headings strong without swallowing the page. */
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-heading {
-  margin-bottom: clamp(20px, 2.6vw, 34px) !important;
-}
-
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-heading h2 {
-  max-width: min(100%, 1080px) !important;
-  font-size: clamp(2.3rem, 4.6vw, 4.95rem) !important;
-  line-height: 1.08 !important;
-}
-
 /* FINAL FEEDBACK AUTHOR COLOR LOCK: overrides lane colors at the true tail. */
 #feedbackView .feedback-thread,
 #feedbackView .feedback-reply {
