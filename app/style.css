@@ -34880,12 +34880,6 @@ body {
 #feedbackView .feedback-thread.tone-5,
 #feedbackView .feedback-reply.tone-5 { --author-rgb: 100, 116, 139; --author-ink: #475569; }
 
-#feedbackView .feedback-thread[class*="tone-"] {
-  background:
-    radial-gradient(520px 160px at 0% 0%, rgba(var(--author-rgb),0.10), transparent 72%),
-    linear-gradient(135deg, rgba(255,255,255,0.42), rgba(255,255,255,0.16)) !important;
-}
-
 #feedbackView .feedback-reply[class*="tone-"],
 #feedbackView .feedback-reply.is-left[class*="tone-"],
 #feedbackView .feedback-reply.is-right[class*="tone-"] {
