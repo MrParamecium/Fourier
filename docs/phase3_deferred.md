@@ -275,3 +275,92 @@ Both pairs were verified during the Pass 1 work and skipped. Update
 
 The Phase 3 JS work is structurally complete. The CSS work landed Pass
 1 across all 3 sub-PRs; Pass 2 is the next-session focus.
+
+---
+
+## 7. Phase 3.5 follow-ups (PR #44 review-deferred)
+
+Drafted 2026-06-22 after the PR #44 5-lens review. PR #44 (Phase 3.5
+visual-diff harness expansion, 9 → 18 views) shipped at f28055b after
+must-fixes 1–12 and should-fixes A–G,I–M were folded in. The items
+below were intentionally left out of PR #44 as out-of-scope follow-ups.
+
+### 7a. Harness architecture (defer for v2)
+
+- **Parallel pipelines per Page A/B/C via `Promise.all`.** Spec v2
+  permitted sequential v1 as acceptable. The bridge serializes
+  internally and the wall-clock saving (~30–50s) is not worth the
+  flake risk without a separate spec for bridge concurrency.
+- **`global.__pageCResults` → closure-threaded `runCtx`.** Acceptable
+  smell for serial execution; refactor when concurrency lands.
+- **PAGE_C scaling beyond 2 family-key coverage** — if a future PR
+  adds views 19+ for additional dispatcher keys, refactor PAGE_C to a
+  handler that opens lessons sequentially with closeSection between
+  captures rather than one page per family (spec deferred §10).
+- **Page B `requires` field for declarative preconditions.** Spec table
+  pattern lists per-view preconditions; today implemented as imperative
+  recovery in each setup(). Works, but a `requires` table would make
+  the preconditions auditable in one place.
+
+### 7b. settleLesson / masking polish
+
+- **settleLesson font warmup loads generics only, not real webfonts.**
+  Calls `document.fonts.load('1em sans-serif')` etc.; real fix is
+  enumerating `document.fonts` and forcing each face. Current
+  implementation is good enough — no observed pixel drift.
+- **settleLesson re-runs font warmup on every screenshot.** Sentinel-
+  gating possible (skip if a "fonts warmed up" flag is set on the
+  page) but adds complexity for a one-time cost.
+- **Feedback meta locale-stable timestamp width** (latent CI flake).
+  Today masked via `color:transparent !important; text-shadow:none`;
+  if a future regression involves text-shape regression it might leak.
+  Real fix: tabular-nums + min-width on the meta line.
+- **MASK_CSS UID length variable** — the masked `.settings-user-meta`
+  line still occupies space proportional to the random UID's length.
+  Today no observed drift, but a seeded random or fixed-width clamp
+  would harden it.
+- **settleLesson + resetLessonChromeState arbitrary 150ms / 100ms
+  tails.** Replace with `waitForFunction` on `.is-animating` absence;
+  mild — current sleeps work.
+
+### 7c. Self-test + cross-reference
+
+- **Add startup self-test for `window.*` harness exports to
+  `npm run check`.** A `node tools/check-harness-exports.js` that
+  greps `app/app.js` for the harness-relied-on window exports
+  (`window.parseBase64JsonAttr`, `window.inferInteractiveDemoFamily`)
+  would surface a deleted export at lint time instead of at first
+  --check run. Good idea; requires new script + package.json wire-up.
+- **Cross-reference comment on `window.__ftutorRefreshPager`.**
+  Consistency only — already exposed in app/app.js without a "harness
+  export" comment band like the other window.* exports.
+- **View 11 `.show` re-apply across 2 rAFs.** Defensive against a stray
+  document.click race auto-closing the menu mid-screenshot. Today not
+  observed flaking. Add a 2-rAF re-apply if intermittent failure ever
+  surfaces.
+
+### 7d. Test fixture organization
+
+- **SUBTOPIC fixture centralization between smoke.js + visual-diff.js.**
+  Both files hard-code `1_1-1 Signal Energy` as the canonical test
+  subtopic. Minor duplication; move to `tools/test-utils.js` as
+  `CANONICAL_SUBTOPIC` if a third caller appears.
+- **3.12 / 3.13 Page C candidates blocked by openSubtopic shape.**
+  Spec v2's view 18 fallback list included `3.12` / `3.13` (cache
+  present in `workspace/materials/lesson-cache/`), but those sections
+  live as standalone entries in `syllabus-data.js` without
+  `subsections:` — openSubtopic's 3-tuple `(chapter, section, title)`
+  shape cannot navigate to them. The implementation drops them from
+  the candidate list with an inline comment. To re-enable, teach
+  openSubtopic to fall through `card.click()` when no subsection card
+  is present and click the section row directly.
+
+### 7e. PR description hygiene
+
+- **Update PR #44 description** noting Commit 1 was not strictly
+  pixel-neutral — the MASK_CSS additions in Commit 2 followed because
+  the BrowserContext-level injection in Commit 1 exposed mask gaps
+  that the old per-page injection had hidden. Spec § "Rebaseline
+  rollout" promised strict pixel-neutrality on Commit 1; the actual
+  experience was 6 baselines moved on Commit 1. Document this once
+  the PR merges.
