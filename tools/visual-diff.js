@@ -301,14 +301,14 @@ const sharedViews = [
     // first candidate — runPageCView handles the re-enter for the rest.
     {
         name: '17-lesson-convolution', page: 'C',
-        setup: async (page) => runPageCView(page, '17-lesson-convolution', { isFirstPageCView: true }),
+        setup: async (page) => runPageCView(page, '17-lesson-convolution'),
     },
     // View 18 — Page C — Chapter 4 §4.11-1 with hard-asserted family routing
-    // to pole_zero_roc_lab. Page C is sticky from view 17, so we always need
-    // to re-enter cleanly — runPageCView treats this as not-first.
+    // to pole_zero_roc_lab. Page C is sticky from view 17 — runPageCView
+    // sees this page in pageCSeeded and re-enters guest mode cleanly.
     {
         name: '18-lesson-pole-zero-roc', page: 'C',
-        setup: async (page) => runPageCView(page, '18-lesson-pole-zero-roc', { isFirstPageCView: false }),
+        setup: async (page) => runPageCView(page, '18-lesson-pole-zero-roc'),
     },
 ];
 
@@ -524,15 +524,23 @@ async function collectLessonFamilies(page, { earlyExitOn } = {}) {
 }
 
 // Run a Page C view: iterate candidates, re-entering guest mode between
-// attempts (skipping re-enter on the very first run since Page C bootstrap
-// already did it). On the first candidate whose hydrated demos include the
-// expected family, record coverage, close the syllabus, and return.
-// Throws if no candidate routes to the expected family.
-async function runPageCView(page, viewName, { isFirstPageCView }) {
+// attempts (skipping re-enter on the very first time this Page is seen,
+// since the Page C bootstrap already did it). On the first candidate whose
+// hydrated demos include the expected family, record coverage, close the
+// syllabus, and return. Throws if no candidate routes to the expected
+// family.
+//
+// pageCSeeded tracks which Page objects have already had at least one
+// lesson opened on them. This replaces the previous `isFirstPageCView`
+// caller-passed flag — the contract is now derivable from page identity,
+// so view-ordering changes can't silently break it.
+const pageCSeeded = new WeakSet();
+async function runPageCView(page, viewName) {
     const view = PAGE_C_VIEWS.find(v => v.viewName === viewName);
     assertOrThrow(view, `${viewName} missing from PAGE_C_VIEWS`);
     let lastErr;
-    let firstAttempt = isFirstPageCView;
+    let firstAttempt = !pageCSeeded.has(page);
+    pageCSeeded.add(page);
     for (const candidate of view.candidates) {
         if (!cachePresent.has(candidate.sectionId)) continue;
         try {
@@ -558,6 +566,13 @@ async function runPageCView(page, viewName, { isFirstPageCView }) {
                 null,
                 { timeout: 5000 }
             ).catch(() => {});
+            // Empirical: dropping this 400ms slack caused view 18 to fail
+            // with families=[] (the kc-interactive-demo hydration race
+            // outran collectLessonFamilies' internal 2s waitForFunction).
+            // settleLesson's MathJax/font/rAF guarantees don't cover demo
+            // canvas/svg paint. Keep the wait until pole_zero_roc_lab's
+            // hydration is restructured to be observable via a stronger
+            // signal than dataset.hydrated + querySelector('canvas, svg').
             await page.waitForTimeout(400);
             const families = await collectLessonFamilies(page, { earlyExitOn: candidate.expected });
             if (!families.has(candidate.expected)) {
@@ -684,6 +699,14 @@ let cachePresent = new Set();
             pageMap.set(key, p);
             return p;
         };
+
+        // Pre-warm all three pages concurrently — each enterGuestMode is
+        // ~5s, so parallelizing saves ~10s/run. Subsequent getPage() calls
+        // inside the view loop hit the Map cache as no-op reads. If this
+        // ever surfaces a bridge race (parallel /api/section + /api/ask
+        // serialization), revert this Promise.all to a sequential pair
+        // and add a // TODO: parallel bootstrap deferred — <reason>.
+        await Promise.all(Array.from(VALID_PAGE_KEYS).map((k) => getPage(k)));
 
         for (const view of sharedViews) {
             const pageKey = view.page || 'A';

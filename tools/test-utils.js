@@ -171,19 +171,26 @@ async function settleLesson(page) {
     await page.evaluate(() => document.fonts && document.fonts.ready).catch(() => {});
     // Force chromium to materialize the system fallback fonts before screenshot.
     // document.fonts.ready resolves on font *load*; this forces *rasterization*
-    // so a cold font cache run does not leak into pixel diffs.
-    await page.evaluate(async () => {
-        if (document.fonts && typeof document.fonts.load === 'function') {
-            try {
-                await Promise.all([
-                    document.fonts.load('1em sans-serif'),
-                    document.fonts.load('400 1em sans-serif'),
-                    document.fonts.load('400 1em serif'),
-                    document.fonts.load('400 1em monospace'),
-                ]);
-            } catch (_) {}
-        }
-    });
+    // so a cold font cache run does not leak into pixel diffs. Once a page
+    // has rasterized them, the cache is sticky for the page lifetime — gate
+    // on a per-page sentinel so second-and-later settles skip this 50-150ms
+    // round-trip. MathJax typesetting + rAFs + the 150ms slack below still
+    // run on every call.
+    if (!page.__ftutorFontsRasterized) {
+        await page.evaluate(async () => {
+            if (document.fonts && typeof document.fonts.load === 'function') {
+                try {
+                    await Promise.all([
+                        document.fonts.load('1em sans-serif'),
+                        document.fonts.load('400 1em sans-serif'),
+                        document.fonts.load('400 1em serif'),
+                        document.fonts.load('400 1em monospace'),
+                    ]);
+                } catch (_) {}
+            }
+        });
+        page.__ftutorFontsRasterized = true;
+    }
     await page.evaluate(async () => {
         if (window.MathJax && window.MathJax.startup && window.MathJax.startup.promise) {
             try { await window.MathJax.startup.promise; } catch (_) {}
