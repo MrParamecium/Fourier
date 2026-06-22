@@ -723,3 +723,130 @@ below were intentionally left out of PR #44 as out-of-scope follow-ups.
   rollout" promised strict pixel-neutrality on Commit 1; the actual
   experience was 6 baselines moved on Commit 1. Document this once
   the PR merges.
+
+---
+
+## 8. Phase 3.5 v2 follow-ups (Glass coverage expansion)
+
+Drafted 2026-06-22 after Phase 3.5 v2 self-review. PR (TBD on merge)
+extended the harness from 18 → 25 views, closing the Glass-surface gap
+that gated Step G.3 (Phase 2 #19, app/style.css L31257–L47658).
+
+### What shipped in Phase 3.5 v2
+
+7 new views, all 0.000% pixel-diff across two consecutive `--check`
+runs:
+
+- **View 19** — `19-login-screen` (Page D, new bootstrap via
+  `enterLoginView`). Covers FINAL LOGIN LIQUID GLASS L43321+.
+- **View 20** — `20-sidebar-collapsed` (Page A late). Covers FINAL
+  COLLAPSED SIDEBAR GLASS FIX L43241+ via direct `.app.sidebar-collapsed`
+  + `#leftSidebar.collapsed` class flips.
+- **View 21** — `21-lesson-key-takeaways` (Page A, paginates to summary
+  KP via the shared `advanceLessonUntil` helper). Covers ABSOLUTE EOF
+  KEY TAKEAWAYS GLASS LOCK L39295+.
+- **View 22** — `22-lesson-quick-check` (Page A, continues pagination
+  to quiz KP). Covers ABSOLUTE EOF QUICK CHECK GLASS LOCK L39494+.
+- **View 23** — `23-textbook-focus` (Page A overlay). Covers TEXTBOOK
+  FOCUS GLASS LOCK L42981+ via forced modal show + mock-image stub.
+- **View 24** — `24-answer-workspace` (Page B late). Covers ANSWER
+  WORKSPACE LIQUID GLASS L41934+ via showAnswer subset replay
+  (including topbar.classList.remove('hidden') to match production).
+- **View 25** — `25-quick-setup-modal` (Page B overlay). Covers TRUE
+  EOF QUICK SETUP GLASS MODAL L40258+ via inline `display:flex` on
+  `#quizOverlay` — chrome only; option-card descendants deferred.
+
+Also extended `tools/test-utils.js`: new `enterLoginView()` helper for
+Page D bootstrap, new MASK_CSS rules for the login WebGL canvas + login
+decorative motion + textbook-focus raster pages.
+
+Also extended `tools/visual-diff.js`: new module-scope
+`advanceLessonUntil(page, sentinelSelector)` pagination helper used by
+views 21/22 to walk the lesson pager until a target Glass card lands.
+
+### 8a — DEFERRED: Quick Setup modal #quizSteps content
+
+View 25 force-shows `#quizOverlay` via inline `style.display='flex'`
+but leaves `#quizSteps` empty. The Glass chrome (card, backdrop, title)
+is pixel-locked; the per-step option-card and progress-indicator
+descendants rendered by `renderQuizStep` (app.js L271+) are NOT. A
+future PR touching the quiz modal styling could regress these inner
+selectors without --check noticing.
+
+**Entry point:** stub minimal option-card HTML into `#quizSteps` before
+the screenshot — match the structure `renderQuizStep` emits but with
+deterministic placeholder text. Risk: stub drift if `renderQuizStep`
+restructures its output. Mitigation: expose `window.__ftutorRenderQuizStep
+= renderQuizStep` (matches the existing `window.parseBase64JsonAttr` /
+`window.inferInteractiveDemoFamily` pattern) and call it directly with
+a fixture step.
+
+### 8b — DEFERRED: window.* exposure pattern for force-flip views
+
+Views 20 (sidebar-collapsed), 23 (textbook-focus), 24 (answer-workspace)
+all bypass real production trigger functions (`setWorkspaceSidebarCollapsed`
+at app.js L7443, `openTextbookFocusMode` at L3293, `showAnswer` at L6080)
+and instead reproduce a subset of each function's DOM mutations inline.
+This works but creates a divergence channel: when production adds a
+new sibling-panel hide or aria attribute, the harness silently drifts.
+
+**Entry point:** in `app/app.js`, expose the three trigger functions on
+window using the same band-comment pattern as
+`window.parseBase64JsonAttr` (L1084) and `window.inferInteractiveDemoFamily`
+(near the dispatcher). Then rewrite views 20/23/24's `setup()` to call
+`window.__ftutor*` directly. Eliminates ~25 lines of replicated logic
+across the three views.
+
+### 8c — DEFERRED: textbook-focus real-section coverage
+
+View 23 injects a mock textbook page (1×1 PNG) into `#textbookFocusContent`
+because §1.1-1 has no `#learnBookOverlay` images registered, so
+`openTextbookFocusMode` (which reads `_bookOverlay.querySelectorAll('.textbook-page-card img')`)
+cannot run. The current force-show + mock-HTML stub captures the Glass
+modal chrome but bypasses any future CSS that depends on real
+textbook-state attributes (e.g. `[data-page-mode]`, `:has(.is-zoomed)`).
+
+**Entry point:** identify a cached section in `workspace/materials/` that
+has `new-book-figures/` data registered and use it for view 23 instead
+of stubbing. Tradeoff: loads more lesson chrome into the captured area
++ ties view 23 to a different SUBTOPIC than §1.1-1, complicating
+sequencing on Page A.
+
+### 8d — DEFERRED: enterLoginView + enterGuestMode intro-dismiss dedup
+
+Both helpers do `page.goto(base)` + `page.click('#introGetStartedBtn')`
+in their first two lines, then diverge. If `#introGetStartedBtn` is
+renamed or the intro flow gains a confirmation step, both helpers must
+be updated in lockstep. Drift surfaces only when `--check` fails.
+
+**Entry point:** extract `dismissIntro(page, base)` to `tools/test-utils.js`
+and have both `enterGuestMode` and `enterLoginView` call it before their
+divergent next-step. ~6 lines saved + closes the drift channel.
+
+### 8e — DEFERRED: MASK_CSS per-view organization
+
+`MASK_CSS` is now a 50-line shared block covering 6 distinct UI surfaces
+(introWebglContainer, recent timestamps, feedback meta, input caret,
+home-mode menu, settings UID, login WebGL, login motion, textbook
+raster). Future contributors adding view 26+ have no convention for
+"add mask here or scope locally?".
+
+**Entry point:** split `MASK_CSS` into `GLOBAL_MASK_CSS` (timestamps,
+captions, `.is-animating`) and `PER_VIEW_MASKS = { '19-login-screen':
+'...', '23-textbook-focus': '...' }`. `captureView` injects the
+per-view block before screenshot via `page.addStyleTag` and removes it
+after.  Defers a noisy file diff for marginal organization gain — skip
+unless Phase 4 adds 5+ more views.
+
+### 8f — DEFERRED: advanceLessonUntil sharing with collectLessonFamilies
+
+`advanceLessonUntil` (visual-diff.js module scope) walks the lesson
+pager until a sentinel selector lands. `collectLessonFamilies`
+(visual-diff.js L423-L524) walks the lesson pager accumulating families
+across all KPs. Both use the same `data-lesson-page` change-watcher
+pattern. Two divergent copies of the pager-walking contract.
+
+**Entry point:** generalize either into a single walker with a
+configurable `stopWhen` predicate. Defer until a third caller appears
+(test-utils.js `paginateLesson(page, opts)` with `mode: 'until' |
+'collect'`). Saves ~25 lines + single-point-of-truth for pager timing.
