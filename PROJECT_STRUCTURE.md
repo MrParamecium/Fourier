@@ -70,11 +70,27 @@ exists under it. Both subdirs exist in a normal checkout, so workspace wins. Wri
 
 ```text
 tools/
-├── test-lesson-open-no-hang.js
-└── test-ui-friction-v123.js
+├── test-utils.js                  (shared Playwright helpers)
+├── visual-diff.js                 (pixel-diff harness, 18 views across pages A/B/C)
+├── visual-baseline/               (committed PNGs — the regression reference)
+├── visual-current/                (last --check capture; git-ignored)
+├── visual-diff/                   (per-view PNG diff for failing views; git-ignored)
+├── visual-diff-report.md          (last --check pass/fail table + dispatcher coverage block)
+├── visual-diff-coverage.json      (machine-readable Page C family-routing record)
+├── smoke.js                       (deterministic UI smoke suite, ~12s)
+├── smoke-report.md                (last smoke.js result)
+├── test-lesson-open-no-hang.js    (legacy Playwright regression: lesson open must not hang)
+├── test-ui-friction-v123.js       (legacy UI friction regression)
+├── test-data-modules-shape.js     (assertion suite for app/data/*.js exports)
+├── scan-unused-css.js             (CSS orphan-selector finder, feeds Phase 3 #20 work)
+└── unused-css-report.md           (last scan-unused-css.js output)
 ```
 
 `tools/` contains Playwright e2e regression scripts. These are not the app entry point and require `npx playwright install chromium` before they run.
+
+`visual-diff.js` and `smoke.js` share their Playwright helpers (`enterGuestMode`, `openSubtopic`, `MASK_CSS`, `settleLesson`, the `resolveLessonCachePath` workspace-preferred materials chain, etc.) via `test-utils.js`. The split rule is intentional: visual-diff-specific helpers (the Page C family-routing walker, the syllabus-close-for-capture helper, the PNG diff core) live in `visual-diff.js`; anything a second tool can reuse belongs in `test-utils.js`. Adding a new shared helper without a second consumer is premature centralization — keep it module-private until a real reuse case appears.
+
+To baseline the harness against the current code: `node tools/visual-diff.js --baseline` (writes PNGs into `tools/visual-baseline/`; commit them). To check current state vs the committed baseline: `node tools/visual-diff.js --check` (writes `tools/visual-current/` + `tools/visual-diff/` + the report files; exit 0 iff every view diffs under 0.5%). The full harness-design spec is `docs/superpowers/specs/2026-06-22-harness-expansion-design.md`.
 
 ## Working Materials And Memory
 

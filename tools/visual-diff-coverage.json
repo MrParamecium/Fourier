@@ -1,0 +1,20 @@
+{
+  "entries": [
+    {
+      "viewName": "17-lesson-convolution",
+      "sectionId": "3.8-1",
+      "expected": "convolution_lab",
+      "families": [
+        "convolution_lab"
+      ]
+    },
+    {
+      "viewName": "18-lesson-pole-zero-roc",
+      "sectionId": "4.11-1",
+      "expected": "pole_zero_roc_lab",
+      "families": [
+        "pole_zero_roc_lab"
+      ]
+    }
+  ]
+}

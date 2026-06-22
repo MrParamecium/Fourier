@@ -19,6 +19,7 @@ const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
 const { chromium } = require('playwright');
+const { waitForHealth, enterGuestMode, ensureSyllabusOpen, openSubtopic } = require('./test-utils.js');
 
 const PORT = Number(process.env.TUTOR_SMOKE_PORT || 9124);
 const BASE = `http://127.0.0.1:${PORT}`;
@@ -46,80 +47,6 @@ const CONSOLE_NOISE = [
     /cdn\.tailwindcss/i,
 ];
 const isNoise = text => CONSOLE_NOISE.some(re => re.test(text));
-
-function waitForHealth(timeoutMs = 15000) {
-    const deadline = Date.now() + timeoutMs;
-    return new Promise((resolve, reject) => {
-        const tryOnce = () => {
-            fetch(`${BASE}/health`).then(r => r.ok ? resolve() : retry()).catch(retry);
-        };
-        const retry = () => {
-            if (Date.now() > deadline) return reject(new Error('bridge /health never came up'));
-            setTimeout(tryOnce, 300);
-        };
-        tryOnce();
-    });
-}
-
-async function enterGuestMode(page) {
-    await page.goto(BASE, { waitUntil: 'domcontentloaded' });
-    await page.click('#introGetStartedBtn');
-    await page.click('#guestModeBtnLogin[data-bound-guest-mode="1"]', { timeout: 25000 });
-    await page.click('#quizCloseBtn');
-    await page.waitForSelector('#navSyllabusBtn', { timeout: 10000 });
-}
-
-async function ensureSyllabusOpen(page) {
-    // Idempotent: clicks the syllabus toggle until the panel reaches the stable
-    // is-open state. Necessary between back-to-back openSubtopic calls because
-    // entering a lesson can leave the panel in a half-animated state.
-    for (let attempt = 0; attempt < 4; attempt++) {
-        const stable = await page.locator('#sidebarSyllabusPanel.is-open:not(.is-animating)').count();
-        if (stable > 0) return;
-        await page.click('#navSyllabusBtn').catch(() => {});
-        try {
-            await page.waitForSelector('#sidebarSyllabusPanel.is-open:not(.is-animating)', { timeout: 2500 });
-            return;
-        } catch (_) { /* try again */ }
-    }
-    throw new Error('could not open syllabus panel after 4 attempts');
-}
-
-async function openSubtopic(page, sub, waitMs = 25000) {
-    await ensureSyllabusOpen(page);
-    await page.click(`#courseSyllabus .syllabus-chapter:has-text("${sub.chapter}")`);
-    await page.click(`#courseSyllabus .syllabus-section[data-section="${sub.section}"]`);
-    const card = page.locator(`.chapter-overview-subcard[data-sublesson-title="${sub.title}"]`);
-    await card.waitFor({ state: 'visible', timeout: 10000 });
-
-    // Card handler ignores clicks during page-turn animation — retry up to 5x.
-    let entered = false;
-    const sawOpenLog = { value: false };
-    const listener = m => { if (/\[openLearnMode\]/.test(m.text())) sawOpenLog.value = true; };
-    page.on('console', listener);
-    try {
-        for (let i = 0; i < 5 && !entered; i++) {
-            await card.click();
-            const t0 = Date.now();
-            while (Date.now() - t0 < 2000) {
-                if (sawOpenLog.value) { entered = true; break; }
-                await page.waitForTimeout(100);
-            }
-        }
-    } finally {
-        page.off('console', listener);
-    }
-    if (!entered) throw new Error(`subtopic "${sub.title}" click never fired openLearnMode`);
-
-    const content = page.locator('#learnExplainContent');
-    const deadline = Date.now() + waitMs;
-    while (Date.now() < deadline) {
-        const text = (await content.innerText().catch(() => '')) || '';
-        if (text && !text.includes('Preparing lesson...') && text.length > 80) return text;
-        await page.waitForTimeout(300);
-    }
-    throw new Error(`subtopic "${sub.title}" never rendered within ${waitMs}ms`);
-}
 
 // ---------- checks ----------
 // Two flavors:
@@ -180,7 +107,7 @@ const checks = [
       kind: 'solo',
       run: async ({ browser }) => {
           const page = await browser.newPage();
-          try { await enterGuestMode(page); } finally { await page.close(); }
+          try { await enterGuestMode(page, BASE); } finally { await page.close(); }
       },
     },
 
@@ -194,7 +121,7 @@ const checks = [
           });
           page.on('pageerror', err => errors.push(`pageerror: ${err.message}`));
           try {
-              await enterGuestMode(page);
+              await enterGuestMode(page, BASE);
               await openSubtopic(page, SUBTOPICS[0]);
               if (errors.length) {
                   throw new Error(`${errors.length} console error(s):\n    - ${errors.slice(0, 5).join('\n    - ')}`);
@@ -274,7 +201,7 @@ const checks = [
     };
 
     try {
-        await waitForHealth();
+        await waitForHealth(BASE);
         browser = await chromium.launch();
 
         // Solo checks (each manages its own state).
@@ -288,7 +215,7 @@ const checks = [
         const guestT0 = Date.now();
         try {
             guestPage = await browser.newPage();
-            await enterGuestMode(guestPage);
+            await enterGuestMode(guestPage, BASE);
             console.log(`  · guest-mode bootstrap (${Date.now() - guestT0}ms)`);
         } catch (err) {
             console.log(`  ✗ guest-mode bootstrap failed (${Date.now() - guestT0}ms): ${err.message}`);

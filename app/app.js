@@ -1070,7 +1070,6 @@ function decodeBase64Utf8(raw) {
     }
   }
 }
-
 function parseBase64JsonAttr(raw) {
   if (!raw) return null;
   try {
@@ -1080,6 +1079,9 @@ function parseBase64JsonAttr(raw) {
     return null;
   }
 }
+// Exposed for tools/visual-diff.js family-verification eval — do not remove
+// without updating tools/test-utils.js / tools/visual-diff.js.
+window.parseBase64JsonAttr = parseBase64JsonAttr;
 
 function decodeInlineMarkdownFragment(markdown) {
   const text = String(markdown || '').trim();
@@ -1687,6 +1689,9 @@ function inferInteractiveDemoFamily(demo = {}) {
   }
   return 'brief';
 }
+// Exposed for tools/visual-diff.js family-verification eval — do not remove
+// without updating tools/test-utils.js / tools/visual-diff.js.
+window.inferInteractiveDemoFamily = inferInteractiveDemoFamily;
 
 function setupInteractiveDemoCanvas(canvas, ctx, height = 260, minWidth = 320) {
   if (!canvas || !ctx) return { width: 0, height: 0 };
