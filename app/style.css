@@ -34783,10 +34783,6 @@ body {
   color: var(--author-ink) !important;
 }
 
-
-
-
-
 #feedbackView .feedback-reply[class*="tone-"] .feedback-reply-context {
   border-color: rgba(var(--author-rgb),0.22) !important;
   background: rgba(var(--author-rgb),0.08) !important;
@@ -34880,9 +34876,6 @@ body {
   background: linear-gradient(180deg, rgba(var(--author-rgb),0.50), rgba(var(--author-rgb),0.22)) !important;
   opacity: 1 !important;
 }
-
-
-
 
 #feedbackView .feedback-reply,
 #feedbackView .feedback-reply.is-left,
