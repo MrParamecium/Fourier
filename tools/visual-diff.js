@@ -194,9 +194,28 @@ const sharedViews = [
         await ensureSyllabusOpen(page);
         await page.waitForTimeout(400);
     } },
+    // View 03 — Page A — mistake notebook EMPTY landing. Idempotent
+    // localStorage clear at the top defends against a sibling view that
+    // might seed mistakes BEFORE this view (parallels the feedback-board
+    // restoreFeedbackBoard pattern at view 14). The harness's chromium
+    // context starts each run with empty localStorage so the clear is
+    // a no-op on clean runs.
+    //
+    // INVARIANT: any future view that seeds `aquariusMistakeNotebook.v1`
+    // MUST run AFTER view 03, OR clear the key in its own setup() prologue.
     { name: '03-mistake-notebook', page: 'A', setup: async (page) => {
+        await page.evaluate(() => {
+            try { localStorage.removeItem('aquariusMistakeNotebook.v1'); } catch (_) {}
+        });
         await page.click('#navMistakeNotebookBtn');
         await page.waitForSelector('#mistakeNotebookView:not(.hidden)', { timeout: 5000 });
+        // Empty-state assertion: #mistakeEmptyPanel visible, #mistakeDetailContent hidden.
+        const emptyOpen = await page.evaluate(() => ({
+            empty: !document.getElementById('mistakeEmptyPanel')?.classList.contains('hidden'),
+            detailHidden: document.getElementById('mistakeDetailContent')?.classList.contains('hidden'),
+        }));
+        assertOrThrow(emptyOpen.empty && emptyOpen.detailHidden,
+            `view 03: expected empty-panel visible + detail-content hidden, got ${JSON.stringify(emptyOpen)}`);
         await page.waitForTimeout(400);
     } },
     { name: '04-recent-conversations', page: 'A', setup: async (page) => {
@@ -621,6 +640,86 @@ const sharedViews = [
             if (overlay) overlay.style.display = 'flex';
         });
         await page.waitForSelector('#quizOverlay', { timeout: 3000, state: 'visible' });
+    } },
+    // ----- Phase 3.5 v3 — late-Page-A state-variant captures -----
+    // View 03b — Page A — OPENED mistake-case workspace (Phase 3.5 v3 §9c
+    // gap 1). Seeds localStorage with a fixture mistake and calls
+    // renderMistakeNotebook() in-place so mistakeDetailContent unhides
+    // and .mistake-workspace renders.
+    //
+    // Numbering note: this view is the only state-variant of view 03 but
+    // sits at the END of the Page A schedule (after view 23) rather than
+    // adjacent to view 03. Reason: seeding aquariusMistakeNotebook.v1 +
+    // calling renderMistakeNotebook in-place causes a small (~4%) drift
+    // on view 04-recent-conversations' welcomeScreen capture (welcomeScreen
+    // re-renders after the close-button → showWelcome path that view 04
+    // takes, and some downstream state changes between the mistake-empty
+    // and mistake-populated render paths). Running 03b LAST on Page A
+    // means no subsequent Page A view inherits the side effect.
+    //
+    // Naming kept as 03b (not 26 or higher) per the NN[a-z] convention —
+    // the suffix communicates "state-variant of 03" regardless of schedule
+    // position. The schedule-position decision is documented here so a
+    // future contributor doesn't naively move it back adjacent to 03.
+    //
+    // Retroactively pixel-verifies PR #65's `.mistake-workspace`
+    // (display + grid-template-columns) and `.mistake-note-columns`
+    // (min-height + height + grid-template-rows) deletions. The
+    // `.mistake-ai-instruction min-height: 94px` deletion in PR #65 is
+    // an orphan selector (no DOM ever matches `.mistake-ai-instruction`
+    // — verified by grep against index.html + app.js + mistake-notebook.js)
+    // and cannot be pixel-validated by any harness coverage.
+    { name: '03b-mistake-notebook-open-case', page: 'A', setup: async (page) => {
+        // Page A's last view before this was 23-textbook-focus, which
+        // unhides #textbookFocusModal + adds 'textbook-focus-active' on
+        // body. Tear that down before re-opening mistake-notebook so the
+        // capture doesn't bleed in textbook chrome.
+        await page.evaluate(() => {
+            document.body.classList.remove('textbook-focus-active');
+            document.getElementById('textbookFocusModal')?.classList.add('hidden');
+            // Restore the lesson chrome state if a prior Page A view left
+            // any class flips around.
+            document.querySelector('.app')?.classList.remove('sidebar-collapsed');
+            document.getElementById('leftSidebar')?.classList.remove('collapsed');
+        });
+        // Seed mistake fixture + re-open notebook from the lesson surface
+        // we landed on after view 22. navMistakeNotebookBtn → showMistakeNotebookView.
+        await page.evaluate(() => {
+            const fixture = [{
+                id: 'mistake_fixture_01',
+                title: 'Fixture mistake for opened-case capture',
+                tags: 'fixture, harness, opened-case',
+                notes: 'User notes for the fixture problem. Length chosen to wrap roughly two lines so .mistake-notes-input height behavior is exercised.',
+                noteImages: [],
+                aiDraftNotes: '',
+                aiAnswer: '',
+                imageDataUrl: '',
+                problemText: 'Fixture problem text — renders into #mistakeTextPreview because imageDataUrl is empty (mistake-notebook.js L272-274).',
+                createdAt: '2024-01-15T10:30:00Z',
+                updatedAt: '2024-01-15T10:30:00Z',
+            }];
+            localStorage.setItem('aquariusMistakeNotebook.v1', JSON.stringify(fixture));
+        });
+        await page.click('#navMistakeNotebookBtn');
+        await page.waitForSelector('#mistakeNotebookView:not(.hidden)', { timeout: 5000 });
+        await page.waitForSelector('#mistakeDetailContent:not(.hidden)', { timeout: 3000 });
+        await page.waitForSelector('.mistake-list-item.active', { timeout: 2000 });
+        // Confirm the rendered workspace shape: 1 list-item active, workspace
+        // visible, text-preview unhidden (imageDataUrl empty path), image hidden.
+        const shape = await page.evaluate(() => ({
+            activeItems: document.querySelectorAll('.mistake-list-item.active').length,
+            workspace: !!document.querySelector('.mistake-workspace'),
+            noteColumns: !!document.querySelector('.mistake-note-columns'),
+            textPreviewVisible: !document.getElementById('mistakeTextPreview')?.classList.contains('hidden'),
+            imageHidden: document.getElementById('mistakeImagePreview')?.classList.contains('hidden'),
+        }));
+        assertOrThrow(
+            shape.activeItems === 1 && shape.workspace && shape.noteColumns
+                && shape.textPreviewVisible && shape.imageHidden,
+            `view 03b: workspace shape mismatch: ${JSON.stringify(shape)}`,
+        );
+        await page.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
+        await page.waitForTimeout(300);
     } },
 ];
 
