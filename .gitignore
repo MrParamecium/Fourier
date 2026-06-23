@@ -46,3 +46,8 @@ tools/visual-diff-report.md
 
 # CSS unused-selector scan output — regenerated each run by tools/scan-unused-css.js
 tools/unused-css-report.md
+
+# Harness state directory (seeded-fixture backups for view 14b / 03b / …).
+# Files only exist between seedFeedbackFixture and restoreFeedbackBoard,
+# plus leftover backups from crashed runs (recovered on next clean run).
+tools/.harness-state/
