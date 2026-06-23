@@ -39448,53 +39448,7 @@ body {
   display: none !important;
 }
 
-#learnView#learnView .learn-explain-body .learn-key-takeaways-list > li,
-#learnView#learnView .explain-body .learn-key-takeaways-list > li,
-.learn-explain-body .learn-key-takeaways-list > li,
-.explain-body .learn-key-takeaways-list > li {
-  padding-left: 76px !important;
-}
-
-#learnView#learnView .learn-explain-body .learn-key-takeaways-list > li::before,
-#learnView#learnView .explain-body .learn-key-takeaways-list > li::before,
-.learn-explain-body .learn-key-takeaways-list > li::before,
-.explain-body .learn-key-takeaways-list > li::before {
-  left: 22px !important;
-  top: 22px !important;
-  width: 30px !important;
-  height: 30px !important;
-  z-index: 1 !important;
-}
-
-@media (max-width: 760px) {
-  #learnView#learnView .learn-explain-body .learn-key-takeaways-list > li,
-  #learnView#learnView .explain-body .learn-key-takeaways-list > li,
-  .learn-explain-body .learn-key-takeaways-list > li,
-  .explain-body .learn-key-takeaways-list > li {
-    padding-left: 64px !important;
-  }
-
-  #learnView#learnView .learn-explain-body .learn-key-takeaways-list > li::before,
-  #learnView#learnView .explain-body .learn-key-takeaways-list > li::before,
-  .learn-explain-body .learn-key-takeaways-list > li::before,
-  .explain-body .learn-key-takeaways-list > li::before {
-    left: 18px !important;
-    top: 18px !important;
-  }
-}
-
 /* ABSOLUTE EOF KEY TAKEAWAYS COUNTER GRID LOCK: reserve a real number column. */
-#learnView#learnView .learn-explain-body .learn-key-takeaways-list > li,
-#learnView#learnView .explain-body .learn-key-takeaways-list > li,
-.learn-explain-body .learn-key-takeaways-list > li,
-.explain-body .learn-key-takeaways-list > li {
-  display: grid !important;
-  grid-template-columns: 34px minmax(0, 1fr) !important;
-  column-gap: 20px !important;
-  align-items: start !important;
-  padding: 18px 22px !important;
-}
-
 #learnView#learnView .learn-explain-body .learn-key-takeaways-list > li::before,
 #learnView#learnView .explain-body .learn-key-takeaways-list > li::before,
 .learn-explain-body .learn-key-takeaways-list > li::before,
