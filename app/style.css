@@ -39437,7 +39437,7 @@ body {
   object-fit: contain !important;
 }
 
-/* ABSOLUTE EOF POLISH: remove quiz top rule and keep takeaway counters clear. */
+/* ABSOLUTE EOF POLISH: remove quiz top rule. */
 #learnView#learnView .lesson-test-banner#testBannerCard::after,
 #learnView#learnView .lesson-test-banner::after,
 .learn-explain-body .lesson-test-banner#testBannerCard::after,
