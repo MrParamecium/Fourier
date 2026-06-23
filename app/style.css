@@ -38823,7 +38823,7 @@ body {
   line-height: 1.08 !important;
 }
 
-/* ABSOLUTE EOF HOME ASK DEBUG LOCK: compact controls and true focus pop. */
+/* ABSOLUTE EOF HOME ASK DEBUG LOCK: composer focus animation + carryover sizing. */
 .welcome.home-ask-workspace #homeModePicker.home-mode-picker {
   width: auto !important;
   flex: 0 0 auto !important;
