@@ -34731,21 +34731,6 @@ body {
   white-space: normal !important;
 }
 
-/* EOF FEEDBACK AUTHOR COLORS: identity tint beats lane tint. */
-#feedbackView .feedback-thread[class*="tone-"] .feedback-thread-meta,
-#feedbackView .feedback-reply[class*="tone-"] .feedback-reply-meta,
-#feedbackView .feedback-reply.is-left[class*="tone-"] .feedback-reply-meta,
-#feedbackView .feedback-reply.is-right[class*="tone-"] .feedback-reply-meta {
-  color: var(--author-ink) !important;
-}
-
-#feedbackView .feedback-reply[class*="tone-"] .feedback-reply-context,
-#feedbackView .feedback-reply.is-left[class*="tone-"] .feedback-reply-context,
-#feedbackView .feedback-reply.is-right[class*="tone-"] .feedback-reply-context {
-  border-color: rgba(var(--author-rgb),0.22) !important;
-  background: rgba(var(--author-rgb),0.08) !important;
-  color: var(--author-ink) !important;
-}
 
 /* TRUE FINAL FEEDBACK AUTHOR TONES: same person, same soft accent. */
 #feedbackView .feedback-thread.tone-0,
@@ -34783,44 +34768,9 @@ body {
   color: var(--author-ink) !important;
 }
 
-#feedbackView .feedback-reply[class*="tone-"],
-#feedbackView .feedback-reply.is-left[class*="tone-"],
-#feedbackView .feedback-reply.is-right[class*="tone-"] {
-  border-color: rgba(255,255,255,0.48) !important;
-  background:
-    radial-gradient(300px 100px at 12% 0%, rgba(var(--author-rgb),0.10), transparent 74%),
-    linear-gradient(135deg, rgba(255,255,255,0.34), rgba(255,255,255,0.12)) !important;
-  box-shadow:
-    0 10px 24px rgba(15,23,42,0.045),
-    inset 0 1px 0 rgba(255,255,255,0.68),
-    inset 0 -1px 0 rgba(255,255,255,0.14) !important;
-}
 
-#feedbackView .feedback-reply[class*="tone-"]::before,
-#feedbackView .feedback-reply.is-left[class*="tone-"]::before,
-#feedbackView .feedback-reply.is-right[class*="tone-"]::before {
-  content: "" !important;
-  display: block !important;
-  position: absolute !important;
-  top: 14px !important;
-  width: 10px !important;
-  height: 10px !important;
-  border-radius: 999px !important;
-  background: rgba(var(--author-rgb),0.72) !important;
-  box-shadow:
-    0 0 0 5px rgba(var(--author-rgb),0.12),
-    0 6px 14px rgba(var(--author-rgb),0.18) !important;
-}
 
-#feedbackView .feedback-reply.is-left[class*="tone-"]::before {
-  left: -5px !important;
-  right: auto !important;
-}
 
-#feedbackView .feedback-reply.is-right[class*="tone-"]::before {
-  right: -5px !important;
-  left: auto !important;
-}
 
 #feedbackView .feedback-reply[class*="tone-"] .feedback-reply-context {
   border-color: rgba(var(--author-rgb),0.22) !important;
@@ -34838,12 +34788,7 @@ body {
 
 #feedbackView .feedback-thread::after {
   display: block !important;
-  content: "" !important;
-  left: 0 !important;
-  top: 22px !important;
-  bottom: 22px !important;
   width: 4px !important;
-  border-radius: 0 999px 999px 0 !important;
   background: linear-gradient(180deg, rgba(var(--author-rgb),0.48), rgba(var(--author-rgb),0.20)) !important;
 }
 
@@ -34871,27 +34816,17 @@ body {
 }
 
 #feedbackView .feedback-reply.is-left::before {
-  left: -5px !important;
   right: auto !important;
 }
 
-#feedbackView .feedback-reply.is-right::before {
-  right: -5px !important;
-  left: auto !important;
-}
 
 #feedbackView .feedback-reply-context,
 #feedbackView .feedback-reply.is-left .feedback-reply-context,
 #feedbackView .feedback-reply.is-right .feedback-reply-context {
-  border-color: var(--author-mid) !important;
   background: rgba(var(--author-rgb),0.08) !important;
   color: var(--author-ink) !important;
 }
 
-#feedbackView .feedback-replies::before {
-  background:
-    linear-gradient(180deg, transparent, rgba(148,163,184,0.14), transparent) !important;
-}
 
 @media (max-width: 760px) {
   #feedbackView .feedback-thread::after,
@@ -34926,39 +34861,13 @@ body {
 }
 
 #feedbackView .feedback-thread::after {
-  left: 0 !important;
-  top: 22px !important;
-  bottom: 22px !important;
   width: 4px !important;
-  border-radius: 0 999px 999px 0 !important;
   background: linear-gradient(180deg, rgba(var(--author-rgb),0.50), rgba(var(--author-rgb),0.22)) !important;
   opacity: 1 !important;
 }
 
-#feedbackView .feedback-thread-meta {
-  color: var(--author-ink) !important;
-}
 
-#feedbackView .feedback-thread-body {
-  border-color: rgba(255,255,255,0.50) !important;
-  background:
-    linear-gradient(135deg, rgba(255,255,255,0.34), rgba(255,255,255,0.12)) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.70),
-    0 10px 24px rgba(15,23,42,0.05) !important;
-}
 
-#feedbackView .feedback-reply-count {
-  border-color: var(--author-mid) !important;
-  background:
-    linear-gradient(135deg, rgba(var(--author-rgb),0.13), rgba(255,255,255,0.22)) !important;
-  color: var(--author-ink) !important;
-}
-
-#feedbackView .feedback-replies::before {
-  background:
-    linear-gradient(180deg, transparent, rgba(148,163,184,0.16), transparent) !important;
-}
 
 #feedbackView .feedback-reply,
 #feedbackView .feedback-reply.is-left,
@@ -34974,14 +34883,11 @@ body {
 }
 
 #feedbackView .feedback-reply::before {
-  content: "" !important;
-  display: block !important;
   position: absolute !important;
   top: 14px !important;
   width: 10px !important;
   height: 10px !important;
   border-radius: 999px !important;
-  background: rgba(var(--author-rgb),0.72) !important;
   box-shadow:
     0 0 0 5px rgba(var(--author-rgb),0.12),
     0 6px 14px rgba(var(--author-rgb),0.18) !important;
@@ -34996,11 +34902,6 @@ body {
   left: auto !important;
 }
 
-#feedbackView .feedback-reply-meta,
-#feedbackView .feedback-reply.is-left .feedback-reply-meta,
-#feedbackView .feedback-reply.is-right .feedback-reply-meta {
-  color: var(--author-ink) !important;
-}
 
 #feedbackView .feedback-reply-context,
 #feedbackView .feedback-reply.is-left .feedback-reply-context,
@@ -37397,9 +37298,6 @@ body {
   padding: 7px 12px !important;
   border: 1px solid rgba(255,255,255,0.62) !important;
   border-radius: 999px !important;
-  background:
-    linear-gradient(135deg, rgba(224,242,254,0.70), rgba(255,255,255,0.22)) !important;
-  color: #075985 !important;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.74) !important;
   font-family: "DM Mono", monospace !important;
   font-size: 12px !important;
@@ -37415,7 +37313,6 @@ body {
   background:
     linear-gradient(135deg, rgba(255,255,255,0.30), rgba(255,255,255,0.10)) !important;
   color: rgba(30,41,59,0.78) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.62) !important;
   font-size: 15px !important;
   line-height: 1.68 !important;
   font-weight: 700 !important;
