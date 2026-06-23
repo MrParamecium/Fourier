@@ -35331,23 +35331,6 @@ body {
   }
 }
 
-/* True EOF lesson page-number size lock: same glass, smaller footprint. */
-#learnView#learnView #learnExplainCol#learnExplainCol #learnExplainBottomRail#learnExplainBottomRail #learnLecturePageIndicator#learnLecturePageIndicator,
-#learnView#learnView #learnBody#learnBody #learnExplainCol#learnExplainCol #learnExplainBottomRail#learnExplainBottomRail #learnLecturePageIndicator#learnLecturePageIndicator,
-#learnView#learnView #learnToolbarPagination#learnToolbarPagination #learnLecturePageIndicator#learnLecturePageIndicator,
-#learnView#learnView #learnLecturePageIndicator#learnLecturePageIndicator {
-  min-width: 72px !important;
-  height: 34px !important;
-  min-height: 34px !important;
-  padding: 0 15px !important;
-  border-radius: 15px !important;
-  font-size: 14px !important;
-  box-shadow:
-    0 12px 24px rgba(15,23,42,0.10),
-    inset 0 1px 0 rgba(255,255,255,0.84),
-    inset 0 -1px 0 rgba(255,255,255,0.16) !important;
-}
-
 /* Mistake Notebook layout shuffle: horizontal case rail plus full-width review desk. */
 #mistakeNotebookView .mistake-notebook-shell {
   width: min(100%, 1560px) !important;
@@ -35579,10 +35562,6 @@ body {
   padding: clamp(22px, 2.4vw, 32px) !important;
 }
 
-#preferenceView .preference-preview-card {
-  grid-column: 2 !important;
-}
-
 #preferenceView .preference-card-tape,
 #preferenceView .preference-card-tape::after {
   content: none !important;
@@ -35796,11 +35775,6 @@ body {
 }
 
 @media (max-width: 1180px) {
-  #preferenceView .preference-page-grid {
-    grid-template-columns: 1fr !important;
-    grid-template-rows: auto !important;
-  }
-
   #preferenceView .preference-profile-card,
   #preferenceView .preference-preview-card {
     grid-column: 1 !important;
@@ -36157,13 +36131,6 @@ body {
   display: none !important;
 }
 
-#mistakeNotebookView .mistake-workspace {
-  display: grid !important;
-  grid-template-columns: minmax(320px, 1.05fr) minmax(340px, 0.95fr) !important;
-  gap: clamp(18px, 2vw, 26px) !important;
-  margin-top: 24px !important;
-}
-
 #mistakeNotebookView .mistake-image-frame {
   min-height: 520px !important;
   border-radius: 26px !important;
@@ -36203,10 +36170,6 @@ body {
 #mistakeNotebookView .mistake-notes-input {
   min-height: 240px !important;
   margin-bottom: 16px !important;
-}
-
-#mistakeNotebookView .mistake-ai-instruction {
-  min-height: 94px !important;
 }
 
 #mistakeNotebookView .mistake-tags-input:focus,
@@ -43915,15 +43878,6 @@ body {
 }
 
 /* Mistake Notebook note cards length tune: keep the vertical split, give notes more writing room. */
-#mistakeNotebookView .mistake-note-columns {
-  min-height: clamp(520px, 60vh, 720px) !important;
-  height: clamp(520px, 60vh, 720px) !important;
-  grid-template-rows:
-    minmax(245px, var(--mistake-note-top))
-    12px
-    minmax(245px, var(--mistake-note-bottom)) !important;
-}
-
 #mistakeNotebookView .mistake-user-note-card,
 #mistakeNotebookView .mistake-ai-draft-card {
   padding: 18px 20px !important;
