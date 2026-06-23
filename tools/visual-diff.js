@@ -201,8 +201,19 @@ const sharedViews = [
     // context starts each run with empty localStorage so the clear is
     // a no-op on clean runs.
     //
-    // INVARIANT: any future view that seeds `aquariusMistakeNotebook.v1`
-    // MUST run AFTER view 03, OR clear the key in its own setup() prologue.
+    // INVARIANTS for the mistake-notebook localStorage key. None of these
+    // are machine-enforced (the JS comment is the only contract); a
+    // contributor adding a view that seeds aquariusMistakeNotebook.v1 must
+    // follow ALL of them or view 04's silent close-button failure (see
+    // view 04 setup) will let populated mistake-notebook state leak into
+    // view 04's "mistake-notebook empty + recent panel open" capture:
+    //   1. The seeding view MUST clear the key in its own setup() prologue
+    //      (defensive — covers re-entry, parallel-run races).
+    //   2. The seeding view MUST run AFTER view 04 in the Page A schedule.
+    //   3. SAFEST placement: end of Page A schedule (after view 23+).
+    //      Mid-schedule placement requires auditing every subsequent
+    //      Page A view's assumed mistake-notebook state.
+    // See view 03b setup comment for the full diagnostic trace.
     { name: '03-mistake-notebook', page: 'A', setup: async (page) => {
         await page.evaluate(() => {
             try { localStorage.removeItem('aquariusMistakeNotebook.v1'); } catch (_) {}
@@ -219,6 +230,17 @@ const sharedViews = [
         await page.waitForTimeout(400);
     } },
     { name: '04-recent-conversations', page: 'A', setup: async (page) => {
+        // NOTE (PR #70 follow-up): the page.click('#mistakeNotebookCloseBtn')
+        // here is a no-op — that button is hidden via the doubled-ID rule
+        // `#mistakeNotebookView#mistakeNotebookView #mistakeNotebookCloseBtn
+        // .feature-close-btn { display: none !important; visibility: hidden
+        // !important; width: 0 !important; ... }` at style.css L34394. The
+        // click has been silently swallowed by the .catch since the harness
+        // was added; view 04 has always captured mistake-notebook view +
+        // sidebar recent-panel open, not welcomeScreen. The waitForSelector
+        // for `.hidden` also always times out (same .catch pattern).
+        // Kept as-is rather than fixed (fixing it would shift the baseline
+        // significantly; out of scope for the harness expansion track).
         await page.click('#mistakeNotebookCloseBtn').catch(() => {});
         await page.waitForSelector('#mistakeNotebookView.hidden', { timeout: 3000 }).catch(() => {});
         await page.click('#navRecentBtn');
@@ -643,24 +665,40 @@ const sharedViews = [
     } },
     // ----- Phase 3.5 v3 — late-Page-A state-variant captures -----
     // View 03b — Page A — OPENED mistake-case workspace (Phase 3.5 v3 §9c
-    // gap 1). Seeds localStorage with a fixture mistake and calls
-    // renderMistakeNotebook() in-place so mistakeDetailContent unhides
-    // and .mistake-workspace renders.
+    // gap 1). Seeds localStorage with a fixture mistake and navigates back
+    // to mistake-notebook so mistakeDetailContent unhides and
+    // .mistake-workspace renders.
     //
-    // Numbering note: this view is the only state-variant of view 03 but
-    // sits at the END of the Page A schedule (after view 23) rather than
-    // adjacent to view 03. Reason: seeding aquariusMistakeNotebook.v1 +
-    // calling renderMistakeNotebook in-place causes a small (~4%) drift
-    // on view 04-recent-conversations' welcomeScreen capture (welcomeScreen
-    // re-renders after the close-button → showWelcome path that view 04
-    // takes, and some downstream state changes between the mistake-empty
-    // and mistake-populated render paths). Running 03b LAST on Page A
-    // means no subsequent Page A view inherits the side effect.
+    // SCHEDULING (LAST on Page A schedule, not adjacent to view 03):
+    // Root cause traced — view 04-recent-conversations' setup tries to
+    // close mistake-notebook via #mistakeNotebookCloseBtn, but that button
+    // is hidden by the doubled-ID rule at style.css L34394
+    // (display/visibility/width all forced to 0 via !important). The click
+    // silently times out (.catch consumes the error) and view 04 captures
+    // mistake-notebook IN WHATEVER STATE IT WAS LEFT IN, plus the sidebar
+    // recent-accordion open. With view 03 preceding view 04, mistake-notebook
+    // is empty (#mistakeEmptyPanel) — that's the baseline. If view 03b
+    // preceded view 04, mistake-notebook would be populated (.mistake-workspace
+    // with #mistakeDetailContent unhidden), causing a ~4.2% pixel diff on
+    // view 04's "mistake-notebook empty + recent panel open" baseline.
+    // Running 03b AFTER all other Page A views means no Page A view inherits
+    // the populated state. View 04's broken close-button click is documented
+    // there (kept as-is — fixing it would shift the baseline significantly
+    // and is out of scope for the harness expansion track).
     //
     // Naming kept as 03b (not 26 or higher) per the NN[a-z] convention —
     // the suffix communicates "state-variant of 03" regardless of schedule
     // position. The schedule-position decision is documented here so a
     // future contributor doesn't naively move it back adjacent to 03.
+    //
+    // INVARIANT for future contributors adding any view that seeds
+    // aquariusMistakeNotebook.v1:
+    //   1. MUST clear the key in own setup() prologue (defensive)
+    //   2. MUST run AFTER view 04 (so view 04's broken-close-button
+    //      capture sees empty mistake-notebook, not populated)
+    //   3. SAFEST: append to the END of the Page A schedule. Mid-schedule
+    //      placement requires AUDIT of every subsequent Page A view's
+    //      assumptions about mistake-notebook state.
     //
     // Retroactively pixel-verifies PR #65's `.mistake-workspace`
     // (display + grid-template-columns) and `.mistake-note-columns`
@@ -670,15 +708,18 @@ const sharedViews = [
     // — verified by grep against index.html + app.js + mistake-notebook.js)
     // and cannot be pixel-validated by any harness coverage.
     { name: '03b-mistake-notebook-open-case', page: 'A', setup: async (page) => {
-        // Page A's last view before this was 23-textbook-focus, which
-        // unhides #textbookFocusModal + adds 'textbook-focus-active' on
-        // body. Tear that down before re-opening mistake-notebook so the
-        // capture doesn't bleed in textbook chrome.
+        // Page A teardown for prior-view state. Uses the shared
+        // resetLessonChromeState helper (clears learnBody.dataset.panelFocus
+        // from views 08/09, chapter-overview* classes from views 15/16)
+        // PLUS the textbook-focus + sidebar-collapsed flips that views 23
+        // and 20 leave around. resetLessonChromeState alone is not enough —
+        // it doesn't touch textbook-focus or sidebar-collapsed (those are
+        // owned by setWorkspaceSidebarCollapsed + openTextbookFocusMode,
+        // not the lesson-chrome subsystem).
+        await resetLessonChromeState(page);
         await page.evaluate(() => {
             document.body.classList.remove('textbook-focus-active');
             document.getElementById('textbookFocusModal')?.classList.add('hidden');
-            // Restore the lesson chrome state if a prior Page A view left
-            // any class flips around.
             document.querySelector('.app')?.classList.remove('sidebar-collapsed');
             document.getElementById('leftSidebar')?.classList.remove('collapsed');
         });
