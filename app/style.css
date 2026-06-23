@@ -34731,6 +34731,21 @@ body {
   white-space: normal !important;
 }
 
+/* EOF FEEDBACK AUTHOR COLORS: identity tint beats lane tint.
+   .feedback-reply-context (1,4,0) coverage for .is-left/.is-right tone-N —
+   uniquely defined here (no later duplicate). Deleting these selectors lets
+   the lane-color override in FEEDBACK CONVERSATION COLOR LANES (specificity
+   1,3,0) win, replacing the author tone tint with hardcoded green/pink.
+   DO NOT DELETE without first relocating these selectors AFTER the lane-
+   color override, or the chip border/background/color for any reply that
+   has BOTH a lane class AND a tone class will flip. */
+#feedbackView .feedback-reply[class*="tone-"] .feedback-reply-context,
+#feedbackView .feedback-reply.is-left[class*="tone-"] .feedback-reply-context,
+#feedbackView .feedback-reply.is-right[class*="tone-"] .feedback-reply-context {
+  border-color: rgba(var(--author-rgb),0.22) !important;
+  background: rgba(var(--author-rgb),0.08) !important;
+  color: var(--author-ink) !important;
+}
 
 /* TRUE FINAL FEEDBACK AUTHOR TONES: same person, same soft accent. */
 #feedbackView .feedback-thread.tone-0,
