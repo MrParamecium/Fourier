@@ -44,26 +44,13 @@ const PORT = Number(process.env.TUTOR_VDIFF_PORT || 9125);
 const BASE = `http://127.0.0.1:${PORT}`;
 const VIEWPORT = { width: 1280, height: 800 };
 const PIXELMATCH_THRESHOLD = 0.1;        // per-pixel YIQ-distance threshold
-const FAIL_RATIO = 0.005;                // fail if >0.5% of pixels differ (default)
-// Per-view tightened thresholds for cascade-sensitive views where the
-// "interesting" chrome covers ≪0.5% of the viewport so a real regression
-// hides under the default ratio. Example: view 14c's two `.feedback-reply-
-// context` chips total ~50px tall × ~340px wide ≈ 0.13% of the frame, so
-// a full chip border-color flip produces ~0.1% diff — below FAIL_RATIO but
-// above 0 (real regression). Map keyed on view.name. Views NOT in this map
-// fall through to FAIL_RATIO. Add new entries with a comment giving the
-// pixel-coverage estimate so the threshold is auditable. Picking a value
-// significantly larger than measured baseline-vs-baseline noise (which is
-// 0 pixels for these masked views) keeps regression detection sharp without
-// flake risk.
-const STRICT_FAIL_RATIO = {
-    // §3a.i regression (PR #71, 2026-06-23) on .feedback-reply.is-left /
-    // .is-right .feedback-reply-context produces 1002/1024000 = 0.098%.
-    // 0.0005 (0.05%) catches it with a 2x safety margin; baseline-vs-baseline
-    // noise on this view is 0 pixels (no animated regions; MASK_CSS covers
-    // all timestamps).
-    '14c-feedback-board-thread1-contexts': 0.0005,
-};
+const FAIL_RATIO = 0.005;                // default — fail if >0.5% of pixels differ
+// Cascade-sensitive views can opt in to a tighter threshold by setting
+// `failRatio` on the view declaration; a real regression on chrome that
+// covers ≪0.5% of the frame would otherwise hide under FAIL_RATIO.
+// Pick a value comfortably above baseline-vs-baseline noise (0 px on masked
+// views) and below the measured regression diff, then leave a comment on
+// the view explaining the pixel-coverage math.
 
 const TOOLS = __dirname;
 const BASELINE_DIR = path.join(TOOLS, 'visual-baseline');
@@ -516,7 +503,11 @@ const sharedViews = [
     // (`signalCleanupRestore` + the bottom-of-try restoreFeedbackBoard) so
     // a later sibling view inheriting the populated board is the next
     // contributor's responsibility, not 14c's.
-    { name: '14c-feedback-board-thread1-contexts', page: 'B', setup: async (page) => {
+    // failRatio: §3a.i regression (PR #71, 2026-06-23) on the two .feedback-
+    // reply.is-{left,right} .feedback-reply-context chips (~50×340px ≈ 0.13%
+    // of the frame) produced 1002/1024000 = 0.098% diff. 0.0005 (0.05%)
+    // catches it with a 2× safety margin; baseline noise on this view is 0 px.
+    { name: '14c-feedback-board-thread1-contexts', page: 'B', failRatio: 0.0005, setup: async (page) => {
         // Re-apply .feedback-reply.is-target on Charlie. View 14b's thread-body
         // click on thread 2 cleared the earlier .is-target on Charlie because
         // setFeedbackReplyTarget allows only one .is-target at a time.
@@ -527,17 +518,12 @@ const sharedViews = [
         // contexts above the lower-thread overflow AND keeps Charlie's context
         // (~160px below Bravo's) inside the 800px viewport. behavior:'instant'
         // avoids the smooth-scroll animation that could mid-screenshot-shift
-        // the rendered position. Re-querying via DOM rather than via Playwright
-        // locators because the harness's MASK_CSS doesn't add `is-animating`
-        // and the page itself doesn't define scroll-behavior:smooth — but
-        // explicit instant is defensive against a future style change.
+        // the rendered position.
         await page.evaluate(() => {
             const target = document.querySelector('#feedbackView .feedback-reply-context');
             if (!target) throw new Error('view 14c: no .feedback-reply-context to scroll into view');
             target.scrollIntoView({ block: 'center', inline: 'center', behavior: 'instant' });
         });
-        // Two rAFs let any post-scroll layout settle (#feedbackList scrollTop
-        // change, no actual transitions to wait on).
         await page.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
         // Assert BOTH contexts now sit inside the 1280x800 capture viewport.
         // Captured BEFORE settleLesson runs so a layout regression that pushes
@@ -1235,7 +1221,7 @@ process.once('SIGTERM', () => signalCleanupRestore('SIGTERM'));
                     }
                     const diffPath = path.join(DIFF_DIR, `${view.name}.png`);
                     const cmp = comparePng(baselinePath, dest, diffPath);
-                    const threshold = STRICT_FAIL_RATIO[view.name] ?? FAIL_RATIO;
+                    const threshold = view.failRatio ?? FAIL_RATIO;
                     const pass = !cmp.error && cmp.ratio <= threshold;
                     results.push({ view: view.name, status: pass ? 'pass' : 'fail',
                                    mismatch: cmp.mismatch, total: cmp.total,
@@ -1348,8 +1334,10 @@ process.once('SIGTERM', () => signalCleanupRestore('SIGTERM'));
     }
 
     if (MODE === 'check') {
-        const strictList = Object.entries(STRICT_FAIL_RATIO)
-            .map(([k, v]) => `${k}=${(v * 100).toFixed(3)}%`).join(', ') || 'none';
+        const strictList = sharedViews
+            .filter(v => v.failRatio != null)
+            .map(v => `${v.name}=${(v.failRatio * 100).toFixed(3)}%`)
+            .join(', ') || 'none';
         const lines = ['# Visual-diff report', '',
             `Default threshold: ≤${(FAIL_RATIO * 100).toFixed(2)}% mismatched pixels per view`,
             `Strict-threshold overrides: ${strictList}`,
