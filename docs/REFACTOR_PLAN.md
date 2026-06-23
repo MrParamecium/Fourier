@@ -2,16 +2,22 @@
 
 Owner: FlyM1ss
 Started: 2026-06-19
-Last refreshed: 2026-06-22 (after PR #62 — Phase 3.5 v2 harness expansion, Glass coverage gate cleared)
+Last refreshed: 2026-06-22 (after PRs #63-#68 — Phase 2 #19 Glass CSS extraction complete via Step G.3)
 Status:
 
 - **Phase 0** merged (#15).
 - **Phase 1** complete (#17, #20–29).
-- **Phase 2** — 7 of 8 items merged. #18 (interactive demos subsystem)
+- **Phase 2** — **ALL 8 items merged.** #18 (interactive demos subsystem)
   shipped 2026-06-22 in PR #60 + #61 (Step G.1 + G.2; −1,042 lines from
   app.js across two new files: dispatcher.js 584L + chapter-one.js 473L).
-  #19 (Glass + chapter-overview CSS, 16,402 lines) is now **unblocked**
-  after PR #62 (Phase 3.5 v2) closed the Glass-surface coverage gap.
+  **#19 (Glass + chapter-overview CSS) shipped 2026-06-22 in PRs #63-#68**
+  (Step G.3 sub-PRs G.3.1 lesson-page -146 / G.3.2 feedback-board -121 /
+  G.3.3 preference/mistake/page-num -46 / G.3.5 Key Takeaways -47 /
+  G.3.4a Home-Ask DEBUG+INTERACTION -131 / G.3.4b Home-Ask SIZE RESTORE -29
+  = **-518 lines cumulative**). Plan target was 16,402 lines (1.17%
+  realized); structural ceiling matches Steps B/C/D pattern (~14% of
+  candidate lines actually deletable due to specificity-graded defenses,
+  state-variant rules deferred, banner-rewrite-required clusters).
 - **Phase 3 Pass 1** complete on 2026-06-21..22 — 6 PRs merged:
   - #38 (PR #21) hydrateInteractiveDemos split into 19 family modules.
   - 589be97 visual-diff baseline refresh + 3 lesson-chrome views.
@@ -37,10 +43,10 @@ Status:
 - **Phase 3 Pass 2** is the active frontier — see §"Roadmap from
   here". Deferred punch-list lives in `docs/phase3_deferred.md`.
 
-Cumulative deltas through end of Step G.2 (PR #60/#61, 2026-06-22):
+Cumulative deltas through end of Step G.3 (PRs #63-#68, 2026-06-22):
 
 - `app/app.js`: 17,650 → 8,339 (−9,311, **−52.7%**).
-- `app/style.css`: 45,286 → 44,261 (−1,025).
+- `app/style.css`: 45,286 → 43,743 (−1,543, **−3.4%**).
 - `app/index.html`: 3,153 → 1,654 (−1,499, ~47.5% — Phase 1 #11 extract).
 
 This is the single source of truth for the multi-phase refactor of the
