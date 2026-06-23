@@ -35,6 +35,8 @@ const {
     assertOrThrow,
     resolveLessonCachePath,
     closeFeaturePopovers,
+    seedFeedbackFixture,
+    restoreFeedbackBoard,
 } = require('./test-utils.js');
 
 const PORT = Number(process.env.TUTOR_VDIFF_PORT || 9125);
@@ -304,9 +306,17 @@ const sharedViews = [
         );
         await page.waitForTimeout(200);
     } },
-    // View 14 — Page B — feedback board resting state. loadFeedbackBoard()
+    // View 14 — Page B — feedback board EMPTY resting state. loadFeedbackBoard()
     // is async; wait until the "Loading suggestions..." placeholder is gone.
+    // Idempotent restore at top: if a prior --check run (or crashed --baseline)
+    // left tools/fixtures/feedback-board.populated.json seeded into app/users/,
+    // view 14b's content would leak into view 14. restoreFeedbackBoard deletes
+    // the seeded file so readFeedbackBoard returns {items:[]} and the empty-
+    // board chrome (`<div class="feedback-empty">No suggestions yet.</div>`)
+    // renders. Safe on a clean tree — the helper no-ops when no fixture or
+    // backup exists.
     { name: '14-feedback-board', page: 'B', setup: async (page) => {
+        restoreFeedbackBoard();
         await page.click('#navFeedbackBtn');
         await page.waitForSelector('#feedbackView:not(.hidden)', { timeout: 5000 });
         await page.waitForFunction(() => {
@@ -314,7 +324,51 @@ const sharedViews = [
             if (!v || v.classList.contains('hidden')) return false;
             return !v.textContent.includes('Loading suggestions');
         }, { timeout: 10000 });
+        // Confirm empty-state chrome — defends against the fixture leaking
+        // via a future code path that bypasses restoreFeedbackBoard.
+        const empty = await page.evaluate(() =>
+            !!document.querySelector('#feedbackView .feedback-empty')
+        );
+        assertOrThrow(empty, 'view 14: feedback board did not render the empty-state placeholder — fixture may have leaked from a prior run');
         await page.waitForTimeout(300);
+    } },
+    // View 14b — Page B — POPULATED feedback board (Phase 3.5 v3 §9a). Seeds
+    // tools/fixtures/feedback-board.populated.json into app/users/feedback-
+    // board.json so the bridge's /api/feedback GET returns 1 thread + 5
+    // replies covering: tone-0..5 across one thread (toneForAuthor at
+    // app.js L6258 round-robins per author per item), is-left + is-right
+    // lanes (laneForAuthor alternates each NEW reply author starting at
+    // right), .feedback-reply-context (Charlie's reply has replyTo set),
+    // .feedback-replies gap, .feedback-thread-pin, .feedback-reply-count.
+    // Then clicks Charlie's reply (tone-3, is-right) to fire setFeedbackReplyTarget
+    // → adds .is-target + reveals .feedback-reply-target chip.
+    //
+    // Retroactively pixel-verifies G.3.2 (PR #64, 121 lines of #feedbackView
+    // deletions) and unlocks deferred §3a.i (feedback-author-tones 5-banner
+    // cascade collapse, ~140 lines) since tone-1..5 are now under harness
+    // coverage. Cleanup runs in the IIFE finally — see restoreFeedbackBoard
+    // call there.
+    { name: '14b-feedback-board-populated', page: 'B', setup: async (page) => {
+        seedFeedbackFixture(path.join(TOOLS, 'fixtures', 'feedback-board.populated.json'));
+        // #feedbackRefreshBtn → loadFeedbackBoard() → fetch /api/feedback →
+        // renderFeedbackBoard(items). Refresh (rather than nav away + back)
+        // keeps Page B sticky and avoids re-running view 12/13 setup churn.
+        await page.click('#feedbackRefreshBtn');
+        await page.waitForSelector('#feedbackView .feedback-thread', { timeout: 5000 });
+        await page.waitForFunction(
+            () => document.querySelectorAll('#feedbackView .feedback-thread .feedback-reply').length === 5,
+            { timeout: 3000 },
+        );
+        // Click Charlie's reply — fixture ID `fb_reply_charlie`. Adds .is-target
+        // on the .feedback-reply node AND unhides the .feedback-reply-target
+        // chip + focuses the compose input (input caret masked via MASK_CSS).
+        await page.click('[data-feedback-reply-anchor="fb_reply_charlie"]');
+        await page.waitForSelector('#feedbackView .feedback-reply.is-target', { timeout: 1000 });
+        await page.waitForFunction(
+            () => !document.querySelector('#feedbackView .feedback-reply-target')?.classList.contains('hidden'),
+            { timeout: 1000 },
+        );
+        await page.waitForTimeout(200);
     } },
     // ----- Page A (continued — lesson chrome class flips) -----
     // View 15 — Page A — forces learnBody.classList.add('chapter-overview-active')
@@ -805,6 +859,19 @@ async function runPageCView(page, viewName) {
 let cachePresent = new Set();
 
 // ---------- runner ----------
+// Signal-handler cleanup for the seeded feedback fixture (view 14b). The IIFE
+// finally block restores on normal exit and on caught exceptions; SIGINT /
+// SIGTERM short-circuit that path. Register a synchronous restore so ctrl-C
+// during --baseline doesn't leave app/users/feedback-board.json contaminated
+// with fixture content. exitCode 130 = standard SIGINT (128+2); 143 = SIGTERM
+// (128+15). Wrapped in try/catch so cleanup failure doesn't mask the signal.
+function signalCleanupRestore(signal) {
+    try { restoreFeedbackBoard(); } catch (_) {}
+    process.exit(signal === 'SIGTERM' ? 143 : 130);
+}
+process.once('SIGINT', () => signalCleanupRestore('SIGINT'));
+process.once('SIGTERM', () => signalCleanupRestore('SIGTERM'));
+
 (async () => {
     const repoRoot = path.resolve(__dirname, '..');
     cachePresent = preFlightCacheCheck(repoRoot);
@@ -934,6 +1001,11 @@ let cachePresent = new Set();
         console.error('[visual-diff] FATAL', err);
         exitCode = 1;
     } finally {
+        // Restore app/users/feedback-board.json to its pre-run state — deletes
+        // the seeded fixture if no backup existed, restores the developer's
+        // file otherwise. Runs BEFORE bridge SIGTERM so a slow bridge shutdown
+        // doesn't widen the contamination window.
+        try { restoreFeedbackBoard(); } catch (_) {}
         // Attach the exit listener BEFORE sending SIGTERM so a fast-exiting
         // bridge can't race the listener; race against a 2s timeout and warn
         // if it hits so "real exit" and "never exited" don't look identical.

@@ -1,0 +1,46 @@
+{
+  "items": [
+    {
+      "id": "fb_thread_fixture_01",
+      "title": "Add a worked example to the convolution lab",
+      "body": "I'm finding the convolution lab hard to follow without a worked example. A toy x[n] = {1, 1, 0, 1} convolved with h[n] = {1, -1} stepped out frame-by-frame would help anchor the procedure.",
+      "author": "Owner-Fixture",
+      "createdAt": "2024-01-15T10:30:00Z",
+      "replies": [
+        {
+          "id": "fb_reply_alpha",
+          "body": "Agreed — the visual aid jumps from a sketch straight to the result without a step-by-step pass.",
+          "author": "Alpha",
+          "createdAt": "2024-01-15T10:31:00Z"
+        },
+        {
+          "id": "fb_reply_bravo",
+          "body": "Could we add a slider that scrubs through each n step alongside the running sum?",
+          "author": "Bravo",
+          "createdAt": "2024-01-15T10:32:00Z"
+        },
+        {
+          "id": "fb_reply_charlie",
+          "body": "Replying to Alpha — yes a stepped pass would unblock me on §3.8-1, the first time I hit the lab.",
+          "author": "Charlie",
+          "createdAt": "2024-01-15T10:33:00Z",
+          "replyTo": "fb_reply_alpha",
+          "replyToAuthor": "Alpha",
+          "replyToBody": "Agreed — the visual aid jumps from a sketch straight to the result without a step-by-step pass."
+        },
+        {
+          "id": "fb_reply_delta",
+          "body": "Same blocker on §3.8-3. A worked example would generalize across the lab.",
+          "author": "Delta",
+          "createdAt": "2024-01-15T10:34:00Z"
+        },
+        {
+          "id": "fb_reply_echo",
+          "body": "+1 for the slider — and please show the running sum alongside the flip-and-shift overlay.",
+          "author": "Echo",
+          "createdAt": "2024-01-15T10:35:00Z"
+        }
+      ]
+    }
+  ]
+}

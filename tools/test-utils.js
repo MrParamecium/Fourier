@@ -247,6 +247,44 @@ function assertOrThrow(condition, msg) {
     if (!condition) throw new Error(msg);
 }
 
+// Path to the on-disk feedback-board fixture used by /api/feedback GET.
+// Matches the runtime path computed in ws-bridge.js L1237 (usersDir =
+// path.join(__dirname, 'users')) + user-memory.js L46 (FEEDBACK_BOARD_PATH =
+// path.join(USERS_DIR, 'feedback-board.json')). Hardcoded rather than
+// recomputed via require('../app/...') to keep test-utils Node-only and
+// avoid pulling in ws-bridge's module graph just to read one constant.
+const FEEDBACK_BOARD_PATH = path.join(__dirname, '..', 'app', 'users', 'feedback-board.json');
+
+// Phase 3.5 v3 §9a — seed app/users/feedback-board.json from a fixture so
+// view 14b can render populated thread/reply chrome (G.3.2's deleted
+// `#feedbackView` rules + all tone-N/lane/target chrome). The bridge reads
+// the file on every /api/feedback GET (no in-process cache), so seeding
+// at view-setup time is sufficient — no bridge restart needed.
+//
+// Snapshots any pre-existing file into a sibling .harness-backup.json so
+// restoreFeedbackBoard() returns the developer's working tree to its prior
+// state. If no file existed before (the common case — readFeedbackBoard
+// gracefully returns {items:[]} on ENOENT), restoreFeedbackBoard deletes
+// the seeded file.
+const FEEDBACK_BOARD_BACKUP_PATH = path.join(__dirname, '..', 'app', 'users', 'feedback-board.harness-backup.json');
+function seedFeedbackFixture(fixturePath) {
+    if (fs.existsSync(FEEDBACK_BOARD_PATH) && !fs.existsSync(FEEDBACK_BOARD_BACKUP_PATH)) {
+        fs.copyFileSync(FEEDBACK_BOARD_PATH, FEEDBACK_BOARD_BACKUP_PATH);
+    }
+    fs.copyFileSync(fixturePath, FEEDBACK_BOARD_PATH);
+}
+function restoreFeedbackBoard() {
+    if (fs.existsSync(FEEDBACK_BOARD_BACKUP_PATH)) {
+        fs.copyFileSync(FEEDBACK_BOARD_BACKUP_PATH, FEEDBACK_BOARD_PATH);
+        fs.unlinkSync(FEEDBACK_BOARD_BACKUP_PATH);
+    } else if (fs.existsSync(FEEDBACK_BOARD_PATH)) {
+        // No backup means no pre-existing file — remove the seeded one so the
+        // working tree returns to "file absent" (the empty-board state that
+        // view 14 captures).
+        fs.unlinkSync(FEEDBACK_BOARD_PATH);
+    }
+}
+
 // Resolve a lesson-cache file path using the same workspace-preferred fallback
 // chain that ws-bridge.js uses. Returns the resolved absolute path or null.
 function resolveLessonCachePath(repoRoot, sectionId) {
@@ -275,4 +313,7 @@ module.exports = {
     assertOrThrow,
     resolveLessonCachePath,
     closeFeaturePopovers,
+    FEEDBACK_BOARD_PATH,
+    seedFeedbackFixture,
+    restoreFeedbackBoard,
 };
