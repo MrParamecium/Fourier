@@ -38824,32 +38824,9 @@ body {
 }
 
 /* ABSOLUTE EOF HOME ASK DEBUG LOCK: compact controls and true focus pop. */
-.welcome.home-ask-workspace .home-ask-toolbar {
-  justify-content: flex-end !important;
-  align-items: center !important;
-  gap: 10px !important;
-  min-height: 46px !important;
-  padding: 0 clamp(12px, 2vw, 22px) 10px !important;
-}
-
 .welcome.home-ask-workspace #homeModePicker.home-mode-picker {
   width: auto !important;
   flex: 0 0 auto !important;
-}
-
-.welcome.home-ask-workspace .home-mode-toggle,
-.welcome.home-ask-workspace #webSearchToggleBtnMain.home-ask-web-toggle {
-  height: 44px !important;
-  min-height: 44px !important;
-  border-radius: 18px !important;
-  border-color: rgba(255,255,255,0.72) !important;
-  box-shadow:
-    0 14px 30px rgba(148,47,62,0.10),
-    0 5px 12px rgba(15,23,42,0.05),
-    inset 0 1px 0 rgba(255,255,255,0.92),
-    inset 0 -1px 0 rgba(255,255,255,0.20) !important;
-  backdrop-filter: blur(24px) saturate(185%) brightness(1.05) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(185%) brightness(1.05) !important;
 }
 
 .welcome.home-ask-workspace .home-mode-toggle {
@@ -38867,42 +38844,10 @@ body {
   white-space: nowrap !important;
 }
 
-.welcome.home-ask-workspace .home-mode-icon {
-  width: 22px !important;
-  min-width: 22px !important;
-  height: 22px !important;
-  min-height: 22px !important;
-  font-size: 22px !important;
-}
-
-.welcome.home-ask-workspace .home-mode-icon i {
-  font-size: 22px !important;
-}
-
 .welcome.home-ask-workspace .home-mode-toggle .qa-caret-icon {
   width: 10px !important;
   height: 10px !important;
   margin-left: 1px !important;
-}
-
-.welcome.home-ask-workspace #webSearchToggleBtnMain.home-ask-web-toggle {
-  width: 46px !important;
-  min-width: 46px !important;
-  padding: 0 !important;
-}
-
-.welcome.home-ask-workspace #webSearchToggleBtnMain.home-ask-web-toggle svg {
-  width: 23px !important;
-  height: 23px !important;
-}
-
-.welcome.home-ask-workspace #homeModeMenu.home-mode-menu {
-  right: 0 !important;
-  bottom: calc(100% + 10px) !important;
-  width: min(320px, calc(100vw - 32px)) !important;
-  padding: 10px !important;
-  border-radius: 24px !important;
-  transform-origin: bottom right !important;
 }
 
 .welcome.home-ask-workspace #homeModeMenu .home-mode-option {
@@ -38912,26 +38857,9 @@ body {
   border-radius: 16px !important;
 }
 
-.welcome.home-ask-workspace #homeModeMenu .home-mode-menu-icon {
-  width: 30px !important;
-  min-width: 30px !important;
-  height: 30px !important;
-  font-size: 30px !important;
-}
-
-.welcome.home-ask-workspace #homeModeMenu .home-mode-menu-icon i {
-  font-size: 30px !important;
-}
-
 .welcome.home-ask-workspace #homeModeMenu .home-mode-menu-text strong {
   font-size: 17px !important;
   line-height: 1.1 !important;
-}
-
-.welcome.home-ask-workspace #homeModeMenu .home-mode-menu-text small {
-  margin-top: 5px !important;
-  font-size: 14px !important;
-  line-height: 1.2 !important;
 }
 
 .welcome.home-ask-workspace .home-ask-composer:focus-within,
@@ -39728,24 +39656,6 @@ body {
   z-index: 40 !important;
 }
 
-.welcome.home-ask-workspace #homeModePicker.home-mode-picker {
-  z-index: 60 !important;
-}
-
-.welcome.home-ask-workspace .home-mode-toggle,
-.welcome.home-ask-workspace #webSearchToggleBtnMain.home-ask-web-toggle {
-  height: 38px !important;
-  min-height: 38px !important;
-  border-radius: 15px !important;
-  box-shadow:
-    0 10px 22px rgba(148,47,62,0.09),
-    0 3px 9px rgba(15,23,42,0.045),
-    inset 0 1px 0 rgba(255,255,255,0.88),
-    inset 0 -1px 0 rgba(255,255,255,0.18) !important;
-  backdrop-filter: blur(22px) saturate(180%) brightness(1.05) !important;
-  -webkit-backdrop-filter: blur(22px) saturate(180%) brightness(1.05) !important;
-}
-
 .welcome.home-ask-workspace .home-mode-toggle {
   min-width: 132px !important;
   width: 132px !important;
@@ -39753,10 +39663,6 @@ body {
   gap: 6px !important;
   font-size: 13px !important;
   font-weight: 820 !important;
-}
-
-.welcome.home-ask-workspace .home-mode-toggle #homeModeCurrentText {
-  max-width: 64px !important;
 }
 
 .welcome.home-ask-workspace .home-mode-icon {
@@ -39787,47 +39693,11 @@ body {
   height: 20px !important;
 }
 
-.welcome.home-ask-workspace #homeModeMenu.home-mode-menu {
-  top: calc(100% + 8px) !important;
-  bottom: auto !important;
-  right: 0 !important;
-  width: min(276px, calc(100vw - 32px)) !important;
-  padding: 8px !important;
-  border-radius: 20px !important;
-  transform: translateY(-6px) scale(0.975) !important;
-  transform-origin: top right !important;
-  z-index: 900 !important;
-}
-
-.welcome.home-ask-workspace #homeModeMenu.home-mode-menu.show {
-  transform: translateY(0) scale(1) !important;
-}
-
 .welcome.home-ask-workspace #homeModeMenu .home-mode-option {
   min-height: 58px !important;
   padding: 10px 12px !important;
   gap: 10px !important;
   border-radius: 14px !important;
-}
-
-.welcome.home-ask-workspace #homeModeMenu .home-mode-menu-icon {
-  width: 25px !important;
-  min-width: 25px !important;
-  height: 25px !important;
-  font-size: 25px !important;
-}
-
-.welcome.home-ask-workspace #homeModeMenu .home-mode-menu-icon i {
-  font-size: 25px !important;
-}
-
-.welcome.home-ask-workspace #homeModeMenu .home-mode-menu-text strong {
-  font-size: 15px !important;
-}
-
-.welcome.home-ask-workspace #homeModeMenu .home-mode-menu-text small {
-  margin-top: 3px !important;
-  font-size: 12.5px !important;
 }
 
 @media (max-width: 760px) {
