@@ -1,37 +1,16 @@
 #!/usr/bin/env node
 /**
- * Diagnostic probe for docs/visual-diff-harness-gap.md.
+ * Reusable cascade-blindness diagnostic. See docs/visual-diff-harness-gap.md
+ * for the methodology and how to adapt this probe to other suspected views.
  *
- * Tests the hypothesis: visual-diff.js uses page.screenshot({ fullPage: false })
- * which clips to the 1280x800 viewport, so a CSS change on an element that
- * lives below the scroll fold produces 0 pixel diff even though the live page
- * paints it.
- *
- * What this probe does:
- *   1. Boot the bridge on port 9126 (avoid clashing with the harness on 9125).
- *   2. Launch Chromium with the SAME context flags the harness uses (viewport,
- *      timezone, locale, MASK_CSS via addInitScript).
- *   3. Reproduce view 14b setup: enter guest, nav to feedback view, seed the
- *      populated fixture, refresh, wait for 2 threads + 6 replies, click
- *      Charlie's reply + thread 2 body so both .is-target chips show.
- *   4. Geometry probe — for every #feedbackView .feedback-reply-context,
- *      report bounding rect + computed style + whether it intersects the
- *      visible 1280x800 viewport.
- *   5. Magenta probe — inject `border: 5px solid magenta !important;
- *      background: yellow !important` on .feedback-reply-context. Take BOTH
- *      a viewport screenshot AND a fullPage screenshot. Count magenta pixels
- *      in each PNG.
- *
- * Decisive outcomes:
- *   - viewport magenta > 0 AND fullPage magenta > 0  → screenshot is fine,
- *     bug is elsewhere (visibility / occlusion). Look at H2/H3.
- *   - viewport magenta == 0 AND fullPage magenta > 0 → H1 confirmed: the
- *     elements paint below the 800px fold; fullPage:false discards them.
- *   - viewport magenta == 0 AND fullPage magenta == 0 → element is hidden
- *     (display:none, visibility:hidden) or otherwise unpaintable. Look at H2.
- *
- * This file is ephemeral diagnostic instrumentation. Delete after the gap
- * is closed or move to tools/test-utils.js if a recurring probe is wanted.
+ * Runs three probes against view 14b's seeded state:
+ *   1. Geometry — bounding rect + computed style of every .feedback-reply-context.
+ *   2. Ancestor chain — overflow / scrollTop of each ancestor, to surface
+ *      inner-scroll containers (the actual root cause for view 14b).
+ *   3. Magenta paint — scrollIntoView, inject a (1,4,0)-specificity border/
+ *      background override, take viewport + fullPage screenshots, count
+ *      magenta pixels in each. Used as a final confirmation that the
+ *      cascade is reachable from the captured region.
  */
 const fs = require('fs');
 const path = require('path');
@@ -263,7 +242,7 @@ async function main() {
 
         console.log('');
         console.log('==================================================');
-        console.log('=== Probe 2: magenta override paint coverage ====');
+        console.log('=== Probe 3: magenta override paint coverage ===');
         console.log('==================================================');
         console.log(`computed after override: ${JSON.stringify(computedAfter)}`);
         console.log(`viewport PNG  ${viewportPng}: ${JSON.stringify(viewportRes)}`);
