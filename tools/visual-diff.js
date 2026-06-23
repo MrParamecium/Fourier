@@ -551,9 +551,18 @@ const sharedViews = [
                     fullyIn: r.top >= 0 && r.bottom <= vh && r.left >= 0 && r.right <= vw };
             });
         });
+        // Split into two assertions so the failure message attributes the
+        // problem correctly: a fixture edit that drops .replyTo would fail the
+        // length check (point reviewer at the fixture); a scrollIntoView /
+        // layout regression that pushes a context off-screen would fail the
+        // fullyIn check (point reviewer at the harness or CSS).
         assertOrThrow(
-            probe.length === 2 && probe.every(p => p.fullyIn),
-            `view 14c: expected 2 .feedback-reply-context elements fully inside viewport, got ${JSON.stringify(probe)}`,
+            probe.length === 2,
+            `view 14c: fixture should produce exactly 2 .feedback-reply-context elements (Bravo + Charlie's replyTo bubbles); got ${probe.length} — check tools/fixtures/feedback-board.populated.json`,
+        );
+        assertOrThrow(
+            probe.every(p => p.fullyIn),
+            `view 14c: scrollIntoView did not center both contexts inside the 1280x800 capture viewport; got ${JSON.stringify(probe)}`,
         );
         await page.waitForTimeout(200);
     } },
