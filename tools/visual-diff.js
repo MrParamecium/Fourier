@@ -44,7 +44,26 @@ const PORT = Number(process.env.TUTOR_VDIFF_PORT || 9125);
 const BASE = `http://127.0.0.1:${PORT}`;
 const VIEWPORT = { width: 1280, height: 800 };
 const PIXELMATCH_THRESHOLD = 0.1;        // per-pixel YIQ-distance threshold
-const FAIL_RATIO = 0.005;                // fail if >0.5% of pixels differ
+const FAIL_RATIO = 0.005;                // fail if >0.5% of pixels differ (default)
+// Per-view tightened thresholds for cascade-sensitive views where the
+// "interesting" chrome covers ≪0.5% of the viewport so a real regression
+// hides under the default ratio. Example: view 14c's two `.feedback-reply-
+// context` chips total ~50px tall × ~340px wide ≈ 0.13% of the frame, so
+// a full chip border-color flip produces ~0.1% diff — below FAIL_RATIO but
+// above 0 (real regression). Map keyed on view.name. Views NOT in this map
+// fall through to FAIL_RATIO. Add new entries with a comment giving the
+// pixel-coverage estimate so the threshold is auditable. Picking a value
+// significantly larger than measured baseline-vs-baseline noise (which is
+// 0 pixels for these masked views) keeps regression detection sharp without
+// flake risk.
+const STRICT_FAIL_RATIO = {
+    // §3a.i regression (PR #71, 2026-06-23) on .feedback-reply.is-left /
+    // .is-right .feedback-reply-context produces 1002/1024000 = 0.098%.
+    // 0.0005 (0.05%) catches it with a 2x safety margin; baseline-vs-baseline
+    // noise on this view is 0 pixels (no animated regions; MASK_CSS covers
+    // all timestamps).
+    '14c-feedback-board-thread1-contexts': 0.0005,
+};
 
 const TOOLS = __dirname;
 const BASELINE_DIR = path.join(TOOLS, 'visual-baseline');
@@ -462,6 +481,80 @@ const sharedViews = [
             document.querySelectorAll('#feedbackView .feedback-reply-target:not(.hidden)').length
         );
         assertOrThrow(visibleChips === 2, `view 14b: expected 2 visible reply-target chips, got ${visibleChips}`);
+        await page.waitForTimeout(200);
+    } },
+    // View 14c — Page B — POPULATED feedback board, THREAD 1 contexts in viewport.
+    //
+    // BACKGROUND. View 14b leaves `#feedbackList` scrolled to the bottom (thread
+    // 2's `.feedback-thread-body.is-target` click auto-scrolls thread 2 into the
+    // inner overflow:auto container). Thread 1's two `.feedback-reply-context`
+    // chips (Bravo .is-left, Charlie .is-right) end up at viewport y≈-1000,
+    // OUTSIDE the screenshot. `page.screenshot({fullPage:false})` clips to the
+    // 1280x800 viewport, AND `fullPage:true` doesn't help because the document
+    // scrollHeight equals the viewport — only the inner #feedbackList scroll
+    // container is overflowing. The §3a.i regression (PR #71, 2026-06-23) on
+    // `.feedback-reply.is-left/.is-right .feedback-reply-context` border/
+    // background/color slipped THROUGH two `--check` runs as 0/1024000 px diff
+    // for exactly this reason — the affected chrome was painted, but painted
+    // OUTSIDE the captured region. Direct Playwright computed-style probes were
+    // the load-bearing verification for §3a.i until this view existed.
+    //
+    // What this view captures. Re-applies `.feedback-reply.is-target` to
+    // Charlie's reply (thread 1, is-right) — view 14b's later click on thread 2
+    // body cleared it — then `scrollIntoView({block:'center'})` on the FIRST
+    // `.feedback-reply-context` (Bravo's is-left chip). At ~25px tall with
+    // ~160px between Bravo's and Charlie's contexts, both land in the 800px
+    // viewport. Result: thread 1's full reply lane chrome — both tone-tinted
+    // (1,4,0) selectors AND the lane-lock (1,3,0) chips AND `.is-target`
+    // ring chrome on Charlie — under pixel-diff coverage.
+    //
+    // INVARIANT. Must run AFTER 14b (depends on the seeded fixture + the
+    // .feedback-thread-body.is-target chrome 14b establishes on thread 2 —
+    // which we DON'T see but which determines that view 14b's `.is-target`
+    // state didn't bleed into here as a different element). Does NOT call
+    // restoreFeedbackBoard — cleanup happens in the captureView IIFE finally
+    // (`signalCleanupRestore` + the bottom-of-try restoreFeedbackBoard) so
+    // a later sibling view inheriting the populated board is the next
+    // contributor's responsibility, not 14c's.
+    { name: '14c-feedback-board-thread1-contexts', page: 'B', setup: async (page) => {
+        // Re-apply .feedback-reply.is-target on Charlie. View 14b's thread-body
+        // click on thread 2 cleared the earlier .is-target on Charlie because
+        // setFeedbackReplyTarget allows only one .is-target at a time.
+        await page.click('[data-feedback-reply-anchor="fb_reply_charlie"]');
+        await page.waitForSelector('#feedbackView .feedback-reply.is-target', { timeout: 2000 });
+        // ScrollIntoView the first .feedback-reply-context (Bravo's) into the
+        // CENTER of the #feedbackList viewport. block:'center' both lifts thread 1
+        // contexts above the lower-thread overflow AND keeps Charlie's context
+        // (~160px below Bravo's) inside the 800px viewport. behavior:'instant'
+        // avoids the smooth-scroll animation that could mid-screenshot-shift
+        // the rendered position. Re-querying via DOM rather than via Playwright
+        // locators because the harness's MASK_CSS doesn't add `is-animating`
+        // and the page itself doesn't define scroll-behavior:smooth — but
+        // explicit instant is defensive against a future style change.
+        await page.evaluate(() => {
+            const target = document.querySelector('#feedbackView .feedback-reply-context');
+            if (!target) throw new Error('view 14c: no .feedback-reply-context to scroll into view');
+            target.scrollIntoView({ block: 'center', inline: 'center', behavior: 'instant' });
+        });
+        // Two rAFs let any post-scroll layout settle (#feedbackList scrollTop
+        // change, no actual transitions to wait on).
+        await page.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
+        // Assert BOTH contexts now sit inside the 1280x800 capture viewport.
+        // Captured BEFORE settleLesson runs so a layout regression that pushes
+        // them out fails fast instead of producing a vacuously-passing screenshot.
+        const probe = await page.evaluate(() => {
+            const els = Array.from(document.querySelectorAll('#feedbackView .feedback-reply-context'));
+            const vh = window.innerHeight, vw = window.innerWidth;
+            return els.map((el) => {
+                const r = el.getBoundingClientRect();
+                return { top: Math.round(r.top), bottom: Math.round(r.bottom),
+                    fullyIn: r.top >= 0 && r.bottom <= vh && r.left >= 0 && r.right <= vw };
+            });
+        });
+        assertOrThrow(
+            probe.length === 2 && probe.every(p => p.fullyIn),
+            `view 14c: expected 2 .feedback-reply-context elements fully inside viewport, got ${JSON.stringify(probe)}`,
+        );
         await page.waitForTimeout(200);
     } },
     // ----- Page A (continued — lesson chrome class flips) -----
@@ -1133,10 +1226,11 @@ process.once('SIGTERM', () => signalCleanupRestore('SIGTERM'));
                     }
                     const diffPath = path.join(DIFF_DIR, `${view.name}.png`);
                     const cmp = comparePng(baselinePath, dest, diffPath);
-                    const pass = !cmp.error && cmp.ratio <= FAIL_RATIO;
+                    const threshold = STRICT_FAIL_RATIO[view.name] ?? FAIL_RATIO;
+                    const pass = !cmp.error && cmp.ratio <= threshold;
                     results.push({ view: view.name, status: pass ? 'pass' : 'fail',
                                    mismatch: cmp.mismatch, total: cmp.total,
-                                   ratio: cmp.ratio, error: cmp.error });
+                                   ratio: cmp.ratio, threshold, error: cmp.error });
                     if (!pass) exitCode = 1;
                 }
             } catch (err) {
@@ -1245,14 +1339,18 @@ process.once('SIGTERM', () => signalCleanupRestore('SIGTERM'));
     }
 
     if (MODE === 'check') {
+        const strictList = Object.entries(STRICT_FAIL_RATIO)
+            .map(([k, v]) => `${k}=${(v * 100).toFixed(3)}%`).join(', ') || 'none';
         const lines = ['# Visual-diff report', '',
-            `Threshold: ≤${(FAIL_RATIO * 100).toFixed(2)}% mismatched pixels per view`,
-            '', '| View | Status | Mismatch | Ratio | Note |',
-            '|---|---|---|---|---|'];
+            `Default threshold: ≤${(FAIL_RATIO * 100).toFixed(2)}% mismatched pixels per view`,
+            `Strict-threshold overrides: ${strictList}`,
+            '', '| View | Status | Mismatch | Ratio | Threshold | Note |',
+            '|---|---|---|---|---|---|'];
         for (const r of results) {
             const ratio = r.ratio != null ? (r.ratio * 100).toFixed(3) + '%' : '—';
             const mismatch = r.mismatch != null ? `${r.mismatch}/${r.total}` : '—';
-            lines.push(`| ${r.view} | ${r.status} | ${mismatch} | ${ratio} | ${r.error || ''} |`);
+            const threshold = r.threshold != null ? (r.threshold * 100).toFixed(3) + '%' : '—';
+            lines.push(`| ${r.view} | ${r.status} | ${mismatch} | ${ratio} | ${threshold} | ${r.error || ''} |`);
         }
         fs.writeFileSync(REPORT_PATH, lines.join('\n') + '\n');
 
