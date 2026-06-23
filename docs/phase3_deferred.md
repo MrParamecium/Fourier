@@ -850,3 +850,56 @@ pattern. Two divergent copies of the pager-walking contract.
 configurable `stopWhen` predicate. Defer until a third caller appears
 (test-utils.js `paginateLesson(page, opts)` with `mode: 'until' |
 'collect'`). Saves ~25 lines + single-point-of-truth for pager timing.
+
+## 9. Phase 3.5 v3 follow-ups (G.3.2 coverage gap)
+
+Identified during PR #64 (Step G.3.2) adversarial review on 2026-06-22.
+
+### 9a — DEFERRED: populated feedback-board view
+
+View 14 (`14-feedback-board`) captures the EMPTY feedback board state:
+`app/users/feedback-board.json` does not exist, `readFeedbackBoard()`
+returns `{items:[]}`, and `renderFeedbackBoard` (app.js:6249) emits
+`<div class="feedback-empty">No suggestions yet.</div>`. NO
+`.feedback-thread`, `.feedback-reply`, `.tone-N`, `.is-left`, `.is-right`,
+`.feedback-replies`, or `.feedback-click-reply` node ever materializes.
+
+**Consequence:** Step G.3.2 (PR #64) shipped 121 lines of `#feedbackView`
+deletions with ZERO pixel coverage on the deleted selectors. The
+0/25-views-at-0.000% result is mechanically correct but vacuous for
+those rules. Cascade-shadow analysis (every deleted rule verified to
+have a same-or-higher specificity later shadower in the same file) is
+the sole correctness guarantee.
+
+**Risk envelope:** if the cascade analysis is wrong on any of those 13
+rules, the regression only surfaces once a real user seeds threads.
+Most-likely regression shapes: author-identity tints disappear or shift
+(sky-blue base instead of tone-N color), per-tone reply backgrounds
+flatten, lane-side dot markers vanish, `.feedback-click-reply.is-target`
+loses its selected-ring chrome.
+
+**Entry point:** seed a fixture `app/users/feedback-board.json` with
+2-3 threads (different `tone-N` classes, mixed `is-left`/`is-right`
+reply lanes, at least one `.feedback-thread-click-target` clicked into
+`is-target`). Add `14b-feedback-board-populated` view that loads the
+fixture and captures the rendered board. Then re-run G.3.2's
+visual-diff against the populated baseline as a retroactive empirical
+check. If the deletions hold up, this stays a one-time validation; if
+any view regresses, the affected rules get restored.
+
+### 9b — DEFERRED: G.3.2 commit message precision
+
+PR #64 commit message says the FINAL FEEDBACK AUTHOR COLOR LOCK
+`--author-soft/-mid/-line` declarations were "shadowed by FEEDBACK
+AUTHOR TONE LOCK identical declarations." TONE LOCK's values
+(0.11/0.24/0.40) actually differ from FINAL LOCK's (0.10/0.22/0.42)
+by 0.01-0.02. The deletion is behaviorally safe because TONE LOCK
+wins by source order regardless, but the word "identical" is imprecise.
+
+**Consequence (per altitude reviewer):** A future reader trusting the
+"identical" phrasing might assume the TONE LOCK block is also a
+duplicate and silently shift tints by 0.01-0.02 across every author
+bubble.
+
+**Entry point:** if Phase 4 ever touches the TONE LOCK block, verify
+the value-diff before treating it as a duplicate of FINAL LOCK.
