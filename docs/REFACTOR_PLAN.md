@@ -2,7 +2,7 @@
 
 Owner: FlyM1ss
 Started: 2026-06-19
-Last refreshed: 2026-06-22 (after PRs #63-#68 — Phase 2 #19 Glass CSS extraction complete via Step G.3)
+Last refreshed: 2026-06-23 (after PRs #69 + #70 — Phase 3.5 v3 §9a populated feedback-board + §9c gap 1 opened mistake-case)
 Status:
 
 - **Phase 0** merged (#15).
@@ -40,6 +40,28 @@ Status:
   (L43241+), Key Takeaways (L39295+), Quick Check (L39494+), textbook-
   focus (L42981+), answer workspace (L41934+), quick-setup modal
   (L40258+). #19 (Glass + chapter-overview CSS) is now unblocked.
+- **Phase 3.5 v3** (state-variant + populated-data coverage, 2 of 3
+  shipped 2026-06-23):
+  - PR #69 (d0bd19a) — view 14b-feedback-board-populated. Seeds a
+    2-thread + 6-reply fixture covering tone-0..5, is-left + is-right
+    lanes, `.feedback-reply-context` (both lanes), `.feedback-reply.is-target`
+    + `.feedback-thread-body.is-target`. Adds safety-contract helpers
+    (content-comparison restore, signal-cleanup, TZ pinning via
+    `chromium.newContext({timezoneId, locale})`) hardened against
+    review findings #1/#9/#10/#11/#12/#16/#20. Harness 25 → 26.
+  - PR #70 (9c2329b) — view 03b-mistake-notebook-open-case. Seeds
+    `localStorage[aquariusMistakeNotebook.v1]` fixture; covers
+    `.mistake-workspace` + `.mistake-note-columns` (PR #65 deletions).
+    The third PR #65 delete (`.mistake-ai-instruction`) was verified
+    ORPHAN (no DOM match). Diagnostic instrumentation found view 04's
+    `#mistakeNotebookCloseBtn` click is hidden via `display:none
+    !important` doubled-ID rule at style.css L34394 — silently fails
+    since harness creation, view 04 captures mistake-notebook (not
+    welcomeScreen). View 03b scheduled at END of Page A to avoid
+    populated-state leak into view 04. Harness 26 → 27.
+  - REMAINING: §9c gap 2 (narrow-viewport `@media (max-width: ...)`
+    coverage at L36230 / L38335 / L36240). Documentation-only close
+    or separate harness sweep — see deferred-doc §9c gap 2.
 - **Phase 3 Pass 2** is the active frontier — see §"Roadmap from
   here". Deferred punch-list lives in `docs/phase3_deferred.md`.
 

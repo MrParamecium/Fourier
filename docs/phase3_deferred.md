@@ -851,11 +851,13 @@ configurable `stopWhen` predicate. Defer until a third caller appears
 (test-utils.js `paginateLesson(page, opts)` with `mode: 'until' |
 'collect'`). Saves ~25 lines + single-point-of-truth for pager timing.
 
-## 9. Phase 3.5 v3 follow-ups (G.3.2 coverage gap)
+## 9. Phase 3.5 v3 follow-ups (G.3.2 + G.3.3 coverage gaps)
 
-Identified during PR #64 (Step G.3.2) adversarial review on 2026-06-22.
+Identified during PR #64 (Step G.3.2) and PR #65 (Step G.3.3) adversarial
+reviews on 2026-06-22. Two of three gaps closed on 2026-06-23 via PRs #69
++ #70; one (§9c gap 2 narrow-viewport) remains deferred.
 
-### 9a — DEFERRED: populated feedback-board view
+### 9a — SHIPPED (PR #69, 2026-06-23): populated feedback-board view
 
 View 14 (`14-feedback-board`) captures the EMPTY feedback board state:
 `app/users/feedback-board.json` does not exist, `readFeedbackBoard()`
@@ -887,6 +889,23 @@ visual-diff against the populated baseline as a retroactive empirical
 check. If the deletions hold up, this stays a one-time validation; if
 any view regresses, the affected rules get restored.
 
+**Shipped in PR #69 (2026-06-23):** Fixture seeded via filesystem path
+`tools/fixtures/feedback-board.populated.json`. View 14b uses
+`seedFeedbackFixture` + `restoreFeedbackBoard` helpers (test-utils.js,
+content-comparison safety to prevent dev-data loss + tools/.harness-state/
+backup dir). Captures 2 threads + 6 replies covering tone-0..5,
+both `is-left`/`is-right` lanes carrying `replyTo` (for
+`.feedback-reply-context` chrome on both lanes), `.feedback-reply.is-target`
+(via Charlie's reply click) + `.feedback-thread-body.is-target` (via
+thread 2's body click). Note: `.feedback-thread-click-target.is-target`
+is UNREACHABLE — setFeedbackReplyTarget's `[data-feedback-reply-anchor="${target.id}"]`
+lookup doesn't match the thread-head div's `data-feedback-reply-anchor="thread"`
+literal anchor. Documented in view 14b setup comment.
+
+TZ + locale pinned via `chromium.newContext({ timezoneId: 'UTC',
+locale: 'en-US' })` so `formatFeedbackTime` (toLocaleString) renders
+deterministically across runners.
+
 ### 9b — DEFERRED: G.3.2 commit message precision
 
 PR #64 commit message says the FINAL FEEDBACK AUTHOR COLOR LOCK
@@ -904,11 +923,11 @@ bubble.
 **Entry point:** if Phase 4 ever touches the TONE LOCK block, verify
 the value-diff before treating it as a duplicate of FINAL LOCK.
 
-### 9c — DEFERRED: opened-mistake-case view + narrow-viewport preference
+### 9c — MIXED: opened-mistake-case view (SHIPPED PR #70) + narrow-viewport (DEFERRED)
 
 Identified during PR #65 (Step G.3.3) adversarial review on 2026-06-22.
 
-**Coverage gap 1 — view 03 mistake-notebook never opens a case.**
+**Coverage gap 1 — view 03 mistake-notebook never opens a case. SHIPPED PR #70 (2026-06-23).**
 View 03 (`03-mistake-notebook`) only captures the landing surface. It
 does not click a case to open `.mistake-workspace`, so the
 `.mistake-workspace` (display + grid-template-columns), `.mistake-ai-
@@ -930,6 +949,39 @@ seeds a fixture mistake case (`app/users/mistakes.json` or similar),
 opens it, and captures the workspace. Then re-run all 3 deletions
 against the populated baseline as a retroactive empirical check.
 
+**Shipped in PR #70 (2026-06-23):** View 03b seeds
+`localStorage[aquariusMistakeNotebook.v1]` with a single fixture
+mistake (id, title, tags, notes, empty arrays + empty AI fields,
+`problemText` only — no `imageDataUrl` to avoid embedding a raster
+blob). Two of the three PR #65 deletes are pixel-validated; the third
+(`.mistake-ai-instruction`) was verified ORPHAN — no DOM ever matches
+the selector (grep against `index.html` + `app.js` + `mistake-notebook.js`
+returns zero rendering paths). Cannot be pixel-validated by any harness
+coverage.
+
+**Side-discovery from PR #70 diagnostic instrumentation:** view 04
+(`04-recent-conversations`) setup's `page.click('#mistakeNotebookCloseBtn')`
+has been silently failing since the harness was created. The button is
+hidden by the doubled-ID rule at `app/style.css:34394` (`display: none
+!important; visibility: hidden !important; width: 0 !important; ...`).
+Playwright's click times out, the `.catch(() => {})` swallows the error,
+the subsequent `waitForSelector('#mistakeNotebookView.hidden')` also
+silently times out. View 04 has ALWAYS captured mistake-notebook view
++ sidebar recent-panel open, NOT welcomeScreen. Real production
+implication: this might be a user-visible UX bug (clicking ✕ on the
+mistake notebook should close it, but it cannot be clicked — though
+users probably navigate away via the sidebar nav anyway). Documented
+in view 04 setup; a future PR could fix the visibility rule + rebaseline
+view 04. Tracked here for visibility.
+
+03b is scheduled at the END of the Page A view list (after view 25)
+rather than adjacent to view 03. Reason: with 03b preceding view 04,
+view 04's broken close-button click leaves mistake-notebook in the
+POPULATED state (workspace visible), causing a ~4.2% drift on view 04's
+"mistake-notebook empty + recent panel open" baseline. Running 03b at
+end means no Page A view inherits the populated state. View 03's
+INVARIANT comment documents this constraint for future contributors.
+
 **Coverage gap 2 — narrow-viewport @media never captured.**
 Harness viewport is 1280x800 (`tools/visual-diff.js` L42, > 1180px).
 The `@media (max-width: 1180px) #preferenceView .preference-page-grid`
@@ -942,3 +994,25 @@ pixel-diff can validate.
 sweep (run at 800x600 or similar against all preference / chapter
 overview / responsive surfaces), or document that ALL `@media (max-
 width)` deletions are cascade-only-verified for future sub-PR reviews.
+
+**Status (2026-06-23): DOCUMENTATION-ONLY CLOSE.** No separate
+narrow-viewport sweep is planned. Future cascade-shadow work that
+touches `@media (max-width: ...)` rules at `app/style.css:36230`
+(`#preferenceView .preference-page-grid` at ≤1180px),
+`app/style.css:38335` (`.mistake-note-columns { grid-template-columns:
+1fr }` at ≤980px), `app/style.css:36240` (notebook-shell padding at
+≤820px), and the broader `@media` cluster from L11000+ MUST treat
+those deletions as cascade-only-verified — the 1280×800 fixed harness
+viewport cannot pixel-validate them. Cascade-shadow analysis (specificity
+tuples + source order + !important precedence on the same selector)
+is the sole correctness guarantee. If a future round of CSS deletion
+proposes a narrow-viewport @media block as dead, surface it explicitly
+in the PR description as "cascade-shadow only, no harness coverage."
+
+Implementing the actual sweep would need: (a) a parallel BrowserContext
+at a narrow viewport (e.g. 800×800 to also cover ≤820 + ≤980 breakpoints
+in one width), (b) a curated subset of views that exercise responsive
+surfaces (preference, course-tracker, mistake-notebook, feedback-board
+— roughly 6-10 views), (c) new baselines + signal-handling. ~150-line
+implementation, ~half-session of work. Worth doing only if a future
+Phase 4 cascade-shadow round proposes 5+ @media deletions in one PR.
