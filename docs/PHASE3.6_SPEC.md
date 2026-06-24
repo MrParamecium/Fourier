@@ -355,6 +355,40 @@ L33191/33192/33213-33216/33238/37415/37416/37423-37426 (the §3d runtime-collaps
 (3) mistake-nb 5; (4) close-btns 2 + composer 1; (5) narrow-viewport probes → Tranche A;
 (6) textbook-mode state → Tranche B; (7) dead-code triage of the 22; (8) isolated-view bootstraps.
 
+## 6.3 Branch progress (refactor/phase3.6-css-collapse, 2026-06-24/25)
+
+Doubled-IDs: **608 → 515** (textbook 35 + page-corner 58). All double-verified
+(css-probe byte-identical + visual-diff 36 views all green, incl. the `opacity:0`
+turner-content via css-probe state S-page-corner).
+
+| Commit | Tranche | Δ doubled-IDs | Verification |
+|---|---|---|---|
+| `bac31d2` + `6f939a2` | textbook (Pilot 0) | −35 (608→573) | css-probe S12 + negative-tested gate |
+| `7fc0350` | page-corner (§6.2 #1) | −58 (573→515) | css-probe S-page-corner + visual-diff 06/17/18/21/22 @ 0.000% |
+
+css-probe states on the branch: S2/S3 (§3d baseline), **S-page-corner** (NEW), S12.
+
+**Next clean tranches (no new infra):** learn-topbar 9 (line-precise — skip LOAD-BEARING
+groups L34176-34178, L34193-34194, L34088), MN 5 (add an MN-open-case probe state à la
+visual-diff view 03b), close-btns 2 + composer 1 (add probes).
+
+### 6.3a — VERIFIED dead-CSS tranche (highest line-value; the only line-reducing one)
+
+Grep-confirmed 2026-06-25 that three IDs are **renamed-away orphans** — `0` references in
+`app/index.html` and `0` across all `app/**/*.js` (vs the real `#learnFocusPageIndicator` =
+1 + 3):
+- `#learnLecturePageIndicator` — 79 selector-lines in style.css, 0 in runtime-collapsed.
+- `#learnExplainBottomRail` — 86 selector-lines in style.css, 0 in runtime-collapsed.
+- `#learnToolbarPagination` — 90 selector-lines in style.css, **31 in runtime-collapsed.css**.
+
+≈255 style.css lines + 31 runtime-collapsed lines of **dead CSS** (refactor-plan rule #1:
+delete unused directly). Unlike doubled-ID collapse (line-neutral), this REDUCES line count.
+**Execution care:** delete whole rules where the dead ID is the sole selector; for GROUPED
+selectors, remove ONLY the dead arm (some group with the live `#learnFocusPageIndicator` /
+other live selectors — deleting a live arm regresses real chrome). **Verifiable**: the live
+`#learnFocusPageIndicator` is covered by lesson views 06/08, so visual-diff --check (0.000%)
+confirms no live arm was clipped. Recommended as the next high-value tranche.
+
 ## References
 - `docs/REFACTOR_PLAN.md` — "The right sequence from here" (step 3 = this spec).
 - `docs/phase3_deferred.md` §12 (entry), §3d (cross-file finding, with corrections folded in here).
