@@ -20728,9 +20728,7 @@ h6,
     max-width: calc(100% - 64px) !important;
   }
 
-  #learnView #learnViewSelector,
-  #learnView #learnBody:not(.chapter-overview-active) #learnViewSelector,
-  #learnView #learnBody.chapter-overview-split-active #learnViewSelector {
+  #learnView #learnViewSelector {
     width: clamp(188px, 45cqi, 228px) !important;
     min-width: 188px !important;
     max-width: 228px !important;
@@ -26111,8 +26109,6 @@ body {
     font-size: 12px !important;
   }
 
-  #learnView #learnBody:not(.chapter-overview-active) #learnViewSelector,
-  #learnView #learnBody.chapter-overview-split-active #learnViewSelector,
   #learnView #learnViewSelector {
     width: clamp(188px, 48cqi, 260px) !important;
     min-width: 188px !important;
@@ -26172,9 +26168,7 @@ body {
   max-width: calc(100% - 118px) !important;
 }
 
-#learnView #learnViewSelector,
-#learnView #learnBody:not(.chapter-overview-active) #learnViewSelector,
-#learnView #learnBody.chapter-overview-split-active #learnViewSelector {
+#learnView #learnViewSelector {
   width: clamp(216px, 24vw, 300px) !important;
   min-width: 216px !important;
   max-width: 300px !important;
@@ -26240,9 +26234,7 @@ body {
     max-width: calc(100% - 84px) !important;
   }
 
-  #learnView #learnViewSelector,
-  #learnView #learnBody:not(.chapter-overview-active) #learnViewSelector,
-  #learnView #learnBody.chapter-overview-split-active #learnViewSelector {
+  #learnView #learnViewSelector {
     width: clamp(188px, 47cqi, 244px) !important;
     min-width: 188px !important;
     max-width: 244px !important;
@@ -26413,8 +26405,6 @@ body {
   padding: 0 !important;
 }
 
-#learnView #learnBody:not(.chapter-overview-active) #learnViewSelector,
-#learnView #learnBody.chapter-overview-split-active #learnViewSelector,
 #learnView #learnViewSelector {
   grid-column: 2 !important;
   justify-self: center !important;
@@ -26613,8 +26603,6 @@ body {
   column-gap: 14px !important;
 }
 
-#learnView #learnBody:not(.chapter-overview-active) #learnViewSelector,
-#learnView #learnBody.chapter-overview-split-active #learnViewSelector,
 #learnView #learnViewSelector {
   grid-column: 3 !important;
 }
@@ -26669,8 +26657,6 @@ body {
   pointer-events: auto !important;
 }
 
-#learnView #learnBody:not(.chapter-overview-active) #learnViewSelector,
-#learnView #learnBody.chapter-overview-split-active #learnViewSelector,
 #learnView #learnViewSelector {
   order: 2 !important;
   flex: 0 0 auto !important;
@@ -26953,8 +26939,6 @@ body {
   overflow: visible !important;
 }
 
-#learnView #learnBody:not(.chapter-overview-active) #learnViewSelector,
-#learnView #learnBody.chapter-overview-split-active #learnViewSelector,
 #learnView #learnViewSelector {
   order: 1 !important;
   flex: 0 0 auto !important;
