@@ -1710,3 +1710,64 @@ quick-check-KP-specific (probably KaTeX render or
 the §11 main investigation if Option B above is pursued (Option A
 also masks it via sidebar-hidden; Option C absorbs it via loose
 threshold).
+
+---
+
+## 12. Phase 3.6 entry — step-1/step-2 status + structural-attack kickoff (2026-06-24 night)
+
+AFK overnight session. FlyM1ss authorized pushing past the §3c.i/§3b
+tail and the state-variant harness into the big structural attack (the
+`!important` wall + `#learnView#learnView` doubled-ID pattern), per
+`docs/REFACTOR_PLAN.md` "The right sequence from here".
+
+### Fresh ground-truth metrics (2026-06-24 night, `grep -c` on HEAD)
+
+| Metric | Count |
+|---|---|
+| `app/style.css` lines | 42,991 |
+| lines containing `!important` (style.css) | 14,948 (15,140 occurrences) |
+| doubled-ID `#X#X` selectors (style.css) | 608 |
+| — of which `#learnView#learnView` | 353 |
+| tripled-ID `#X#X#X` (style.css) | 91 (49 are `#learnView`×3) |
+| `runtime-collapsed.css` lines / `!important` / `#learnView` sels | 2,102 / 1,158 / 525 |
+
+The doubled-ID debt is ~600/608 concentrated in the **learn-view
+reading subsystem** (`#learnView` 353, `#learnBody` 62, `#learnChatCol`
+36, `#learnLecturePageIndicator` 23, `#learnFollowupBar` 21,
+`#learnChatContent` 13, `#learnExplainBottomRail` 11, …) plus
+`#textbookFocusModal` 32. So the "`#learnView#learnView` attack" is a
+learn-view + textbook-focus surface rewrite.
+
+### Step 1 (§3c.i / §3b tail) — CONFIRMED AT D3 CEILING, no standalone PR
+
+§3c.i pass 8 (commit c45b205) found zero whole-rule candidates; the
+home-Ask shadowed-banner vein is mined out under the current
+delete-only discipline. The only remaining slivers are themselves
+doubled-ID / grouped-selector-split work and fold into Phase 3.6:
+- §3c.i pass 9: split the HOME ASK LIQUID GLASS TEST 4-arm grouped
+  selector (now L30011, banner L29910) to drop the 2 shadowed arms
+  (~12 lines).
+- §3b.iii: MN doubled-ID specificity patterns (L35492-area).
+Forcing a standalone step-1 PR would violate "don't invent the next
+step" — recorded as at-ceiling; the slivers are absorbed by the
+Phase 3.6 surface sweep.
+
+### Step 2 (state-variant harness) — COMPLETE; learn-view PROBE coverage is the new need
+
+Per §10, state-variant coverage (`:hover`/`:focus`/`:active`/`:disabled`
+on the #20b/#20c top selectors) is complete in the 36-view set. The
+harness work Phase 3.6 actually needs is **learn-view computed-style-probe
+coverage** — the regression net for the doubled-ID/`!important` collapse,
+since pixel-diff has documented property-specific blindspots
+(§3a.i #feedbackView). Shipping as its own PR → main.
+
+### Step 3 (Phase 3.6 structural attack) — see docs/PHASE3.6_SPEC.md
+
+Spec authored from a parallel inventory workflow. Cross-file finding
+(extends §3d): `runtime-collapsed.css` ALSO uses doubled/tripled IDs;
+style.css's `#learnView`×3 triples (49) exist to out-rank them — the
+ID-multiplication is a CROSS-FILE specificity arms race, not within-file
+cruft. `#textbookFocusModal` has ZERO `runtime-collapsed.css` competitor
+(grep-confirmed 0) → self-contained pilot. Execution on branch
+`refactor/phase3.6-css-collapse`; single massive PR only when complete,
+else branch-only (no PR) per FlyM1ss's AFK instruction.
