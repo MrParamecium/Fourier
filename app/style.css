@@ -3429,9 +3429,7 @@ body.textbook-focus-active .learn-chat-popover {
 .learn-body.chapter-overview-active .learn-chat-col,
 .learn-body.chapter-overview-active .learn-resizer,
 .learn-body.chapter-overview-active .learn-explain-toolbar,
-.learn-body.chapter-overview-active .learn-explain-bottom-rail,
-.learn-body.chapter-overview-active .learn-chat-fab,
-.learn-body.chapter-overview-active .learn-chat-restore {
+.learn-body.chapter-overview-active .learn-chat-fab{
   display: none !important;
 }
 
@@ -3521,8 +3519,7 @@ body.textbook-focus-active .learn-chat-popover {
   display: none !important;
 }
 
-.learn-body.chapter-overview-split-active .learn-explain-toolbar,
-.learn-body.chapter-overview-split-active .learn-chat-topbar {
+.learn-body.chapter-overview-split-active .learn-explain-toolbar{
   display: block !important;
   position: static !important;
   height: 0 !important;
@@ -3647,8 +3644,7 @@ body.textbook-focus-active .learn-chat-popover {
   display: none !important;
 }
 
-.learn-body.chapter-overview-split-active .learn-explain-toolbar,
-.learn-body.chapter-overview-split-active .learn-chat-topbar {
+.learn-body.chapter-overview-split-active .learn-explain-toolbar{
   display: block !important;
   position: static !important;
   height: 0 !important;
@@ -3763,8 +3759,7 @@ body.textbook-focus-active .learn-chat-popover {
   display: none !important;
 }
 
-.learn-body.chapter-overview-split-active .learn-explain-toolbar,
-.learn-body.chapter-overview-split-active .learn-chat-topbar {
+.learn-body.chapter-overview-split-active .learn-explain-toolbar{
   display: block !important;
   position: static !important;
   height: 0 !important;
@@ -3930,8 +3925,7 @@ body.textbook-focus-active .learn-chat-popover {
   display: none !important;
 }
 
-.learn-body.chapter-overview-split-active .learn-explain-toolbar,
-.learn-body.chapter-overview-split-active .learn-chat-topbar {
+.learn-body.chapter-overview-split-active .learn-explain-toolbar{
   display: block !important;
   position: static !important;
   height: 0 !important;
@@ -4018,8 +4012,7 @@ body.textbook-focus-active .learn-chat-popover {
   display: none !important;
 }
 
-.learn-body.chapter-overview-split-active .learn-explain-toolbar,
-.learn-body.chapter-overview-split-active .learn-chat-topbar {
+.learn-body.chapter-overview-split-active .learn-explain-toolbar{
   display: block !important;
   position: static !important;
   height: 0 !important;
@@ -6611,23 +6604,6 @@ body.answer-compare-resizing {
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
-.learn-chat-topbar {
-  position: sticky;
-  top: 0;
-  z-index: 11;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 14px 16px 0;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-.learn-chat-corner-toggle {
-  flex-shrink: 0;
-}
-
 .learn-side-restore {
   position: absolute;
   top: 20px;
@@ -6932,18 +6908,6 @@ body.answer-compare-resizing {
   transform: translateY(-1px);
 }
 
-.lecture-overlay-btn-left {
-  margin-right: auto;
-  align-self: center;
-  justify-self: start;
-}
-
-.lecture-overlay-btn-right {
-  margin-left: auto;
-  align-self: center;
-  justify-self: end;
-}
-
 .lecture-focus-overlay-btn.hidden,
 .lecture-overlay-btn.hidden,
 .textbook-zoom-overlay-btn.hidden {
@@ -7025,14 +6989,6 @@ body.answer-compare-resizing {
   pointer-events: auto;
 }
 
-.learn-explain-bottom-rail {
-  position: absolute;
-  position: static;
-  height: 0;
-  z-index: 17;
-  pointer-events: none;
-}
-
 .learn-focus-page-indicator {
   position: absolute;
   right: 18px;
@@ -7076,11 +7032,6 @@ body.answer-compare-resizing {
 }
 
 .learn-explain-scroll.textbook-mode #learnExplainContent {
-  display: none !important;
-}
-
-.learn-explain-scroll.textbook-mode .learn-explain-bottom-rail {
-  position: absolute;
   display: none !important;
 }
 
@@ -7279,11 +7230,6 @@ body.answer-compare-resizing {
   width: 100% !important;
   max-width: 100% !important;
   min-width: 0 !important;
-}
-
-.learn-body.explain-collapsed .learn-chat-topbar {
-  justify-content: flex-end;
-  padding: 14px 18px 0;
 }
 
 .learn-body.explain-collapsed .learn-side-restore-explain {
@@ -11299,16 +11245,6 @@ body,
   color: #0F172A;
 }
 
-.learn-explain-bottom-rail {
-  position: relative;
-  height: auto;
-  z-index: 17;
-  pointer-events: none;
-  padding: 40px 0;
-  display: flex;
-  justify-content: flex-end;
-}
-
 /* --- Feature navigation shell --- */
 .syllabus-view,
 .recent-view {
@@ -11541,14 +11477,6 @@ body,
   .lecture-overlay-btn-text,
   .lecture-focus-overlay-text {
     display: none;
-  }
-
-  .lecture-overlay-btn-left {
-    margin-right: 0;
-  }
-
-  .lecture-overlay-btn-right {
-    margin-left: 0;
   }
 
   .lecture-focus-overlay-btn,
@@ -12872,26 +12800,6 @@ h6,
   left: auto !important;
 }
 
-.lecture-overlay-btn-left {
-  left: 128px !important;
-}
-
-.lecture-overlay-btn-right {
-  right: 18px !important;
-}
-
-.learn-chat-topbar {
-  position: static !important;
-  z-index: auto !important;
-  height: 0 !important;
-  min-height: 0 !important;
-  padding: 0 !important;
-  background: transparent !important;
-  border: 0 !important;
-  overflow: visible !important;
-  pointer-events: none !important;
-}
-
 .learn-chat-topbar #learnFocusBtn {
   pointer-events: auto !important;
 }
@@ -12914,11 +12822,6 @@ h6,
   display: none !important;
 }
 
-.learn-body.explain-collapsed .learn-chat-topbar {
-  justify-content: flex-end !important;
-  padding: 0 !important;
-}
-
 #learnFocusBtn:hover,
 .learn-side-restore-explain:hover,
 .learn-side-restore-chat:hover {
@@ -12929,12 +12832,6 @@ h6,
   .learn-explain-toolbar {
     padding: 84px 18px 16px !important;
     flex-wrap: wrap !important;
-  }
-
-  .lecture-overlay-btn-left,
-  .lecture-overlay-btn-right {
-    position: static !important;
-    transform: none !important;
   }
 
     .learn-side-restore-explain {
@@ -14857,29 +14754,8 @@ h6,
   margin-right: 0 !important;
 }
 
-.learn-explain-toolbar .lecture-overlay-btn-left,
-.learn-explain-toolbar .lecture-overlay-btn-right {
-  position: static !important;
-  inset: auto !important;
-  top: auto !important;
-  right: auto !important;
-  bottom: auto !important;
-  left: auto !important;
-  transform: none !important;
-  margin: 0 !important;
-  flex: 0 0 auto !important;
-  max-width: 100% !important;
-  overflow: hidden !important;
-}
-
 .learn-explain-toolbar .lecture-overlay-btn::before {
   inset: 0 !important;
-}
-
-.learn-explain-toolbar .lecture-overlay-btn-left {
-  grid-column: 2 !important;
-  grid-row: 1 !important;
-  justify-self: start !important;
 }
 
 .learn-toolbar-center {
@@ -14892,12 +14768,6 @@ h6,
 
 .learn-explain-toolbar .learn-view-selector {
   max-width: 100% !important;
-}
-
-.learn-explain-toolbar .lecture-overlay-btn-right {
-  grid-column: 4 !important;
-  grid-row: 1 !important;
-  justify-self: end !important;
 }
 
 .learn-explain-toolbar .learn-kp-nav {
@@ -14913,18 +14783,8 @@ h6,
     padding: 14px 18px 16px !important;
   }
 
-  .learn-explain-toolbar .lecture-overlay-btn-left {
-    grid-area: left !important;
-    justify-self: end !important;
-  }
-
   .learn-toolbar-center {
     grid-area: center !important;
-  }
-
-  .learn-explain-toolbar .lecture-overlay-btn-right {
-    grid-area: right !important;
-    justify-self: end !important;
   }
 }
 
@@ -14937,9 +14797,6 @@ h6,
       "right" !important;
     justify-items: stretch !important;
   }
-
-    .learn-explain-toolbar .lecture-overlay-btn-left,
-  .learn-explain-toolbar .lecture-overlay-btn-right,
   .learn-toolbar-center {
     justify-self: center !important;
   }
@@ -14957,8 +14814,7 @@ h6,
   overflow: hidden !important;
 }
 
-.learn-explain-toolbar .learn-toolbar-center,
-.learn-explain-toolbar .lecture-overlay-btn-right {
+.learn-explain-toolbar .learn-toolbar-center{
   position: static !important;
   inset: auto !important;
   margin: 0 !important;
@@ -14978,29 +14834,11 @@ h6,
   overflow: hidden !important;
 }
 
-.learn-explain-toolbar .lecture-overlay-btn-left {
-  order: 1 !important;
-  position: static !important;
-  inset: auto !important;
-  margin: 0 !important;
-  transform: none !important;
-}
-
 .learn-explain-toolbar .learn-view-selector {
   order: 2 !important;
   flex: 0 1 auto !important;
   min-width: 260px !important;
   max-width: min(100%, 360px) !important;
-}
-
-.learn-explain-toolbar .lecture-overlay-btn-right {
-  order: 3 !important;
-}
-
-.learn-explain-toolbar .lecture-overlay-btn-left,
-.learn-explain-toolbar .lecture-overlay-btn-right {
-  min-width: 120px !important;
-  height: 54px !important;
 }
 
 .learn-explain-toolbar .learn-kp-nav {
@@ -15031,13 +14869,6 @@ h6,
 @media (max-width: 1320px) {
   .learn-explain-toolbar .learn-toolbar-center {
     justify-content: flex-start !important;
-  }
-
-  .learn-explain-toolbar .lecture-overlay-btn-left,
-  .learn-explain-toolbar .lecture-overlay-btn-right {
-    min-width: 64px !important;
-    width: 64px !important;
-    padding: 0 !important;
   }
 
   .learn-explain-toolbar .lecture-overlay-btn-text {
@@ -15296,10 +15127,6 @@ h6,
   font-size: 14px !important;
   font-weight: 800 !important;
   box-shadow: 0 12px 28px rgba(37, 99, 235, 0.12) !important;
-}
-
-.learn-explain-bottom-rail {
-  display: none !important;
 }
 
 @media (max-width: 900px) {
@@ -15607,18 +15434,6 @@ h6,
   z-index: 2;
 }
 
-.learn-chat-topbar {
-  position: absolute !important;
-  top: 22px !important;
-  right: 42px !important;
-  z-index: 8 !important;
-  height: auto !important;
-  padding: 0 !important;
-  background: transparent !important;
-  border: 0 !important;
-  pointer-events: none !important;
-}
-
 .learn-chat-topbar #learnFocusBtn {
   pointer-events: auto !important;
 }
@@ -15923,11 +15738,6 @@ h6,
 
 .learn-chat-col::before {
   opacity: 0.32 !important;
-}
-
-.learn-chat-topbar {
-  top: 18px !important;
-  right: 30px !important;
 }
 
 .learn-chat-scroll {
@@ -17382,19 +17192,6 @@ h6,
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(240, 247, 255, 0.96)) !important;
   color: #1e3a8a !important;
-}
-
-.learn-chat-topbar {
-  position: static !important;
-  inset: auto !important;
-  height: 0 !important;
-  min-height: 0 !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  background: transparent !important;
-  border: 0 !important;
-  overflow: visible !important;
-  pointer-events: none !important;
 }
 
 .learn-chat-topbar #learnFocusBtn {
@@ -18882,9 +18679,7 @@ h6,
 .learn-body.chapter-overview-active .learn-chat-col,
 .learn-body.chapter-overview-active .learn-resizer,
 .learn-body.chapter-overview-active .learn-explain-toolbar,
-.learn-body.chapter-overview-active .learn-explain-bottom-rail,
 .learn-body.chapter-overview-active .learn-chat-fab,
-.learn-body.chapter-overview-active .learn-chat-restore,
 .learn-body.chapter-overview-active #learnFocusBtn{
   display: none !important;
 }
@@ -18917,8 +18712,7 @@ h6,
   display: none !important;
 }
 
-.learn-body.chapter-overview-split-active .learn-explain-toolbar,
-.learn-body.chapter-overview-split-active .learn-chat-topbar {
+.learn-body.chapter-overview-split-active .learn-explain-toolbar{
   display: block !important;
   position: static !important;
   height: 0 !important;
@@ -19041,11 +18835,8 @@ h6,
 .learn-body.chapter-overview-active .learn-chat-col,
 .learn-body.chapter-overview-active .learn-resizer,
 .learn-body.chapter-overview-active .learn-explain-toolbar,
-.learn-body.chapter-overview-active .learn-explain-bottom-rail,
 .learn-body.chapter-overview-active .learn-chat-fab,
-.learn-body.chapter-overview-active .learn-chat-restore,
 .learn-body.chapter-overview-active #learnFocusBtn,
-.learn-body.chapter-overview-active .learn-chat-topbar,
 .learn-body.chapter-overview-active .learn-followup-bar {
   display: none !important;
   visibility: hidden !important;
@@ -19152,8 +18943,7 @@ h6,
 #learnBody.chapter-overview-active #learnResizer,
 #learnBody.chapter-overview-active #learnExplainToolbar,
 #learnBody.chapter-overview-active #learnFocusBtn,
-#learnBody.chapter-overview-active .learn-followup-bar,
-#learnBody.chapter-overview-active .learn-chat-topbar {
+#learnBody.chapter-overview-active .learn-followup-bar{
   display: none !important;
   visibility: hidden !important;
   flex: 0 0 0 !important;
@@ -19480,76 +19270,6 @@ h6,
   display: contents !important;
 }
 
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left,
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right {
-  position: relative !important;
-  inset: auto !important;
-  justify-self: center !important;
-  width: 44px !important;
-  min-width: 44px !important;
-  max-width: 44px !important;
-  height: 44px !important;
-  flex: 0 0 44px !important;
-  padding: 0 !important;
-  border-radius: 18px !important;
-  border: 1px solid rgba(186, 178, 162, 0.82) !important;
-  background:
-    linear-gradient(180deg, rgba(255, 253, 247, 0.99), rgba(248, 242, 232, 0.97)) !important;
-  color: #31415f !important;
-  box-shadow:
-    0 12px 24px rgba(145, 156, 178, 0.14),
-    0 3px 8px rgba(145, 156, 178, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.94) !important;
-  display: inline-grid !important;
-  place-items: center !important;
-  font-family: "Quicksand", "Nunito", sans-serif !important;
-  font-size: 12px !important;
-  font-weight: 850 !important;
-  letter-spacing: 0.01em !important;
-  overflow: hidden !important;
-  cursor: pointer !important;
-}
-
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left {
-  grid-column: 2 !important;
-  grid-row: 1 !important;
-  transform: rotate(-0.9deg) !important;
-}
-
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right {
-  grid-column: 4 !important;
-  grid-row: 1 !important;
-  transform: rotate(0.9deg) !important;
-}
-
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left::before,
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right::before {
-  content: "" !important;
-  display: block !important;
-  position: absolute !important;
-  inset: 8px !important;
-  border: 1px dashed rgba(150, 161, 180, 0.34) !important;
-  border-radius: 13px !important;
-  pointer-events: none !important;
-}
-
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left::after,
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right::after {
-  content: "" !important;
-  display: block !important;
-  position: absolute !important;
-  top: -7px !important;
-  right: 8px !important;
-  width: 28px !important;
-  height: 12px !important;
-  border-radius: 999px !important;
-  background: linear-gradient(180deg, rgba(191, 221, 255, 0.62), rgba(161, 201, 255, 0.34)) !important;
-  opacity: 0.78 !important;
-  transform: rotate(6deg) !important;
-  box-shadow: 0 2px 8px rgba(114, 150, 209, 0.16) !important;
-  pointer-events: none !important;
-}
-
 #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-icon {
   width: 24px !important;
   height: 24px !important;
@@ -19571,25 +19291,6 @@ h6,
 
 #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-text {
   display: none !important;
-}
-
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left:hover:not(:disabled) {
-  transform: translateY(-1px) rotate(-0.9deg) !important;
-  border-color: rgba(164, 154, 138, 0.9) !important;
-  background: linear-gradient(180deg, rgba(255, 255, 252, 1), rgba(251, 247, 239, 1)) !important;
-}
-
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right:hover:not(:disabled) {
-  transform: translateY(-1px) rotate(0.9deg) !important;
-  border-color: rgba(164, 154, 138, 0.9) !important;
-  background: linear-gradient(180deg, rgba(255, 255, 252, 1), rgba(251, 247, 239, 1)) !important;
-}
-
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left:disabled,
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right:disabled {
-  opacity: 0.46 !important;
-  cursor: not-allowed !important;
-  filter: grayscale(0.12) !important;
 }
 
 #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-view-selector {
@@ -19616,14 +19317,6 @@ h6,
     padding-inline: 10px !important;
   }
 
-  #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left,
-  #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right {
-    width: 38px !important;
-    min-width: 38px !important;
-    max-width: 38px !important;
-    height: 40px !important;
-  }
-
   #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-view-btn {
     padding-inline: 9px !important;
     font-size: 13px !important;
@@ -19635,14 +19328,6 @@ h6,
     grid-template-columns: 38px 34px minmax(116px, 1fr) 34px !important;
     column-gap: 5px !important;
     padding-inline: 8px !important;
-  }
-
-  #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left,
-  #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right {
-    width: 34px !important;
-    min-width: 34px !important;
-    max-width: 34px !important;
-    height: 38px !important;
   }
 
   #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-view-btn {
@@ -19663,14 +19348,6 @@ h6,
   padding-inline: 10px !important;
 }
 
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left,
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right {
-  width: 38px !important;
-  min-width: 38px !important;
-  max-width: 38px !important;
-  height: 40px !important;
-}
-
 #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-view-selector {
   min-width: 0 !important;
 }
@@ -19685,14 +19362,6 @@ h6,
     grid-template-columns: 38px 34px minmax(132px, 1fr) 34px !important;
     column-gap: 5px !important;
     padding-inline: 8px !important;
-  }
-
-  #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left,
-  #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right {
-    width: 34px !important;
-    min-width: 34px !important;
-    max-width: 34px !important;
-    height: 38px !important;
   }
 
   #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-view-btn {
@@ -19942,45 +19611,6 @@ h6,
   box-shadow: 4px 4px 0 rgba(15, 23, 42, 0.88), 0 14px 26px rgba(37, 99, 235, 0.13) !important;
 }
 
-#learnBody:not(.chapter-overview-active) .learn-chat-topbar {
-  position: sticky !important;
-  top: 0 !important;
-  z-index: 24 !important;
-  min-height: 88px !important;
-  padding: 16px 16px !important;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.9)) !important;
-  backdrop-filter: blur(8px) !important;
-  border-bottom: 1px solid rgba(203, 213, 225, 0.72) !important;
-}
-
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left,
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right {
-  position: relative !important;
-  inset: auto !important;
-  width: 42px !important;
-  min-width: 42px !important;
-  max-width: 42px !important;
-  height: 42px !important;
-  padding: 0 !important;
-  border-radius: 999px !important;
-  border: 2px solid rgba(15, 23, 42, 0.84) !important;
-  background: #ffffff !important;
-  color: #0f172a !important;
-  box-shadow: 2px 2px 0 rgba(15, 23, 42, 0.78) !important;
-  display: grid !important;
-  place-items: center !important;
-  transform: none !important;
-  overflow: hidden !important;
-}
-
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left::before,
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right::before,
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left::after,
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right::after {
-  content: none !important;
-  display: none !important;
-}
-
 #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-icon {
   width: 100% !important;
   height: 100% !important;
@@ -20012,19 +19642,6 @@ h6,
   font-weight: 900 !important;
   line-height: 0.8 !important;
   transform: translateY(-2px) !important;
-}
-
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left:hover:not(:disabled),
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right:hover:not(:disabled) {
-  transform: translate(-1px, -1px) !important;
-  border-color: #2563eb !important;
-  box-shadow: 3px 3px 0 rgba(15, 23, 42, 0.84), 0 10px 18px rgba(37, 99, 235, 0.12) !important;
-}
-
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left:disabled,
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right:disabled {
-  opacity: 0.35 !important;
-  box-shadow: 1px 1px 0 rgba(15, 23, 42, 0.35) !important;
 }
 
 #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-view-selector {
@@ -20305,30 +19922,8 @@ h6,
   }
 }
 
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left,
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right {
-  width: 36px !important;
-  min-width: 36px !important;
-  max-width: 36px !important;
-  height: 36px !important;
-  border: 1.5px solid rgba(148, 163, 184, 0.9) !important;
-  background: rgba(255, 255, 255, 0.96) !important;
-  color: #2563eb !important;
-  box-shadow: 0 2px 0 rgba(148, 163, 184, 0.36), 0 8px 16px rgba(15, 23, 42, 0.06) !important;
-}
-
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left {
-  grid-column: 1 !important;
-  grid-row: 1 !important;
-}
-
 #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-view-selector {
   grid-column: 2 !important;
-  grid-row: 1 !important;
-}
-
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right {
-  grid-column: 3 !important;
   grid-row: 1 !important;
 }
 
@@ -20337,14 +19932,6 @@ h6,
   color: #2563eb !important;
   font-size: 26px !important;
   font-weight: 850 !important;
-}
-
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left:hover:not(:disabled),
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right:hover:not(:disabled) {
-  transform: translateY(-1px) !important;
-  border-color: #60a5fa !important;
-  background: #eff6ff !important;
-  box-shadow: 0 2px 0 rgba(96, 165, 250, 0.38), 0 10px 18px rgba(37, 99, 235, 0.12) !important;
 }
 
 /* FINAL GEMINI LOGIN SCRAPBOOK COLLAGE */
@@ -21116,78 +20703,12 @@ h6,
   gap: 14px !important;
 }
 
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right {
-  position: relative !important;
-  grid-row: 1 !important;
-  width: 48px !important;
-  min-width: 48px !important;
-  max-width: 48px !important;
-  height: 48px !important;
-  padding: 0 !important;
-  border-radius: 18px 16px 18px 17px !important;
-  border: 2px solid rgba(15, 23, 42, 0.78) !important;
-  background:
-    linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(148, 163, 184, 0.07) 1px, transparent 1px),
-    #fffdf7 !important;
-  background-size: 16px 16px, 16px 16px, auto !important;
-  color: #2563eb !important;
-  box-shadow: 3px 3px 0 rgba(15, 23, 42, 0.68), 0 10px 18px rgba(15, 23, 42, 0.07) !important;
-  display: grid !important;
-  place-items: center !important;
-  transform: rotate(-1.4deg) !important;
-  overflow: visible !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right {
-  transform: rotate(1.2deg) !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left {
-  grid-column: 1 !important;
-}
-
 #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-view-selector {
   grid-column: 2 !important;
   grid-row: 1 !important;
   width: 100% !important;
   min-width: 0 !important;
   max-width: none !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right {
-  grid-column: 3 !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left::before,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right::before {
-  content: "" !important;
-  position: absolute !important;
-  left: 12px !important;
-  top: -8px !important;
-  width: 28px !important;
-  height: 13px !important;
-  border-radius: 4px !important;
-  border: 1px solid rgba(125, 211, 252, 0.55) !important;
-  background: repeating-linear-gradient(
-    -45deg,
-    rgba(186, 230, 253, 0.76) 0 8px,
-    rgba(240, 249, 255, 0.82) 8px 16px
-  ) !important;
-  transform: rotate(-5deg) !important;
-  opacity: 0.9 !important;
-  display: block !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left::after,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right::after {
-  content: "" !important;
-  position: absolute !important;
-  inset: 7px !important;
-  border: 1px dashed rgba(100, 116, 139, 0.28) !important;
-  border-radius: 12px !important;
-  display: block !important;
 }
 
 #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-icon {
@@ -21224,37 +20745,10 @@ h6,
   transform: translateY(-2px) !important;
 }
 
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left:hover:not(:disabled),
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right:hover:not(:disabled) {
-  border-color: #2563eb !important;
-  background:
-    linear-gradient(90deg, rgba(125, 211, 252, 0.1) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(125, 211, 252, 0.08) 1px, transparent 1px),
-    #f8fbff !important;
-  background-size: 16px 16px, 16px 16px, auto !important;
-  box-shadow: 4px 4px 0 rgba(15, 23, 42, 0.76), 0 13px 22px rgba(37, 99, 235, 0.13) !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left:hover:not(:disabled) {
-  transform: translate(-1px, -1px) rotate(-1.4deg) !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right:hover:not(:disabled) {
-  transform: translate(-1px, -1px) rotate(1.2deg) !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left:disabled,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right:disabled {
-  opacity: 0.34 !important;
-  filter: grayscale(0.18) !important;
-  box-shadow: 2px 2px 0 rgba(15, 23, 42, 0.32) !important;
-}
-
 /* FINAL SINGLE-LINE LEARN TOOLBAR
    User direction: More Lecture, lecture/textbook pager, and More Q&A should sit
    on one shared row. Keep the center controls compact and redraw page arrows. */
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar,
-#learnView #learnBody:not(.chapter-overview-active) .learn-chat-topbar {
+#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar{
   min-height: 78px !important;
   height: 78px !important;
   padding: 12px 18px !important;
@@ -21327,64 +20821,6 @@ h6,
   font-weight: 850 !important;
 }
 
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right {
-  position: relative !important;
-  grid-row: 1 !important;
-  width: 40px !important;
-  min-width: 40px !important;
-  max-width: 40px !important;
-  height: 40px !important;
-  padding: 0 !important;
-  border-radius: 16px 14px 16px 15px !important;
-  border: 2px solid rgba(15, 23, 42, 0.76) !important;
-  background:
-    linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(148, 163, 184, 0.07) 1px, transparent 1px),
-    #fffdf7 !important;
-  background-size: 14px 14px, 14px 14px, auto !important;
-  box-shadow: 2px 2px 0 rgba(15, 23, 42, 0.62), 0 8px 14px rgba(15, 23, 42, 0.06) !important;
-  display: grid !important;
-  place-items: center !important;
-  overflow: visible !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left {
-  grid-column: 1 !important;
-  transform: rotate(-1.8deg) !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right {
-  grid-column: 3 !important;
-  transform: rotate(1.5deg) !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left::before,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right::before {
-  content: "" !important;
-  display: block !important;
-  position: absolute !important;
-  left: 9px !important;
-  top: -7px !important;
-  width: 24px !important;
-  height: 11px !important;
-  border-radius: 4px !important;
-  border: 1px solid rgba(125, 211, 252, 0.46) !important;
-  background: repeating-linear-gradient(-45deg, rgba(186, 230, 253, 0.7) 0 7px, rgba(240, 249, 255, 0.84) 7px 14px) !important;
-  transform: rotate(-5deg) !important;
-  opacity: 0.86 !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left::after,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right::after {
-  content: "" !important;
-  display: block !important;
-  position: absolute !important;
-  inset: 6px !important;
-  border: 1px dashed rgba(100, 116, 139, 0.25) !important;
-  border-radius: 10px !important;
-}
-
 #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-icon {
   position: relative !important;
   z-index: 2 !important;
@@ -21417,23 +20853,6 @@ h6,
   font-weight: 900 !important;
   line-height: 0.72 !important;
   transform: translateY(-2px) !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left:hover:not(:disabled) {
-  transform: translate(-1px, -1px) rotate(-1.8deg) !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right:hover:not(:disabled) {
-  transform: translate(-1px, -1px) rotate(1.5deg) !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) .learn-chat-topbar {
-  position: sticky !important;
-  top: 0 !important;
-  z-index: 32 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: flex-end !important;
 }
 
 #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle {
@@ -21499,14 +20918,6 @@ h6,
     width: min(100%, 264px) !important;
     grid-template-columns: 36px minmax(142px, 180px) 36px !important;
     gap: 7px !important;
-  }
-
-  #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left,
-  #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right {
-    width: 36px !important;
-    min-width: 36px !important;
-    max-width: 36px !important;
-    height: 36px !important;
   }
 }
 
@@ -21587,76 +20998,6 @@ h6,
   }
 }
 
-/* FINAL JOURNAL PAGE ARROWS V2
-   Redesign only the previous/next lecture page buttons; preserve their current
-   size and position in the toolbar. */
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right {
-  width: 40px !important;
-  min-width: 40px !important;
-  max-width: 40px !important;
-  height: 40px !important;
-  border-radius: 13px 16px 14px 15px !important;
-  border: 2px solid rgba(29, 41, 61, 0.78) !important;
-  background:
-    linear-gradient(90deg, rgba(96, 165, 250, 0.07) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(96, 165, 250, 0.055) 1px, transparent 1px),
-    radial-gradient(circle at 24% 18%, rgba(255, 255, 255, 0.98), transparent 34%),
-    #fffdf7 !important;
-  background-size: 13px 13px, 13px 13px, auto, auto !important;
-  box-shadow:
-    2px 3px 0 rgba(29, 41, 61, 0.58),
-    0 9px 18px rgba(15, 23, 42, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.96) !important;
-  display: grid !important;
-  place-items: center !important;
-  overflow: visible !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left {
-  transform: rotate(-2.2deg) !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right {
-  transform: rotate(2deg) !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left::before,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right::before {
-  content: "" !important;
-  display: block !important;
-  position: absolute !important;
-  left: 50% !important;
-  top: -7px !important;
-  width: 25px !important;
-  height: 10px !important;
-  border-radius: 999px !important;
-  border: 1px solid rgba(125, 211, 252, 0.58) !important;
-  background: repeating-linear-gradient(
-    -45deg,
-    rgba(186, 230, 253, 0.82) 0 7px,
-    rgba(240, 249, 255, 0.86) 7px 14px
-  ) !important;
-  opacity: 0.95 !important;
-  transform: translateX(-50%) rotate(-4deg) !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right::before {
-  transform: translateX(-50%) rotate(4deg) !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left::after,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right::after {
-  content: "" !important;
-  display: block !important;
-  position: absolute !important;
-  inset: 6px !important;
-  border-radius: 10px 12px 10px 11px !important;
-  border: 1px dashed rgba(37, 99, 235, 0.28) !important;
-  background: transparent !important;
-  pointer-events: none !important;
-}
-
 #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left .lecture-overlay-btn-icon::after {
   content: "‹" !important;
   color: #2563eb !important;
@@ -21677,106 +21018,6 @@ h6,
   line-height: 0.7 !important;
   text-shadow: 1px 1px 0 rgba(191, 219, 254, 0.78) !important;
   transform: translate(1px, -2px) !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left:hover:not(:disabled) {
-  border-color: rgba(37, 99, 235, 0.86) !important;
-  transform: translate(-1px, -1px) rotate(-2.2deg) !important;
-  box-shadow:
-    3px 4px 0 rgba(29, 41, 61, 0.62),
-    0 12px 22px rgba(37, 99, 235, 0.13),
-    inset 0 1px 0 rgba(255, 255, 255, 0.98) !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right:hover:not(:disabled) {
-  border-color: rgba(37, 99, 235, 0.86) !important;
-  transform: translate(-1px, -1px) rotate(2deg) !important;
-  box-shadow:
-    3px 4px 0 rgba(29, 41, 61, 0.62),
-    0 12px 22px rgba(37, 99, 235, 0.13),
-    inset 0 1px 0 rgba(255, 255, 255, 0.98) !important;
-}
-
-/* FINAL JOURNAL PAGE ARROWS V3
-   Same placement/scale, but the arrows read as small taped journal tabs even
-   in the chapter prelude split layout. */
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-left,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-right,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right {
-  position: relative !important;
-  width: 42px !important;
-  min-width: 42px !important;
-  max-width: 42px !important;
-  height: 42px !important;
-  border-radius: 15px 12px 16px 13px !important;
-  border: 2px solid #1d293d !important;
-  color: #2563eb !important;
-  background:
-    linear-gradient(90deg, rgba(147, 197, 253, 0.11) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(147, 197, 253, 0.09) 1px, transparent 1px),
-    radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.96) 0 28%, transparent 29%),
-    #fffdf6 !important;
-  background-size: 12px 12px, 12px 12px, auto, auto !important;
-  box-shadow:
-    3px 4px 0 #1d293d,
-    0 10px 18px rgba(15, 23, 42, 0.09),
-    inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
-  display: grid !important;
-  place-items: center !important;
-  padding: 0 !important;
-  overflow: visible !important;
-  opacity: 1 !important;
-}
-
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-left,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left {
-  transform: rotate(-1.8deg) !important;
-}
-
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-right,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right {
-  transform: rotate(1.8deg) !important;
-}
-
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-left::before,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-right::before,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left::before,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right::before {
-  content: "" !important;
-  position: absolute !important;
-  left: 50% !important;
-  top: -8px !important;
-  width: 27px !important;
-  height: 11px !important;
-  border: 1px solid rgba(125, 211, 252, 0.62) !important;
-  border-radius: 999px !important;
-  background: repeating-linear-gradient(
-    -45deg,
-    rgba(186, 230, 253, 0.9) 0 7px,
-    rgba(240, 249, 255, 0.94) 7px 14px
-  ) !important;
-  opacity: 0.96 !important;
-  transform: translateX(-50%) rotate(-5deg) !important;
-  pointer-events: none !important;
-}
-
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-right::before,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right::before {
-  transform: translateX(-50%) rotate(5deg) !important;
-}
-
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-left::after,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-right::after,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left::after,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right::after {
-  content: "" !important;
-  position: absolute !important;
-  inset: 7px !important;
-  border: 1px dashed rgba(37, 99, 235, 0.32) !important;
-  border-radius: 10px 8px 11px 9px !important;
-  background: transparent !important;
-  pointer-events: none !important;
 }
 
 #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-icon,
@@ -21815,24 +21056,6 @@ h6,
   line-height: 0.62 !important;
   transform: translate(1px, -2px) !important;
 }
-
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-left:disabled,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-right:disabled,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left:disabled,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right:disabled {
-  cursor: default !important;
-  opacity: 0.74 !important;
-  filter: saturate(0.72) brightness(1.02) !important;
-  box-shadow:
-    2px 3px 0 rgba(29, 41, 61, 0.3),
-    0 7px 14px rgba(15, 23, 42, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.92) !important;
-}
-
-/* FINAL CHUNKY STAMP PAGINATION BUTTONS
-   Yellow academic scrapbook stamp buttons for every lecture pagination surface. */
-#learnView #learnExplainToolbar .lecture-overlay-btn-left,
-#learnView #learnExplainToolbar .lecture-overlay-btn-right,
 #learnView .learn-kp-btn,
 #learnView .learn-focus-nav-btn {
   position: relative !important;
@@ -21857,9 +21080,6 @@ h6,
   opacity: 1 !important;
   filter: none !important;
 }
-
-#learnView #learnExplainToolbar .lecture-overlay-btn-left::before,
-#learnView #learnExplainToolbar .lecture-overlay-btn-right::before,
 #learnView .learn-kp-btn::before,
 #learnView .learn-focus-nav-btn::before {
   content: "" !important;
@@ -21877,9 +21097,6 @@ h6,
   transition: transform 0.3s ease !important;
   pointer-events: none !important;
 }
-
-#learnView #learnExplainToolbar .lecture-overlay-btn-left::after,
-#learnView #learnExplainToolbar .lecture-overlay-btn-right::after,
 #learnView .learn-kp-btn::after,
 #learnView .learn-focus-nav-btn::after {
   content: none !important;
@@ -21930,33 +21147,21 @@ h6,
   font-size: 24px !important;
   font-weight: 950 !important;
 }
-
-#learnView #learnExplainToolbar .lecture-overlay-btn-left:hover:not(:disabled),
-#learnView #learnExplainToolbar .lecture-overlay-btn-right:hover:not(:disabled),
 #learnView .learn-kp-btn:hover:not(:disabled),
 #learnView .learn-focus-nav-btn:hover:not(:disabled) {
   transform: translate(-2px, -2px) !important;
   box-shadow: 6px 6px 0 #1e293b !important;
   background: #fdf08a !important;
 }
-
-#learnView #learnExplainToolbar .lecture-overlay-btn-left:hover:not(:disabled)::before,
-#learnView #learnExplainToolbar .lecture-overlay-btn-right:hover:not(:disabled)::before,
 #learnView .learn-kp-btn:hover:not(:disabled)::before,
 #learnView .learn-focus-nav-btn:hover:not(:disabled)::before {
   transform: rotate(15deg) !important;
 }
-
-#learnView #learnExplainToolbar .lecture-overlay-btn-left:active:not(:disabled),
-#learnView #learnExplainToolbar .lecture-overlay-btn-right:active:not(:disabled),
 #learnView .learn-kp-btn:active:not(:disabled),
 #learnView .learn-focus-nav-btn:active:not(:disabled) {
   transform: translate(4px, 4px) !important;
   box-shadow: 0 0 0 #1e293b !important;
 }
-
-#learnView #learnExplainToolbar .lecture-overlay-btn-left:disabled,
-#learnView #learnExplainToolbar .lecture-overlay-btn-right:disabled,
 #learnView .learn-kp-btn:disabled,
 #learnView .learn-focus-nav-btn:disabled {
   background: #f1f5f9 !important;
@@ -21967,9 +21172,6 @@ h6,
   opacity: 1 !important;
   filter: none !important;
 }
-
-#learnView #learnExplainToolbar .lecture-overlay-btn-left:disabled::before,
-#learnView #learnExplainToolbar .lecture-overlay-btn-right:disabled::before,
 #learnView .learn-kp-btn:disabled::before,
 #learnView .learn-focus-nav-btn:disabled::before {
   border-color: #cbd5e1 !important;
@@ -21978,66 +21180,6 @@ h6,
 #learnView #learnExplainToolbar .lecture-overlay-btn-left:disabled .lecture-overlay-btn-icon::after,
 #learnView #learnExplainToolbar .lecture-overlay-btn-right:disabled .lecture-overlay-btn-icon::after {
   color: #94a3b8 !important;
-}
-
-/* ABSOLUTE FINAL: higher-specificity stamp override for the live toolbar. */
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-left,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-right {
-  position: relative !important;
-  inset: auto !important;
-  width: 44px !important;
-  min-width: 44px !important;
-  max-width: 44px !important;
-  height: 44px !important;
-  min-height: 44px !important;
-  max-height: 44px !important;
-  padding: 0 !important;
-  border-radius: 50% !important;
-  background: #fde047 !important;
-  border: 3px solid #1e293b !important;
-  color: #1e293b !important;
-  box-shadow: 4px 4px 0 #1e293b !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  cursor: pointer !important;
-  transform: none !important;
-  opacity: 1 !important;
-  filter: none !important;
-  overflow: visible !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left::before,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right::before,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-left::before,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-right::before {
-  content: "" !important;
-  position: absolute !important;
-  inset: 3px !important;
-  left: 3px !important;
-  top: 3px !important;
-  width: auto !important;
-  height: auto !important;
-  border: 2px dashed #1e293b !important;
-  border-radius: 50% !important;
-  background: transparent !important;
-  background-image: none !important;
-  opacity: 0.3 !important;
-  transform: none !important;
-  transition: transform 0.3s ease !important;
-  pointer-events: none !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left::after,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right::after,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-left::after,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-right::after {
-  content: none !important;
-  display: none !important;
-  border: 0 !important;
-  background: transparent !important;
 }
 
 #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left .lecture-overlay-btn-text,
@@ -22090,50 +21232,6 @@ h6,
   transform: translateY(-1px) !important;
 }
 
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left:hover:not(:disabled),
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right:hover:not(:disabled),
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-left:hover:not(:disabled),
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-right:hover:not(:disabled) {
-  transform: translate(-2px, -2px) !important;
-  box-shadow: 6px 6px 0 #1e293b !important;
-  background: #fdf08a !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left:hover:not(:disabled)::before,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right:hover:not(:disabled)::before,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-left:hover:not(:disabled)::before,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-right:hover:not(:disabled)::before {
-  transform: rotate(15deg) !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left:active:not(:disabled),
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right:active:not(:disabled),
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-left:active:not(:disabled),
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-right:active:not(:disabled) {
-  transform: translate(4px, 4px) !important;
-  box-shadow: 0 0 0 #1e293b !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left:disabled,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right:disabled,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-left:disabled,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-right:disabled {
-  background: #f1f5f9 !important;
-  color: #94a3b8 !important;
-  border-color: #cbd5e1 !important;
-  box-shadow: 3px 3px 0 #e2e8f0 !important;
-  cursor: not-allowed !important;
-  opacity: 1 !important;
-  filter: none !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left:disabled::before,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right:disabled::before,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-left:disabled::before,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-right:disabled::before {
-  border-color: #cbd5e1 !important;
-}
-
 #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left:disabled .lecture-overlay-btn-icon::after,
 #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right:disabled .lecture-overlay-btn-icon::after,
 #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-left:disabled .lecture-overlay-btn-icon::after,
@@ -22161,22 +21259,8 @@ h6,
   padding: 10px 14px 16px 8px !important;
 }
 
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-left {
-  margin: 0 7px 7px 0 !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-right {
-  margin: 0 7px 7px 0 !important;
-}
-
 #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .stamp-page-btn:hover:not(:disabled),
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .stamp-page-btn:hover:not(:disabled),
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left:hover:not(:disabled),
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right:hover:not(:disabled),
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-left:hover:not(:disabled),
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-right:hover:not(:disabled) {
+#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .stamp-page-btn:hover:not(:disabled){
   transform: translate(-3px, -3px) scale(1.06) !important;
   box-shadow: 8px 8px 0 #1e293b !important;
   background: #fff38a !important;
@@ -22240,33 +21324,6 @@ h6,
   font-size: 15px !important;
 }
 
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-left,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-right {
-  grid-row: 1 !important;
-  width: 40px !important;
-  min-width: 40px !important;
-  max-width: 40px !important;
-  height: 40px !important;
-  min-height: 40px !important;
-  max-height: 40px !important;
-  box-shadow: 3px 3px 0 #1e293b !important;
-  margin: 0 5px 5px 0 !important;
-  pointer-events: auto !important;
-  z-index: 2 !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-left {
-  grid-column: 1 !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-right {
-  grid-column: 3 !important;
-}
-
 #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left .lecture-overlay-btn-icon::after,
 #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-left .lecture-overlay-btn-icon::after,
 #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right .lecture-overlay-btn-icon::after,
@@ -22275,18 +21332,12 @@ h6,
 }
 
 #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .stamp-page-btn:hover:not(:disabled),
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .stamp-page-btn:hover:not(:disabled),
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left:hover:not(:disabled),
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right:hover:not(:disabled),
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-left:hover:not(:disabled),
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-right:hover:not(:disabled) {
+#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .stamp-page-btn:hover:not(:disabled){
   transform: translate(-2px, -2px) scale(1.04) !important;
   box-shadow: 5px 5px 0 #1e293b !important;
 }
 
-#learnView #learnExplainToolbar .stamp-page-btn.is-flipping,
-#learnView #learnExplainToolbar .lecture-overlay-btn-left.is-flipping,
-#learnView #learnExplainToolbar .lecture-overlay-btn-right.is-flipping {
+#learnView #learnExplainToolbar .stamp-page-btn.is-flipping{
   transform: translate(2px, 2px) scale(0.96) !important;
   box-shadow: 1px 1px 0 #1e293b !important;
   background: #fff38a !important;
@@ -22486,13 +21537,6 @@ h6,
   pointer-events: auto !important;
   cursor: pointer !important;
 }
-
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-left,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-right,
-#learnView #learnExplainToolbar .lecture-overlay-btn-left,
-#learnView #learnExplainToolbar .lecture-overlay-btn-right,
 #learnView #learnExplainToolbar #learnFocusBtn {
   position: relative !important;
   z-index: 80 !important;
@@ -23480,13 +22524,6 @@ and tape. */
   width: 105% !important;
   height: 58% !important;
 }
-
-#learnView #learnBody:not(.chapter-overview-active) #learnChatCol .learn-chat-topbar,
-#learnView #learnBody.chapter-overview-split-active #learnChatCol .learn-chat-topbar,
-#learnView #learnBody[data-panel-focus="normal"] #learnChatCol .learn-chat-topbar,
-#learnView #learnBody[data-panel-focus="qa-wide"] #learnChatCol .learn-chat-topbar,
-#learnView #learnBody[data-panel-focus="qa-full"] #learnChatCol .learn-chat-topbar,
-#learnView #learnChatCol .learn-chat-topbar,
 #learnView #learnChatCol .learn-chat-scroll,
 #learnView #learnChatCol .learn-web-section,
 #learnView #learnChatCol #learnChatEmptyState,
@@ -23516,11 +22553,6 @@ and tape. */
   background: transparent !important;
   border: 0 !important;
   box-shadow: none !important;
-}
-
-#learnView #learnChatCol .learn-chat-topbar {
-  margin: 0 !important;
-  padding: 18px 18px 8px !important;
 }
 
 #learnView #learnChatCol .learn-chat-scroll {
@@ -23605,8 +22637,6 @@ and tape. */
   content: none !important;
   display: none !important;
 }
-
-#learnView #learnChatCol .learn-chat-topbar,
 #learnView #learnChatCol .learn-chat-scroll,
 #learnView #learnChatCol .learn-web-section,
 #learnView #learnChatCol #learnChatEmptyState,
@@ -23619,11 +22649,6 @@ and tape. */
   border: 0 !important;
   border-radius: 0 !important;
   box-shadow: none !important;
-}
-
-#learnView #learnChatCol .learn-chat-topbar {
-  margin: 0 !important;
-  padding: 18px 18px 8px !important;
 }
 
 #learnView #learnChatCol .learn-chat-scroll {
@@ -23686,14 +22711,6 @@ and tape. */
 #learnView #learnChatCol {
   border-left: 0 !important;
   box-shadow: none !important;
-}
-
-#learnView #learnChatCol .learn-chat-topbar {
-  border: 0 !important;
-  box-shadow: none !important;
-  background: transparent !important;
-  margin: 0 !important;
-  padding: 18px 20px 8px !important;
 }
 
 #learnView #learnChatCol .learn-chat-scroll {
@@ -23764,14 +22781,6 @@ and tape. */
   background: linear-gradient(180deg, rgba(244, 247, 249, 0.96) 0%, rgba(238, 251, 246, 0.96) 100%) !important;
   border: 0 !important;
   box-shadow: none !important;
-}
-
-#learnView #learnChatCol .learn-chat-topbar {
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  margin: 0 !important;
-  padding: 18px 18px 8px !important;
 }
 
 #learnView #learnChatScroll {
@@ -24164,26 +23173,6 @@ and tape. */
     radial-gradient(circle at 95% 86%, rgba(110, 231, 183, 0.18), transparent 30%),
     linear-gradient(180deg, rgba(244, 247, 249, 0.3), rgba(255, 255, 255, 0.82)) !important;
   opacity: 0.86 !important;
-}
-
-#learnView #learnChatCol .learn-chat-topbar {
-  position: absolute !important;
-  top: 38px !important;
-  right: clamp(18px, 3vw, 44px) !important;
-  left: auto !important;
-  z-index: 30 !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: flex-end !important;
-  gap: 10px !important;
-  width: auto !important;
-  min-width: 0 !important;
-  height: auto !important;
-  padding: 0 !important;
-  background: transparent !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  pointer-events: auto !important;
 }
 
 #learnView #learnChatCol #learnFocusBtn.learn-chat-corner-toggle {
@@ -24772,13 +23761,6 @@ body {
   width: 100% !important;
 }
 
-.learn-chat-topbar {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  gap: 12px !important;
-}
-
 .learn-chat-popover-btn {
   display: inline-flex !important;
   align-items: center !important;
@@ -25303,12 +24285,6 @@ body {
     font-size: 10px !important;
   }
 }
-
-/* FINAL CLEAN PAGER ARROWS: remove the inner dashed stamp ring and use blue solid arrows. */
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left::before,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right::before,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-left::before,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-right::before,
 #learnView .stamp-page-btn::before {
   content: none !important;
   display: none !important;
@@ -25802,8 +24778,6 @@ body {
 #learnView #learnChatCol .ambient-background {
   display: none !important;
 }
-
-#learnView #learnChatCol .learn-chat-topbar,
 #learnView #learnChatCol .learn-chat-scroll,
 #learnView #learnChatCol .learn-web-section,
 #learnView #learnChatCol #learnChatEmptyState,
@@ -25833,11 +24807,6 @@ body {
   background: transparent !important;
   border: 0 !important;
   box-shadow: none !important;
-}
-
-#learnView #learnChatCol .learn-chat-topbar {
-  margin: 0 !important;
-  padding: 14px 14px 6px !important;
 }
 
 #learnView #learnChatCol .learn-chat-scroll {
@@ -29289,8 +28258,7 @@ body {
 #learnView #learnChatCol::before,
 #learnView #learnChatCol::after,
 #learnView #learnChatCol .ambient-background,
-#learnView #learnChatCol .orb,
-#learnView #learnChatCol .learn-chat-topbar {
+#learnView #learnChatCol .orb{
   content: none !important;
   display: none !important;
 }
