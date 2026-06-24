@@ -299,12 +299,25 @@ level but not the selector level. Future cascade-analysis prompts
 should explicitly compare comma-separated selector lists, not just
 declaration bodies, when claiming "duplicate."
 
-**Forward cleanup (deferred to §3a.ii or later):** Adversarial review
-also flagged L37980-L37991 (12-line tone-0..5 `--author-rgb`/`--author-
-ink` triplicate), L38006 `.feedback-reply-meta` tone-aware, and 4
-selector-only line deletes in L34751-L34762 — ~22 more lines available
-in a future pass once a paired-line atomic-delete tool is built (the
-comma-group syntax fragility blocks single-line deletion of those).
+**Forward cleanup status (2026-06-24):**
+
+- **L37980-L37991 tone-0..5 `--author-rgb`/`--author-ink` triplicate:**
+  ALREADY REMOVED by PRs #80/#81 cleanup of the feedback cluster — only
+  one definition set at L34710-L34715 remains in the post-#83 file.
+  No further work.
+- **L38006 `.feedback-reply-meta` tone-aware:** SHIPPED PR #87 (2026-06-24).
+  Dropped `#feedbackView .feedback-reply[class*="tone-"] .feedback-reply-meta`
+  from the L34655 grouped selector (byte-identical to L37790's first
+  selector, same 1,2,1 spec, source-order shadow). Also bundled: L29817
+  `font-size: 12px !important` dropped (byte-identical to L37088 same-group
+  same-spec). −2 lines net.
+- **L34751-L34762 4-selector deletes:** ALREADY REMOVED by PR #80
+  (§3b.i `.feedback-reply.is-left::before { right: auto !important }`
+  + L34786 `.feedback-reply-context` triple-group) and PR #81
+  (`.feedback-thread` zero-match selector + remaining triple-group).
+  The comma-group atomic-delete tooling was never needed because the
+  enclosing rules became fully-shadowed and were deletable as full
+  blocks. No further work.
 
 #### 3a.ii — SHIPPED PR #76 (2026-06-24): B17/B18/B25 cluster-G remnants (-11 lines)
 
