@@ -34064,8 +34064,8 @@ body {
   align-items: stretch !important;
 }
 
-#mistakeNotebookView#mistakeNotebookView .mistake-list-card,
-#mistakeNotebookView#mistakeNotebookView .mistake-detail-card {
+#mistakeNotebookView .mistake-list-card,
+#mistakeNotebookView .mistake-detail-card {
   width: 100% !important;
   max-width: none !important;
 }
@@ -34083,12 +34083,12 @@ body {
   scroll-snap-type: x proximity !important;
 }
 
-#mistakeNotebookView#mistakeNotebookView .mistake-list-item {
+#mistakeNotebookView .mistake-list-item {
   min-height: 96px !important;
   scroll-snap-align: start !important;
 }
 
-#mistakeNotebookView#mistakeNotebookView .mistake-detail-content {
+#mistakeNotebookView .mistake-detail-content {
   display: grid !important;
   grid-template-rows: auto auto auto !important;
   gap: 20px !important;
