@@ -414,26 +414,68 @@ Realistic Step C ceiling, post-analysis: ~125 lines for the no-state-variant
 no-banner-rewrite subset. The 775-line gap to the original 900 target is
 structural (harness gap + banner-rewrite complexity), not a deferral.
 
-#### 3b.i — DEFERRED: feedback-board banner consolidation
+#### 3b.i — SHIPPED PR #80 (2026-06-24): feedback-cluster shadowed-block cleanup (-48 lines)
 
-Tripled byte-identical `.feedback-reply[class*="tone-"]::before` rules
-at L34909-L34923 / L34992-L35006 / L38513-L38527 (and matching
-`.is-left::before` / `.is-right::before` variants). Plus duplicate
-tone-variable declarations at L34870-L34881 vs L34944-L34955
-(`#feedbackView .feedback-thread.tone-N, #feedbackView .feedback-reply.tone-N
-{ --author-rgb: ...; --author-ink: ...; }`) — both byte-for-byte
-identical 12-line blocks.
+The original §3b.i scope (banner-rewrite of "EOF FEEDBACK AUTHOR COLORS"
++ "TRUE FINAL FEEDBACK AUTHOR TONES" + "EOF FEEDBACK AUTHOR COLORS
+duplicate at L38480") was obsoleted by interim PRs #71-#79: the third
+"duplicate at L38480" banner had already been removed, and the
+"TRUE FINAL FEEDBACK AUTHOR TONES" banner was retitled / consolidated.
+The remaining work surfaced as 6 individual cascade-shadowed blocks
+inside the L34660-L34858 cluster, not a coordinated banner rewrite.
 
-These require a coordinated banner-consolidation refactor (merge
-"EOF FEEDBACK AUTHOR COLORS" + "TRUE FINAL FEEDBACK AUTHOR TONES" +
-"EOF FEEDBACK AUTHOR COLORS (duplicate at L38480)" into a single tone
-definition section) rather than per-rule cascade-collapse. Estimated
-~80 lines recoverable.
+PR #80 deleted 6 shadowed blocks (line numbers pre-deletion):
 
-**Entry point:** read L34869-L35275 + L38480-L38565 in parallel,
-diff each banner pair, propose a single canonical placement
-(probably the L38480 location since it's after the lane overrides at
-L38122-L38275 that need to lose to per-author tones).
+- L34676-L34682 `#feedbackView .feedback-reply.tone-0..5` per-author
+  vars — strict duplicate of broader L34772-L34777 `.tone-0..5`.
+  Specificity drops (1,2,0) → (1,1,0); values byte-identical so final
+  computed value on every reply is unchanged.
+- L34706-L34710 `.feedback-reply[class*="tone-"] .feedback-reply-context`
+  single-sel — strict subset of the load-bearing L34668 triple-group.
+- L34712-L34716 `.feedback-thread::after` width/background — shadowed
+  by L34690 `[class*="tone-"]` at (1,2,1) since every thread per
+  app.js:6276 has `tone-N`.
+- L34786-L34790 `.feedback-thread::after` width/background/opacity —
+  same shadow chain as L34712; opacity falls through to L37552's 0.82.
+- L34805-L34814 `.feedback-reply::before` single-sel — every property
+  duplicated by L34725 triple-group; L37384's later `display:none`
+  made the bare hypothetical unreachable.
+- L34852-L34858 `@media (max-width:760px)` block — byte-identical
+  (verified via `diff`) to L34754 + L37678; third copy still present.
+
+Verification: per-property cascade walk + 3-lens adversarial review
+(specificity-tuple-arithmetic, JS-template-class-discovery, media-query-
+and-pseudo-element-edge-cases) — all 6 candidates returned `safe-delete`
+with zero refutations. Plus 9-angle high-effort `/code-review` with
+1-vote verify + sweep — 4 returned findings, all PR-description precision
+asks or runtime-unreachable hypotheticals, no defects. Visual-diff
+harness: 33 views @ 0.000% across two consecutive `--check` runs,
+including strict-0.05% view 14c (the §3a.i regression-detector).
+
+Also dropped the stale `/* Per-author tint at (1,2,0)… */` comment at
+L34676 explaining the now-deleted block. 48 lines net.
+
+#### 3b.i.followup — DEFERRED (D1): banner-comment hardening
+
+Review finding #2 (PR #80 `/code-review`): the L34660-L34667
+"EOF FEEDBACK AUTHOR COLORS" banner comment carries a DO-NOT-DELETE
+warning specifically about the (1,4,0) `.feedback-reply-context`
+triple-group at L34668-L34674, but does not mention the surviving
+`.feedback-reply::before` triple-group immediately below
+(at L34705 post-deletion / L34725 pre-deletion). A future maintainer
+inspecting the cluster could misread the `.feedback-reply::before` group
+as accidentally retained and delete it, breaking the dot-marker chrome
+on left/right reply pseudo-elements.
+
+**Why deferred (D1 — Unrelated):** the `.feedback-reply::before` group
+was not modified by PR #80; expanding the banner comment to cover
+adjacent rules is scope creep relative to the cascade-collapse goal of
+the PR.
+
+**Next-session entry point:** `app/style.css:34660` — add a brief
+"plus the .feedback-reply::before group at L34705 is the live source
+of dot-marker chrome" line to the existing DO-NOT-DELETE block. ≤5
+line doc-only edit; no cascade impact.
 
 #### 3b.ii — SHIPPED PR #75 (2026-06-24): course-tracker overview + grid bundle (-21 lines)
 
@@ -754,10 +796,11 @@ Both pairs were verified during the Pass 1 work and skipped. Update
 | §3a.ii (PR #76) | B17/B18/B25 cluster-G remnants | −11 in `app/style.css` |
 | §3a.ii extension (PR #77) | B17 mechanical 8-site sweep | −16 in `app/style.css` |
 | §3.5 v4 harness (PR #78) | +5 state-variant views (12b/12c/12d/14d/14e) | +245 in `tools/visual-diff.js` |
-| **§3b.iv pass 1 (PR #79)** | **4 shadowed `:hover` / `:focus` / `:active` blocks** | **−30 in `app/style.css`** |
+| §3b.iv pass 1 (PR #79) | 4 shadowed `:hover` / `:focus` / `:active` blocks | −30 in `app/style.css` |
+| **§3b.i (PR #80)** | **feedback-cluster shadowed-block cleanup** | **−48 in `app/style.css`** |
 
 `app/app.js`: **14,434 → 9,385 lines (−5,049, −35.0%)**.
-`app/style.css`: **44,845 → 43,516 lines (−1,329, −2.96%)**.
+`app/style.css`: **44,845 → 43,468 lines (−1,377, −3.07%)**.
 
 The Phase 3 JS work is structurally complete. CSS Pass 1 + Pass 2
 Steps A through D shipped; the structural ceiling on the L33181–L44261
