@@ -357,7 +357,7 @@ L33191/33192/33213-33216/33238/37415/37416/37423-37426 (the §3d runtime-collaps
 
 ## 6.3 Branch progress (refactor/phase3.6-css-collapse, 2026-06-24/25)
 
-**Cumulative this session (all double-verified):** doubled-IDs **608 → 437** (−171, −28%);
+**Cumulative this session (all double-verified):** doubled-IDs **608 → 426** (−182, −30%);
 `!important` lines **14,948 → 14,552** (−396); style.css **42,991 → 42,221** (−770) +
 runtime-collapsed.css **2,102 → 2,019** (−83). Every change verified by css-probe (byte-identical)
 + visual-diff (36 views ≤ threshold; lesson views covering live chrome at 0.000%).
@@ -367,6 +367,16 @@ runtime-collapsed.css **2,102 → 2,019** (−83). Every change verified by css-
 | `bac31d2` + `6f939a2` | textbook (Pilot 0) | −35 doubled-IDs | css-probe S12 + negative-tested gate |
 | `7fc0350` | page-corner (§6.2 #1) | −58 doubled-IDs | css-probe S-page-corner + visual-diff 06/17/18/21/22 @ 0.000% |
 | `8cd712b` | dead-CSS (§6.3a) | **−853 lines, −78 doubled-IDs, −396 `!important`** | dead-ID grep 0; live `#learnFocusPageIndicator` intact; css-probe PASS; visual-diff exit 0 (06/07/08 @ 0.000%) |
+| `10935a3` | learn-topbar (§6.2 #2) | −11 doubled-IDs | css-probe PASS; visual-diff exit 0 (06/07/08/15/16 @ 0.000%) |
+
+**Clean COLLAPSE-SAFE-NOW wins are now harvested.** Remaining COLLAPSE-SAFE-NOW are small + need
+new probe coverage (MN 4 visible cards via views 03/03b; MN close-btn + close-btns L34088/89 +
+composer `.bottom-actions` are `display:none`/specific-prop → need css-probe states). The larger
+remaining value is the **`!important` removal on DOM-isolated views** (courseTracker 74.9% NOCOMP,
+preference 69.8%) — higher-risk (changes cascade outcomes), needs a per-view css-probe state with
+COMPREHENSIVE per-property coverage (probe every stripped property, not just the visible pixel).
+That + the harness-gated tranches (narrow-viewport, state-matrix) are the genuine multi-session
+Phase 3.6 grind.
 
 css-probe states on the branch: S2/S3 (§3d baseline), **S-page-corner** (NEW), S12.
 
