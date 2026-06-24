@@ -13838,17 +13838,6 @@ h6,
   align-items: start;
 }
 
-.preference-profile-card,
-.preference-ai-card,
-.preference-preview-card {
-  position: relative;
-  background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,251,255,0.98));
-  border: 3px solid #cbd5e1;
-  border-radius: 28px;
-  padding: 26px;
-  box-shadow: 0 14px 0 -6px #f8fafc, 0 14px 0 1px #bfd0e2, 0 28px 34px rgba(15, 23, 42, 0.08);
-}
-
 .preference-profile-card {
   min-height: 640px;
 }
