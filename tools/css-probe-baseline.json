@@ -99,6 +99,98 @@
       "value": "visible"
     }
   ],
+  "S-page-corner": [
+    {
+      "sel": "#lecturePrevOverlayBtn",
+      "pseudo": null,
+      "prop": "background-image",
+      "value": "none"
+    },
+    {
+      "sel": "#lecturePrevOverlayBtn",
+      "pseudo": null,
+      "prop": "border-top-left-radius",
+      "value": "0px"
+    },
+    {
+      "sel": "#lecturePrevOverlayBtn",
+      "pseudo": null,
+      "prop": "box-shadow",
+      "value": "none"
+    },
+    {
+      "sel": "#lecturePrevOverlayBtn",
+      "pseudo": "::after",
+      "prop": "background-image",
+      "value": "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E\")"
+    },
+    {
+      "sel": "#lecturePrevOverlayBtn",
+      "pseudo": "::after",
+      "prop": "opacity",
+      "value": "1"
+    },
+    {
+      "sel": "#lecturePrevOverlayBtn",
+      "pseudo": "::before",
+      "prop": "background-image",
+      "value": "linear-gradient(225deg, rgb(255, 255, 255) 0%, rgb(232, 229, 223) 100%)"
+    },
+    {
+      "sel": "#lecturePrevOverlayBtn .turner-content",
+      "pseudo": null,
+      "prop": "opacity",
+      "value": "0"
+    },
+    {
+      "sel": "#lecturePrevOverlayBtn .turner-content",
+      "pseudo": null,
+      "prop": "transform",
+      "value": "matrix(1, 0, 0, 1, -10, 10)"
+    },
+    {
+      "sel": "#lectureNextOverlayBtn",
+      "pseudo": null,
+      "prop": "background-image",
+      "value": "none"
+    },
+    {
+      "sel": "#lectureNextOverlayBtn",
+      "pseudo": null,
+      "prop": "border-top-left-radius",
+      "value": "0px"
+    },
+    {
+      "sel": "#lectureNextOverlayBtn",
+      "pseudo": null,
+      "prop": "box-shadow",
+      "value": "none"
+    },
+    {
+      "sel": "#lectureNextOverlayBtn",
+      "pseudo": "::after",
+      "prop": "background-image",
+      "value": "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E\")"
+    },
+    {
+      "sel": "#lectureNextOverlayBtn",
+      "pseudo": "::after",
+      "prop": "opacity",
+      "value": "1"
+    },
+    {
+      "sel": "#lectureNextOverlayBtn .turner-content",
+      "pseudo": null,
+      "prop": "opacity",
+      "value": "0"
+    },
+    {
+      "sel": "#lectureNextOverlayBtn .turner-content",
+      "pseudo": null,
+      "prop": "transform",
+      "value": "matrix(1, 0, 0, 1, 10, 10)"
+    }
+  ],
   "S12-textbook-qa-open": [
     {
       "sel": "#textbookFocusModal",

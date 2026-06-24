@@ -33440,8 +33440,8 @@ body {
 }
 
 /* PAGE CORNER ID OVERRIDE: older #lecturePrev/#lectureNext button skins lose here. */
-#learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner,
-#learnView#learnView #lectureNextOverlayBtn.lecture-page-corner {
+#learnView #lecturePrevOverlayBtn.lecture-page-corner,
+#learnView #lectureNextOverlayBtn.lecture-page-corner {
   position: absolute !important;
   bottom: clamp(18px, 2.4vh, 28px) !important;
   z-index: 90 !important;
@@ -33471,28 +33471,28 @@ body {
   filter: none !important;
 }
 
-#learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner {
+#learnView #lecturePrevOverlayBtn.lecture-page-corner {
   left: clamp(18px, 2.4vw, 34px) !important;
   right: auto !important;
 }
 
-#learnView#learnView #lectureNextOverlayBtn.lecture-page-corner {
+#learnView #lectureNextOverlayBtn.lecture-page-corner {
   left: auto !important;
   right: clamp(18px, 2.4vw, 34px) !important;
 }
 
-#learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner::before,
-#learnView#learnView #lectureNextOverlayBtn.lecture-page-corner::before,
-#learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner::after,
-#learnView#learnView #lectureNextOverlayBtn.lecture-page-corner::after {
+#learnView #lecturePrevOverlayBtn.lecture-page-corner::before,
+#learnView #lectureNextOverlayBtn.lecture-page-corner::before,
+#learnView #lecturePrevOverlayBtn.lecture-page-corner::after,
+#learnView #lectureNextOverlayBtn.lecture-page-corner::after {
   position: absolute !important;
   display: block !important;
   opacity: 1 !important;
   pointer-events: none !important;
 }
 
-#learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner:hover:not(:disabled),
-#learnView#learnView #lectureNextOverlayBtn.lecture-page-corner:hover:not(:disabled) {
+#learnView #lecturePrevOverlayBtn.lecture-page-corner:hover:not(:disabled),
+#learnView #lectureNextOverlayBtn.lecture-page-corner:hover:not(:disabled) {
   transform: translateY(-3px) !important;
   filter: drop-shadow(0 18px 22px rgba(15,23,42,0.16)) !important;
 }
@@ -33788,8 +33788,8 @@ body {
   line-height: 1.62 !important;
 }
 
-#learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner,
-#learnView#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner {
+#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner,
+#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner {
   position: absolute !important;
   bottom: 0 !important;
   top: auto !important;
@@ -33827,22 +33827,22 @@ body {
     opacity 0.2s ease !important;
 }
 
-#learnView#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner.next {
+#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner.next {
   right: 0 !important;
   left: auto !important;
   justify-content: flex-end !important;
 }
 
-#learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner.prev {
+#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner.prev {
   left: 0 !important;
   right: auto !important;
   justify-content: flex-start !important;
 }
 
-#learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner:hover:not(:disabled),
-#learnView#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner:hover:not(:disabled),
-#learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner.is-flipping:not(:disabled),
-#learnView#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner.is-flipping:not(:disabled) {
+#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner:hover:not(:disabled),
+#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner:hover:not(:disabled),
+#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner.is-flipping:not(:disabled),
+#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner.is-flipping:not(:disabled) {
   width: 150px !important;
   min-width: 150px !important;
   max-width: 150px !important;
@@ -33853,8 +33853,8 @@ body {
   filter: none !important;
 }
 
-#learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner::after,
-#learnView#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner::after {
+#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner::after,
+#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner::after {
   content: "" !important;
   position: absolute !important;
   inset: 0 !important;
@@ -33872,16 +33872,16 @@ body {
   filter: none !important;
 }
 
-#learnView#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner.next::after {
+#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner.next::after {
   clip-path: polygon(100% 0, 0 100%, 100% 100%) !important;
 }
 
-#learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner.prev::after {
+#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner.prev::after {
   clip-path: polygon(0 0, 100% 100%, 0 100%) !important;
 }
 
-#learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner::before,
-#learnView#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner::before {
+#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner::before,
+#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner::before {
   content: "" !important;
   position: absolute !important;
   inset: 0 !important;
@@ -33896,20 +33896,20 @@ body {
   transform: none !important;
 }
 
-#learnView#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner.next::before {
+#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner.next::before {
   background: linear-gradient(135deg, #FFFFFF 0%, #E8E5DF 100%) !important;
   clip-path: polygon(0 0, 100% 0, 0 100%) !important;
   filter: drop-shadow(-6px -6px 12px rgba(15, 23, 42, 0.15)) !important;
 }
 
-#learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner.prev::before {
+#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner.prev::before {
   background: linear-gradient(225deg, #FFFFFF 0%, #E8E5DF 100%) !important;
   clip-path: polygon(0 0, 100% 0, 100% 100%) !important;
   filter: drop-shadow(6px -6px 12px rgba(15, 23, 42, 0.15)) !important;
 }
 
-#learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner .turner-content,
-#learnView#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner .turner-content {
+#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner .turner-content,
+#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner .turner-content {
   position: relative !important;
   z-index: 3 !important;
   color: #9E2A2B !important;
@@ -33928,18 +33928,18 @@ body {
   transition: all 0.3s ease !important;
 }
 
-#learnView#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner.next .turner-content {
+#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner.next .turner-content {
   transform: translate(10px, 10px) !important;
 }
 
-#learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner.prev .turner-content {
+#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner.prev .turner-content {
   transform: translate(-10px, 10px) !important;
 }
 
-#learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner:hover:not(:disabled) .turner-content,
-#learnView#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner:hover:not(:disabled) .turner-content,
-#learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner.is-flipping:not(:disabled) .turner-content,
-#learnView#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner.is-flipping:not(:disabled) .turner-content {
+#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner:hover:not(:disabled) .turner-content,
+#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner:hover:not(:disabled) .turner-content,
+#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner.is-flipping:not(:disabled) .turner-content,
+#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner.is-flipping:not(:disabled) .turner-content {
   opacity: 1 !important;
   transform: translate(0, 0) !important;
   transition-delay: 0.15s !important;
@@ -36041,8 +36041,8 @@ body {
   display: block !important;
 }
 
-#learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner:disabled,
-#learnView#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner:disabled {
+#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner:disabled,
+#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner:disabled {
   opacity: 0 !important;
   pointer-events: none !important;
 }
@@ -37476,8 +37476,8 @@ body {
   font-family: "Fira Code", ui-monospace, SFMono-Regular, Menlo, monospace !important;
 }
 
-#learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner,
-#learnView#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner {
+#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner,
+#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner {
   bottom: 0 !important;
   width: 54px !important;
   min-width: 54px !important;
@@ -37502,22 +37502,22 @@ body {
     max-height 0.5s cubic-bezier(0.25, 1, 0.2, 1) !important;
 }
 
-#learnView#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner.next {
+#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner.next {
   right: 0 !important;
   left: auto !important;
   justify-content: flex-end !important;
 }
 
-#learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner.prev {
+#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner.prev {
   left: 0 !important;
   right: auto !important;
   justify-content: flex-start !important;
 }
 
-#learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner:hover:not(:disabled),
-#learnView#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner:hover:not(:disabled),
-#learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner.is-flipping:not(:disabled),
-#learnView#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner.is-flipping:not(:disabled) {
+#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner:hover:not(:disabled),
+#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner:hover:not(:disabled),
+#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner.is-flipping:not(:disabled),
+#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner.is-flipping:not(:disabled) {
   width: 150px !important;
   min-width: 150px !important;
   max-width: 150px !important;
@@ -37528,36 +37528,36 @@ body {
   filter: none !important;
 }
 
-#learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner::after,
-#learnView#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner::after {
+#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner::after,
+#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner::after {
   background-color: #EFECE5 !important;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E") !important;
   box-shadow: inset 4px 4px 15px rgba(0, 0, 0, 0.06) !important;
   transform: none !important;
 }
 
-#learnView#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner.next::after {
+#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner.next::after {
   clip-path: polygon(100% 0, 0 100%, 100% 100%) !important;
 }
 
-#learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner.prev::after {
+#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner.prev::after {
   clip-path: polygon(0 0, 100% 100%, 0 100%) !important;
 }
 
-#learnView#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner.next::before {
+#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner.next::before {
   background: linear-gradient(135deg, #FFFFFF 0%, #E8E5DF 100%) !important;
   clip-path: polygon(0 0, 100% 0, 0 100%) !important;
   filter: drop-shadow(-6px -6px 12px rgba(15, 23, 42, 0.15)) !important;
 }
 
-#learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner.prev::before {
+#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner.prev::before {
   background: linear-gradient(225deg, #FFFFFF 0%, #E8E5DF 100%) !important;
   clip-path: polygon(0 0, 100% 0, 100% 100%) !important;
   filter: drop-shadow(6px -6px 12px rgba(15, 23, 42, 0.15)) !important;
 }
 
-#learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner .turner-content,
-#learnView#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner .turner-content {
+#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner .turner-content,
+#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner .turner-content {
   color: #9E2A2B !important;
   font-family: "Zilla Slab", Georgia, serif !important;
   font-size: 18px !important;
@@ -37567,18 +37567,18 @@ body {
   transition: all 0.3s ease !important;
 }
 
-#learnView#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner.next .turner-content {
+#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner.next .turner-content {
   transform: translate(10px, 10px) !important;
 }
 
-#learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner.prev .turner-content {
+#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner.prev .turner-content {
   transform: translate(-10px, 10px) !important;
 }
 
-#learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner:hover:not(:disabled) .turner-content,
-#learnView#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner:hover:not(:disabled) .turner-content,
-#learnView#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner.is-flipping:not(:disabled) .turner-content,
-#learnView#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner.is-flipping:not(:disabled) .turner-content {
+#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner:hover:not(:disabled) .turner-content,
+#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner:hover:not(:disabled) .turner-content,
+#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner.is-flipping:not(:disabled) .turner-content,
+#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner.is-flipping:not(:disabled) .turner-content {
   opacity: 1 !important;
   transform: translate(0, 0) !important;
   transition-delay: 0.15s !important;

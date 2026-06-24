@@ -172,6 +172,46 @@ const PROBE_STATES = [
         probes: FOLLOWUP_PROBES,
     },
     {
+        // S-page-corner — lecture page-turn overlay buttons (#lecturePrevOverlayBtn /
+        // #lectureNextOverlayBtn, static .lecture-page-corner.page-turner per index.html
+        // L694/697) in the resting lesson. Gate for the Phase 3.6 §6.2 page-corner
+        // de-double (27 over-specified #learnView#learnView rules). The .turner-content
+        // span rests at opacity:0 — INVISIBLE to pixel-diff — so computed-style probing is
+        // the only reliable way to verify those rules survive the de-double unchanged.
+        state: 'S-page-corner',
+        enter: async (page) => {
+            await resetLearnChrome(page);
+            // Buttons + .turner-content are static; the page-corner rules match
+            // unconditionally (only the .lecture-page-corner.page-turner classes gate them).
+            const ok = await page.evaluate(() => {
+                const prev = document.getElementById('lecturePrevOverlayBtn');
+                const next = document.getElementById('lectureNextOverlayBtn');
+                return !!prev && prev.matches('.lecture-page-corner.page-turner')
+                    && !!next && next.matches('.lecture-page-corner.page-turner')
+                    && !!prev.querySelector('.turner-content')
+                    && !!next.querySelector('.turner-content');
+            });
+            assertOrThrow(ok, 'S-page-corner: overlay buttons missing or lack .lecture-page-corner.page-turner / .turner-content child');
+        },
+        probes: [
+            ['#lecturePrevOverlayBtn', null, 'background-image'],
+            ['#lecturePrevOverlayBtn', null, 'border-top-left-radius'],
+            ['#lecturePrevOverlayBtn', null, 'box-shadow'],
+            ['#lecturePrevOverlayBtn', '::after', 'background-image'],
+            ['#lecturePrevOverlayBtn', '::after', 'opacity'],
+            ['#lecturePrevOverlayBtn', '::before', 'background-image'],
+            ['#lecturePrevOverlayBtn .turner-content', null, 'opacity'],
+            ['#lecturePrevOverlayBtn .turner-content', null, 'transform'],
+            ['#lectureNextOverlayBtn', null, 'background-image'],
+            ['#lectureNextOverlayBtn', null, 'border-top-left-radius'],
+            ['#lectureNextOverlayBtn', null, 'box-shadow'],
+            ['#lectureNextOverlayBtn', '::after', 'background-image'],
+            ['#lectureNextOverlayBtn', '::after', 'opacity'],
+            ['#lectureNextOverlayBtn .turner-content', null, 'opacity'],
+            ['#lectureNextOverlayBtn .turner-content', null, 'transform'],
+        ],
+    },
+    {
         // S12 — textbook-focus modal, Q&A panel un-hidden, empty-state node rendered.
         // THE PILOT GATE: pins the resolved values of every selector the textbook
         // de-double rewrites (docs/PHASE3.6_SPEC.md §3 Pilot 0). The page-indicator
