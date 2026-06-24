@@ -6647,9 +6647,7 @@ body.answer-compare-resizing {
   align-self: flex-end;
 }
 
-.lecture-overlay-btn,
-.lecture-focus-overlay-btn,
-.textbook-zoom-overlay-btn {
+.lecture-overlay-btn {
   position: relative;
   z-index: 2;
   min-width: 58px;
@@ -6675,17 +6673,13 @@ body.answer-compare-resizing {
   letter-spacing: 0.01em;
 }
 
-.lecture-overlay-btn::before,
-.lecture-focus-overlay-btn::before,
-.textbook-zoom-overlay-btn::before {
+.lecture-overlay-btn::before {
   content: '';
   position: absolute;
   inset: -28px;
 }
 
-.lecture-overlay-btn:hover,
-.lecture-focus-overlay-btn:hover,
-.textbook-zoom-overlay-btn:hover {
+.lecture-overlay-btn:hover {
   opacity: 1 !important;
   background: linear-gradient(180deg, #ffffff 0%, #eff6ff 100%);
   border-color: rgba(96, 165, 250, 0.98);
@@ -6693,9 +6687,7 @@ body.answer-compare-resizing {
   transform: translateY(-1px);
 }
 
-.lecture-focus-overlay-btn.hidden,
-.lecture-overlay-btn.hidden,
-.textbook-zoom-overlay-btn.hidden {
+.lecture-overlay-btn.hidden {
   display: none !important;
 }
 
@@ -6728,10 +6720,6 @@ body.answer-compare-resizing {
   white-space: nowrap;
 }
 
-.lecture-focus-overlay-btn {
-  min-width: 92px;
-}
-
 .learn-explain-scroll {
   flex: 1;
   overflow-y: auto;
@@ -6757,9 +6745,7 @@ body.answer-compare-resizing {
   flex: 0 0 auto;
 }
 
-.learn-explain-overlay-rail .lecture-overlay-btn,
-.learn-explain-overlay-rail .lecture-focus-overlay-btn,
-.learn-explain-overlay-rail .textbook-zoom-overlay-btn {
+.learn-explain-overlay-rail .lecture-overlay-btn {
   pointer-events: auto;
 }
 
@@ -6809,8 +6795,7 @@ body.answer-compare-resizing {
   display: none !important;
 }
 
-.learn-explain-scroll.textbook-mode .lecture-overlay-btn,
-.learn-explain-scroll.textbook-mode .lecture-focus-overlay-btn {
+.learn-explain-scroll.textbook-mode .lecture-overlay-btn {
   display: none !important;
 }
 
@@ -8283,47 +8268,6 @@ body.answer-compare-resizing {
   background: linear-gradient(180deg, #f8fafc 0%, #f3f7fb 100%);
 }
 
-.syllabus-page-shell {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 42px 36px 56px;
-}
-
-
-.syllabus-page-eyebrow {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #64748b;
-  margin-bottom: 10px;
-}
-
-.syllabus-page-title {
-  margin: 0;
-  font-size: 40px;
-  line-height: 1.08;
-  color: #0f172a;
-}
-
-.syllabus-page-subtitle {
-  margin: 14px 0 0;
-  font-size: 16px;
-  color: #475569;
-  line-height: 1.7;
-  max-width: 720px;
-}
-
-.syllabus-page-panel {
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(226, 232, 240, 0.96);
-  border-radius: 28px;
-  padding: 24px;
-  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.06);
-  min-height: 420px;
-}
-
-
 .settings-page-shell {
   max-width: 1320px;
   margin: 0 auto;
@@ -8792,8 +8736,6 @@ body {
 }
 
 :root[data-theme="light"] .lecture-overlay-btn,
-:root[data-theme="light"] .lecture-focus-overlay-btn,
-:root[data-theme="light"] .textbook-zoom-overlay-btn,
 :root[data-theme="light"] .learn-focus-btn {
   border-color: #d6d6d3;
   background: rgba(255, 255, 255, 0.98);
@@ -8802,14 +8744,11 @@ body {
 }
 
 :root[data-theme="light"] .lecture-overlay-btn:hover,
-:root[data-theme="light"] .lecture-focus-overlay-btn:hover,
-:root[data-theme="light"] .textbook-zoom-overlay-btn:hover,
 :root[data-theme="light"] .learn-focus-btn:hover {
   background: #f3f3f2;
   border-color: #bdbdb8;
 }
 
-:root[data-theme="light"] .lecture-focus-overlay-btn.is-collapsed,
 :root[data-theme="light"] .learn-focus-btn.is-collapsed {
   background: #111111;
   color: #ffffff;
@@ -10896,47 +10835,6 @@ body,
   background: linear-gradient(180deg, #f8fafc 0%, #f3f7fb 100%);
 }
 
-.syllabus-page-shell {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 42px 36px 56px;
-}
-
-
-.syllabus-page-eyebrow {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #64748b;
-  margin-bottom: 10px;
-}
-
-.syllabus-page-title {
-  margin: 0;
-  font-size: 40px;
-  line-height: 1.08;
-  color: #0f172a;
-}
-
-.syllabus-page-subtitle {
-  margin: 14px 0 0;
-  font-size: 16px;
-  color: #475569;
-  line-height: 1.7;
-  max-width: 720px;
-}
-
-.syllabus-page-panel {
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(226, 232, 240, 0.96);
-  border-radius: 28px;
-  padding: 24px;
-  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.06);
-  min-height: 420px;
-}
-
-
 .welcome-cover-btn {
   width: 100%;
   padding: 0;
@@ -10950,138 +10848,13 @@ body,
   transform: translateY(-2px);
 }
 
-.library-view {
-  height: 100%;
-  overflow: auto;
-  background: linear-gradient(180deg, #f8fafc 0%, #f3f7fb 100%);
-}
-
-.library-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20px;
-}
-
-.library-card {
-  border: 1px solid rgba(226, 232, 240, 0.96);
-  border-radius: 28px;
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.06);
-  overflow: hidden;
-}
-
-
-.library-card-cover {
-  background: #dbeafe;
-  min-height: 100%;
-}
-
-.library-card-cover img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-
-.library-card-status {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #64748b;
-  margin-bottom: 10px;
-}
-
-.library-card-title {
-  margin: 0 0 10px;
-  font-size: 28px;
-  line-height: 1.18;
-  color: #0f172a;
-}
-
-.library-card-copy {
-  margin: 0;
-  font-size: 15px;
-  line-height: 1.75;
-  color: #475569;
-}
-
-
-.library-chip {
-  display: inline-flex;
-  align-items: center;
-  min-height: 32px;
-  padding: 0 12px;
-  border-radius: 999px;
-  background: rgba(37, 99, 235, 0.08);
-  color: #2563eb;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-
-:root[data-theme="dark"] .library-view {
-  background: #171513 !important;
-}
-
-:root[data-theme="dark"] .library-card {
-  background: #211d1a !important;
-  border-color: #332d28 !important;
-  box-shadow: none;
-}
-
-:root[data-theme="dark"] .library-card-title {
-  color: #f5efe6 !important;
-}
-
-:root[data-theme="dark"] .library-card-copy,
-:root[data-theme="dark"] .library-card-status {
-  color: #c3b7aa !important;
-}
-
-:root[data-theme="dark"] .library-chip {
-  background: rgba(245, 239, 230, 0.08);
-  color: #f5efe6;
-}
-
 :root[data-theme="dark"] .syllabus-view,
 :root[data-theme="dark"] .recent-view {
   background: #171513 !important;
 }
 
-:root[data-theme="dark"] .syllabus-page-panel {
-  background: #211d1a !important;
-  border-color: #332d28 !important;
-  box-shadow: none;
-}
-
-:root[data-theme="dark"] .syllabus-page-title {
-  color: #f5efe6 !important;
-}
-
-:root[data-theme="dark"] .syllabus-page-subtitle,
-:root[data-theme="dark"] .syllabus-page-eyebrow {
-  color: #c3b7aa !important;
-}
-
 @media (max-width: 900px) {
-  .syllabus-page-shell {
-    padding: 24px 16px 32px;
-  }
-
-  .syllabus-page-title {
-    font-size: 34px;
-  }
-
-  .library-grid {
-    grid-template-columns: 1fr;
-  }
-
-  
-  .lecture-overlay-btn,
-  .lecture-focus-overlay-btn,
-  .textbook-zoom-overlay-btn {
+  .lecture-overlay-btn {
     min-width: 48px;
     height: 48px;
     padding: 0 12px;
@@ -11090,13 +10863,6 @@ body,
   .lecture-overlay-btn-text,
   .lecture-focus-overlay-text {
     display: none;
-  }
-
-  .lecture-focus-overlay-btn,
-  .textbook-zoom-overlay-btn {
-    top: 12px;
-    right: 12px;
-    min-width: 48px;
   }
 }
 
@@ -11343,8 +11109,6 @@ h6,
 .learn-title,
 .settings-page-title,
 .settings-page-card-title,
-.library-card-title,
-.syllabus-page-title,
 .login-card-title,
 .learn-kp-title {
   font-family: "Quicksand", "Nunito", sans-serif !important;
@@ -11428,7 +11192,6 @@ h6,
 .sidebar-link,
 .sidebar-settings-btn,
 .settings-page-nav-item,
-.library-card,
 .theme-toggle-btn,
 .book-nav-btn,
 .learn-kp-btn,
@@ -11602,15 +11365,12 @@ h6,
 .answer,
 .learn-view,
 .settings-view,
-.library-view,
-.syllabus-page-shell,
 .settings-page-shell {
   background: transparent !important;
 }
 
 .settings-page-card,
 .settings-page-nav,
-.library-card,
 .learn-intro-card,
 .login-card,
 .sources,
@@ -11647,9 +11407,7 @@ h6,
 .learn-badge,
 .sidebar-nav-group-label,
 .settings-page-eyebrow,
-.settings-page-card-eyebrow,
-.syllabus-page-eyebrow,
-.library-card-status {
+.settings-page-card-eyebrow {
   font-family: "Quicksand", "Nunito", sans-serif !important;
 }
 
@@ -11660,7 +11418,6 @@ h6,
 }
 
 .welcome-cover-btn > div,
-.library-card-cover,
 .settings-user-card,
 .search-box,
 .followup-bar,
@@ -11792,7 +11549,6 @@ h6,
 :root[data-theme="dark"] .learn-followup-bar,
 :root[data-theme="dark"] .settings-page-card,
 :root[data-theme="dark"] .settings-page-nav,
-:root[data-theme="dark"] .library-card,
 :root[data-theme="dark"] .learn-intro-card,
 :root[data-theme="dark"] .login-card,
 :root[data-theme="dark"] .sources,
@@ -11801,8 +11557,7 @@ h6,
 :root[data-theme="dark"] #quizCard,
 :root[data-theme="dark"] #quizOverlay #quizCard,
 :root[data-theme="dark"] #authOverlay > div,
-:root[data-theme="dark"] .settings-user-card,
-:root[data-theme="dark"] .syllabus-page-panel {
+:root[data-theme="dark"] .settings-user-card {
   background: linear-gradient(180deg, #151e2b 0%, #121a26 100%) !important;
   border: 3px solid #2b3a50 !important;
   box-shadow:
@@ -11920,8 +11675,6 @@ h6,
 :root[data-theme="dark"] .learn-title,
 :root[data-theme="dark"] .settings-page-title,
 :root[data-theme="dark"] .settings-page-card-title,
-:root[data-theme="dark"] .library-card-title,
-:root[data-theme="dark"] .syllabus-page-title,
 :root[data-theme="dark"] .login-card-title,
 :root[data-theme="dark"] .learn-kp-title,
 :root[data-theme="dark"] .chapter-overview-title,
@@ -11934,10 +11687,6 @@ h6,
 :root[data-theme="dark"] .settings-page-copy,
 :root[data-theme="dark"] .settings-page-subtitle,
 :root[data-theme="dark"] .settings-user-meta,
-:root[data-theme="dark"] .library-card-copy,
-:root[data-theme="dark"] .library-card-status,
-:root[data-theme="dark"] .syllabus-page-subtitle,
-:root[data-theme="dark"] .syllabus-page-eyebrow,
 :root[data-theme="dark"] .chapter-overview-summary,
 :root[data-theme="dark"] .chapter-overview-subcard-summary,
 :root[data-theme="dark"] .ghost {
@@ -14689,31 +14438,6 @@ h6,
 .lesson-page-content > .kc-visual-plan:first-child + .math-block,
 .lesson-page-content > .math-block:first-child {
   margin-top: 0 !important;
-}
-
-.lesson-page-footer {
-  flex: 0 0 auto !important;
-  display: flex !important;
-  justify-content: flex-end !important;
-  margin-top: 28px !important;
-  pointer-events: none !important;
-}
-
-.lesson-page-footer span {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  min-width: 74px !important;
-  height: 42px !important;
-  padding: 0 16px !important;
-  border-radius: 999px !important;
-  border: 1px solid rgba(191, 219, 254, 0.98) !important;
-  background: #fff !important;
-  color: #2563eb !important;
-  font-family: "DM Mono", monospace !important;
-  font-size: 14px !important;
-  font-weight: 800 !important;
-  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.12) !important;
 }
 
 @media (max-width: 900px) {
@@ -23046,7 +22770,6 @@ body,
 .learn-explain-scroll,
 .learn-explain-body,
 .settings-view,
-.library-view,
 .course-tracker-view,
 .mistake-notebook-view,
 .preference-view,
@@ -23913,14 +23636,6 @@ body {
 
 #learnView #lectureNextOverlayBtn {
   order: 3 !important;
-}
-
-/* FINAL LECTURE PAGINATION POSITION FIX: one pager, centered inside the lecture page. */
-#learnView .lesson-page-footer,
-#learnView .lesson-page-footer span {
-  display: none !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
 }
 
 #learnView #learnExplainScroll.learn-explain-scroll,
@@ -29070,7 +28785,6 @@ body,
 .learn-body,
 .learn-body-inner,
 .settings-view,
-.library-view,
 .syllabus-view,
 .recent-view,
 .feedback-view,
@@ -29115,8 +28829,6 @@ body {
 .learn-explain-scroll,
 .learn-chat-scroll,
 .settings-page-shell,
-.library-shell,
-.syllabus-page-shell,
 .recent-shell,
 .feedback-shell,
 .mistake-notebook-shell,
@@ -29681,8 +29393,7 @@ body {
 
 #learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-heading,
 #learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content,
-#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-extra,
-#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-footer {
+#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-extra {
   position: relative !important;
   z-index: 1 !important;
 }
@@ -32772,8 +32483,7 @@ body {
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-heading,
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-heading h2,
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content,
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-extra,
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-footer {
+#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-extra {
   width: 100% !important;
   max-width: none !important;
   margin-left: 0 !important;
@@ -32817,7 +32527,6 @@ body {
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-heading,
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content,
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-extra,
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-footer,
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content > *,
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content p,
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content li,
@@ -34300,7 +34009,6 @@ body {
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-heading h2,
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content,
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-extra,
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-footer,
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content > *,
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content p,
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content li,
@@ -34343,27 +34051,6 @@ body {
     inset 0 -1px 0 rgba(255,255,255,0.18) !important;
   backdrop-filter: blur(34px) saturate(190%) brightness(1.06) !important;
   -webkit-backdrop-filter: blur(34px) saturate(190%) brightness(1.06) !important;
-}
-
-#learnView#learnView .lesson-page-footer span{
-  min-width: 88px !important;
-  height: 46px !important;
-  padding: 0 20px !important;
-  border: 1px solid rgba(255,255,255,0.62) !important;
-  border-radius: 18px !important;
-  background:
-    linear-gradient(135deg, rgba(255,255,255,0.58), rgba(255,255,255,0.22)) !important;
-  color: rgba(15,23,42,0.86) !important;
-  font-family: "Fira Code", ui-monospace, SFMono-Regular, Menlo, monospace !important;
-  font-size: 17px !important;
-  font-weight: 800 !important;
-  letter-spacing: 0 !important;
-  box-shadow:
-    0 18px 36px rgba(15,23,42,0.12),
-    inset 0 1px 0 rgba(255,255,255,0.86),
-    inset 0 -1px 0 rgba(255,255,255,0.18) !important;
-  backdrop-filter: blur(22px) saturate(180%) brightness(1.06) !important;
-  -webkit-backdrop-filter: blur(22px) saturate(180%) brightness(1.06) !important;
 }
 
 /* True tail lock: keep the requested lecture typography and page curl as the last word. */
