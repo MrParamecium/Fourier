@@ -41941,7 +41941,7 @@ body {
     radial-gradient(90px 70px at 24% 0%, rgba(255, 255, 255, 0.48), transparent 72%) !important;
 }
 
-#textbookFocusModal #textbookFocusPageIndicator#textbookFocusPageIndicator {
+#textbookFocusModal #textbookFocusPageIndicator {
   min-width: 80px !important;
   min-height: 38px !important;
   padding: 9px 18px !important;
@@ -41960,8 +41960,8 @@ body {
   -webkit-backdrop-filter: blur(30px) saturate(205%) brightness(1.06) !important;
 }
 
-#textbookFocusModal #textbookFocusPageIndicator#textbookFocusPageIndicator::before,
-#textbookFocusModal #textbookFocusPageIndicator#textbookFocusPageIndicator::after {
+#textbookFocusModal #textbookFocusPageIndicator::before,
+#textbookFocusModal #textbookFocusPageIndicator::after {
   content: none !important;
   display: none !important;
 }
