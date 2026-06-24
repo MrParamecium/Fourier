@@ -33417,7 +33417,7 @@ body {
   overflow: hidden !important;
 }
 
-#learnView#learnView .learn-topbar-actions:has(#learnClose.learn-close) {
+#learnView .learn-topbar-actions:has(#learnClose.learn-close) {
   gap: 0 !important;
 }
 
@@ -33440,7 +33440,7 @@ body {
 }
 
 /* Lecture/Textbook topbar glass relocation: keep controls in the title rail and give the freed space to content. */
-#learnView#learnView .learn-topbar {
+#learnView .learn-topbar {
   min-height: 62px !important;
   height: auto !important;
   padding: 10px clamp(14px, 1.8vw, 24px) !important;
@@ -33457,13 +33457,13 @@ body {
   -webkit-backdrop-filter: blur(30px) saturate(185%) brightness(1.04) !important;
 }
 
-#learnView#learnView .learn-topbar-left {
+#learnView .learn-topbar-left {
   flex: 1 1 auto !important;
   min-width: 0 !important;
   gap: 11px !important;
 }
 
-#learnView#learnView .learn-title {
+#learnView .learn-title {
   min-width: 0 !important;
   color: rgba(15,23,42,0.88) !important;
   font-family: "Zilla Slab", Georgia, serif !important;
@@ -33473,7 +33473,7 @@ body {
   letter-spacing: 0 !important;
 }
 
-#learnView#learnView .learn-topbar-actions {
+#learnView .learn-topbar-actions {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: flex-end !important;
@@ -33495,7 +33495,7 @@ body {
   overflow: hidden !important;
 }
 
-#learnView#learnView #learnExplainToolbar .learn-toolbar-center {
+#learnView #learnExplainToolbar .learn-toolbar-center {
   display: none !important;
 }
 
@@ -33526,8 +33526,8 @@ body {
   pointer-events: auto !important;
 }
 
-#learnView#learnView #btnLectureView,
-#learnView#learnView #btnTextbookView {
+#learnView #btnLectureView,
+#learnView #btnTextbookView {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -33549,8 +33549,8 @@ body {
   transform: none !important;
 }
 
-#learnView#learnView #btnLectureView.active,
-#learnView#learnView #btnTextbookView.active {
+#learnView #btnLectureView.active,
+#learnView #btnTextbookView.active {
   color: rgba(15,23,42,0.92) !important;
   background:
     linear-gradient(135deg, rgba(255,255,255,0.82), rgba(255,255,255,0.48)) !important;
@@ -33559,7 +33559,7 @@ body {
     inset 0 1px 0 rgba(255,255,255,0.92) !important;
 }
 
-#learnView#learnView .learn-close {
+#learnView .learn-close {
   order: 2 !important;
   display: inline-flex !important;
   align-items: center !important;
