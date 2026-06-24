@@ -39565,14 +39565,6 @@ body {
   height: 34px !important;
 }
 
-.welcome.home-ask-workspace .home-ask-empty p {
-  margin-top: 10px !important;
-  font-family: "Nunito", "Inter", sans-serif !important;
-  font-size: clamp(16px, 1.05vw, 20px) !important;
-  line-height: 1.35 !important;
-  font-weight: 650 !important;
-}
-
 .welcome.home-ask-workspace .home-ask-tags {
   width: min(940px, 100%) !important;
   justify-self: center !important;
@@ -39580,11 +39572,6 @@ body {
   margin-top: 28px !important;
   margin-bottom: 0 !important;
   transform: none !important;
-}
-
-.welcome.home-ask-workspace .home-ask-tag svg {
-  width: 22px !important;
-  height: 22px !important;
 }
 
 .welcome.home-ask-workspace .home-ask-composer,
@@ -39619,23 +39606,6 @@ body {
   0% { transform: translateY(0) scale(1); }
   44% { transform: translateY(0) scale(1.018); }
   100% { transform: translateY(0) scale(1); }
-}
-
-.welcome.home-ask-workspace .home-ask-input-row {
-  min-height: 64px !important;
-  grid-template-columns: 46px minmax(0, 1fr) 54px !important;
-}
-
-.welcome.home-ask-workspace #userInput.search-input {
-  min-height: 58px !important;
-  font-family: "Nunito", "Inter", sans-serif !important;
-  font-size: clamp(18px, 1.12vw, 21px) !important;
-  font-weight: 750 !important;
-}
-
-.welcome.home-ask-workspace .home-ask-toolbar {
-  margin-top: 12px !important;
-  padding: 0 16px 8px !important;
 }
 
 .welcome.home-ask-workspace #homeModeMenu.home-mode-menu {
@@ -39682,14 +39652,6 @@ body {
 
 .welcome.home-ask-workspace:has(#homeModeMenu.home-mode-menu.show) .home-feature-actions {
   transform: none !important;
-}
-
-.welcome.home-ask-workspace .home-feature-chip {
-  height: 44px !important;
-  padding: 0 20px !important;
-  font-family: "Nunito", "Inter", sans-serif !important;
-  font-size: 16px !important;
-  font-weight: 750 !important;
 }
 
 @media (max-width: 900px) {
