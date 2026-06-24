@@ -841,11 +841,33 @@ lines, partly shipped:
   analysis. **Defer rule D3** — structural ceiling: the cleanly-
   deletable subset is captured by pass 1.
 
-**Entry point for §3c.i pass 2:** dispatch the same Explore agent
-prompt as pass 1, this time against the cluster-B/C/D banners
-(HOME ASK POLISH LOCK L39271+, UPWARD MENU FIX L39529+, SIZE
-RESTORE L39652+, LEARN-QA MATCH L39824+ — line numbers
-post-PR-#94). Same 2-skeptic + pixel-tiebreaker workflow.
+**Entry point for §3c.i pass 3:** PR #95 (pass 2) covered the
+preceding HOME ASK CONTROL MOTION TUNE banner (L38064-L38128
+pre-#95). Remaining unanalyzed HOME ASK banners (current
+post-#95 line numbers, file at 43,195):
+- TRUE EOF HOME ASK POLISH LOCK L39175+
+- TRUE EOF HOME ASK UPWARD MENU FIX L39433+
+- TRUE EOF HOME ASK SIZE RESTORE L39556+
+- TRUE EOF HOME ASK LEARN-QA MATCH L39728+
+- TRUE EOF HOME ASK SCALE CORRECTION L39962+
+- TRUE EOF HOME ASK RIGHT-QA REDESIGN L40083+
+- TRUE EOF HOME ASK SCREENSHOT MATCH L40370+
+- TRUE EOF HOME ASK GLOBAL SHRINK L40633+
+- TRUE EOF HOME ASK MODE GLASS L40785+
+
+Re-dispatch the same Explore agent prompt against these banners
+(or against earlier HOME ASK CONTROL GLASS LOCK L37888+ since
+pass 2 confirmed it has no whole-rule SAFE-DELETE candidates per
+the prior agent finding — likely correct, but re-verify).
+Same 2-skeptic + pixel-tiebreaker workflow.
+
+PARTIAL holdouts from pass 2 (KEPT in MOTION TUNE banner):
+- L38118-L38124 (now ~L38065+) `.home-mode-menu` base — interacts
+  with prefers-reduced-motion @media at L38130 (which targets
+  3 selectors including this base). Splitting the @media block
+  to drop the menu arm + then deleting the base could land ~10
+  lines; defer until a future pass that touches the reduced-
+  motion block holistically.
 
 **Entry point:** rebase the existing discovery output
 (`/tmp/claude-1000/-mnt-d-Github-fourier-tutor-agent/.../wzd6pqscb.output`)
@@ -983,9 +1005,10 @@ a future contributor running the §6.2 orphan-sweep doesn't re-flag them.
 | §3b.iv pass 5 (PR #92) | MN base cluster shadowed by #mistakeNotebookView !important block (bundled 5 rules) | −43 in `app/style.css` |
 | §3b.iv pass 6 (PR #93) | CT base cluster shadowed by #courseTrackerView !important block (2 rules — shell + title) | −18 in `app/style.css` |
 | §3c.i pass 1 (PR #94) | DEBUG LOCK shadowed cluster (.home-mode-option + :focus-within + dead @keyframes + reduced-motion duplicate) | −39 in `app/style.css` |
+| §3c.i pass 2 (PR #95) | MOTION TUNE shadowed cluster (9 rules: :focus-within + dead @keyframes home-ask-focus-soft-pop + .home-mode-toggle + .home-mode-icon + .qa-caret-icon + web-toggle base/svg + .home-mode-menu.show) | −57 in `app/style.css` |
 
 `app/app.js`: **14,434 → 8,339 lines (−6,095, −42.2%)** (includes post-PR #82 interactive-demos extractions in Step F/G PRs #59-#61).
-`app/style.css`: **44,845 → 43,252 lines (−1,593, −3.55%)**.
+`app/style.css`: **44,845 → 43,195 lines (−1,650, −3.68%)**.
 
 **Adversarial-review pattern (PR #91 + PR #93):** /code-review repeatedly
 returns inverted-cascade false-positives on state-variant and value-divergent
