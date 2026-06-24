@@ -29041,26 +29041,6 @@ body {
     line-height: 1 !important;
 }
 
-.welcome.home-ask-workspace .home-mode-toggle .qa-caret-icon {
-    width: 10px !important;
-    height: 10px !important;
-    color: #475569 !important;
-}
-
-.welcome.home-ask-workspace .home-ask-web-toggle {
-    width: 44px !important;
-    min-width: 44px !important;
-    height: 38px !important;
-    min-height: 38px !important;
-    padding: 0 !important;
-    border-radius: 14px !important;
-}
-
-.welcome.home-ask-workspace .home-ask-web-toggle svg {
-    width: 20px !important;
-    height: 20px !important;
-}
-
 /* FEEDBACK BOARD GLASS REFRESH: turn the community wall into a soft glass workspace. */
 .feedback-view {
   padding: 44px clamp(24px, 4.2vw, 64px) 64px !important;
