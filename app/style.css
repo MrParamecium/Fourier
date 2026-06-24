@@ -28990,54 +28990,7 @@ body {
     border-radius: 14px !important;
 }
 
-/* HOME ASK SPACING TIGHTEN: compact the hero, chips, composer, and feature buttons. */
-.home-ask-stage {
-    padding-top: clamp(148px, 20vh, 190px) !important;
-}
-
-.home-ask-icon {
-    margin-bottom: 12px !important;
-}
-
-.home-ask-empty h1 {
-    line-height: 1.08 !important;
-}
-
-.home-ask-empty p {
-    margin-top: 8px !important;
-    line-height: 1.32 !important;
-}
-
-.home-ask-tags {
-    margin-top: 14px !important;
-    margin-bottom: 16px !important;
-    gap: 8px !important;
-}
-
-.home-ask-tag {
-    min-height: 28px !important;
-    padding: 0 12px !important;
-}
-
-.welcome.home-ask-workspace .home-ask-composer,
-.welcome.home-ask-workspace #searchBox.home-ask-composer {
-    min-height: 78px !important;
-    padding: 10px 14px !important;
-}
-
-.welcome.home-ask-workspace .home-ask-input-row {
-    min-height: 40px !important;
-}
-
-.home-ask-toolbar {
-    margin-top: 4px !important;
-}
-
-.home-feature-actions {
-    margin-top: 16px !important;
-    gap: 8px !important;
-}
-
+/* HOME ASK SPACING TIGHTEN: feature-chip letter-spacing lock (every other prop here is shadowed by later .welcome.home-ask-workspace !important rules). */
 .home-feature-chip {
     height: 34px !important;
     gap: 5px !important;
@@ -29046,20 +28999,11 @@ body {
     letter-spacing: 0 !important;
 }
 
-.home-feature-chip svg {
-    width: 15px !important;
-    height: 15px !important;
-}
-
 .home-feature-chip span {
     letter-spacing: 0 !important;
 }
 
 /* HOME ASK MODE BUTTON PARITY: use the same button language as chapter Q&A. */
-.home-ask-toolbar {
-    gap: 10px !important;
-}
-
 .welcome.home-ask-workspace .home-mode-toggle {
     height: 38px !important;
     min-height: 38px !important;
@@ -29115,13 +29059,6 @@ body {
 .welcome.home-ask-workspace .home-ask-web-toggle svg {
     width: 20px !important;
     height: 20px !important;
-}
-
-/* HOME ASK MODULE POSITION: nudge the full question module lower. */
-.home-ask-stage > .home-ask-empty,
-.home-ask-stage > .home-ask-composer,
-.home-ask-stage > .home-feature-actions {
-    transform: translateY(28px) !important;
 }
 
 /* FEEDBACK BOARD GLASS REFRESH: turn the community wall into a soft glass workspace. */
