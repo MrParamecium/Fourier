@@ -1007,9 +1007,10 @@ a future contributor running the §6.2 orphan-sweep doesn't re-flag them.
 | §3c.i pass 1 (PR #94) | DEBUG LOCK shadowed cluster (.home-mode-option + :focus-within + dead @keyframes + reduced-motion duplicate) | −39 in `app/style.css` |
 | §3c.i pass 2 (PR #95) | MOTION TUNE shadowed cluster (9 rules: :focus-within + dead @keyframes home-ask-focus-soft-pop + .home-mode-toggle + .home-mode-icon + .qa-caret-icon + web-toggle base/svg + .home-mode-menu.show) | −57 in `app/style.css` |
 | §3c.i pass 3 (PR #96) | multi-banner shadowed cluster (14 rules across POLISH LOCK / UPWARD MENU FIX / LEARN-QA MATCH / SCALE CORRECTION) | −77 in `app/style.css` |
+| §3c.i pass 4 (PR #97) | SCREENSHOT MATCH .home-mode-toggle (3 props all shadowed by GLOBAL SHRINK L40649) — structural ceiling for RIGHT-QA REDESIGN + SCREENSHOT MATCH | −6 in `app/style.css` |
 
 `app/app.js`: **14,434 → 8,339 lines (−6,095, −42.2%)** (includes post-PR #82 interactive-demos extractions in Step F/G PRs #59-#61).
-`app/style.css`: **44,845 → 43,118 lines (−1,727, −3.85%)**.
+`app/style.css`: **44,845 → 43,112 lines (−1,733, −3.87%)**.
 
 **Adversarial-review pattern (PR #91 + PR #93):** /code-review repeatedly
 returns inverted-cascade false-positives on state-variant and value-divergent
