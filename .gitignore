@@ -44,6 +44,9 @@ tools/visual-current/
 tools/visual-diff/
 tools/visual-diff-report.md
 
+# css-probe harness — baseline.json is committed (the proof artifact), report is ephemeral
+tools/css-probe-report.md
+
 # CSS unused-selector scan output — regenerated each run by tools/scan-unused-css.js
 tools/unused-css-report.md
 
