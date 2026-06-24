@@ -958,9 +958,10 @@ a future contributor running the §6.2 orphan-sweep doesn't re-flag them.
 | §7c harness-exports self-test (PR #89) | npm run check now lints window.* | +54 in `tools/check-harness-exports.js` |
 | §3b.iv pass 3 (PR #90) | preference-card grouped base + .preference-page-grid + min-height shadowed (bundled 3 rules) | −22 in `app/style.css` |
 | §3b.iv pass 4 (PR #91) | preference editor:focus + @media .preference-page-grid + feedback btn:hover shadowed (bundled 3 rules) | −22 in `app/style.css` |
+| §3b.iv pass 5 (PR #92) | MN base cluster shadowed by #mistakeNotebookView !important block (bundled 5 rules) | −43 in `app/style.css` |
 
 `app/app.js`: **14,434 → 8,339 lines (−6,095, −42.2%)** (includes post-PR #82 interactive-demos extractions in Step F/G PRs #59-#61).
-`app/style.css`: **44,845 → 43,352 lines (−1,493, −3.33%)**.
+`app/style.css`: **44,845 → 43,309 lines (−1,536, −3.43%)**.
 
 The Phase 3 JS work is structurally complete. CSS Pass 1 + Pass 2
 Steps A through D shipped; the structural ceiling on the L33181–L44261
