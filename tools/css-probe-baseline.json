@@ -1,0 +1,284 @@
+{
+  "S2-qa-wide": [
+    {
+      "sel": "#learnChatCol",
+      "pseudo": null,
+      "prop": "background-image",
+      "value": "radial-gradient(760px 520px at 10% 0%, rgba(186, 230, 253, 0.56), rgba(0, 0, 0, 0) 74%), radial-gradient(820px 620px at 86% 88%, rgba(187, 247, 208, 0.42), rgba(0, 0, 0, 0) 76%), linear-gradient(rgb(217, 243, 255) 0%, rgb(234, 249, 244) 54%, rgb(213, 248, 232) 100%)"
+    },
+    {
+      "sel": "#learnChatCol",
+      "pseudo": null,
+      "prop": "background-color",
+      "value": "rgba(0, 0, 0, 0)"
+    },
+    {
+      "sel": "#learnChatCol",
+      "pseudo": null,
+      "prop": "overflow",
+      "value": "hidden"
+    },
+    {
+      "sel": "#learnFollowupBar",
+      "pseudo": null,
+      "prop": "width",
+      "value": "426px"
+    },
+    {
+      "sel": "#learnFollowupBar",
+      "pseudo": null,
+      "prop": "min-height",
+      "value": "152px"
+    },
+    {
+      "sel": "#learnFollowupBar",
+      "pseudo": null,
+      "prop": "border-top-left-radius",
+      "value": "28px"
+    },
+    {
+      "sel": "#learnFollowupBar",
+      "pseudo": null,
+      "prop": "background-image",
+      "value": "linear-gradient(145deg, rgba(255, 255, 255, 0.54), rgba(255, 255, 255, 0.18)), radial-gradient(520px 180px at 18% 0%, rgba(255, 255, 255, 0.54), rgba(0, 0, 0, 0) 72%), linear-gradient(105deg, rgba(125, 211, 252, 0.1), rgba(251, 113, 133, 0.12) 62%, rgba(167, 139, 250, 0.08))"
+    },
+    {
+      "sel": "#learnFollowupBar",
+      "pseudo": null,
+      "prop": "box-shadow",
+      "value": "rgba(148, 47, 62, 0.18) 0px 30px 82px 0px, rgba(15, 23, 42, 0.08) 0px 12px 30px 0px, rgba(255, 255, 255, 0.92) 0px 1px 0px 0px inset, rgba(255, 255, 255, 0.24) 0px -1px 0px 0px inset"
+    },
+    {
+      "sel": "#learnFollowupBar",
+      "pseudo": null,
+      "prop": "backdrop-filter",
+      "value": "blur(36px) saturate(1.95) brightness(1.06)"
+    },
+    {
+      "sel": "#learnFollowupBar",
+      "pseudo": null,
+      "prop": "z-index",
+      "value": "40"
+    },
+    {
+      "sel": "#learnFollowupBar",
+      "pseudo": "::before",
+      "prop": "content",
+      "value": "\"\""
+    },
+    {
+      "sel": "#learnFollowupBar",
+      "pseudo": "::after",
+      "prop": "transform",
+      "value": "none"
+    },
+    {
+      "sel": "#learnFollowupBar .input-wrapper",
+      "pseudo": null,
+      "prop": "grid-template-columns",
+      "value": "48px 258px 52px"
+    },
+    {
+      "sel": "#learnFollowupBar .input-field",
+      "pseudo": null,
+      "prop": "min-height",
+      "value": "58px"
+    },
+    {
+      "sel": "#learnFollowupBar .input-field",
+      "pseudo": null,
+      "prop": "font-weight",
+      "value": "680"
+    }
+  ],
+  "S3-qa-full": [
+    {
+      "sel": "#learnChatCol",
+      "pseudo": null,
+      "prop": "background-image",
+      "value": "radial-gradient(760px 520px at 10% 0%, rgba(186, 230, 253, 0.56), rgba(0, 0, 0, 0) 74%), radial-gradient(820px 620px at 86% 88%, rgba(187, 247, 208, 0.42), rgba(0, 0, 0, 0) 76%), linear-gradient(rgb(217, 243, 255) 0%, rgb(234, 249, 244) 54%, rgb(213, 248, 232) 100%)"
+    },
+    {
+      "sel": "#learnFollowupBar",
+      "pseudo": null,
+      "prop": "width",
+      "value": "426px"
+    },
+    {
+      "sel": "#learnFollowupBar",
+      "pseudo": null,
+      "prop": "min-height",
+      "value": "152px"
+    },
+    {
+      "sel": "#learnFollowupBar",
+      "pseudo": null,
+      "prop": "border-top-left-radius",
+      "value": "28px"
+    },
+    {
+      "sel": "#learnFollowupBar",
+      "pseudo": null,
+      "prop": "backdrop-filter",
+      "value": "blur(36px) saturate(1.95) brightness(1.06)"
+    },
+    {
+      "sel": "#learnFollowupBar",
+      "pseudo": "::after",
+      "prop": "transform",
+      "value": "none"
+    }
+  ],
+  "S12-textbook-qa-open": [
+    {
+      "sel": "#textbookFocusModal",
+      "pseudo": null,
+      "prop": "background-image",
+      "value": "radial-gradient(900px 680px at 72% 18%, rgba(96, 165, 250, 0.13), rgba(0, 0, 0, 0) 68%), radial-gradient(760px 560px at 22% 88%, rgba(244, 114, 182, 0.08), rgba(0, 0, 0, 0) 72%), none"
+    },
+    {
+      "sel": "#textbookFocusDialog .learn-focus-headings",
+      "pseudo": null,
+      "prop": "background-image",
+      "value": "linear-gradient(145deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.055)), radial-gradient(260px 92px at 0% 0%, rgba(125, 211, 252, 0.12), rgba(0, 0, 0, 0) 72%)"
+    },
+    {
+      "sel": "#textbookFocusDialog .learn-focus-headings",
+      "pseudo": null,
+      "prop": "backdrop-filter",
+      "value": "blur(30px) saturate(1.8) brightness(1.05)"
+    },
+    {
+      "sel": "#textbookFocusQaPanel",
+      "pseudo": null,
+      "prop": "border-top-left-radius",
+      "value": "24px"
+    },
+    {
+      "sel": "#textbookFocusQaPanel",
+      "pseudo": null,
+      "prop": "background-image",
+      "value": "linear-gradient(145deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.08)), radial-gradient(560px 260px at 0% 0%, rgba(125, 211, 252, 0.14), rgba(0, 0, 0, 0) 72%), radial-gradient(520px 260px at 100% 18%, rgba(244, 114, 182, 0.1), rgba(0, 0, 0, 0) 74%)"
+    },
+    {
+      "sel": "#textbookFocusQaPanel",
+      "pseudo": null,
+      "prop": "box-shadow",
+      "value": "rgba(2, 6, 23, 0.38) 0px 30px 90px 0px, rgba(14, 165, 233, 0.1) 0px 10px 26px 0px, rgba(255, 255, 255, 0.62) 0px 1px 0px 0px inset, rgba(255, 255, 255, 0.12) 0px -1px 0px 0px inset"
+    },
+    {
+      "sel": "#textbookFocusQaPanel",
+      "pseudo": null,
+      "prop": "backdrop-filter",
+      "value": "blur(42px) saturate(2.05) brightness(1.04)"
+    },
+    {
+      "sel": "#textbookFocusQaPanel",
+      "pseudo": "::before",
+      "prop": "content",
+      "value": "\"\""
+    },
+    {
+      "sel": "#textbookFocusQaPanel",
+      "pseudo": "::before",
+      "prop": "opacity",
+      "value": "0.72"
+    },
+    {
+      "sel": ".textbook-focus-qa-head",
+      "pseudo": null,
+      "prop": "background-image",
+      "value": "linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.035))"
+    },
+    {
+      "sel": ".textbook-focus-qa-close",
+      "pseudo": null,
+      "prop": "background-image",
+      "value": "linear-gradient(145deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.1))"
+    },
+    {
+      "sel": ".textbook-focus-qa-empty",
+      "pseudo": null,
+      "prop": "border-top-left-radius",
+      "value": "__MISSING__"
+    },
+    {
+      "sel": ".textbook-focus-qa-compose",
+      "pseudo": null,
+      "prop": "grid-template-columns",
+      "value": "306px 48px"
+    },
+    {
+      "sel": ".textbook-focus-qa-input",
+      "pseudo": null,
+      "prop": "min-height",
+      "value": "48px"
+    },
+    {
+      "sel": ".textbook-focus-qa-input",
+      "pseudo": null,
+      "prop": "border-top-left-radius",
+      "value": "18px"
+    },
+    {
+      "sel": ".textbook-focus-qa-send",
+      "pseudo": null,
+      "prop": "width",
+      "value": "48px"
+    },
+    {
+      "sel": ".textbook-focus-qa-send",
+      "pseudo": null,
+      "prop": "border-top-left-radius",
+      "value": "18px"
+    },
+    {
+      "sel": "#textbookFocusQaToggle",
+      "pseudo": null,
+      "prop": "width",
+      "value": "74px"
+    },
+    {
+      "sel": "#textbookFocusQaToggle",
+      "pseudo": null,
+      "prop": "background-image",
+      "value": "linear-gradient(145deg, rgba(96, 165, 250, 0.36), rgba(255, 255, 255, 0.1)), radial-gradient(90px 70px at 24% 0%, rgba(255, 255, 255, 0.42), rgba(0, 0, 0, 0) 72%)"
+    },
+    {
+      "sel": "#textbookFocusPageIndicator",
+      "pseudo": null,
+      "prop": "background-image",
+      "value": "linear-gradient(145deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.086)), radial-gradient(120px 56px at 18% 0%, rgba(253, 224, 71, 0.18), rgba(0, 0, 0, 0) 74%)"
+    },
+    {
+      "sel": "#textbookFocusPageIndicator",
+      "pseudo": null,
+      "prop": "border-top-left-radius",
+      "value": "16px"
+    },
+    {
+      "sel": "#textbookFocusPageIndicator",
+      "pseudo": null,
+      "prop": "min-width",
+      "value": "80px"
+    },
+    {
+      "sel": "#textbookFocusPageIndicator",
+      "pseudo": "::before",
+      "prop": "content",
+      "value": "none"
+    },
+    {
+      "sel": "#textbookFocusPageIndicator",
+      "pseudo": "::before",
+      "prop": "display",
+      "value": "none"
+    },
+    {
+      "sel": "#textbookFocusPageIndicator",
+      "pseudo": "::after",
+      "prop": "display",
+      "value": "none"
+    }
+  ]
+}
