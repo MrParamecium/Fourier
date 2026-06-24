@@ -899,10 +899,15 @@ a future contributor running the §6.2 orphan-sweep doesn't re-flag them.
 | §3b.iv pass 1 (PR #79) | 4 shadowed `:hover` / `:focus` / `:active` blocks | −30 in `app/style.css` |
 | §3b.i (PR #80) | feedback-cluster shadowed-block cleanup | −48 in `app/style.css` |
 | §3a.i++/§3a.ii++ (PR #81) | cross-cluster shadowed cleanup (feedback + MN + lesson-page) | −41 in `app/style.css` |
-| **§3b.i.followup (PR #82)** | **bundled comment-hardening + indentation fix** | **+13 in `app/style.css` (doc)** |
+| §3b.i.followup (PR #82) | bundled comment-hardening + indentation fix | +13 in `app/style.css` (doc) |
+| §3.5 v5 harness (PR #83) | +3 sev3 state-variant gaps closed (12e/14f/14d outline) | +132 in `tools/visual-diff.js`, −42 in `app/style.css` (bundled §3b.iv pass 2 PR #84) |
+| §11 Phase 3.5 v6 (PR #86) | mask lesson sidebar + refresh 9 baselines | +31 in `tools/test-utils.js`/`visual-diff.js`; 9 PNG refreshes |
+| §3a.i forward-cleanup remnant (PR #87) | feedback-meta cascade-shadowed | −2 in `app/style.css` |
+| §8d dismissIntro helper (PR #88) | extracted shared intro-dismiss prologue | +0 net (closes drift channel) |
+| §7c harness-exports self-test (PR #89) | npm run check now lints window.* | +54 in `tools/check-harness-exports.js` |
 
-`app/app.js`: **14,434 → 9,385 lines (−5,049, −35.0%)**.
-`app/style.css`: **44,845 → 43,427 lines (−1,418, −3.16%)**.
+`app/app.js`: **14,434 → 8,339 lines (−6,095, −42.2%)** (includes post-PR #82 interactive-demos extractions in Step F/G PRs #59-#61).
+`app/style.css`: **44,845 → 43,396 lines (−1,449, −3.23%)**.
 
 The Phase 3 JS work is structurally complete. CSS Pass 1 + Pass 2
 Steps A through D shipped; the structural ceiling on the L33181–L44261
