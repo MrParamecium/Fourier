@@ -357,9 +357,9 @@ L33191/33192/33213-33216/33238/37415/37416/37423-37426 (the §3d runtime-collaps
 
 ## 6.3 Branch progress (refactor/phase3.6-css-collapse, 2026-06-24/25)
 
-**Cumulative this session (all verified):** style.css **42,991 → 39,881 (−3,110, now < 40K)** + runtime-collapsed.css
-**2,102 → 2,019 (−83)** = **−3,193 lines**; doubled-IDs **608 → 422 (−186, −30.6%)**;
-`!important` lines **14,948 → 13,644 (−1,304)**. Every change verified by css-probe (byte-identical)
+**Cumulative this session (all verified):** style.css **42,991 → 39,568 (−3,423, now < 40K)** + runtime-collapsed.css
+**2,102 → 2,019 (−83)** = **−3,506 lines**; doubled-IDs **608 → 422 (−186, −30.6%)**;
+`!important` lines **14,948 → 13,599 (−1,349)**. Every change verified by css-probe (byte-identical)
 + visual-diff (lesson views covering live chrome at 0.000%); dead-CSS deletions additionally gated on
 the **distinct-live-selector-context set-difference invariant** (catches uncaptured-state loss that
 pixel-diff misses). Dead-orphan removal is the dominant lever (−3,028 of −3,110 style.css lines).
@@ -374,6 +374,14 @@ pixel-diff misses). Dead-orphan removal is the dominant lever (−3,028 of −3,
 | `6503947` | dead-CSS `.learn-explain-toggle-btn` + `#learnExplainToggleBtn` | **−662 lines, −321 `!important`** | distinct `#learnFocusBtn` selector-contexts unchanged (70=70); both gates @ 0.000% |
 | `d385d00` | dead-CSS `.lecture-overlay-btn-left/-right` + `.learn-chat-restore/-topbar/-corner-toggle` + `.learn-explain-bottom-rail` | **−1032 lines, −476 `!important`** | set-difference empty for all 6 live siblings (#lecture{Prev,Next}OverlayBtn / .turner-content / #learnFocusBtn / .lecture-overlay-btn-{text,icon}); both gates @ 0.000% |
 | `1dc55c5` | conservative whole-file orphan sweep (77 renamed-away classes: settings-drawer-*/library-*/old chapter-overview children/edu-* old/journal-*/mode-icon-* etc.) | **−646 lines, −111 `!important`** | set-difference over ALL 858 live selectors = 0 lost; correctly SKIPPED runtime-built `*-demo-*` + template `lecture-note-card-${type}` + harness/compound; both gates @ 0.000% |
+| `61ffde1` | entangled-orphan arm-surgery (library-* / syllabus-page-* / lecture-focus-overlay-btn / textbook-zoom-overlay-btn / lesson-page-footer + dead `.lecture-overlay-btn` base) | **−313 lines, −45 `!important`** | live `.learn-focus-btn`/`.lesson-page-heading` lost 0 contexts; `.lecture-overlay-btn` verified dead (0 HTML+JS); both gates @ 0.000% |
+
+**Dead-orphan vein status: nearly exhausted** (5 sweeps = −3,341 style.css lines). Known remaining orphans:
+`.lecture-overlay-btn-text`/`-icon` (~80 lines — an earlier sweep kept them as "live descendants of
+#lecture*OverlayBtn" but the base `.lecture-overlay-btn` is dead, so verify+delete these next) + small
+entangled residuals. **The high-confidence safe wins are essentially done; the remainder is the
+careful/risky multi-session grind** (`!important`-stripping on DOM-isolated views — line-neutral + cascade-
+risk; harness-gated narrow-viewport/state-matrix; the §3d composer chain).
 
 **Orphan-sweep status:** the standalone-dead orphans are harvested (4 deletions = −3,028 lines). Remaining
 orphan residuals are ENTANGLED (in comment-laced / doubled-ID / live-ancestor groups — e.g. `library-card`
