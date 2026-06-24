@@ -34673,14 +34673,6 @@ body {
   color: var(--author-ink) !important;
 }
 
-/* Per-author tint at (1,2,0). .feedback-thread inherits via .tone-N at (1,1,0). */
-#feedbackView .feedback-reply.tone-0 { --author-rgb: 56, 189, 248; --author-ink: #0369a1; }
-#feedbackView .feedback-reply.tone-1 { --author-rgb: 129, 140, 248; --author-ink: #4f46e5; }
-#feedbackView .feedback-reply.tone-2 { --author-rgb: 45, 212, 191; --author-ink: #0f766e; }
-#feedbackView .feedback-reply.tone-3 { --author-rgb: 251, 146, 60; --author-ink: #c2410c; }
-#feedbackView .feedback-reply.tone-4 { --author-rgb: 168, 85, 247; --author-ink: #7e22ce; }
-#feedbackView .feedback-reply.tone-5 { --author-rgb: 100, 116, 139; --author-ink: #475569; }
-
 #feedbackView .feedback-thread[class*="tone-"] {
   background:
     radial-gradient(520px 160px at 0% 0%, rgba(var(--author-rgb),0.10), transparent 72%),
@@ -34701,18 +34693,6 @@ body {
 #feedbackView .feedback-thread[class*="tone-"] .feedback-thread-meta,
 #feedbackView .feedback-reply[class*="tone-"] .feedback-reply-meta {
   color: var(--author-ink) !important;
-}
-
-#feedbackView .feedback-reply[class*="tone-"] .feedback-reply-context {
-  border-color: rgba(var(--author-rgb),0.22) !important;
-  background: rgba(var(--author-rgb),0.08) !important;
-  color: var(--author-ink) !important;
-}
-
-#feedbackView .feedback-thread::after {
-  display: block !important;
-  width: 4px !important;
-  background: linear-gradient(180deg, rgba(var(--author-rgb),0.48), rgba(var(--author-rgb),0.20)) !important;
 }
 
 #feedbackView .feedback-reply-count {
@@ -34742,14 +34722,12 @@ body {
   right: auto !important;
 }
 
-
 #feedbackView .feedback-reply-context,
 #feedbackView .feedback-reply.is-left .feedback-reply-context,
 #feedbackView .feedback-reply.is-right .feedback-reply-context {
   background: rgba(var(--author-rgb),0.08) !important;
   color: var(--author-ink) !important;
 }
-
 
 @media (max-width: 760px) {
   #feedbackView .feedback-thread::after,
@@ -34783,12 +34761,6 @@ body {
     linear-gradient(135deg, rgba(255,255,255,0.42), rgba(255,255,255,0.16)) !important;
 }
 
-#feedbackView .feedback-thread::after {
-  width: 4px !important;
-  background: linear-gradient(180deg, rgba(var(--author-rgb),0.50), rgba(var(--author-rgb),0.22)) !important;
-  opacity: 1 !important;
-}
-
 #feedbackView .feedback-reply,
 #feedbackView .feedback-reply.is-left,
 #feedbackView .feedback-reply.is-right {
@@ -34802,17 +34774,6 @@ body {
     inset 0 -1px 0 rgba(255,255,255,0.14) !important;
 }
 
-#feedbackView .feedback-reply::before {
-  position: absolute !important;
-  top: 14px !important;
-  width: 10px !important;
-  height: 10px !important;
-  border-radius: 999px !important;
-  box-shadow:
-    0 0 0 5px rgba(var(--author-rgb),0.12),
-    0 6px 14px rgba(var(--author-rgb),0.18) !important;
-}
-
 #feedbackView .feedback-reply.is-left::before {
   left: -5px !important;
 }
@@ -34821,7 +34782,6 @@ body {
   right: -5px !important;
   left: auto !important;
 }
-
 
 #feedbackView .feedback-reply-context,
 #feedbackView .feedback-reply.is-left .feedback-reply-context,
@@ -34847,14 +34807,6 @@ body {
   background:
     radial-gradient(240px 80px at 8% 0%, rgba(252,211,77,0.20), transparent 70%),
     linear-gradient(135deg, rgba(255,255,255,0.40), rgba(255,255,255,0.16)) !important;
-}
-
-@media (max-width: 760px) {
-  #feedbackView .feedback-thread::after,
-  #feedbackView .feedback-replies::before {
-    display: none !important;
-    content: none !important;
-  }
 }
 
 /* Sidebar Home entry: a quiet glass shortcut above Syllabus. */
