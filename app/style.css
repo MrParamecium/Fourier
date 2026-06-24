@@ -19272,7 +19272,6 @@ h6,
 #learnBody.chapter-overview-active #learnChatCol,
 #learnBody.chapter-overview-active #learnResizer,
 #learnBody.chapter-overview-active #learnExplainToolbar,
-#learnBody.chapter-overview-active #learnExplainBottomRail,
 #learnBody.chapter-overview-active #learnFocusBtn,
 #learnBody.chapter-overview-active .learn-followup-bar,
 #learnBody.chapter-overview-active .learn-chat-topbar {
@@ -23228,7 +23227,6 @@ h6,
 }
 
 /* FINAL JOURNAL PAGE TAG FIX: cover all page counters, including notebook/textbook spans. */
-#learnLecturePageIndicator,
 #learnFocusPageIndicator,
 #textbookFocusPageIndicator,
 #mistakePageIndicator,
@@ -23262,7 +23260,6 @@ h6,
   isolation: isolate !important;
 }
 
-#learnLecturePageIndicator::before,
 #learnFocusPageIndicator::before,
 #textbookFocusPageIndicator::before,
 #mistakePageIndicator::before,
@@ -23283,7 +23280,6 @@ h6,
   z-index: -1 !important;
 }
 
-#learnLecturePageIndicator::after,
 #learnFocusPageIndicator::after,
 #textbookFocusPageIndicator::after,
 #mistakePageIndicator::after,
@@ -23393,7 +23389,6 @@ h6,
 }
 
 /* FINAL PAGE COUNTER STABILIZER: keep each counter's original placement, style only the badge. */
-#learnLecturePageIndicator,
 #learnFocusPageIndicator,
 #textbookFocusPageIndicator,
 #mistakePageIndicator,
@@ -23428,10 +23423,6 @@ h6,
   isolation: auto !important;
 }
 
-#learnLecturePageIndicator {
-  position: relative !important;
-}
-
 #learnFocusPageIndicator {
   position: absolute !important;
   right: 18px !important;
@@ -23454,8 +23445,6 @@ h6,
   position: relative !important;
 }
 
-#learnLecturePageIndicator::before,
-#learnLecturePageIndicator::after,
 #learnFocusPageIndicator::before,
 #learnFocusPageIndicator::after,
 #textbookFocusPageIndicator::before,
@@ -23919,148 +23908,11 @@ and tape. */
 }
 
 /* FINAL LECTURE PAGINATION: compact scrapbook Prev - page - Next controls. */
-#learnView #learnExplainBottomRail.learn-explain-bottom-rail,
-#learnView #learnExplainBottomRail {
-  position: sticky !important;
-  bottom: 0 !important;
-  z-index: 32 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 18px !important;
-  width: 100% !important;
-  min-height: 58px !important;
-  padding: 9px 18px 14px !important;
-  margin: 18px 0 0 !important;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(253, 251, 247, 0.92) 32%, rgba(253, 251, 247, 0.98)) !important;
-  pointer-events: auto !important;
-}
-
 #learnView #learnExplainToolbar .learn-toolbar-center {
   grid-template-columns: minmax(170px, 252px) !important;
   width: auto !important;
   padding: 6px 10px !important;
   gap: 0 !important;
-}
-
-#learnView #learnExplainBottomRail .lecture-overlay-btn-left,
-#learnView #learnExplainBottomRail .lecture-overlay-btn-right,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainBottomRail .lecture-overlay-btn-left,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainBottomRail .lecture-overlay-btn-right,
-#learnView #learnBody.chapter-overview-split-active #learnExplainBottomRail .lecture-overlay-btn-left,
-#learnView #learnBody.chapter-overview-split-active #learnExplainBottomRail .lecture-overlay-btn-right {
-  position: relative !important;
-  inset: auto !important;
-  width: auto !important;
-  min-width: 68px !important;
-  max-width: none !important;
-  height: 34px !important;
-  min-height: 34px !important;
-  max-height: 34px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 6px !important;
-  padding: 7px 12px !important;
-  border: 2px solid #1e293b !important;
-  border-radius: 10px !important;
-  background: #fdfbf7 !important;
-  color: #1e293b !important;
-  font-family: "Quicksand", "Nunito", sans-serif !important;
-  font-size: 12px !important;
-  font-weight: 800 !important;
-  line-height: 1 !important;
-  box-shadow: 3px 3px 0 #1e293b !important;
-  transform: rotate(-1.5deg) !important;
-  cursor: pointer !important;
-  overflow: visible !important;
-  opacity: 1 !important;
-  filter: none !important;
-  transition:
-    transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1),
-    box-shadow 0.15s cubic-bezier(0.34, 1.56, 0.64, 1),
-    background-color 0.18s ease !important;
-}
-
-#learnView #learnExplainBottomRail .lecture-overlay-btn-right,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainBottomRail .lecture-overlay-btn-right,
-#learnView #learnBody.chapter-overview-split-active #learnExplainBottomRail .lecture-overlay-btn-right {
-  box-shadow: -3px 3px 0 #1e293b !important;
-  transform: rotate(1.5deg) !important;
-}
-
-#learnView #learnExplainBottomRail .lecture-overlay-btn-left::before,
-#learnView #learnExplainBottomRail .lecture-overlay-btn-left::after,
-#learnView #learnExplainBottomRail .lecture-overlay-btn-right::before,
-#learnView #learnExplainBottomRail .lecture-overlay-btn-right::after {
-  content: none !important;
-  display: none !important;
-  background: none !important;
-  border: 0 !important;
-}
-
-#learnView #learnExplainBottomRail .lecture-overlay-btn-text {
-  display: inline !important;
-  color: inherit !important;
-  font-size: 12px !important;
-  font-weight: 800 !important;
-  line-height: 1 !important;
-  background: transparent !important;
-}
-
-#learnView #learnExplainBottomRail .lecture-overlay-btn-icon {
-  width: 16px !important;
-  height: 16px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  color: transparent !important;
-  font-size: 0 !important;
-  line-height: 1 !important;
-}
-
-#learnView #learnExplainBottomRail .lecture-overlay-btn-left .lecture-overlay-btn-icon::after,
-#learnView #learnExplainBottomRail .lecture-overlay-btn-right .lecture-overlay-btn-icon::after {
-  color: #1e293b !important;
-  font-family: "Quicksand", "Nunito", sans-serif !important;
-  font-size: 19px !important;
-  font-weight: 950 !important;
-  line-height: 0.8 !important;
-  transform: none !important;
-}
-
-#learnView #learnExplainBottomRail .lecture-overlay-btn-left .lecture-overlay-btn-icon::after {
-  content: "‹" !important;
-}
-
-#learnView #learnExplainBottomRail .lecture-overlay-btn-right .lecture-overlay-btn-icon::after {
-  content: "›" !important;
-}
-
-#learnView #learnExplainBottomRail #learnLecturePageIndicator {
-  position: relative !important;
-  min-width: 64px !important;
-  min-height: 32px !important;
-  padding: 8px 13px 7px !important;
-  border: 1.5px dashed rgba(132, 94, 48, 0.46) !important;
-  border-radius: 8px 10px 9px 7px !important;
-  background: #fff8dd !important;
-  color: #7c4a12 !important;
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.85) inset,
-    0 2px 0 rgba(132, 94, 48, 0.12),
-    0 8px 15px rgba(132, 94, 48, 0.1) !important;
-  transform: rotate(-1deg) !important;
-}
-
-#learnView #learnExplainBottomRail #learnLecturePageIndicator::before,
-#learnView #learnExplainBottomRail #learnLecturePageIndicator::after {
-  content: none !important;
-  display: none !important;
 }
 
 /* FINAL FIXED LECTURE PAGE TAG: anchor page counter to the lecture panel, not the scroll content. */
@@ -24072,57 +23924,6 @@ and tape. */
 #learnView #learnExplainScroll {
   position: relative !important;
   padding-bottom: 92px !important;
-}
-
-#learnView #learnExplainBottomRail.learn-explain-bottom-rail,
-#learnView #learnExplainBottomRail {
-  position: absolute !important;
-  right: clamp(32px, 5vw, 76px) !important;
-  bottom: 34px !important;
-  left: auto !important;
-  top: auto !important;
-  transform: none !important;
-  z-index: 48 !important;
-  display: block !important;
-  width: auto !important;
-  min-width: 0 !important;
-  min-height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  background: transparent !important;
-  pointer-events: none !important;
-}
-
-#learnView #learnExplainBottomRail #learnLecturePageIndicator {
-  pointer-events: auto !important;
-}
-
-/* ABSOLUTE FINAL MONO PAGE TAG LOCK: this must stay after every page-tag override. */
-#learnView #learnExplainCol #learnExplainBottomRail #learnLecturePageIndicator,
-#learnView #learnBody #learnExplainCol #learnExplainBottomRail #learnLecturePageIndicator,
-#learnView #learnExplainBottomRail #learnLecturePageIndicator,
-#learnLecturePageIndicator {
-  border: 1.5px dashed rgba(30, 41, 59, 0.5) !important;
-  background: #ffffff !important;
-  background-image: none !important;
-  color: #1e293b !important;
-  text-shadow: none !important;
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.98) inset,
-    0 2px 0 rgba(30, 41, 59, 0.08),
-    0 8px 15px rgba(30, 41, 59, 0.1) !important;
-}
-
-#learnView #learnExplainCol #learnExplainBottomRail #learnLecturePageIndicator::before,
-#learnView #learnExplainCol #learnExplainBottomRail #learnLecturePageIndicator::after,
-#learnView #learnBody #learnExplainCol #learnExplainBottomRail #learnLecturePageIndicator::before,
-#learnView #learnBody #learnExplainCol #learnExplainBottomRail #learnLecturePageIndicator::after,
-#learnView #learnExplainBottomRail #learnLecturePageIndicator::before,
-#learnView #learnExplainBottomRail #learnLecturePageIndicator::after,
-#learnLecturePageIndicator::before,
-#learnLecturePageIndicator::after {
-  content: none !important;
-  display: none !important;
 }
 
 /* TRUE EOF PAGER TEXT + ARROW FIX:
@@ -26165,32 +25966,7 @@ body {
   }
 }
 
-/* FINAL MONO PAGE TAG: keep the sticker shape, switch page counter to black and white. */
-#learnView #learnExplainBottomRail #learnLecturePageIndicator,
-#learnView #learnToolbarPagination #learnLecturePageIndicator,
-#learnLecturePageIndicator {
-  border-color: rgba(30, 41, 59, 0.48) !important;
-  background: #ffffff !important;
-  color: #1e293b !important;
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.95) inset,
-    0 2px 0 rgba(30, 41, 59, 0.08),
-    0 8px 15px rgba(30, 41, 59, 0.1) !important;
-}
-
-#learnView #learnExplainBottomRail #learnLecturePageIndicator::before,
-#learnView #learnExplainBottomRail #learnLecturePageIndicator::after,
-#learnView #learnToolbarPagination #learnLecturePageIndicator::before,
-#learnView #learnToolbarPagination #learnLecturePageIndicator::after,
-#learnLecturePageIndicator::before,
-#learnLecturePageIndicator::after {
-  content: none !important;
-  display: none !important;
-}
-
 /* FINAL CLEAN PAGER ARROWS: remove the inner dashed stamp ring and use blue solid arrows. */
-#learnView #learnToolbarPagination .lecture-overlay-btn-left::before,
-#learnView #learnToolbarPagination .lecture-overlay-btn-right::before,
 #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left::before,
 #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right::before,
 #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-left::before,
@@ -26203,7 +25979,6 @@ body {
   opacity: 0 !important;
 }
 
-#learnView #learnToolbarPagination .lecture-overlay-btn-icon,
 #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-icon,
 #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-icon,
 #learnView .stamp-page-btn .lecture-overlay-btn-icon {
@@ -26218,14 +25993,12 @@ body {
   transform: none !important;
 }
 
-#learnView #learnToolbarPagination .lecture-overlay-btn-text,
 #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-text,
 #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-text {
   display: none !important;
   visibility: hidden !important;
 }
 
-#learnView #learnToolbarPagination .lecture-overlay-btn-left .lecture-overlay-btn-icon::after,
 #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left .lecture-overlay-btn-icon::after,
 #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-left .lecture-overlay-btn-icon::after,
 #learnView .stamp-page-btn.lecture-overlay-btn-left .lecture-overlay-btn-icon::after {
@@ -26240,7 +26013,6 @@ body {
   transform: translateX(-1px) !important;
 }
 
-#learnView #learnToolbarPagination .lecture-overlay-btn-right .lecture-overlay-btn-icon::after,
 #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right .lecture-overlay-btn-icon::after,
 #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-right .lecture-overlay-btn-icon::after,
 #learnView .stamp-page-btn.lecture-overlay-btn-right .lecture-overlay-btn-icon::after {
@@ -26294,15 +26066,6 @@ body {
   z-index: 6 !important;
 }
 
-#learnView #learnBody:not(.chapter-overview-active) #learnToolbarPagination,
-#learnView #learnBody.chapter-overview-split-active #learnToolbarPagination,
-#learnView #learnToolbarPagination {
-  display: contents !important;
-  order: initial !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
 #learnView #learnExplainToolbar .learn-kp-nav,
 #learnView #learnExplainToolbar #learnKpPrevBtn,
 #learnView #learnExplainToolbar #learnKpNextBtn,
@@ -26313,28 +26076,16 @@ body {
   pointer-events: none !important;
 }
 
-#learnView #learnBody:not(.chapter-overview-active) #learnToolbarPagination .lecture-overlay-btn-left,
-#learnView #learnBody.chapter-overview-split-active #learnToolbarPagination .lecture-overlay-btn-left,
-#learnView #learnToolbarPagination .lecture-overlay-btn-left,
 #learnView #lecturePrevOverlayBtn {
   grid-column: 1 !important;
   justify-self: end !important;
 }
 
-#learnView #learnBody:not(.chapter-overview-active) #learnToolbarPagination .lecture-overlay-btn-right,
-#learnView #learnBody.chapter-overview-split-active #learnToolbarPagination .lecture-overlay-btn-right,
-#learnView #learnToolbarPagination .lecture-overlay-btn-right,
 #learnView #lectureNextOverlayBtn {
   grid-column: 3 !important;
   justify-self: start !important;
 }
 
-#learnView #learnBody:not(.chapter-overview-active) #learnToolbarPagination .lecture-overlay-btn-left,
-#learnView #learnBody:not(.chapter-overview-active) #learnToolbarPagination .lecture-overlay-btn-right,
-#learnView #learnBody.chapter-overview-split-active #learnToolbarPagination .lecture-overlay-btn-left,
-#learnView #learnBody.chapter-overview-split-active #learnToolbarPagination .lecture-overlay-btn-right,
-#learnView #learnToolbarPagination .lecture-overlay-btn-left,
-#learnView #learnToolbarPagination .lecture-overlay-btn-right,
 #learnView #lecturePrevOverlayBtn,
 #learnView #lectureNextOverlayBtn {
   position: relative !important;
@@ -26375,62 +26126,6 @@ body {
 #learnView #lectureNextOverlayBtn {
   box-shadow: -4px 4px 0 #1e293b !important;
   transform: rotate(2deg) !important;
-}
-
-#learnView #learnToolbarPagination .lecture-overlay-btn-left::before,
-#learnView #learnToolbarPagination .lecture-overlay-btn-right::before,
-#learnView #learnToolbarPagination .lecture-overlay-btn-left::after,
-#learnView #learnToolbarPagination .lecture-overlay-btn-right::after {
-  content: none !important;
-  display: none !important;
-}
-
-#learnView #learnToolbarPagination .lecture-overlay-btn-text {
-  display: inline-flex !important;
-  position: relative !important;
-  z-index: 2 !important;
-  color: inherit !important;
-  font-size: 14px !important;
-  font-weight: 900 !important;
-}
-
-#learnView #learnToolbarPagination .lecture-overlay-btn-text::before,
-#learnView #learnToolbarPagination .lecture-overlay-btn-text::after {
-  content: none !important;
-  display: none !important;
-}
-
-#learnView #learnToolbarPagination .lecture-overlay-btn-icon {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 14px !important;
-  height: 14px !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  color: transparent !important;
-  font-size: 0 !important;
-  line-height: 1 !important;
-  transform: none !important;
-  transition: transform 0.2s ease !important;
-}
-
-#learnView #learnToolbarPagination .lecture-overlay-btn-left .lecture-overlay-btn-icon::after {
-  content: "‹" !important;
-  color: #1e293b !important;
-  font-size: 24px !important;
-  font-weight: 950 !important;
-  line-height: 1 !important;
-}
-
-#learnView #learnToolbarPagination .lecture-overlay-btn-right .lecture-overlay-btn-icon::after {
-  content: "›" !important;
-  color: #1e293b !important;
-  font-size: 24px !important;
-  font-weight: 950 !important;
-  line-height: 1 !important;
 }
 
 #learnView #lecturePrevOverlayBtn:hover:not(:disabled) {
@@ -26488,17 +26183,11 @@ body {
   grid-column: 3 !important;
 }
 
-#learnView #learnToolbarPagination .lecture-overlay-btn-left,
-#learnView #learnBody:not(.chapter-overview-active) #learnToolbarPagination .lecture-overlay-btn-left,
-#learnView #learnBody.chapter-overview-split-active #learnToolbarPagination .lecture-overlay-btn-left,
 #learnView #lecturePrevOverlayBtn {
   grid-column: 2 !important;
   justify-self: end !important;
 }
 
-#learnView #learnToolbarPagination .lecture-overlay-btn-right,
-#learnView #learnBody:not(.chapter-overview-active) #learnToolbarPagination .lecture-overlay-btn-right,
-#learnView #learnBody.chapter-overview-split-active #learnToolbarPagination .lecture-overlay-btn-right,
 #learnView #lectureNextOverlayBtn {
   grid-column: 4 !important;
   justify-self: start !important;
@@ -26552,55 +26241,6 @@ body {
   order: 3 !important;
 }
 
-#learnView #learnToolbarPagination {
-  display: none !important;
-}
-
-#learnView #learnExplainBottomRail .lecture-overlay-btn-left:hover:not(:disabled),
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainBottomRail .lecture-overlay-btn-left:hover:not(:disabled),
-#learnView #learnBody.chapter-overview-split-active #learnExplainBottomRail .lecture-overlay-btn-left:hover:not(:disabled) {
-  background: #ffffff !important;
-  box-shadow: 4px 4px 0 #1e293b !important;
-  transform: translate(-1px, -1px) rotate(0deg) !important;
-}
-
-#learnView #learnExplainBottomRail .lecture-overlay-btn-right:hover:not(:disabled),
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainBottomRail .lecture-overlay-btn-right:hover:not(:disabled),
-#learnView #learnBody.chapter-overview-split-active #learnExplainBottomRail .lecture-overlay-btn-right:hover:not(:disabled) {
-  background: #ffffff !important;
-  box-shadow: -4px 4px 0 #1e293b !important;
-  transform: translate(1px, -1px) rotate(0deg) !important;
-}
-
-#learnView #learnExplainBottomRail .lecture-overlay-btn-left:hover:not(:disabled) .lecture-overlay-btn-icon {
-  transform: translateX(-2px) !important;
-}
-
-#learnView #learnExplainBottomRail .lecture-overlay-btn-right:hover:not(:disabled) .lecture-overlay-btn-icon {
-  transform: translateX(2px) !important;
-}
-
-#learnView #learnExplainBottomRail .lecture-overlay-btn-left:active:not(:disabled),
-#learnView #learnExplainBottomRail .lecture-overlay-btn-right:active:not(:disabled) {
-  box-shadow: 0 0 0 #1e293b !important;
-  transform: translate(3px, 3px) rotate(0deg) !important;
-}
-
-#learnView #learnExplainBottomRail .lecture-overlay-btn-left:disabled,
-#learnView #learnExplainBottomRail .lecture-overlay-btn-right:disabled {
-  background: #f8fafc !important;
-  color: #94a3b8 !important;
-  border-color: #cbd5e1 !important;
-  box-shadow: none !important;
-  transform: translateY(1px) rotate(0deg) !important;
-  cursor: not-allowed !important;
-}
-
-#learnView #learnExplainBottomRail .lecture-overlay-btn-left:disabled .lecture-overlay-btn-icon::after,
-#learnView #learnExplainBottomRail .lecture-overlay-btn-right:disabled .lecture-overlay-btn-icon::after {
-  color: #94a3b8 !important;
-}
-
 /* FINAL LECTURE PAGINATION POSITION FIX: one pager, centered inside the lecture page. */
 #learnView .lesson-page-footer,
 #learnView .lesson-page-footer span {
@@ -26615,30 +26255,7 @@ body {
   padding-bottom: 110px !important;
 }
 
-#learnView #learnExplainBottomRail.learn-explain-bottom-rail,
-#learnView #learnExplainBottomRail {
-  position: absolute !important;
-  left: 50% !important;
-  right: auto !important;
-  bottom: 42px !important;
-  width: auto !important;
-  min-width: 0 !important;
-  min-height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  transform: translateX(-50%) !important;
-  background: transparent !important;
-}
-
-#learnView #learnExplainBottomRail #learnLecturePageIndicator {
-  transform: rotate(-1deg) !important;
-}
-
 /* FINAL TOOLBAR PAGINATION ROW: place pager beside the Lecture/Textbook tabs. */
-#learnView #learnExplainBottomRail {
-  display: none !important;
-}
-
 #learnView #learnExplainToolbar .learn-toolbar-center {
   display: flex !important;
   align-items: center !important;
@@ -26648,148 +26265,6 @@ body {
   max-width: none !important;
   padding: 6px 10px !important;
   overflow: visible !important;
-}
-
-#learnView #learnToolbarPagination {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 12px !important;
-  margin-left: 6px !important;
-  overflow: visible !important;
-}
-
-#learnView #learnToolbarPagination .lecture-overlay-btn-left,
-#learnView #learnToolbarPagination .lecture-overlay-btn-right,
-#learnView #learnBody:not(.chapter-overview-active) #learnToolbarPagination .lecture-overlay-btn-left,
-#learnView #learnBody:not(.chapter-overview-active) #learnToolbarPagination .lecture-overlay-btn-right,
-#learnView #learnBody.chapter-overview-split-active #learnToolbarPagination .lecture-overlay-btn-left,
-#learnView #learnBody.chapter-overview-split-active #learnToolbarPagination .lecture-overlay-btn-right {
-  position: relative !important;
-  inset: auto !important;
-  width: auto !important;
-  min-width: 62px !important;
-  max-width: none !important;
-  height: 32px !important;
-  min-height: 32px !important;
-  max-height: 32px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 5px !important;
-  padding: 6px 11px !important;
-  border: 2px solid #1e293b !important;
-  border-radius: 10px !important;
-  background: #fdfbf7 !important;
-  color: #1e293b !important;
-  font-family: "Quicksand", "Nunito", sans-serif !important;
-  font-size: 12px !important;
-  font-weight: 800 !important;
-  line-height: 1 !important;
-  box-shadow: 3px 3px 0 #1e293b !important;
-  transform: rotate(-1.5deg) !important;
-  cursor: pointer !important;
-  overflow: visible !important;
-  opacity: 1 !important;
-  filter: none !important;
-}
-
-#learnView #learnToolbarPagination .lecture-overlay-btn-right,
-#learnView #learnBody:not(.chapter-overview-active) #learnToolbarPagination .lecture-overlay-btn-right,
-#learnView #learnBody.chapter-overview-split-active #learnToolbarPagination .lecture-overlay-btn-right {
-  box-shadow: -3px 3px 0 #1e293b !important;
-  transform: rotate(1.5deg) !important;
-}
-
-#learnView #learnToolbarPagination .lecture-overlay-btn-left::before,
-#learnView #learnToolbarPagination .lecture-overlay-btn-left::after,
-#learnView #learnToolbarPagination .lecture-overlay-btn-right::before,
-#learnView #learnToolbarPagination .lecture-overlay-btn-right::after {
-  content: none !important;
-  display: none !important;
-  background: none !important;
-  border: 0 !important;
-}
-
-#learnView #learnToolbarPagination .lecture-overlay-btn-text {
-  display: inline !important;
-  color: inherit !important;
-  font-size: 12px !important;
-  font-weight: 800 !important;
-  background: transparent !important;
-}
-
-#learnView #learnToolbarPagination .lecture-overlay-btn-icon {
-  width: 15px !important;
-  height: 15px !important;
-  border: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  color: transparent !important;
-  font-size: 0 !important;
-}
-
-#learnView #learnToolbarPagination .lecture-overlay-btn-left .lecture-overlay-btn-icon::after,
-#learnView #learnToolbarPagination .lecture-overlay-btn-right .lecture-overlay-btn-icon::after {
-  color: #1e293b !important;
-  font-family: "Quicksand", "Nunito", sans-serif !important;
-  font-size: 18px !important;
-  font-weight: 950 !important;
-  line-height: 0.8 !important;
-  transform: none !important;
-}
-
-#learnView #learnToolbarPagination .lecture-overlay-btn-left .lecture-overlay-btn-icon::after {
-  content: "‹" !important;
-}
-
-#learnView #learnToolbarPagination .lecture-overlay-btn-right .lecture-overlay-btn-icon::after {
-  content: "›" !important;
-}
-
-#learnView #learnToolbarPagination #learnLecturePageIndicator {
-  position: relative !important;
-  min-width: 58px !important;
-  min-height: 30px !important;
-  padding: 7px 12px 6px !important;
-  border: 1.5px dashed rgba(132, 94, 48, 0.46) !important;
-  border-radius: 8px 10px 9px 7px !important;
-  background: #fff8dd !important;
-  color: #7c4a12 !important;
-  transform: rotate(-1deg) !important;
-}
-
-#learnView #learnToolbarPagination #learnLecturePageIndicator::before,
-#learnView #learnToolbarPagination #learnLecturePageIndicator::after {
-  content: none !important;
-  display: none !important;
-}
-
-#learnView #learnToolbarPagination .lecture-overlay-btn-left:hover:not(:disabled) {
-  background: #ffffff !important;
-  box-shadow: 4px 4px 0 #1e293b !important;
-  transform: translate(-1px, -1px) rotate(0deg) !important;
-}
-
-#learnView #learnToolbarPagination .lecture-overlay-btn-right:hover:not(:disabled) {
-  background: #ffffff !important;
-  box-shadow: -4px 4px 0 #1e293b !important;
-  transform: translate(1px, -1px) rotate(0deg) !important;
-}
-
-#learnView #learnToolbarPagination .lecture-overlay-btn-left:disabled,
-#learnView #learnToolbarPagination .lecture-overlay-btn-right:disabled {
-  background: #f8fafc !important;
-  color: #94a3b8 !important;
-  border-color: #cbd5e1 !important;
-  box-shadow: none !important;
-  transform: translateY(1px) rotate(0deg) !important;
-  cursor: not-allowed !important;
-}
-
-#learnView #learnToolbarPagination .lecture-overlay-btn-left:disabled .lecture-overlay-btn-icon::after,
-#learnView #learnToolbarPagination .lecture-overlay-btn-right:disabled .lecture-overlay-btn-icon::after {
-  color: #94a3b8 !important;
 }
 
 /* FINAL FINAL TOOLBAR PAGER LOCK: override older high-specificity toolbar grids. */
@@ -26807,48 +26282,9 @@ body {
   overflow: visible !important;
 }
 
-#learnView #learnBody:not(.chapter-overview-active) #learnToolbarPagination,
-#learnView #learnBody.chapter-overview-split-active #learnToolbarPagination,
-#learnView #learnToolbarPagination {
-  order: 2 !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 12px !important;
-  flex: 0 0 auto !important;
-  margin-left: 0 !important;
-  overflow: visible !important;
-}
-
 #learnView #learnViewSelector {
   order: 1 !important;
   flex: 0 0 auto !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnToolbarPagination .lecture-overlay-btn-left,
-#learnView #learnBody:not(.chapter-overview-active) #learnToolbarPagination .lecture-overlay-btn-right,
-#learnView #learnBody.chapter-overview-split-active #learnToolbarPagination .lecture-overlay-btn-left,
-#learnView #learnBody.chapter-overview-split-active #learnToolbarPagination .lecture-overlay-btn-right {
-  position: relative !important;
-  inset: auto !important;
-  width: auto !important;
-  min-width: 62px !important;
-  max-width: none !important;
-  height: 32px !important;
-  min-height: 32px !important;
-  max-height: 32px !important;
-  border-radius: 10px !important;
-  background: #fdfbf7 !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnToolbarPagination #learnLecturePageIndicator,
-#learnView #learnBody.chapter-overview-split-active #learnToolbarPagination #learnLecturePageIndicator,
-#learnView #learnToolbarPagination #learnLecturePageIndicator {
-  position: relative !important;
-  right: auto !important;
-  top: auto !important;
-  bottom: auto !important;
-  margin: 0 !important;
 }
 
 /* FINAL SPLIT PAGER: page tag bottom-right, flip buttons in the tab row. */
@@ -26860,64 +26296,6 @@ body {
   pointer-events: none !important;
 }
 
-#learnView #learnExplainBottomRail.learn-explain-bottom-rail,
-#learnView #learnExplainBottomRail {
-  position: absolute !important;
-  right: clamp(28px, 4.5vw, 72px) !important;
-  bottom: 30px !important;
-  left: auto !important;
-  transform: none !important;
-  z-index: 36 !important;
-  display: block !important;
-  width: auto !important;
-  min-width: 0 !important;
-  min-height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  background: transparent !important;
-  pointer-events: none !important;
-}
-
-#learnView #learnExplainBottomRail #learnLecturePageIndicator {
-  position: relative !important;
-  right: auto !important;
-  top: auto !important;
-  bottom: auto !important;
-  margin: 0 !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  min-width: 64px !important;
-  min-height: 32px !important;
-  padding: 8px 13px 7px !important;
-  border: 1.5px dashed rgba(132, 94, 48, 0.46) !important;
-  border-radius: 8px 10px 9px 7px !important;
-  background: #fff8dd !important;
-  color: #7c4a12 !important;
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.85) inset,
-    0 2px 0 rgba(132, 94, 48, 0.12),
-    0 8px 15px rgba(132, 94, 48, 0.1) !important;
-  transform: rotate(-1deg) !important;
-  pointer-events: auto !important;
-}
-
-#learnView #learnExplainBottomRail #learnLecturePageIndicator::before,
-#learnView #learnExplainBottomRail #learnLecturePageIndicator::after {
-  content: none !important;
-  display: none !important;
-}
-
-#learnView #learnBody:not(.chapter-overview-active) #learnToolbarPagination,
-#learnView #learnBody.chapter-overview-split-active #learnToolbarPagination,
-#learnView #learnToolbarPagination {
-  gap: 14px !important;
-}
-
-#learnView #learnToolbarPagination #learnLecturePageIndicator {
-  display: none !important;
-}
-
 /* FINAL FIXED LECTURE PAGE TAG LOCK: keep the page tag pinned to the visible lecture panel. */
 #learnView #learnExplainCol {
   position: relative !important;
@@ -26927,57 +26305,6 @@ body {
 #learnView #learnExplainScroll {
   position: relative !important;
   padding-bottom: 92px !important;
-}
-
-#learnView #learnExplainBottomRail.learn-explain-bottom-rail,
-#learnView #learnExplainBottomRail {
-  position: absolute !important;
-  right: clamp(32px, 5vw, 76px) !important;
-  bottom: 34px !important;
-  left: auto !important;
-  top: auto !important;
-  transform: none !important;
-  z-index: 48 !important;
-  display: block !important;
-  width: auto !important;
-  min-width: 0 !important;
-  min-height: 0 !important;
-  margin: 0 !important;
-  padding: 0 !important;
-  background: transparent !important;
-  pointer-events: none !important;
-}
-
-#learnView #learnExplainBottomRail #learnLecturePageIndicator {
-  pointer-events: auto !important;
-}
-
-/* ABSOLUTE EOF MONO PAGE TAG LOCK: keep after all legacy page tag colors. */
-#learnView #learnExplainCol #learnExplainBottomRail #learnLecturePageIndicator,
-#learnView #learnBody #learnExplainCol #learnExplainBottomRail #learnLecturePageIndicator,
-#learnView #learnExplainBottomRail #learnLecturePageIndicator,
-#learnLecturePageIndicator {
-  border: 1.5px dashed rgba(30, 41, 59, 0.5) !important;
-  background: #ffffff !important;
-  background-image: none !important;
-  color: #1e293b !important;
-  text-shadow: none !important;
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.98) inset,
-    0 2px 0 rgba(30, 41, 59, 0.08),
-    0 8px 15px rgba(30, 41, 59, 0.1) !important;
-}
-
-#learnView #learnExplainCol #learnExplainBottomRail #learnLecturePageIndicator::before,
-#learnView #learnExplainCol #learnExplainBottomRail #learnLecturePageIndicator::after,
-#learnView #learnBody #learnExplainCol #learnExplainBottomRail #learnLecturePageIndicator::before,
-#learnView #learnBody #learnExplainCol #learnExplainBottomRail #learnLecturePageIndicator::after,
-#learnView #learnExplainBottomRail #learnLecturePageIndicator::before,
-#learnView #learnExplainBottomRail #learnLecturePageIndicator::after,
-#learnLecturePageIndicator::before,
-#learnLecturePageIndicator::after {
-  content: none !important;
-  display: none !important;
 }
 
 /* CODEx_FINAL_PAGER_TEXT_ARROW_FIX_SENTINEL */
@@ -33945,24 +33272,6 @@ body {
   transition-delay: 0.15s !important;
 }
 
-/* Final final lesson page-number size lock: keep glass badge compact. */
-#learnView#learnView #learnExplainCol#learnExplainCol #learnExplainBottomRail#learnExplainBottomRail #learnLecturePageIndicator#learnLecturePageIndicator,
-#learnView#learnView #learnBody#learnBody #learnExplainCol#learnExplainCol #learnExplainBottomRail#learnExplainBottomRail #learnLecturePageIndicator#learnLecturePageIndicator,
-#learnView#learnView #learnToolbarPagination#learnToolbarPagination #learnLecturePageIndicator#learnLecturePageIndicator,
-#learnView#learnView #learnLecturePageIndicator#learnLecturePageIndicator {
-  min-width: 72px !important;
-  width: auto !important;
-  height: 34px !important;
-  min-height: 34px !important;
-  padding: 0 15px !important;
-  border-radius: 15px !important;
-  font-size: 14px !important;
-  box-shadow:
-    0 12px 24px rgba(15,23,42,0.10),
-    inset 0 1px 0 rgba(255,255,255,0.84),
-    inset 0 -1px 0 rgba(255,255,255,0.16) !important;
-}
-
 /* True tail lesson title scale lock: keep large headings readable but calmer. */
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-heading {
   margin-bottom: clamp(20px, 2.6vw, 34px) !important;
@@ -34639,8 +33948,6 @@ body {
   display: none !important;
 }
 
-#learnView#learnView #learnBody#learnBody.learn-textbook-active #learnExplainBottomRail#learnExplainBottomRail,
-#learnView#learnView #learnBody#learnBody.learn-textbook-active #learnLecturePageIndicator#learnLecturePageIndicator,
 #learnView#learnView #learnBody#learnBody.learn-textbook-active #lecturePrevOverlayBtn#lecturePrevOverlayBtn,
 #learnView#learnView #learnBody#learnBody.learn-textbook-active #lectureNextOverlayBtn#lectureNextOverlayBtn {
   display: none !important;
@@ -34746,24 +34053,6 @@ body {
     min-width: 0 !important;
     align-self: stretch !important;
   }
-}
-
-/* Absolute EOF lesson page-number size lock: same glass, smaller footprint. */
-#learnView#learnView #learnExplainCol#learnExplainCol #learnExplainBottomRail#learnExplainBottomRail #learnLecturePageIndicator#learnLecturePageIndicator,
-#learnView#learnView #learnBody#learnBody #learnExplainCol#learnExplainCol #learnExplainBottomRail#learnExplainBottomRail #learnLecturePageIndicator#learnLecturePageIndicator,
-#learnView#learnView #learnToolbarPagination#learnToolbarPagination #learnLecturePageIndicator#learnLecturePageIndicator,
-#learnView#learnView #learnLecturePageIndicator#learnLecturePageIndicator {
-  min-width: 72px !important;
-  width: auto !important;
-  height: 34px !important;
-  min-height: 34px !important;
-  padding: 0 15px !important;
-  border-radius: 15px !important;
-  font-size: 14px !important;
-  box-shadow:
-    0 12px 24px rgba(15,23,42,0.10),
-    inset 0 1px 0 rgba(255,255,255,0.84),
-    inset 0 -1px 0 rgba(255,255,255,0.16) !important;
 }
 
 /* True EOF Mistake Notebook layout lock: horizontal case rail + full-width review desk. */
@@ -34893,47 +34182,6 @@ body {
 
 #mistakeNotebookView .mistake-empty-panel {
   min-height: 430px !important;
-}
-
-/* Final page-number glass lock: override older sticky-note/dashed badge rules. */
-#learnView#learnView #learnExplainCol#learnExplainCol #learnExplainBottomRail#learnExplainBottomRail #learnLecturePageIndicator#learnLecturePageIndicator,
-#learnView#learnView #learnBody#learnBody #learnExplainCol#learnExplainCol #learnExplainBottomRail#learnExplainBottomRail #learnLecturePageIndicator#learnLecturePageIndicator,
-#learnView#learnView #learnToolbarPagination#learnToolbarPagination #learnLecturePageIndicator#learnLecturePageIndicator,
-#learnView#learnView #learnLecturePageIndicator#learnLecturePageIndicator {
-  min-width: 88px !important;
-  height: 46px !important;
-  padding: 0 20px !important;
-  border: 1px solid rgba(255,255,255,0.62) !important;
-  border-radius: 18px !important;
-  background:
-    linear-gradient(135deg, rgba(255,255,255,0.58), rgba(255,255,255,0.22)) !important;
-  background-image:
-    linear-gradient(135deg, rgba(255,255,255,0.58), rgba(255,255,255,0.22)) !important;
-  color: rgba(15,23,42,0.86) !important;
-  font-family: "Fira Code", ui-monospace, SFMono-Regular, Menlo, monospace !important;
-  font-size: 17px !important;
-  font-weight: 800 !important;
-  letter-spacing: 0 !important;
-  line-height: 1 !important;
-  text-align: center !important;
-  box-shadow:
-    0 18px 36px rgba(15,23,42,0.12),
-    inset 0 1px 0 rgba(255,255,255,0.86),
-    inset 0 -1px 0 rgba(255,255,255,0.18) !important;
-  backdrop-filter: blur(22px) saturate(180%) brightness(1.06) !important;
-  -webkit-backdrop-filter: blur(22px) saturate(180%) brightness(1.06) !important;
-  transform: none !important;
-  isolation: auto !important;
-}
-
-#learnView#learnView #learnLecturePageIndicator#learnLecturePageIndicator::before,
-#learnView#learnView #learnLecturePageIndicator#learnLecturePageIndicator::after,
-#learnView#learnView #learnExplainBottomRail#learnExplainBottomRail #learnLecturePageIndicator#learnLecturePageIndicator::before,
-#learnView#learnView #learnExplainBottomRail#learnExplainBottomRail #learnLecturePageIndicator#learnLecturePageIndicator::after,
-#learnView#learnView #learnToolbarPagination#learnToolbarPagination #learnLecturePageIndicator#learnLecturePageIndicator::before,
-#learnView#learnView #learnToolbarPagination#learnToolbarPagination #learnLecturePageIndicator#learnLecturePageIndicator::after {
-  content: none !important;
-  display: none !important;
 }
 
 /* Preference page liquid glass redesign: compact memory cockpit over the theme surface. */
@@ -38198,24 +37446,6 @@ body {
     grid-template-rows: minmax(340px, auto) minmax(300px, auto) !important;
     min-height: auto !important;
   }
-}
-
-/* Final compact lesson page badge lock. */
-#learnView#learnView #learnExplainCol#learnExplainCol #learnExplainBottomRail#learnExplainBottomRail #learnLecturePageIndicator#learnLecturePageIndicator,
-#learnView#learnView #learnBody#learnBody #learnExplainCol#learnExplainCol #learnExplainBottomRail#learnExplainBottomRail #learnLecturePageIndicator#learnLecturePageIndicator,
-#learnView#learnView #learnToolbarPagination#learnToolbarPagination #learnLecturePageIndicator#learnLecturePageIndicator,
-#learnView#learnView #learnLecturePageIndicator#learnLecturePageIndicator {
-  min-width: 72px !important;
-  width: auto !important;
-  height: 34px !important;
-  min-height: 34px !important;
-  padding: 0 15px !important;
-  border-radius: 15px !important;
-  font-size: 14px !important;
-  box-shadow:
-    0 12px 24px rgba(15,23,42,0.10),
-    inset 0 1px 0 rgba(255,255,255,0.84),
-    inset 0 -1px 0 rgba(255,255,255,0.16) !important;
 }
 
 /* True EOF lesson title scale lock: chapter headings stay strong without swallowing the page. */

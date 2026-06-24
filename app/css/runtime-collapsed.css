@@ -619,17 +619,6 @@
       flex: 0 0 auto !important;
     }
 
-    #learnView #learnBody:not(.chapter-overview-active) #learnToolbarPagination,
-    #learnView #learnBody.chapter-overview-split-active #learnToolbarPagination,
-    #learnView #learnToolbarPagination {
-      display: none !important;
-      order: initial !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      gap: 0 !important;
-      overflow: visible !important;
-    }
-
     #learnView #learnExplainToolbar .learn-kp-nav,
     #learnView #learnExplainToolbar #learnKpPrevBtn,
     #learnView #learnExplainToolbar #learnKpNextBtn {
@@ -638,9 +627,6 @@
       pointer-events: none !important;
     }
 
-    #learnView #learnToolbarPagination .lecture-overlay-btn-left,
-    #learnView #learnBody:not(.chapter-overview-active) #learnToolbarPagination .lecture-overlay-btn-left,
-    #learnView #learnBody.chapter-overview-split-active #learnToolbarPagination .lecture-overlay-btn-left,
     #learnView #lecturePrevOverlayBtn {
       order: 1 !important;
       grid-column: auto !important;
@@ -649,9 +635,6 @@
       transform: rotate(-2deg) !important;
     }
 
-    #learnView #learnToolbarPagination .lecture-overlay-btn-right,
-    #learnView #learnBody:not(.chapter-overview-active) #learnToolbarPagination .lecture-overlay-btn-right,
-    #learnView #learnBody.chapter-overview-split-active #learnToolbarPagination .lecture-overlay-btn-right,
     #learnView #lectureNextOverlayBtn {
       order: 3 !important;
       grid-column: auto !important;
@@ -660,12 +643,6 @@
       transform: rotate(2deg) !important;
     }
 
-    #learnView #learnToolbarPagination .lecture-overlay-btn-left,
-    #learnView #learnToolbarPagination .lecture-overlay-btn-right,
-    #learnView #learnBody:not(.chapter-overview-active) #learnToolbarPagination .lecture-overlay-btn-left,
-    #learnView #learnBody:not(.chapter-overview-active) #learnToolbarPagination .lecture-overlay-btn-right,
-    #learnView #learnBody.chapter-overview-split-active #learnToolbarPagination .lecture-overlay-btn-left,
-    #learnView #learnBody.chapter-overview-split-active #learnToolbarPagination .lecture-overlay-btn-right,
     #learnView #lecturePrevOverlayBtn,
     #learnView #lectureNextOverlayBtn {
       position: relative !important;
@@ -696,60 +673,6 @@
       overflow: visible !important;
       z-index: 8 !important;
       pointer-events: auto !important;
-    }
-
-    #learnView #learnToolbarPagination .lecture-overlay-btn-left::before,
-    #learnView #learnToolbarPagination .lecture-overlay-btn-left::after,
-    #learnView #learnToolbarPagination .lecture-overlay-btn-right::before,
-    #learnView #learnToolbarPagination .lecture-overlay-btn-right::after,
-    #learnView #learnToolbarPagination .lecture-overlay-btn-text::before,
-    #learnView #learnToolbarPagination .lecture-overlay-btn-text::after {
-      content: none !important;
-      display: none !important;
-      background: none !important;
-      border: 0 !important;
-    }
-
-    #learnView #learnToolbarPagination .lecture-overlay-btn-text {
-      display: inline-flex !important;
-      color: inherit !important;
-      background: transparent !important;
-      font-size: 14px !important;
-      font-weight: 900 !important;
-      line-height: 1 !important;
-    }
-
-    #learnView #learnToolbarPagination .lecture-overlay-btn-icon {
-      display: inline-flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      width: 14px !important;
-      height: 14px !important;
-      border: 0 !important;
-      border-radius: 0 !important;
-      background: transparent !important;
-      box-shadow: none !important;
-      color: transparent !important;
-      font-size: 0 !important;
-      line-height: 1 !important;
-      transform: none !important;
-      transition: transform 0.2s ease !important;
-    }
-
-    #learnView #learnToolbarPagination .lecture-overlay-btn-left .lecture-overlay-btn-icon::after {
-      content: "‹" !important;
-      color: #1e293b !important;
-      font-size: 24px !important;
-      font-weight: 950 !important;
-      line-height: 1 !important;
-    }
-
-    #learnView #learnToolbarPagination .lecture-overlay-btn-right .lecture-overlay-btn-icon::after {
-      content: "›" !important;
-      color: #1e293b !important;
-      font-size: 24px !important;
-      font-weight: 950 !important;
-      line-height: 1 !important;
     }
 
     #learnView #lecturePrevOverlayBtn:hover:not(:disabled) {
@@ -791,8 +714,6 @@
  * Site #3 -- injectFinalPagerArrowStyles
  * Originally app/app.js L1796-1868 (pre-PR #22).
  * ============================================================ */
-    #learnView #learnToolbarPagination .lecture-overlay-btn-left::before,
-    #learnView #learnToolbarPagination .lecture-overlay-btn-right::before,
     #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left::before,
     #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right::before,
     #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-left::before,
@@ -805,7 +726,6 @@
       opacity: 0 !important;
     }
 
-    #learnView #learnToolbarPagination .lecture-overlay-btn-icon,
     #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-icon,
     #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-icon,
     #learnView .stamp-page-btn .lecture-overlay-btn-icon {
@@ -820,14 +740,12 @@
       transform: none !important;
     }
 
-    #learnView #learnToolbarPagination .lecture-overlay-btn-text,
     #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-text,
     #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-text {
       display: none !important;
       visibility: hidden !important;
     }
 
-    #learnView #learnToolbarPagination .lecture-overlay-btn-left .lecture-overlay-btn-icon::after,
     #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left .lecture-overlay-btn-icon::after,
     #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-left .lecture-overlay-btn-icon::after,
     #learnView .stamp-page-btn.lecture-overlay-btn-left .lecture-overlay-btn-icon::after {
@@ -842,7 +760,6 @@
       transform: translateX(-1px) !important;
     }
 
-    #learnView #learnToolbarPagination .lecture-overlay-btn-right .lecture-overlay-btn-icon::after,
     #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right .lecture-overlay-btn-icon::after,
     #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-right .lecture-overlay-btn-icon::after,
     #learnView .stamp-page-btn.lecture-overlay-btn-right .lecture-overlay-btn-icon::after {
