@@ -448,6 +448,14 @@ process.once('SIGTERM', () => signalCleanup('SIGTERM'));
         }
     }
 
+    // Symmetric fail-closed: a current state absent from the baseline (a probe
+    // state added without re-baselining) would otherwise be silently uncovered.
+    for (const state of Object.keys(snapshot)) {
+        if (!(state in baseline)) {
+            errors.push(`${state}: current run has a probe state with no baseline entry — re-baseline after adding a new state`);
+        }
+    }
+
     const cell = (v) => String(v).replace(/\|/g, '\\|'); // guard the markdown table
     const pass = diffs.length === 0 && errors.length === 0;
     const lines = ['# css-probe report', '',
