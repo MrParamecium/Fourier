@@ -304,6 +304,57 @@ Only the **DOM-isolated single-instance** doubled-IDs (`#courseTrackerView#cours
 `#preferenceView#preferenceView`, `#settingsView#settingsView`, `#feedbackView#feedbackView`
 — 1 each) might be quick wins once their view has probe coverage; verify each, do not assume.
 
+## 6.2 Per-instance work-list (instance-classification workflow `wbnwmiwqx`, 2026-06-25)
+
+A 7-agent read-only per-instance classification of 133 doubled-ID selector blocks across 6
+surfaces **overturned the §6.1 pessimism**: page-corner is overwhelmingly *over-specified*, not
+entangled. **44 blocks are COLLAPSE-SAFE-NOW** (verifiable at 1280/resting with existing harness
+views; no competitor wins after reduction).
+
+| Classification | mistake-nb | page-corner | learn-topbar | close-btns | explain-rail | composer-§3d | TOTAL |
+|---|--:|--:|--:|--:|--:|--:|--:|
+| COLLAPSE-SAFE-NOW | 5 | 27 | 9 | 2 | 0 | 1 | **44** |
+| NEEDS-NARROW-VIEWPORT | 6 | 0 | 5 | 0 | 0 | 1 | 12 |
+| NEEDS-STATE-MATRIX | 0 | 7 | 0 | 0 | 13 | 8 | 28 |
+| NEEDS-NEW-VIEW | 0 | 0 | 1 | 4 | 22 | 2 | 29 |
+| LOAD-BEARING (never touch) | 6 | 0 | 6 | 1 | 0 | 7 | 20 |
+
+**COLLAPSE-SAFE-NOW work-list (style.css line numbers):**
+- **page-corner (27)** — verified by visual-diff views 06/17/18/21/22; turner-content rests at
+  `opacity:0` so **css-probe (computed-style) is mandatory** (pixel-diff blind): L33443, 33474,
+  33479, 33484, 33791, 33830, 33836, 33856, 33875, 33879, 33883, 33899, 33905, 33911, 33931,
+  33935, 37479, 37505, 37511, 37531, 37539, 37543, 37547, 37553, 37559, 37570, 37574. Drop one
+  redundant `#learnView` → (0,2,2,0) still beats the pill skin (0,2,0,0); toolbar-descendant
+  rivals never match (buttons are toolbar siblings).
+- **learn-topbar (9)** — L34111, 34134, 34151, 34157, 34167, 34189, 34220, 34243, 34253.
+  **Skip the LOAD-BEARING atomic groups** L34176-34178 and L34193-34194, and the L34088 member.
+- **mistake-notebook (5)** — L34778, 34779, 34797, 34802, 34094 (covered by views 03 + 03b).
+- **close-buttons (2)** — L34088 (`#learnClose`), L34089 (`#topbarCloseBtn`). **Line-precise edits
+  only** — they share the grouped rule L34088-L34094; **do NOT touch L34091 (feedback) = LOAD-BEARING**
+  (border flips to L36596), and the other view lines are NEEDS-NEW-VIEW.
+- **composer (1)** — L33233 (`.bottom-actions` z-index/overflow; no competitor on those props).
+
+**LOAD-BEARING — never collapse (cite-and-skip):** mistake-nb L34770/34784/34816/34820/34826/34831;
+learn-topbar L34088/34176-34178/34193-34194; close-btns L34091 (feedback→L36596); composer
+L33191/33192/33213-33216/33238/37415/37416/37423-37426 (the §3d runtime-collapsed.css war).
+
+**Coverage roadmap for blocked tranches:**
+- **Tranche A (narrow-viewport, 12):** add ≤1180px probe (unblocks MN 34808/34838/34842 + composer
+  33277) and ≤820px probe (unblocks MN 34848/34849/34853 + topbar 34297/34302/34303/34307/34311).
+- **Tranche B (state-matrix, 28-30):** a **`.learn-textbook-active` css-probe state** is the single
+  biggest unlock (13 explain-rail rules); plus S10/S11 chapter-overview, `.is-chat-active`, and
+  `[data-custom-split]`/`.panel-normal` states for the composer.
+- **Tranche C (new-view + dead-code, 29):** settings/preference/courseTracker view bootstraps (3
+  close-btns); open mode-menu (2 composer). **DEAD-CODE TRIAGE (22):** L33949-33952, 34752-34755,
+  34899-34902, 34929-34934, 38204-38207 target `#learnLecturePageIndicator`/`#learnExplainBottomRail`/
+  `#learnToolbarPagination` — IDs that exist in **NO HTML/JS** (only `#learnFocusPageIndicator` is
+  real). These are dead-CSS DELETION candidates (big line reduction), not collapse — confirm against
+  DOM, then delete whole chains.
+
+**Recommended order:** (1) page-corner 27 — highest value/lowest risk; (2) learn-topbar 9;
+(3) mistake-nb 5; (4) close-btns 2 + composer 1; (5) narrow-viewport probes → Tranche A;
+(6) textbook-mode state → Tranche B; (7) dead-code triage of the 22; (8) isolated-view bootstraps.
+
 ## References
 - `docs/REFACTOR_PLAN.md` — "The right sequence from here" (step 3 = this spec).
 - `docs/phase3_deferred.md` §12 (entry), §3d (cross-file finding, with corrections folded in here).
