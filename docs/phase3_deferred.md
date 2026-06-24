@@ -686,31 +686,25 @@ from this surface. Future state-variant work on these selectors needs
 NEW harness views (no `:hover`/`:focus`/`:active` on `.feedback-board-card`
 in the 35-view set) before further deletion is safe.
 
-#### 3b.iv.followup — Cascade-shadow remnants near PR #90 deletion (defer rule D1)
+#### 3b.iv.followup — Cascade-shadow remnants near PR #90 (CLOSED PR #91)
 
-The /code-review of PR #90 surfaced one additional candidate not bundled
-into the merged PR (D1 — unrelated to the bundled diff's selectors):
+The `/code-review` follow-up from PR #90 + a parallel broader discovery
+agent surfaced 3 candidates, all bundled and shipped in PR #91:
 
-- **L14819-L14823 (post-PR-#90)** `@media (max-width: 1100px) {
-  .preference-page-grid { grid-template-columns: 1fr } }` — fully
-  shadowed by L36005 `@media (max-width: 1180px) { #preferenceView
-  .preference-page-grid { grid-template-columns: 1fr !important;
-  grid-template-rows: auto !important } }`. At every viewport ≤1100px
-  where the L14819 query matches, L36005 also matches and wins by
-  (1,1,0) + !important. Net delete: ~5 lines (the @media wrapper +
-  contents). Cascade-only verified; harness viewport is 1280×800 so
-  pixel-validation is blocked (per §9c gap 2: ALL `@media (max-width:
-  ...)` deletions are cascade-only-verified). Surface explicitly in
-  the next-PR description.
+- L14818 @media (max-width:1100px) .preference-page-grid (now removed).
+- L13923 preference editor :focus / ai-input :focus (now removed) —
+  shadower's `transform: none !important` was already winning pre-delete;
+  view 12c at 0.000% diff confirms.
+- L29356 feedback-{primary,secondary,reply}-btn:hover (now removed) —
+  shadower's identical-property !important block at L36965 was already
+  winning by spec; view 14e covers the .feedback-primary-btn arm.
 
-**Why deferred (D1 — Unrelated):** the @media wrapper at L14819 was
-not in PR #90's diff. Adding it would expand scope past the bundled
-3-rule deletion. Pick up in next §3b.iv pass.
-
-**Next-session entry point:** `app/style.css:14819` — verify the
-post-PR-#90 line number, confirm the L36005 shadower still matches the
-@media context, delete the wrapper + body, run npm run check + 35-view
-harness, ship as a focused PR.
+Adversarial verify of PR #91 returned a false-positive on candidate 1
+(reviewer asserted "focus lift lost" without verifying the cascade
+direction — the shadower already cancelled the lift pre-delete). Pixel
+evidence (view 12c) refuted the verdict. Lesson: when /code-review
+flags a state-variant deletion, always confirm with the relevant pixel
+view's diff value rather than treating the verdict as authoritative.
 
 #### 3b.iv.followup — Harness gaps surfaced by PR #79 self-review
 
@@ -963,9 +957,10 @@ a future contributor running the §6.2 orphan-sweep doesn't re-flag them.
 | §8d dismissIntro helper (PR #88) | extracted shared intro-dismiss prologue | +0 net (closes drift channel) |
 | §7c harness-exports self-test (PR #89) | npm run check now lints window.* | +54 in `tools/check-harness-exports.js` |
 | §3b.iv pass 3 (PR #90) | preference-card grouped base + .preference-page-grid + min-height shadowed (bundled 3 rules) | −22 in `app/style.css` |
+| §3b.iv pass 4 (PR #91) | preference editor:focus + @media .preference-page-grid + feedback btn:hover shadowed (bundled 3 rules) | −22 in `app/style.css` |
 
 `app/app.js`: **14,434 → 8,339 lines (−6,095, −42.2%)** (includes post-PR #82 interactive-demos extractions in Step F/G PRs #59-#61).
-`app/style.css`: **44,845 → 43,374 lines (−1,471, −3.28%)**.
+`app/style.css`: **44,845 → 43,352 lines (−1,493, −3.33%)**.
 
 The Phase 3 JS work is structurally complete. CSS Pass 1 + Pass 2
 Steps A through D shipped; the structural ceiling on the L33181–L44261
