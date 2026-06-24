@@ -389,6 +389,39 @@ other live selectors — deleting a live arm regresses real chrome). **Verifiabl
 `#learnFocusPageIndicator` is covered by lesson views 06/08, so visual-diff --check (0.000%)
 confirms no live arm was clipped. Recommended as the next high-value tranche.
 
+**Precise deletion plan generated** (workflow `wg12bp3ys`, 3 per-ID planners, 2026-06-25).
+Bigger than first estimated: **~320 style.css lines** removable —
+**74 WHOLE-RULE** deletions (the big comment-headed clusters: "page-number glass lock" /
+"MONO PAGE TAG LOCK" / "compact lesson page badge lock" at L24044-26981, L33948-34937,
+L38203-area — dead ID is the sole selector, no live sibling), **47 ARM-IN-GROUP** single-line
+deletes (the dead arm is always the FIRST arm of shared paper-tag groups at L23231-23468 etc.,
+so the trailing `,` stays and no `{` is touched), **7 ARM-LAST** (need a comma/brace fix —
+handle individually), **6 RISK** (verify individually). Many WHOLE-RULE rules are also doubled-ID
+(`#learnLecturePageIndicator#learnLecturePageIndicator` etc.), so this also cuts the doubled-ID count.
+
+**Execution protocol (IMPORTANT):**
+1. **Cross-ID coordination** — the 3 per-ID plans each mislabel *sibling dead IDs as "live"*
+   (the `#learnLecturePageIndicator` planner lists `#learnExplainBottomRail` — also dead — as a
+   live sibling). Treat ALL THREE as dead: delete every arm referencing any of the 3; a rule left
+   with no *truly*-live arm (e.g. not `#learnFocusPageIndicator`/`#textbookFocusPageIndicator`/
+   `#mistakePageIndicator`/`#bookPageIndicator`/`#quizPageIndicator`/overlay buttons) becomes WHOLE-RULE.
+2. **Regenerate line numbers before executing** — the plan's line numbers are valid only against
+   the frozen branch `refactor/phase3.6-css-collapse` HEAD; re-run the planner workflow (or re-grep)
+   if any style.css edit intervenes. Execute **bottom-up** (highest line first) so edits don't shift
+   later targets.
+3. **Verify** with `visual-diff --check` (0.000% — the live `#learnFocusPageIndicator` on views
+   06/08 catches a wrongly-removed live arm) + a CSS sanity check that no empty/orphan selector
+   block (`{` with no preceding selector) was left behind.
+
+### 6.3b — learn-topbar tranche caveat (non-unique selectors)
+
+The 9 COLLAPSE-SAFE-NOW topbar selectors are NOT all single-occurrence: `#learnView#learnView
+.learn-topbar {` (×2), `.learn-topbar-left` (×2), `.learn-topbar-actions {` (×3), `#btnLectureView`
+(×2), `#btnTextbookView` (×2) — the duplicate occurrences are `@media`/state-variant rules that are
+NEEDS-NARROW-VIEWPORT or NEEDS-STATE-MATRIX, **not** safe to de-double at 1280/resting. So the topbar
+needs **per-occurrence** edits (the L34111-34253 resting rules only), NOT a blanket replace_all. Skip
+the LOAD-BEARING groups L34176-34178 (toolbar, chapter-overview state arms) + L34193-34194 (viewselector).
+
 ## References
 - `docs/REFACTOR_PLAN.md` — "The right sequence from here" (step 3 = this spec).
 - `docs/phase3_deferred.md` §12 (entry), §3d (cross-file finding, with corrections folded in here).
