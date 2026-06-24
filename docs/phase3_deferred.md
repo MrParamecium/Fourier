@@ -844,19 +844,21 @@ banners still need higher specificity to beat them.
 
 ---
 
-## 4. Plan-inventory corrections to fold into the next Pass 2 PR
+## 4. Plan-inventory corrections to fold into the next Pass 2 PR — DONE 2026-06-24
 
 The plan §6.2 Pass 1 list contained inaccurate "orphan" flags:
 
 - **`.preference-signal-card` and `.preference-signal-label`** (claimed
   orphan for #20b) — actually **LIVE**, used in
-  `app/preference-profile.js` as static `class="..."` strings.
+  `app/preference-profile.js` as static `class="..."` strings (verified
+  L175-176).
 - **`.mistake-note-image-empty` and `.mistake-note-image-chip`**
   (claimed orphan for #20c) — actually **LIVE**, used in
-  `app/mistake-notebook.js`.
+  `app/mistake-notebook.js` (verified L247 + L252).
 
-Both pairs were verified during the Pass 1 work and skipped. Update
-`docs/phase3_plan.md` §6.2 when the next #20b/#20c Pass 2 PR ships.
+Both pairs were verified during the Pass 1 work and skipped. `docs/phase3_plan.md`
+§6.2 updated 2026-06-24 with strikethrough + DO-NOT-DELETE callouts so
+a future contributor running the §6.2 orphan-sweep doesn't re-flag them.
 
 ---
 
