@@ -13831,17 +13831,6 @@ h6,
   color: #475569;
 }
 
-.preference-page-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
-  gap: 26px;
-  align-items: start;
-}
-
-.preference-profile-card {
-  min-height: 640px;
-}
-
 .preference-card-tape {
   position: absolute;
   top: -21px;
