@@ -801,29 +801,51 @@ state-variant candidates were ship-able. The ~3,350-line gap to the
 original 3,500 target is structural (S3 + S4 both verified zero,
 state-variant blind spot blocks remaining home-Ask).
 
-#### 3c.i — DEFERRED: remaining home-Ask state-variant candidates
+#### 3c.i — PARTIALLY SHIPPED: remaining home-Ask state-variant candidates
 
 The discovery workflow for S1 surfaced ~145 additional safe-on-cascade
-lines that were intentionally not shipped:
+lines, partly shipped:
 
-- **`:focus-within` transform/animation deletes** in cluster-B/C/D
-  banners (L40492, L40681, L40890 — pre-#56 lines; ~52 lines total).
-  Each is byte-identical to a later same-selector same-specificity
-  rule, so deletion does not change the active value. But the
-  harness has NO `:focus-within` coverage on the home-Ask composer
-  (view 10 captures focus state on the composer container, not on
-  the dropdown sub-state). Safe by cascade analysis, unverifiable
-  by pixel diff. Held back to keep the "every Step D PR hit 0.000%
-  on 18 views" invariant intact.
-- **DEBUG LOCK / INTERACTION LOCK tail** (~45 lines from L39192,
-  L40081 pre-#56 lines). Cluster-A/B candidates verified by both
-  cascade and harness lenses but not yet shipped — all are tightly
-  shadowed by later GLOBAL SHRINK / MODE GLASS overrides.
-- **Cluster-A initial `.home-mode-icon i`, `.qa-caret-icon`,
-  web-toggle svg, `.home-mode-option.selected`** (~18 lines from
+- **§3c.i pass 1 — SHIPPED PR #94 (2026-06-24): −39 lines.** DEBUG
+  LOCK banner cluster (L38374-L38465 pre-PR-#94): `.home-mode-option`
+  4-prop block (shadowed by L39244-L39248 + later same-spec
+  redeclarations through L40935), `:focus-within` transform +
+  animation `home-ask-focus-real-bounce` (shadowed by L39180-L39184
+  using `home-ask-in-place-pop`), dead `@keyframes
+  home-ask-focus-real-bounce` (only ref was inside the deleted
+  `:focus-within` block), and the `@media (prefers-reduced-motion:
+  reduce) :focus-within` duplicate (identical to L39263-L39269).
+  Discovery dispatched as parallel Explore agent + 2-skeptic
+  adversarial verify (skeptic A returned false-positive citing
+  "banner-tier" narrative; pixel diff at view 10 + view 11 was the
+  tiebreaker, both 0.000%). 35/35 views @ 0.000% across two
+  consecutive `--check` runs.
+- **DEFERRED: `:focus-within` transform/animation deletes** in
+  cluster-B/C/D banners (~52 lines pre-PR-#94 estimate; line numbers
+  now shift after #94). Each is byte-identical to a later same-
+  selector same-specificity rule, so deletion does not change the
+  active value, but the additional clusters touch composer state
+  not covered by view 10 (e.g., dropdown sub-states). **Defer rule
+  D2.** Re-run discovery agent after re-baselining line numbers.
+- **DEFERRED: Cluster-A initial `.home-mode-icon i`, `.qa-caret-icon`,
+  web-toggle svg, `.home-mode-option.selected`** (~18 lines, pre-#56
   L38762-L38818). Earlier control glass banner. Safe on cascade,
   state-variant-free, but small enough that ROI on the PR ceremony
-  is poor.
+  is poor. Could bundle with the next §3c.i discovery pass.
+- **DEFERRED: INTERACTION LOCK tail remainders.** Per the Explore
+  agent's BANNER 2 finding (TRUE EOF HOME ASK INTERACTION LOCK,
+  L39162-L39270 in current file), all rules contain at least one
+  load-bearing property — no whole-rule SAFE-DELETE candidates.
+  Property-level deletion (PARTIAL classification) would require
+  per-rule edits that change cascade winners; needs case-by-case
+  analysis. **Defer rule D3** — structural ceiling: the cleanly-
+  deletable subset is captured by pass 1.
+
+**Entry point for §3c.i pass 2:** dispatch the same Explore agent
+prompt as pass 1, this time against the cluster-B/C/D banners
+(HOME ASK POLISH LOCK L39271+, UPWARD MENU FIX L39529+, SIZE
+RESTORE L39652+, LEARN-QA MATCH L39824+ — line numbers
+post-PR-#94). Same 2-skeptic + pixel-tiebreaker workflow.
 
 **Entry point:** rebase the existing discovery output
 (`/tmp/claude-1000/-mnt-d-Github-fourier-tutor-agent/.../wzd6pqscb.output`)
@@ -960,9 +982,10 @@ a future contributor running the §6.2 orphan-sweep doesn't re-flag them.
 | §3b.iv pass 4 (PR #91) | preference editor:focus + @media .preference-page-grid + feedback btn:hover shadowed (bundled 3 rules) | −22 in `app/style.css` |
 | §3b.iv pass 5 (PR #92) | MN base cluster shadowed by #mistakeNotebookView !important block (bundled 5 rules) | −43 in `app/style.css` |
 | §3b.iv pass 6 (PR #93) | CT base cluster shadowed by #courseTrackerView !important block (2 rules — shell + title) | −18 in `app/style.css` |
+| §3c.i pass 1 (PR #94) | DEBUG LOCK shadowed cluster (.home-mode-option + :focus-within + dead @keyframes + reduced-motion duplicate) | −39 in `app/style.css` |
 
 `app/app.js`: **14,434 → 8,339 lines (−6,095, −42.2%)** (includes post-PR #82 interactive-demos extractions in Step F/G PRs #59-#61).
-`app/style.css`: **44,845 → 43,291 lines (−1,554, −3.47%)**.
+`app/style.css`: **44,845 → 43,252 lines (−1,593, −3.55%)**.
 
 **Adversarial-review pattern (PR #91 + PR #93):** /code-review repeatedly
 returns inverted-cascade false-positives on state-variant and value-divergent
