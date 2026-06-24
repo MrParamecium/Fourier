@@ -14136,13 +14136,6 @@ h6,
   color: #475569;
 }
 
-.course-tracker-overview {
-  display: grid;
-  grid-template-columns: 0.8fr 1.25fr 1fr;
-  gap: 18px;
-  margin-bottom: 24px;
-}
-
 .course-tracker-progress-bar {
   height: 14px;
   margin-top: 18px;
@@ -14199,13 +14192,6 @@ h6,
 .course-tracker-source-chip,
 .course-milestone-chip {
   padding: 7px 11px;
-}
-
-.course-tracker-grid {
-  display: grid;
-  grid-template-columns: minmax(280px, 0.34fr) minmax(0, 0.66fr);
-  gap: 24px;
-  align-items: start;
 }
 
 .course-calendar-card {
@@ -14809,13 +14795,6 @@ h6,
   border-color: #fcd34d;
   background: #fffbeb;
   color: #b45309;
-}
-
-@media (max-width: 1100px) {
-  .course-tracker-overview,
-  .course-tracker-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
 :root[data-theme="dark"] .preference-sidebar-summary {
