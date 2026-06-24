@@ -25979,8 +25979,6 @@ body {
   pointer-events: none !important;
 }
 
-#learnView #learnBody:not(.chapter-overview-active) #learnViewSelector,
-#learnView #learnBody.chapter-overview-split-active #learnViewSelector,
 #learnView #learnViewSelector {
   grid-column: 2 !important;
   order: initial !important;
@@ -34699,11 +34697,6 @@ body {
   line-height: 1 !important;
 }
 
-.welcome.home-ask-workspace #homeModeMenu .home-mode-menu-icon i {
-  font-size: 24px !important;
-  line-height: 1 !important;
-}
-
 .welcome.home-ask-workspace #homeModeMenu .icon-fast { color: #f59e0b !important; }
 .welcome.home-ask-workspace #homeModeMenu .icon-balanced { color: #0284c7 !important; }
 .welcome.home-ask-workspace #homeModeMenu .icon-detailed { color: #8b5cf6 !important; }
@@ -34979,10 +34972,6 @@ body {
   scroll-padding-top: 0 !important;
   overflow-y: auto !important;
   overflow-x: hidden !important;
-  background:
-    radial-gradient(circle at 18% 6%, rgba(255,255,255,0.82), transparent 34%),
-    radial-gradient(circle at 82% 16%, rgba(255,255,255,0.44), transparent 36%),
-    var(--theme-page-surface-soft) !important;
   background-image:
     radial-gradient(circle at 18% 6%, rgba(255,255,255,0.82), transparent 34%),
     radial-gradient(circle at 82% 16%, rgba(255,255,255,0.44), transparent 36%),
