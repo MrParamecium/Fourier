@@ -41718,14 +41718,14 @@ body {
 }
 
 /* TEXTBOOK FOCUS GLASS LOCK: overlay Q&A panel, Q&A fab, and page counter. */
-#textbookFocusModal#textbookFocusModal {
+#textbookFocusModal {
   background:
     radial-gradient(900px 680px at 72% 18%, rgba(96, 165, 250, 0.13), transparent 68%),
     radial-gradient(760px 560px at 22% 88%, rgba(244, 114, 182, 0.08), transparent 72%),
     rgba(9, 15, 31, 0.94) !important;
 }
 
-#textbookFocusModal#textbookFocusModal #textbookFocusDialog .learn-focus-headings {
+#textbookFocusModal #textbookFocusDialog .learn-focus-headings {
   border: 1px solid rgba(255, 255, 255, 0.16) !important;
   background:
     linear-gradient(145deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.055)),
@@ -41737,7 +41737,7 @@ body {
   -webkit-backdrop-filter: blur(30px) saturate(180%) brightness(1.05) !important;
 }
 
-#textbookFocusModal#textbookFocusModal .textbook-focus-qa-panel#textbookFocusQaPanel {
+#textbookFocusModal #textbookFocusQaPanel {
   border: 1px solid rgba(255, 255, 255, 0.34) !important;
   border-radius: 24px !important;
   background:
@@ -41754,7 +41754,7 @@ body {
   -webkit-backdrop-filter: blur(42px) saturate(205%) brightness(1.04) !important;
 }
 
-#textbookFocusModal#textbookFocusModal .textbook-focus-qa-panel#textbookFocusQaPanel::before {
+#textbookFocusModal #textbookFocusQaPanel::before {
   content: "" !important;
   position: absolute !important;
   inset: 1px !important;
@@ -41766,12 +41766,12 @@ body {
   opacity: 0.72 !important;
 }
 
-#textbookFocusModal#textbookFocusModal .textbook-focus-qa-panel#textbookFocusQaPanel > * {
+#textbookFocusModal #textbookFocusQaPanel > * {
   position: relative !important;
   z-index: 1 !important;
 }
 
-#textbookFocusModal#textbookFocusModal .textbook-focus-qa-head {
+#textbookFocusModal .textbook-focus-qa-head {
   padding: 20px 22px 16px !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.24) !important;
   background:
@@ -41780,16 +41780,16 @@ body {
   -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
 }
 
-#textbookFocusModal#textbookFocusModal .textbook-focus-qa-eyebrow {
+#textbookFocusModal .textbook-focus-qa-eyebrow {
   color: #2563eb !important;
   letter-spacing: 0.08em !important;
 }
 
-#textbookFocusModal#textbookFocusModal .textbook-focus-qa-title {
+#textbookFocusModal .textbook-focus-qa-title {
   color: #0f172a !important;
 }
 
-#textbookFocusModal#textbookFocusModal .textbook-focus-qa-close {
+#textbookFocusModal .textbook-focus-qa-close {
   border: 1px solid rgba(255, 255, 255, 0.50) !important;
   background:
     linear-gradient(145deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.10)) !important;
@@ -41801,13 +41801,13 @@ body {
   -webkit-backdrop-filter: blur(20px) saturate(185%) !important;
 }
 
-#textbookFocusModal#textbookFocusModal .textbook-focus-qa-scroll {
+#textbookFocusModal .textbook-focus-qa-scroll {
   padding: 20px 20px 22px !important;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.025)) !important;
 }
 
-#textbookFocusModal#textbookFocusModal .textbook-focus-qa-empty {
+#textbookFocusModal .textbook-focus-qa-empty {
   margin: auto !important;
   min-height: 120px !important;
   padding: 18px 20px !important;
@@ -41823,7 +41823,7 @@ body {
   -webkit-backdrop-filter: blur(28px) saturate(190%) !important;
 }
 
-#textbookFocusModal#textbookFocusModal .textbook-focus-qa-scroll .followup-bubble {
+#textbookFocusModal .textbook-focus-qa-scroll .followup-bubble {
   padding: 0 !important;
   margin: 0 0 18px !important;
   background: transparent !important;
@@ -41831,7 +41831,7 @@ body {
   box-shadow: none !important;
 }
 
-#textbookFocusModal#textbookFocusModal .textbook-focus-qa-scroll .followup-bubble .fub-q {
+#textbookFocusModal .textbook-focus-qa-scroll .followup-bubble .fub-q {
   border: 1px solid rgba(125, 211, 252, 0.70) !important;
   border-radius: 20px 20px 8px 20px !important;
   background:
@@ -41845,7 +41845,7 @@ body {
   -webkit-backdrop-filter: blur(28px) saturate(190%) brightness(1.04) !important;
 }
 
-#textbookFocusModal#textbookFocusModal .textbook-focus-qa-scroll .followup-bubble .fub-a {
+#textbookFocusModal .textbook-focus-qa-scroll .followup-bubble .fub-a {
   border: 1px solid rgba(255, 255, 255, 0.42) !important;
   border-radius: 22px !important;
   background:
@@ -41859,7 +41859,7 @@ body {
   -webkit-backdrop-filter: blur(36px) saturate(195%) brightness(1.04) !important;
 }
 
-#textbookFocusModal#textbookFocusModal .textbook-focus-qa-compose {
+#textbookFocusModal .textbook-focus-qa-compose {
   grid-template-columns: 1fr auto !important;
   gap: 12px !important;
   padding: 16px !important;
@@ -41871,10 +41871,10 @@ body {
   -webkit-backdrop-filter: blur(34px) saturate(200%) !important;
 }
 
-#textbookFocusModal#textbookFocusModal .textbook-focus-qa-select,
-#textbookFocusModal#textbookFocusModal .textbook-focus-qa-web,
-#textbookFocusModal#textbookFocusModal .textbook-focus-qa-input,
-#textbookFocusModal#textbookFocusModal .textbook-focus-qa-send {
+#textbookFocusModal .textbook-focus-qa-select,
+#textbookFocusModal .textbook-focus-qa-web,
+#textbookFocusModal .textbook-focus-qa-input,
+#textbookFocusModal .textbook-focus-qa-send {
   border: 1px solid rgba(255, 255, 255, 0.48) !important;
   background:
     linear-gradient(145deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.10)) !important;
@@ -41886,13 +41886,13 @@ body {
   -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
 }
 
-#textbookFocusModal#textbookFocusModal .textbook-focus-qa-input {
+#textbookFocusModal .textbook-focus-qa-input {
   min-height: 48px !important;
   border-radius: 18px !important;
   color: #111827 !important;
 }
 
-#textbookFocusModal#textbookFocusModal .textbook-focus-qa-input:focus {
+#textbookFocusModal .textbook-focus-qa-input:focus {
   border-color: rgba(96, 165, 250, 0.78) !important;
   box-shadow:
     0 0 0 4px rgba(96, 165, 250, 0.14),
@@ -41900,15 +41900,15 @@ body {
     inset 0 1px 0 rgba(255, 255, 255, 0.72) !important;
 }
 
-#textbookFocusModal#textbookFocusModal .textbook-focus-qa-web.active,
-#textbookFocusModal#textbookFocusModal .textbook-focus-qa-send:not(:disabled) {
+#textbookFocusModal .textbook-focus-qa-web.active,
+#textbookFocusModal .textbook-focus-qa-send:not(:disabled) {
   color: #0369a1 !important;
   border-color: rgba(125, 211, 252, 0.62) !important;
   background:
     linear-gradient(145deg, rgba(240, 249, 255, 0.42), rgba(125, 211, 252, 0.14)) !important;
 }
 
-#textbookFocusModal#textbookFocusModal .textbook-focus-qa-send {
+#textbookFocusModal .textbook-focus-qa-send {
   width: 48px !important;
   min-width: 48px !important;
   height: 48px !important;
@@ -41916,7 +41916,7 @@ body {
   font-size: 22px !important;
 }
 
-#textbookFocusModal#textbookFocusModal .textbook-focus-qa-toggle#textbookFocusQaToggle {
+#textbookFocusModal #textbookFocusQaToggle {
   width: 74px !important;
   height: 74px !important;
   border: 1px solid rgba(255, 255, 255, 0.36) !important;
@@ -41933,15 +41933,15 @@ body {
   -webkit-backdrop-filter: blur(34px) saturate(210%) brightness(1.08) !important;
 }
 
-#textbookFocusModal#textbookFocusModal .textbook-focus-qa-toggle#textbookFocusQaToggle:hover,
-#textbookFocusModal#textbookFocusModal .textbook-focus-qa-toggle#textbookFocusQaToggle.is-open {
+#textbookFocusModal #textbookFocusQaToggle:hover,
+#textbookFocusModal #textbookFocusQaToggle.is-open {
   transform: translateY(-2px) !important;
   background:
     linear-gradient(145deg, rgba(59, 130, 246, 0.46), rgba(255, 255, 255, 0.13)),
     radial-gradient(90px 70px at 24% 0%, rgba(255, 255, 255, 0.48), transparent 72%) !important;
 }
 
-#textbookFocusModal#textbookFocusModal #textbookFocusPageIndicator#textbookFocusPageIndicator {
+#textbookFocusModal #textbookFocusPageIndicator#textbookFocusPageIndicator {
   min-width: 80px !important;
   min-height: 38px !important;
   padding: 9px 18px !important;
@@ -41960,18 +41960,18 @@ body {
   -webkit-backdrop-filter: blur(30px) saturate(205%) brightness(1.06) !important;
 }
 
-#textbookFocusModal#textbookFocusModal #textbookFocusPageIndicator#textbookFocusPageIndicator::before,
-#textbookFocusModal#textbookFocusModal #textbookFocusPageIndicator#textbookFocusPageIndicator::after {
+#textbookFocusModal #textbookFocusPageIndicator#textbookFocusPageIndicator::before,
+#textbookFocusModal #textbookFocusPageIndicator#textbookFocusPageIndicator::after {
   content: none !important;
   display: none !important;
 }
 
 @media (max-width: 1179px) {
-  #textbookFocusModal#textbookFocusModal .textbook-focus-qa-panel#textbookFocusQaPanel {
+  #textbookFocusModal #textbookFocusQaPanel {
     border-radius: 22px !important;
   }
 
-  #textbookFocusModal#textbookFocusModal .textbook-focus-qa-toggle#textbookFocusQaToggle {
+  #textbookFocusModal #textbookFocusQaToggle {
     width: 62px !important;
     height: 62px !important;
   }
