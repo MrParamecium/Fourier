@@ -35,6 +35,7 @@ const {
     assertOrThrow,
     resolveLessonCachePath,
     closeFeaturePopovers,
+    maskLessonSidebar,
     seedFeedbackFixture,
     restoreFeedbackBoard,
     FEEDBACK_FIXTURE_POPULATED_PATH,
@@ -260,6 +261,14 @@ const sharedViews = [
     { name: '06-lesson-view', page: 'A', setup: async (page) => {
         await closeFeaturePopovers(page);
         await openSubtopic(page, SUBTOPIC);
+        // Mask the syllabus accordion (sticky on Page A from here through 03b).
+        // Lesson-view pixel diffs were dominated by sidebar row-layout drift
+        // that no settle helper could eliminate — see docs/phase3_deferred.md §11
+        // Option A. Side effect: views 06-22 + 03b on Page A all capture WITHOUT
+        // sidebar accordion content, which is acceptable because views 02 (Page A,
+        // before this mask is added), 12/13/14 (Page B, separate page) already
+        // cover sidebar rendering in their deterministic resting states.
+        await maskLessonSidebar(page);
         await page.waitForTimeout(800); // let KaTeX settle
     } },
     { name: '07-lesson-pager-states', page: 'A', setup: async (page) => {

@@ -158,6 +158,27 @@ async function openSubtopic(page, sub, waitMs = 25000) {
     throw new Error(`subtopic "${sub.title}" never rendered within ${waitMs}ms`);
 }
 
+// Remove the expanded syllabus accordion in the left sidebar from layout
+// with `display: none` so its non-deterministic row layout drift (~1-2px
+// per row, accumulating to 12k+ px / ~1.2% across 9 lesson views) stops
+// contaminating those views' pixel diffs. `visibility: hidden` was not
+// enough — it preserves layout, so a panel that animates to a slightly
+// different settled height still shifts every sidebar nav button below
+// it. Use on Page A AFTER view 02 (which captures the syllabus tree
+// intentionally) — once active, the mask persists on the Page A page
+// through every subsequent view in the schedule, including 03b.
+// Idempotent (re-injecting on subsequent views is a no-op via id-keyed
+// guard). See docs/phase3_deferred.md §11 (Option A) for discovery story.
+async function maskLessonSidebar(page) {
+    await page.evaluate(() => {
+        if (document.getElementById('__ftutor-lesson-sidebar-mask')) return;
+        const s = document.createElement('style');
+        s.id = '__ftutor-lesson-sidebar-mask';
+        s.textContent = '#sidebarSyllabusPanel { display: none !important; }';
+        document.head.appendChild(s);
+    });
+}
+
 // Close any visible feature-popover help bubbles. Several Page A/B views
 // open with a `.feature-close-btn` element rendered into the page; click
 // every one that is currently in the layout (offsetParent !== null) so
@@ -375,6 +396,7 @@ module.exports = {
     assertOrThrow,
     resolveLessonCachePath,
     closeFeaturePopovers,
+    maskLessonSidebar,
     FEEDBACK_BOARD_PATH,
     FEEDBACK_FIXTURE_POPULATED_PATH,
     HARNESS_STATE_DIR,
