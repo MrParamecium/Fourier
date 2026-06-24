@@ -34661,8 +34661,8 @@ body {
    The next rule's .feedback-reply.is-left[class*="tone-"] /
    .is-right[class*="tone-"] arms (1,4,0) are uniquely defined here —
    no later duplicate. Deleting them lets the FEEDBACK CONVERSATION
-   COLOR LANES rules around L37552+ (specificity 1,3,0) win, replacing
-   the author tone tint with hardcoded green/pink lane colors.
+   COLOR LANES rules starting at L37461 (specificity 1,3,0) win,
+   replacing the author tone tint with hardcoded green/pink lane colors.
    DO NOT DELETE without first relocating these selectors AFTER the
    lane-color block, or the chip border/background/color for any reply
    that has BOTH a lane class AND a tone class will flip.
@@ -34736,7 +34736,7 @@ body {
 
 /* FEEDBACK AUTHOR TONE LOCK: colors belong to people, not left/right lanes.
    See the L34660 banner for the (1,4,0) > (1,3,0) cascade rationale that
-   makes tone-rules beat the later lane-color overrides at L37552+.
+   makes tone-rules beat the later lane-color overrides at L37461+.
    --author-mid is consumed by #feedbackView .feedback-reply-count (L34698)
    even though the .feedback-reply-context consumer was removed in PR #81 —
    do not drop this variable. */
