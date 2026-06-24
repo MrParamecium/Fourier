@@ -29814,7 +29814,6 @@ body {
 
 #feedbackView .feedback-thread-meta,
 #feedbackView .feedback-reply-meta {
-  font-size: 12px !important;
   line-height: 1.35 !important;
 }
 
@@ -34652,8 +34651,7 @@ body {
   background: linear-gradient(180deg, rgba(var(--author-rgb),0.46), rgba(var(--author-rgb),0.18)) !important;
 }
 
-#feedbackView .feedback-thread[class*="tone-"] .feedback-thread-meta,
-#feedbackView .feedback-reply[class*="tone-"] .feedback-reply-meta {
+#feedbackView .feedback-thread[class*="tone-"] .feedback-thread-meta {
   color: var(--author-ink) !important;
 }
 
