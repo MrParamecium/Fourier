@@ -34718,17 +34718,6 @@ body {
     0 6px 14px rgba(var(--author-rgb),0.18) !important;
 }
 
-#feedbackView .feedback-reply.is-left::before {
-  right: auto !important;
-}
-
-#feedbackView .feedback-reply-context,
-#feedbackView .feedback-reply.is-left .feedback-reply-context,
-#feedbackView .feedback-reply.is-right .feedback-reply-context {
-  background: rgba(var(--author-rgb),0.08) !important;
-  color: var(--author-ink) !important;
-}
-
 @media (max-width: 760px) {
   #feedbackView .feedback-thread::after,
   #feedbackView .feedback-replies::before {
@@ -34754,13 +34743,6 @@ body {
 #feedbackView .tone-4 { --author-rgb: 168, 85, 247; --author-ink: #7e22ce; }
 #feedbackView .tone-5 { --author-rgb: 100, 116, 139; --author-ink: #475569; }
 
-#feedbackView .feedback-thread {
-  border-color: rgba(255,255,255,0.58) !important;
-  background:
-    radial-gradient(560px 170px at 0% 0%, var(--author-soft), transparent 72%),
-    linear-gradient(135deg, rgba(255,255,255,0.42), rgba(255,255,255,0.16)) !important;
-}
-
 #feedbackView .feedback-reply,
 #feedbackView .feedback-reply.is-left,
 #feedbackView .feedback-reply.is-right {
@@ -34781,14 +34763,6 @@ body {
 #feedbackView .feedback-reply.is-right::before {
   right: -5px !important;
   left: auto !important;
-}
-
-#feedbackView .feedback-reply-context,
-#feedbackView .feedback-reply.is-left .feedback-reply-context,
-#feedbackView .feedback-reply.is-right .feedback-reply-context {
-  border-color: var(--author-mid) !important;
-  background: rgba(var(--author-rgb),0.09) !important;
-  color: color-mix(in srgb, var(--author-ink) 76%, #334155) !important;
 }
 
 #feedbackView .feedback-click-reply.is-target {
@@ -35101,15 +35075,6 @@ body {
 }
 
 /* Mistake Notebook layout shuffle: horizontal case rail plus full-width review desk. */
-#mistakeNotebookView .mistake-notebook-shell {
-  width: min(100%, 1560px) !important;
-  padding-top: clamp(20px, 2.8vw, 38px) !important;
-}
-
-#mistakeNotebookView .mistake-notebook-header {
-  margin-bottom: 18px !important;
-}
-
 #mistakeNotebookView .mistake-notebook-toolbar {
   grid-template-columns: minmax(190px, auto) minmax(320px, 1fr) auto !important;
   margin-bottom: 18px !important;
@@ -36136,12 +36101,6 @@ body {
   max-width: none !important;
   margin-left: 0 !important;
   margin-right: 0 !important;
-}
-
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content p,
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-content li {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
 }
 
 /* Strict 55:45 lesson split and full-width lecture content. */
