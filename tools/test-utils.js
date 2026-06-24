@@ -79,9 +79,18 @@ function waitForHealth(base, timeoutMs = 15000) {
     });
 }
 
-async function enterGuestMode(page, base) {
+// Shared first step for enterGuestMode + enterLoginView: navigate to BASE
+// and click through the intro landing. Both bootstraps diverge after this
+// point. Centralizing the `#introGetStartedBtn` selector here so a rename
+// only needs one update — previously this pair was a silent drift channel
+// per docs/phase3_deferred.md §8d.
+async function dismissIntro(page, base) {
     await page.goto(base, { waitUntil: 'domcontentloaded' });
     await page.click('#introGetStartedBtn');
+}
+
+async function enterGuestMode(page, base) {
+    await dismissIntro(page, base);
     await page.click('#guestModeBtnLogin[data-bound-guest-mode="1"]', { timeout: 25000 });
     await page.click('#quizCloseBtn');
     await page.waitForSelector('#navSyllabusBtn', { timeout: 10000 });
@@ -93,8 +102,7 @@ async function enterGuestMode(page, base) {
 // transition into the workspace. After this returns the page sits on the
 // login card with the Three.js cosmos canvas masked.
 async function enterLoginView(page, base) {
-    await page.goto(base, { waitUntil: 'domcontentloaded' });
-    await page.click('#introGetStartedBtn');
+    await dismissIntro(page, base);
     await page.waitForSelector('#loginView:not(.hidden)', { timeout: 10000 });
     // Wait for the bound-guest-mode attribute as proof clerk-auth.js
     // initLoginExperience() ran — the same readiness signal enterGuestMode
