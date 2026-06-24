@@ -12,25 +12,45 @@
  *        radial-gradient→flat) can dirty fewer pixels than even the 0.05% strict
  *        threshold when the element is clipped or the delta is alpha-on-glass.
  *   This harness reads literal getComputedStyle values and asserts BYTE-IDENTICAL
- *   before/after a refactor. getComputedStyle returns the resolved cascade value
- *   regardless of viewport clipping AND resolves calc()/min() to px — which is
- *   exactly the signal that distinguishes the 12-ID followup-bar winner
- *   (`calc(100% - 36px)`) from the 8-ID one (`min(820px, …)`). It generalizes the
- *   per-view computed-style asserts already in visual-diff.js (views 12b-e/14d-f).
+ *   before/after a refactor. It generalizes the per-view computed-style asserts
+ *   already in visual-diff.js (views 12b-e/14d-f).
+ *
+ * PROBE THE CASCADE WINNER, NOT THE LAYOUT (review of PR #101):
+ *   Probes pin LITERAL cascade values (min-height 152px, border-radius 28px, the
+ *   glass-token inside background-image) — NOT layout-derived USED values
+ *   (`width: 426px`, `grid-template-columns: 48px 258px 52px`). Used values are
+ *   recomputed from viewport / scrollbar gutter / font metrics, so they drift
+ *   across machines + Chromium versions (false FAIL) while telling you nothing
+ *   about which rule won (a 12-ID `calc(100%-36px)` and an 8-ID `min(820px,…)`
+ *   resolve to the SAME px below 820px). Literal cascade values are deterministic
+ *   and discriminate the winner.
+ *
+ * FAIL CLOSED (review of PR #101):
+ *   A verification harness must treat ABSENCE OF SIGNAL as failure, never a
+ *   silent pass: `--baseline` refuses to write if any probe is `__MISSING__`
+ *   (element absent → mis-specified probe); `--check` fails on a `__MISSING__`/
+ *   `__ABSENT__` baseline value, a vanished element, a non-array (corrupt)
+ *   baseline state, a current-only probe with no baseline entry, or a duplicate
+ *   probe key. Each `enter()` asserts a SENTINEL computed value proving the
+ *   gated doubled-ID rule actually wins before any probe is trusted (R8).
  *
  * Usage:
  *   node tools/css-probe.js --baseline   # snapshot resolved styles → css-probe-baseline.json
  *   node tools/css-probe.js --check      # capture current + diff vs baseline (byte-identical)
  *
- * Exit 0 if every probed (state, selector, pseudo, property) value matches the
- * baseline byte-for-byte (or on --baseline). Exit 1 on any diff, any __MISSING__
- * that was present in baseline, or harness failure.
+ * Exit 0 only if every probed value matches the baseline byte-for-byte (or on a
+ * clean --baseline). Exit 1 on any diff, any fail-closed condition, or harness failure.
  *
  * Report: tools/css-probe-report.md (only written by --check).
  *
- * NOT wired into `npm run check` — it spawns the bridge + Chromium (~30s). Run it
- * manually as a pre-merge gate alongside visual-diff (property-identity +
- * spatial-identity are complementary).
+ * NOT wired into `npm run check` for execution — it spawns the bridge + Chromium
+ * (~30s). Run manually as a pre-merge gate alongside visual-diff (property-identity
+ * + spatial-identity are complementary).
+ *
+ * KNOWN follow-up (deferred D1, docs/phase3_deferred.md §13): the bridge-spawn /
+ * signal-teardown / MASK addInitScript / markdown-report blocks are near-duplicates
+ * of visual-diff.js. A shared hoist into test-utils.js is its own PR (center of
+ * gravity is the stable visual-diff.js; needs a visual-diff regression run).
  */
 'use strict';
 const fs = require('fs');
@@ -71,12 +91,12 @@ const SUBTOPIC = { id: '1_1-1', title: '1.1-1 Signal Energy',
 
 // ---------- probe states ----------
 // Each state: { state, enter(page), probes: [[selector, pseudo|null, property], ...] }.
-// enter() MUST assert-as-entered (prove the gated rule actually matches) before
-// the snapshot, or the probe reads an inactive rule and proves nothing
-// (docs/PHASE3.6_SPEC.md §4.1, risk R8). All states run on one Page-A lesson page
-// (§1.1-1) opened once; resetLessonChromeState() clears prior panel state.
+// enter() MUST assert a SENTINEL computed value proving the gated doubled-ID rule
+// is the live cascade winner (R8, docs/PHASE3.6_SPEC.md §4.1) before snapshot —
+// otherwise the probe reads an inactive rule and proves nothing. All states run on
+// one Page-A lesson page (§1.1-1) opened once; resetLearnChrome() clears prior state.
 
-// Helper run inside enter() to drop learn-view panel state to a known floor.
+// Drop learn-view panel state + the textbook modal to a known floor between states.
 async function resetLearnChrome(page) {
     await resetLessonChromeState(page);
     await page.evaluate(() => {
@@ -84,6 +104,29 @@ async function resetLearnChrome(page) {
         document.body.classList.remove('textbook-focus-active');
     });
 }
+
+// Sentinel for the §3d composer chain: the 12-ID L41334 rule sets min-height 152px
+// and wins unconditionally over the 8-ID runtime-collapsed.css rule's 112px. If this
+// does not hold, the probe state is wrong and the baseline must not be trusted.
+async function assertFollowupBarWinner(page, label) {
+    const mh = await page.evaluate(() => {
+        const el = document.getElementById('learnFollowupBar');
+        return el ? getComputedStyle(el).minHeight : null;
+    });
+    assertOrThrow(mh === '152px',
+        `${label}: #learnFollowupBar min-height is "${mh}", expected "152px" (the 12-ID §3d winner). State invalid — probe would not exercise the cascade war.`);
+}
+
+const FOLLOWUP_PROBES = [
+    ['#learnChatCol', null, 'background-image'],   // §3d war: flat var vs radial (L33191 dead / L37417 wins)
+    ['#learnFollowupBar', null, 'min-height'],      // 152 (12-ID) vs 112 (8-ID) — discriminating literal
+    ['#learnFollowupBar', null, 'border-top-left-radius'], // 28 vs 18
+    ['#learnFollowupBar', null, 'background-image'], // pink glass vs white glass
+    ['#learnFollowupBar', null, 'box-shadow'],
+    ['#learnFollowupBar', null, 'backdrop-filter'], // blur(36) vs blur(34)
+    ['#learnFollowupBar', null, 'z-index'],         // 40 (L33213 8-ID) vs runtime 3
+    ['#learnFollowupBar', null, 'overflow'],        // visible (L33213)
+];
 
 const PROBE_STATES = [
     {
@@ -104,28 +147,13 @@ const PROBE_STATES = [
                 document.getElementById('learnBody')?.dataset.panelFocus === 'qa-wide'
                 && !!document.getElementById('learnFollowupBar'));
             assertOrThrow(ok, 'S2-qa-wide: panelFocus not applied or #learnFollowupBar missing');
+            await assertFollowupBarWinner(page, 'S2-qa-wide');
         },
-        probes: [
-            ['#learnChatCol', null, 'background-image'],
-            ['#learnChatCol', null, 'background-color'],
-            ['#learnChatCol', null, 'overflow'],
-            ['#learnFollowupBar', null, 'width'],
-            ['#learnFollowupBar', null, 'min-height'],
-            ['#learnFollowupBar', null, 'border-top-left-radius'],
-            ['#learnFollowupBar', null, 'background-image'],
-            ['#learnFollowupBar', null, 'box-shadow'],
-            ['#learnFollowupBar', null, 'backdrop-filter'],
-            ['#learnFollowupBar', null, 'z-index'],
-            ['#learnFollowupBar', '::before', 'content'],
-            ['#learnFollowupBar', '::after', 'transform'],
-            ['#learnFollowupBar .input-wrapper', null, 'grid-template-columns'],
-            ['#learnFollowupBar .input-field', null, 'min-height'],
-            ['#learnFollowupBar .input-field', null, 'font-weight'],
-        ],
+        probes: FOLLOWUP_PROBES,
     },
     {
-        // S3 — data-panel-focus="qa-full" (mirrors visual-diff view 09). Largest
-        // chat surface; same §3d war coverage as S2.
+        // S3 — data-panel-focus="qa-full" (mirrors visual-diff view 09). Same §3d
+        // war coverage as S2 in the largest-chat state.
         state: 'S3-qa-full',
         enter: async (page) => {
             await resetLearnChrome(page);
@@ -139,23 +167,19 @@ const PROBE_STATES = [
                 document.getElementById('learnBody')?.dataset.panelFocus === 'qa-full'
                 && !!document.getElementById('learnFollowupBar'));
             assertOrThrow(ok, 'S3-qa-full: panelFocus not applied or #learnFollowupBar missing');
+            await assertFollowupBarWinner(page, 'S3-qa-full');
         },
-        probes: [
-            ['#learnChatCol', null, 'background-image'],
-            ['#learnFollowupBar', null, 'width'],
-            ['#learnFollowupBar', null, 'min-height'],
-            ['#learnFollowupBar', null, 'border-top-left-radius'],
-            ['#learnFollowupBar', null, 'backdrop-filter'],
-            ['#learnFollowupBar', '::after', 'transform'],
-        ],
+        probes: FOLLOWUP_PROBES,
     },
     {
-        // S12 — textbook-focus modal, Q&A panel un-hidden. THE PILOT GATE: pins the
-        // resolved values of every selector the textbook de-doubling rewrites
-        // (docs/PHASE3.6_SPEC.md §3 Pilot 0). The page-indicator background-image
-        // is the load-bearing one — it must stay the GLASS radial-gradient (not the
-        // paper-tag `#fff8dd` gradient from the L23441 single-ID !important rule);
-        // a Step-2 over-flatten to a bare ID would surface the paper-tag value here.
+        // S12 — textbook-focus modal, Q&A panel un-hidden, empty-state node rendered.
+        // THE PILOT GATE: pins the resolved values of every selector the textbook
+        // de-double rewrites (docs/PHASE3.6_SPEC.md §3 Pilot 0). The page-indicator
+        // background-image is load-bearing — it must stay the GLASS radial-gradient
+        // (carries the `253, 224, 71` token), not the paper-tag `#fff8dd` gradient
+        // from the L23441 single-ID !important rule; a Step-2 over-flatten to a bare
+        // ID would surface the paper-tag value here. The sentinel asserts the glass
+        // rule wins BEFORE any probe is trusted.
         state: 'S12-textbook-qa-open',
         enter: async (page) => {
             await resetLearnChrome(page);
@@ -164,13 +188,16 @@ const PROBE_STATES = [
                 const content = document.getElementById('textbookFocusContent');
                 const indicator = document.getElementById('textbookFocusPageIndicator');
                 const panel = document.getElementById('textbookFocusQaPanel');
+                const scroll = document.getElementById('textbookFocusQaScroll');
                 if (!modal) return;
                 document.body.classList.add('textbook-focus-active');
                 modal.classList.remove('hidden');
-                // Un-hide the Q&A panel so its de-doubled internals (head, compose,
-                // input, send, empty) are live for getComputedStyle. The panel is
-                // `.hidden` by default (only shown when the user toggles the fab).
+                // Un-hide the Q&A panel so its de-doubled internals are live.
                 panel?.classList.remove('hidden');
+                // Render the empty-state node so `.textbook-focus-qa-empty` (L41810,
+                // a de-double target) is actually in the DOM. It is otherwise only
+                // emitted by app.js:3052 on the live Q&A render path. Matches that markup.
+                if (scroll) scroll.innerHTML = '<div class="textbook-focus-qa-empty">No questions yet.</div>';
                 const placeholder = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+P+/HgAFBAJ/wlseKgAAAABJRU5ErkJggg==';
                 if (content) {
                     content.innerHTML = `
@@ -183,41 +210,58 @@ const PROBE_STATES = [
                 if (indicator) indicator.textContent = '1 / 1';
             });
             await page.waitForTimeout(200);
-            const ok = await page.evaluate(() => {
+            // Sentinel 1: modal + panel + empty node present.
+            const present = await page.evaluate(() => {
                 const modal = document.getElementById('textbookFocusModal');
                 const panel = document.getElementById('textbookFocusQaPanel');
                 return !!modal && !modal.classList.contains('hidden')
-                    && !!panel && !panel.classList.contains('hidden');
+                    && !!panel && !panel.classList.contains('hidden')
+                    && !!document.querySelector('.textbook-focus-qa-empty');
             });
-            assertOrThrow(ok, 'S12-textbook-qa-open: modal still hidden or #textbookFocusQaPanel missing/hidden');
+            assertOrThrow(present, 'S12: modal hidden, QA panel missing/hidden, or .textbook-focus-qa-empty not rendered');
+            // Sentinel 2: the GLASS LOCK rules win (not the paper-tag / base rules).
+            const win = await page.evaluate(() => {
+                const ind = document.getElementById('textbookFocusPageIndicator');
+                const panel = document.getElementById('textbookFocusQaPanel');
+                return {
+                    indBg: ind ? getComputedStyle(ind).backgroundImage : '',
+                    panelRadius: panel ? getComputedStyle(panel).borderTopLeftRadius : '',
+                };
+            });
+            assertOrThrow(win.indBg.includes('253, 224, 71'),
+                `S12: page-indicator background-image lacks the glass token "253, 224, 71" (got "${win.indBg}"). The doubled-ID GLASS LOCK rule is not winning — paper-tag rule may have taken over; baseline invalid.`);
+            assertOrThrow(win.panelRadius === '24px',
+                `S12: QA panel border-top-left-radius is "${win.panelRadius}", expected "24px" (the GLASS LOCK rule). Base class rule (16px) may be winning; baseline invalid.`);
         },
         probes: [
             ['#textbookFocusModal', null, 'background-image'],
             ['#textbookFocusDialog .learn-focus-headings', null, 'background-image'],
             ['#textbookFocusDialog .learn-focus-headings', null, 'backdrop-filter'],
-            ['#textbookFocusQaPanel', null, 'border-top-left-radius'],
+            ['#textbookFocusQaPanel', null, 'border-top-left-radius'],   // 24 vs base 16 — discriminating
             ['#textbookFocusQaPanel', null, 'background-image'],
             ['#textbookFocusQaPanel', null, 'box-shadow'],
             ['#textbookFocusQaPanel', null, 'backdrop-filter'],
-            ['#textbookFocusQaPanel', '::before', 'content'],
-            ['#textbookFocusQaPanel', '::before', 'opacity'],
+            ['#textbookFocusQaPanel', '::before', 'content'],            // "" -> '""' (discriminating)
+            ['#textbookFocusQaPanel', '::before', 'opacity'],            // 0.72
             ['.textbook-focus-qa-head', null, 'background-image'],
+            ['.textbook-focus-qa-head', null, 'border-bottom-color'],
             ['.textbook-focus-qa-close', null, 'background-image'],
-            ['.textbook-focus-qa-empty', null, 'border-top-left-radius'],
-            ['.textbook-focus-qa-compose', null, 'grid-template-columns'],
-            ['.textbook-focus-qa-input', null, 'min-height'],
-            ['.textbook-focus-qa-input', null, 'border-top-left-radius'],
-            ['.textbook-focus-qa-send', null, 'width'],
-            ['.textbook-focus-qa-send', null, 'border-top-left-radius'],
-            ['#textbookFocusQaToggle', null, 'width'],
+            ['.textbook-focus-qa-empty', null, 'border-top-left-radius'], // 22 — now rendered
+            ['.textbook-focus-qa-empty', null, 'background-image'],
+            ['.textbook-focus-qa-compose', null, 'gap'],                  // 12px literal (NOT grid-template-columns used value)
+            ['.textbook-focus-qa-compose', null, 'border-top-color'],
+            ['.textbook-focus-qa-input', null, 'min-height'],            // 48px literal
+            ['.textbook-focus-qa-input', null, 'border-top-left-radius'], // 18px
+            ['.textbook-focus-qa-send', null, 'width'],                  // 48px FIXED literal (not auto/derived)
+            ['.textbook-focus-qa-send', null, 'border-top-left-radius'], // 18px
+            ['#textbookFocusQaToggle', null, 'width'],                   // 74px FIXED literal
             ['#textbookFocusQaToggle', null, 'background-image'],
-            // The load-bearing page-indicator probes (Step-2 specificity guard):
-            ['#textbookFocusPageIndicator', null, 'background-image'],
-            ['#textbookFocusPageIndicator', null, 'border-top-left-radius'],
-            ['#textbookFocusPageIndicator', null, 'min-width'],
-            ['#textbookFocusPageIndicator', '::before', 'content'],
-            ['#textbookFocusPageIndicator', '::before', 'display'],
-            ['#textbookFocusPageIndicator', '::after', 'display'],
+            // The load-bearing page-indicator probes (Step-2 specificity guard).
+            // Pseudo content/display dropped — they resolve `none` whether the
+            // doubled-ID or single-ID rule wins (non-discriminating, review PR #101).
+            ['#textbookFocusPageIndicator', null, 'background-image'],   // GLASS token vs paper-tag
+            ['#textbookFocusPageIndicator', null, 'border-top-left-radius'], // 16px
+            ['#textbookFocusPageIndicator', null, 'min-width'],          // 80px
         ],
     },
 ];
@@ -237,7 +281,9 @@ async function snapshotState(page, stateDef) {
 }
 
 function keyOf(state, p) {
-    return `${state} | ${p.sel}${p.pseudo ? p.pseudo : ''} { ${p.prop} }`;
+    // Explicit field separators so a selector that literally contains `::before`
+    // can never collide with a (selector, '::before') tuple.
+    return `${state} | ${p.sel} || ${p.pseudo || ''} || ${p.prop}`;
 }
 
 // ---------- runner ----------
@@ -333,12 +379,28 @@ process.once('SIGTERM', () => signalCleanup('SIGTERM'));
             console.error('[css-probe] a state errored during capture — NOT writing a partial baseline');
             process.exit(1);
         }
+        // FAIL CLOSED: a probe whose element is absent records __MISSING__, which would
+        // then compare __MISSING__===__MISSING__ forever (false confidence). Refuse to
+        // bake one into the proof artifact — fix the probe/state instead.
+        const missing = [];
+        for (const [state, rows] of Object.entries(snapshot)) {
+            if (!Array.isArray(rows)) continue;
+            for (const p of rows) {
+                if (p.value === '__MISSING__' || p.value === '__ABSENT__') missing.push(keyOf(state, p));
+            }
+        }
+        if (missing.length) {
+            console.error('[css-probe] refusing to write baseline — these probes resolved __MISSING__ (element absent in state):');
+            for (const m of missing) console.error(`  ! ${m}`);
+            console.error('  Fix the probe selector or render the element in enter().');
+            process.exit(1);
+        }
         fs.writeFileSync(BASELINE_PATH, JSON.stringify(snapshot, null, 2) + '\n');
-        console.log(`\n[css-probe] baseline → ${BASELINE_PATH}`);
+        console.log(`\n[css-probe] baseline → ${BASELINE_PATH} (${Object.keys(snapshot).length} states, all probes have a real value)`);
         process.exit(0);
     }
 
-    // --check: byte-identical comparison against the committed baseline.
+    // --check: byte-identical comparison against the committed baseline, fail-closed.
     if (!fs.existsSync(BASELINE_PATH)) {
         console.error(`[css-probe] no baseline at ${BASELINE_PATH} — run --baseline first`);
         process.exit(1);
@@ -349,44 +411,66 @@ process.once('SIGTERM', () => signalCleanup('SIGTERM'));
     for (const state of Object.keys(baseline)) {
         const baseRows = baseline[state];
         const curRows = snapshot[state];
-        if (!Array.isArray(baseRows)) { continue; } // baseline state was an error — skip
+        if (!Array.isArray(baseRows)) {
+            errors.push(`${state}: baseline state is not a probe array (corrupt/partial baseline) — failing closed`);
+            continue;
+        }
         if (!curRows || !Array.isArray(curRows)) {
             errors.push(`${state}: current run produced no rows (${curRows && curRows.error ? curRows.error : 'missing'})`);
             continue;
         }
-        const curByKey = new Map(curRows.map(p => [keyOf(state, p), p.value]));
+        const curByKey = new Map();
+        for (const p of curRows) {
+            const k = keyOf(state, p);
+            if (curByKey.has(k)) errors.push(`${state}: duplicate probe key "${k}" — de-dup the probe list`);
+            curByKey.set(k, p.value);
+        }
+        const baseKeys = new Set();
         for (const bp of baseRows) {
             const k = keyOf(state, bp);
-            const cur = curByKey.has(k) ? curByKey.get(k) : '__ABSENT__';
-            if (cur !== bp.value) {
-                diffs.push({ key: k, before: bp.value, after: cur });
+            baseKeys.add(k);
+            if (bp.value === '__MISSING__' || bp.value === '__ABSENT__') {
+                errors.push(`${state}: baseline value for "${k}" is ${bp.value} — probe never had a real value; re-baseline / fix the probe`);
+                continue;
             }
+            const cur = curByKey.has(k) ? curByKey.get(k) : '__ABSENT__';
+            if (cur === '__MISSING__') {
+                errors.push(`${state}: "${k}" element vanished (baseline ${bp.value}, now __MISSING__)`);
+                continue;
+            }
+            if (cur !== bp.value) diffs.push({ key: k, before: bp.value, after: cur });
+        }
+        // Reverse pass: a current probe with no baseline entry means someone added a
+        // probe without re-baselining — it would otherwise be silently uncovered.
+        for (const p of curRows) {
+            const k = keyOf(state, p);
+            if (!baseKeys.has(k)) errors.push(`${state}: current probe "${k}" has no baseline entry — re-baseline after adding/renaming probes`);
         }
     }
 
+    const cell = (v) => String(v).replace(/\|/g, '\\|'); // guard the markdown table
+    const pass = diffs.length === 0 && errors.length === 0;
     const lines = ['# css-probe report', '',
         `States: ${Object.keys(baseline).join(', ')}`,
-        `Result: ${diffs.length === 0 && errors.length === 0 ? 'PASS — all probes byte-identical' : 'FAIL'}`,
+        `Result: ${pass ? 'PASS — all probes byte-identical' : 'FAIL'}`,
         ''];
     if (errors.length) {
-        lines.push('## State errors', '');
+        lines.push('## Fail-closed errors', '');
         for (const e of errors) lines.push(`- ${e}`);
         lines.push('');
     }
     if (diffs.length) {
         lines.push('## Probe diffs (baseline → current)', '',
             '| Probe | Before | After |', '|---|---|---|');
-        for (const d of diffs) {
-            lines.push(`| ${d.key} | \`${d.before}\` | \`${d.after}\` |`);
-        }
+        for (const d of diffs) lines.push(`| ${cell(d.key)} | \`${cell(d.before)}\` | \`${cell(d.after)}\` |`);
     } else if (!errors.length) {
         lines.push('Every probed (state, selector, property) resolved value matches the baseline byte-for-byte.');
     }
     fs.writeFileSync(REPORT_PATH, lines.join('\n') + '\n');
     console.log(`\n[css-probe] report → ${REPORT_PATH}`);
 
-    if (diffs.length || errors.length) {
-        console.error(`[css-probe] FAIL: ${diffs.length} probe diff(s), ${errors.length} state error(s)`);
+    if (!pass) {
+        console.error(`[css-probe] FAIL: ${diffs.length} probe diff(s), ${errors.length} fail-closed error(s)`);
         for (const d of diffs) console.error(`  ~ ${d.key}\n      before: ${d.before}\n      after:  ${d.after}`);
         for (const e of errors) console.error(`  ! ${e}`);
         process.exit(1);

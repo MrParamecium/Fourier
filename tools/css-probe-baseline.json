@@ -7,22 +7,54 @@
       "value": "radial-gradient(760px 520px at 10% 0%, rgba(186, 230, 253, 0.56), rgba(0, 0, 0, 0) 74%), radial-gradient(820px 620px at 86% 88%, rgba(187, 247, 208, 0.42), rgba(0, 0, 0, 0) 76%), linear-gradient(rgb(217, 243, 255) 0%, rgb(234, 249, 244) 54%, rgb(213, 248, 232) 100%)"
     },
     {
-      "sel": "#learnChatCol",
+      "sel": "#learnFollowupBar",
       "pseudo": null,
-      "prop": "background-color",
-      "value": "rgba(0, 0, 0, 0)"
-    },
-    {
-      "sel": "#learnChatCol",
-      "pseudo": null,
-      "prop": "overflow",
-      "value": "hidden"
+      "prop": "min-height",
+      "value": "152px"
     },
     {
       "sel": "#learnFollowupBar",
       "pseudo": null,
-      "prop": "width",
-      "value": "426px"
+      "prop": "border-top-left-radius",
+      "value": "28px"
+    },
+    {
+      "sel": "#learnFollowupBar",
+      "pseudo": null,
+      "prop": "background-image",
+      "value": "linear-gradient(145deg, rgba(255, 255, 255, 0.54), rgba(255, 255, 255, 0.18)), radial-gradient(520px 180px at 18% 0%, rgba(255, 255, 255, 0.54), rgba(0, 0, 0, 0) 72%), linear-gradient(105deg, rgba(125, 211, 252, 0.1), rgba(251, 113, 133, 0.12) 62%, rgba(167, 139, 250, 0.08))"
+    },
+    {
+      "sel": "#learnFollowupBar",
+      "pseudo": null,
+      "prop": "box-shadow",
+      "value": "rgba(148, 47, 62, 0.18) 0px 30px 82px 0px, rgba(15, 23, 42, 0.08) 0px 12px 30px 0px, rgba(255, 255, 255, 0.92) 0px 1px 0px 0px inset, rgba(255, 255, 255, 0.24) 0px -1px 0px 0px inset"
+    },
+    {
+      "sel": "#learnFollowupBar",
+      "pseudo": null,
+      "prop": "backdrop-filter",
+      "value": "blur(36px) saturate(1.95) brightness(1.06)"
+    },
+    {
+      "sel": "#learnFollowupBar",
+      "pseudo": null,
+      "prop": "z-index",
+      "value": "40"
+    },
+    {
+      "sel": "#learnFollowupBar",
+      "pseudo": null,
+      "prop": "overflow",
+      "value": "visible"
+    }
+  ],
+  "S3-qa-full": [
+    {
+      "sel": "#learnChatCol",
+      "pseudo": null,
+      "prop": "background-image",
+      "value": "radial-gradient(760px 520px at 10% 0%, rgba(186, 230, 253, 0.56), rgba(0, 0, 0, 0) 74%), radial-gradient(820px 620px at 86% 88%, rgba(187, 247, 208, 0.42), rgba(0, 0, 0, 0) 76%), linear-gradient(rgb(217, 243, 255) 0%, rgb(234, 249, 244) 54%, rgb(213, 248, 232) 100%)"
     },
     {
       "sel": "#learnFollowupBar",
@@ -62,71 +94,9 @@
     },
     {
       "sel": "#learnFollowupBar",
-      "pseudo": "::before",
-      "prop": "content",
-      "value": "\"\""
-    },
-    {
-      "sel": "#learnFollowupBar",
-      "pseudo": "::after",
-      "prop": "transform",
-      "value": "none"
-    },
-    {
-      "sel": "#learnFollowupBar .input-wrapper",
       "pseudo": null,
-      "prop": "grid-template-columns",
-      "value": "48px 258px 52px"
-    },
-    {
-      "sel": "#learnFollowupBar .input-field",
-      "pseudo": null,
-      "prop": "min-height",
-      "value": "58px"
-    },
-    {
-      "sel": "#learnFollowupBar .input-field",
-      "pseudo": null,
-      "prop": "font-weight",
-      "value": "680"
-    }
-  ],
-  "S3-qa-full": [
-    {
-      "sel": "#learnChatCol",
-      "pseudo": null,
-      "prop": "background-image",
-      "value": "radial-gradient(760px 520px at 10% 0%, rgba(186, 230, 253, 0.56), rgba(0, 0, 0, 0) 74%), radial-gradient(820px 620px at 86% 88%, rgba(187, 247, 208, 0.42), rgba(0, 0, 0, 0) 76%), linear-gradient(rgb(217, 243, 255) 0%, rgb(234, 249, 244) 54%, rgb(213, 248, 232) 100%)"
-    },
-    {
-      "sel": "#learnFollowupBar",
-      "pseudo": null,
-      "prop": "width",
-      "value": "426px"
-    },
-    {
-      "sel": "#learnFollowupBar",
-      "pseudo": null,
-      "prop": "min-height",
-      "value": "152px"
-    },
-    {
-      "sel": "#learnFollowupBar",
-      "pseudo": null,
-      "prop": "border-top-left-radius",
-      "value": "28px"
-    },
-    {
-      "sel": "#learnFollowupBar",
-      "pseudo": null,
-      "prop": "backdrop-filter",
-      "value": "blur(36px) saturate(1.95) brightness(1.06)"
-    },
-    {
-      "sel": "#learnFollowupBar",
-      "pseudo": "::after",
-      "prop": "transform",
-      "value": "none"
+      "prop": "overflow",
+      "value": "visible"
     }
   ],
   "S12-textbook-qa-open": [
@@ -191,6 +161,12 @@
       "value": "linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.035))"
     },
     {
+      "sel": ".textbook-focus-qa-head",
+      "pseudo": null,
+      "prop": "border-bottom-color",
+      "value": "rgba(255, 255, 255, 0.24)"
+    },
+    {
       "sel": ".textbook-focus-qa-close",
       "pseudo": null,
       "prop": "background-image",
@@ -200,13 +176,25 @@
       "sel": ".textbook-focus-qa-empty",
       "pseudo": null,
       "prop": "border-top-left-radius",
-      "value": "__MISSING__"
+      "value": "22px"
+    },
+    {
+      "sel": ".textbook-focus-qa-empty",
+      "pseudo": null,
+      "prop": "background-image",
+      "value": "linear-gradient(145deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.055))"
     },
     {
       "sel": ".textbook-focus-qa-compose",
       "pseudo": null,
-      "prop": "grid-template-columns",
-      "value": "306px 48px"
+      "prop": "gap",
+      "value": "12px"
+    },
+    {
+      "sel": ".textbook-focus-qa-compose",
+      "pseudo": null,
+      "prop": "border-top-color",
+      "value": "rgba(255, 255, 255, 0.26)"
     },
     {
       "sel": ".textbook-focus-qa-input",
@@ -261,24 +249,6 @@
       "pseudo": null,
       "prop": "min-width",
       "value": "80px"
-    },
-    {
-      "sel": "#textbookFocusPageIndicator",
-      "pseudo": "::before",
-      "prop": "content",
-      "value": "none"
-    },
-    {
-      "sel": "#textbookFocusPageIndicator",
-      "pseudo": "::before",
-      "prop": "display",
-      "value": "none"
-    },
-    {
-      "sel": "#textbookFocusPageIndicator",
-      "pseudo": "::after",
-      "prop": "display",
-      "value": "none"
     }
   ]
 }
