@@ -646,14 +646,71 @@ Deleted 4 fully-shadowed cascade blocks:
   box-shadow !important }` — shadowed by L37095 (1-ID `#feedbackView` +
   !important). Verified by view 14d.
 
-**Remaining §3b.iv candidates (estimated ~120-170 lines):** the
-`.feedback-board-card` 27×, `.preference-profile-preview` 18×,
-`.preference-preview-card` 14× rules listed above. These are mostly
-property duplicates across the 5 banners in the L33181-L44261 cluster;
-each needs per-block cascade-shadow analysis like §3a.i / §3a.ii had.
-Some are covered by existing views 14 / 14b / 12 (resting state) since
-deletions to non-state-variant property duplicates don't require state
-capture.
+**§3b.iv pass 3 — SHIPPED PR #90 (2026-06-24): -22 lines.** Broad
+discovery on the 3 selectors yielded **0 candidates** on `.feedback-board-card`
+(27×) and `.preference-profile-preview` (18×), and **1 candidate** on
+`.preference-preview-card` (14×). The /code-review of that 1 candidate
+surfaced 2 more adjacent candidates not in the original selector list.
+Final bundle:
+
+- L13841-L13850 grouped `.preference-{profile,ai,preview}-card { position;
+  background; border; border-radius; padding; box-shadow }` — all 6 props
+  on all 3 arms shadowed by L35214-L35229 `#preferenceView` !important +
+  L35254 / L35261-L35264 padding clamp(). Sister classes only inside
+  `#preferenceView` per index.html L1023/1040/1060.
+- L13834-L13839 `.preference-page-grid { display; grid-template-columns;
+  gap; align-items }` — all 4 props shadowed by L35195 `#preferenceView
+  .preference-page-grid` (1,1,0 !important) + L36016 `@media (max-width:
+  1180px) #preferenceView ...` for the narrow-viewport path. Only DOM
+  use is inside #preferenceView per index.html:1022.
+- L13841-L13843 `.preference-profile-card { min-height: 640px }` —
+  shadowed by L35185 grouped `#preferenceView .preference-{...}-card
+  { min-height: 0 !important }`.
+
+3-skeptic adversarial verify confirmed safe-delete: no @media/@container
+wrap-escape, dark-mode rule L14813 cannot escape !important shadow, no
+state-variant fallback. Visual-diff harness: 35/35 @ 0.000% across two
+consecutive `--check` runs after each commit (view 12 preference-page
+resting state is the load-bearing pixel guard).
+
+**Plan-target correction (matches §3a.i + Step B/C/D pattern):** the
+"~120-170 lines" estimate was off by an order of magnitude against the
+3 named selectors. Post-discovery ceiling on `.feedback-board-card` /
+`.preference-profile-preview` / `.preference-preview-card` is ~10 lines;
+the additional 11 lines came from adjacent rules (`.preference-page-grid`
++ surviving `.preference-profile-card` min-height) surfaced by review,
+not by the named-selector discovery. The 120-170-line estimate from
+Roadmap Step C predates the §3b.iv pass 1+2 deletions (PR #79 -30, PR
+#84 -42 = -72 lines) which already harvested the bulk of the easy wins
+from this surface. Future state-variant work on these selectors needs
+NEW harness views (no `:hover`/`:focus`/`:active` on `.feedback-board-card`
+in the 35-view set) before further deletion is safe.
+
+#### 3b.iv.followup — Cascade-shadow remnants near PR #90 deletion (defer rule D1)
+
+The /code-review of PR #90 surfaced one additional candidate not bundled
+into the merged PR (D1 — unrelated to the bundled diff's selectors):
+
+- **L14819-L14823 (post-PR-#90)** `@media (max-width: 1100px) {
+  .preference-page-grid { grid-template-columns: 1fr } }` — fully
+  shadowed by L36005 `@media (max-width: 1180px) { #preferenceView
+  .preference-page-grid { grid-template-columns: 1fr !important;
+  grid-template-rows: auto !important } }`. At every viewport ≤1100px
+  where the L14819 query matches, L36005 also matches and wins by
+  (1,1,0) + !important. Net delete: ~5 lines (the @media wrapper +
+  contents). Cascade-only verified; harness viewport is 1280×800 so
+  pixel-validation is blocked (per §9c gap 2: ALL `@media (max-width:
+  ...)` deletions are cascade-only-verified). Surface explicitly in
+  the next-PR description.
+
+**Why deferred (D1 — Unrelated):** the @media wrapper at L14819 was
+not in PR #90's diff. Adding it would expand scope past the bundled
+3-rule deletion. Pick up in next §3b.iv pass.
+
+**Next-session entry point:** `app/style.css:14819` — verify the
+post-PR-#90 line number, confirm the L36005 shadower still matches the
+@media context, delete the wrapper + body, run npm run check + 35-view
+harness, ship as a focused PR.
 
 #### 3b.iv.followup — Harness gaps surfaced by PR #79 self-review
 
@@ -905,9 +962,10 @@ a future contributor running the §6.2 orphan-sweep doesn't re-flag them.
 | §3a.i forward-cleanup remnant (PR #87) | feedback-meta cascade-shadowed | −2 in `app/style.css` |
 | §8d dismissIntro helper (PR #88) | extracted shared intro-dismiss prologue | +0 net (closes drift channel) |
 | §7c harness-exports self-test (PR #89) | npm run check now lints window.* | +54 in `tools/check-harness-exports.js` |
+| §3b.iv pass 3 (PR #90) | preference-card grouped base + .preference-page-grid + min-height shadowed (bundled 3 rules) | −22 in `app/style.css` |
 
 `app/app.js`: **14,434 → 8,339 lines (−6,095, −42.2%)** (includes post-PR #82 interactive-demos extractions in Step F/G PRs #59-#61).
-`app/style.css`: **44,845 → 43,396 lines (−1,449, −3.23%)**.
+`app/style.css`: **44,845 → 43,374 lines (−1,471, −3.28%)**.
 
 The Phase 3 JS work is structurally complete. CSS Pass 1 + Pass 2
 Steps A through D shipped; the structural ceiling on the L33181–L44261
