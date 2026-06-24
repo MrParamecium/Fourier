@@ -349,6 +349,126 @@ const sharedViews = [
         await page.waitForSelector('#preferenceProfilePreview', { timeout: 5000 });
         await page.waitForTimeout(300);
     } },
+    // View 12b — Page B — preference page, .preference-primary-btn :hover.
+    // Hovers #preferenceSaveBtn so the :hover cascade fires; cascade winner
+    // is the L35558 `#preferenceView .preference-primary-btn:hover {
+    // transform: translateY(-1px) !important }` rule. The earlier L13985
+    // rule wants -2px but is shadowed by specificity. Required by deferred
+    // §3b.iv to safely delete redundant `:hover` rules.
+    //
+    // Cascade-arm assertion (the LOAD-BEARING check, NOT pixel diff). A
+    // 1-px translateY shift on a ~120×50 px button dirties only the
+    // leading + trailing edge rows ≈ 2 × 120 = 240 px ≈ 0.023% of the
+    // 1280×800 frame — WAY under the 0.5% default threshold. So the
+    // assert below MUST verify which cascade arm won by literal matrix
+    // equality, not "any non-'none' transform". A weaker assert lets
+    // §3b.iv silently swap -1px → -2px (or vice versa) past the harness.
+    // The failRatio: 0.0005 (0.05%) override below catches a ~2× safety
+    // margin above the 0.023% expected diff if the assert ever loosens.
+    //
+    // The 350ms post-hover wait lets the 150ms transform transition
+    // (style.css L13969) settle into its steady-state translated frame.
+    // A MASK_CSS transition-freeze was tried but contaminated lesson
+    // views 21/22 (~1.3% drift) via cascade side effects that could not
+    // be localized; the per-view wait is locally scoped and pixel-neutral.
+    { name: '12b-preference-primary-btn-hover', page: 'B', failRatio: 0.0005, setup: async (page) => {
+        // Defensive blur — view 11 already blurred composer focus, but a
+        // future intervening view could leak focus state and tint the
+        // captured chrome. blur is a no-op if nothing is focused.
+        await page.evaluate(() => document.activeElement?.blur?.());
+        // Snapshot resting transform BEFORE hover so the assert can
+        // distinguish "hover landed on the right cascade arm" from
+        // "page.hover silently no-op'd" (the latter would leave resting
+        // unchanged). Resting computes to 'none' for this button — the
+        // base .preference-primary-btn rule sets no transform.
+        const before = await page.evaluate(() => {
+            const btn = document.getElementById('preferenceSaveBtn');
+            return btn ? getComputedStyle(btn).transform : null;
+        });
+        await page.hover('#preferenceSaveBtn');
+        // CRITICAL ORDER: wait for the 150ms transform transition
+        // (style.css L13969) to settle BEFORE reading `after`. Reading
+        // earlier captures the start-of-transition value (effectively
+        // translateY(0), serializing to `matrix(1, 0, 0, 1, 0, 0)`) and
+        // the literal-match assert below would falsely fail. 350ms
+        // covers transition + small settle slack.
+        await page.waitForTimeout(350);
+        const after = await page.evaluate(() => {
+            const btn = document.getElementById('preferenceSaveBtn');
+            return btn ? getComputedStyle(btn).transform : null;
+        });
+        // Expected literal: 'matrix(1, 0, 0, 1, 0, -1)' from L35558's
+        // translateY(-1px) !important. If a future §3b.iv delete makes
+        // L13985 (translateY(-2px), non-important) the winner instead,
+        // `after` becomes 'matrix(1, 0, 0, 1, 0, -2)' and this exact-
+        // match check fails LOUDLY rather than silently passing under
+        // pixel-diff.
+        const EXPECTED = 'matrix(1, 0, 0, 1, 0, -1)';
+        assertOrThrow(before === 'none',
+            `view 12b: #preferenceSaveBtn resting transform should be 'none' (no base transform on .preference-primary-btn) but is "${before}" — has a new base transform rule been added?`);
+        assertOrThrow(after === EXPECTED,
+            `view 12b: #preferenceSaveBtn :hover transform is "${after}", expected "${EXPECTED}" (L35558 cascade winner). If L35558 was deleted, L13985's translateY(-2px) becomes the winner — check the cascade.`);
+    } },
+    // View 12c — Page B — preference page, .preference-profile-editor :focus.
+    // Focuses #preferenceProfileEditor (textarea) so the :focus cascade at
+    // L35511 fires (border-color → sky-300; box-shadow → 4px sky-glow ring).
+    // The 4px ring around the ~700×420 textarea covers ≈ perimeter × 4 ≈
+    // 9000 px ≈ 0.88% of the frame, so the default 0.5% threshold WOULD
+    // catch a full ring deletion — but a subtle alpha-channel cascade swap
+    // (e.g. 0.18 → 0.16) only shifts pixel YIQ slightly and may slip
+    // under 0.5%. failRatio: 0.0005 keeps the safety margin tight.
+    //
+    // page.mouse.move(0,0) clears view 12b's lingering hover on
+    // #preferenceSaveBtn so the only state-variant visible in this frame is
+    // the focused editor.
+    // 350ms wait covers the 150ms box-shadow transition on
+    // .preference-profile-editor (style.css cascade) + a small settle slack.
+    { name: '12c-preference-editor-focused', page: 'B', failRatio: 0.0005, setup: async (page) => {
+        await page.mouse.move(0, 0);
+        await page.focus('#preferenceProfileEditor');
+        const focused = await page.evaluate(() => {
+            const t = document.getElementById('preferenceProfileEditor');
+            return Boolean(t) && document.activeElement === t;
+        });
+        assertOrThrow(focused, 'view 12c: #preferenceProfileEditor is not document.activeElement after page.focus()');
+        await page.waitForTimeout(350);
+    } },
+    // View 12d — Page B — preference page, .preference-secondary-btn :hover.
+    // Hovers #preferenceResetBtn (the "Reset Draft" button) to close the
+    // grouped-selector blind spot left by 12b. The :hover cascade rules
+    // at L13985 + L35558 group `.preference-primary-btn:hover` WITH
+    // `.preference-secondary-btn:hover` — a §3b.iv refactor that splits
+    // the comma list could break secondary while leaving primary intact,
+    // and the harness has no view exercising secondary-btn hover otherwise.
+    //
+    // Cascade winner for #preferenceResetBtn:hover: L35558 (translateY
+    // -1px !important) via #preferenceView ID, same as #preferenceSaveBtn.
+    // Resting transform is 'none' (base .preference-secondary-btn rule at
+    // L13979 sets no transform). The exact-match assert below catches a
+    // cascade-arm swap the same way 12b does.
+    { name: '12d-preference-secondary-btn-hover', page: 'B', failRatio: 0.0005, setup: async (page) => {
+        // Move mouse to (0,0) first to clear 12c's focus chrome — that
+        // view focused the textarea but the box-shadow ring is steady-
+        // state and unaffected by mouse position; the move is for
+        // schedule-symmetry with 12b/12c, not pixel correctness.
+        await page.mouse.move(0, 0);
+        const before = await page.evaluate(() => {
+            const btn = document.getElementById('preferenceResetBtn');
+            return btn ? getComputedStyle(btn).transform : null;
+        });
+        await page.hover('#preferenceResetBtn');
+        // Wait BEFORE reading `after` — see view 12b for the rationale.
+        await page.waitForTimeout(350);
+        const after = await page.evaluate(() => {
+            const btn = document.getElementById('preferenceResetBtn');
+            return btn ? getComputedStyle(btn).transform : null;
+        });
+        const EXPECTED = 'matrix(1, 0, 0, 1, 0, -1)';
+        assertOrThrow(before === 'none',
+            `view 12d: #preferenceResetBtn resting transform should be 'none' but is "${before}"`);
+        assertOrThrow(after === EXPECTED,
+            `view 12d: #preferenceResetBtn :hover transform is "${after}", expected "${EXPECTED}" (L35558 secondary-btn cascade arm)`);
+    } },
     // View 13 — Page B — course tracker resting state.
     { name: '13-course-tracker', page: 'B', setup: async (page) => {
         await page.click('#navCourseTrackerBtn');
@@ -552,6 +672,121 @@ const sharedViews = [
         );
         await page.waitForTimeout(200);
     } },
+    // View 14d — Page B — populated feedback board, .feedback-textarea :focus
+    // on the compose-card body input. Inherits view 14c's right-column state
+    // (populated board, Charlie .is-target, both .feedback-reply-context
+    // chips scrolled into viewport center) and adds the :focus cascade at
+    // L29380-L29389 (border-color → sky-300; background → 0.76 white; box-
+    // shadow → 4px sky ring). Required by deferred §3b.iv to validate
+    // collapses of `:focus` rules on feedback inputs — if a delete drops
+    // the actual cascade winner, the focused border-color shifts visibly.
+    //
+    // mouse.move(0,0) clears any latent hover from view 14c (the .click on
+    // Charlie's reply leaves the mouse at that reply's location; no hover
+    // chrome is cascading on .feedback-reply, but a defensive reset avoids
+    // future-proofing risk if a later refactor adds .feedback-reply:hover).
+    // 350ms wait covers the 150ms box-shadow transition on .feedback-textarea
+    // (the L29401 transition rule on .feedback-primary-btn et al. wrapper
+    // doesn't apply to textareas; textareas inherit default UA transitions
+    // on focus glow). failRatio: 0.0005 keeps the chrome-recolor safety
+    // margin tight — the focus ring on a ~860×140 textarea covers ≈ 8000
+    // px = ~0.78% of frame, so 0.5% default would catch full-ring deletion
+    // but a subtle alpha cascade swap could slip under.
+    { name: '14d-feedback-compose-input-focused', page: 'B', failRatio: 0.0005, setup: async (page) => {
+        await page.mouse.move(0, 0);
+        await page.focus('#feedbackBodyInput');
+        const focused = await page.evaluate(() => {
+            const t = document.getElementById('feedbackBodyInput');
+            return Boolean(t) && document.activeElement === t;
+        });
+        assertOrThrow(focused, 'view 14d: #feedbackBodyInput is not document.activeElement after page.focus()');
+        await page.waitForTimeout(350);
+    } },
+    // View 14e — Page B — populated feedback board, .feedback-primary-btn
+    // :hover on the compose submit button. Blurs view 14d's textarea focus
+    // first so the only state-variant in this frame is the hovered submit
+    // button — captures TWO cascade rules:
+    //   (1) PARENT BUTTON cascade winner = style.css L35040
+    //       `#feedbackView .feedback-compose-card #feedbackSubmitBtn.feedback-primary-btn:hover
+    //         { transform: translateY(-2px) !important; ... }` (3-ID + 1-class
+    //       specificity beats the L29417 .feedback-primary-btn:hover rule
+    //       — both !important, specificity decides). L29417 IS still the
+    //       winner for sibling .feedback-secondary-btn:hover /
+    //       .feedback-reply-btn:hover (not exercised by this view).
+    //   (2) CHILD ICON cascade winner = style.css L35050
+    //       `... #feedbackSubmitBtn.feedback-primary-btn:hover i
+    //         { transform: translateX(2px) translateY(-1px) rotate(-6deg) !important; }`
+    //       — only fires on hover and only via the same 3-ID prefix. Has
+    //       no shadower; deleting it leaves the icon static at hover.
+    // Required by §3b.iv to validate collapses of `:hover` rules on
+    // feedback buttons.
+    //
+    // ASSERTS. The check is exact-match on the resolved matrix string for
+    // BOTH the button AND the child icon. The base .feedback-primary-btn
+    // rule at L29400 sets `transform: translateY(0) !important` on the
+    // BUTTON (NOT the icon) — so the button's resting matrix is
+    // `matrix(1, 0, 0, 1, 0, 0)`, NOT `'none'`. A weak `!== 'none'`
+    // assert would pass even if page.hover silently no-op'd; only the
+    // resting-vs-hovered comparison catches that. failRatio: 0.0005
+    // backs it up — a 2px button translate on a ~120×50 px target dirties
+    // ~480 px ≈ 0.047%; a child-icon rotate sweeps a ~24×24 region ≈ 575
+    // px ≈ 0.056%; both well above 0.0005's noise floor (~50 px) and
+    // well below the 0.5% default.
+    //
+    // INVARIANT: leaves mouse at #feedbackSubmitBtn. The next Page B view
+    // is 24, whose setup hides #feedbackView AND defensively parks the
+    // mouse at (0, 0) (per the matching guard in view 24's setup). View
+    // 24's baseline is pixel-unchanged because the (0, 0) parking became
+    // its baseline. If a future schedule edit moves a hoverable-on-
+    // visible-chrome view between 14e and 24, view 24's self-park keeps
+    // its baseline stable regardless.
+    // 350ms wait covers the 160ms transform transition on .feedback-primary-btn
+    // (style.css L29401) AND L35037 (icon-hover-transition declared on
+    // .feedback-compose-card #feedbackSubmitBtn).
+    { name: '14e-feedback-compose-btn-hover', page: 'B', failRatio: 0.0005, setup: async (page) => {
+        await page.evaluate(() => document.activeElement?.blur?.());
+        // Snapshot resting transforms BEFORE hover so the assert can
+        // distinguish "hover landed" from "page.hover silently no-op'd"
+        // — the latter would leave both transforms unchanged. Note the
+        // BUTTON resting is matrix(1,0,0,1,0,0) (L29400 base), not 'none'.
+        const before = await page.evaluate(() => {
+            const btn = document.getElementById('feedbackSubmitBtn');
+            const icon = btn?.querySelector('i');
+            return {
+                button: btn ? getComputedStyle(btn).transform : null,
+                icon:   icon ? getComputedStyle(icon).transform : null,
+            };
+        });
+        await page.hover('#feedbackSubmitBtn');
+        // Wait BEFORE reading `after` — see view 12b for the rationale.
+        // 350ms covers both the 160ms parent transition (L29401) and the
+        // 160ms child-icon transition (L35037).
+        await page.waitForTimeout(350);
+        const after = await page.evaluate(() => {
+            const btn = document.getElementById('feedbackSubmitBtn');
+            const icon = btn?.querySelector('i');
+            return {
+                button: btn ? getComputedStyle(btn).transform : null,
+                icon:   icon ? getComputedStyle(icon).transform : null,
+            };
+        });
+        const BUTTON_EXPECTED = 'matrix(1, 0, 0, 1, 0, -2)';
+        // L35050 sets translateX(2px) translateY(-1px) rotate(-6deg).
+        // Serialized matrix: cos(-6°)=0.9945, sin(-6°)=-0.1045 →
+        // matrix(0.994522, -0.104528, 0.104528, 0.994522, 2, -1).
+        // The match is on the matrix() prefix + arg structure; we use
+        // startsWith on the rounded-prefix to absorb cross-Chromium
+        // float-precision wobble in the last digit.
+        const ICON_PREFIX = 'matrix(0.99';
+        assertOrThrow(before.button === 'matrix(1, 0, 0, 1, 0, 0)',
+            `view 14e: #feedbackSubmitBtn resting transform is "${before.button}", expected "matrix(1, 0, 0, 1, 0, 0)" (base translateY(0) !important at style.css L29400). If a new base rule was added, update this assert.`);
+        assertOrThrow(after.button === BUTTON_EXPECTED,
+            `view 14e: #feedbackSubmitBtn :hover transform is "${after.button}", expected "${BUTTON_EXPECTED}" (L35040 cascade winner). If L35040 was deleted, L29417's translateY(-1px) becomes the winner — check the cascade.`);
+        assertOrThrow(before.icon === 'none',
+            `view 14e: child #feedbackSubmitBtn i resting transform should be 'none' (no base transform on the icon) but is "${before.icon}"`);
+        assertOrThrow(after.icon != null && after.icon.startsWith(ICON_PREFIX),
+            `view 14e: child #feedbackSubmitBtn i :hover transform is "${after.icon}", expected to start with "${ICON_PREFIX}" (L35050 rotate(-6deg)+translate cascade). If L35050 was deleted, the icon stays untransformed at hover — check the cascade.`);
+    } },
     // ----- Page A (continued — lesson chrome class flips) -----
     // View 15 — Page A — forces learnBody.classList.add('chapter-overview-active')
     // to flip the `:not(.chapter-overview-active)` negation that 30+ #20a rules
@@ -715,6 +950,16 @@ const sharedViews = [
     // Page B view (14-feedback-board) left #feedbackView visible — close
     // it first along with the other sibling panels showAnswer also hides.
     { name: '24-answer-workspace', page: 'B', setup: async (page) => {
+        // Defensive mouse park (Phase 3.5 v4 §3b.iv harness expansion finding):
+        // make view 24 self-defensive about mouse position so its baseline is
+        // robust against ANY upstream Page B view that leaves the cursor over
+        // a hoverable element. Today the last upstream Page B view is 14e
+        // (cursor at #feedbackSubmitBtn inside #feedbackView which gets hidden
+        // below); the parking is identity-safe for that case. The guarantee
+        // matters for FUTURE inserts: e.g. a 14f hover-on-other-button view
+        // could otherwise silently shift this baseline at the new cursor
+        // coordinate. Park at (0, 0) for consistency with view 14d's pattern.
+        await page.mouse.move(0, 0);
         await page.evaluate(() => {
             document.getElementById('feedbackView')?.classList.add('hidden');
             document.getElementById('preferenceView')?.classList.add('hidden');
