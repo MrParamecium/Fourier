@@ -357,12 +357,14 @@ L33191/33192/33213-33216/33238/37415/37416/37423-37426 (the §3d runtime-collaps
 
 ## 6.3 Branch progress (refactor/phase3.6-css-collapse, 2026-06-24/25)
 
-**Cumulative this session (all verified):** style.css **42,991 → 39,568 (−3,423, now < 40K)** + runtime-collapsed.css
-**2,102 → 2,019 (−83)** = **−3,506 lines**; doubled-IDs **608 → 422 (−186, −30.6%)**;
-`!important` lines **14,948 → 13,599 (−1,349)**. Every change verified by css-probe (byte-identical)
-+ visual-diff (lesson views covering live chrome at 0.000%); dead-CSS deletions additionally gated on
-the **distinct-live-selector-context set-difference invariant** (catches uncaptured-state loss that
-pixel-diff misses). Dead-orphan removal is the dominant lever (−3,028 of −3,110 style.css lines).
+**Cumulative this session (all verified):** style.css **42,991 → 38,771 (−4,220, now < 39K)** + runtime-collapsed.css
+**2,102 → 1,734 (−368)** = **−4,588 lines**; doubled-IDs **608 → 418 (−190, −31.3%)**;
+`!important` lines style.css **14,948 → 13,206 (−1,742)** + runtime-collapsed.css **1,158 → 964 (−194)**.
+Every change verified by css-probe (byte-identical) + visual-diff (35 views covering live chrome at
+0.000%; occasional sub-0.005% antialiasing noise on text-heavy views, well under threshold); dead-CSS
+deletions additionally gated on the **distinct-live-selector-context set-difference invariant** (catches
+uncaptured-state loss that pixel-diff misses). Dead-CSS deletion accounts for essentially the entire line
+reduction (the doubled-ID de-double tranches are ~0 net lines by design — see §2 caveat).
 
 | Commit | Tranche | Δ | Verification |
 |---|---|---|---|
@@ -375,13 +377,18 @@ pixel-diff misses). Dead-orphan removal is the dominant lever (−3,028 of −3,
 | `d385d00` | dead-CSS `.lecture-overlay-btn-left/-right` + `.learn-chat-restore/-topbar/-corner-toggle` + `.learn-explain-bottom-rail` | **−1032 lines, −476 `!important`** | set-difference empty for all 6 live siblings (#lecture{Prev,Next}OverlayBtn / .turner-content / #learnFocusBtn / .lecture-overlay-btn-{text,icon}); both gates @ 0.000% |
 | `1dc55c5` | conservative whole-file orphan sweep (77 renamed-away classes: settings-drawer-*/library-*/old chapter-overview children/edu-* old/journal-*/mode-icon-* etc.) | **−646 lines, −111 `!important`** | set-difference over ALL 858 live selectors = 0 lost; correctly SKIPPED runtime-built `*-demo-*` + template `lecture-note-card-${type}` + harness/compound; both gates @ 0.000% |
 | `61ffde1` | entangled-orphan arm-surgery (library-* / syllabus-page-* / lecture-focus-overlay-btn / textbook-zoom-overlay-btn / lesson-page-footer + dead `.lecture-overlay-btn` base) | **−313 lines, −45 `!important`** | live `.learn-focus-btn`/`.lesson-page-heading` lost 0 contexts; `.lecture-overlay-btn` verified dead (0 HTML+JS); both gates @ 0.000% |
+| `c4e7030` | dead `.lecture-overlay-btn-text`/`-icon`/`.lecture-focus-overlay-text` family (58 blocks style.css −797 + 23 blocks runtime-collapsed.css −285/−154 `!important`) | **−1,082 lines, −154 `!important`** | all 81 blocks key-dead, 0 live comma-arms; **0 refs in live `app/` tree** (only stale `workspace/app-mirror` names them → confirms the `.turner-content` rename); css-probe byte-identical incl. S-page-corner; visual-diff 35/35 |
 
-**Dead-orphan vein status: nearly exhausted** (5 sweeps = −3,341 style.css lines). Known remaining orphans:
-`.lecture-overlay-btn-text`/`-icon` (~80 lines — an earlier sweep kept them as "live descendants of
-#lecture*OverlayBtn" but the base `.lecture-overlay-btn` is dead, so verify+delete these next) + small
-entangled residuals. **The high-confidence safe wins are essentially done; the remainder is the
-careful/risky multi-session grind** (`!important`-stripping on DOM-isolated views — line-neutral + cascade-
-risk; harness-gated narrow-viewport/state-matrix; the §3d composer chain).
+**CORRECTION to the `d385d00` row:** it listed `.lecture-overlay-btn-{text,icon}` as *live siblings to
+preserve*. That was wrong — they were renamed-away orphans all along (base `.lecture-overlay-btn` was
+already dead). `c4e7030` proves it: 0 refs in the live `app/` tree, both gates byte-identical after removal.
+
+**Dead-orphan vein status: EXHAUSTED for the lecture/learn-chrome family** (6 sweeps = −4,138 style.css lines).
+No known high-confidence dead orphans remain in the audited surfaces. **The remainder is the careful/risky
+multi-session grind**: `!important`-stripping on DOM-isolated views (`#courseTrackerView` 74.9% NOCOMP /
+`#preferenceView` 69.8%) — line-neutral + changes cascade outcomes, so it needs FlyM1ss's risk-appetite
+call; harness-gated narrow-viewport/state-matrix tranches; and the §3d composer chain (hardest, cross-file
+lockstep). This is the natural seam to hand back for steering.
 
 **Orphan-sweep status:** the standalone-dead orphans are harvested (4 deletions = −3,028 lines). Remaining
 orphan residuals are ENTANGLED (in comment-laced / doubled-ID / live-ancestor groups — e.g. `library-card`
