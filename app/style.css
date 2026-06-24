@@ -13920,13 +13920,6 @@ h6,
   margin: 14px 0 16px;
 }
 
-.preference-profile-editor:focus,
-.preference-ai-input:focus {
-  border-color: #38bdf8;
-  box-shadow: 0 6px 0 #bae6fd;
-  transform: translateY(-1px);
-}
-
 .preference-profile-actions,
 .preference-draft-actions {
   display: flex;
@@ -14813,12 +14806,6 @@ h6,
 :root[data-theme="dark"] .preference-draft-panel {
   background: linear-gradient(180deg, #162435, #132131);
   border-color: #36537a;
-}
-
-@media (max-width: 1100px) {
-  .preference-page-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
 :root[data-theme="dark"] .mistake-notebook-title,
@@ -29351,15 +29338,6 @@ body {
   color: #2563eb !important;
   backdrop-filter: blur(14px) saturate(1.35) !important;
   -webkit-backdrop-filter: blur(14px) saturate(1.35) !important;
-}
-
-.feedback-primary-btn:hover,
-.feedback-secondary-btn:hover,
-.feedback-reply-btn:hover {
-  transform: translateY(-1px) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.66),
-    0 18px 40px rgba(14, 165, 233, 0.26) !important;
 }
 
 .feedback-board-head {
