@@ -152,10 +152,39 @@ async function openSubtopic(page, sub, waitMs = 25000) {
     const deadline = Date.now() + waitMs;
     while (Date.now() < deadline) {
         const text = (await content.innerText().catch(() => '')) || '';
-        if (text && !text.includes('Preparing lesson...') && text.length > 80) return text;
+        if (text && !text.includes('Preparing lesson...') && text.length > 80) {
+            await normalizeSidebarSyllabusScroll(page);
+            return text;
+        }
         await page.waitForTimeout(300);
     }
     throw new Error(`subtopic "${sub.title}" never rendered within ${waitMs}ms`);
+}
+
+// Force the syllabus accordion panel to scrollTop=0 after a lesson opens.
+// openSubtopic's `.syllabus-section` click triggers chrome's
+// scrollIntoViewIfNeeded on the clicked row, which lands at a NON-
+// DETERMINISTIC scrollTop between runs (depends on accordion-open
+// animation phase at click time + viewport quantization). The bistable
+// result was ~1-2px-per-row layout shift in the sidebar across 9 lesson
+// views, producing 13645+ px diff (~1.33%) per view despite no code
+// change. Pinning scrollTop=0 normalizes to "scrolled to syllabus head"
+// in every run. See docs/phase3_deferred.md §11 for the discovery story.
+async function normalizeSidebarSyllabusScroll(page) {
+    await page.evaluate(() => {
+        const inner = document.querySelector('#sidebarSyllabusPanel .sidebar-syllabus-panel-inner');
+        const fallback = document.getElementById('sidebarSyllabusPanel');
+        const target = inner || fallback;
+        if (!target) return;
+        target.scrollTop = 0;
+        // Some accordions also have a separate inner scroll container per chapter;
+        // reset every scrollable descendant for full determinism.
+        target.querySelectorAll('*').forEach(el => {
+            if (el.scrollHeight > el.clientHeight) el.scrollTop = 0;
+        });
+    });
+    // Single rAF so layout settles after the scroll write before the next capture.
+    await page.evaluate(() => new Promise(r => requestAnimationFrame(r)));
 }
 
 // Close any visible feature-popover help bubbles. Several Page A/B views
