@@ -34658,13 +34658,17 @@ body {
 }
 
 /* EOF FEEDBACK AUTHOR COLORS: identity tint beats lane tint.
-   .feedback-reply-context (1,4,0) coverage for .is-left/.is-right tone-N —
-   uniquely defined here (no later duplicate). Deleting these selectors lets
-   the lane-color override in FEEDBACK CONVERSATION COLOR LANES (specificity
-   1,3,0) win, replacing the author tone tint with hardcoded green/pink.
-   DO NOT DELETE without first relocating these selectors AFTER the lane-
-   color override, or the chip border/background/color for any reply that
-   has BOTH a lane class AND a tone class will flip. */
+   The next rule's .feedback-reply.is-left[class*="tone-"] /
+   .is-right[class*="tone-"] arms (1,4,0) are uniquely defined here —
+   no later duplicate. Deleting them lets the FEEDBACK CONVERSATION
+   COLOR LANES rules starting at L37461 (specificity 1,3,0) win,
+   replacing the author tone tint with hardcoded green/pink lane colors.
+   DO NOT DELETE without first relocating these selectors AFTER the
+   lane-color block, or the chip border/background/color for any reply
+   that has BOTH a lane class AND a tone class will flip.
+   The neighbouring .feedback-reply::before triple-group at L34705 is
+   the live source of the dot-marker chrome; treat it as the same kind
+   of load-bearing rule. */
 #feedbackView .feedback-reply[class*="tone-"] .feedback-reply-context,
 #feedbackView .feedback-reply.is-left[class*="tone-"] .feedback-reply-context,
 #feedbackView .feedback-reply.is-right[class*="tone-"] .feedback-reply-context {
@@ -34702,6 +34706,10 @@ body {
   color: var(--author-ink) !important;
 }
 
+/* Dot-marker chrome for left/right replies. Provides position:absolute +
+   content for the .is-left::before / .is-right::before offset rules below
+   (left:-5px / right:-5px). Deleting this group leaves those offsets with
+   no positioned pseudo-element to push. */
 #feedbackView .feedback-reply::before,
 #feedbackView .feedback-reply.is-left::before,
 #feedbackView .feedback-reply.is-right::before {
@@ -34726,7 +34734,12 @@ body {
   }
 }
 
-/* FEEDBACK AUTHOR TONE LOCK: colors belong to people, not left/right lanes. */
+/* FEEDBACK AUTHOR TONE LOCK: colors belong to people, not left/right lanes.
+   See the L34660 banner for the (1,4,0) > (1,3,0) cascade rationale that
+   makes tone-rules beat the later lane-color overrides at L37461+.
+   --author-mid is consumed by #feedbackView .feedback-reply-count (L34698)
+   even though the .feedback-reply-context consumer was removed in PR #81 —
+   do not drop this variable. */
 #feedbackView .feedback-thread,
 #feedbackView .feedback-reply {
   --author-rgb: 56, 189, 248;
@@ -35069,12 +35082,12 @@ body {
     grid-template-columns: 1fr !important;
   }
 
-#mistakeNotebookView#mistakeNotebookView .mistake-list {
+  #mistakeNotebookView#mistakeNotebookView .mistake-list {
     grid-auto-columns: minmax(230px, 82vw) !important;
   }
 }
 
-/* Mistake Notebook layout shuffle: horizontal case rail plus full-width review desk. */
+/* Mistake Notebook toolbar + list-card layout. */
 #mistakeNotebookView .mistake-notebook-toolbar {
   grid-template-columns: minmax(190px, auto) minmax(320px, 1fr) auto !important;
   margin-bottom: 18px !important;
@@ -36075,7 +36088,7 @@ body {
   padding-right: 0 !important;
 }
 
-/* True tail lock 2: remove the remaining lecture-page gutters. */
+/* True tail lock 2: normalize lecture-page frame padding + reset content width. */
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-frame {
   padding: clamp(20px, 2.2vw, 34px) clamp(20px, 2.6vw, 40px) clamp(54px, 4.5vw, 74px) !important;
 }
