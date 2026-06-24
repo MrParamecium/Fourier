@@ -39178,11 +39178,6 @@ body {
   z-index: 35 !important;
 }
 
-.welcome.home-ask-workspace .home-ask-composer,
-.welcome.home-ask-workspace #searchBox.home-ask-composer {
-  z-index: 20 !important;
-}
-
 .welcome.home-ask-workspace .home-ask-composer:focus-within,
 .welcome.home-ask-workspace #searchBox.home-ask-composer:focus-within {
   animation: home-ask-visible-pop 340ms cubic-bezier(0.16, 1.38, 0.28, 1) both !important;
@@ -39215,10 +39210,6 @@ body {
 .welcome.home-ask-workspace:has(#homeModeMenu.home-mode-menu.show) .home-feature-actions {
   transform: translateY(132px) !important;
   transition: transform 220ms cubic-bezier(0.18, 1.08, 0.28, 1) !important;
-}
-
-.welcome.home-ask-workspace #homeModeMenu.home-mode-menu {
-  z-index: 950 !important;
 }
 
 @media (max-width: 760px) {
@@ -39524,9 +39515,6 @@ body {
   transform: translateY(0) scale(1) !important;
 }
 
-.welcome.home-ask-workspace #homeModeMenu .home-mode-option {
-  min-height: 56px !important;
-}
 
 @media (max-width: 760px) {
   .welcome.home-ask-workspace .home-ask-stage {
@@ -39750,11 +39738,6 @@ body {
   z-index: 18 !important;
 }
 
-.welcome.home-ask-workspace .home-ask-icon {
-  width: 34px !important;
-  height: 34px !important;
-  margin: 0 0 18px !important;
-}
 
 .welcome.home-ask-workspace .home-ask-empty h1 {
   font-family: "Source Serif 4", Georgia, "Times New Roman", serif !important;
@@ -39964,34 +39947,10 @@ body {
   padding: clamp(160px, 18vh, 220px) clamp(72px, 7vw, 120px) clamp(42px, 5vh, 64px) !important;
 }
 
-.welcome.home-ask-workspace .home-ask-empty h1 {
-  font-size: clamp(32px, 2.35vw, 44px) !important;
-  line-height: 1.08 !important;
-}
-
-.welcome.home-ask-workspace .home-ask-empty p {
-  margin-top: 12px !important;
-  font-size: clamp(15px, 1vw, 18px) !important;
-  font-weight: 700 !important;
-}
-
 .welcome.home-ask-workspace .home-ask-tags {
   width: min(720px, 100%) !important;
   margin-top: 28px !important;
   gap: 18px !important;
-}
-
-.welcome.home-ask-workspace .home-ask-tag {
-  min-height: 42px !important;
-  padding: 0 24px !important;
-  border-width: 3px !important;
-  font-size: clamp(16px, 1vw, 19px) !important;
-  gap: 9px !important;
-}
-
-.welcome.home-ask-workspace .home-ask-tag svg {
-  width: 18px !important;
-  height: 18px !important;
 }
 
 .welcome.home-ask-workspace .home-ask-composer,
@@ -40024,12 +39983,6 @@ body {
   font-weight: 780 !important;
 }
 
-.welcome.home-ask-workspace .home-ask-toolbar {
-  min-height: 44px !important;
-  margin-top: auto !important;
-  padding-bottom: 2px !important;
-}
-
 .welcome.home-ask-workspace .home-mode-toggle,
 .welcome.home-ask-workspace #webSearchToggleBtnMain.home-ask-web-toggle {
   height: 42px !important;
@@ -40043,36 +39996,6 @@ body {
   font-size: 14px !important;
 }
 
-.welcome.home-ask-workspace .home-mode-toggle #homeModeCurrentText {
-  max-width: 82px !important;
-}
-
-.welcome.home-ask-workspace #webSearchToggleBtnMain.home-ask-web-toggle {
-  width: 46px !important;
-  min-width: 46px !important;
-}
-
-.welcome.home-ask-workspace #homeModeMenu.home-mode-menu {
-  bottom: calc(100% + 96px) !important;
-}
-
-.welcome.home-ask-workspace .home-feature-actions {
-  width: min(1040px, 100%) !important;
-  margin-top: 34px !important;
-  gap: 12px !important;
-  flex-wrap: nowrap !important;
-}
-
-.welcome.home-ask-workspace .home-feature-chip {
-  min-width: 0 !important;
-  flex: 1 1 0 !important;
-  height: 44px !important;
-  padding: 0 16px !important;
-  border-radius: 16px !important;
-  font-size: 16px !important;
-  font-weight: 800 !important;
-  white-space: nowrap !important;
-}
 
 @media (max-width: 1100px) {
   .welcome.home-ask-workspace .home-feature-actions {
