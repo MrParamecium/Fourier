@@ -14045,15 +14045,6 @@ h6,
   min-height: 0;
 }
 
-.course-tracker-shell {
-  width: min(100%, 1440px);
-  margin: 0 auto;
-  padding: clamp(28px, 4vw, 56px);
-  height: 100%;
-  min-height: 100%;
-  overflow-y: auto;
-}
-
 .course-tracker-header {
   display: flex;
   align-items: flex-start;
@@ -14072,15 +14063,6 @@ h6,
   letter-spacing: 0.14em;
   color: #64748b;
   margin-bottom: 8px;
-}
-
-.course-tracker-title {
-  margin: 0 0 10px;
-  font-family: "Quicksand", "Nunito", sans-serif;
-  font-size: clamp(42px, 5vw, 64px);
-  line-height: 0.96;
-  letter-spacing: -0.04em;
-  color: #1e293b;
 }
 
 .course-tracker-subtitle {
