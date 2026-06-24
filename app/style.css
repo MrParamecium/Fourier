@@ -14064,10 +14064,6 @@ h6,
   font-weight: 900;
 }
 
-.preference-preview-card {
-  grid-column: 1 / -1;
-}
-
 /* Course Tracker: syllabus-derived progress and grading dashboard. */
 .course-tracker-view.hidden {
   display: none !important;
@@ -29292,11 +29288,6 @@ body {
     0 24px 72px rgba(15, 23, 42, 0.10) !important;
 }
 
-.feedback-compose-card,
-.feedback-board-card {
-  border-radius: 30px !important;
-}
-
 .feedback-compose-card {
   padding: 30px 24px 24px !important;
   top: 28px !important;
@@ -29391,10 +29382,6 @@ body {
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.66),
     0 18px 40px rgba(14, 165, 233, 0.26) !important;
-}
-
-.feedback-board-card {
-  padding: 24px !important;
 }
 
 .feedback-board-head {
@@ -29497,22 +29484,6 @@ body {
     #f8fbff !important;
 }
 
-.feedback-compose-card,
-.feedback-board-card {
-  border: 1px solid rgba(255, 255, 255, 0.76) !important;
-  background:
-    linear-gradient(137deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.16) 48%, rgba(240, 249, 255, 0.24) 100%),
-    rgba(255, 255, 255, 0.18) !important;
-  backdrop-filter: blur(38px) saturate(1.95) contrast(1.05) !important;
-  -webkit-backdrop-filter: blur(38px) saturate(1.95) contrast(1.05) !important;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.34),
-    inset 18px 22px 48px rgba(255, 255, 255, 0.24),
-    inset -24px -28px 62px rgba(14, 165, 233, 0.075),
-    0 30px 90px rgba(15, 23, 42, 0.13) !important;
-}
-
 .feedback-compose-card::before,
 .feedback-board-card::before {
   background:
@@ -29533,12 +29504,6 @@ body {
     repeating-linear-gradient(112deg, rgba(255, 255, 255, 0.06) 0 1px, transparent 1px 11px) !important;
   mix-blend-mode: screen !important;
   opacity: 0.78 !important;
-}
-
-.feedback-board-card {
-  background:
-    linear-gradient(137deg, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0.13) 50%, rgba(236, 253, 245, 0.20) 100%),
-    rgba(255, 255, 255, 0.16) !important;
 }
 
 .feedback-input,
@@ -29579,13 +29544,6 @@ body {
   background:
     linear-gradient(137deg, rgba(30, 41, 59, 0.54) 0%, rgba(15, 23, 42, 0.24) 52%, rgba(8, 47, 73, 0.28) 100%),
     rgba(15, 23, 42, 0.22) !important;
-}
-
-/* FEEDBACK BOARD READABILITY PASS: keep the glass, but make discussion cards easy to scan. */
-.feedback-board-card {
-  background:
-    linear-gradient(137deg, rgba(255, 255, 255, 0.54) 0%, rgba(255, 255, 255, 0.28) 52%, rgba(240, 253, 250, 0.30) 100%),
-    rgba(255, 255, 255, 0.24) !important;
 }
 
 .feedback-board-card::after {

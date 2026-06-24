@@ -469,8 +469,75 @@ const sharedViews = [
         assertOrThrow(after === EXPECTED,
             `view 12d: #preferenceResetBtn :hover transform is "${after}", expected "${EXPECTED}" (L35558 secondary-btn cascade arm)`);
     } },
+    // View 12e — Page B — preference page, .preference-primary-btn :active.
+    // Closes the v4 harness blind spot flagged in docs/phase3_deferred.md
+    // §3b.iv.followup gap 1: PR #79 deleted L13998's :active block on
+    // cascade-shadow analysis only — there was no pixel-verifiable
+    // :active view. A future delete or reorder of L35463-L35469 (now
+    // the SOLE :active rule for these buttons after #79) would silently
+    // regress mousedown chrome.
+    //
+    // Cascade reality at edit time: L13998 is GONE; L35463-L35469 is the
+    // ONLY .preference-primary-btn:active rule in app/style.css. Delete it
+    // and `:active` matches no rule → transform stays 'none' through
+    // mousedown, distinguishable from the EXPECTED matrix.
+    //
+    // mouse.move(0,0) clears view 12d's hover on #preferenceResetBtn so
+    // the only cascade arm exercised here is :active on #preferenceSaveBtn.
+    // A 350ms wait covers the 150ms transform-transition reversal on
+    // reset-btn (style.css L13969) before snapshotting the resting frame.
+    //
+    // page.mouse.down() simulates the physical button press and keeps
+    // `:active` matching across the screenshot frame (setup → screenshot
+    // happens in that order; the mouse stays down through capture).
+    // View 13 defensively releases at entry (see its setup).
+    //
+    // failRatio: 0.0005 keeps the chrome-recolor safety margin tight —
+    // L35463 also sets a different box-shadow recipe; a partial cascade
+    // collapse that drops only one !important could slip a 1-2 px shadow
+    // shift under the default 0.5%.
+    { name: '12e-preference-primary-btn-active', page: 'B', failRatio: 0.0005, setup: async (page) => {
+        await page.mouse.move(0, 0);
+        await page.waitForTimeout(350);
+        const before = await page.evaluate(() => {
+            const btn = document.getElementById('preferenceSaveBtn');
+            return btn ? getComputedStyle(btn).transform : null;
+        });
+        // Position the cursor over #preferenceSaveBtn — page.hover() also
+        // arms the :hover cascade (L35458 → translateY(-1px)). page.mouse
+        // .down() then ADDS :active (L35463 → translateY(1px)). On a
+        // matching element, :active wins over :hover via source order
+        // (L35463 is after L35458). Capturing this layered state is the
+        // realistic mousedown frame.
+        await page.hover('#preferenceSaveBtn');
+        await page.mouse.down();
+        // Wait BEFORE reading `after` — covers the 150ms transform
+        // transition between :hover and :active states.
+        await page.waitForTimeout(350);
+        const after = await page.evaluate(() => {
+            const btn = document.getElementById('preferenceSaveBtn');
+            return btn ? getComputedStyle(btn).transform : null;
+        });
+        // Expected literal: L35463's translateY(1px) !important wins over
+        // L35458's :hover translateY(-1px). If L35463 is deleted with no
+        // replacement, the :hover rule wins → 'matrix(1, 0, 0, 1, 0, -1)'.
+        // If both are deleted, falls through to base 'none'.
+        const EXPECTED = 'matrix(1, 0, 0, 1, 0, 1)';
+        assertOrThrow(before === 'none',
+            `view 12e: #preferenceSaveBtn resting transform should be 'none' (no base transform on .preference-primary-btn) but is "${before}" — has a new base transform rule been added?`);
+        assertOrThrow(after === EXPECTED,
+            `view 12e: #preferenceSaveBtn :active transform is "${after}", expected "${EXPECTED}" (L35463 cascade winner). If L35463 was deleted, :hover's translateY(-1px) becomes the winner — check the cascade.`);
+    } },
     // View 13 — Page B — course tracker resting state.
     { name: '13-course-tracker', page: 'B', setup: async (page) => {
+        // Defensive mouse.up() — view 12e leaves the primary button
+        // pressed to capture :active across the screenshot. Without
+        // this release, the subsequent #navCourseTrackerBtn click
+        // would dispatch into a held-down mouse state that some
+        // Playwright internals treat inconsistently across Chromium
+        // releases. The .catch swallows the "mouse is not down"
+        // error if a future schedule edit removes view 12e.
+        await page.mouse.up().catch(() => {});
         await page.click('#navCourseTrackerBtn');
         await page.waitForSelector('#courseTrackerView:not(.hidden)', { timeout: 5000 });
         // Tracker timeline renders synchronously from COURSE_SCHEDULE — wait
@@ -701,6 +768,71 @@ const sharedViews = [
         });
         assertOrThrow(focused, 'view 14d: #feedbackBodyInput is not document.activeElement after page.focus()');
         await page.waitForTimeout(350);
+        // OUTLINE GUARD (deferred §3b.iv.followup gap 3). The grouped
+        // selector at style.css L36989-L37001 sets `outline: none
+        // !important`; the broad rule at L9405 (`button:focus,
+        // input:focus, textarea:focus { outline: none }`) provides a
+        // second-line fallback. A future refactor that drops BOTH
+        // would re-enable the UA `:focus-visible` ring. The explicit
+        // computed-style check below catches the catastrophic two-
+        // rule deletion (pixel diff alone caught the single-rule
+        // L36989 case at 0.089% during v5 regression verification —
+        // well above the 0.05% threshold). Belt-and-suspenders: the
+        // assertion documents the cascade dependency for any reader
+        // touching either rule.
+        const outline = await page.evaluate(() => {
+            const t = document.getElementById('feedbackBodyInput');
+            if (!t) return null;
+            const cs = getComputedStyle(t);
+            return { style: cs.outlineStyle, width: cs.outlineWidth };
+        });
+        assertOrThrow(outline && outline.style === 'none',
+            `view 14d: #feedbackBodyInput :focus outline-style is "${outline?.style}", expected "none" (style.css L37000 :important + L9405 broad fallback). If BOTH were deleted, the UA :focus-visible ring is back — restore one of them.`);
+    } },
+    // View 14f — Page B — populated feedback board, .feedback-input :focus
+    // (the input arm of L36989's grouped selector, NOT the textarea arm
+    // covered by 14d). Closes the v4 harness blind spot flagged in docs/
+    // phase3_deferred.md §3b.iv.followup gap 2: L36989 groups four
+    // selectors — `.feedback-input` (covers #feedbackNameInput +
+    // #feedbackTitleInput), `.feedback-textarea` (#feedbackBodyInput),
+    // `.feedback-reply-name`, `.feedback-reply-input`. View 14d only
+    // exercises the textarea arm; a §3b.iv refactor that splits the
+    // grouped selector (e.g. dropping the .feedback-input arm) would
+    // leave the textarea pixel-stable while regressing the name/title
+    // inputs into the unstyled :focus state.
+    //
+    // Inherits 14b's populated fixture (composer inputs are always
+    // present regardless of board state). 14e's blur-on-entry cleans
+    // up 14f's focus.
+    //
+    // ASSERT: document.activeElement match + outline-style === 'none'
+    // (catches L37000 deletion on this arm specifically — gap 3 again,
+    // but for .feedback-input, not .feedback-textarea).
+    //
+    // failRatio: 0.0005 keeps the chrome-recolor safety margin tight.
+    // The 4px sky-glow box-shadow ring around the ~340×40 px name input
+    // covers ≈ 3000 px ≈ 0.29% — well under 0.5% default.
+    { name: '14f-feedback-input-focused', page: 'B', failRatio: 0.0005, setup: async (page) => {
+        // mouse.move(0,0) — same reasoning as 14d: clear any latent
+        // hover from upstream views (14c left mouse at Charlie's reply).
+        await page.mouse.move(0, 0);
+        await page.focus('#feedbackNameInput');
+        const focused = await page.evaluate(() => {
+            const t = document.getElementById('feedbackNameInput');
+            return Boolean(t) && document.activeElement === t
+                   && t.classList.contains('feedback-input');
+        });
+        assertOrThrow(focused,
+            'view 14f: #feedbackNameInput is not document.activeElement after page.focus() (or it lost its .feedback-input class)');
+        await page.waitForTimeout(350);
+        const outline = await page.evaluate(() => {
+            const t = document.getElementById('feedbackNameInput');
+            if (!t) return null;
+            const cs = getComputedStyle(t);
+            return { style: cs.outlineStyle, width: cs.outlineWidth };
+        });
+        assertOrThrow(outline && outline.style === 'none',
+            `view 14f: #feedbackNameInput :focus outline-style is "${outline?.style}", expected "none" (style.css L37000 + L9405 broad fallback). If BOTH were deleted, the UA :focus-visible ring is back on the name input — restore one of them.`);
     } },
     // View 14e — Page B — populated feedback board, .feedback-primary-btn
     // :hover on the compose submit button. Blurs view 14d's textarea focus
