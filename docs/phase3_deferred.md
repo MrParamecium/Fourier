@@ -1771,3 +1771,56 @@ cruft. `#textbookFocusModal` has ZERO `runtime-collapsed.css` competitor
 (grep-confirmed 0) → self-contained pilot. Execution on branch
 `refactor/phase3.6-css-collapse`; single massive PR only when complete,
 else branch-only (no PR) per FlyM1ss's AFK instruction.
+
+---
+
+## 13. Phase 3.6 verification harness `tools/css-probe.js` — SHIPPED PR #101 (2026-06-24)
+
+The computed-style probe gate for the Phase 3.6 collapse (docs/PHASE3.6_SPEC.md
+§4). Table-driven `getComputedStyle` snapshots (`--baseline` / `--check`,
+byte-identical), spawns its own bridge on `:9126`. States S2/S3 (§3d
+composer-chain baseline) + S12 (textbook pilot gate). Wired into `npm run check`
+(node --check) + `test:css-probe:{baseline,check}` scripts.
+
+A medium-effort `/code-review` (10 agents) caught the worst defect class for a
+verification harness — **false confidence** — all fixed before merge:
+- FAIL CLOSED on absence-of-signal (`--baseline` refuses `__MISSING__`; `--check`
+  fails on `__MISSING__`/`__ABSENT__` baseline, vanished element, corrupt
+  (non-array) baseline state, current-only probe, current-only state, duplicate key).
+- Probe LITERAL cascade values, not layout-derived USED values (dropped
+  `width`/`grid-template-columns` — drift across machines/fonts/scrollbars and
+  non-discriminating <820px; kept min-height/border-radius/bg-image/box-shadow/
+  backdrop-filter).
+- Render the `.textbook-focus-qa-empty` node in S12 (was JS-only → dead probe).
+- Dropped non-discriminating page-indicator `::before/::after` probes.
+- assert-as-entered sentinels (R8): S2/S3 `min-height===152px`; S12 glass-token +
+  panel `border-radius:24px`.
+A 1-agent adversarial re-review confirmed no new defects.
+
+### 13a — DEFERRED (D1): hoist bridge/mask/report machinery shared with visual-diff.js
+
+**Status: deferred 2026-06-24 in PR #101 (defer rule D1).**
+
+**What:** the bridge-spawn + SIGTERM-race teardown + signal handler + MASK
+`addInitScript` injection + markdown-report assembly in `tools/css-probe.js` are
+near-duplicates of `tools/visual-diff.js`. They will drift (a fix in one won't
+reach the other — e.g. the PR #69 #9 orphaned-bridge fix).
+
+**Why deferred (D1 — Unrelated module):** the fix's center of gravity is the
+stable, load-bearing `tools/visual-diff.js`; hoisting `spawnBridge()` +
+`injectMask(context)` + a `writeReport()` into `tools/test-utils.js` and rewiring
+BOTH harnesses needs a visual-diff regression run (35-view `--check`), which is
+out of scope for a probe-harness PR.
+
+**Next-session entry point:** `tools/test-utils.js` — add `spawnBridge(repoRoot, port)`,
+`injectMaskInitScript(context)`, `writeMarkdownReport(path, {title, rows})`; rewire
+`tools/css-probe.js` + `tools/visual-diff.js`; verify with `npm run test:visual:check`
++ `npm run test:css-probe:check`. ~1 focused PR.
+
+### 13b — accepted limitation: baseline-driven coverage
+
+The harness compares the current run against the committed baseline; coverage is
+whatever the baseline records. Adding a new probe STATE requires re-baselining
+(the §13 symmetric guard now errors on a current-only state so the gap is loud,
+not silent). Same design as `visual-diff.js`. When Surface 6 (§3d composer chain)
+is attacked, add states S4-S11 (spec §4.2) and re-baseline on pre-collapse main.
