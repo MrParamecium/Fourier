@@ -775,21 +775,7 @@
     }
 
     @container lecture-panel (max-width: 760px) {
-      #learnView #learnExplainToolbar .learn-toolbar-center,
-      #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-toolbar-center,
-      #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .learn-toolbar-center {
-        grid-template-columns: 58px clamp(188px, 47cqi, 244px) 58px !important;
-        gap: 9px !important;
-        max-width: calc(100% - 84px) !important;
-      }
 
-      #learnView #learnViewSelector,
-      #learnView #learnBody:not(.chapter-overview-active) #learnViewSelector,
-      #learnView #learnBody.chapter-overview-split-active #learnViewSelector {
-        width: clamp(188px, 47cqi, 244px) !important;
-        min-width: 188px !important;
-        max-width: 244px !important;
-      }
 
       #learnView #learnExplainToolbar #lecturePrevOverlayBtn,
       #learnView #learnExplainToolbar #lectureNextOverlayBtn {
