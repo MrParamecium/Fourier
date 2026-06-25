@@ -261,6 +261,15 @@ const PROBE_STATES = [
             });
             assertOrThrow(ok, 'S-page-corner: overlay buttons missing or lack .lecture-page-corner.page-turner / .turner-content child');
         },
+        // NOTE on which probes are load-bearing: the visual treatment lives on
+        // the PSEUDO-elements + the inner span — ::before carries the gradient,
+        // ::after the noise data-URI (opacity:1), .turner-content the rest
+        // transform. On the BASE button, background-image/border-top-left-radius/
+        // box-shadow rest at their defaults (none/0px/none) in this state, so
+        // those three probes are change-detectors for an accidental ADDITION by
+        // the de-double, not witnesses of a preserved value. Both roles are
+        // wanted; the §6.2 de-double is proven equivalent only by the ::before/
+        // ::after/.turner-content probes, which pin real non-default values.
         probes: [
             ['#lecturePrevOverlayBtn', null, 'background-image'],
             ['#lecturePrevOverlayBtn', null, 'border-top-left-radius'],

@@ -63,7 +63,40 @@ function parseDeclarations(css) {
     return ans + 1; // 1-based
   };
 
-  const norm = (s) => s.replace(/\s+/g, ' ').trim();
+  // Collapse runs of whitespace to a single space and trim, but PRESERVE
+  // whitespace INSIDE quoted strings. A plain /\s+/g collapse would fold the
+  // value of an attribute selector — `[title="a   b"]` → `[title="a b"]` — so
+  // two genuinely-different selectors differing only by internal string
+  // whitespace would hash into ONE group and the earlier could be wrongly
+  // deleted. Walking quotes keeps them DISTINCT groups → never over-merges.
+  const norm = (s) => {
+    let out = '';
+    let p = 0;
+    const len = s.length;
+    while (p < len) {
+      const c = s[p];
+      if (c === '"' || c === "'") {
+        const q = c;
+        let e = p + 1;
+        while (e < len) { if (s[e] === '\\') { e += 2; continue; } if (s[e] === q) break; e++; }
+        out += s.slice(p, Math.min(e + 1, len)); // string verbatim (incl. its ws)
+        p = e + 1;
+        continue;
+      }
+      if (/\s/.test(c)) {
+        // outer trigger uses the SAME `\s` predicate as the inner swallow, so
+        // the two whitespace notions can't diverge — this keeps the collapse
+        // byte-identical to the old `s.replace(/\s+/g,' ')` for input outside
+        // quoted strings (incl. vertical-tab / NBSP / Unicode spaces).
+        while (p < len && /\s/.test(s[p])) p++; // swallow the whole run
+        out += ' ';
+        continue;
+      }
+      out += c;
+      p++;
+    }
+    return out.trim();
+  };
 
   // `buf` accumulates the raw text of the current chunk (a prelude before `{`,
   // or a declaration before `;`/`}`) for prop:value PARSING only. Byte OFFSETS
@@ -511,6 +544,12 @@ function validate() {
   eq('custom-prop case sensitive', collapse(':root {\n  --Gap: 10px;\n  --gap: 20px;\n}\n'), ':root {\n  --Gap: 10px;\n  --gap: 20px;\n}\n');
   // review fix: native nesting must not collide same child under different parents
   eq('nesting no cross-parent collide', collapse('.a { & .c { color: red; } }\n.b { & .c { color: green; } }\n'), '.a { & .c { color: red; } }\n.b { & .c { color: green; } }\n');
+  // review fix: whitespace INSIDE a quoted selector value is significant — two
+  // attribute selectors differing only by internal string whitespace are
+  // DIFFERENT groups and must both survive (norm must not fold string ws).
+  eq('attr-selector internal ws distinct', collapse('[data-x="a  b"] { color: red; }\n[data-x="a b"] { color: blue; }\n'), '[data-x="a  b"] { color: red; }\n[data-x="a b"] { color: blue; }\n');
+  // same selector, internal-ws string value: redeclaration still collapses
+  eq('attr-selector same internal ws collapses', collapse('[data-x="a  b"] {\n  color: red;\n  color: blue;\n}\n'), '[data-x="a  b"] {\n  color: blue;\n}\n');
 
   // --- empty-rule husks ---
   eq('empty husk removed', stripEmpty('.x { }\n.y { color: red; }\n'), '.y { color: red; }\n');

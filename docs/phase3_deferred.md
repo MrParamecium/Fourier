@@ -1902,6 +1902,37 @@ byte-identical at every probed viewport (the five banded states N0–N4 + the th
 S2/S3/S12). Est. reward: ~620 `!important` + ~696 lines, now split across a desktop-verifiable
 slice and a narrow-viewport-verifiable slice.
 
+#### 14a — Pre-existing unclosed `.learn-followup-bar {` brace — DEFERRED (cascade-changing)
+
+**Status: surfaced 2026-06-25 during the §14 collapse (PR #105); flagged, NOT fixed (out of scope —
+fixing it changes rendering).**
+
+**What:** `app/style.css` has an accidentally-unclosed `.learn-followup-bar {` with an empty body
+(whitespace + a comment), immediately before the "Final lecture typography override" block —
+source ~L7198 on pre-collapse `main`, now `app/style.css` L5478 (the `/* Final lecture typography
+override */` comment at L5480). Because the brace never closes before the next rule, a
+**nesting-aware** browser scopes the ~79 following declarations (`.learn-explain-body`,
+`.explain-body`, their `p`/`li`/`h*` typography) as DESCENDANTS of `.learn-followup-bar` rather
+than as the intended global overrides. The explain body is not a descendant of the follow-up bar,
+so the "final typography override" is **likely inert globally** in nesting-aware browsers.
+
+**Interaction with the §14 collapse (why it mattered):** the detector groups by the FULL nesting
+chain, so it correctly treated those 79 decls as scoped under `.learn-followup-bar` and left them
+intact. The throwaway first pass grouped by innermost selector only, ignored the nesting, merged
+them with the top-level `.explain-body` typography, and **over-deleted 48** — the bug fixed in
+commit 772c065 (and now locked by the `--validate` `nesting no cross-parent collide` case).
+
+**Why deferred (cascade-changing):** closing the brace would re-activate those `!important`
+typography overrides GLOBALLY, changing the rendered explain-body color/size/line-height — exactly
+the kind of cascade change a render-neutral collapse PR must not make. It needs its own PR that
+(a) decides whether those overrides are still wanted, (b) closes the brace (or deletes the dead
+block), and (c) re-verifies `npm run test:visual:check` + `npm run test:css-probe:check` with an
+EXPECTED, reviewed render delta.
+
+**Next-session entry point:** `app/style.css` L5478 (`.learn-followup-bar {` → `/* Final lecture
+typography override */`). Confirm in a nesting-aware engine whether the block is inert today before
+choosing fix-vs-delete.
+
 ## 15. css-probe S2/S3 panelFocus JS-var desync — DEFERRED (D1), harness-fidelity only
 
 **Status: deferred 2026-06-25 in PR #104 self-review (defer rule D1 — pre-existing, unrelated to this PR's diff).**
