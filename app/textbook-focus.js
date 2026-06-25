@@ -19,10 +19,19 @@
 //   - setTextbookFocusQaOpen / sendTextbookFocusQuestion / syncTextbookFocusQaFromLearnChat
 //   - stepTextbookFocusZoom / resetTextbookFocusTransform / applyTextbookFocusTransform
 //   - isTextbookFocusQaOpen  (state read by app.js's QA-toggle handler + learn-chat hook)
+//
+// Shared mutable state crossing back into app.js (live bindings in the shared
+// global lexical env, NOT module-private): app.js's document-level mouse drag
+// handler — the same listener that drags the image lightbox — reads
+// textbookFocusDragging / textbookFocusScale / textbookFocusDragStart{X,Y} and
+// writes textbookFocusPan{X,Y} during a drag (mousedown is bound here in
+// bindTextbookFocusInteractions; the mousemove/mouseup half stays in that shared
+// app.js handler because it also serves the lightbox). Keep these as module-scope
+// `let`s, not a closure/object, or those app.js references break.
 
 // DOM elements + module state — queried once at load (this <script> runs after the
-// body is parsed, like the sibling feature modules). Only this module reads the
-// state vars; app.js reads some button consts cross-scope to wire their handlers.
+// body is parsed, like the sibling feature modules). app.js reaches the button
+// consts (event wiring) and the drag/pan state (shared mouse handler) cross-scope.
 const textbookFocusModal    = document.getElementById('textbookFocusModal');
 const textbookFocusBackdrop = document.getElementById('textbookFocusBackdrop');
 const textbookFocusClose    = document.getElementById('textbookFocusClose');
