@@ -295,6 +295,86 @@ function applyExcisions(css, dead) {
   return { css: out, removed };
 }
 
+// ---- empty style-rule removal ----------------------------------------------
+
+/**
+ * Find STYLE-rule blocks (not @media/@supports/@container/@keyframes/@font-face)
+ * whose body holds zero declarations and zero nested rules — i.e. `sel { }` with
+ * only whitespace inside. Such rules render nothing, so removing the whole
+ * `sel { }` span (selector through close brace) is unconditionally safe. The
+ * collapse leaves these husks behind when every declaration of a block was a
+ * dead loser. Comment-only bodies are NOT removed (a comment may be a note).
+ * @returns {Array<{start:number, end:number, selector:string}>}
+ */
+function findEmptyStyleRules(css) {
+  const n = css.length;
+  const out = [];
+  const stack = []; // { kind:'style'|'at', preludeStart, hasContent }
+  let i = 0;
+  let preludeStart = -1; // first content byte of the pending prelude
+  let skipDepth = -1;
+
+  const markPrelude = (off) => { if (preludeStart < 0) preludeStart = off; };
+  const markParentContent = () => { if (stack.length && skipDepth === -1) stack[stack.length - 1].hasContent = true; };
+
+  while (i < n) {
+    const ch = css[i];
+    if (ch === '/' && css[i + 1] === '*') {
+      // a comment inside a block counts as content → preserve comment-only
+      // husks (don't delete dev notes); it does NOT set preludeStart, so the
+      // removal span still starts at the selector, leaving a leading comment.
+      markParentContent();
+      const e = css.indexOf('*/', i + 2); i = e === -1 ? n : e + 2; continue;
+    }
+    if (ch === '"' || ch === "'") {
+      const q = ch; let j = i + 1;
+      while (j < n) { if (css[j] === '\\') { j += 2; continue; } if (css[j] === q) break; j++; }
+      markPrelude(i); markParentContent();
+      i = j + 1; continue;
+    }
+    if (ch === '(') {
+      let depth = 0, j = i;
+      while (j < n) {
+        const c = css[j];
+        if (c === '/' && css[j + 1] === '*') { const e = css.indexOf('*/', j + 2); j = e === -1 ? n : e + 2; continue; }
+        if (c === '"' || c === "'") { const q = c; let k = j + 1; while (k < n) { if (css[k] === '\\') { k += 2; continue; } if (css[k] === q) break; k++; } j = k + 1; continue; }
+        if (c === '(') depth++;
+        else if (c === ')') { depth--; if (depth === 0) { j++; break; } }
+        j++;
+      }
+      markPrelude(i); markParentContent();
+      i = j; continue;
+    }
+    if (ch === '{') {
+      const prelude = css.slice(preludeStart < 0 ? i : preludeStart, i).replace(/\/\*[\s\S]*?\*\//g, '').replace(/\s+/g, ' ').trim();
+      const pStart = preludeStart < 0 ? i : preludeStart;
+      preludeStart = -1;
+      if (skipDepth !== -1) { stack.push({ kind: 'skip' }); i++; continue; }
+      markParentContent(); // this nested block is content for its parent
+      if (prelude.startsWith('@')) {
+        const at = prelude.slice(1).split(/[\s(]/, 1)[0].toLowerCase();
+        if (at === 'media' || at === 'supports' || at === 'container') stack.push({ kind: 'at', preludeStart: pStart, hasContent: false });
+        else { skipDepth = stack.length; stack.push({ kind: 'skip' }); }
+      } else {
+        stack.push({ kind: 'style', preludeStart: pStart, hasContent: false });
+      }
+      i++; continue;
+    }
+    if (ch === '}') {
+      const blk = stack.pop();
+      if (blk && blk.kind === 'style' && !blk.hasContent) {
+        out.push({ start: blk.preludeStart, end: i + 1, selector: css.slice(blk.preludeStart, i).replace(/\/\*[\s\S]*?\*\//g, '').replace(/\s+/g, ' ').trim() });
+      }
+      if (skipDepth !== -1 && stack.length <= skipDepth) skipDepth = -1;
+      i++; continue;
+    }
+    if (ch === ';') { markPrelude(i); markParentContent(); preludeStart = -1; i++; continue; }
+    if (!/\s/.test(ch)) { markPrelude(i); markParentContent(); }
+    i++;
+  }
+  return out;
+}
+
 // ---- CLI --------------------------------------------------------------------
 
 function classify(d) { return d.context === '' ? 'top-level' : 'media-gated'; }
@@ -309,6 +389,26 @@ function main() {
     process.exit(2);
   }
   const css = fs.readFileSync(file, 'utf8');
+
+  // --empty-rules: remove `sel { }` husks (whitespace/comment-only style rules).
+  if (args.includes('--empty-rules')) {
+    const empties = findEmptyStyleRules(css);
+    if (args.includes('--write')) {
+      const before = css.split('\n').length;
+      // reuse the excision masker (start/end spans); line-swallow tidies up
+      const { css: out, removed } = applyExcisions(css, empties);
+      const after = out.split('\n').length;
+      fs.writeFileSync(file, out);
+      console.log(`${file}: removed ${empties.length} empty style rules, ${removed} bytes; lines ${before} → ${after} (−${before - after})`);
+    } else if (args.includes('--json')) {
+      console.log(JSON.stringify(empties, null, 2));
+    } else {
+      console.log(`${file}: ${empties.length} empty style-rule husks`);
+      for (const e of empties) console.log(`  L${String(css.slice(0, e.start).split('\n').length).padStart(6)}  ${e.selector.slice(0, 90)}`);
+    }
+    return;
+  }
+
   let dead = findDead(parseDeclarations(css));
 
   if (args.includes('--top-level')) dead = dead.filter((d) => classify(d) === 'top-level');
@@ -389,4 +489,4 @@ function validate() {
 }
 
 if (require.main === module) main();
-module.exports = { parseDeclarations, findDead, applyExcisions, classify };
+module.exports = { parseDeclarations, findDead, applyExcisions, classify, findEmptyStyleRules };
