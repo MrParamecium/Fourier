@@ -2749,9 +2749,6 @@ body.textbook-focus-active .learn-chat-popover {
 
 
 
-@media (max-width: 980px) {
-}
-
 /* Final split override: overview lessons keep both side buttons and a full-width Q&A composer. */
 
 
@@ -2828,9 +2825,6 @@ body.textbook-focus-active .learn-chat-popover {
 
 
 
-
-@media (max-width: 980px) {
-}
 
 /* Final final: overview lessons keep split Q&A controls active. */
 
@@ -12564,9 +12558,6 @@ h6,
 
 
 
-@media (max-width: 900px) {
-}
-
 /* Home scrapbook layer */
 .welcome {
   isolation: isolate !important;
@@ -21759,10 +21750,6 @@ body {
   transition: transform 180ms ease !important;
 }
 
-@media (max-width: 760px) {
-
-}
-
 /* HOME ASK FINAL POSITION: keep the homepage question module slightly lower. */
 .home-ask-stage > .home-ask-empty,
 .home-ask-stage > .home-ask-composer,
@@ -21935,9 +21922,6 @@ body {
   100% {
     translate: 0 0;
   }
-}
-
-@media (prefers-reduced-motion: reduce) {
 }
 
 .welcome.home-ask-workspace .home-ask-tag,
@@ -25824,9 +25808,6 @@ body {
     0 6px 14px rgba(var(--author-rgb),0.18) !important;
 }
 
-@media (max-width: 760px) {
-}
-
 /* FEEDBACK AUTHOR TONE LOCK: colors belong to people, not left/right lanes.
    See the L34660 banner for the (1,4,0) > (1,3,0) cascade rationale that
    makes tone-rules beat the later lane-color overrides at L37461+.
@@ -29150,9 +29131,6 @@ body {
   margin-top: 0 !important;
 }
 
-@media (max-width: 760px) {
-}
-
 /* True EOF lesson title scale lock: chapter headings stay strong without swallowing the page. */
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-heading#learnPageHeading,
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-heading {
@@ -29648,9 +29626,6 @@ body {
 .learn-explain-body .learn-key-takeaways-list > li > :first-child,
 .explain-body .learn-key-takeaways-list > li > :first-child {
   margin-top: 0 !important;
-}
-
-@media (max-width: 760px) {
 }
 
 /* ABSOLUTE EOF KEY TAKEAWAYS FROSTED LAYOUT LOCK: explicit marker + copy structure. */
