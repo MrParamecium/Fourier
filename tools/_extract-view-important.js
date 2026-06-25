@@ -18,7 +18,7 @@ const FILE = path.join(__dirname, '..', 'app', 'style.css');
 const css = fs.readFileSync(FILE, 'utf8');
 const decls = parseDeclarations(css);
 
-const VIEWS = ['#mistakeNotebookView'];
+const VIEWS = ['#feedbackView'];
 
 for (const view of VIEWS) {
   // !important decls whose selector mentions this view ID

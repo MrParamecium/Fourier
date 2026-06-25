@@ -25,7 +25,7 @@ const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
 const { chromium } = require('playwright');
-const { MASK_CSS, waitForHealth, enterGuestMode } = require('./test-utils.js');
+const { MASK_CSS, waitForHealth, enterGuestMode, seedFeedbackFixture, restoreFeedbackBoard, FEEDBACK_FIXTURE_POPULATED_PATH } = require('./test-utils.js');
 
 const PORT = Number(process.env.TUTOR_VIEWPROBE_PORT || 9127);
 const BASE = `http://127.0.0.1:${PORT}`;
@@ -59,45 +59,22 @@ const VIEWPORTS = [1280, 1180, 980, 820, 760];
 // !important is dropped.
 const VIEWS = [
   {
-    id: 'mistakeNotebook', nav: '#navMistakeNotebookBtn', root: '#mistakeNotebookView',
-    // Seed a single-case fixture (the visual-diff 03b pattern) so the case-detail
-    // rules (.mistake-note-columns / inputs / action buttons) are live, not just
-    // the empty board. The app re-reads localStorage on MN open.
-    preNav: async (page) => {
-      await page.evaluate(() => {
-        const fixture = [{
-          id: 'mistake_probe_01', title: 'Probe fixture mistake',
-          tags: 'fixture, probe', notes: 'Notes long enough to wrap two lines so input height is exercised.',
-          noteImages: [], aiDraftNotes: '', aiAnswer: '', imageDataUrl: '',
-          problemText: 'Probe problem text — renders into #mistakeTextPreview (imageDataUrl empty).',
-          createdAt: '2024-01-15T10:30:00Z', updatedAt: '2024-01-15T10:30:00Z',
-        }];
-        localStorage.setItem('aquariusMistakeNotebook.v1', JSON.stringify(fixture));
-      });
-    },
-    ready: () => !document.getElementById('mistakeDetailContent')?.classList.contains('hidden')
-      && !!document.querySelector('.mistake-list-item.active'),
-    // A resize re-render can collapse the open case — re-open it idempotently.
-    ensureState: async (page) => {
-      await page.evaluate(() => {
-        const detail = document.getElementById('mistakeDetailContent');
-        const active = document.querySelector('.mistake-list-item.active');
-        if (!active || !detail || detail.classList.contains('hidden')) {
-          document.querySelector('.mistake-list-item')?.click();
-        }
-      });
-    },
+    id: 'feedback', nav: '#navFeedbackBtn', root: '#feedbackView',
+    // Seed the populated multi-tone board (the visual-diff 14b fixture) so the
+    // tone-lane / is-left|right / reply-context rules are all live. Node-side
+    // file swap; restoreFeedbackBoard() runs in the runner's finally.
+    preNav: async () => { seedFeedbackFixture(FEEDBACK_FIXTURE_POPULATED_PATH); },
+    ready: () => document.querySelectorAll('#feedbackView .feedback-thread').length > 0,
     interactions: [
       { label: 'rest' },
-      { label: 'item-hover', hover: '#mistakeNotebookView .mistake-list-item' },
-      { label: 'primary-hover', hover: '#mistakeNotebookView .mistake-primary-btn' },
-      { label: 'secondary-hover', hover: '#mistakeNotebookView .mistake-secondary-btn' },
-      { label: 'danger-hover', hover: '#mistakeNotebookView .mistake-danger-btn' },
-      { label: 'mini-hover', hover: '#mistakeNotebookView .mistake-mini-btn' },
-      { label: 'upload-hover', hover: '#mistakeNotebookView .mistake-upload-btn' },
-      { label: 'title-focus', focus: '#mistakeNotebookView .mistake-title-input' },
-      { label: 'notes-focus', focus: '#mistakeNotebookView .mistake-notes-input' },
-      { label: 'tags-focus', focus: '#mistakeNotebookView .mistake-tags-input' },
+      { label: 'card-hover', hover: '#feedbackView .feedback-board-card' },
+      { label: 'primary-hover', hover: '#feedbackView .feedback-primary-btn' },
+      { label: 'secondary-hover', hover: '#feedbackView .feedback-secondary-btn' },
+      { label: 'refresh-hover', hover: '#feedbackView .feedback-refresh-icon-btn' },
+      { label: 'pin-hover', hover: '#feedbackView .feedback-thread-pin' },
+      { label: 'input-focus', focus: '#feedbackView .feedback-input' },
+      { label: 'textarea-focus', focus: '#feedbackView .feedback-textarea' },
+      { label: 'replyinput-focus', focus: '#feedbackView .feedback-reply-input' },
     ],
   },
 ];
@@ -122,7 +99,11 @@ function makeSnapshotFn() {
     };
     return els.map((el, i) => {
       const cs = getComputedStyle(el);
-      const rect = el.getBoundingClientRect();
+      // Layout-box metrics (offset*) — scroll-INVARIANT (Playwright auto-scrolls
+      // to hover/focus below-fold controls non-deterministically). Transforms are
+      // pre-layout so they don't show here, but `transform` is snapshotted as a
+      // prop, so reflow + transform coverage is complete between the two.
+      const rect = { x: el.offsetLeft, y: el.offsetTop, width: el.offsetWidth, height: el.offsetHeight };
       const cls = (el.className && typeof el.className === 'string')
         ? '.' + el.className.trim().split(/\s+/).join('.') : '';
       const pv = {};
@@ -130,7 +111,7 @@ function makeSnapshotFn() {
       return {
         i,
         desc: el.tagName.toLowerCase() + (el.id ? '#' + el.id : '') + cls,
-        rect: [r3(rect.x), r3(rect.y), r3(rect.width), r3(rect.height)],
+        rect: [rect.x, rect.y, rect.width, rect.height],
         props: pv,
         before: pseudo(el, '::before'),
         after: pseudo(el, '::after'),
@@ -266,6 +247,9 @@ process.once('SIGTERM', () => cleanup('SIGTERM'));
     console.error('[view-probe] FATAL', err);
     exitCode = 1;
   } finally {
+    // Restore any server-side feedback board the probe seeded (data-loss-safe:
+    // restoreFeedbackBoard only deletes a board it can prove is the fixture).
+    if (VIEWS.some((v) => v.id === 'feedback')) { try { restoreFeedbackBoard(); } catch (_) {} }
     const exited = new Promise((res) => bridge.once('exit', res));
     bridge.kill('SIGTERM');
     await Promise.race([exited, new Promise((res) => setTimeout(res, 2500))]);
