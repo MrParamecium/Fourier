@@ -1898,6 +1898,39 @@ this lever is a trap without viewport-aware verification.
 the EXISTING 1280 harness; it was never harness-blocked. (b) the hard half — build the
 correctness-hardened parser (prereq 2), then cut the genuinely media-gated earlier-dead decls on
 the `refactor/phase3.6-css-collapse` branch → `npm run test:css-probe:check` must stay
-byte-identical at every probed viewport (the four narrow states + the three desktop states).
-Est. reward: ~620 `!important` + ~696 lines, now split across a desktop-verifiable slice and a
-narrow-viewport-verifiable slice.
+byte-identical at every probed viewport (the five banded states N0–N4 + the three desktop states
+S2/S3/S12). Est. reward: ~620 `!important` + ~696 lines, now split across a desktop-verifiable
+slice and a narrow-viewport-verifiable slice.
+
+## 15. css-probe S2/S3 panelFocus JS-var desync — DEFERRED (D1), harness-fidelity only
+
+**Status: deferred 2026-06-25 in PR #104 self-review (defer rule D1 — pre-existing, unrelated to this PR's diff).**
+
+**What:** The S2/S3 desktop probe states (PR #101) set `#learnBody.dataset.panelFocus =
+'qa-wide'|'qa-full'` directly in `page.evaluate` instead of calling the app's internal
+`applyLearnPanelFocusState` (app.js), so the module-internal `learnPanelFocus` JS variable stays
+`'normal'`. With the DOM in a panel-focus state but the JS var `'normal'`, `applyLearnSplit`'s
+guard (`learnPanelFocus !== 'normal'`, app.js ~L7561) is false at desktop width, so it RUNS and
+writes inline `!important` split-column styles onto the shared learn columns; the desync persists
+across later states on the shared page.
+
+**Why deferred (D1):** the finding is in the S2/S3 `enter()` logic (PR #101), which this PR's diff
+did not touch — the new banded states N0–N4 are independent. It is invisible to the harness: no
+probe (FOLLOWUP_PROBES / NARROW_PROBES / S12) reads `learnPanelFocus` or the inline split-column
+geometry it produces, so no captured value is affected (confirmed: `--check` byte-identical, 8/8
+states). A proper fix needs app.js to expose `applyLearnPanelFocusState` to the page context (or
+the harness to replicate its full side-effect set) AND would re-capture + potentially drift the
+S2/S3 baseline — out of scope for a harness-coverage PR.
+
+**Next-session entry point:** `tools/css-probe.js` S2/S3 `enter()` (`shell.dataset.panelFocus = …`);
+`app.js` `applyLearnPanelFocusState` / the `applyLearnSplit` guard (~L2725 / ~L7561). Only worth
+fixing if a future probe targets the learn-split column geometry. Est. effort: small, gated on
+exposing the app function + an S2/S3 re-baseline.
+
+> PR #104 self-review note: the other review findings were fixed in-PR — desktop bracket state N0
+> (catches a media-query hoist that changes the 1280 value), an `explain-collapsed` floor in
+> `bandState.enter()` (guards the ≤820 edge-tab band from a higher-specificity leak), raw sentinel
+> reads (sentinel/probe byte-agreement), duplicate-state-name + duplicate-probe-key fail-closed
+> guards, and comment-accuracy fixes (toolbar `flex-wrap` is an inert cascade witness, not layout).
+> The `@container lecture-panel` coverage gap remains the documented §14 follow-up (needs a panel-
+> width driver, not a viewport one).
