@@ -390,6 +390,16 @@ process.once('SIGTERM', () => signalCleanup('SIGTERM'));
 (async () => {
     const repoRoot = path.resolve(__dirname, '..');
 
+    // FAIL CLOSED (static precondition, before any resource is spawned): duplicate state names
+    // would silently overwrite in `snapshot[name]`, dropping a whole state's coverage with zero
+    // signal (the per-key / missing-state guards cannot see it). Reject before the bridge starts.
+    const stateNames = PROBE_STATES.map((s) => s.state);
+    const dupState = stateNames.find((n, i) => stateNames.indexOf(n) !== i);
+    if (dupState) {
+        console.error(`[css-probe] duplicate PROBE_STATES name "${dupState}" — state ids must be unique`);
+        process.exit(1);
+    }
+
     console.log(`[css-probe] mode=${MODE}`);
     console.log(`[css-probe] starting bridge on :${PORT}`);
     const server = spawn('node', ['app/ws-bridge.js'], {
@@ -430,16 +440,6 @@ process.once('SIGTERM', () => signalCleanup('SIGTERM'));
         const page = await context.newPage();
         await enterGuestMode(page, BASE);
         await openSubtopic(page, SUBTOPIC);
-
-        // FAIL CLOSED: duplicate state names would silently overwrite in `snapshot[name]`,
-        // dropping a whole state's coverage with zero signal (the per-key / missing-state guards
-        // cannot see it). Reject before capturing.
-        const stateNames = PROBE_STATES.map((s) => s.state);
-        const dupState = stateNames.find((n, i) => stateNames.indexOf(n) !== i);
-        if (dupState) {
-            console.error(`[css-probe] duplicate PROBE_STATES name "${dupState}" — state ids must be unique`);
-            process.exit(1);
-        }
 
         for (const stateDef of PROBE_STATES) {
             try {
