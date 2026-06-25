@@ -41,8 +41,7 @@ if (!MODE) { console.error('usage: _view-cascade-probe.js --baseline | --check')
 // staples) — i.e. "every property touched by a stripped !important" (spec §4.3).
 const cand = require('./_view-important.json');
 const PROP_LIST = [...new Set([
-  ...cand['#courseTrackerView'].map((d) => d.prop),
-  ...cand['#preferenceView'].map((d) => d.prop),
+  ...Object.values(cand).flat().map((d) => d.prop),
   // layout/visual staples so a reflow's downstream resolved values are pinned too
   'left', 'right', 'bottom', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom',
   'margin-right', 'border-width', 'border-style', 'background-color', 'flex-grow', 'flex-basis',
@@ -51,26 +50,28 @@ const PROP_LIST = [...new Set([
 const THEMES = ['dawn', 'dusk', 'dark'];
 const VIEWPORTS = [1280, 1180, 980, 760];
 
+// NOTE: VIEWS is reassigned per-surface as the strip pipeline moves through the
+// spec §3 surfaces. courseTracker/preference (committed `3385050`) used the config
+// kept in git history; this run targets #settingsView. The settings control classes
+// (.settings-primary-btn/.settings-secondary-btn/.settings-page-nav-item/
+// .settings-page-back/.feature-close-btn) carry GLOBAL :hover/:focus/:active rules,
+// so those states must be probed to catch a competitor that wins once a resting
+// !important is dropped.
 const VIEWS = [
   {
-    id: 'courseTracker', nav: '#navCourseTrackerBtn', root: '#courseTrackerView',
-    ready: () => document.querySelectorAll('#courseTrackerTableBody .course-timeline-item').length > 0,
+    id: 'settings', nav: '#sidebarSettingsBtn', root: '#settingsView',
+    ready: () => !!document.querySelector('.settings-page-version'),
     interactions: [
       { label: 'rest' },
-      { label: 'item-hover', hover: '#courseTrackerTableBody .course-timeline-item' },
-    ],
-  },
-  {
-    id: 'preference', nav: '#navPreferenceBtn', root: '#preferenceView',
-    ready: () => !!document.getElementById('preferenceProfilePreview'),
-    interactions: [
-      { label: 'rest' },
-      { label: 'save-hover', hover: '#preferenceSaveBtn' },
-      { label: 'reset-hover', hover: '#preferenceResetBtn' },
-      { label: 'editor-focus', focus: '#preferenceProfileEditor' },
-      { label: 'tone-working', tone: 'working' },
-      { label: 'tone-saved', tone: 'saved' },
-      { label: 'tone-error', tone: 'error' },
+      { label: 'primary-hover', hover: '#settingsView .settings-primary-btn' },
+      { label: 'secondary-hover', hover: '#settingsView .settings-secondary-btn' },
+      { label: 'navitem-hover', hover: '#settingsView .settings-page-nav-item:not(.active)' },
+      { label: 'back-hover', hover: '#settingsView .settings-page-back' },
+      { label: 'close-hover', hover: '#settingsView .feature-close-btn' },
+      { label: 'primary-focus', focus: '#settingsView .settings-primary-btn' },
+      { label: 'secondary-focus', focus: '#settingsView .settings-secondary-btn' },
+      { label: 'primary-active', active: '#settingsView .settings-primary-btn' },
+      { label: 'secondary-active', active: '#settingsView .settings-secondary-btn' },
     ],
   },
 ];
@@ -129,6 +130,7 @@ async function captureView(page, view, snapFn) {
     for (const vp of VIEWPORTS) {
       for (const act of view.interactions) {
         // Clear prior interaction state, then set theme + viewport.
+        await page.mouse.up().catch(() => {});
         await page.mouse.move(0, 0);
         await page.evaluate(() => {
           document.activeElement?.blur?.();
@@ -138,9 +140,21 @@ async function captureView(page, view, snapFn) {
         await page.evaluate((t) => document.documentElement.setAttribute('data-theme', t), theme);
         await page.setViewportSize({ width: vp, height: 800 });
         await settle(page);
-        // Apply this interaction.
-        if (act.hover) await page.hover(act.hover).catch(() => {});
-        if (act.focus) await page.focus(act.focus).catch(() => {});
+        // Apply this interaction — query existence + visibility FIRST so a missing
+        // or guest-hidden control (e.g. .settings-page-back is absent) fails fast
+        // instead of blocking on page.hover's 30s default timeout.
+        const present = async (sel) => {
+          const el = await page.$(sel).catch(() => null);
+          if (el && await el.isVisible().catch(() => false)) return el;
+          return null;
+        };
+        if (act.hover && await present(act.hover)) await page.hover(act.hover, { timeout: 1500 }).catch(() => {});
+        if (act.focus && await present(act.focus)) await page.focus(act.focus, { timeout: 1500 }).catch(() => {});
+        if (act.active) {
+          const el = await present(act.active);
+          const box = el && await el.boundingBox().catch(() => null);
+          if (box) { await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2); await page.mouse.down().catch(() => {}); }
+        }
         if (act.tone) {
           await page.evaluate((tone) => {
             const ss = document.querySelector('.preference-save-state');

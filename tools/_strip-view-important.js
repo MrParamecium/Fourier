@@ -21,7 +21,7 @@ const path = require('path');
 const { execSync } = require('child_process');
 const { parseDeclarations } = require('./find-dead-redeclarations.js');
 
-const VIEW_IDS = { courseTracker: '#courseTrackerView', preference: '#preferenceView' };
+const VIEW_IDS = { courseTracker: '#courseTrackerView', preference: '#preferenceView', settings: '#settingsView' };
 const viewArg = (process.argv.find((a) => a.startsWith('--view=')) || '--view=both').split('=')[1];
 const views = viewArg === 'both' ? Object.values(VIEW_IDS)
   : VIEW_IDS[viewArg] ? [VIEW_IDS[viewArg]] : null;

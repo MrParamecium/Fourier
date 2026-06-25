@@ -18,7 +18,7 @@ const FILE = path.join(__dirname, '..', 'app', 'style.css');
 const css = fs.readFileSync(FILE, 'utf8');
 const decls = parseDeclarations(css);
 
-const VIEWS = ['#courseTrackerView', '#preferenceView'];
+const VIEWS = ['#settingsView'];
 
 for (const view of VIEWS) {
   // !important decls whose selector mentions this view ID
@@ -50,4 +50,4 @@ for (const view of VIEWS) {
 }
 const dest = path.join(__dirname, '_view-important.json');
 fs.writeFileSync(dest, JSON.stringify(out, null, 2));
-console.log(`\n→ wrote ${dest} (${out['#courseTrackerView'].length} + ${out['#preferenceView'].length} candidates)`);
+console.log(`\n→ wrote ${dest} (${Object.entries(out).map(([k, v]) => `${k}:${v.length}`).join(', ')})`);
