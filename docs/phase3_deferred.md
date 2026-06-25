@@ -1864,14 +1864,23 @@ Two render-neutral tranches landed on `refactor/phase3.6-css-collapse`:
   interaction queries; 120 states byte-identical (settings controls carry GLOBAL :hover/:focus/:active
   competitors, so those states are probed); visual-diff 35/35 (05-settings @ 0.000%).
 
-Post-tranche file state: style.css 33,353 lines / 9,887 `!important` / 404 doubled-IDs;
-rcc 1,602 lines / 888 `!important`. Total `!important` stripped on isolated views this session: 405.
+- **`b0c1871` — `#mistakeNotebookView` strip (−193 `!important`).** Isolated (186 refs, 0 elsewhere).
+  447 candidates → **193 strippable, 254 load-bearing** (43%). Arbiter extended (`5bec499`): probes a
+  seeded open-case fixture (03b localStorage pattern) across 5 viewports incl. 820px, snapshots
+  `::placeholder`, re-opens the case after resize. Converged in 2 passes — the first keep-set under-kept
+  layout roots (a stripped box-model `!important` shifted container heights 1px), caught by the probe's
+  reflow flips and fixed with a "keep box-model candidates on any rect-flipped element" guard. 150 states
+  byte-identical; visual-diff 35/35 (03/03b @ 0.000%).
+
+Post-tranche file state: style.css 33,353 lines / 9,694 `!important` / 404 doubled-IDs;
+rcc 1,602 lines / 888 `!important`. Total `!important` stripped on isolated views this session: 598
+(courseTracker/preference 384 + settings 21 + mistakeNotebook 193) + 78 dead `!important` swept.
 
 **Remaining `!important`-strip targets (all reuse the cascade arbiter — edit its `VIEWS`):**
-`#mistakeNotebookView` (447, isolated), `#feedbackView` (528, isolated — docs §3a.i make a
-computed-style probe MANDATORY here; visual-diff has a documented blindspot on feedback cascade),
-`.app .sidebar` (656, NOT isolated — needs multi-view probe coverage), and the §3d composer chain
-(hardest, cross-file lockstep — needs FlyM1ss's risk-appetite call).
+`#feedbackView` (528, isolated — docs §3a.i make a computed-style probe MANDATORY here; visual-diff has
+a documented blindspot on feedback cascade; needs a seeded multi-tone thread fixture), `.app .sidebar`
+(656, NOT isolated — needs multi-view probe coverage), and the §3d composer chain (hardest, cross-file
+lockstep — needs FlyM1ss's risk-appetite call).
 
 **Update 2026-06-25 (pass 2) — prereq 2 built + self-reviewed, finding corrected, top-level slice executed.**
 
