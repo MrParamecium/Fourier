@@ -2070,3 +2070,32 @@ exposing the app function + an S2/S3 re-baseline.
 > guards, and comment-accuracy fixes (toolbar `flex-wrap` is an inert cascade witness, not layout).
 > The `@container lecture-panel` coverage gap remains the documented §14 follow-up (needs a panel-
 > width driver, not a viewport one).
+
+## 16. Feedback board copy — "Harrison" status string (Workstream B B1, PR #107)
+
+**Status: deferred 2026-06-25 in PR #107 (owner-decision; user-guidance overrides loop fix-now)**
+
+**What:** `submitFeedbackItem` sets the post-success status line to
+`"Posted. Harrison can review it later."` (now at `app/feedback-board.js`, moved
+verbatim from `app/app.js`). The owner's current preferred identity is FlyM1ss;
+this user-facing copy still names "Harrison".
+
+**Why deferred:** pre-existing — byte-identical to `main` (it was at
+`app/app.js:6429` before the B1 extraction), so not introduced by this PR. It is
+user-facing product copy whose wording is an owner decision, and project memory
+explicitly cautions against bulk-renaming "Harrison". Per the skill priority,
+user guidance overrides the loop's fix-now default, so the autonomous loop does
+not silently rewrite visible app copy. Surfaced by the PR #107 high-effort
+self-review (PLAUSIBLE; zero runtime impact).
+
+**Next-session entry point:** `app/feedback-board.js` `submitFeedbackItem` (the
+`setFeedbackStatus('Posted. …', 'ok')` line). Sev-3 cosmetic; needs FlyM1ss to
+choose the wording ("Posted." / "FlyM1ss can review it later." / leave as-is).
+Est. effort: 1 line once the owner decides.
+
+> PR #107 self-review note: the other findings were fixed in-PR — moved the five
+> board-internal DOM consts (feedbackNameInput/TitleInput/BodyInput, feedbackList,
+> feedbackStatus) into the module so it owns the elements only it reads (was an
+> orphan-deletion footgun in app.js; matches mistake-notebook.js convention),
+> dropped the dead `type:'thread'/'reply'` discriminator (no consumer reads it),
+> and corrected three stale `app.js L####` comment pointers in tools/visual-diff.js.
