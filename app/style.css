@@ -105,7 +105,6 @@ html, body {
 }
 
 /* Utilities */
-.hidden { }
 .ghost { color: var(--text-muted); font-style: italic; }
 
 body.app-booting .app,
@@ -911,13 +910,7 @@ body.intro-active .intro-landing-new:not(.hidden) {
 }
 
 /* Edge tabs v3: refined drawer handles instead of floating pills. */
-.learn-body {
-}
 
-#learnFocusBtn,
-.learn-side-restore-explain,
-.learn-side-restore-chat {
-}
 
 .learn-side-restore-explain {
   border-top-left-radius: 18px !important;
@@ -930,14 +923,8 @@ body.intro-active .intro-landing-new:not(.hidden) {
   border-bottom-right-radius: 18px !important;
 }
 
-.learn-edge-toggle-icon {
-}
 
-.learn-edge-toggle-icon svg {
-}
 
-.learn-edge-toggle-label {
-}
 
 #learnFocusBtn:hover,
 .learn-side-restore-explain:hover,
@@ -949,97 +936,31 @@ body.intro-active .intro-landing-new:not(.hidden) {
 }
 
 /* Edge tabs v6 final-final: study-journal paper tabs. Keep after drawer overrides. */
-.learn-body {
-}
 
-#learnFocusBtn,
-.learn-side-restore-explain,
-.learn-side-restore-chat {
-}
 
-.learn-side-restore-explain {
-}
 
-#learnFocusBtn,
-.learn-side-restore-chat {
-}
 
-#learnFocusBtn::before,
-.learn-side-restore-explain::before,
-.learn-side-restore-chat::before {
-}
 
-#learnFocusBtn::after,
-.learn-side-restore-explain::after,
-.learn-side-restore-chat::after {
-}
 
-.learn-edge-toggle-icon {
-}
 
-.learn-edge-toggle-icon svg {
-}
 
-.learn-edge-toggle-label {
-}
 
-.learn-side-restore-explain:hover {
-}
 
-#learnFocusBtn:hover,
-.learn-side-restore-chat:hover {
-}
 
 /* Edge tabs v5 final: study-journal paper tabs. */
-.learn-body {
-}
 
-#learnFocusBtn,
-.learn-side-restore-explain,
-.learn-side-restore-chat {
-}
 
-.learn-side-restore-explain {
-}
 
-#learnFocusBtn,
-.learn-side-restore-chat {
-}
 
-#learnFocusBtn::before,
-.learn-side-restore-explain::before,
-.learn-side-restore-chat::before {
-}
 
-#learnFocusBtn::after,
-.learn-side-restore-explain::after,
-.learn-side-restore-chat::after {
-}
 
-.learn-edge-toggle-icon {
-}
 
-.learn-edge-toggle-icon svg {
-}
 
-.learn-edge-toggle-label {
-}
 
-.learn-side-restore-explain:hover {
-}
 
-#learnFocusBtn:hover,
-.learn-side-restore-chat:hover {
-}
 
 /* Edge tabs v5: study-journal paper tabs. */
-.learn-body {
-}
 
-#learnFocusBtn,
-.learn-side-restore-explain,
-.learn-side-restore-chat {
-}
 
 .learn-side-restore-explain {
   border-left: 1px solid rgba(186, 178, 162, 0.82) !important;
@@ -1050,31 +971,12 @@ body.intro-active .intro-landing-new:not(.hidden) {
   border-right: 1px solid rgba(186, 178, 162, 0.82) !important;
 }
 
-#learnFocusBtn::before,
-.learn-side-restore-explain::before,
-.learn-side-restore-chat::before {
-}
 
-#learnFocusBtn::after,
-.learn-side-restore-explain::after,
-.learn-side-restore-chat::after {
-}
 
-.learn-edge-toggle-icon {
-}
 
-.learn-edge-toggle-icon svg {
-}
 
-.learn-edge-toggle-label {
-}
 
-.learn-side-restore-explain:hover {
-}
 
-#learnFocusBtn:hover,
-.learn-side-restore-chat:hover {
-}
 
 @media (max-width: 600px) {
   .intro-landing-new .intro-nav {
@@ -1113,8 +1015,6 @@ body.intro-active .intro-landing-new:not(.hidden) {
 }
 
 /* Shell Layout */
-.app {
-}
 
 /* ──────────────────────────────────────────────────────────
    SIDEBAR
@@ -1178,8 +1078,6 @@ body.intro-active .intro-landing-new:not(.hidden) {
   filter: drop-shadow(0 3px 0 rgba(30, 41, 59, 0.18));
 }
 
-.logo-text {
-}
 
 .logo-text::after {
   content: '';
@@ -1212,8 +1110,6 @@ body.intro-active .intro-landing-new:not(.hidden) {
   transition: transform 0.15s ease;
 }
 
-.sidebar .logo:hover {
-}
 
 .sidebar-nav {
   display: flex;
@@ -1405,9 +1301,6 @@ body.intro-active .intro-landing-new:not(.hidden) {
   overflow-y: auto;
 }
 
-.syllabus::-webkit-scrollbar { }
-.syllabus::-webkit-scrollbar-thumb {
-}
 
 .syllabus-item { margin-bottom: 0; }
 .syllabus > .syllabus-item + .syllabus-item { margin-top: 2px; }
@@ -1443,11 +1336,7 @@ body.intro-active .intro-landing-new:not(.hidden) {
   padding-bottom: 1px;
 }
 
-.syllabus-section-wrap {
-}
 
-.syllabus-section-row {
-}
 
 .syllabus-section-caret {
   padding: 4px 2px 4px 0;
@@ -1461,8 +1350,6 @@ body.intro-active .intro-landing-new:not(.hidden) {
   transition: transform 0.2s;
 }
 
-.syllabus-section-caret-placeholder {
-}
 
 .syllabus-section {
   text-align: left;
@@ -1471,8 +1358,6 @@ body.intro-active .intro-landing-new:not(.hidden) {
   flex: 1;
 }
 
-.syllabus-section:hover {
-}
 .syllabus-section.active {
   border-radius: var(--radius-sm);
 }
@@ -1483,11 +1368,7 @@ body.intro-active .intro-landing-new:not(.hidden) {
   padding-bottom: 2px;
 }
 
-.syllabus-subsection {
-}
 
-.syllabus-subsection:hover {
-}
 
 .sidebar-footer {
   padding: 14px 18px 18px;
@@ -1562,8 +1443,6 @@ body.intro-active .intro-landing-new:not(.hidden) {
   flex-direction: column;
 }
 
-.syllabus-section-row {
-}
 
 .syllabus-section-caret,
 .syllabus-section-caret-placeholder {
@@ -1582,11 +1461,7 @@ body.intro-active .intro-landing-new:not(.hidden) {
   transition: transform 0.18s ease, color 0.18s ease, background 0.18s ease;
 }
 
-.syllabus-section-caret:hover {
-}
 
-.syllabus-section-caret.open {
-}
 
 .syllabus-subsections {
   padding-left: 10px;
@@ -1688,8 +1563,6 @@ body.intro-active .intro-landing-new:not(.hidden) {
    THREE-COLUMN LAYOUT
    left sidebar | main content | right TOC
    ════════════════════════════════════════════════════════ */
-.app {
-}
 
 .workspace-account-bar {
   position: absolute;
@@ -1830,10 +1703,6 @@ body.intro-active .intro-landing-new:not(.hidden) {
   line-height: 1.45;
   transition: all 0.15s;
 }
-.toc-item:hover {
-}
-.toc-item.active {
-}
 
 #tocSidebar {
   display: none !important;
@@ -1934,12 +1803,8 @@ body.intro-active .intro-landing-new:not(.hidden) {
   height: 34px;
 }
 
-.main {
-}
 
 /* ── Learn View (inline, replaces answer/welcome) ── */
-.learn-view {
-}
 .learn-view.hidden { display: none !important; }
 
 .learn-topbar {
@@ -2100,17 +1965,9 @@ body.intro-active .intro-landing-new:not(.hidden) {
   box-shadow: 0 0 30px rgba(56, 189, 248, 0.2);
 }
 
-.aquarius-glow {
-}
 
-.login-card-title {
-}
 
-.text-gradient-aurora {
-}
 
-.login-card-subtitle {
-}
 
 .login-clerk-mount {
   min-height: 12px;
@@ -2177,18 +2034,12 @@ body.intro-active .intro-landing-new:not(.hidden) {
   border-color: rgba(255,255,255,0.18);
 }
 
-.login-sso-btn:disabled,
-.login-submit-btn:disabled,
-.login-guest-btn:disabled {
-}
 
 .login-divider {
   display: flex;
   align-items: center;
 }
 
-.login-divider span {
-}
 
 .login-divider-line {
   flex: 1;
@@ -2211,8 +2062,6 @@ body.intro-active .intro-landing-new:not(.hidden) {
   flex-direction: column;
 }
 
-.login-field label {
-}
 
 .login-field-row {
   display: flex;
@@ -2224,11 +2073,7 @@ body.intro-active .intro-landing-new:not(.hidden) {
   transition: color 0.2s ease;
 }
 
-.login-link:hover {
-}
 
-.login-link-strong {
-}
 
 .login-input {
   width: 100%;
@@ -2243,8 +2088,6 @@ body.intro-active .intro-landing-new:not(.hidden) {
   transition: all 0.3s ease;
 }
 
-.login-input::placeholder {
-}
 
 .login-input:focus {
   outline: none;
@@ -2257,8 +2100,6 @@ body.intro-active .intro-landing-new:not(.hidden) {
   align-items: center;
 }
 
-.login-input-password {
-}
 
 .login-password-toggle {
   position: absolute;
@@ -2270,8 +2111,6 @@ body.intro-active .intro-landing-new:not(.hidden) {
   transition: all 0.2s ease;
 }
 
-.login-password-toggle:hover {
-}
 
 .btn-shine {
   position: relative;
@@ -2319,8 +2158,6 @@ body.intro-active .intro-landing-new:not(.hidden) {
   text-align: center;
 }
 
-.login-signup-copy {
-}
 
 @keyframes pulse-glow {
   0% { filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.4)); transform: scale(1); }
@@ -2375,8 +2212,6 @@ body.intro-active .intro-landing-new:not(.hidden) {
   }
 }
 
-.learn-body-inner {
-}
 
 .learn-book-col {
   flex: 1;
@@ -2858,11 +2693,7 @@ body.textbook-focus-active .learn-chat-popover {
   position: relative;
 }
 
-.learn-chat-col {
-}
 
-.learn-body.chat-collapsed .learn-body-inner {
-}
 
 .learn-body.chat-collapsed .learn-explain-col {
   border-right: none !important;
@@ -2873,8 +2704,6 @@ body.textbook-focus-active .learn-chat-popover {
   display: none !important;
 }
 
-.learn-body.explain-collapsed .learn-explain-col {
-}
 
 .learn-body.explain-collapsed .learn-resizer {
   display: none !important;
@@ -2884,11 +2713,7 @@ body.textbook-focus-active .learn-chat-popover {
   display: none !important;
 }
 
-.learn-body.explain-collapsed .learn-body-inner {
-}
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-chat-col {
-}
 
 .learn-chat-scroll {
   display: flex;
@@ -2901,8 +2726,6 @@ body.textbook-focus-active .learn-chat-popover {
   gap: 16px;
 }
 
-.learn-body.chapter-overview-active .learn-body-inner {
-}
 
 .learn-body.chapter-overview-active .learn-book-col,
 .learn-body.chapter-overview-active .learn-chat-col,
@@ -2912,39 +2735,16 @@ body.textbook-focus-active .learn-chat-popover {
   display: none !important;
 }
 
-.learn-body.chapter-overview-active .learn-explain-col {
-}
 
-.learn-body.chapter-overview-active .learn-explain-scroll,
-.learn-body.chapter-overview-active .learn-explain-content {
-}
 
-.learn-body.chapter-overview-active .learn-explain-scroll {
-}
 
-.learn-body.chapter-overview-active .learn-explain-body {
-}
 
-.learn-body.chapter-overview-active .chapter-overview-shell {
-}
 
-.learn-body.chapter-overview-active .chapter-overview-map {
-}
 
-.learn-body.chapter-overview-active .chapter-overview-hero {
-}
 
-.learn-body.chapter-overview-active .chapter-overview-list-block {
-}
 
-.learn-body.chapter-overview-active .chapter-overview-grid {
-}
 
-.learn-body.chapter-overview-active .chapter-overview-subcard {
-}
 
-.learn-body.chapter-overview-active .chapter-overview-subcard-title {
-}
 
 @media (max-width: 980px) {
   .learn-body.chapter-overview-active .chapter-overview-map {
@@ -2954,33 +2754,14 @@ body.textbook-focus-active .learn-chat-popover {
 }
 
 /* Final split override: overview lessons keep both side buttons and a full-width Q&A composer. */
-.learn-body.chapter-overview-split-active {
-}
 
-.learn-body.chapter-overview-split-active .learn-body-inner {
-}
 
-.learn-body.chapter-overview-split-active .learn-book-col {
-}
 
-.learn-body.chapter-overview-split-active .learn-explain-toolbar{
-}
 
-.learn-body.chapter-overview-split-active #learnFocusBtn {
-}
 
-.learn-body.chapter-overview-split-active #learnFocusBtn {
-}
 
-.learn-body.chapter-overview-split-active[data-panel-focus="lecture-full"] #learnFocusBtn{
-}
 
-.learn-body.chapter-overview-split-active .learn-explain-col,
-.learn-body.chapter-overview-split-active .learn-chat-col {
-}
 
-.learn-body.chapter-overview-split-active .learn-explain-col {
-}
 
 .learn-body.chapter-overview-split-active .learn-resizer {
   width: 6px !important;
@@ -2998,176 +2779,56 @@ body.textbook-focus-active .learn-chat-popover {
   background-attachment: scroll !important;
 }
 
-.learn-body.chapter-overview-split-active .learn-chat-scroll {
-}
 
-.learn-body.chapter-overview-split-active .learn-chat-empty-state {
-}
 
-.learn-body.chapter-overview-split-active .learn-followup-bar,
-.learn-body[data-panel-focus="normal"] .learn-chat-col .learn-followup-bar,
-.learn-body[data-panel-focus="qa-wide"] .learn-followup-bar,
-.learn-body[data-panel-focus="qa-full"] .learn-followup-bar {
-}
 
-.learn-body.chapter-overview-split-active .learn-followup-bar .followup-bar-row,
-.learn-body[data-panel-focus="normal"] .learn-chat-col .learn-followup-bar .followup-bar-row {
-}
 
-.learn-body[data-panel-focus="qa-wide"] .learn-followup-bar .followup-bar-row,
-.learn-body[data-panel-focus="qa-full"] .learn-followup-bar .followup-bar-row {
-}
 
-.learn-body.chapter-overview-split-active .learn-followup-input,
-.learn-body[data-panel-focus="normal"] .learn-chat-col .learn-followup-input,
-.learn-body[data-panel-focus="qa-wide"] .learn-followup-input,
-.learn-body[data-panel-focus="qa-full"] .learn-followup-input {
-}
 
 /* Final split override: overview lessons keep both side buttons and a full-width Q&A composer. */
-.learn-body.chapter-overview-split-active {
-}
 
-.learn-body.chapter-overview-split-active .learn-body-inner {
-}
 
-.learn-body.chapter-overview-split-active .learn-book-col {
-}
 
-.learn-body.chapter-overview-split-active .learn-explain-toolbar{
-}
 
-.learn-body.chapter-overview-split-active #learnFocusBtn {
-}
 
-.learn-body.chapter-overview-split-active #learnFocusBtn {
-}
 
-.learn-body.chapter-overview-split-active[data-panel-focus="lecture-full"] #learnFocusBtn{
-}
 
-.learn-body.chapter-overview-split-active .learn-explain-col,
-.learn-body.chapter-overview-split-active .learn-chat-col {
-}
 
-.learn-body.chapter-overview-split-active .learn-explain-col {
-}
 
-.learn-body.chapter-overview-split-active .learn-resizer {
-}
 
-.learn-body.chapter-overview-split-active .learn-chat-col {
-}
 
-.learn-body.chapter-overview-split-active .learn-chat-scroll {
-}
 
-.learn-body.chapter-overview-split-active .learn-chat-empty-state {
-}
 
-.learn-body.chapter-overview-split-active .learn-followup-bar,
-.learn-body[data-panel-focus="normal"] .learn-chat-col .learn-followup-bar,
-.learn-body[data-panel-focus="qa-wide"] .learn-followup-bar,
-.learn-body[data-panel-focus="qa-full"] .learn-followup-bar {
-}
 
-.learn-body.chapter-overview-split-active .learn-followup-bar .followup-bar-row,
-.learn-body[data-panel-focus="normal"] .learn-chat-col .learn-followup-bar .followup-bar-row {
-}
 
-.learn-body[data-panel-focus="qa-wide"] .learn-followup-bar .followup-bar-row,
-.learn-body[data-panel-focus="qa-full"] .learn-followup-bar .followup-bar-row {
-}
 
-.learn-body.chapter-overview-split-active .learn-followup-input,
-.learn-body[data-panel-focus="normal"] .learn-chat-col .learn-followup-input,
-.learn-body[data-panel-focus="qa-wide"] .learn-followup-input,
-.learn-body[data-panel-focus="qa-full"] .learn-followup-input {
-}
 
 /* Overview lesson pages still use the split Q&A workbench. */
-.learn-body.chapter-overview-split-active {
-}
 
-.learn-body.chapter-overview-split-active .learn-body-inner {
-}
 
-.learn-body.chapter-overview-split-active .learn-book-col {
-}
 
-.learn-body.chapter-overview-split-active .learn-explain-toolbar{
-}
 
-.learn-body.chapter-overview-split-active #learnFocusBtn {
-}
 
-.learn-body.chapter-overview-split-active #learnFocusBtn {
-}
 
-.learn-body.chapter-overview-split-active[data-panel-focus="lecture-full"] #learnFocusBtn{
-}
 
-.learn-body.chapter-overview-split-active .learn-explain-col,
-.learn-body.chapter-overview-split-active .learn-chat-col {
-}
 
-.learn-body.chapter-overview-split-active .learn-explain-col {
-}
 
-.learn-body.chapter-overview-split-active .learn-resizer {
-}
 
-.learn-body.chapter-overview-split-active .learn-chat-col {
-}
 
-.learn-body.chapter-overview-split-active .learn-chat-scroll {
-}
 
-.learn-body.chapter-overview-split-active .learn-chat-empty-state {
-}
 
-.learn-body.chapter-overview-split-active .learn-followup-bar,
-.learn-body[data-panel-focus="normal"] .learn-chat-col .learn-followup-bar {
-}
 
-.learn-body.chapter-overview-split-active .learn-followup-bar .followup-bar-row,
-.learn-body[data-panel-focus="normal"] .learn-chat-col .learn-followup-bar .followup-bar-row {
-}
 
-.learn-body.chapter-overview-split-active .learn-followup-input,
-.learn-body[data-panel-focus="normal"] .learn-chat-col .learn-followup-input {
-}
 
-.learn-body[data-panel-focus="qa-wide"] .learn-followup-bar,
-.learn-body[data-panel-focus="qa-full"] .learn-followup-bar {
-}
 
-.learn-body.chapter-overview-active .learn-explain-scroll {
-}
 
-.learn-body.chapter-overview-active .learn-explain-body {
-}
 
-.learn-body.chapter-overview-active .chapter-overview-shell {
-}
 
-.learn-body.chapter-overview-active .chapter-overview-map {
-}
 
-.learn-body.chapter-overview-active .chapter-overview-hero {
-}
 
-.learn-body.chapter-overview-active .chapter-overview-list-block {
-}
 
-.learn-body.chapter-overview-active .chapter-overview-grid {
-}
 
-.learn-body.chapter-overview-active .chapter-overview-subcard {
-}
 
-.learn-body.chapter-overview-active .chapter-overview-subcard-title {
-}
 
 @media (max-width: 980px) {
   .learn-body.chapter-overview-active .chapter-overview-map {
@@ -3177,36 +2838,15 @@ body.textbook-focus-active .learn-chat-popover {
 }
 
 /* Final final: overview lessons keep split Q&A controls active. */
-.learn-body.chapter-overview-split-active {
-}
 
-.learn-body.chapter-overview-split-active .learn-body-inner {
-}
 
-.learn-body.chapter-overview-split-active .learn-book-col {
-}
 
-.learn-body.chapter-overview-split-active .learn-explain-toolbar{
-}
 
-.learn-body.chapter-overview-split-active #learnFocusBtn {
-}
 
-.learn-body.chapter-overview-split-active #learnFocusBtn {
-}
 
-.learn-body.chapter-overview-split-active[data-panel-focus="lecture-full"] #learnFocusBtn{
-}
 
-.learn-body.chapter-overview-split-active .learn-explain-col,
-.learn-body.chapter-overview-split-active .learn-chat-col {
-}
 
-.learn-body.chapter-overview-split-active .learn-explain-col {
-}
 
-.learn-body.chapter-overview-split-active .learn-resizer {
-}
 
 .learn-body.chapter-overview-split-active .learn-followup-bar,
 .learn-body[data-panel-focus="normal"] .learn-chat-col .learn-followup-bar {
@@ -3216,9 +2856,6 @@ body.textbook-focus-active .learn-chat-popover {
   margin: 0 16px 18px !important;
 }
 
-.learn-body.chapter-overview-split-active .learn-followup-bar .followup-bar-row,
-.learn-body[data-panel-focus="normal"] .learn-chat-col .learn-followup-bar .followup-bar-row {
-}
 
 .learn-body.chapter-overview-split-active .learn-followup-input,
 .learn-body[data-panel-focus="normal"] .learn-chat-col .learn-followup-input {
@@ -3227,19 +2864,10 @@ body.textbook-focus-active .learn-chat-popover {
   max-width: 100% !important;
 }
 
-.learn-body[data-panel-focus="qa-wide"] .learn-followup-bar,
-.learn-body[data-panel-focus="qa-full"] .learn-followup-bar {
-}
 
 /* Final split overview + Q&A control fix. */
-.learn-body.chapter-overview-split-active .learn-body-inner {
-}
 
-.learn-body.chapter-overview-split-active .learn-book-col {
-}
 
-.learn-body.chapter-overview-split-active .learn-explain-toolbar{
-}
 
 .learn-body.chapter-overview-split-active #learnFocusBtn,
 .learn-body[data-panel-focus] #learnFocusBtn {
@@ -3258,8 +2886,6 @@ body.textbook-focus-active .learn-chat-popover {
   left: auto !important;
 }
 
-.learn-body[data-panel-focus="lecture-full"] #learnFocusBtn{
-}
 
 .learn-body.chapter-overview-split-active .learn-explain-col {
   display: flex !important;
@@ -3271,8 +2897,6 @@ body.textbook-focus-active .learn-chat-popover {
   min-width: 0 !important;
 }
 
-.learn-body.chapter-overview-split-active .learn-resizer {
-}
 
 .learn-body.chapter-overview-split-active .learn-followup-bar,
 .learn-body:not(.chapter-overview-active) .learn-chat-col .learn-followup-bar {
@@ -3299,9 +2923,6 @@ body.textbook-focus-active .learn-chat-popover {
   max-width: 100% !important;
 }
 
-.learn-body[data-panel-focus="qa-wide"] .learn-followup-bar,
-.learn-body[data-panel-focus="qa-full"] .learn-followup-bar {
-}
 
 .chapter-overview-shell {
   width: min(1180px, calc(100% - 40px));
@@ -3718,8 +3339,6 @@ body.textbook-focus-active .learn-chat-popover {
   text-align: center;
 }
 
-.learn-chat-empty-title {
-}
 
 @media (max-width: 900px) {
   .chapter-overview-hero {
@@ -3733,8 +3352,6 @@ body.textbook-focus-active .learn-chat-popover {
   }
 }
 
-.welcome {
-}
 
 .welcome-inner-override {
   width: 100%;
@@ -3772,8 +3389,6 @@ body.textbook-focus-active .learn-chat-popover {
 /* Big Search Box */
 .search-box {
   margin-bottom: 24px;
-}
-.search-box-row {
 }
 
 .search-box-toolbar {
@@ -3819,11 +3434,7 @@ body.textbook-focus-active .learn-chat-popover {
   border-color: rgba(37, 99, 235, 0.22);
   background: rgba(255, 255, 255, 0.92);
 }
-.followup-bar-row {
-}
 
-.search-box:focus-within {
-}
 
 .search-icon {
   color: var(--text-muted);
@@ -3862,8 +3473,6 @@ body.textbook-focus-active .learn-chat-popover {
   background: var(--text-primary);
   color: #fff;
 }
-.search-send:not([disabled]):hover {
-}
 
 /* Quick Chips */
 .chips {
@@ -3881,8 +3490,6 @@ body.textbook-focus-active .learn-chat-popover {
 
 /* chip text is set by JS innerHTML, not ::after */
 
-.chip:hover {
-}
 
 /* ──────────────────────────────────────────────────────────
    ANSWER SCREEN
@@ -5285,8 +4892,6 @@ body.answer-compare-resizing {
   gap: 8px;
   cursor: pointer;
 }
-.learn-start-btn:hover {
-}
 
 /* Body: left book + right explain */
 .learn-body {
@@ -5329,8 +4934,6 @@ body.answer-compare-resizing {
   display: none;
 }
 
-.learn-toolbar-center {
-}
 
 .learn-kp-btn {
   width: 34px;
@@ -5594,8 +5197,6 @@ body.answer-compare-resizing {
   background: linear-gradient(180deg, rgba(127, 182, 255, 0.28), rgba(99, 150, 223, 0.12));
 }
 
-.learn-side-restore-explain {
-}
 
 .learn-side-restore-chat {
   right: 14px;
@@ -5659,8 +5260,6 @@ body.answer-compare-resizing {
   align-items: center;
 }
 
-.learn-chat-popover-btn {
-}
 
 .learn-chat-popover-body {
   min-height: 0;
@@ -5764,10 +5363,6 @@ body.answer-compare-resizing {
   border-color: rgba(147, 197, 253, 0.95);
   box-shadow: 0 14px 34px rgba(37, 99, 235, 0.16), 0 2px 8px rgba(15, 23, 42, 0.08);
   transform: none;
-}.learn-explain-scroll {
-}
-
-.learn-explain-toolbar {
 }
 
 .learn-view-selector {
@@ -5882,15 +5477,7 @@ body.answer-compare-resizing {
 /* Final lecture typography override
    Keep this block at the very end so older historical overrides do not win. */
 
-.learn-explain-body,
-.explain-body {
-}
 
-.learn-explain-body p,
-.learn-explain-body li,
-.explain-body p,
-.explain-body li {
-}
 
 .learn-explain-body h1,
 .explain-body h1 {
@@ -5977,8 +5564,6 @@ body.answer-compare-resizing {
   min-width: 0 !important;
 }
 
-.learn-body.chat-collapsed .learn-explain-col {
-}
 
 .learn-body.explain-collapsed:not(.chat-collapsed) .learn-chat-col {
   min-width: 0 !important;
@@ -5989,8 +5574,6 @@ body.answer-compare-resizing {
   left: 18px;
 }
 
-.learn-body.explain-collapsed .learn-side-restore-chat {
-}
 
 @media (max-width: 900px) {
   .learn-body-inner {
@@ -6017,7 +5600,6 @@ body.answer-compare-resizing {
   background: var(--bg-body);
   outline: none;
 }
-.learn-followup-input:focus { }
 .learn-followup-send {
   width: 36px; height: 36px;
   border-radius: 50%;
@@ -6362,8 +5944,6 @@ body.answer-compare-resizing {
 }
 .learn-web-section.hidden { display: none; }
 
-.learn-web-section-title {
-}
 .learn-web-section-count {
   font-size: 11px;
   padding: 2px 8px;
@@ -6469,8 +6049,6 @@ body.answer-compare-resizing {
 .followup-bubble .fub-q::before {
   content: '';
   flex-shrink: 0;
-}
-.followup-bubble .fub-a {
 }
 .followup-bubble .fub-a h1,
 .followup-bubble .fub-a h2,
@@ -6673,8 +6251,6 @@ body.answer-compare-resizing {
   line-height: 1.5;
   margin-bottom: 48px;
 }
-.search-box {
-}
 .search-box:focus-within {
   transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
@@ -6688,8 +6264,6 @@ body.answer-compare-resizing {
   width: 44px;
   height: 44px;
   color: white;
-}
-.search-send:not([disabled]):hover {
 }
 
 .chip {
@@ -6713,8 +6287,6 @@ body.answer-compare-resizing {
   border: none;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-.learn-start-btn:hover {
 }
 
 /* Learn Title */
@@ -6742,8 +6314,6 @@ body.answer-compare-resizing {
   background: white;
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--border);
-}
-.lss-item.active {
 }
 
 /* ── Lesson images ─────────────────────────────────────────────────────── */
@@ -6923,8 +6493,6 @@ body.answer-compare-resizing {
   background: #2a2a2a !important;
   transform: none;
   box-shadow: none;
-}
-.search-box {
 }
 .search-send {
   background: #0F172A;
@@ -7130,9 +6698,6 @@ body.answer-compare-resizing {
   background: linear-gradient(180deg, #f8fafc 0%, #f3f7fb 100%);
 }
 
-.syllabus-view,
-.recent-view {
-}
 
 .settings-page-shell {
   max-width: 1320px;
@@ -7196,11 +6761,7 @@ body.answer-compare-resizing {
   cursor: pointer;
 }
 
-.settings-page-nav-item.active {
-}
 
-.settings-page-content {
-}
 
 .settings-page-card {
   border: 1px solid rgba(226, 232, 240, 0.96);
@@ -7544,8 +7105,6 @@ body {
   color: #171513;
 }
 
-:root[data-theme="dark"] .sidebar-version-dot {
-}
 
 :root[data-theme="light"] .lecture-overlay-btn,
 :root[data-theme="light"] .learn-focus-btn {
@@ -7640,8 +7199,6 @@ h1, h2, h3, h4, h5, h6, .welcome-h1, .learn-title {
 .app.sidebar-collapsed .main { border-radius: 0 !important; margin-left: 0 !important; margin-right: 0 !important; border: none !important; min-width: 0; min-height: 0; }
 
 /* The left syllabus menu items - Vercel style */
-.syllabus {
-}
 
 .syllabus-item {
   border-radius: var(--radius-sm);
@@ -7685,8 +7242,6 @@ h1, h2, h3, h4, h5, h6, .welcome-h1, .learn-title {
   border-left-color: var(--sidebar-text-muted) !important;
 }
 
-.toc-nav a.active {
-}
 
 /* Inputs and Buttons - Premium tactile feel */
 input, textarea, button {
@@ -7703,8 +7258,6 @@ button:focus, input:focus, textarea:focus {
   transition: box-shadow 0.3s, border-color 0.3s;
 }
 
-.search-box:focus-within, .followup-bar:focus-within {
-}
 
 /* Toggle Buttons */
 .menu-toggle {
@@ -7760,9 +7313,6 @@ button:focus, input:focus, textarea:focus {
   color: var(--text-primary);
   transform: translateY(-1px);
   box-shadow: 0 12px 20px -10px rgba(0,0,0,0.08);
-}
-.app.sidebar-collapsed .sidebar-float-toggle,
-.sidebar.collapsed ~ .main .sidebar-float-toggle {
 }
 
 /* Message Bubbles / Content spacing */
@@ -8949,8 +8499,6 @@ body.learn-resizing .learn-resizer::before {
   flex-direction: column;
   position: relative;
 }
-.learn-explain-col {
-}
 .fub-q, .fub-a, .learn-explain-content {
   word-break: break-word;
   overflow-wrap: break-word;
@@ -9077,8 +8625,6 @@ body.learn-resizing .learn-resizer::before {
   transform: translate(-1px, -1px);
 }
 
-.search-progress-card .search-step.is-muted {
-}
 
 .search-progress-index,
 .search-step-index {
@@ -9199,8 +8745,6 @@ body.learn-resizing .learn-resizer::before {
   gap: 8px; /* space out components */
   width: 100%;
 }
-.learn-followup-input {
-}
 .learn-followup-send {
   flex-shrink: 0;
   position: static !important;
@@ -9241,8 +8785,6 @@ body,
   flex-direction: column;
 }
 
-.sidebar{
-}
 
 .welcome {
   position: absolute;
@@ -9481,8 +9023,6 @@ body,
   text-decoration: none;
   cursor: pointer;
   transition: all 0.15s;
-}
-.learn-web-card:hover {
 }
 .learn-web-card .lwc-head {
   display: flex;
@@ -10631,22 +10171,14 @@ h6,
   pointer-events: none !important;
 }
 
-.settings-page-card:nth-child(1) {
-}
 
-.settings-page-card:nth-child(2) {
-}
 
-.settings-page-card:nth-child(3) {
-}
 
 .settings-page-card:nth-child(4),
 .settings-page-card:nth-child(5) {
   grid-column: 1 !important;
 }
 
-.settings-page-card:nth-child(4) {
-}
 
 .settings-page-card-head {
   margin-bottom: 16px !important;
@@ -10813,20 +10345,9 @@ h6,
   gap: 16px !important;
 }
 
-#learnFocusBtn,
-.learn-side-restore-explain,
-.learn-side-restore-chat {
-}
 
-.learn-side-restore-explain {
-}
 
-#learnFocusBtn,
-.learn-side-restore-chat {
-}
 
-.learn-chat-topbar #learnFocusBtn {
-}
 
   .learn-side-restore-explain,
   .learn-side-restore-chat {
@@ -10846,10 +10367,6 @@ h6,
   display: none !important;
 }
 
-#learnFocusBtn:hover,
-.learn-side-restore-explain:hover,
-.learn-side-restore-chat:hover {
-}
 
 @media (max-width: 900px) {
   .learn-explain-toolbar {
@@ -11091,11 +10608,7 @@ h6,
   height: 520px;
 }
 
-.login-view::before {
-}
 
-.login-view::after {
-}
 
 .login-webgl-container,
 .login-webgl-container canvas {
@@ -11212,8 +10725,6 @@ h6,
   min-height: 0 !important;
 }
 
-.login-card-header {
-}
 
 .login-brand-mark {
   width: 72px !important;
@@ -11314,10 +10825,6 @@ h6,
   box-shadow: 6px 6px 0 var(--login-ink) !important;
 }
 
-.login-sso-btn:active,
-.login-guest-btn:active,
-.login-submit-btn:active {
-}
 
 .login-submit-btn,
 :root[data-theme="dark"] .login-view:not(.hidden) .login-submit-btn {
@@ -11332,8 +10839,6 @@ h6,
   box-shadow: 8px 8px 0 var(--login-ink) !important;
 }
 
-.login-guest-btn {
-}
 
 .login-sso-btn:disabled,
 .login-submit-btn:disabled,
@@ -12658,8 +12163,6 @@ h6,
   min-width: 0 !important;
 }
 
-.learn-body:not(.chat-collapsed):not(.explain-collapsed) .learn-body-inner {
-}
 
 .learn-body:not(.chat-collapsed):not(.explain-collapsed) .learn-explain-col,
 .learn-body:not(.chat-collapsed):not(.explain-collapsed) .learn-chat-col {
@@ -12688,11 +12191,7 @@ h6,
   max-width: 100% !important;
 }
 
-.learn-explain-toolbar .learn-view-selector {
-}
 
-.learn-explain-toolbar .learn-kp-nav {
-}
 
 @media (max-width: 1180px) {
   .learn-explain-toolbar {
@@ -13019,14 +12518,8 @@ h6,
 }
 
 /* Answer view polish: keep the follow-up composer visible above the frame edge. */
-.answer .col-explain {
-}
 
-.answer .explain-scroll {
-}
 
-.answer .followup-bar {
-}
 
 @media (max-width: 900px) {
   .answer .followup-bar {
@@ -13215,8 +12708,6 @@ h6,
   z-index: 2;
 }
 
-.learn-chat-topbar #learnFocusBtn {
-}
 
 .learn-chat-scroll {
   gap: 16px !important;
@@ -13320,8 +12811,6 @@ h6,
   pointer-events: none;
 }
 
-.learn-followup-bar .followup-bar-row {
-}
 
 .learn-followup-input {
   font-family: "Nunito", "Inter", sans-serif !important;
@@ -13333,10 +12822,6 @@ h6,
   color: #94a3b8 !important;
 }
 
-.learn-followup-bar .attach-btn,
-.learn-followup-bar .icon-toggle-btn,
-.learn-followup-bar .learn-followup-send {
-}
 
 .learn-followup-bar .attach-btn {
   background: #ffffff !important;
@@ -13406,11 +12891,7 @@ h6,
   z-index: 60 !important;
 }
 
-.answer .followup-bar-row {
-}
 
-.answer .followup-input {
-}
 
 @media (max-width: 900px) {
   .answer {
@@ -13431,8 +12912,6 @@ h6,
   overflow: hidden !important;
 }
 
-.learn-chat-col::before {
-}
 
 .learn-chat-scroll {
   flex: 1 1 auto !important;
@@ -13444,14 +12923,7 @@ h6,
   height: auto !important;
 }
 
-.learn-chat-empty-state::before,
-.learn-chat-empty-state::after,
-.learn-chat-paper-clip,
-.learn-chat-empty-kicker {
-}
 
-.learn-chat-empty-title {
-}
 
 .learn-followup-bar {
   flex: 0 0 auto !important;
@@ -13471,10 +12943,6 @@ h6,
   flex: 1 1 210px !important;
 }
 
-.learn-followup-bar .attach-btn,
-.learn-followup-bar .icon-toggle-btn,
-.learn-followup-bar .learn-followup-send {
-}
 
 #answerLengthToggleLearn {
   flex: 0 0 112px !important;
@@ -14030,8 +13498,6 @@ h6,
   text-align: center;
 }
 
-.feedback-thread {
-}
 
 .feedback-thread-pin {
   position: absolute;
@@ -14066,8 +13532,6 @@ h6,
   font: 900 11px/1 "DM Mono", monospace;
 }
 
-.feedback-thread-body {
-}
 
 .feedback-replies {
   display: flex;
@@ -14075,18 +13539,12 @@ h6,
   margin-bottom: 14px;
 }
 
-.feedback-reply {
-}
 
 .feedback-reply-body {
   margin-top: 4px;
 }
 
-.feedback-reply-compose {
-}
 
-.feedback-reply-name {
-}
 
 .feedback-reply-input {
   resize: vertical;
@@ -14111,10 +13569,6 @@ h6,
   background-size: auto, 28px 28px, 28px 28px, auto;
 }
 
-:root[data-theme="dark"] .feedback-compose-card,
-:root[data-theme="dark"] .feedback-board-card,
-:root[data-theme="dark"] .feedback-thread {
-}
 
 :root[data-theme="dark"] .feedback-title,
 :root[data-theme="dark"] .feedback-compose-card h2,
@@ -14123,11 +13577,6 @@ h6,
   color: #e6edf7;
 }
 
-:root[data-theme="dark"] .feedback-subtitle,
-:root[data-theme="dark"] .feedback-compose-card p,
-:root[data-theme="dark"] .feedback-thread-body,
-:root[data-theme="dark"] .feedback-reply-body {
-}
 
 :root[data-theme="dark"] .feedback-input,
 :root[data-theme="dark"] .feedback-textarea,
@@ -14177,8 +13626,6 @@ h6,
   box-shadow: 0 4px 16px rgba(15, 23, 42, 0.08) !important;
 }
 
-.learn-followup-bar .followup-bar-row {
-}
 
 .learn-followup-input {
   max-height: 92px !important;
@@ -14201,8 +13648,6 @@ h6,
   border: 1px solid rgba(203, 213, 225, 0.9) !important;
 }
 
-#answerLengthToggleLearn {
-}
 
 #webSearchToggleBtnLearn {
   width: 100% !important;
@@ -14214,8 +13659,6 @@ h6,
   content: none !important;
 }
 
-.learn-followup-send {
-}
 
 #webSearchToggleBtnLearn,
 .learn-followup-send {
@@ -14376,11 +13819,7 @@ h6,
   background-size: 28px 28px, 28px 28px, auto, auto, auto !important;
 }
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-chat-scroll {
-}
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-chat-empty-state {
-}
 
 .learn-body.explain-collapsed:not(.chat-collapsed) .learn-chat-empty-state::before {
   content: "" !important;
@@ -14394,14 +13833,8 @@ h6,
   position: absolute !important;
 }
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-chat-empty-title {
-}
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-chat-empty-bubble {
-}
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-chat-empty-bubble svg {
-}
 
 .learn-chat-empty-bubble .bubble-shadow {
   fill: rgba(15, 23, 42, 0.14);
@@ -14414,33 +13847,13 @@ h6,
   stroke-width: 1.2;
 }
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-chat-empty-copy {
-}
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-followup-bar {
-}
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-followup-bar .followup-bar-row {
-}
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-followup-input {
-}
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-followup-bar .attach-btn,
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-followup-bar .icon-toggle-btn,
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-followup-bar .learn-followup-send {
-}
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-followup-bar .attach-btn {
-}
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-followup-bar .attach-btn svg,
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-followup-bar .learn-followup-send svg,
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-followup-bar .icon-toggle-btn svg {
-}
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-followup-send {
-}
 
 .learn-body.explain-collapsed:not(.chat-collapsed) #answerLengthToggleLearn {
   padding-left: 26px !important;
@@ -14452,8 +13865,6 @@ h6,
   box-shadow: none !important;
 }
 
-.learn-body.explain-collapsed:not(.chat-collapsed) #webSearchToggleBtnLearn::after {
-}
 
 @media (max-width: 820px) {
   .learn-body.explain-collapsed:not(.chat-collapsed) .learn-followup-bar .followup-bar-row {
@@ -14534,14 +13945,8 @@ h6,
   display: none !important;
 }
 
-.learn-edge-toggle-icon {
-}
 
-.learn-edge-toggle-icon svg {
-}
 
-.learn-edge-toggle-label {
-}
 
 #learnFocusBtn:hover,
 .learn-side-restore-explain:hover,
@@ -14561,8 +13966,6 @@ h6,
   --learn-edge-tab-top: 22px;
 }
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-chat-scroll {
-}
 
 .learn-body.explain-collapsed:not(.chat-collapsed) .learn-chat-empty-state {
   border: 1px solid rgba(191, 205, 222, 0.86) !important;
@@ -14594,8 +13997,6 @@ h6,
   background: repeating-linear-gradient(90deg, rgba(148, 163, 184, 0.5) 0 10px, transparent 10px 20px) !important;
 }
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-chat-empty-bubble {
-}
 
 .learn-body.explain-collapsed:not(.chat-collapsed) .learn-chat-empty-title {
   color: #111827 !important;
@@ -14606,14 +14007,8 @@ h6,
   color: #64748b !important;
 }
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-followup-bar {
-}
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-followup-bar .followup-bar-row {
-}
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-followup-input {
-}
 
 .learn-body.explain-collapsed:not(.chat-collapsed) .learn-followup-bar .attach-btn,
 .learn-body.explain-collapsed:not(.chat-collapsed) .learn-followup-bar .icon-toggle-btn,
@@ -14645,11 +14040,7 @@ h6,
   border-radius: 17px !important;
 }
 
-.learn-body.explain-collapsed:not(.chat-collapsed) #webSearchToggleBtnLearn::after {
-}
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-followup-send {
-}
 
 @media (max-width: 820px) {
   .learn-body {
@@ -14769,8 +14160,6 @@ h6,
   border: 4px solid #172033 !important;
 }
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-followup-send {
-}
 
 .learn-body.explain-collapsed:not(.chat-collapsed) .learn-followup-bar .attach-btn {
   background: #ffffff !important;
@@ -14982,11 +14371,7 @@ h6,
   justify-content: flex-end !important;
 }
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-chat-empty-state {
-}
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-followup-bar {
-}
 
 .learn-body.explain-collapsed:not(.chat-collapsed) .learn-followup-bar .followup-bar-row {
   grid-template-areas:
@@ -15064,8 +14449,6 @@ h6,
   transform: rotate(-1.5deg) !important;
 }
 
-.learn-body:not(.explain-collapsed):not(.chat-collapsed) .learn-chat-empty-bubble svg {
-}
 
 .learn-body:not(.explain-collapsed):not(.chat-collapsed) .learn-chat-empty-title {
   font-size: clamp(26px, 3vw, 36px) !important;
@@ -15083,8 +14466,6 @@ h6,
   box-shadow: 0 7px 0 #172033, 0 14px 28px rgba(15, 23, 42, 0.08) !important;
 }
 
-.learn-body:not(.explain-collapsed):not(.chat-collapsed) .learn-followup-bar .followup-bar-row {
-}
 
 .learn-body:not(.explain-collapsed):not(.chat-collapsed) .learn-followup-input {
   border: 3px solid #60a5fa !important;
@@ -15255,23 +14636,11 @@ h6,
   display: none !important;
 }
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-chat-empty-bubble {
-}
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-chat-empty-bubble svg {
-}
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-chat-empty-title {
-}
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-chat-empty-copy {
-}
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-followup-bar {
-}
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-followup-bar .followup-bar-row {
-}
 
 .learn-body.explain-collapsed:not(.chat-collapsed) .learn-followup-input {
   border: 3px solid #172033 !important;
@@ -15295,20 +14664,13 @@ h6,
   box-shadow: 5px 5px 0 #172033 !important;
 }
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-followup-bar .attach-btn svg,
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-followup-bar .learn-followup-send svg {
-}
 
 .learn-body.explain-collapsed:not(.chat-collapsed) #answerLengthToggleLearn,
 .learn-body.explain-collapsed:not(.chat-collapsed) #webSearchToggleBtnLearn {
   border-width: 2px !important;
 }
 
-.learn-body.explain-collapsed:not(.chat-collapsed) #answerLengthToggleLearn {
-}
 
-.learn-body.explain-collapsed:not(.chat-collapsed) #webSearchToggleBtnLearn {
-}
 
 .learn-body:not(.explain-collapsed):not(.chat-collapsed) .learn-chat-empty-state {
   min-height: clamp(360px, calc(100vh - 360px), 620px) !important;
@@ -15352,20 +14714,10 @@ h6,
   box-shadow: 0 6px 0 #bfdbfe, 0 14px 28px rgba(96, 165, 250, 0.12) !important;
 }
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-chat-empty-state {
-}
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-chat-empty-bubble {
-}
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-chat-empty-bubble svg {
-}
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-chat-empty-title {
-}
 
-.learn-body.explain-collapsed:not(.chat-collapsed) .learn-chat-empty-copy {
-}
 
 .learn-body.explain-collapsed:not(.chat-collapsed) .learn-followup-bar {
   width: min(74%, 1060px) !important;
@@ -15430,15 +14782,11 @@ h6,
   min-width: 100px !important;
 }
 
-.learn-body:not(.explain-collapsed):not(.chat-collapsed) .learn-followup-bar {
-}
 
 .learn-body:not(.explain-collapsed):not(.chat-collapsed) .learn-followup-bar:focus-within {
   box-shadow: 0 6px 0 #bfdbfe, 0 14px 28px rgba(96, 165, 250, 0.12) !important;
 }
 
-.learn-body:not(.explain-collapsed):not(.chat-collapsed) .learn-followup-bar .followup-bar-row {
-}
 
 .learn-body:not(.explain-collapsed):not(.chat-collapsed) .learn-followup-input {
   min-height: 44px !important;
@@ -15803,13 +15151,8 @@ h6,
   margin-inline: auto !important;
 }
 
-.learn-body[data-panel-focus="qa-wide"] .learn-followup-bar .followup-bar-row,
-.learn-body[data-panel-focus="qa-full"] .learn-followup-bar .followup-bar-row {
-}
 
 /* Final override: chapter maps are single-column notebook pages, never split panels. */
-.learn-body.chapter-overview-active .learn-body-inner {
-}
 
 .learn-body.chapter-overview-active .learn-book-col,
 .learn-body.chapter-overview-active .learn-chat-col,
@@ -15820,8 +15163,6 @@ h6,
   display: none !important;
 }
 
-.learn-body.chapter-overview-active .learn-explain-col {
-}
 
 .learn-body.chapter-overview-active .learn-explain-scroll,
 .learn-body.chapter-overview-active .learn-explain-content {
@@ -16141,8 +15482,6 @@ h6,
   position: relative !important;
 }
 
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar {
-}
 
 #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-toolbar-center {
   grid-column: 1 !important;
@@ -16382,15 +15721,12 @@ h6,
   justify-content: center !important;
 }
 
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-toolbar-center {
-}#learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-view-selector {
+#learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-view-selector {
   justify-self: stretch !important;
   display: grid !important;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
 }
 
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-view-btn {
-}
 
 @container lecture-panel (max-width: 720px) {
   #learnBody:not(.chapter-overview-active) #learnExplainToolbar {
@@ -16428,11 +15764,7 @@ h6,
   padding-inline: 10px !important;
 }
 
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-view-selector {
-}
 
-#learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-view-btn {
-}
 
 @container lecture-panel (max-width: 620px) {
   #learnBody:not(.chapter-overview-active) #learnExplainToolbar {
@@ -16474,11 +15806,7 @@ h6,
   max-width: none !important;
 }
 
-#learnBody[data-panel-focus="normal"]:not(.chapter-overview-active) #learnExplainCol {
-}
 
-#learnBody[data-panel-focus="normal"]:not(.chapter-overview-active) #learnChatCol {
-}
 
 #learnBody[data-panel-focus="lecture-wide"]:not(.chapter-overview-active) #learnExplainCol {
   flex: 0 0 calc(72% - 11px) !important;
@@ -17238,8 +16566,6 @@ h6,
   background-size: 24px 24px !important;
 }
 
-.login-card::before {
-}
 
 .login-card::after {
   content: "member pass";
@@ -17641,11 +16967,8 @@ h6,
   justify-items: center !important;
 }
 
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-toolbar-center {
-}
 
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-view-selector {
-}/* FINAL SINGLE-LINE LEARN TOOLBAR
+/* FINAL SINGLE-LINE LEARN TOOLBAR
    User direction: More Lecture, lecture/textbook pager, and More Q&A should sit
    on one shared row. Keep the center controls compact and redraw page arrows. */
 #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar{
@@ -17948,9 +17271,6 @@ h6,
   overflow: visible !important;
 }
 
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-toolbar-center,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .learn-toolbar-center {
-}
 
 #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .stamp-page-btn:hover:not(:disabled),
 #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .stamp-page-btn:hover:not(:disabled){
@@ -18401,8 +17721,6 @@ h6,
 }
 
 /* FINAL SMOOTH WORKSPACE SIDEBAR: width glides instead of snapping open. */
-.app {
-}
 
 .app .sidebar {
   will-change: width, flex-basis, max-width, transform, opacity;
@@ -18420,15 +17738,6 @@ h6,
   will-change: transform, opacity, filter;
 }
 
-.app.sidebar-collapsed .sidebar .sidebar-top,
-.app.sidebar-collapsed .sidebar .sidebar-nav-shell,
-.app.sidebar-collapsed .sidebar .sidebar-footer,
-.app.sidebar-collapsed .sidebar .sidebar-journal-decor,
-.app .sidebar.collapsed .sidebar-top,
-.app .sidebar.collapsed .sidebar-nav-shell,
-.app .sidebar.collapsed .sidebar-footer,
-.app .sidebar.collapsed .sidebar-journal-decor {
-}
 
 .app .main {
   flex: 1 1 auto !important;
@@ -18441,8 +17750,6 @@ h6,
     width var(--workspace-sidebar-duration) var(--workspace-sidebar-ease) !important;
 }
 
-.app.sidebar-collapsed .main {
-}
 
 @media (prefers-reduced-motion: reduce) {
   .app .sidebar,
@@ -18612,8 +17919,6 @@ h6,
   box-sizing: border-box !important;
 }
 
-.app .sidebar .logo {
-}
 
 .app.sidebar-collapsed .sidebar,
 .app .sidebar.collapsed {
@@ -18648,9 +17953,6 @@ h6,
   padding-right: 10px !important;
 }
 
-.app.sidebar-collapsed .sidebar .sidebar-top,
-.app .sidebar.collapsed .sidebar-top {
-}
 
 .app.sidebar-collapsed .sidebar .sidebar-nav-shell,
 .app .sidebar.collapsed .sidebar-nav-shell {
@@ -18686,9 +17988,6 @@ h6,
   transform: rotate(180deg) !important;
 }
 
-.app.sidebar-collapsed .sidebar .logo-icon-brand,
-.app .sidebar.collapsed .logo-icon-brand {
-}
 
 .app.sidebar-collapsed .sidebar .logo-text,
 .app.sidebar-collapsed .sidebar .sidebar-nav-group-label,
@@ -18930,29 +18229,11 @@ and tape. */
 }
 
 /* FINAL FIXED LECTURE PAGE TAG: anchor page counter to the lecture panel, not the scroll content. */
-#learnView #learnExplainCol {
-}
 
-#learnView #learnExplainScroll.learn-explain-scroll,
-#learnView #learnExplainScroll {
-}
 
 /* TRUE EOF PAGER TEXT + ARROW FIX:
    placed last so older toolbar locks cannot crop "previous" or hide arrows. */
-#learnView #learnExplainToolbar .learn-toolbar-center,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-toolbar-center,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .learn-toolbar-center {
-}
 
-#learnView #lecturePrevOverlayBtn,
-#learnView #lectureNextOverlayBtn,
-#learnView #learnExplainToolbar #lecturePrevOverlayBtn,
-#learnView #learnExplainToolbar #lectureNextOverlayBtn,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar #lecturePrevOverlayBtn,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar #lectureNextOverlayBtn,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar #lecturePrevOverlayBtn,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar #lectureNextOverlayBtn {
-}
 
 #learnView #lecturePrevOverlayBtn,
 #learnView #learnExplainToolbar #lecturePrevOverlayBtn,
@@ -18970,10 +18251,7 @@ and tape. */
   width: auto !important;
   min-width: 70px !important;
   max-width: 78px !important;
-}#learnView #lecturePrevOverlayBtn:disabled,
-#learnView #lectureNextOverlayBtn:disabled {
 }
-
 /* FINAL LEARN QA FLATTENING: last rule wins over all older panel chrome. */
 #learnView #learnBody:not(.chapter-overview-active) #learnChatCol,
 #learnView #learnBody.chapter-overview-split-active #learnChatCol,
@@ -19014,55 +18292,15 @@ and tape. */
   width: 105% !important;
   height: 58% !important;
 }
-#learnView #learnChatCol .learn-chat-scroll,
-#learnView #learnChatCol .learn-web-section,
-#learnView #learnChatCol #learnChatEmptyState,
-#learnView #learnChatCol .edu-tutor-empty-inner,
-#learnView #learnChatCol .learn-followup-bar,
-#learnView #learnChatCol .glass-panel,
-#learnView #learnChatCol .edu-tutor-composer,
-#learnView #learnChatCol .followup-bubble {
-}
 
-#learnView #learnChatCol .learn-chat-scroll::before,
-#learnView #learnChatCol .learn-chat-scroll::after,
-#learnView #learnChatCol #learnChatEmptyState::before,
-#learnView #learnChatCol #learnChatEmptyState::after,
-#learnView #learnChatCol .learn-followup-bar::before,
-#learnView #learnChatCol .learn-followup-bar::after,
-#learnView #learnChatCol .edu-tutor-composer::before,
-#learnView #learnChatCol .edu-tutor-composer::after,
-#learnView #learnChatCol .glass-panel::before,
-#learnView #learnChatCol .glass-panel::after {
-}
 
-#learnView #learnChatCol .learn-chat-scroll {
-}
 
-#learnView #learnChatCol #learnChatEmptyState {
-}
 
-#learnView #learnChatCol .edu-tutor-empty-inner {
-}
 
-#learnView #learnChatCol .learn-followup-bar {
-}
 
-#learnView #learnChatCol .edu-tutor-composer {
-}
 
-#learnView #learnChatCol .input-wrapper {
-}
 
-#learnView #learnChatCol .edu-tutor-actions {
-}
 
-#learnView #learnChatCol .action-chip,
-#learnView #learnChatCol .edu-mode-toggle,
-#learnView #learnChatCol .network-on,
-#learnView #learnChatCol .network-off,
-#learnView #learnChatCol .edu-tutor-native-select {
-}
 
 /* FINAL NO-FRAME QA LOCK: everything in the right panel becomes one continuous surface. */
 #learnView #learnChatCol,
@@ -19085,51 +18323,20 @@ and tape. */
   content: none !important;
   display: none !important;
 }
-#learnView #learnChatCol .learn-chat-scroll,
-#learnView #learnChatCol .learn-web-section,
-#learnView #learnChatCol #learnChatEmptyState,
-#learnView #learnChatCol .edu-tutor-empty-inner,
-#learnView #learnChatCol .learn-followup-bar,
-#learnView #learnChatCol .glass-panel,
-#learnView #learnChatCol .edu-tutor-composer,
-#learnView #learnChatCol .followup-bubble {
-}
 
-#learnView #learnChatCol .learn-chat-scroll {
-}
 
-#learnView #learnChatCol #learnChatEmptyState {
-}
 
 #learnView #learnChatCol .edu-tutor-empty-inner {
   width: 100% !important;
 }
 
-#learnView #learnChatCol .learn-followup-bar {
-}
 
-#learnView #learnChatCol .edu-tutor-composer {
-}
 
-#learnView #learnChatCol .input-wrapper {
-}
 
-#learnView #learnChatCol .edu-tutor-actions {
-}
 
-#learnView #learnChatCol .action-chip,
-#learnView #learnChatCol .edu-mode-toggle,
-#learnView #learnChatCol .network-on,
-#learnView #learnChatCol .network-off,
-#learnView #learnChatCol .edu-tutor-native-select {
-}
 
 /* FINAL FRAMELESS QA SURFACE: remove outer boxes and keep one continuous glass panel. */
-#learnView #learnChatCol {
-}
 
-#learnView #learnChatCol .learn-chat-scroll {
-}
 
 #learnView #learnChatCol .learn-chat-empty-state,
 #learnView #learnChatCol .edu-tutor-empty,
@@ -19144,15 +18351,8 @@ and tape. */
   padding-bottom: 28px !important;
 }
 
-#learnView #learnChatCol .learn-followup-bar {
-}
 
-#learnView #learnChatCol .glass-panel,
-#learnView #learnChatCol .edu-tutor-composer {
-}
 
-#learnView #learnChatCol .input-wrapper {
-}
 
 #learnView #learnChatCol .edu-tutor-actions {
   box-shadow: none !important;
@@ -19202,8 +18402,6 @@ and tape. */
   box-shadow: none !important;
 }
 
-#learnView #learnChatCol #learnChatEmptyState {
-}
 
 #learnView #learnChatCol .edu-tutor-empty-inner {
   padding: 0 !important;
@@ -19222,8 +18420,6 @@ and tape. */
   box-shadow: none !important;
 }
 
-#learnView #learnChatCol .input-wrapper {
-}
 
 #learnView #learnChatCol .edu-tutor-actions {
   margin-top: 10px !important;
@@ -19232,12 +18428,6 @@ and tape. */
   background: transparent !important;
 }
 
-#learnView #learnChatCol .action-chip,
-#learnView #learnChatCol .edu-mode-toggle,
-#learnView #learnChatCol .network-on,
-#learnView #learnChatCol .network-off,
-#learnView #learnChatCol .edu-tutor-native-select {
-}
 
 /* =========================================================
    TUTOR AGENT GLASSMORPHISM UI OVERRIDES
@@ -19414,8 +18604,6 @@ and tape. */
   transition: color 0.16s ease !important;
 }
 
-.app .sidebar .logo:hover {
-}
 
 .app .sidebar .menu-toggle {
   width: 30px !important;
@@ -19611,9 +18799,6 @@ and tape. */
   line-height: 1 !important;
 }
 
-#learnView #learnChatCol .qa-hero-icon,
-#learnView #learnChatCol .qa-hero-icon svg {
-}
 
 #learnView #learnChatCol .qa-inline-icon,
 #learnView #learnChatCol .qa-inline-icon svg {
@@ -19822,11 +19007,7 @@ and tape. */
   cursor: pointer !important;
 }
 
-#learnView #learnChatCol .edu-mode-option:hover {
-}
 
-#learnView #learnChatCol .edu-mode-option.selected {
-}
 
 #learnView #learnChatCol .edu-mode-icon {
   text-align: center !important;
@@ -20025,30 +19206,9 @@ body {
 
 /* ABSOLUTE EOF PAGER TEXT + ARROW FIX:
    keep the small black/white tabs, but give "previous" room and show arrows. */
-#learnView #learnExplainToolbar .learn-toolbar-center,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-toolbar-center,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .learn-toolbar-center {
-}
 
-#learnView #lecturePrevOverlayBtn,
-#learnView #lectureNextOverlayBtn,
-#learnView #learnExplainToolbar #lecturePrevOverlayBtn,
-#learnView #learnExplainToolbar #lectureNextOverlayBtn,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar #lecturePrevOverlayBtn,
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar #lectureNextOverlayBtn,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar #lecturePrevOverlayBtn,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar #lectureNextOverlayBtn {
-}
 
-#learnView #lecturePrevOverlayBtn,
-#learnView #learnExplainToolbar #lecturePrevOverlayBtn {
-}
 
-#learnView #lectureNextOverlayBtn,
-#learnView #learnExplainToolbar #lectureNextOverlayBtn {
-}#learnView #lecturePrevOverlayBtn:disabled,
-#learnView #lectureNextOverlayBtn:disabled {
-}
 
 /* ABSOLUTE EOF LECTURE TOOLBAR CENTER LOCK:
    center Prev + Lecture/Textbook + Next on the visible lecture panel axis. */
@@ -20144,9 +19304,6 @@ body {
   background-color: #f8fafc !important;
 }
 
-#learnView #learnExplainToolbar #lecturePrevOverlayBtn:active:not(:disabled),
-#learnView #learnExplainToolbar #lectureNextOverlayBtn:active:not(:disabled) {
-}
 
 #learnView #learnExplainToolbar #lecturePrevOverlayBtn:disabled,
 #learnView #learnExplainToolbar #lectureNextOverlayBtn:disabled {
@@ -20270,10 +19427,6 @@ body {
   overflow: visible !important;
 }
 
-#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-toolbar-center,
-#learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .learn-toolbar-center,
-#learnView #learnExplainToolbar .learn-toolbar-center {
-}
 
 #learnView #learnViewSelector {
   justify-self: center !important;
@@ -20291,11 +19444,7 @@ body {
   pointer-events: none !important;
 }
 
-#learnView #lecturePrevOverlayBtn {
-}
 
-#learnView #lectureNextOverlayBtn {
-}
 
 #learnView #lecturePrevOverlayBtn,
 #learnView #lectureNextOverlayBtn {
@@ -20370,8 +19519,6 @@ body {
   column-gap: 14px !important;
 }
 
-#learnView #learnViewSelector {
-}
 
 #learnView #lecturePrevOverlayBtn {
   grid-column: 2 !important;
@@ -20383,9 +19530,6 @@ body {
   justify-self: start !important;
 }
 
-#learnView #lecturePrevOverlayBtn:disabled,
-#learnView #lectureNextOverlayBtn:disabled {
-}
 /* FINAL SCRAPBOOK TOOLBAR DIRECT DOM: buttons sit immediately beside the tab switcher. */
 #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-toolbar-center,
 #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .learn-toolbar-center,
@@ -20411,9 +19555,6 @@ body {
   order: 3 !important;
 }
 
-#learnView #learnExplainScroll.learn-explain-scroll,
-#learnView #learnExplainScroll {
-}
 
 /* FINAL TOOLBAR PAGINATION ROW: place pager beside the Lecture/Textbook tabs. */
 #learnView #learnExplainToolbar .learn-toolbar-center {
@@ -20456,8 +19597,6 @@ body {
 }
 
 /* FINAL FIXED LECTURE PAGE TAG LOCK: keep the page tag pinned to the visible lecture panel. */
-#learnView #learnExplainCol {
-}
 
 #learnView #learnExplainScroll.learn-explain-scroll,
 #learnView #learnExplainScroll {
@@ -20667,16 +19806,11 @@ body {
   line-height: 1 !important;
 }
 
-#learnView #learnChatCol .edu-mode-toggle {
-}
 
 #learnView #learnChatCol #webSearchToggleBtnLearn {
   display: inline-flex !important;
 }
 
-#learnView #learnChatCol #webSearchToggleBtnLearn .qa-inline-icon,
-#learnView #learnChatCol #learnModeCurrentIcon {
-}
 
 #learnView #learnChatCol #webSearchToggleBtnLearn .qa-inline-icon {
   transform: translateY(-1px) !important;
@@ -20687,8 +19821,6 @@ body {
   overflow: visible !important;
 }
 
-#learnView #learnChatCol .edu-mode-option {
-}
 
 /* CODEx_FINAL_QA_CONTROLS_MATCH_REFERENCE: remove composer focus shell and use reference dropdown/network controls. */
 #learnView #learnChatCol #learnFollowupBar,
@@ -20744,8 +19876,6 @@ body {
   background: rgba(0, 0, 0, 0.04) !important;
 }
 
-#learnView #learnChatCol .edu-mode-option.selected {
-}
 
 #learnView #learnChatCol .edu-mode-icon {
   width: 24px !important;
@@ -20878,8 +20008,6 @@ body {
   padding: 0 !important;
 }
 
-.welcome.home-ask-workspace.hidden {
-}
 
 .welcome.home-ask-workspace::before,
 .welcome.home-ask-workspace::after {
@@ -20921,8 +20049,6 @@ body {
   color: #0284c7 !important;
 }
 
-.home-ask-icon svg {
-}
 
 .home-ask-empty h1 {
   margin: 0 !important;
@@ -21004,8 +20130,6 @@ body {
   color: #ffffff !important;
 }
 
-.welcome.home-ask-workspace .home-ask-send:disabled {
-}
 
 .welcome.home-ask-workspace .home-ask-attach svg,
 .welcome.home-ask-workspace .home-ask-send svg,
@@ -21025,8 +20149,6 @@ body {
   white-space: pre-wrap !important;
 }
 
-.welcome.home-ask-workspace #userInput::placeholder {
-}
 
 .home-ask-toolbar {
   display: flex !important;
@@ -21143,8 +20265,6 @@ body {
 }
 
 /* HOME_DASHBOARD_ASK_CENTER: compact center module with room for future home widgets. */
-.welcome.home-ask-workspace {
-}
 
 .welcome.home-ask-workspace.hidden {
   display: none !important;
@@ -21162,11 +20282,7 @@ body {
   padding: clamp(112px, 17vh, 160px) clamp(42px, 8vw, 130px) 48px !important;
 }
 
-.home-ask-icon {
-}
 
-.home-ask-icon svg {
-}
 
 .home-ask-empty h1 {
   font-family: "Source Serif 4", "Bricolage Grotesque", "Inter", sans-serif !important;
@@ -21204,15 +20320,8 @@ body {
   height: 14px !important;
 }
 
-.welcome.home-ask-workspace .home-ask-composer,
-.welcome.home-ask-workspace #searchBox.home-ask-composer {
-}
 
-.welcome.home-ask-workspace .home-ask-input-row {
-}
 
-.welcome.home-ask-workspace #userInput.search-input {
-}
 
 .home-ask-toolbar {
   margin-top: 6px !important;
@@ -21378,9 +20487,6 @@ body {
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
-#learnView .edu-mode-menu.show,
-#learnView #learnChatCol .edu-mode-menu.show {
-}
 
 #learnView .edu-mode-option,
 #learnView #learnChatCol .edu-mode-option {
@@ -21686,8 +20792,6 @@ body {
     isolation: isolate !important;
 }
 
-.app::before {
-}
 
 .app .sidebar{
     position: relative !important;
@@ -21762,20 +20866,9 @@ body {
 }
 
 /* SIDEBAR LAYOUT PARITY: keep syllabus rows on one line like the glass mockup. */
-:root {
-}
 
-.app .sidebar,
-.app .sidebar-top,
-.app .sidebar-nav-shell,
-.app .sidebar-footer {
-}
 
-.app .sidebar .logo {
-}
 
-.app .sidebar-nav-shell {
-}
 
 .app .sidebar .sidebar-link,
 .app .sidebar .sidebar-settings-btn {
@@ -21783,8 +20876,6 @@ body {
     white-space: nowrap !important;
 }
 
-.app .sidebar .syllabus-sections {
-}
 
 .app .sidebar .syllabus-section-row {
     align-items: center !important;
@@ -21975,9 +21066,6 @@ body {
 }
 
 /* LEARN Q&A MODE PICKER COMPACT PASS */
-#learnView .edu-mode-menu,
-#learnView #learnChatCol .edu-mode-menu {
-}
 
 #learnView .edu-mode-option,
 #learnView #learnChatCol .edu-mode-option {
@@ -22083,24 +21171,11 @@ body {
     -webkit-backdrop-filter: blur(24px) saturate(140%) !important;
 }
 
-#learnView #learnChatCol #learnFollowupBar .input-wrapper,
-#learnView #learnChatCol #learnFollowupBar .input-wrapper:focus-within {
-}
 
-#learnView #learnChatCol #learnFollowupBar .btn-clip {
-}
 
-#learnView #learnChatCol #learnFollowupBar .input-field {
-}
 
-#learnView #learnChatCol #learnFollowupBar .input-field::placeholder {
-}
 
-#learnView #learnChatCol #learnFollowupBar .btn-send {
-}
 
-#learnView #learnChatCol #learnFollowupBar .bottom-actions {
-}
 
 #learnView #learnChatCol #learnFollowupBar .edu-mode-toggle {
     height: 38px !important;
@@ -22313,15 +21388,11 @@ body {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.52) !important;
 }
 
-.feedback-thread {
-}
 
 .feedback-thread h3 {
   font-weight: 820 !important;
 }
 
-.feedback-thread-body {
-}
 
 .feedback-reply-count {
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55) !important;
@@ -22342,8 +21413,6 @@ body {
   }
 }
 
-:root[data-theme="dark"] .feedback-view {
-}
 
 :root[data-theme="dark"] .feedback-compose-card,
 :root[data-theme="dark"] .feedback-board-card,
@@ -22607,31 +21676,13 @@ body {
 }
 
 /* FEEDBACK BOARD COMPACT PASS: smaller page scale, shorter cards, lighter controls. */
-#feedbackView.feedback-view {
-}
 
-#feedbackView .feedback-shell {
-}
 
-#feedbackView .feedback-header {
-}
 
-#feedbackView .feedback-title {
-}
 
-#feedbackView .feedback-subtitle {
-}
 
-#feedbackView .feedback-eyebrow,
-#feedbackView .feedback-card-kicker {
-}
 
-#feedbackView .feedback-grid {
-}
 
-#feedbackView .feedback-compose-card,
-#feedbackView .feedback-board-card {
-}
 
 #feedbackView .feedback-compose-card {
   padding: 34px 28px 30px !important;
@@ -22641,12 +21692,7 @@ body {
   padding: 20px !important;
 }
 
-#feedbackView .feedback-board-head {
-}
 
-#feedbackView .feedback-compose-card h2,
-#feedbackView .feedback-board-head h2 {
-}
 
 #feedbackView .feedback-compose-card p {
   margin-bottom: 14px !important;
@@ -22667,14 +21713,8 @@ body {
   font-size: 13px !important;
 }
 
-#feedbackView .feedback-list {
-}
 
-#feedbackView .feedback-thread {
-}
 
-#feedbackView .feedback-thread-head {
-}
 
 #feedbackView .feedback-thread h3 {
   margin-bottom: 5px !important;
@@ -22685,14 +21725,8 @@ body {
   line-height: 1.35 !important;
 }
 
-#feedbackView .feedback-reply-count {
-}
 
-#feedbackView .feedback-thread-body {
-}
 
-#feedbackView .feedback-reply {
-}
 
 #feedbackView .feedback-reply::before {
   position: absolute !important;
@@ -22711,18 +21745,9 @@ body {
   letter-spacing: 0 !important;
 }
 
-#feedbackView .feedback-reply-body {
-}
 
-#feedbackView .feedback-reply-compose {
-}
 
-#feedbackView .feedback-reply-name,
-#feedbackView .feedback-reply-input {
-}
 
-#feedbackView .feedback-reply-btn {
-}
 
 #feedbackView .feedback-refresh-icon-btn {
   position: relative !important;
@@ -22792,8 +21817,6 @@ body {
 }
 
 /* HOME GLASS TEST: subtle glass panels over a very quiet light field. */
-.app {
-}
 
 .app::before {
   position: absolute !important;
@@ -22941,9 +21964,6 @@ body {
   border-radius: 0 !important;
 }
 
-.welcome.home-ask-workspace .home-ask-composer:focus-within,
-.welcome.home-ask-workspace #searchBox.home-ask-composer:focus-within {
-}
 
 @keyframes home-ask-focus-bounce {
   0% {
@@ -23858,9 +22878,6 @@ body {
 }
 
 /* LEARN QA EMPTY STATE LOWER + COMPOSER BOUNCE */
-#learnView #learnBody:not(.chat-collapsed) #learnChatCol:not(.is-chat-active) #learnChatEmptyState,
-#learnView #learnBody:not(.chat-collapsed) #learnChatCol:not(.is-chat-active) .learn-chat-empty-state.edu-tutor-empty {
-}
 
 #learnView #learnChatCol #learnFollowupBar,
 #learnView #learnBody #learnChatCol #learnFollowupBar,
@@ -23908,9 +22925,6 @@ body {
 }
 
 /* CHAPTER OVERVIEW OPEN BOOK REDESIGN */
-#learnView #learnBody.chapter-overview-active .chapter-overview-shell,
-#learnView #learnBody.chapter-overview-split-active .chapter-overview-shell {
-}
 
 #learnView #learnBody.chapter-overview-active .chapter-overview-map,
 #learnView #learnBody.chapter-overview-split-active .chapter-overview-map {
@@ -23918,18 +22932,11 @@ body {
   overflow: visible !important;
 }
 
-#learnView #learnBody.chapter-overview-active .chapter-overview-map::before,
-#learnView #learnBody.chapter-overview-active .chapter-overview-map::after,
-#learnView #learnBody.chapter-overview-split-active .chapter-overview-map::before,
-#learnView #learnBody.chapter-overview-split-active .chapter-overview-map::after {
-}
 
 #learnView .chapter-overview-book-spread {
   grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr) !important;
 }
 
-#learnView .chapter-overview-book-spread::before {
-}
 
 #learnView .chapter-overview-book-spread::after {
   inset: auto 34px -17px !important;
@@ -24014,9 +23021,6 @@ body {
   transform: none !important;
 }
 
-#learnView #learnBody.chapter-overview-active .chapter-overview-title,
-#learnView #learnBody.chapter-overview-split-active .chapter-overview-title {
-}
 
 #learnView #learnBody.chapter-overview-active .chapter-overview-title::after,
 #learnView #learnBody.chapter-overview-split-active .chapter-overview-title::after {
@@ -24032,9 +23036,6 @@ body {
   z-index: -1 !important;
 }
 
-#learnView #learnBody.chapter-overview-active .chapter-overview-summary,
-#learnView #learnBody.chapter-overview-split-active .chapter-overview-summary {
-}
 
 #learnView #learnBody.chapter-overview-active .chapter-overview-list-head,
 #learnView #learnBody.chapter-overview-split-active .chapter-overview-list-head {
@@ -24042,9 +23043,6 @@ body {
   z-index: 2 !important;
 }
 
-#learnView #learnBody.chapter-overview-active .chapter-overview-list-eyebrow,
-#learnView #learnBody.chapter-overview-split-active .chapter-overview-list-eyebrow {
-}
 
 #learnView #learnBody.chapter-overview-active .chapter-overview-list-title,
 #learnView #learnBody.chapter-overview-split-active .chapter-overview-list-title {
@@ -24168,9 +23166,6 @@ body {
   pointer-events: none !important;
 }
 
-#learnView #learnBody.chapter-overview-active .chapter-overview-note::before,
-#learnView #learnBody.chapter-overview-split-active .chapter-overview-note::before {
-}
 
 #learnView #learnBody.chapter-overview-active .chapter-overview-note::after,
 #learnView #learnBody.chapter-overview-split-active .chapter-overview-note::after {
@@ -24192,31 +23187,19 @@ body {
   display: none !important;
 }
 
-#learnView #learnBody.chapter-overview-active .chapter-overview-note .chapter-overview-subcard-marker,
-#learnView #learnBody.chapter-overview-split-active .chapter-overview-note .chapter-overview-subcard-marker {
-}
 
 #learnView #learnBody.chapter-overview-active .chapter-overview-note .chapter-overview-subcard-copy,
 #learnView #learnBody.chapter-overview-split-active .chapter-overview-note .chapter-overview-subcard-copy {
   flex: 0 1 auto !important;
 }
 
-#learnView #learnBody.chapter-overview-active .chapter-overview-note .chapter-overview-subcard-title,
-#learnView #learnBody.chapter-overview-split-active .chapter-overview-note .chapter-overview-subcard-title {
-}
 
 #learnView #learnBody.chapter-overview-active .chapter-overview-note .chapter-overview-open-cue,
 #learnView #learnBody.chapter-overview-split-active .chapter-overview-note .chapter-overview-open-cue {
   margin-top: auto !important;
 }
 
-#learnView #learnBody.chapter-overview-active .chapter-overview-note .chapter-overview-open-cue::before,
-#learnView #learnBody.chapter-overview-split-active .chapter-overview-note .chapter-overview-open-cue::before {
-}
 
-#learnView #learnBody.chapter-overview-active .chapter-overview-note .chapter-overview-open-cue::after,
-#learnView #learnBody.chapter-overview-split-active .chapter-overview-note .chapter-overview-open-cue::after {
-}
 
 @media (max-width: 1120px) {
   #learnView .chapter-overview-book-spread {
@@ -24279,9 +23262,6 @@ body {
 }
 
 /* CHAPTER OVERVIEW TACTICAL NOTEBOOK STYLE */
-#learnView #learnBody.chapter-overview-active .chapter-overview-shell,
-#learnView #learnBody.chapter-overview-split-active .chapter-overview-shell {
-}
 
 #learnView #learnBody.chapter-overview-active .chapter-overview-map,
 #learnView #learnBody.chapter-overview-split-active .chapter-overview-map {
@@ -24857,27 +23837,13 @@ body {
 }
 
 /* OVERVIEW BOOK POLISH: fill the page, round both outer edges, show margin line, scroll notes. */
-#learnView #learnBody.chapter-overview-active .chapter-overview-shell,
-#learnView #learnBody.chapter-overview-split-active .chapter-overview-shell {
-}
 
-#learnView #learnBody.chapter-overview-active .chapter-overview-map,
-#learnView #learnBody.chapter-overview-split-active .chapter-overview-map {
-}
 
 #learnView .chapter-overview-book-spread {
   aspect-ratio: auto !important;
 }
 
-#learnView #learnBody.chapter-overview-active .chapter-overview-book-page-left,
-#learnView #learnBody.chapter-overview-split-active .chapter-overview-book-page-left,
-#learnView .chapter-overview-book-page-left {
-}
 
-#learnView #learnBody.chapter-overview-active .chapter-overview-book-page-right,
-#learnView #learnBody.chapter-overview-split-active .chapter-overview-book-page-right,
-#learnView .chapter-overview-book-page-right {
-}
 
 #learnView .chapter-overview-book-page-left::before {
   content: "" !important;
@@ -25038,15 +24004,7 @@ body {
     0 0 0 1px rgba(15, 23, 42, 0.06) !important;
 }
 
-#learnView #learnBody.chapter-overview-active .chapter-overview-book-page-left,
-#learnView #learnBody.chapter-overview-split-active .chapter-overview-book-page-left,
-#learnView .chapter-overview-book-page-left {
-}
 
-#learnView #learnBody.chapter-overview-active .chapter-overview-book-page-right,
-#learnView #learnBody.chapter-overview-split-active .chapter-overview-book-page-right,
-#learnView .chapter-overview-book-page-right {
-}
 
 #learnView #learnBody.chapter-overview-active .chapter-overview-book-page-left::before,
 #learnView #learnBody.chapter-overview-split-active .chapter-overview-book-page-left::before,
@@ -25068,9 +24026,6 @@ body {
   left: 78px !important;
 }
 
-#learnView #learnBody.chapter-overview-active .chapter-overview-book-page-right::before,
-#learnView #learnBody.chapter-overview-split-active .chapter-overview-book-page-right::before {
-}
 
 #learnView #learnBody.chapter-overview-active .chapter-overview-book-page-left::after,
 #learnView #learnBody.chapter-overview-split-active .chapter-overview-book-page-left::after,
@@ -25095,9 +24050,6 @@ body {
   padding-left: 112px !important;
 }
 
-#learnView #learnBody.chapter-overview-active .chapter-overview-book-page-right,
-#learnView #learnBody.chapter-overview-split-active .chapter-overview-book-page-right {
-}
 
 /* OVERVIEW BOOK TRUE OVAL AND FULL-PAGE PASS */
 #learnView #learnBody.chapter-overview-active #learnExplainScroll,
@@ -25823,9 +24775,6 @@ body {
 }
 
 /* LEARN Q&A RUNTIME INJECTION OVERRIDE: outrank late app.js style tags. */
-#learnView#learnView #learnBody#learnBody #learnChatCol#learnChatCol,
-#learnView#learnView #learnBody#learnBody[data-panel-focus] #learnChatCol#learnChatCol {
-}
 
 #learnView#learnView #learnBody#learnBody #learnChatCol#learnChatCol #learnChatEmptyState#learnChatEmptyState,
 #learnView#learnView #learnBody#learnBody #learnChatCol#learnChatCol .learn-chat-empty-state.edu-tutor-empty {
@@ -26420,17 +25369,8 @@ body {
   line-height: 0 !important;
 }
 
-#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner.next {
-}
 
-#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner.prev {
-}
 
-#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner:hover:not(:disabled),
-#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner:hover:not(:disabled),
-#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner.is-flipping:not(:disabled),
-#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner.is-flipping:not(:disabled) {
-}
 
 #learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner::after,
 #learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner::after {
@@ -26447,11 +25387,7 @@ body {
   filter: none !important;
 }
 
-#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner.next::after {
-}
 
-#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner.prev::after {
-}
 
 #learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner::before,
 #learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner::before {
@@ -26469,11 +25405,7 @@ body {
   transform: none !important;
 }
 
-#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner.next::before {
-}
 
-#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner.prev::before {
-}
 
 #learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner .turner-content,
 #learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner .turner-content {
@@ -26488,24 +25420,11 @@ body {
   white-space: nowrap !important;
 }
 
-#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner.next .turner-content {
-}
 
-#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner.prev .turner-content {
-}
 
-#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner:hover:not(:disabled) .turner-content,
-#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner:hover:not(:disabled) .turner-content,
-#learnView #lecturePrevOverlayBtn.lecture-page-corner.page-turner.is-flipping:not(:disabled) .turner-content,
-#learnView #lectureNextOverlayBtn.lecture-page-corner.page-turner.is-flipping:not(:disabled) .turner-content {
-}
 
 /* True tail lesson title scale lock: keep large headings readable but calmer. */
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-heading {
-}
 
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-heading h2 {
-}
 
 /* Absolute EOF overview textbook scroll lock: chapter-level textbook pages must scroll. */
 #learnView#learnView #learnBody#learnBody.chapter-overview-active.learn-textbook-active #learnExplainScroll#learnExplainScroll,
@@ -26847,8 +25766,6 @@ body {
 }
 
 /* Home answer-style menu: match the lesson Q&A glass selector. */
-.welcome.home-ask-workspace #homeModePicker.home-mode-picker {
-}
 
 .welcome.home-ask-workspace #homeModeMenu.home-mode-menu {
   position: absolute !important;
@@ -26875,11 +25792,7 @@ body {
   transition: background 160ms ease, border-color 160ms ease, box-shadow 160ms ease !important;
 }
 
-.welcome.home-ask-workspace #homeModeMenu .home-mode-option:hover:not(.selected) {
-}
 
-.welcome.home-ask-workspace #homeModeMenu .home-mode-option.selected {
-}
 
 .welcome.home-ask-workspace #homeModeMenu .home-mode-menu-icon {
   min-height: 24px !important;
@@ -26950,8 +25863,6 @@ body {
   color: var(--author-ink) !important;
 }
 
-#feedbackView .feedback-reply-count {
-}
 
 /* Dot-marker chrome for left/right replies. Provides position:absolute +
    content for the .is-left::before / .is-right::before offset rules below
@@ -27025,11 +25936,7 @@ body {
   left: auto !important;
 }
 
-#feedbackView .feedback-click-reply.is-target {
-}
 
-#feedbackView .feedback-reply-target {
-}
 
 /* Sidebar Home entry: a quiet glass shortcut above Syllabus. */
 .app .sidebar .sidebar-home-link#navHomeBtn {
@@ -27307,33 +26214,23 @@ body {
   margin-bottom: 18px !important;
 }
 
-#mistakeNotebookView .mistake-list-card {
-}
 
 #mistakeNotebookView .mistake-list-card .mistake-card-kicker {
   margin-bottom: 12px !important;
 }
 
-#mistakeNotebookView .mistake-detail-card {
-}
 
 #mistakeNotebookView .mistake-detail-head {
   padding-bottom: 16px !important;
   border-bottom: 1px solid rgba(255,255,255,0.36) !important;
 }
 
-#mistakeNotebookView .mistake-notes-input {
-}
 
-#mistakeNotebookView .mistake-ai-instruction {
-}
 
 #mistakeNotebookView .mistake-danger-btn {
   min-width: 94px !important;
 }
 
-#mistakeNotebookView .mistake-empty-panel {
-}
 
 /* Preference page liquid glass redesign: compact memory cockpit over the theme surface. */
 #preferenceView.preference-view {
@@ -28244,8 +27141,6 @@ body {
 }
 
 /* True tail lock 2: normalize lecture-page frame padding + reset content width. */
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-frame {
-}
 
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-heading,
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .lesson-page-heading h2,
@@ -28270,8 +27165,6 @@ body {
 }
 
 /* Strict 55:45 lesson split and full-width lecture content. */
-#learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active):not(.chat-collapsed) .learn-body-inner:not([data-custom-split="true"]) {
-}
 
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) #learnExplainScroll,
 #learnView#learnView #learnBody:not(.chapter-overview-active):not(.chapter-overview-split-active) .learn-explain-scroll {
@@ -29942,24 +28835,11 @@ body {
   gap: 14px !important;
 }
 
-#mistakeNotebookView .mistake-note-columns {
-}
 
-#mistakeNotebookView .mistake-user-note-card,
-#mistakeNotebookView .mistake-ai-draft-card {
-}
 
-#mistakeNotebookView .mistake-user-note-card {
-}
 
-#mistakeNotebookView .mistake-ai-draft-card {
-}
 
-#mistakeNotebookView .mistake-user-note-card .mistake-field-label {
-}
 
-#mistakeNotebookView .mistake-ai-draft-card .mistake-field-label {
-}
 
 #mistakeNotebookView .mistake-notes-input,
 #mistakeNotebookView .mistake-ai-instruction,
@@ -30002,8 +28882,6 @@ body {
     linear-gradient(135deg, rgba(255,255,255,0.38), rgba(255,255,255,0.13)) !important;
 }
 
-#mistakeNotebookView .mistake-actions {
-}
 
 #mistakeNotebookView .mistake-note-card-head {
   display: flex !important;
@@ -30023,8 +28901,6 @@ body {
   font-weight: 850 !important;
 }
 
-#mistakeNotebookView .mistake-note-images {
-}
 
 #mistakeNotebookView .mistake-note-image-empty {
   display: flex !important;
@@ -30059,8 +28935,6 @@ body {
   line-height: 1 !important;
 }
 
-#mistakeNotebookView .mistake-ai-draft-card {
-}
 
 #mistakeNotebookView .mistake-draft-head {
   margin: 0 0 8px !important;
@@ -30077,13 +28951,7 @@ body {
 }
 
 /* HOME ASK CONTROL GLASS LOCK: unclipped menu plus thicker frosted mode/web controls. */
-.welcome.home-ask-workspace .home-ask-composer,
-.welcome.home-ask-workspace #searchBox.home-ask-composer {
-}
 
-.welcome.home-ask-workspace .home-ask-composer:focus-within,
-.welcome.home-ask-workspace #searchBox.home-ask-composer:focus-within {
-}
 
 .welcome.home-ask-workspace .home-ask-toolbar {
   position: relative !important;
@@ -30137,14 +29005,8 @@ body {
   color: #0284c7 !important;
 }
 
-.welcome.home-ask-workspace .home-mode-icon i {
-}
 
-.welcome.home-ask-workspace .home-mode-toggle .qa-caret-icon {
-}
 
-.welcome.home-ask-workspace #webSearchToggleBtnMain.home-ask-web-toggle svg {
-}
 
 .welcome.home-ask-workspace #webSearchToggleBtnMain.home-ask-web-toggle.active {
   color: #2563eb !important;
@@ -30161,11 +29023,7 @@ body {
   overflow: hidden !important;
 }
 
-.welcome.home-ask-workspace #homeModeMenu .home-mode-option {
-}
 
-.welcome.home-ask-workspace #homeModeMenu .home-mode-option.selected {
-}
 
 /* HOME ASK CONTROL MOTION TUNE: smaller icons, keep glass, restore a light pop. */
 .welcome.home-ask-workspace #homeModeMenu.home-mode-menu {
@@ -30184,8 +29042,6 @@ body {
 }
 
 /* MISTAKE NOTE GLASS STACK LOCK: stacked frosted notes, user-owned first. */
-#mistakeNotebookView .mistake-note-columns {
-}
 
 #mistakeNotebookView .mistake-user-note-card,
 #mistakeNotebookView .mistake-ai-draft-card {
@@ -30286,15 +29142,11 @@ body {
   -webkit-backdrop-filter: blur(24px) saturate(180%) brightness(1.05) !important;
 }
 
-#mistakeNotebookView .mistake-notes-input {
-}
 
 #mistakeNotebookView .mistake-notes-input::placeholder {
   color: rgba(71,85,105,0.48) !important;
 }
 
-#mistakeNotebookView .mistake-draft-notes-output {
-}
 
 #mistakeNotebookView .mistake-draft-notes-output :is(ul, ol),
 #mistakeNotebookView .mistake-ai-answer :is(ul, ol) {
@@ -31078,8 +29930,6 @@ body {
 }
 
 /* TRUE EOF HOME ASK INTERACTION LOCK: menu opens below, composer pops in place, controls stay compact. */
-.welcome.home-ask-workspace .home-ask-stage {
-}
 
 .welcome.home-ask-workspace .home-ask-empty,
 .welcome.home-ask-workspace .home-ask-tags {
@@ -31087,13 +29937,7 @@ body {
   z-index: 8 !important;
 }
 
-.welcome.home-ask-workspace .home-ask-composer,
-.welcome.home-ask-workspace #searchBox.home-ask-composer {
-}
 
-.welcome.home-ask-workspace .home-ask-composer:focus-within,
-.welcome.home-ask-workspace #searchBox.home-ask-composer:focus-within {
-}
 
 @keyframes home-ask-in-place-pop {
   0% {
@@ -31132,14 +29976,8 @@ body {
   height: 9px !important;
 }
 
-.welcome.home-ask-workspace #webSearchToggleBtnMain.home-ask-web-toggle {
-}
 
-.welcome.home-ask-workspace #webSearchToggleBtnMain.home-ask-web-toggle svg {
-}
 
-.welcome.home-ask-workspace #homeModeMenu .home-mode-option {
-}
 
 @media (max-width: 760px) {
   .welcome.home-ask-workspace .home-mode-toggle {
@@ -31166,9 +30004,6 @@ body {
   position: relative !important;
 }
 
-.welcome.home-ask-workspace .home-ask-composer:focus-within,
-.welcome.home-ask-workspace #searchBox.home-ask-composer:focus-within {
-}
 
 @keyframes home-ask-visible-pop {
   0% {
@@ -31408,14 +30243,8 @@ body {
 }
 
 /* TRUE EOF HOME ASK UPWARD MENU FIX: keep tool chips visible, open style menu above. */
-.welcome.home-ask-workspace .home-ask-stage {
-}
 
-.welcome.home-ask-workspace .home-ask-empty {
-}
 
-.welcome.home-ask-workspace .home-ask-tags {
-}
 
 .welcome.home-ask-workspace .home-ask-composer,
 .welcome.home-ask-workspace #searchBox.home-ask-composer {
@@ -31423,9 +30252,6 @@ body {
   overflow: visible !important;
 }
 
-.welcome.home-ask-workspace .home-ask-composer:focus-within,
-.welcome.home-ask-workspace #searchBox.home-ask-composer:focus-within {
-}
 
 @keyframes home-ask-upward-menu-pop {
   0% {
@@ -31456,8 +30282,6 @@ body {
   transition: none !important;
 }
 
-.welcome.home-ask-workspace:has(#homeModeMenu.home-mode-menu.show) .home-feature-actions {
-}
 
 .welcome.home-ask-workspace #homeModePicker.home-mode-picker {
   z-index: 80 !important;
@@ -31526,9 +30350,6 @@ body {
   justify-self: center !important;
 }
 
-.welcome.home-ask-workspace .home-ask-composer:focus-within,
-.welcome.home-ask-workspace #searchBox.home-ask-composer:focus-within {
-}
 
 @keyframes home-ask-size-restore-pop {
   0% { transform: translateY(0) scale(1); }
@@ -31569,8 +30390,6 @@ body {
   justify-self: center !important;
 }
 
-.welcome.home-ask-workspace:has(#homeModeMenu.home-mode-menu.show) .home-feature-actions {
-}
 
 @media (max-width: 900px) {
   .welcome.home-ask-workspace .home-ask-stage {
@@ -31594,37 +30413,21 @@ body {
 }
 
 /* TRUE EOF HOME ASK LEARN-QA MATCH: mirror the Learn Q&A page rhythm. */
-.welcome.home-ask-workspace .home-ask-stage {
-}
 
 .welcome.home-ask-workspace .home-ask-empty {
   z-index: 18 !important;
 }
 
-.welcome.home-ask-workspace .home-ask-empty h1 {
-}
 
-.welcome.home-ask-workspace .home-ask-empty p {
-}
 
 .welcome.home-ask-workspace .home-ask-tags {
   transform: none !important;
   z-index: 18 !important;
 }
 
-.welcome.home-ask-workspace .home-ask-tag {
-}
 
-.welcome.home-ask-workspace .home-ask-tag svg {
-}
 
-.welcome.home-ask-workspace .home-ask-composer,
-.welcome.home-ask-workspace #searchBox.home-ask-composer {
-}
 
-.welcome.home-ask-workspace .home-ask-composer:focus-within,
-.welcome.home-ask-workspace #searchBox.home-ask-composer:focus-within {
-}
 
 @keyframes home-ask-learn-qa-pop {
   0% { transform: scale(1); }
@@ -31637,37 +30440,15 @@ body {
   align-items: start !important;
 }
 
-.welcome.home-ask-workspace .home-ask-attach,
-.welcome.home-ask-workspace .home-ask-send {
-}
 
-.welcome.home-ask-workspace #userInput.search-input {
-}
 
-.welcome.home-ask-workspace #userInput::placeholder {
-}
 
-.welcome.home-ask-workspace .home-ask-toolbar {
-}
 
-.welcome.home-ask-workspace .home-mode-toggle,
-.welcome.home-ask-workspace #webSearchToggleBtnMain.home-ask-web-toggle {
-}
 
-.welcome.home-ask-workspace .home-mode-toggle {
-}
 
-.welcome.home-ask-workspace #webSearchToggleBtnMain.home-ask-web-toggle {
-}
 
-.welcome.home-ask-workspace #homeModeMenu.home-mode-menu {
-}
 
-.welcome.home-ask-workspace .home-feature-actions {
-}
 
-.welcome.home-ask-workspace .home-feature-chip {
-}
 
 @media (max-width: 1100px) {
   .welcome.home-ask-workspace .home-ask-stage {
@@ -31699,15 +30480,8 @@ body {
 }
 
 /* TRUE EOF HOME ASK SCALE CORRECTION: match Learn Q&A proportions, not a giant hero. */
-.welcome.home-ask-workspace .home-ask-stage {
-}
 
-.welcome.home-ask-workspace .home-ask-tags {
-}
 
-.welcome.home-ask-workspace .home-ask-composer,
-.welcome.home-ask-workspace #searchBox.home-ask-composer {
-}
 
 .welcome.home-ask-workspace .home-ask-input-row {
   grid-template-columns: 42px minmax(0, 1fr) 50px !important;
@@ -31715,19 +30489,9 @@ body {
   gap: 14px !important;
 }
 
-.welcome.home-ask-workspace .home-ask-attach,
-.welcome.home-ask-workspace .home-ask-send {
-}
 
-.welcome.home-ask-workspace #userInput.search-input {
-}
 
-.welcome.home-ask-workspace .home-mode-toggle,
-.welcome.home-ask-workspace #webSearchToggleBtnMain.home-ask-web-toggle {
-}
 
-.welcome.home-ask-workspace .home-mode-toggle {
-}
 
 @media (max-width: 1100px) {
   .welcome.home-ask-workspace .home-feature-actions {
@@ -32069,9 +30833,6 @@ body {
   padding: 0 0 5px !important;
 }
 
-.welcome.home-ask-workspace .home-mode-toggle,
-.welcome.home-ask-workspace #webSearchToggleBtnMain.home-ask-web-toggle {
-}
 
 .welcome.home-ask-workspace .home-feature-actions {
   margin: 38px auto 0 !important;
@@ -34022,19 +32783,9 @@ body {
   outline: none !important;
 }
 
-#mistakeNotebookView .mistake-user-note-card,
-#mistakeNotebookView .mistake-ai-draft-card {
-}
 
-#mistakeNotebookView .mistake-user-note-card {
-}
 
-#mistakeNotebookView .mistake-ai-draft-card {
-}
 
-#mistakeNotebookView .mistake-notes-input,
-#mistakeNotebookView .mistake-draft-notes-output {
-}
 
 #mistakeNotebookView .mistake-notes-input {
   height: clamp(180px, 26vh, 300px) !important;
