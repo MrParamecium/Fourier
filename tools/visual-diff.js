@@ -1056,7 +1056,7 @@ const sharedViews = [
     // the body class — the body class is only needed by L3110-3111 to hide
     // the floating learn-chat-fab. Both are set so the captured frame
     // mirrors the production state. §1.1-1 has no `#learnBookOverlay`
-    // images registered, so openTextbookFocusMode (app.js L3293) can't run;
+    // images registered, so openTextbookFocusMode (textbook-focus.js) can't run;
     // inject a single 1×1 placeholder so the dialog's scroll body isn't
     // empty (MASK_CSS hides the raster).
     { name: '23-textbook-focus', page: 'A', setup: async (page) => {
