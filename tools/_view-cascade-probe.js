@@ -1,0 +1,296 @@
+#!/usr/bin/env node
+/**
+ * _view-cascade-probe.js — TEMP scratch arbiter for the Phase 3.6 task-2
+ * !important-strip on #courseTrackerView / #preferenceView.
+ *
+ * The spec (§4) warns pixel-diff is blind to off-screen / sub-threshold cascade
+ * flips — exactly the failure mode of downgrading !important. This is the
+ * load-bearing gate: it walks the ENTIRE view subtree (element + ::before +
+ * ::after) and records, per element:
+ *   - getBoundingClientRect  (catches ANY reflow a cascade flip causes)
+ *   - every candidate property's resolved value (catches recolor/reborder/etc.)
+ * across the COMPLETE state matrix that rules under the view actually use:
+ *   themes {dawn,dusk,dark} × viewports {1280,1180,980,760} × interactions
+ *   {rest, hover, focus, data-tone}. A stripped !important can only change
+ *   rendering where a competing RULE exists, and every such rule's state is one
+ *   of these — so byte-identical here ⇒ render-neutral.
+ *
+ *   node tools/_view-cascade-probe.js --baseline   # → _view-cascade-baseline.json
+ *   node tools/_view-cascade-probe.js --check       # compare byte-identical, report flips
+ *
+ * Reuses the css-probe.js bridge-spawn + test-utils navigation verbatim.
+ */
+'use strict';
+const fs = require('fs');
+const path = require('path');
+const { spawn } = require('child_process');
+const { chromium } = require('playwright');
+const { MASK_CSS, waitForHealth, enterGuestMode } = require('./test-utils.js');
+
+const PORT = Number(process.env.TUTOR_VIEWPROBE_PORT || 9127);
+const BASE = `http://127.0.0.1:${PORT}`;
+const TOOLS = __dirname;
+const BASELINE = path.join(TOOLS, '_view-cascade-baseline.json');
+const REPORT = path.join(TOOLS, '_view-cascade-report.md');
+
+const MODE = process.argv.includes('--baseline') ? 'baseline'
+           : process.argv.includes('--check') ? 'check' : null;
+if (!MODE) { console.error('usage: _view-cascade-probe.js --baseline | --check'); process.exit(2); }
+
+// Property union actually carrying !important under either view (+ a few layout
+// staples) — i.e. "every property touched by a stripped !important" (spec §4.3).
+const cand = require('./_view-important.json');
+const PROP_LIST = [...new Set([
+  ...cand['#courseTrackerView'].map((d) => d.prop),
+  ...cand['#preferenceView'].map((d) => d.prop),
+  // layout/visual staples so a reflow's downstream resolved values are pinned too
+  'left', 'right', 'bottom', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom',
+  'margin-right', 'border-width', 'border-style', 'background-color', 'flex-grow', 'flex-basis',
+])].sort();
+
+const THEMES = ['dawn', 'dusk', 'dark'];
+const VIEWPORTS = [1280, 1180, 980, 760];
+
+const VIEWS = [
+  {
+    id: 'courseTracker', nav: '#navCourseTrackerBtn', root: '#courseTrackerView',
+    ready: () => document.querySelectorAll('#courseTrackerTableBody .course-timeline-item').length > 0,
+    interactions: [
+      { label: 'rest' },
+      { label: 'item-hover', hover: '#courseTrackerTableBody .course-timeline-item' },
+    ],
+  },
+  {
+    id: 'preference', nav: '#navPreferenceBtn', root: '#preferenceView',
+    ready: () => !!document.getElementById('preferenceProfilePreview'),
+    interactions: [
+      { label: 'rest' },
+      { label: 'save-hover', hover: '#preferenceSaveBtn' },
+      { label: 'reset-hover', hover: '#preferenceResetBtn' },
+      { label: 'editor-focus', focus: '#preferenceProfileEditor' },
+      { label: 'tone-working', tone: 'working' },
+      { label: 'tone-saved', tone: 'saved' },
+      { label: 'tone-error', tone: 'error' },
+    ],
+  },
+];
+
+const round = (n) => Math.round(n * 1000) / 1000;
+
+// Walk the subtree in document order; snapshot geometry + props + pseudo-elements.
+function makeSnapshotFn() {
+  return (args) => {
+    const { root, props } = args;
+    const rootEl = document.querySelector(root);
+    if (!rootEl) return { __error: `root ${root} missing` };
+    const els = [rootEl, ...rootEl.querySelectorAll('*')];
+    const r3 = (n) => Math.round(n * 1000) / 1000;
+    const pseudo = (el, which) => {
+      const g = getComputedStyle(el, which);
+      return [
+        g.content, g.getPropertyValue('background-image'), g.getPropertyValue('background-color'),
+        g.color, g.opacity, g.transform, g.boxShadow, g.getPropertyValue('border-color'),
+        g.width, g.height, g.display,
+      ].join(' ¦ ');
+    };
+    return els.map((el, i) => {
+      const cs = getComputedStyle(el);
+      const rect = el.getBoundingClientRect();
+      const cls = (el.className && typeof el.className === 'string')
+        ? '.' + el.className.trim().split(/\s+/).join('.') : '';
+      const pv = {};
+      for (const p of props) pv[p] = cs.getPropertyValue(p);
+      return {
+        i,
+        desc: el.tagName.toLowerCase() + (el.id ? '#' + el.id : '') + cls,
+        rect: [r3(rect.x), r3(rect.y), r3(rect.width), r3(rect.height)],
+        props: pv,
+        before: pseudo(el, '::before'),
+        after: pseudo(el, '::after'),
+      };
+    });
+  };
+}
+
+async function settle(page) {
+  await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+}
+
+async function captureView(page, view, snapFn) {
+  const out = {};
+  // Open the view once at desktop.
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await settle(page);
+  await page.click(view.nav);
+  await page.waitForSelector(`${view.root}:not(.hidden)`, { timeout: 8000 });
+  await page.waitForFunction(view.ready, { timeout: 8000 });
+
+  for (const theme of THEMES) {
+    for (const vp of VIEWPORTS) {
+      for (const act of view.interactions) {
+        // Clear prior interaction state, then set theme + viewport.
+        await page.mouse.move(0, 0);
+        await page.evaluate(() => {
+          document.activeElement?.blur?.();
+          const ss = document.querySelector('.preference-save-state');
+          if (ss) ss.removeAttribute('data-tone');
+        });
+        await page.evaluate((t) => document.documentElement.setAttribute('data-theme', t), theme);
+        await page.setViewportSize({ width: vp, height: 800 });
+        await settle(page);
+        // Apply this interaction.
+        if (act.hover) await page.hover(act.hover).catch(() => {});
+        if (act.focus) await page.focus(act.focus).catch(() => {});
+        if (act.tone) {
+          await page.evaluate((tone) => {
+            const ss = document.querySelector('.preference-save-state');
+            if (ss) { ss.setAttribute('data-tone', tone); if (!ss.textContent.trim()) ss.textContent = 'state'; }
+          }, act.tone);
+        }
+        await settle(page);
+        // Force-settle EVERY transition/animation to its end state. The CSS freeze
+        // alone loses to (1,1,0) !important `transition` rules on .course-timeline-item
+        // (the same arms race we're unwinding), so the WAAPI .finish() is load-bearing
+        // for determinism — it jumps each animation to its cascade-determined target
+        // independent of specificity/!important.
+        await page.evaluate(() => { document.getAnimations().forEach((a) => { try { a.finish(); } catch (_) {} }); });
+        await settle(page);
+        await page.waitForTimeout(80);
+        // Pin scroll so geometry is deterministic.
+        await page.evaluate((root) => {
+          window.scrollTo(0, 0);
+          const el = document.querySelector(root); if (el) el.scrollTop = 0;
+        }, view.root);
+        const rows = await page.evaluate(snapFn, { root: view.root, props: PROP_LIST });
+        out[`${view.id} | ${theme} | ${vp} | ${act.label}`] = rows;
+      }
+    }
+  }
+  // Reset theme/viewport for the next view.
+  await page.evaluate(() => document.documentElement.setAttribute('data-theme', 'dawn'));
+  await page.setViewportSize({ width: 1280, height: 800 });
+  return out;
+}
+
+let bridge = null;
+function cleanup(sig) { if (bridge && !bridge.killed) { try { bridge.kill('SIGTERM'); } catch (_) {} } process.exit(sig === 'SIGTERM' ? 143 : 130); }
+process.once('SIGINT', () => cleanup('SIGINT'));
+process.once('SIGTERM', () => cleanup('SIGTERM'));
+
+(async () => {
+  const repoRoot = path.resolve(__dirname, '..');
+  console.log(`[view-probe] mode=${MODE}  props=${PROP_LIST.length}  states/view=${THEMES.length}×${VIEWPORTS.length}`);
+  console.log(`[view-probe] starting bridge on :${PORT}`);
+  bridge = spawn('node', ['app/ws-bridge.js'], { cwd: repoRoot, env: { ...process.env, PORT: String(PORT) }, stdio: ['ignore', 'pipe', 'pipe'] });
+  bridge.stdout.on('data', () => {});
+  bridge.stderr.on('data', (d) => { const s = String(d); if (!/OpenRouter|OPENAI/.test(s)) process.stderr.write(`  [bridge] ${s}`); });
+
+  let exitCode = 0;
+  const snapshot = {};
+  try {
+    await waitForHealth(BASE);
+    const browser = await chromium.launch();
+    const context = await browser.newContext({ viewport: { width: 1280, height: 800 }, timezoneId: 'UTC', locale: 'en-US' });
+    // MASK_CSS (shared with the other harnesses) + a blanket animation/transition
+    // freeze so entrance lifts / theme-cross-fades / hover transitions snap to their
+    // settled cascade-determined target (the spec's css-probe prescribes the same
+    // `* { animation: none }` freeze for animation states). Without it the timeline
+    // items' in-flight translateY makes every geometry read jitter sub-pixel.
+    const FREEZE_CSS = `*, *::before, *::after {
+      animation: none !important;
+      transition: none !important;
+      scroll-behavior: auto !important;
+    }`;
+    await context.addInitScript(({ css }) => {
+      const inject = () => { const s = document.createElement('style'); s.id = '__probe_freeze__'; s.textContent = css; document.head.appendChild(s); };
+      if (document.head) inject(); else document.addEventListener('DOMContentLoaded', inject);
+    }, { css: MASK_CSS + '\n' + FREEZE_CSS });
+    const page = await context.newPage();
+    await enterGuestMode(page, BASE);
+    const snapFn = makeSnapshotFn();
+    for (const view of VIEWS) {
+      const part = await captureView(page, view, snapFn);
+      Object.assign(snapshot, part);
+      const nEls = Object.values(part)[0]?.length ?? 0;
+      console.log(`  ✓ ${view.id}: ${Object.keys(part).length} states × ${nEls} elements`);
+    }
+    await page.close().catch(() => {});
+    await context.close().catch(() => {});
+    await browser.close();
+  } catch (err) {
+    console.error('[view-probe] FATAL', err);
+    exitCode = 1;
+  } finally {
+    const exited = new Promise((res) => bridge.once('exit', res));
+    bridge.kill('SIGTERM');
+    await Promise.race([exited, new Promise((res) => setTimeout(res, 2500))]);
+  }
+  if (exitCode) process.exit(exitCode);
+
+  if (MODE === 'baseline') {
+    fs.writeFileSync(BASELINE, JSON.stringify(snapshot) + '\n');
+    const states = Object.keys(snapshot).length;
+    const cells = Object.values(snapshot).reduce((a, r) => a + (Array.isArray(r) ? r.length : 0), 0);
+    console.log(`\n[view-probe] baseline → ${BASELINE} (${states} states, ${cells} element-snapshots)`);
+    process.exit(0);
+  }
+
+  // --check
+  if (!fs.existsSync(BASELINE)) { console.error('[view-probe] no baseline — run --baseline first'); process.exit(1); }
+  const base = JSON.parse(fs.readFileSync(BASELINE, 'utf8'));
+
+  // Tolerant value equality: identical non-numeric skeleton (so rgba→rgb, none→matrix,
+  // an added shadow layer, etc. are ALWAYS caught), and each numeric token equal —
+  // px lengths within 0.1px (absorbs the #courseProgressRing aspect-ratio subpixel
+  // jitter), everything else (color channels, alpha, opacity, unitless) EXACT.
+  const PX_TOL = 0.25;
+  function parseVal(str) {
+    const nums = []; let skel = ''; let last = 0;
+    const re = /-?\d*\.?\d+(?:e[+-]?\d+)?/gi; let m;
+    while ((m = re.exec(str)) !== null) {
+      skel += str.slice(last, m.index) + '#';
+      const after = str.slice(m.index + m[0].length, m.index + m[0].length + 2).toLowerCase();
+      nums.push({ v: parseFloat(m[0]), px: after === 'px' });
+      last = m.index + m[0].length;
+    }
+    return { skel: skel + str.slice(last), nums };
+  }
+  function valEq(a, b) {
+    if (a === b) return true;
+    if (a == null || b == null) return false;
+    const pa = parseVal(String(a)), pb = parseVal(String(b));
+    if (pa.skel !== pb.skel || pa.nums.length !== pb.nums.length) return false;
+    for (let i = 0; i < pa.nums.length; i++) {
+      const tol = pa.nums[i].px ? PX_TOL : 0;
+      if (Math.abs(pa.nums[i].v - pb.nums[i].v) > tol) return false;
+    }
+    return true;
+  }
+  const rectEq = (a, b) => a.length === b.length && a.every((v, i) => Math.abs(v - b[i]) <= PX_TOL);
+
+  const diffs = [];
+  for (const state of Object.keys(base)) {
+    const b = base[state], c = snapshot[state];
+    if (!c) { diffs.push(`${state}: MISSING in current`); continue; }
+    if (b.length !== c.length) { diffs.push(`${state}: element count ${b.length} → ${c.length} (DOM changed!)`); continue; }
+    for (let i = 0; i < b.length; i++) {
+      const eb = b[i], ec = c[i];
+      const tag = `${state} | [${i}] ${eb.desc}`;
+      if (!rectEq(eb.rect, ec.rect)) diffs.push(`${tag} | rect ${JSON.stringify(eb.rect)} → ${JSON.stringify(ec.rect)}`);
+      for (const p of PROP_LIST) if (!valEq(eb.props[p], ec.props[p])) diffs.push(`${tag} | ${p}: "${eb.props[p]}" → "${ec.props[p]}"`);
+      if (!valEq(eb.before, ec.before)) diffs.push(`${tag} | ::before "${eb.before}" → "${ec.before}"`);
+      if (!valEq(eb.after, ec.after)) diffs.push(`${tag} | ::after "${eb.after}" → "${ec.after}"`);
+    }
+  }
+  const lines = [`# view-cascade-probe report`, ``, `states: ${Object.keys(base).length}  props/element: ${PROP_LIST.length}`, ``];
+  if (diffs.length === 0) {
+    lines.push(`**PASS — byte-identical across all states.**`);
+    console.log(`\n[view-probe] PASS — ${Object.keys(base).length} states byte-identical`);
+  } else {
+    lines.push(`**FAIL — ${diffs.length} cascade flips:**`, ``, ...diffs.map((d) => `- ${d}`));
+    console.log(`\n[view-probe] FAIL — ${diffs.length} flips (see ${REPORT})`);
+    for (const d of diffs.slice(0, 40)) console.log(`  ✗ ${d}`);
+  }
+  fs.writeFileSync(REPORT, lines.join('\n') + '\n');
+  process.exit(diffs.length ? 1 : 0);
+})();
