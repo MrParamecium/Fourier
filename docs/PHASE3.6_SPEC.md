@@ -268,7 +268,7 @@ pre-collapse baseline is captured against `main` and every future surface verifi
 | H | `tools/css-probe.js` + `css-probe-baseline.json` | main (PR #101) | none (test-only) | ✅ merged `a6c8b5b` (reviewed: 10-agent /code-review caught false-confidence holes, all fixed) |
 | 1 | textbook Step 1: de-double 29 non-indicator rules, keep `!important` | branch | provably safe (zero cross-file competitor) | ✅ `bac31d2` — css-probe --check PASS, −32 doubled-IDs |
 | 2 | textbook Step 2: page-indicator → 0-2-0 | branch | safe (specificity pre-verified + probe) | ✅ `6f939a2` — PASS, −3 doubled-IDs (textbook = 0 doubled-IDs) |
-| 3+ | courseTracker / preference `!important`-NOCOMP strip | branch | needs per-view probe coverage first | ⏸ deferred — see §6.1 |
+| 3+ | courseTracker / preference `!important`-NOCOMP strip | branch | needs per-view probe coverage first | ✅ `3385050` — −384 `!important` (384/476 NOCOMP; 92 load-bearing kept). New exhaustive computed-style arbiter (`_view-cascade-probe.js`, `a71dbda`) byte-identical over 108 states + visual-diff 35/35. See §14 pass 3. |
 | 6 | §3d composer chain lockstep | branch (later nights) | high — full css-probe S2-S12 gate | deferred |
 
 Branch: `refactor/phase3.6-css-collapse` (2 commits; **no PR** — Phase 3.6 incomplete).

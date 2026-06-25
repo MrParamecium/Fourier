@@ -1825,9 +1825,39 @@ whatever the baseline records. Adding a new probe STATE requires re-baselining
 not silent). Same design as `visual-diff.js`. When Surface 6 (§3d composer chain)
 is attacked, add states S4-S11 (spec §4.2) and re-baseline on pre-collapse main.
 
-## 14. The redeclaration-pileup `!important` lever — TOP-LEVEL SLICE EXECUTED; media-gated slice DEFERRED (D2)
+## 14. The redeclaration-pileup `!important` lever — TOP-LEVEL + MEDIA-GATED SLICES EXECUTED
 
-**Status: prereq 1 (narrow harness) DONE 2026-06-25; prereq 2 (hardened parser) BUILT + self-reviewed 2026-06-25; TOP-LEVEL slice EXECUTED on branch `refactor/phase3.6-css-collapse` in PR #105 (style.css −3,631 dead / −2,844 `!important`; rcc −68 / −68; + empty husks −509 style / −12 rcc); MEDIA-GATED slice (78 style + 6 rcc decls) remains DEFERRED (D2 — harness blindspot). The xhigh self-review caught the detector over-deleting 48 decls and was fixed before merge (see below).**
+**Status: prereq 1 (narrow harness) DONE 2026-06-25; prereq 2 (hardened parser) BUILT + self-reviewed 2026-06-25; TOP-LEVEL slice EXECUTED on branch `refactor/phase3.6-css-collapse` in PR #105 (style.css −3,631 dead / −2,844 `!important`; rcc −68 / −68; + empty husks −509 style / −12 rcc); MEDIA-GATED slice EXECUTED 2026-06-25 (see pass 3 below). The xhigh self-review caught the detector over-deleting 48 decls and was fixed before merge (see below).**
+
+**Update 2026-06-25 (pass 3) — media-gated slice swept + Surfaces 1-3 `!important`-strip executed (branch).**
+
+Two render-neutral tranches landed on `refactor/phase3.6-css-collapse`:
+
+- **`d719707` — media-gated redecl sweep (−182 lines).** `find-dead-redeclarations.js --media`
+  excised the 78 style.css + 6 rcc media-gated dead decls (provably cascade-dead losers: same
+  selector + same `@media`/`@container` context, later/higher-importance winner preserved);
+  `--empty-rules` then cleared the 35+2 husks the sweep emptied. Verified: re-scan 0 dead / 0
+  husks / braces balanced; css-probe `--check` byte-identical incl. narrow bands N0-N4
+  (1280/1160/890/740/700px, which exercise the touched `@media` regions); visual-diff 35/35.
+  This closes the §14 redeclaration lever (top-level + media-gated both done).
+
+- **`3385050` — Surfaces 1-3 `!important`-strip on `#courseTrackerView` + `#preferenceView`
+  (−384 `!important`, line-neutral).** Both views are cross-file-isolated (0 refs in rcc /
+  ui-friction / inline css), so their `!important` only defended within-`style.css`. Of 476
+  view-scoped `!important` decls, **384 had no surviving competitor** (downgrade changes no
+  cascade winner) and were stripped; **92 are load-bearing** (a base / doubled-ID rule wins
+  once the flag drops — kept, incl. 2 `:active` decls). The empirical NOCOMP count (~81%)
+  came in ABOVE the planning-grade 74.9%/69.8% estimate. courseTracker 254→52, preference
+  236→41. Verified by a new exhaustive computed-style arbiter (`tools/_view-cascade-probe.js`,
+  committed `a71dbda`): 108 states = themes{dawn,dusk,dark} × viewports{1280,1180,980,760} ×
+  interactions{rest,hover,focus,tone}, geometry + 72 props/element + `::before`/`::after`,
+  WAAPI-frozen, sensitivity-tested — **byte-identical**; plus visual-diff 35/35
+  (12/12b-e/13 @ 0.000%; view 12 @ 0.004% pre-existing text-AA noise).
+  This is the spec §3 Surfaces 1-3 pilot; remaining surfaces (settings 39.8%, sidebar 44.2%,
+  mistakeNotebook, §3d composer chain) can reuse the same probe (edit its `VIEWS` array).
+
+Post-tranche file state: style.css 33,353 lines / 9,908 `!important` / 404 doubled-IDs;
+rcc 1,602 lines / 888 `!important`.
 
 **Update 2026-06-25 (pass 2) — prereq 2 built + self-reviewed, finding corrected, top-level slice executed.**
 
