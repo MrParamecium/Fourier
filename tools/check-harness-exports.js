@@ -24,7 +24,7 @@ const REQUIRED = [
       consumer: 'tools/visual-diff.js — PAGE_C demo hydration check' },
     { symbol: 'inferInteractiveDemoFamily', file: 'app/interactive-demos/dispatcher.js',
       consumer: 'tools/visual-diff.js — PAGE_C lesson-family inference' },
-    { symbol: '__ftutorRefreshPager',      file: 'app/app.js',
+    { symbol: '__ftutorRefreshPager',      file: 'app/ui-friction-fixes.js',
       consumer: 'tools/test-utils.js resetLessonChromeState — pager-state observer rewake' },
 ];
 
