@@ -264,14 +264,223 @@ pre-collapse baseline is captured against `main` and every future surface verifi
 
 | # | Commit | Where | Risk | Status |
 |---|---|---|---|---|
-| spec | this document | main (docs) | none | — |
-| H | `tools/css-probe.js` + `css-probe-baseline.json` | main (step-2 harness PR) | none (test-only) | — |
-| 1 | textbook Step 1: de-double 29 non-indicator rules, keep `!important` | branch | provably safe (zero cross-file competitor) | — |
-| 2 | textbook Step 2: page-indicator → 0-2-0 | branch | safe (specificity pre-verified + probe) | — |
-| 3+ | courseTracker / preference `!important`-NOCOMP strip | branch | stretch (touches cascade outcomes) | — |
+| spec | this document | main (docs) | none | ✅ `1598c6f` |
+| H | `tools/css-probe.js` + `css-probe-baseline.json` | main (PR #101) | none (test-only) | ✅ merged `a6c8b5b` (reviewed: 10-agent /code-review caught false-confidence holes, all fixed) |
+| 1 | textbook Step 1: de-double 29 non-indicator rules, keep `!important` | branch | provably safe (zero cross-file competitor) | ✅ `bac31d2` — css-probe --check PASS, −32 doubled-IDs |
+| 2 | textbook Step 2: page-indicator → 0-2-0 | branch | safe (specificity pre-verified + probe) | ✅ `6f939a2` — PASS, −3 doubled-IDs (textbook = 0 doubled-IDs) |
+| 3+ | courseTracker / preference `!important`-NOCOMP strip | branch | needs per-view probe coverage first | ⏸ deferred — see §6.1 |
 | 6 | §3d composer chain lockstep | branch (later nights) | high — full css-probe S2-S12 gate | deferred |
 
-Branch: `refactor/phase3.6-css-collapse`.
+Branch: `refactor/phase3.6-css-collapse` (2 commits; **no PR** — Phase 3.6 incomplete).
+Doubled-IDs: **608 → 573** (textbook pilot). `!important`: 14,948 (untouched — no `!important` work shipped yet).
+
+## 6.1 Post-pilot finding (2026-06-24) — the textbook pilot was the clean EXCEPTION
+
+The textbook surface had **zero cross-file competitors AND zero within-file `@media`
+competitors**, so its 35 doubled-IDs collapsed as a provable no-op (css-probe-verified,
+incl. a true-positive negative test: a deliberate 24px→25px regression was correctly
+caught). **Every remaining doubled-ID surface is entangled** and is NOT a clean de-double:
+
+- **`#mistakeNotebookView#mistakeNotebookView`** (17, DOM-isolated, zero cross-file): but
+  `.mistake-workspace` L34808 (doubled, 0,3,0) has a LATER single-ID competitor at L35745
+  (0,2,0) **inside an `@media`**. De-doubling L34808 → (0,2,0) ties L35745, which wins by
+  source order at narrow viewports — a regression the 1280px harness **cannot see** (§9c
+  blindspot). Other MN targets have 4-8 single-ID/bare competitors each.
+- **page-corner / lecture-overlay** (~99, GRATUITOUS bucket): **272 selector lines**, deeply
+  nested (`#learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar #lecture*OverlayBtn`),
+  multi-state, many `@media`-wrapped. Per-property/per-state/per-viewport analysis required.
+- **`#learnView#learnView` core** (353): interleaves the LOAD-BEARING §3d composer chain
+  (~120 tokens, Report 1 §4) with safe UNIFORM-FLOOR/GRATUITOUS instances. No global
+  `replace_all` is safe.
+
+**Prerequisite for the bulk (next-session entry point):**
+1. **Narrow-viewport probe coverage** — add a second BrowserContext at ~800px to `css-probe.js`
+   (or a sibling harness) so `@media (max-width:…)` competitors (L35745 etc.) are verifiable.
+   This is the §9c-deferred ~150-line task; it is the gate for de-doubling MN + learn-view.
+2. **Full S4-S11 state matrix** in css-probe (spec §4.2) before touching the §3d composer chain.
+3. **Per-instance cascade classification** of the 573 remaining doubled-IDs (extend the
+   inventory workflow to instance granularity) → the exact safe-collapse work-list.
+Only the **DOM-isolated single-instance** doubled-IDs (`#courseTrackerView#courseTrackerView`,
+`#preferenceView#preferenceView`, `#settingsView#settingsView`, `#feedbackView#feedbackView`
+— 1 each) might be quick wins once their view has probe coverage; verify each, do not assume.
+
+## 6.2 Per-instance work-list (instance-classification workflow `wbnwmiwqx`, 2026-06-25)
+
+A 7-agent read-only per-instance classification of 133 doubled-ID selector blocks across 6
+surfaces **overturned the §6.1 pessimism**: page-corner is overwhelmingly *over-specified*, not
+entangled. **44 blocks are COLLAPSE-SAFE-NOW** (verifiable at 1280/resting with existing harness
+views; no competitor wins after reduction).
+
+| Classification | mistake-nb | page-corner | learn-topbar | close-btns | explain-rail | composer-§3d | TOTAL |
+|---|--:|--:|--:|--:|--:|--:|--:|
+| COLLAPSE-SAFE-NOW | 5 | 27 | 9 | 2 | 0 | 1 | **44** |
+| NEEDS-NARROW-VIEWPORT | 6 | 0 | 5 | 0 | 0 | 1 | 12 |
+| NEEDS-STATE-MATRIX | 0 | 7 | 0 | 0 | 13 | 8 | 28 |
+| NEEDS-NEW-VIEW | 0 | 0 | 1 | 4 | 22 | 2 | 29 |
+| LOAD-BEARING (never touch) | 6 | 0 | 6 | 1 | 0 | 7 | 20 |
+
+**COLLAPSE-SAFE-NOW work-list (style.css line numbers):**
+- **page-corner (27)** — verified by visual-diff views 06/17/18/21/22; turner-content rests at
+  `opacity:0` so **css-probe (computed-style) is mandatory** (pixel-diff blind): L33443, 33474,
+  33479, 33484, 33791, 33830, 33836, 33856, 33875, 33879, 33883, 33899, 33905, 33911, 33931,
+  33935, 37479, 37505, 37511, 37531, 37539, 37543, 37547, 37553, 37559, 37570, 37574. Drop one
+  redundant `#learnView` → (0,2,2,0) still beats the pill skin (0,2,0,0); toolbar-descendant
+  rivals never match (buttons are toolbar siblings).
+- **learn-topbar (9)** — L34111, 34134, 34151, 34157, 34167, 34189, 34220, 34243, 34253.
+  **Skip the LOAD-BEARING atomic groups** L34176-34178 and L34193-34194, and the L34088 member.
+- **mistake-notebook (5)** — L34778, 34779, 34797, 34802, 34094 (covered by views 03 + 03b).
+- **close-buttons (2)** — L34088 (`#learnClose`), L34089 (`#topbarCloseBtn`). **Line-precise edits
+  only** — they share the grouped rule L34088-L34094; **do NOT touch L34091 (feedback) = LOAD-BEARING**
+  (border flips to L36596), and the other view lines are NEEDS-NEW-VIEW.
+- **composer (1)** — L33233 (`.bottom-actions` z-index/overflow; no competitor on those props).
+
+**LOAD-BEARING — never collapse (cite-and-skip):** mistake-nb L34770/34784/34816/34820/34826/34831;
+learn-topbar L34088/34176-34178/34193-34194; close-btns L34091 (feedback→L36596); composer
+L33191/33192/33213-33216/33238/37415/37416/37423-37426 (the §3d runtime-collapsed.css war).
+
+**Coverage roadmap for blocked tranches:**
+- **Tranche A (narrow-viewport, 12):** add ≤1180px probe (unblocks MN 34808/34838/34842 + composer
+  33277) and ≤820px probe (unblocks MN 34848/34849/34853 + topbar 34297/34302/34303/34307/34311).
+- **Tranche B (state-matrix, 28-30):** a **`.learn-textbook-active` css-probe state** is the single
+  biggest unlock (13 explain-rail rules); plus S10/S11 chapter-overview, `.is-chat-active`, and
+  `[data-custom-split]`/`.panel-normal` states for the composer.
+- **Tranche C (new-view + dead-code, 29):** settings/preference/courseTracker view bootstraps (3
+  close-btns); open mode-menu (2 composer). **DEAD-CODE TRIAGE (22):** L33949-33952, 34752-34755,
+  34899-34902, 34929-34934, 38204-38207 target `#learnLecturePageIndicator`/`#learnExplainBottomRail`/
+  `#learnToolbarPagination` — IDs that exist in **NO HTML/JS** (only `#learnFocusPageIndicator` is
+  real). These are dead-CSS DELETION candidates (big line reduction), not collapse — confirm against
+  DOM, then delete whole chains.
+
+**Recommended order:** (1) page-corner 27 — highest value/lowest risk; (2) learn-topbar 9;
+(3) mistake-nb 5; (4) close-btns 2 + composer 1; (5) narrow-viewport probes → Tranche A;
+(6) textbook-mode state → Tranche B; (7) dead-code triage of the 22; (8) isolated-view bootstraps.
+
+## 6.3 Branch progress (refactor/phase3.6-css-collapse, 2026-06-24/25)
+
+**Cumulative this session (all verified):** style.css **42,991 → 38,771 (−4,220, now < 39K)** + runtime-collapsed.css
+**2,102 → 1,734 (−368)** = **−4,588 lines**; doubled-IDs **608 → 418 (−190, −31.3%)**;
+`!important` lines style.css **14,948 → 13,206 (−1,742)** + runtime-collapsed.css **1,158 → 964 (−194)**.
+Every change verified by css-probe (byte-identical) + visual-diff (35 views covering live chrome at
+0.000%; occasional sub-0.005% antialiasing noise on text-heavy views, well under threshold); dead-CSS
+deletions additionally gated on the **distinct-live-selector-context set-difference invariant** (catches
+uncaptured-state loss that pixel-diff misses). Dead-CSS deletion accounts for essentially the entire line
+reduction (the doubled-ID de-double tranches are ~0 net lines by design — see §2 caveat).
+
+| Commit | Tranche | Δ | Verification |
+|---|---|---|---|
+| `bac31d2` + `6f939a2` | textbook (Pilot 0) | −35 doubled-IDs | css-probe S12 + negative-tested gate |
+| `7fc0350` | page-corner (§6.2 #1) | −58 doubled-IDs | css-probe S-page-corner + visual-diff @ 0.000% |
+| `8cd712b` | dead-CSS page-indicators (§6.3a) | **−853 lines, −78 doubled-IDs, −396 `!important`** | dead-ID grep 0; live `#learnFocusPageIndicator` intact; both gates 0.000% |
+| `10935a3` | learn-topbar (§6.2 #2) | −11 doubled-IDs | css-probe PASS; visual-diff 06/07/08/15/16 @ 0.000% |
+| `71dd7c9` | mistake-notebook cards (§6.2 #3) | −4 doubled-IDs | css-probe PASS; visual-diff 03 + 03b @ 0.000% |
+| `6503947` | dead-CSS `.learn-explain-toggle-btn` + `#learnExplainToggleBtn` | **−662 lines, −321 `!important`** | distinct `#learnFocusBtn` selector-contexts unchanged (70=70); both gates @ 0.000% |
+| `d385d00` | dead-CSS `.lecture-overlay-btn-left/-right` + `.learn-chat-restore/-topbar/-corner-toggle` + `.learn-explain-bottom-rail` | **−1032 lines, −476 `!important`** | set-difference empty for all 6 live siblings (#lecture{Prev,Next}OverlayBtn / .turner-content / #learnFocusBtn / .lecture-overlay-btn-{text,icon}); both gates @ 0.000% |
+| `1dc55c5` | conservative whole-file orphan sweep (77 renamed-away classes: settings-drawer-*/library-*/old chapter-overview children/edu-* old/journal-*/mode-icon-* etc.) | **−646 lines, −111 `!important`** | set-difference over ALL 858 live selectors = 0 lost; correctly SKIPPED runtime-built `*-demo-*` + template `lecture-note-card-${type}` + harness/compound; both gates @ 0.000% |
+| `61ffde1` | entangled-orphan arm-surgery (library-* / syllabus-page-* / lecture-focus-overlay-btn / textbook-zoom-overlay-btn / lesson-page-footer + dead `.lecture-overlay-btn` base) | **−313 lines, −45 `!important`** | live `.learn-focus-btn`/`.lesson-page-heading` lost 0 contexts; `.lecture-overlay-btn` verified dead (0 HTML+JS); both gates @ 0.000% |
+| `c4e7030` | dead `.lecture-overlay-btn-text`/`-icon`/`.lecture-focus-overlay-text` family (58 blocks style.css −797 + 23 blocks runtime-collapsed.css −285/−154 `!important`) | **−1,082 lines, −154 `!important`** | all 81 blocks key-dead, 0 live comma-arms; **0 refs in live `app/` tree** (only stale `workspace/app-mirror` names them → confirms the `.turner-content` rename); css-probe byte-identical incl. S-page-corner; visual-diff 35/35 |
+
+**CORRECTION to the `d385d00` row:** it listed `.lecture-overlay-btn-{text,icon}` as *live siblings to
+preserve*. That was wrong — they were renamed-away orphans all along (base `.lecture-overlay-btn` was
+already dead). `c4e7030` proves it: 0 refs in the live `app/` tree, both gates byte-identical after removal.
+
+**Dead-orphan vein status: EXHAUSTED for the lecture/learn-chrome family** (6 sweeps = −4,138 style.css lines).
+No known high-confidence dead orphans remain in the audited surfaces. **The remainder is the careful/risky
+multi-session grind**: `!important`-stripping on DOM-isolated views (`#courseTrackerView` 74.9% NOCOMP /
+`#preferenceView` 69.8%) — line-neutral + changes cascade outcomes, so it needs FlyM1ss's risk-appetite
+call; harness-gated narrow-viewport/state-matrix tranches; and the §3d composer chain (hardest, cross-file
+lockstep). This is the natural seam to hand back for steering.
+
+**Orphan-sweep status:** the standalone-dead orphans are harvested (4 deletions = −3,028 lines). Remaining
+orphan residuals are ENTANGLED (in comment-laced / doubled-ID / live-ancestor groups — e.g. `library-card`
+×19, `settings-drawer` ×2, `lecture-focus-overlay-btn`, `textbook-zoom-overlay-btn`, old `intro-*` under live
+`.intro-landing-new`) and need careful per-arm surgery — lower value-per-effort, do later. The ~130 `*-demo-*`
++ template-built families are LIVE (never delete; see SKIPPED list).
+
+**Next: comprehensive whole-file orphan scan.** Three orphan deletions found via specific leads
+removed −2,464 lines; a systematic whole-file scan (extract every class/ID token from style.css
+selectors, cross-check vs index.html + all app JS, **template-literal-aware** — `tone-${n}`/`is-${align}`
+etc. are LIVE despite 0 literal refs) will find the long tail. `tools/scan-unused-css.js` is scoped to
+L33181+; extend it whole-file or run a careful scan. Delete via strict arm-removal + the set-difference
+invariant; conservative on any template-literal-plausible candidate.
+
+### 6.3c — dead-orphan sweep is the richest remaining SAFE vein (recommended next)
+
+Two dead-orphan deletions (page-indicators −853, toggle-btn −662) prove **renamed-away orphan
+classes/IDs** are the highest-value SAFE target (line + `!important` reduction, no cascade-rewrite
+risk). The toggle-btn subagent flagged MORE candidates (verify each: 0 refs in index.html + all
+app JS, not template-built): `.learn-chat-corner-toggle`, `.lecture-overlay-btn-left`,
+`.lecture-overlay-btn-right`, `.learn-chat-restore`, `.learn-chat-topbar`, `.learn-explain-bottom-rail`,
+plus a residual `#learnExplainToggleBtn` arm. A COMPREHENSIVE whole-file orphan scan (tools/scan-unused-css.js
+is scoped only to L33181+; extend it or run a custom scan, template-literal-aware) likely finds more.
+
+**Dead-orphan deletion protocol (corrected after a near-miss):** strict ARM-REMOVAL — delete only
+dead arm-lines; whole-rule-delete ONLY when EVERY arm is dead; for mixed groups keep the live arm
+(it may be re-emitted in `{`-form when the dead arm was last). **Definitive safety invariant: the SET
+of distinct live-selector-contexts (e.g. `grep '#liveId' | sed 's/[,{].*//' | sort -u`) must be
+UNCHANGED before/after** — this is viewport-independent and catches loss in harness-uncaptured states
+(e.g. `data-panel-focus="lecture-full"`), which a raw `-`-line diff or pixel-diff will MISS.
+
+### Remaining beyond the orphan sweep
+- Small COLLAPSE-SAFE-NOW (close-btns L34088/89 + composer `.bottom-actions`, `display:none`/specific → need css-probe states).
+- **`!important` removal on DOM-isolated views** (courseTracker 74.9% NOCOMP, preference 69.8%) — higher-risk;
+  needs a per-view css-probe state with comprehensive per-property coverage.
+- Harness-gated tranches (narrow-viewport, state-matrix) + the §3d composer chain (hardest).
+
+css-probe states on the branch: S2/S3 (§3d baseline), **S-page-corner** (NEW), S12.
+
+**Next clean tranches (no new infra):** learn-topbar 9 (line-precise — skip LOAD-BEARING
+groups L34176-34178, L34193-34194, L34088), MN 5 (add an MN-open-case probe state à la
+visual-diff view 03b), close-btns 2 + composer 1 (add probes).
+
+### 6.3a — VERIFIED dead-CSS tranche (highest line-value; the only line-reducing one)
+
+Grep-confirmed 2026-06-25 that three IDs are **renamed-away orphans** — `0` references in
+`app/index.html` and `0` across all `app/**/*.js` (vs the real `#learnFocusPageIndicator` =
+1 + 3):
+- `#learnLecturePageIndicator` — 79 selector-lines in style.css, 0 in runtime-collapsed.
+- `#learnExplainBottomRail` — 86 selector-lines in style.css, 0 in runtime-collapsed.
+- `#learnToolbarPagination` — 90 selector-lines in style.css, **31 in runtime-collapsed.css**.
+
+≈255 style.css lines + 31 runtime-collapsed lines of **dead CSS** (refactor-plan rule #1:
+delete unused directly). Unlike doubled-ID collapse (line-neutral), this REDUCES line count.
+**Execution care:** delete whole rules where the dead ID is the sole selector; for GROUPED
+selectors, remove ONLY the dead arm (some group with the live `#learnFocusPageIndicator` /
+other live selectors — deleting a live arm regresses real chrome). **Verifiable**: the live
+`#learnFocusPageIndicator` is covered by lesson views 06/08, so visual-diff --check (0.000%)
+confirms no live arm was clipped. Recommended as the next high-value tranche.
+
+**Precise deletion plan generated** (workflow `wg12bp3ys`, 3 per-ID planners, 2026-06-25).
+Bigger than first estimated: **~320 style.css lines** removable —
+**74 WHOLE-RULE** deletions (the big comment-headed clusters: "page-number glass lock" /
+"MONO PAGE TAG LOCK" / "compact lesson page badge lock" at L24044-26981, L33948-34937,
+L38203-area — dead ID is the sole selector, no live sibling), **47 ARM-IN-GROUP** single-line
+deletes (the dead arm is always the FIRST arm of shared paper-tag groups at L23231-23468 etc.,
+so the trailing `,` stays and no `{` is touched), **7 ARM-LAST** (need a comma/brace fix —
+handle individually), **6 RISK** (verify individually). Many WHOLE-RULE rules are also doubled-ID
+(`#learnLecturePageIndicator#learnLecturePageIndicator` etc.), so this also cuts the doubled-ID count.
+
+**Execution protocol (IMPORTANT):**
+1. **Cross-ID coordination** — the 3 per-ID plans each mislabel *sibling dead IDs as "live"*
+   (the `#learnLecturePageIndicator` planner lists `#learnExplainBottomRail` — also dead — as a
+   live sibling). Treat ALL THREE as dead: delete every arm referencing any of the 3; a rule left
+   with no *truly*-live arm (e.g. not `#learnFocusPageIndicator`/`#textbookFocusPageIndicator`/
+   `#mistakePageIndicator`/`#bookPageIndicator`/`#quizPageIndicator`/overlay buttons) becomes WHOLE-RULE.
+2. **Regenerate line numbers before executing** — the plan's line numbers are valid only against
+   the frozen branch `refactor/phase3.6-css-collapse` HEAD; re-run the planner workflow (or re-grep)
+   if any style.css edit intervenes. Execute **bottom-up** (highest line first) so edits don't shift
+   later targets.
+3. **Verify** with `visual-diff --check` (0.000% — the live `#learnFocusPageIndicator` on views
+   06/08 catches a wrongly-removed live arm) + a CSS sanity check that no empty/orphan selector
+   block (`{` with no preceding selector) was left behind.
+
+### 6.3b — learn-topbar tranche caveat (non-unique selectors)
+
+The 9 COLLAPSE-SAFE-NOW topbar selectors are NOT all single-occurrence: `#learnView#learnView
+.learn-topbar {` (×2), `.learn-topbar-left` (×2), `.learn-topbar-actions {` (×3), `#btnLectureView`
+(×2), `#btnTextbookView` (×2) — the duplicate occurrences are `@media`/state-variant rules that are
+NEEDS-NARROW-VIEWPORT or NEEDS-STATE-MATRIX, **not** safe to de-double at 1280/resting. So the topbar
+needs **per-occurrence** edits (the L34111-34253 resting rules only), NOT a blanket replace_all. Skip
+the LOAD-BEARING groups L34176-34178 (toolbar, chapter-overview state arms) + L34193-34194 (viewselector).
 
 ## References
 - `docs/REFACTOR_PLAN.md` — "The right sequence from here" (step 3 = this spec).

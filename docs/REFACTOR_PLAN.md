@@ -2,7 +2,7 @@
 
 Owner: FlyM1ss
 Started: 2026-06-19
-Last refreshed: 2026-06-24 (after §3c.i pass 8 D3 ceiling — `app/style.css` now 42,991 lines; status overview + "Should we split further?" outlook section added)
+Last refreshed: 2026-06-25 (Phase 3.6 structural attack underway on branch — see the "Phase 3.6 execution status" callout in Forward outlook)
 Status:
 
 - **Phase 0** merged (#15).
@@ -352,6 +352,48 @@ re-checking them.
 Recorded 2026-06-24 in response to the question "when can we split the
 couple monoliths into smaller files, or should we?".
 
+### Phase 3.6 execution status (2026-06-25) — key findings first
+
+Step 3 below ("the big CSS structural attack") is **in progress on branch
+`refactor/phase3.6-css-collapse`** (11 verified commits, no PR yet — it ships
+as one PR when complete). Cumulative, every commit gated by css-probe
+(byte-identical computed styles) + visual-diff (35/35 @ 0.000%):
+
+- `app/style.css` **42,991 → 38,771 (−4,220)**; `runtime-collapsed.css`
+  **2,102 → 1,734 (−368)** = **−4,588 lines**.
+- `!important` (style.css) **14,948 → 13,206 (−1,742)**; doubled-IDs
+  **608 → 418 (−190, −31.3%)**.
+
+**What worked:** the dominant lever was deleting **renamed-away dead rules/
+orphans** — the residue of the "FINAL/EOF/LOCK" redesign passes (e.g. the
+`.lecture-overlay-btn-*` family, renamed to `.turner-content`; the
+`.learn-explain-toggle-btn` pileup). Doubled-ID de-doubling is ~0 net lines by
+design; the bytes come from dead-rule deletion. **This vein is now exhausted**
+for the lecture/learn-chrome surfaces.
+
+**The biggest remaining lever — partly unblocked 2026-06-25.** The
+redeclaration-pileup pattern (same selector + same property + same context, only
+the last wins) holds **696 provably-dead `!important`-heavy declarations (620
+`!important`)**. A media-*unaware* detector over-reported 4,422 — **3,726 of those
+were responsive/theme overrides that would have broken if deleted** (proof this
+lever is a trap without viewport-aware verification). **Correction (verified
+2026-06-25):** the earlier "0 top-level; dominated by `max-width:1024px`" claim was
+a parser artifact — the one `1024px` block touches only the landing page, and the
+mis-grouped dead decls are actually **top-level** (the "Edge tabs v3 → v6" pileup,
+L941+), so a material slice is desktop-visible and sweepable now with the existing
+harness. The genuinely viewport-gated slice (bands 1180/1120/900/820/760/720) is
+now covered: **the narrow-viewport css-probe harness landed** (four states
+N1@1160/N2@890/N3@740/N4@700, negative-control-proven). Full record + the remaining
+hardened-parser prereq: `docs/phase3_deferred.md` §14.
+
+**Remaining buckets:** (1) ~~narrow-viewport harness coverage~~ **DONE** → the
+top-level slice is desktop-sweepable now; the media-gated slice needs the hardened
+parser (§14 prereq 2); (2) **`!important`-stripping
+on DOM-isolated views** (`#courseTrackerView` 74.9% NOCOMP, `#preferenceView`
+69.8%) — line-neutral but *cascade-changing*, needs an explicit risk decision;
+(3) **§3d composer chain** — hardest, cross-file lockstep. Strategy detail in
+`docs/PHASE3.6_SPEC.md`.
+
 ### Where we are
 
 The JS monolith story is largely solved: `app/app.js` is down 58.8% (20,250
@@ -397,16 +439,22 @@ and you're chasing specificity through 10 files instead of one.
 
 ### The right sequence from here
 
-1. **Finish the cheap §3c.i / §3b tail** (a few hundred more lines,
-   likely 1–2 more dev days). Diminishing returns past pass 8.
-2. **Expand the visual-diff harness for state variants** — `:hover`,
-   `:focus-within`, `:disabled`, `:active` on the top-duplicated #20b/c
-   selectors. Unblocks ~300 deferred lines (§3b.iv, §3c.i tail).
-3. **Then** the big CSS structural attack: collapse the `!important`
-   wall and the doubled-ID `#learnView#learnView` pattern. That's where
-   the real bytes live (~15.6 k `!important` ≫ all line-count work to
-   date). It needs a coordinated banner-rewrite, not more deletion
-   passes — design it as a Phase 3.6 spec, not a continuation of §3c.
+1. ~~**Finish the cheap §3c.i / §3b tail.**~~ **DONE** — confirmed at the
+   D3 zero-candidate ceiling (commit c45b205, pass 8); the home-Ask
+   shadowed-banner vein is mined out under current verification discipline.
+2. ~~**Expand the visual-diff harness for state variants.**~~ **DONE** — shipped
+   the computed-style `tools/css-probe.js` harness (PR #101, desktop states
+   S2/S3/S12) + the 35-view pixel harness, **then added the narrow-viewport tier**
+   (states N1@1160/N2@890/N3@740/N4@700, sentinel-gated literal probes,
+   negative-control-proven). The viewport-gated half of the 620-`!important` pileup
+   sweep is now verifiable; the remaining gap is non-viewport (chapter-overview /
+   lecture-overlay / `@container` — recorded in §14).
+3. **The big CSS structural attack — IN PROGRESS** on branch
+   `refactor/phase3.6-css-collapse` (see the execution-status callout above for
+   live numbers). Designed as `docs/PHASE3.6_SPEC.md`. Finding to date: the
+   real bytes came from deleting renamed-away dead rules, not banner-rewrites;
+   the remaining `!important` reduction is harness-gated (D2) or
+   cascade-changing (needs a risk decision), not more free deletion.
 4. **JS module splits can run in parallel** with any of the above —
    they don't touch CSS.
 

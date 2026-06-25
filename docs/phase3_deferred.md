@@ -1824,3 +1824,113 @@ whatever the baseline records. Adding a new probe STATE requires re-baselining
 (the §13 symmetric guard now errors on a current-only state so the gap is loud,
 not silent). Same design as `visual-diff.js`. When Surface 6 (§3d composer chain)
 is attacked, add states S4-S11 (spec §4.2) and re-baseline on pre-collapse main.
+
+## 14. The redeclaration-pileup `!important` lever — DEFERRED (D2), the biggest remaining reduction
+
+**Status: deferred 2026-06-25 (defer rule D2 — harness blindspot). Prerequisite 1 SATISFIED 2026-06-25 (narrow-viewport css-probe states); prerequisite 2 + a corrected scope below.**
+
+**Update 2026-06-25 — prerequisite 1 satisfied + a correction to the analysis below.**
+
+*Narrow-viewport harness (prereq 1) is now in place.* `tools/css-probe.js` gained an optional
+per-state `viewport:{width,height}` field and four narrow learn-chrome states — N1@1160 (inside
+the ≤1180 band), N2@890 (≤900), N3@740 (≤820, also ≤760), N4@700 (≤720) — pinning only LITERAL
+cascade values (toolbar `grid-template-areas` + `flex-wrap`, toolbar-center `flex-wrap`, and the
+inherited `--learn-edge-tab-top` px custom property). The clamp()/cqi toolbar-center `gap`
+(17.92→16.24→12.46px) is deliberately NOT probed — it is a layout-derived used value that drifts
+across machines. Re-baselined on pre-collapse main; `--check` is byte-identical across two
+independent runs; a negative control (neutralizing the ≤900 `flex-wrap:wrap !important` rule at
+`app/style.css` L12999) is caught by three states (N2's sentinel + N3/N4 probe diffs), proving
+the harness detects exactly the width-gated deletions this lever performs. **KNOWN GAP (recorded,
+not covered):** chapter-overview book-spread (≤1120/≤760), lecture-overlay nav buttons
+(≤1320/≤900), and collapsed-panel edge tabs (≤900) are absent from a §1.1-1 lesson DOM, and
+`runtime-collapsed.css` responsiveness keys off `@container lecture-panel` (the explain-panel's
+own width, not the viewport) — covering them needs a chapter-overview lesson state and/or a
+container-width driver, a follow-up harness task.
+
+*CORRECTION to "dominated by `@media (max-width:1024px)` (~150 dead)" below (verified on HEAD).*
+There is exactly ONE `@media (max-width:1024px)` block in `app/style.css` (L912–939) and it
+touches ZERO learn-chrome rules and ZERO `!important` — it only restyles `.intro-landing-new`
+(landing hero / ui-mockup / constellation). The ~150 dead decls the throwaway detector attributed
+to 1024px are actually **top-level** (brace depth 0): the "Edge tabs v3 → v6 final-final"
+redeclaration pileup at L941–L1030+ (`.learn-body` custom props + `.learn-explain-toggle-btn` /
+`#learnFocusBtn` / `.learn-side-restore-*` redeclared across successive "vN" rewrites). The buggy
+`@`-context stack never popped the 1024px context after L939, so it mis-labeled top-level dead
+decls as media-gated. **Consequence: a material (still-unquantified) fraction of the 696 is
+desktop-visible and was never actually D2-blocked** — it is verifiable by the EXISTING 1280
+harness and can be swept now, separately from the media-gated slice. The true narrow-viewport
+learn-chrome bands are 1180/1120/900/820/760/720 (inside-media `!important` load
+47/36/99/67/108/64), NOT 1024. The exact top-level-vs-media split awaits prerequisite 2 (the
+hardened parser).
+
+**What:** `app/style.css` carries the "FINAL/EOF/LOCK" redeclaration-pileup pattern the
+spec §0 named: the *same selector* sets the *same property* in multiple rule blocks within
+the *same `@media`/`@supports` context*; only the last block wins, so every earlier
+same-property declaration is provably dead (cascade-neutral to delete). An importance- and
+media-context-aware detector (built 2026-06-25, run on HEAD) found **696 such dead
+declarations across 179 selectors, of which 620 are `!important`.** This is the single
+largest remaining `!important`-count lever in the file — bigger than any dead-orphan sweep.
+
+**Why deferred (D2 — verification needs harness expansion first):** a context-aware split
+showed **0 of the 696 are top-level — every one lives inside a media query**, dominated by
+`@media (max-width: 1024px)` (~150 dead) with a long tail down to ~430–600px. The css-probe
++ visual-diff harnesses both render at **desktop width (1280)**, so they cannot observe any
+of these declarations — deleting them now would be flying blind in exactly the
+narrow-viewport blindspot spec §4 warns about. A naive (media-unaware) detector reported
+4,422 "dead" decls; **3,726 of those were responsive/theme overrides that would have BROKEN
+if deleted** (e.g. `:root[data-theme="dark"]` vars redefined per breakpoint) — proof that
+this lever is a trap without viewport-aware verification.
+
+**Two hard prerequisites before this is safe to execute:**
+1. **Narrow-viewport harness coverage.** Add css-probe STATES (and ideally visual-diff views)
+   that render the affected learn-view chrome at ≤1024px (and a second tier ~760px and ~560px
+   to cover the tail), probing the literal cascade value of each property a deleted decl
+   touched. Re-baseline on pre-collapse main. This is a Step-2 (per-PR-to-main) task and is
+   the concrete unblocker.
+2. **A correctness-hardened parser.** The throwaway detector's `@`-context *stack* over-
+   accumulates conditions across sibling blocks (errs safe for counting — under-groups, so
+   696 is a LOWER bound — but unfit for deletion). The deletion pass needs a brace-accurate
+   parser that pops context correctly and handles comments/`content:"}"`/data-URIs. Validate
+   it against the spec's known ground truth (`.learn-explain-toggle-btn` height redeclared
+   11× at (0,1,0)) before trusting it to cut.
+
+**Next-session entry point:** prerequisite 1 is DONE (the four narrow states above). Remaining:
+(a) the easy half — sweep the **top-level** redeclaration pileup (L941–L1030+ and its kin) using
+the EXISTING 1280 harness; it was never harness-blocked. (b) the hard half — build the
+correctness-hardened parser (prereq 2), then cut the genuinely media-gated earlier-dead decls on
+the `refactor/phase3.6-css-collapse` branch → `npm run test:css-probe:check` must stay
+byte-identical at every probed viewport (the five banded states N0–N4 + the three desktop states
+S2/S3/S12). Est. reward: ~620 `!important` + ~696 lines, now split across a desktop-verifiable
+slice and a narrow-viewport-verifiable slice.
+
+## 15. css-probe S2/S3 panelFocus JS-var desync — DEFERRED (D1), harness-fidelity only
+
+**Status: deferred 2026-06-25 in PR #104 self-review (defer rule D1 — pre-existing, unrelated to this PR's diff).**
+
+**What:** The S2/S3 desktop probe states (PR #101) set `#learnBody.dataset.panelFocus =
+'qa-wide'|'qa-full'` directly in `page.evaluate` instead of calling the app's internal
+`applyLearnPanelFocusState` (app.js), so the module-internal `learnPanelFocus` JS variable stays
+`'normal'`. With the DOM in a panel-focus state but the JS var `'normal'`, `applyLearnSplit`'s
+guard (`learnPanelFocus !== 'normal'`, app.js ~L7561) is false at desktop width, so it RUNS and
+writes inline `!important` split-column styles onto the shared learn columns; the desync persists
+across later states on the shared page.
+
+**Why deferred (D1):** the finding is in the S2/S3 `enter()` logic (PR #101), which this PR's diff
+did not touch — the new banded states N0–N4 are independent. It is invisible to the harness: no
+probe (FOLLOWUP_PROBES / NARROW_PROBES / S12) reads `learnPanelFocus` or the inline split-column
+geometry it produces, so no captured value is affected (confirmed: `--check` byte-identical, 8/8
+states). A proper fix needs app.js to expose `applyLearnPanelFocusState` to the page context (or
+the harness to replicate its full side-effect set) AND would re-capture + potentially drift the
+S2/S3 baseline — out of scope for a harness-coverage PR.
+
+**Next-session entry point:** `tools/css-probe.js` S2/S3 `enter()` (`shell.dataset.panelFocus = …`);
+`app.js` `applyLearnPanelFocusState` / the `applyLearnSplit` guard (~L2725 / ~L7561). Only worth
+fixing if a future probe targets the learn-split column geometry. Est. effort: small, gated on
+exposing the app function + an S2/S3 re-baseline.
+
+> PR #104 self-review note: the other review findings were fixed in-PR — desktop bracket state N0
+> (catches a media-query hoist that changes the 1280 value), an `explain-collapsed` floor in
+> `bandState.enter()` (guards the ≤820 edge-tab band from a higher-specificity leak), raw sentinel
+> reads (sentinel/probe byte-agreement), duplicate-state-name + duplicate-probe-key fail-closed
+> guards, and comment-accuracy fixes (toolbar `flex-wrap` is an inert cascade witness, not layout).
+> The `@container lecture-panel` coverage gap remains the documented §14 follow-up (needs a panel-
+> width driver, not a viewport one).
