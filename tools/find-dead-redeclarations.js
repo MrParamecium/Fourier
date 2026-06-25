@@ -66,10 +66,17 @@ function parseDeclarations(css) {
   const norm = (s) => s.replace(/\s+/g, ' ').trim();
 
   // `buf` accumulates the raw text of the current chunk (a prelude before `{`,
-  // or a declaration before `;`/`}`). `bufStart` is its byte offset (for line#).
+  // or a declaration before `;`/`}`) for prop:value PARSING only. Byte OFFSETS
+  // are tracked separately via declFirst/declLast — the offset of the first and
+  // last non-whitespace CONTENT byte since the last flush. This decoupling is
+  // essential: comments are elided from `buf`, so buf-relative arithmetic would
+  // drift into a preceding comment (deleting its closing */). declFirst/declLast
+  // index the real source, skipping leading/trailing whitespace AND comments.
   let buf = '';
-  let bufStart = -1;
-  const pushChar = (ch, off) => { if (buf === '') bufStart = off; buf += ch; };
+  let declFirst = -1; // source offset of first content byte of current chunk
+  let declLast = -1;  // source offset of last content byte (inclusive)
+  const markContent = (from, to) => { if (declFirst < 0) declFirst = from; declLast = to; };
+  const pushChar = (ch, off) => { buf += ch; if (!/\s/.test(ch)) markContent(off, off); };
 
   // depth at which a skipped (opaque) at-rule body began; -1 when not skipping.
   let skipDepth = -1;
@@ -93,9 +100,10 @@ function parseDeclarations(css) {
         j++;
       }
       // preserve the string verbatim in buf so values stay intact
-      const str = css.slice(i, Math.min(j + 1, n));
-      if (buf === '') bufStart = i;
+      const strEnd = Math.min(j + 1, n);
+      const str = css.slice(i, strEnd);
       buf += str;
+      markContent(i, strEnd - 1);
       i = j + 1;
       continue;
     }
@@ -116,8 +124,8 @@ function parseDeclarations(css) {
         j++;
       }
       const paren = css.slice(i, j);
-      if (buf === '') bufStart = i;
       buf += paren;
+      markContent(i, j - 1);
       i = j;
       continue;
     }
@@ -126,6 +134,7 @@ function parseDeclarations(css) {
     if (ch === '{') {
       const prelude = norm(buf);
       buf = '';
+      declFirst = -1; declLast = -1;
       if (skipDepth !== -1) {
         // already inside an opaque at-rule: just track nesting via selStack
         selStack.push(null);
@@ -176,12 +185,13 @@ function parseDeclarations(css) {
 
   function flushDecl(termOffset, isSemicolon) {
     const raw = buf;
-    const rawStart = bufStart;
+    const declStart = declFirst;
+    const contentEnd = declLast; // last content byte (inclusive)
     buf = '';
-    bufStart = -1;
+    declFirst = -1; declLast = -1;
     if (skipDepth !== -1) return; // inside opaque at-rule
     const text = raw.trim();
-    if (!text) return;
+    if (!text || declStart < 0) return;
     const sel = selStack[selStack.length - 1];
     if (sel === null || sel === '__AT__' || sel === undefined) return; // not inside a style rule
     const colon = text.indexOf(':');
@@ -190,12 +200,12 @@ function parseDeclarations(css) {
     if (!prop) return;
     const value = text.slice(colon + 1).trim();
     const important = /!\s*important\b/i.test(value);
-    // exact byte span of the declaration, for surgical excision:
-    //   declStart = first non-ws char (the property name)
-    //   spanEnd   = just after the terminating ';' (or at the '}' if none)
-    const leadWs = raw.length - raw.trimStart().length;
-    const declStart = rawStart + leadWs;
-    const spanEnd = isSemicolon ? termOffset + 1 : declStart + text.length;
+    // exact byte span of the declaration, for surgical excision. declStart and
+    // contentEnd index the real source (skipping leading/trailing ws AND any
+    // elided comments), so the span never bleeds into a neighbouring comment.
+    //   spanEnd = just after the terminating ';' (or just after the last
+    //   content byte when the block-closing '}' ends the declaration).
+    const spanEnd = isSemicolon ? termOffset + 1 : contentEnd + 1;
     decls.push({
       context: ctxStack.join(' || '),
       selector: norm(sel),
