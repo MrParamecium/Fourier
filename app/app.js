@@ -477,13 +477,10 @@ const sidebarSyllabusPanel = document.getElementById('sidebarSyllabusPanel');
 const welcomeCoverBtn = document.getElementById('welcomeCoverBtn');
 const settingsPageBackBtn = document.getElementById('settingsPageBackBtn');
 const feedbackCloseBtn = document.getElementById('feedbackCloseBtn');
-const feedbackNameInput = document.getElementById('feedbackNameInput');
-const feedbackTitleInput = document.getElementById('feedbackTitleInput');
-const feedbackBodyInput = document.getElementById('feedbackBodyInput');
 const feedbackSubmitBtn = document.getElementById('feedbackSubmitBtn');
 const feedbackRefreshBtn = document.getElementById('feedbackRefreshBtn');
-const feedbackList = document.getElementById('feedbackList');
-const feedbackStatus = document.getElementById('feedbackStatus');
+// feedbackNameInput/TitleInput/BodyInput, feedbackList, feedbackStatus moved to
+// feedback-board.js (only that module reads them).
 
 const courseTrackerCloseBtn = document.getElementById('courseTrackerCloseBtn');
 const courseTrackerResetBtn = document.getElementById('courseTrackerResetBtn');

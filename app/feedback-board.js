@@ -9,15 +9,23 @@
 // network paths.
 //
 // External globals used at call time:
-//   - escapeHtml                                         (app.js)
-//   - API_BASE                                           (app.js)
-//   - currentUser                                        (clerk-auth.js)
-//   - feedbackList, feedbackStatus, feedbackNameInput,
-//     feedbackTitleInput, feedbackBodyInput, feedbackSubmitBtn   (app.js DOM consts)
+//   - escapeHtml                          (app.js)
+//   - API_BASE                            (app.js)
+//   - currentUser                         (clerk-auth.js)
+//   - feedbackSubmitBtn                   (app.js DOM const; app.js init wires its click handler)
 //
 // Public surface (callers outside this module):
 //   - loadFeedbackBoard   (app.js showFeedbackView + #feedbackRefreshBtn handler)
 //   - submitFeedbackItem  (app.js #feedbackSubmitBtn handler)
+
+// DOM elements owned by this module — queried once at load (this <script> runs
+// after the body is parsed, like the sibling feature modules). No other module
+// reads them: the board's form inputs + thread list + status line.
+const feedbackNameInput = document.getElementById('feedbackNameInput');
+const feedbackTitleInput = document.getElementById('feedbackTitleInput');
+const feedbackBodyInput = document.getElementById('feedbackBodyInput');
+const feedbackList = document.getElementById('feedbackList');
+const feedbackStatus = document.getElementById('feedbackStatus');
 
 const feedbackReplyTargets = new Map();
 
@@ -50,7 +58,6 @@ function setFeedbackStatus(message, kind = 'idle') {
 
 function feedbackReplyTargetForItem(item) {
   return {
-    type: 'thread',
     id: item.id || '',
     author: item.author || 'Anonymous',
     body: item.body || item.title || ''
@@ -59,7 +66,6 @@ function feedbackReplyTargetForItem(item) {
 
 function feedbackReplyTargetForReply(reply) {
   return {
-    type: 'reply',
     id: reply.id || '',
     author: reply.author || 'Anonymous',
     body: reply.body || ''

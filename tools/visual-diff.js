@@ -592,7 +592,7 @@ const sharedViews = [
     // tools/fixtures/feedback-board.populated.json into app/users/feedback-
     // board.json so the bridge's /api/feedback GET returns 2 threads + 6
     // replies covering:
-    //   - tone-0..5 across thread 1 (toneForAuthor at app.js L6258 round-
+    //   - tone-0..5 across thread 1 (toneForAuthor in feedback-board.js round-
     //     robins per author per item; thread 1 has 6 distinct authors so
     //     all 6 tones materialize)
     //   - is-left + is-right reply lanes (laneForAuthor alternates each NEW
