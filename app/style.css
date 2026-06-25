@@ -26057,11 +26057,11 @@ body {
 
 /* True EOF Mistake Notebook layout lock: horizontal case rail + full-width review desk. */
 #mistakeNotebookView#mistakeNotebookView .mistake-notebook-grid {
-  display: grid !important;
+  display: grid;
   grid-template-columns: minmax(0, 1fr) !important;
   grid-template-rows: auto auto !important;
   gap: 18px !important;
-  align-items: stretch !important;
+  align-items: stretch;
 }
 
 #mistakeNotebookView .mistake-list-card,
@@ -26071,35 +26071,35 @@ body {
 }
 
 #mistakeNotebookView#mistakeNotebookView .mistake-list {
-  display: grid !important;
+  display: grid;
   grid-auto-flow: column !important;
   grid-auto-columns: minmax(260px, 320px) !important;
   grid-template-columns: none !important;
   gap: 12px !important;
   max-height: none !important;
-  overflow-x: auto !important;
-  overflow-y: hidden !important;
+  overflow-x: auto;
+  overflow-y: hidden;
   padding: 2px 4px 8px 2px !important;
-  scroll-snap-type: x proximity !important;
+  scroll-snap-type: x proximity;
 }
 
 #mistakeNotebookView .mistake-list-item {
   min-height: 96px !important;
-  scroll-snap-align: start !important;
+  scroll-snap-align: start;
 }
 
 #mistakeNotebookView .mistake-detail-content {
-  display: grid !important;
+  display: grid;
   grid-template-rows: auto auto auto !important;
   gap: 20px !important;
 }
 
 #mistakeNotebookView#mistakeNotebookView .mistake-workspace {
-  display: grid !important;
+  display: grid;
   grid-template-columns: minmax(420px, 1.18fr) minmax(360px, 0.82fr) !important;
   gap: clamp(18px, 2.2vw, 28px) !important;
   margin-top: 0 !important;
-  align-items: stretch !important;
+  align-items: stretch;
 }
 
 #mistakeNotebookView#mistakeNotebookView .mistake-image-frame {
@@ -26107,20 +26107,20 @@ body {
 }
 
 #mistakeNotebookView#mistakeNotebookView .mistake-notes-panel {
-  display: grid !important;
+  display: grid;
   grid-template-rows: auto auto auto minmax(220px, 1fr) auto auto auto !important;
-  align-content: start !important;
+  align-content: start;
 }
 
 #mistakeNotebookView#mistakeNotebookView .mistake-actions {
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto !important;
-  align-items: center !important;
+  align-items: center;
 }
 
 #mistakeNotebookView#mistakeNotebookView .mistake-ai-answer-panel {
   margin-top: 0 !important;
   max-height: min(34vh, 360px) !important;
-  overflow: auto !important;
+  overflow: auto;
 }
 
 @media (max-width: 1180px) {
@@ -26537,26 +26537,26 @@ body {
 
 /* Mistake Notebook liquid glass redesign: review cockpit aligned with the theme. */
 #mistakeNotebookView.mistake-notebook-view {
-  background: var(--theme-page-surface-soft) !important;
-  background-image: var(--theme-page-surface-soft) !important;
-  overflow: hidden !important;
+  background: var(--theme-page-surface-soft);
+  background-image: var(--theme-page-surface-soft);
+  overflow: hidden;
 }
 
 #mistakeNotebookView .mistake-notebook-shell {
-  width: min(100%, 1500px) !important;
-  height: 100% !important;
-  min-height: 0 !important;
-  margin: 0 auto !important;
-  padding: clamp(22px, 3vw, 42px) clamp(24px, 4.2vw, 64px) 54px !important;
-  overflow-y: auto !important;
-  background: transparent !important;
-  background-image: none !important;
+  width: min(100%, 1500px);
+  height: 100%;
+  min-height: 0;
+  margin: 0 auto;
+  padding: clamp(22px, 3vw, 42px) clamp(24px, 4.2vw, 64px) 54px;
+  overflow-y: auto;
+  background: transparent;
+  background-image: none;
 }
 
 #mistakeNotebookView .mistake-notebook-header {
-  display: grid !important;
+  display: grid;
   grid-template-columns: minmax(0, 1fr) auto !important;
-  align-items: start !important;
+  align-items: start;
   gap: 20px !important;
   margin: 0 0 clamp(18px, 2.2vw, 26px) !important;
 }
@@ -26569,30 +26569,30 @@ body {
 #mistakeNotebookView .mistake-card-kicker,
 #mistakeNotebookView .mistake-field-label {
   margin-bottom: 8px !important;
-  color: rgba(51,65,85,0.66) !important;
-  font-family: "DM Mono", "SFMono-Regular", monospace !important;
+  color: rgba(51,65,85,0.66);
+  font-family: "DM Mono", "SFMono-Regular", monospace;
   font-size: 12px !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.22em !important;
-  text-transform: uppercase !important;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
 }
 
 #mistakeNotebookView .mistake-notebook-title {
   max-width: 920px !important;
   margin: 0 0 12px !important;
   color: rgba(15,23,42,0.92) !important;
-  font-family: "Quicksand", "Nunito", sans-serif !important;
+  font-family: "Quicksand", "Nunito", sans-serif;
   font-size: clamp(48px, 5.8vw, 82px) !important;
   line-height: 0.92 !important;
   letter-spacing: 0 !important;
-  text-shadow: 0 1px 0 rgba(255,255,255,0.56) !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.56);
 }
 
 #mistakeNotebookView .mistake-notebook-subtitle {
   max-width: 940px !important;
   margin: 0 !important;
   color: rgba(51,65,85,0.72) !important;
-  font-family: "Nunito", sans-serif !important;
+  font-family: "Nunito", sans-serif;
   font-size: 17px !important;
   line-height: 1.62 !important;
 }
@@ -26609,26 +26609,26 @@ body {
     0 18px 38px rgba(15,23,42,0.10),
     inset 0 1px 0 rgba(255,255,255,0.78),
     inset 0 -1px 0 rgba(255,255,255,0.18) !important;
-  backdrop-filter: blur(24px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
 }
 
 #mistakeNotebookView .mistake-notebook-toolbar,
 #mistakeNotebookView .mistake-list-card,
 #mistakeNotebookView .mistake-detail-card,
 #mistakeNotebookView .mistake-ai-answer-panel {
-  position: relative !important;
+  position: relative;
   border: 1px solid rgba(255,255,255,0.58) !important;
-  border-radius: 30px !important;
+  border-radius: 30px;
   background:
     linear-gradient(135deg, rgba(255,255,255,0.44), rgba(255,255,255,0.16)) !important;
   box-shadow:
     var(--theme-composer-shadow),
     inset 0 1px 0 rgba(255,255,255,0.82),
     inset 0 -1px 0 rgba(255,255,255,0.18) !important;
-  backdrop-filter: blur(34px) saturate(190%) brightness(1.05) !important;
-  -webkit-backdrop-filter: blur(34px) saturate(190%) brightness(1.05) !important;
-  overflow: hidden !important;
+  backdrop-filter: blur(34px) saturate(190%) brightness(1.05);
+  -webkit-backdrop-filter: blur(34px) saturate(190%) brightness(1.05);
+  overflow: hidden;
 }
 
 #mistakeNotebookView .mistake-notebook-toolbar::before,
@@ -26651,14 +26651,14 @@ body {
 #mistakeNotebookView .mistake-list-card > *,
 #mistakeNotebookView .mistake-detail-card > *,
 #mistakeNotebookView .mistake-ai-answer-panel > * {
-  position: relative !important;
-  z-index: 1 !important;
+  position: relative;
+  z-index: 1;
 }
 
 #mistakeNotebookView .mistake-notebook-toolbar {
-  display: grid !important;
+  display: grid;
   grid-template-columns: auto minmax(280px, 1fr) auto !important;
-  align-items: center !important;
+  align-items: center;
   gap: 16px !important;
   margin: 0 0 clamp(18px, 2.1vw, 26px) !important;
   padding: 16px !important;
@@ -26670,35 +26670,35 @@ body {
 #mistakeNotebookView .mistake-danger-btn,
 #mistakeNotebookView .mistake-mini-btn {
   border: 1px solid rgba(255,255,255,0.62) !important;
-  border-radius: 16px !important;
+  border-radius: 16px;
   font-family: "Quicksand", "Nunito", sans-serif !important;
-  font-weight: 800 !important;
+  font-weight: 800;
   box-shadow:
     0 16px 30px rgba(15,23,42,0.09),
     inset 0 1px 0 rgba(255,255,255,0.78),
-    inset 0 -1px 0 rgba(255,255,255,0.18) !important;
-  backdrop-filter: blur(18px) saturate(170%) !important;
-  -webkit-backdrop-filter: blur(18px) saturate(170%) !important;
+    inset 0 -1px 0 rgba(255,255,255,0.18);
+  backdrop-filter: blur(18px) saturate(170%);
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
 }
 
 #mistakeNotebookView .mistake-upload-btn,
 #mistakeNotebookView .mistake-primary-btn {
   background:
-    linear-gradient(135deg, rgba(14,165,233,0.82), rgba(16,185,129,0.64)) !important;
-  color: #fff !important;
+    linear-gradient(135deg, rgba(14,165,233,0.82), rgba(16,185,129,0.64));
+  color: #fff;
 }
 
 #mistakeNotebookView .mistake-secondary-btn,
 #mistakeNotebookView .mistake-mini-btn {
   background:
-    linear-gradient(135deg, rgba(255,255,255,0.50), rgba(255,255,255,0.18)) !important;
-  color: rgba(30,41,59,0.78) !important;
+    linear-gradient(135deg, rgba(255,255,255,0.50), rgba(255,255,255,0.18));
+  color: rgba(30,41,59,0.78);
 }
 
 #mistakeNotebookView .mistake-danger-btn {
   background:
-    linear-gradient(135deg, rgba(255,241,242,0.64), rgba(255,255,255,0.18)) !important;
-  color: #be123c !important;
+    linear-gradient(135deg, rgba(255,241,242,0.64), rgba(255,255,255,0.18));
+  color: #be123c;
 }
 
 #mistakeNotebookView .mistake-upload-btn {
@@ -26708,8 +26708,8 @@ body {
 }
 
 #mistakeNotebookView .mistake-upload-btn small {
-  display: inline-flex !important;
-  align-items: center !important;
+  display: inline-flex;
+  align-items: center;
   min-height: 26px !important;
   padding: 0 10px !important;
   border-radius: 999px !important;
@@ -26717,9 +26717,9 @@ body {
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.38) !important;
   color: rgba(255,255,255,0.86) !important;
   font-size: 12px !important;
-  font-weight: 800 !important;
+  font-weight: 800;
   letter-spacing: 0 !important;
-  white-space: nowrap !important;
+  white-space: nowrap;
 }
 
 #mistakeNotebookView .mistake-search-wrap,
@@ -26739,13 +26739,13 @@ body {
     inset 0 1px 0 rgba(255,255,255,0.70),
     0 12px 28px rgba(15,23,42,0.055) !important;
   backdrop-filter: blur(18px) saturate(165%) !important;
-  -webkit-backdrop-filter: blur(18px) saturate(165%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(165%);
 }
 
 #mistakeNotebookView .mistake-search-wrap {
   min-width: 0 !important;
   min-height: 58px !important;
-  border-radius: 18px !important;
+  border-radius: 18px;
   padding: 0 18px !important;
   color: rgba(71,85,105,0.70) !important;
 }
@@ -26758,22 +26758,22 @@ body {
 
 #mistakeNotebookView .mistake-count-pill {
   min-height: 58px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  border-radius: 999px !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
   padding: 0 20px !important;
   color: rgba(30,41,59,0.76) !important;
-  font-family: "DM Mono", monospace !important;
+  font-family: "DM Mono", monospace;
   font-size: 13px !important;
-  font-weight: 700 !important;
+  font-weight: 700;
 }
 
 #mistakeNotebookView .mistake-notebook-grid {
-  display: grid !important;
+  display: grid;
   grid-template-columns: minmax(300px, 0.30fr) minmax(0, 0.70fr) !important;
   gap: clamp(18px, 2vw, 26px) !important;
-  align-items: start !important;
+  align-items: start;
 }
 
 #mistakeNotebookView .mistake-list-card {
@@ -26785,10 +26785,10 @@ body {
 }
 
 #mistakeNotebookView .mistake-list {
-  display: grid !important;
+  display: grid;
   gap: 12px !important;
   max-height: min(66vh, 760px) !important;
-  overflow: auto !important;
+  overflow: auto;
   padding-right: 2px !important;
 }
 
@@ -26796,7 +26796,7 @@ body {
   grid-template-columns: 58px minmax(0, 1fr) !important;
   gap: 14px !important;
   padding: 12px !important;
-  border-radius: 20px !important;
+  border-radius: 20px;
   color: rgba(51,65,85,0.78) !important;
 }
 
@@ -26811,8 +26811,8 @@ body {
 #mistakeNotebookView .mistake-list-thumb {
   width: 58px !important;
   height: 58px !important;
-  border-radius: 18px !important;
-  color: rgba(51,65,85,0.52) !important;
+  border-radius: 18px;
+  color: rgba(51,65,85,0.52);
 }
 
 #mistakeNotebookView .mistake-list-meta strong {
@@ -26827,9 +26827,9 @@ body {
 }
 
 #mistakeNotebookView .mistake-detail-head {
-  display: grid !important;
+  display: grid;
   grid-template-columns: minmax(0, 1fr) auto !important;
-  align-items: start !important;
+  align-items: start;
   gap: 18px !important;
 }
 
@@ -26838,12 +26838,12 @@ body {
   max-width: none !important;
   border: 0 !important;
   border-bottom: 1px solid rgba(255,255,255,0.44) !important;
-  background: transparent !important;
-  box-shadow: none !important;
+  background: transparent;
+  box-shadow: none;
   color: rgba(15,23,42,0.92) !important;
   font-size: clamp(30px, 3.2vw, 46px) !important;
   line-height: 1.08 !important;
-  letter-spacing: 0 !important;
+  letter-spacing: 0;
   padding: 2px 0 12px !important;
 }
 
@@ -26858,7 +26858,7 @@ body {
   color: rgba(15,23,42,0.78) !important;
   font-family: "Fira Code", "DM Mono", monospace !important;
   font-size: 14px !important;
-  transform: none !important;
+  transform: none;
 }
 
 #mistakeNotebookView #mistakePageIndicator::before,
@@ -26869,8 +26869,8 @@ body {
 
 #mistakeNotebookView .mistake-image-frame {
   min-height: 520px !important;
-  border-radius: 26px !important;
-  overflow: hidden !important;
+  border-radius: 26px;
+  overflow: hidden;
 }
 
 #mistakeNotebookView .mistake-text-preview {
@@ -26880,7 +26880,7 @@ body {
   color: rgba(30,41,59,0.84) !important;
   font-size: 15px !important;
   line-height: 1.76 !important;
-  overflow: auto !important;
+  overflow: auto;
 }
 
 #mistakeNotebookView .mistake-notes-panel {
@@ -26890,7 +26890,7 @@ body {
 #mistakeNotebookView .mistake-tags-input,
 #mistakeNotebookView .mistake-notes-input,
 #mistakeNotebookView .mistake-ai-instruction {
-  border-radius: 18px !important;
+  border-radius: 18px;
   color: rgba(15,23,42,0.86) !important;
   font-family: "Nunito", sans-serif !important;
   font-size: 15px !important;
@@ -26919,7 +26919,7 @@ body {
 }
 
 #mistakeNotebookView .mistake-actions {
-  display: grid !important;
+  display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
   gap: 12px !important;
 }
@@ -26944,19 +26944,19 @@ body {
 }
 
 #mistakeNotebookView .mistake-empty-panel {
-  min-height: 560px !important;
-  color: rgba(30,41,59,0.78) !important;
+  min-height: 560px;
+  color: rgba(30,41,59,0.78);
 }
 
 #mistakeNotebookView .mistake-empty-icon {
-  border: 1px solid rgba(255,255,255,0.58) !important;
+  border: 1px solid rgba(255,255,255,0.58);
   background:
-    linear-gradient(135deg, rgba(14,165,233,0.24), rgba(16,185,129,0.20)) !important;
+    linear-gradient(135deg, rgba(14,165,233,0.24), rgba(16,185,129,0.20));
   box-shadow:
     0 18px 34px rgba(14,165,233,0.14),
-    inset 0 1px 0 rgba(255,255,255,0.74) !important;
-  backdrop-filter: blur(18px) saturate(170%) !important;
-  -webkit-backdrop-filter: blur(18px) saturate(170%) !important;
+    inset 0 1px 0 rgba(255,255,255,0.74);
+  backdrop-filter: blur(18px) saturate(170%);
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
 }
 
 @media (max-width: 1180px) {
@@ -26972,7 +26972,7 @@ body {
 
 @media (max-width: 820px) {
   #mistakeNotebookView .mistake-notebook-shell {
-    padding: 24px 16px 46px !important;
+    padding: 24px 16px 46px;
   }
 
   #mistakeNotebookView .mistake-notebook-toolbar,
@@ -28765,8 +28765,8 @@ body {
 
 /* MISTAKE NOTE OWNERSHIP LOCK: user notes stay primary, AI drafts stay separate. */
 #mistakeNotebookView .mistake-notes-panel {
-  display: flex !important;
-  flex-direction: column !important;
+  display: flex;
+  flex-direction: column;
   gap: 14px !important;
 }
 
@@ -28781,7 +28781,7 @@ body {
 #mistakeNotebookView .mistake-draft-notes-output {
   width: 100% !important;
   border: 1px solid rgba(255,255,255,0.56) !important;
-  border-radius: 18px !important;
+  border-radius: 18px;
   background:
     linear-gradient(135deg, rgba(255,255,255,0.38), rgba(255,255,255,0.14)) !important;
   color: rgba(15,23,42,0.84) !important;
@@ -28798,15 +28798,15 @@ body {
 }
 
 #mistakeNotebookView .mistake-ai-instruction {
-  min-height: 96px !important;
-  margin-bottom: 12px !important;
-  resize: vertical !important;
+  min-height: 96px;
+  margin-bottom: 12px;
+  resize: vertical;
 }
 
 #mistakeNotebookView .mistake-draft-head {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 10px !important;
 }
 
@@ -28814,59 +28814,59 @@ body {
   padding: 14px 16px !important;
   background:
     radial-gradient(280px 100px at 0% 0%, rgba(125,211,252,0.14), transparent 72%),
-    linear-gradient(135deg, rgba(255,255,255,0.38), rgba(255,255,255,0.13)) !important;
+    linear-gradient(135deg, rgba(255,255,255,0.38), rgba(255,255,255,0.13));
 }
 
 
 #mistakeNotebookView .mistake-note-card-head {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 10px !important;
   margin-bottom: 8px !important;
 }
 
 #mistakeNotebookView .mistake-note-image-btn {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  cursor: pointer !important;
-  font-family: "Quicksand", "Nunito", sans-serif !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-family: "Quicksand", "Nunito", sans-serif;
   font-size: 12px !important;
-  font-weight: 850 !important;
+  font-weight: 850;
 }
 
 
 #mistakeNotebookView .mistake-note-image-empty {
-  display: flex !important;
-  align-items: center !important;
+  display: flex;
+  align-items: center;
   font-size: 12px !important;
-  font-weight: 760 !important;
+  font-weight: 760;
 }
 
 #mistakeNotebookView .mistake-note-image-chip {
-  position: relative !important;
-  margin: 0 !important;
-  overflow: hidden !important;
+  position: relative;
+  margin: 0;
+  overflow: hidden;
 }
 
 #mistakeNotebookView .mistake-note-image-chip img {
-  display: block !important;
+  display: block;
   width: 100% !important;
-  object-fit: cover !important;
+  object-fit: cover;
 }
 
 #mistakeNotebookView .mistake-note-image-chip button {
-  position: absolute !important;
-  top: 6px !important;
-  right: 6px !important;
+  position: absolute;
+  top: 6px;
+  right: 6px;
   width: 24px !important;
   height: 24px !important;
   border: 1px solid rgba(255,255,255,0.72) !important;
   border-radius: 999px !important;
   background: rgba(15,23,42,0.52) !important;
   color: #fff !important;
-  cursor: pointer !important;
+  cursor: pointer;
   line-height: 1 !important;
 }
 
@@ -28980,51 +28980,51 @@ body {
 
 #mistakeNotebookView .mistake-user-note-card,
 #mistakeNotebookView .mistake-ai-draft-card {
-  position: relative !important;
-  isolation: isolate !important;
-  overflow: hidden !important;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   min-width: 0 !important;
   border: 1px solid rgba(255,255,255,0.72) !important;
-  border-radius: 30px !important;
+  border-radius: 30px;
   background:
     linear-gradient(145deg, rgba(255,255,255,0.52), rgba(255,255,255,0.18) 52%, rgba(255,255,255,0.10)),
     radial-gradient(520px 260px at 0% 0%, rgba(125,211,252,0.20), transparent 68%),
-    radial-gradient(420px 240px at 100% 12%, rgba(167,139,250,0.13), transparent 70%) !important;
+    radial-gradient(420px 240px at 100% 12%, rgba(167,139,250,0.13), transparent 70%);
   box-shadow:
     0 26px 60px rgba(15,23,42,0.12),
     0 8px 22px rgba(14,165,233,0.08),
     inset 0 1px 0 rgba(255,255,255,0.92),
-    inset 0 -1px 0 rgba(255,255,255,0.24) !important;
-  backdrop-filter: blur(34px) saturate(190%) brightness(1.06) !important;
-  -webkit-backdrop-filter: blur(34px) saturate(190%) brightness(1.06) !important;
+    inset 0 -1px 0 rgba(255,255,255,0.24);
+  backdrop-filter: blur(34px) saturate(190%) brightness(1.06);
+  -webkit-backdrop-filter: blur(34px) saturate(190%) brightness(1.06);
 }
 
 #mistakeNotebookView .mistake-ai-draft-card {
   background:
     linear-gradient(145deg, rgba(255,255,255,0.50), rgba(255,255,255,0.17) 54%, rgba(255,255,255,0.10)),
     radial-gradient(520px 260px at 8% 0%, rgba(147,197,253,0.22), transparent 68%),
-    radial-gradient(460px 240px at 100% 0%, rgba(196,181,253,0.15), transparent 72%) !important;
+    radial-gradient(460px 240px at 100% 0%, rgba(196,181,253,0.15), transparent 72%);
 }
 
 #mistakeNotebookView .mistake-user-note-card::before,
 #mistakeNotebookView .mistake-ai-draft-card::before {
-  content: "" !important;
-  position: absolute !important;
-  inset: 1px !important;
-  z-index: -1 !important;
-  border-radius: 29px !important;
+  content: "";
+  position: absolute;
+  inset: 1px;
+  z-index: -1;
+  border-radius: 29px;
   background:
     linear-gradient(125deg, rgba(255,255,255,0.58), rgba(255,255,255,0.08) 34%, transparent 62%),
-    linear-gradient(180deg, rgba(255,255,255,0.18), transparent 44%) !important;
-  pointer-events: none !important;
+    linear-gradient(180deg, rgba(255,255,255,0.18), transparent 44%);
+  pointer-events: none;
 }
 
 #mistakeNotebookView .mistake-user-note-card {
-  display: grid !important;
+  display: grid;
 }
 
 #mistakeNotebookView .mistake-ai-draft-card {
-  display: grid !important;
+  display: grid;
 }
 
 #mistakeNotebookView .mistake-note-card-head,
@@ -29033,30 +29033,30 @@ body {
 }
 
 #mistakeNotebookView .mistake-user-note-card .mistake-field-label {
-  color: rgba(13,112,105,0.86) !important;
-  text-shadow: 0 1px 0 rgba(255,255,255,0.70) !important;
+  color: rgba(13,112,105,0.86);
+  text-shadow: 0 1px 0 rgba(255,255,255,0.70);
 }
 
 #mistakeNotebookView .mistake-ai-draft-card .mistake-field-label {
-  color: rgba(79,110,226,0.88) !important;
-  text-shadow: 0 1px 0 rgba(255,255,255,0.70) !important;
+  color: rgba(79,110,226,0.88);
+  text-shadow: 0 1px 0 rgba(255,255,255,0.70);
 }
 
 #mistakeNotebookView .mistake-note-image-btn {
   min-height: 38px !important;
   padding: 0 16px !important;
   border: 1px solid rgba(255,255,255,0.74) !important;
-  border-radius: 16px !important;
+  border-radius: 16px;
   background:
     linear-gradient(145deg, rgba(255,255,255,0.58), rgba(255,255,255,0.18)),
-    radial-gradient(120px 58px at 12% 0%, rgba(103,232,249,0.18), transparent 70%) !important;
-  color: rgba(15,118,110,0.86) !important;
+    radial-gradient(120px 58px at 12% 0%, rgba(103,232,249,0.18), transparent 70%);
+  color: rgba(15,118,110,0.86);
   box-shadow:
     0 12px 24px rgba(15,23,42,0.08),
     inset 0 1px 0 rgba(255,255,255,0.94),
-    inset 0 -1px 0 rgba(255,255,255,0.22) !important;
-  backdrop-filter: blur(20px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    inset 0 -1px 0 rgba(255,255,255,0.22);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
 }
 
 #mistakeNotebookView .mistake-notes-input,
@@ -29064,7 +29064,7 @@ body {
   width: 100% !important;
   padding: 20px 22px !important;
   border: 1px solid rgba(255,255,255,0.70) !important;
-  border-radius: 24px !important;
+  border-radius: 24px;
   background:
     linear-gradient(145deg, rgba(255,255,255,0.44), rgba(255,255,255,0.14) 64%, rgba(255,255,255,0.08)),
     radial-gradient(420px 220px at 0% 0%, rgba(255,255,255,0.30), transparent 65%) !important;
@@ -29074,7 +29074,7 @@ body {
     inset 0 0 0 1px rgba(255,255,255,0.12),
     0 14px 30px rgba(15,23,42,0.07) !important;
   backdrop-filter: blur(24px) saturate(180%) brightness(1.05) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(180%) brightness(1.05) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) brightness(1.05);
 }
 
 
@@ -29103,47 +29103,47 @@ body {
 
 #mistakeNotebookView .mistake-draft-notes-output .math-block,
 #mistakeNotebookView .mistake-ai-answer .math-block {
-  margin: 14px 0 !important;
-  padding: 12px 14px !important;
-  border-radius: 16px !important;
-  background: rgba(255, 255, 255, 0.34) !important;
-  border: 1px solid rgba(255, 255, 255, 0.46) !important;
-  overflow-x: auto !important;
+  margin: 14px 0;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.34);
+  border: 1px solid rgba(255, 255, 255, 0.46);
+  overflow-x: auto;
 }
 
 #mistakeNotebookView .mistake-note-images {
-  display: grid !important;
+  display: grid;
   grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)) !important;
   gap: 12px !important;
 }
 
 #mistakeNotebookView .mistake-note-image-empty {
-  grid-column: 1 / -1 !important;
+  grid-column: 1 / -1;
   padding: 0 16px !important;
   border: 1px dashed rgba(94,116,138,0.34) !important;
-  border-radius: 20px !important;
+  border-radius: 20px;
   background:
-    linear-gradient(145deg, rgba(255,255,255,0.28), rgba(255,255,255,0.08)) !important;
-  color: rgba(71,85,105,0.58) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.58) !important;
-  backdrop-filter: blur(18px) saturate(160%) !important;
-  -webkit-backdrop-filter: blur(18px) saturate(160%) !important;
+    linear-gradient(145deg, rgba(255,255,255,0.28), rgba(255,255,255,0.08));
+  color: rgba(71,85,105,0.58);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.58);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
 }
 
 #mistakeNotebookView .mistake-note-image-chip {
-  border: 1px solid rgba(255,255,255,0.72) !important;
-  border-radius: 22px !important;
+  border: 1px solid rgba(255,255,255,0.72);
+  border-radius: 22px;
   background:
-    linear-gradient(145deg, rgba(255,255,255,0.40), rgba(255,255,255,0.12)) !important;
+    linear-gradient(145deg, rgba(255,255,255,0.40), rgba(255,255,255,0.12));
   box-shadow:
     0 16px 30px rgba(15,23,42,0.10),
-    inset 0 1px 0 rgba(255,255,255,0.88) !important;
-  backdrop-filter: blur(20px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    inset 0 1px 0 rgba(255,255,255,0.88);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
 }
 
 #mistakeNotebookView .mistake-note-image-chip img {
-  aspect-ratio: 4 / 3 !important;
+  aspect-ratio: 4 / 3;
 }
 
 #mistakeNotebookView .mistake-actions {
@@ -32673,15 +32673,15 @@ body {
 
 #mistakeNotebookView .mistake-note-resizer {
   border: 0 !important;
-  opacity: 0.58 !important;
+  opacity: 0.58;
   transition: opacity 160ms ease, background 160ms ease, transform 160ms ease !important;
 }
 
 #mistakeNotebookView .mistake-note-resizer:hover,
 #mistakeNotebookView .mistake-note-resizer:focus-visible,
 #mistakeNotebookView .mistake-note-resizer.is-dragging {
-  opacity: 1 !important;
-  outline: none !important;
+  opacity: 1;
+  outline: none;
 }
 
 
@@ -32691,12 +32691,12 @@ body {
 #mistakeNotebookView .mistake-notes-input {
   height: clamp(180px, 26vh, 300px) !important;
   max-height: 360px !important;
-  resize: vertical !important;
+  resize: vertical;
 }
 
 #mistakeNotebookView .mistake-draft-notes-output {
   max-height: clamp(210px, 32vh, 380px) !important;
-  overflow: auto !important;
+  overflow: auto;
 }
 
 @media (max-width: 760px) {
@@ -32707,7 +32707,7 @@ body {
   }
 
   #mistakeNotebookView .mistake-note-resizer {
-    display: none !important;
+    display: none;
   }
 }
 
@@ -33087,38 +33087,38 @@ body {
 #mistakeNotebookView .mistake-note-columns {
   --mistake-note-top: 0.5fr;
   --mistake-note-bottom: 0.5fr;
-  display: grid !important;
+  display: grid;
   grid-template-columns: 1fr !important;
   gap: 12px !important;
-  align-items: stretch !important;
+  align-items: stretch;
 }
 
 #mistakeNotebookView .mistake-note-resizer {
   width: 100% !important;
   min-height: 12px !important;
   height: 12px !important;
-  align-self: center !important;
-  border-radius: 999px !important;
+  align-self: center;
+  border-radius: 999px;
   background:
     linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.34), transparent),
-    linear-gradient(180deg, transparent 4px, rgba(255, 255, 255, 0.82) 4px 8px, transparent 8px) !important;
-  cursor: row-resize !important;
+    linear-gradient(180deg, transparent 4px, rgba(255, 255, 255, 0.82) 4px 8px, transparent 8px);
+  cursor: row-resize;
 }
 
 #mistakeNotebookView .mistake-note-resizer:hover,
 #mistakeNotebookView .mistake-note-resizer:focus-visible,
 #mistakeNotebookView .mistake-note-resizer.is-dragging {
-  transform: scaleY(1.18) !important;
+  transform: scaleY(1.18);
   background:
     linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.52), transparent),
-    linear-gradient(180deg, transparent 4px, rgba(255, 255, 255, 0.94) 4px 8px, transparent 8px) !important;
+    linear-gradient(180deg, transparent 4px, rgba(255, 255, 255, 0.94) 4px 8px, transparent 8px);
 }
 
 #mistakeNotebookView .mistake-user-note-card,
 #mistakeNotebookView .mistake-ai-draft-card {
   height: 100% !important;
   min-height: 0 !important;
-  align-self: stretch !important;
+  align-self: stretch;
 }
 
 #mistakeNotebookView .mistake-user-note-card {
@@ -33133,7 +33133,7 @@ body {
 #mistakeNotebookView .mistake-draft-notes-output {
   height: 100% !important;
   max-height: none !important;
-  overflow: auto !important;
+  overflow: auto;
 }
 
 @media (max-width: 980px) {
