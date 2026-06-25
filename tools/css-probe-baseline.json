@@ -251,6 +251,32 @@
       "value": "80px"
     }
   ],
+  "N0-desktop-1280": [
+    {
+      "sel": ".learn-explain-toolbar",
+      "pseudo": null,
+      "prop": "grid-template-areas",
+      "value": "none"
+    },
+    {
+      "sel": ".learn-explain-toolbar",
+      "pseudo": null,
+      "prop": "flex-wrap",
+      "value": "nowrap"
+    },
+    {
+      "sel": ".learn-toolbar-center",
+      "pseudo": null,
+      "prop": "flex-wrap",
+      "value": "nowrap"
+    },
+    {
+      "sel": ".learn-body",
+      "pseudo": null,
+      "prop": "--learn-edge-tab-top",
+      "value": "22px"
+    }
+  ],
   "N1-toolbar-1160": [
     {
       "sel": ".learn-explain-toolbar",

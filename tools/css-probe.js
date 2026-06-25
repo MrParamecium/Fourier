@@ -128,60 +128,68 @@ const FOLLOWUP_PROBES = [
     ['#learnFollowupBar', null, 'overflow'],        // visible (L33213)
 ];
 
-// ---------- narrow-viewport learn-chrome states (docs/phase3_deferred.md §14 prerequisite 1) ----------
-// The `!important` / doubled-ID wall's single largest remaining lever is the redeclaration
-// pileup INSIDE width @media queries; the desktop-only (1280) probe + visual-diff harnesses
-// are blind to it — exactly the narrow-viewport blindspot spec §4 warns about. These states
-// render §1.1-1's always-present learn-chrome (#learnExplainToolbar + the inherited
-// --learn-edge-tab-top custom property) at four widths, each landing JUST INSIDE a distinct
-// learn-chrome responsive band, and pin only LITERAL cascade values (grid-template-areas
-// strings, the flex-wrap keyword, a px custom property) — never layout-derived used values
-// (toolbar-center's clamp() gap interpolates 17.92→16.24→12.46px with the viewport and would
-// false-FAIL across machines/Chromium versions; deliberately NOT probed, per the header doc).
+// ---------- viewport-banded learn-chrome states (docs/phase3_deferred.md §14 prerequisite 1) ----------
+// The `!important` / doubled-ID wall's single largest remaining lever is the redeclaration pileup
+// inside width @media queries; the desktop-only (1280) probe + visual-diff harnesses are blind to
+// it — exactly the narrow-viewport blindspot spec §4 warns about. These states render §1.1-1's
+// always-present learn-chrome (#learnExplainToolbar + the inherited --learn-edge-tab-top custom
+// property) across five viewport widths and pin only LITERAL cascade values — never layout-derived
+// used values (toolbar-center's clamp() gap interpolates 17.92→16.24→12.46px with the viewport and
+// would false-FAIL across machines; deliberately NOT probed, per the header doc).
 //
-// Bands covered (empirically verified 2026-06-25; every probed value is byte-stable across two
-// independent runs at the same width):
-//   N1 @1160 (≤1180): toolbar grid-template-areas none → "left right"/"center center";
-//                     toolbar-center flex-wrap nowrap → wrap.
-//   N2 @890  (≤900):  toolbar flex-wrap nowrap → wrap.
-//   N3 @740  (≤820):  --learn-edge-tab-top 22px → 14px (also sits inside the 760px band).
-//   N4 @700  (≤720):  toolbar grid-template-areas → fully-stacked "center"/"left"/"right".
+// Each band transition is BRACKETED — a state just above and just below it both capture the shared
+// probe set — so a deletion is caught from the narrow side AND a media-query hoist that changes the
+// desktop value is caught from the wide side (N0). The single discriminator per transition
+// (empirically verified 2026-06-25; every probed value is byte-stable across two independent runs):
+//   N0 @1280 → N1 @1160 (≤1180): toolbar grid-template-areas none → "left right"/"center center";
+//                                toolbar-center flex-wrap nowrap → wrap.
+//   N1 @1160 → N2 @890  (≤900):  toolbar flex-wrap nowrap → wrap.
+//   N2 @890  → N3 @740  (≤820):  --learn-edge-tab-top 22px → 14px.
+//   N3 @740  → N4 @700  (≤720):  toolbar grid-template-areas → fully-stacked "center"/"left"/"right".
+// flex-wrap on #learnExplainToolbar is INERT (the toolbar resolves to display:grid) — it is probed
+// as a cascade WITNESS that the ≤900 rule wins, not for a layout effect. Cells that repeat across
+// adjacent states (e.g. toolbar-center flex-wrap is "wrap" at every ≤1180 width) are intentional:
+// they pin the persists-down winner, so deleting its single source rule flips every state below it.
+//
 // NOT covered (elements absent from a §1.1-1 lesson DOM — recorded as a follow-up gap in §14):
 //   chapter-overview book-spread (≤1120/≤760), lecture-overlay nav buttons (≤1320/≤900),
 //   collapsed-panel edge tabs (≤900), and runtime-collapsed.css @container lecture-panel bands
 //   (keyed off the explain-panel's own width, not the viewport).
 
-// Assert a narrow @media band's literal value is the live cascade winner BEFORE trusting any
-// probe (R8 / FAIL-CLOSED) — proves the rule actually applies at this viewport, not merely
-// that setViewportSize was called.
+// Assert a band's literal value is the live cascade winner BEFORE trusting any probe (R8 /
+// FAIL-CLOSED) — proves the rule actually applies at this viewport, not merely that
+// setViewportSize was called. Reads RAW (no trim) so the sentinel and the probe (snapshotState,
+// also raw) agree byte-for-byte on what "the value" is, rather than the sentinel masking a
+// whitespace divergence the probe would surface.
 async function assertNarrowBand(page, label, sel, prop, expected) {
     const got = await page.evaluate(({ sel, prop }) => {
         const el = document.querySelector(sel);
-        return el ? getComputedStyle(el).getPropertyValue(prop).trim() : '__MISSING__';
+        return el ? getComputedStyle(el).getPropertyValue(prop) : '__MISSING__';
     }, { sel, prop });
     assertOrThrow(got === expected,
-        `${label}: ${sel} { ${prop} } resolved "${got}", expected "${expected}" — the narrow @media band is not the live cascade winner at this viewport; baseline invalid.`);
+        `${label}: ${sel} { ${prop} } resolved "${got}", expected "${expected}" — the band rule is not the live cascade winner at this viewport; baseline invalid.`);
 }
 
-// One shared probe list: the four deterministic width-discriminating literals. Captured in
-// every narrow state so the cumulative band signature is pinned at each width — a future sweep
-// that deletes ANY of these width-gated declarations flips a value and is caught. Values are
-// not trimmed here (snapshotState reads them raw); --baseline/--check compare the same way.
+// One shared probe list captured at every banded width, so each transition is pinned from both
+// sides. flex-wrap on the toolbar is inert-on-grid (above) — a cascade witness, not layout.
 const NARROW_PROBES = [
-    ['.learn-explain-toolbar', null, 'grid-template-areas'], // none / 2-row / 3-row stack
-    ['.learn-explain-toolbar', null, 'flex-wrap'],           // nowrap → wrap at ≤900
-    ['.learn-toolbar-center', null, 'flex-wrap'],            // nowrap → wrap at ≤1180
-    ['.learn-body', null, '--learn-edge-tab-top'],           // 22px → 14px at ≤820
+    ['.learn-explain-toolbar', null, 'grid-template-areas'], // none (≥1181) / 2-row (≤1180) / 3-row stack (≤720)
+    ['.learn-explain-toolbar', null, 'flex-wrap'],           // nowrap (≥901) → wrap (≤900); witness of the ≤900 rule
+    ['.learn-toolbar-center', null, 'flex-wrap'],            // nowrap (≥1181) → wrap (≤1180)
+    ['.learn-body', null, '--learn-edge-tab-top'],           // 22px (≥821) → 14px (≤820)
 ];
 
-// Factory for a narrow state: apply the per-state viewport (snapshotState reads .viewport),
-// floor the chrome, then sentinel-assert the band is winning before the shared probes run.
-function narrowState(id, width, sentinel) {
+// Factory for a banded state: apply the per-state viewport (snapshotState reads .viewport), floor
+// the chrome to the natural (non-collapsed) lesson — explicitly clear explain-collapsed so the
+// higher-specificity `.explain-collapsed:not(.chat-collapsed)` edge-tab rule (0,3,0) cannot leak
+// in from a prior state and mask the ≤820 band (0,1,0) — then sentinel-assert the band winner.
+function bandState(id, width, sentinel) {
     return {
         state: id,
         viewport: { width, height: 800 },
         enter: async (page) => {
-            await resetLearnChrome(page); // dispatches resize at the already-applied narrow width
+            await resetLearnChrome(page); // dispatches resize at the already-applied viewport
+            await page.evaluate(() => document.getElementById('learnBody')?.classList.remove('explain-collapsed'));
             await assertNarrowBand(page, id, sentinel.sel, sentinel.prop, sentinel.expected);
         },
         probes: NARROW_PROBES,
@@ -324,25 +332,27 @@ const PROBE_STATES = [
             ['#textbookFocusPageIndicator', null, 'min-width'],          // 80px
         ],
     },
-    // Narrow-viewport learn-chrome (§14 prereq 1). Each sentinel asserts the band-entry
-    // literal; the shared NARROW_PROBES pin the cumulative signature at that width.
-    narrowState('N1-toolbar-1160', 1160,
+    // Viewport-banded learn-chrome (§14 prereq 1). N0 captures the desktop (pre-transition) side
+    // so every band is bracketed; each sentinel asserts the band-entry literal at its own width.
+    bandState('N0-desktop-1280', 1280,
+        { sel: '.learn-explain-toolbar', prop: 'grid-template-areas', expected: 'none' }),
+    bandState('N1-toolbar-1160', 1160,
         { sel: '.learn-explain-toolbar', prop: 'grid-template-areas', expected: '"left right" "center center"' }),
-    narrowState('N2-toolbar-890', 890,
+    bandState('N2-toolbar-890', 890,
         { sel: '.learn-explain-toolbar', prop: 'flex-wrap', expected: 'wrap' }),
-    narrowState('N3-edgetab-740', 740,
+    bandState('N3-edgetab-740', 740,
         { sel: '.learn-body', prop: '--learn-edge-tab-top', expected: '14px' }),
-    narrowState('N4-toolbar-700', 700,
+    bandState('N4-toolbar-700', 700,
         { sel: '.learn-explain-toolbar', prop: 'grid-template-areas', expected: '"center" "left" "right"' }),
 ];
 
 // Read every probe tuple's resolved computed value for one state.
 async function snapshotState(page, stateDef) {
-    // Per-state viewport (defaults to desktop). Set UNCONDITIONALLY each iteration so a narrow
-    // state cannot leak its width into a later desktop state — the page + context are shared
-    // and the viewport is sticky on the context (set once at newContext). setViewportSize
-    // queues a resize but does not await layout, so settle the reflow (double-rAF) BEFORE
-    // enter() runs, letting the app's resize handlers recompute against the new width.
+    // Per-state viewport (defaults to desktop). Set UNCONDITIONALLY each iteration so every state
+    // runs at its own width regardless of order — the page + context are shared and the viewport
+    // is sticky on the context (set once at newContext), so a prior banded state's width must not
+    // persist into the next. setViewportSize queues a resize but does not await layout; settle the
+    // reflow (double-rAF) BEFORE enter() so the app's resize handlers recompute at the new width.
     await page.setViewportSize(stateDef.viewport || VIEWPORT);
     await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
     await stateDef.enter(page);
@@ -421,6 +431,16 @@ process.once('SIGTERM', () => signalCleanup('SIGTERM'));
         await enterGuestMode(page, BASE);
         await openSubtopic(page, SUBTOPIC);
 
+        // FAIL CLOSED: duplicate state names would silently overwrite in `snapshot[name]`,
+        // dropping a whole state's coverage with zero signal (the per-key / missing-state guards
+        // cannot see it). Reject before capturing.
+        const stateNames = PROBE_STATES.map((s) => s.state);
+        const dupState = stateNames.find((n, i) => stateNames.indexOf(n) !== i);
+        if (dupState) {
+            console.error(`[css-probe] duplicate PROBE_STATES name "${dupState}" — state ids must be unique`);
+            process.exit(1);
+        }
+
         for (const stateDef of PROBE_STATES) {
             try {
                 const rows = await snapshotState(page, stateDef);
@@ -460,16 +480,28 @@ process.once('SIGTERM', () => signalCleanup('SIGTERM'));
         // then compare __MISSING__===__MISSING__ forever (false confidence). Refuse to
         // bake one into the proof artifact — fix the probe/state instead.
         const missing = [];
+        const dupKeys = [];
         for (const [state, rows] of Object.entries(snapshot)) {
             if (!Array.isArray(rows)) continue;
+            const seen = new Set();
             for (const p of rows) {
                 if (p.value === '__MISSING__' || p.value === '__ABSENT__') missing.push(keyOf(state, p));
+                const k = keyOf(state, p);
+                if (seen.has(k)) dupKeys.push(k); else seen.add(k);
             }
         }
         if (missing.length) {
             console.error('[css-probe] refusing to write baseline — these probes resolved __MISSING__ (element absent in state):');
             for (const m of missing) console.error(`  ! ${m}`);
             console.error('  Fix the probe selector or render the element in enter().');
+            process.exit(1);
+        }
+        // FAIL CLOSED: a duplicate probe key within a state would bake two rows the --check
+        // de-dup silently collapses (here multiplied across every state sharing NARROW_PROBES).
+        // --check already rejects dup current keys; refuse to WRITE one too, symmetrically.
+        if (dupKeys.length) {
+            console.error('[css-probe] refusing to write baseline — duplicate probe keys (de-dup the probe list):');
+            for (const k of dupKeys) console.error(`  ! ${k}`);
             process.exit(1);
         }
         fs.writeFileSync(BASELINE_PATH, JSON.stringify(snapshot, null, 2) + '\n');
