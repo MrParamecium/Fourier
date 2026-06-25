@@ -128,6 +128,66 @@ const FOLLOWUP_PROBES = [
     ['#learnFollowupBar', null, 'overflow'],        // visible (L33213)
 ];
 
+// ---------- narrow-viewport learn-chrome states (docs/phase3_deferred.md §14 prerequisite 1) ----------
+// The `!important` / doubled-ID wall's single largest remaining lever is the redeclaration
+// pileup INSIDE width @media queries; the desktop-only (1280) probe + visual-diff harnesses
+// are blind to it — exactly the narrow-viewport blindspot spec §4 warns about. These states
+// render §1.1-1's always-present learn-chrome (#learnExplainToolbar + the inherited
+// --learn-edge-tab-top custom property) at four widths, each landing JUST INSIDE a distinct
+// learn-chrome responsive band, and pin only LITERAL cascade values (grid-template-areas
+// strings, the flex-wrap keyword, a px custom property) — never layout-derived used values
+// (toolbar-center's clamp() gap interpolates 17.92→16.24→12.46px with the viewport and would
+// false-FAIL across machines/Chromium versions; deliberately NOT probed, per the header doc).
+//
+// Bands covered (empirically verified 2026-06-25; every probed value is byte-stable across two
+// independent runs at the same width):
+//   N1 @1160 (≤1180): toolbar grid-template-areas none → "left right"/"center center";
+//                     toolbar-center flex-wrap nowrap → wrap.
+//   N2 @890  (≤900):  toolbar flex-wrap nowrap → wrap.
+//   N3 @740  (≤820):  --learn-edge-tab-top 22px → 14px (also sits inside the 760px band).
+//   N4 @700  (≤720):  toolbar grid-template-areas → fully-stacked "center"/"left"/"right".
+// NOT covered (elements absent from a §1.1-1 lesson DOM — recorded as a follow-up gap in §14):
+//   chapter-overview book-spread (≤1120/≤760), lecture-overlay nav buttons (≤1320/≤900),
+//   collapsed-panel edge tabs (≤900), and runtime-collapsed.css @container lecture-panel bands
+//   (keyed off the explain-panel's own width, not the viewport).
+
+// Assert a narrow @media band's literal value is the live cascade winner BEFORE trusting any
+// probe (R8 / FAIL-CLOSED) — proves the rule actually applies at this viewport, not merely
+// that setViewportSize was called.
+async function assertNarrowBand(page, label, sel, prop, expected) {
+    const got = await page.evaluate(({ sel, prop }) => {
+        const el = document.querySelector(sel);
+        return el ? getComputedStyle(el).getPropertyValue(prop).trim() : '__MISSING__';
+    }, { sel, prop });
+    assertOrThrow(got === expected,
+        `${label}: ${sel} { ${prop} } resolved "${got}", expected "${expected}" — the narrow @media band is not the live cascade winner at this viewport; baseline invalid.`);
+}
+
+// One shared probe list: the four deterministic width-discriminating literals. Captured in
+// every narrow state so the cumulative band signature is pinned at each width — a future sweep
+// that deletes ANY of these width-gated declarations flips a value and is caught. Values are
+// not trimmed here (snapshotState reads them raw); --baseline/--check compare the same way.
+const NARROW_PROBES = [
+    ['.learn-explain-toolbar', null, 'grid-template-areas'], // none / 2-row / 3-row stack
+    ['.learn-explain-toolbar', null, 'flex-wrap'],           // nowrap → wrap at ≤900
+    ['.learn-toolbar-center', null, 'flex-wrap'],            // nowrap → wrap at ≤1180
+    ['.learn-body', null, '--learn-edge-tab-top'],           // 22px → 14px at ≤820
+];
+
+// Factory for a narrow state: apply the per-state viewport (snapshotState reads .viewport),
+// floor the chrome, then sentinel-assert the band is winning before the shared probes run.
+function narrowState(id, width, sentinel) {
+    return {
+        state: id,
+        viewport: { width, height: 800 },
+        enter: async (page) => {
+            await resetLearnChrome(page); // dispatches resize at the already-applied narrow width
+            await assertNarrowBand(page, id, sentinel.sel, sentinel.prop, sentinel.expected);
+        },
+        probes: NARROW_PROBES,
+    };
+}
+
 const PROBE_STATES = [
     {
         // S2 — data-panel-focus="qa-wide" (mirrors visual-diff view 08). Baselines
@@ -264,10 +324,27 @@ const PROBE_STATES = [
             ['#textbookFocusPageIndicator', null, 'min-width'],          // 80px
         ],
     },
+    // Narrow-viewport learn-chrome (§14 prereq 1). Each sentinel asserts the band-entry
+    // literal; the shared NARROW_PROBES pin the cumulative signature at that width.
+    narrowState('N1-toolbar-1160', 1160,
+        { sel: '.learn-explain-toolbar', prop: 'grid-template-areas', expected: '"left right" "center center"' }),
+    narrowState('N2-toolbar-890', 890,
+        { sel: '.learn-explain-toolbar', prop: 'flex-wrap', expected: 'wrap' }),
+    narrowState('N3-edgetab-740', 740,
+        { sel: '.learn-body', prop: '--learn-edge-tab-top', expected: '14px' }),
+    narrowState('N4-toolbar-700', 700,
+        { sel: '.learn-explain-toolbar', prop: 'grid-template-areas', expected: '"center" "left" "right"' }),
 ];
 
 // Read every probe tuple's resolved computed value for one state.
 async function snapshotState(page, stateDef) {
+    // Per-state viewport (defaults to desktop). Set UNCONDITIONALLY each iteration so a narrow
+    // state cannot leak its width into a later desktop state — the page + context are shared
+    // and the viewport is sticky on the context (set once at newContext). setViewportSize
+    // queues a resize but does not await layout, so settle the reflow (double-rAF) BEFORE
+    // enter() runs, letting the app's resize handlers recompute against the new width.
+    await page.setViewportSize(stateDef.viewport || VIEWPORT);
+    await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
     await stateDef.enter(page);
     await settleLesson(page);
     return page.evaluate((probes) => {

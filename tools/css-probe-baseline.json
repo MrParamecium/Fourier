@@ -250,5 +250,109 @@
       "prop": "min-width",
       "value": "80px"
     }
+  ],
+  "N1-toolbar-1160": [
+    {
+      "sel": ".learn-explain-toolbar",
+      "pseudo": null,
+      "prop": "grid-template-areas",
+      "value": "\"left right\" \"center center\""
+    },
+    {
+      "sel": ".learn-explain-toolbar",
+      "pseudo": null,
+      "prop": "flex-wrap",
+      "value": "nowrap"
+    },
+    {
+      "sel": ".learn-toolbar-center",
+      "pseudo": null,
+      "prop": "flex-wrap",
+      "value": "wrap"
+    },
+    {
+      "sel": ".learn-body",
+      "pseudo": null,
+      "prop": "--learn-edge-tab-top",
+      "value": "22px"
+    }
+  ],
+  "N2-toolbar-890": [
+    {
+      "sel": ".learn-explain-toolbar",
+      "pseudo": null,
+      "prop": "grid-template-areas",
+      "value": "\"left right\" \"center center\""
+    },
+    {
+      "sel": ".learn-explain-toolbar",
+      "pseudo": null,
+      "prop": "flex-wrap",
+      "value": "wrap"
+    },
+    {
+      "sel": ".learn-toolbar-center",
+      "pseudo": null,
+      "prop": "flex-wrap",
+      "value": "wrap"
+    },
+    {
+      "sel": ".learn-body",
+      "pseudo": null,
+      "prop": "--learn-edge-tab-top",
+      "value": "22px"
+    }
+  ],
+  "N3-edgetab-740": [
+    {
+      "sel": ".learn-explain-toolbar",
+      "pseudo": null,
+      "prop": "grid-template-areas",
+      "value": "\"left right\" \"center center\""
+    },
+    {
+      "sel": ".learn-explain-toolbar",
+      "pseudo": null,
+      "prop": "flex-wrap",
+      "value": "wrap"
+    },
+    {
+      "sel": ".learn-toolbar-center",
+      "pseudo": null,
+      "prop": "flex-wrap",
+      "value": "wrap"
+    },
+    {
+      "sel": ".learn-body",
+      "pseudo": null,
+      "prop": "--learn-edge-tab-top",
+      "value": "14px"
+    }
+  ],
+  "N4-toolbar-700": [
+    {
+      "sel": ".learn-explain-toolbar",
+      "pseudo": null,
+      "prop": "grid-template-areas",
+      "value": "\"center\" \"left\" \"right\""
+    },
+    {
+      "sel": ".learn-explain-toolbar",
+      "pseudo": null,
+      "prop": "flex-wrap",
+      "value": "wrap"
+    },
+    {
+      "sel": ".learn-toolbar-center",
+      "pseudo": null,
+      "prop": "flex-wrap",
+      "value": "wrap"
+    },
+    {
+      "sel": ".learn-body",
+      "pseudo": null,
+      "prop": "--learn-edge-tab-top",
+      "value": "14px"
+    }
   ]
 }
