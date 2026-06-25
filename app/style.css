@@ -24266,25 +24266,25 @@ body {
 }
 
 #settingsView .settings-page-shell {
-  width: min(100%, 1380px) !important;
+  width: min(100%, 1380px);
   padding: clamp(32px, 4.8vw, 68px) clamp(28px, 5vw, 72px) 78px !important;
 }
 
 #settingsView .settings-page-header {
-  position: relative !important;
-  z-index: 1 !important;
+  position: relative;
+  z-index: 1;
   margin-bottom: 30px !important;
 }
 
 #settingsView .settings-page-eyebrow,
 #settingsView .settings-page-card-eyebrow {
-  color: rgba(51, 65, 85, 0.62) !important;
-  letter-spacing: .18em !important;
+  color: rgba(51, 65, 85, 0.62);
+  letter-spacing: .18em;
 }
 
 #settingsView .settings-page-title {
   color: rgba(15, 23, 42, 0.88) !important;
-  text-shadow: 0 1px 0 rgba(255,255,255,0.55) !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.55);
   letter-spacing: 0 !important;
 }
 
@@ -24302,8 +24302,8 @@ body {
     0 14px 28px rgba(15, 23, 42, 0.10),
     inset 0 1px 0 rgba(255,255,255,0.86),
     inset 0 -1px 0 rgba(255,255,255,0.18) !important;
-  backdrop-filter: blur(24px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
 }
 
 #settingsView .settings-page-nav,
@@ -24318,7 +24318,7 @@ body {
     inset 0 1px 0 rgba(255,255,255,0.78),
     inset 0 -1px 0 rgba(255,255,255,0.18) !important;
   backdrop-filter: blur(30px) saturate(185%) brightness(1.04) !important;
-  -webkit-backdrop-filter: blur(30px) saturate(185%) brightness(1.04) !important;
+  -webkit-backdrop-filter: blur(30px) saturate(185%) brightness(1.04);
 }
 
 #settingsView .settings-page-nav-item,
@@ -24339,8 +24339,8 @@ body {
     0 10px 24px rgba(15, 23, 42, 0.08),
     inset 0 1px 0 rgba(255,255,255,0.88),
     inset 0 -1px 0 rgba(255,255,255,0.20) !important;
-  backdrop-filter: blur(18px) saturate(170%) !important;
-  -webkit-backdrop-filter: blur(18px) saturate(170%) !important;
+  backdrop-filter: blur(18px) saturate(170%);
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
 }
 
 #settingsView .settings-page-content {
@@ -24360,7 +24360,7 @@ body {
     inset 0 1px 0 rgba(255,255,255,0.82),
     inset 0 -1px 0 rgba(255,255,255,0.18) !important;
   backdrop-filter: blur(34px) saturate(190%) brightness(1.05) !important;
-  -webkit-backdrop-filter: blur(34px) saturate(190%) brightness(1.05) !important;
+  -webkit-backdrop-filter: blur(34px) saturate(190%) brightness(1.05);
 }
 
 #settingsView .settings-page-card::before {
@@ -24383,13 +24383,13 @@ body {
 }
 
 #settingsView .settings-page-card > * {
-  position: relative !important;
-  z-index: 1 !important;
+  position: relative;
+  z-index: 1;
 }
 
 #settingsView .settings-page-card-title {
   color: rgba(15, 23, 42, 0.88) !important;
-  text-shadow: 0 1px 0 rgba(255,255,255,0.48) !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.48);
 }
 
 #settingsView .settings-user-card,
@@ -24401,8 +24401,8 @@ body {
     0 18px 44px rgba(15, 23, 42, 0.10),
     inset 0 1px 0 rgba(255,255,255,0.78),
     inset 0 -1px 0 rgba(255,255,255,0.18) !important;
-  backdrop-filter: blur(26px) saturate(185%) !important;
-  -webkit-backdrop-filter: blur(26px) saturate(185%) !important;
+  backdrop-filter: blur(26px) saturate(185%);
+  -webkit-backdrop-filter: blur(26px) saturate(185%);
 }
 
 #settingsView .settings-user-avatar,
@@ -24433,8 +24433,8 @@ body {
   box-shadow:
     0 12px 26px rgba(15, 23, 42, 0.08),
     inset 0 1px 0 rgba(255,255,255,0.76) !important;
-  backdrop-filter: blur(18px) saturate(170%) !important;
-  -webkit-backdrop-filter: blur(18px) saturate(170%) !important;
+  backdrop-filter: blur(18px) saturate(170%);
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
 }
 
 #settingsView .settings-page-actions .settings-primary-btn {
@@ -24459,8 +24459,8 @@ body {
   background:
     linear-gradient(135deg, rgba(255,255,255,0.34), rgba(255,255,255,0.14)) !important;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.74) !important;
-  backdrop-filter: blur(18px) saturate(160%) !important;
-  -webkit-backdrop-filter: blur(18px) saturate(160%) !important;
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
 }
 
 :root[data-theme="dusk"] #settingsView .settings-page-card,
