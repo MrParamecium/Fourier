@@ -1853,11 +1853,25 @@ Two render-neutral tranches landed on `refactor/phase3.6-css-collapse`:
   interactions{rest,hover,focus,tone}, geometry + 72 props/element + `::before`/`::after`,
   WAAPI-frozen, sensitivity-tested — **byte-identical**; plus visual-diff 35/35
   (12/12b-e/13 @ 0.000%; view 12 @ 0.004% pre-existing text-AA noise).
-  This is the spec §3 Surfaces 1-3 pilot; remaining surfaces (settings 39.8%, sidebar 44.2%,
-  mistakeNotebook, §3d composer chain) can reuse the same probe (edit its `VIEWS` array).
+  This is the spec §3 Surfaces 1-3 pilot.
 
-Post-tranche file state: style.css 33,353 lines / 9,908 `!important` / 404 doubled-IDs;
-rcc 1,602 lines / 888 `!important`.
+- **`26c4370` — Surface 4 `#settingsView` strip (−21 `!important`).** Also cross-file-isolated
+  (42 refs in style.css, 0 elsewhere). Of 87 candidates only **21 had no competitor**; **66 are
+  load-bearing** — settings is a glass-paint fortress (background/border/box-shadow/backdrop-filter
+  each beaten by a base card/button rule once the flag drops), a far lower NOCOMP rate than
+  courseTracker/preference. Force-kept 1 cross-view group shared with `#learnView`/`#topbarCloseBtn`
+  (outside probe coverage). Arbiter generalized (`537d3aa`): added `:active` probing + fail-fast
+  interaction queries; 120 states byte-identical (settings controls carry GLOBAL :hover/:focus/:active
+  competitors, so those states are probed); visual-diff 35/35 (05-settings @ 0.000%).
+
+Post-tranche file state: style.css 33,353 lines / 9,887 `!important` / 404 doubled-IDs;
+rcc 1,602 lines / 888 `!important`. Total `!important` stripped on isolated views this session: 405.
+
+**Remaining `!important`-strip targets (all reuse the cascade arbiter — edit its `VIEWS`):**
+`#mistakeNotebookView` (447, isolated), `#feedbackView` (528, isolated — docs §3a.i make a
+computed-style probe MANDATORY here; visual-diff has a documented blindspot on feedback cascade),
+`.app .sidebar` (656, NOT isolated — needs multi-view probe coverage), and the §3d composer chain
+(hardest, cross-file lockstep — needs FlyM1ss's risk-appetite call).
 
 **Update 2026-06-25 (pass 2) — prereq 2 built + self-reviewed, finding corrected, top-level slice executed.**
 
