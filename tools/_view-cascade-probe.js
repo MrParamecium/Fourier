@@ -48,7 +48,7 @@ const PROP_LIST = [...new Set([
 ])].sort();
 
 const THEMES = ['dawn', 'dusk', 'dark'];
-const VIEWPORTS = [1280, 1180, 980, 760];
+const VIEWPORTS = [1280, 1180, 980, 820, 760];
 
 // NOTE: VIEWS is reassigned per-surface as the strip pipeline moves through the
 // spec §3 surfaces. courseTracker/preference (committed `3385050`) used the config
@@ -59,19 +59,45 @@ const VIEWPORTS = [1280, 1180, 980, 760];
 // !important is dropped.
 const VIEWS = [
   {
-    id: 'settings', nav: '#sidebarSettingsBtn', root: '#settingsView',
-    ready: () => !!document.querySelector('.settings-page-version'),
+    id: 'mistakeNotebook', nav: '#navMistakeNotebookBtn', root: '#mistakeNotebookView',
+    // Seed a single-case fixture (the visual-diff 03b pattern) so the case-detail
+    // rules (.mistake-note-columns / inputs / action buttons) are live, not just
+    // the empty board. The app re-reads localStorage on MN open.
+    preNav: async (page) => {
+      await page.evaluate(() => {
+        const fixture = [{
+          id: 'mistake_probe_01', title: 'Probe fixture mistake',
+          tags: 'fixture, probe', notes: 'Notes long enough to wrap two lines so input height is exercised.',
+          noteImages: [], aiDraftNotes: '', aiAnswer: '', imageDataUrl: '',
+          problemText: 'Probe problem text — renders into #mistakeTextPreview (imageDataUrl empty).',
+          createdAt: '2024-01-15T10:30:00Z', updatedAt: '2024-01-15T10:30:00Z',
+        }];
+        localStorage.setItem('aquariusMistakeNotebook.v1', JSON.stringify(fixture));
+      });
+    },
+    ready: () => !document.getElementById('mistakeDetailContent')?.classList.contains('hidden')
+      && !!document.querySelector('.mistake-list-item.active'),
+    // A resize re-render can collapse the open case — re-open it idempotently.
+    ensureState: async (page) => {
+      await page.evaluate(() => {
+        const detail = document.getElementById('mistakeDetailContent');
+        const active = document.querySelector('.mistake-list-item.active');
+        if (!active || !detail || detail.classList.contains('hidden')) {
+          document.querySelector('.mistake-list-item')?.click();
+        }
+      });
+    },
     interactions: [
       { label: 'rest' },
-      { label: 'primary-hover', hover: '#settingsView .settings-primary-btn' },
-      { label: 'secondary-hover', hover: '#settingsView .settings-secondary-btn' },
-      { label: 'navitem-hover', hover: '#settingsView .settings-page-nav-item:not(.active)' },
-      { label: 'back-hover', hover: '#settingsView .settings-page-back' },
-      { label: 'close-hover', hover: '#settingsView .feature-close-btn' },
-      { label: 'primary-focus', focus: '#settingsView .settings-primary-btn' },
-      { label: 'secondary-focus', focus: '#settingsView .settings-secondary-btn' },
-      { label: 'primary-active', active: '#settingsView .settings-primary-btn' },
-      { label: 'secondary-active', active: '#settingsView .settings-secondary-btn' },
+      { label: 'item-hover', hover: '#mistakeNotebookView .mistake-list-item' },
+      { label: 'primary-hover', hover: '#mistakeNotebookView .mistake-primary-btn' },
+      { label: 'secondary-hover', hover: '#mistakeNotebookView .mistake-secondary-btn' },
+      { label: 'danger-hover', hover: '#mistakeNotebookView .mistake-danger-btn' },
+      { label: 'mini-hover', hover: '#mistakeNotebookView .mistake-mini-btn' },
+      { label: 'upload-hover', hover: '#mistakeNotebookView .mistake-upload-btn' },
+      { label: 'title-focus', focus: '#mistakeNotebookView .mistake-title-input' },
+      { label: 'notes-focus', focus: '#mistakeNotebookView .mistake-notes-input' },
+      { label: 'tags-focus', focus: '#mistakeNotebookView .mistake-tags-input' },
     ],
   },
 ];
@@ -108,6 +134,7 @@ function makeSnapshotFn() {
         props: pv,
         before: pseudo(el, '::before'),
         after: pseudo(el, '::after'),
+        placeholder: pseudo(el, '::placeholder'),
       };
     });
   };
@@ -122,6 +149,7 @@ async function captureView(page, view, snapFn) {
   // Open the view once at desktop.
   await page.setViewportSize({ width: 1280, height: 800 });
   await settle(page);
+  if (view.preNav) await view.preNav(page);   // e.g. seed a localStorage fixture before opening
   await page.click(view.nav);
   await page.waitForSelector(`${view.root}:not(.hidden)`, { timeout: 8000 });
   await page.waitForFunction(view.ready, { timeout: 8000 });
@@ -140,6 +168,9 @@ async function captureView(page, view, snapFn) {
         await page.evaluate((t) => document.documentElement.setAttribute('data-theme', t), theme);
         await page.setViewportSize({ width: vp, height: 800 });
         await settle(page);
+        // Re-assert a content state that a viewport re-render may have dropped
+        // (e.g. MN closes the open case detail on resize). Idempotent.
+        if (view.ensureState) await view.ensureState(page);
         // Apply this interaction — query existence + visibility FIRST so a missing
         // or guest-hidden control (e.g. .settings-page-back is absent) fails fast
         // instead of blocking on page.hover's 30s default timeout.
@@ -294,6 +325,7 @@ process.once('SIGTERM', () => cleanup('SIGTERM'));
       for (const p of PROP_LIST) if (!valEq(eb.props[p], ec.props[p])) diffs.push(`${tag} | ${p}: "${eb.props[p]}" → "${ec.props[p]}"`);
       if (!valEq(eb.before, ec.before)) diffs.push(`${tag} | ::before "${eb.before}" → "${ec.before}"`);
       if (!valEq(eb.after, ec.after)) diffs.push(`${tag} | ::after "${eb.after}" → "${ec.after}"`);
+      if (!valEq(eb.placeholder, ec.placeholder)) diffs.push(`${tag} | ::placeholder "${eb.placeholder}" → "${ec.placeholder}"`);
     }
   }
   const lines = [`# view-cascade-probe report`, ``, `states: ${Object.keys(base).length}  props/element: ${PROP_LIST.length}`, ``];
