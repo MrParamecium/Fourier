@@ -35,6 +35,65 @@
 
 const fs = require('fs');
 
+// ---- shared char-level scan primitives --------------------------------------
+// The lexical core used by BOTH passes (parseDeclarations and
+// findEmptyStyleRules). These were previously inlined byte-for-byte in each — a
+// divergence hazard on a file whose entire job is scanner correctness (a `}`
+// inside content:"}" handled in one pass but not the other = an over-deletion).
+// Each takes the source, an index pointing AT the opening token, and the end
+// bound, and returns the next index to resume from. They do NO bookkeeping —
+// callers keep their own markContent/markPrelude/hasContent side effects.
+
+// `i` points at '/', with str[i+1] === '*'. Returns the index just past the
+// closing '*/', or `end` when the comment is unterminated.
+function skipComment(str, i, end) {
+  const e = str.indexOf('*/', i + 2);
+  return e === -1 ? end : e + 2;
+}
+
+// `i` points at an opening quote. Returns the index OF the matching closing
+// quote (or one past `end` when unterminated); `\` is a 2-char escape, so
+// content:"}" can't end the string early. Callers resume at the result + 1.
+function skipString(str, i, end) {
+  const q = str[i];
+  let j = i + 1;
+  while (j < end) {
+    if (str[j] === '\\') { j += 2; continue; }
+    if (str[j] === q) break;
+    j++;
+  }
+  return j;
+}
+
+// `i` points at '('. Returns the index just past the matching ')' (balanced,
+// honoring nested comments and quoted strings), or `end` if unbalanced — so a
+// data-URI like url(data:image/svg+xml;...{...}) is swallowed whole.
+function skipParen(str, i, end) {
+  let depth = 0;
+  let j = i;
+  while (j < end) {
+    const c = str[j];
+    if (c === '/' && str[j + 1] === '*') { j = skipComment(str, j, end); continue; }
+    if (c === '"' || c === "'") { j = skipString(str, j, end) + 1; continue; }
+    if (c === '(') depth++;
+    else if (c === ')') { depth--; if (depth === 0) { j++; break; } }
+    j++;
+  }
+  return j;
+}
+
+// Classify a normalized block prelude: 'style' (an ordinary selector),
+// 'transparent' (@media/@supports/@container — nests style rules, cascade
+// groups flow through), or 'opaque' (@keyframes/@font-face/@page/@layer block
+// etc. — inner braces are NOT selectors). Single source of truth for the
+// context model, so the allowlist can't drift between the two passes.
+const TRANSPARENT_AT_RULES = new Set(['media', 'supports', 'container']);
+function atRuleKind(prelude) {
+  if (!prelude.startsWith('@')) return 'style';
+  const name = prelude.slice(1).split(/[\s(]/, 1)[0].toLowerCase();
+  return TRANSPARENT_AT_RULES.has(name) ? 'transparent' : 'opaque';
+}
+
 // ---- tokenizing scanner -----------------------------------------------------
 
 /**
@@ -76,11 +135,9 @@ function parseDeclarations(css) {
     while (p < len) {
       const c = s[p];
       if (c === '"' || c === "'") {
-        const q = c;
-        let e = p + 1;
-        while (e < len) { if (s[e] === '\\') { e += 2; continue; } if (s[e] === q) break; e++; }
-        out += s.slice(p, Math.min(e + 1, len)); // string verbatim (incl. its ws)
-        p = e + 1;
+        const close = skipString(s, p, len);
+        out += s.slice(p, Math.min(close + 1, len)); // string verbatim (incl. its ws)
+        p = close + 1;
         continue;
       }
       if (/\s/.test(c)) {
@@ -119,45 +176,23 @@ function parseDeclarations(css) {
 
     // --- comments ---
     if (ch === '/' && css[i + 1] === '*') {
-      const end = css.indexOf('*/', i + 2);
-      i = end === -1 ? n : end + 2;
+      i = skipComment(css, i, n);
       continue;
     }
     // --- strings ---
     if (ch === '"' || ch === "'") {
-      const quote = ch;
-      let j = i + 1;
-      while (j < n) {
-        if (css[j] === '\\') { j += 2; continue; }
-        if (css[j] === quote) break;
-        j++;
-      }
+      const close = skipString(css, i, n);
       // preserve the string verbatim in buf so values stay intact
-      const strEnd = Math.min(j + 1, n);
-      const str = css.slice(i, strEnd);
-      buf += str;
+      const strEnd = Math.min(close + 1, n);
+      buf += css.slice(i, strEnd);
       markContent(i, strEnd - 1);
-      i = j + 1;
+      i = close + 1;
       continue;
     }
     // --- parens (url(), calc(), data-URIs): swallow until matching ) ---
     if (ch === '(') {
-      let depth = 0;
-      let j = i;
-      while (j < n) {
-        const c = css[j];
-        if (c === '/' && css[j + 1] === '*') { const e = css.indexOf('*/', j + 2); j = e === -1 ? n : e + 2; continue; }
-        if (c === '"' || c === "'") {
-          const q = c; let k = j + 1;
-          while (k < n) { if (css[k] === '\\') { k += 2; continue; } if (css[k] === q) break; k++; }
-          j = k + 1; continue;
-        }
-        if (c === '(') depth++;
-        else if (c === ')') { depth--; if (depth === 0) { j++; break; } }
-        j++;
-      }
-      const paren = css.slice(i, j);
-      buf += paren;
+      const j = skipParen(css, i, n);
+      buf += css.slice(i, j);
       markContent(i, j - 1);
       i = j;
       continue;
@@ -174,16 +209,14 @@ function parseDeclarations(css) {
         i++;
         continue;
       }
-      if (prelude.startsWith('@')) {
-        const atName = prelude.slice(1).split(/[\s(]/, 1)[0].toLowerCase();
-        if (atName === 'media' || atName === 'supports' || atName === 'container') {
-          ctxStack.push(prelude);
-          selStack.push('__AT__'); // marker: pop ctxStack when this frame closes
-        } else {
-          // @keyframes / @font-face / @page / @layer-block / etc → opaque
-          skipDepth = selStack.length; // remember the depth where skipping started
-          selStack.push(null);
-        }
+      const kind = atRuleKind(prelude);
+      if (kind === 'transparent') {
+        ctxStack.push(prelude);
+        selStack.push('__AT__'); // marker: pop ctxStack when this frame closes
+      } else if (kind === 'opaque') {
+        // @keyframes / @font-face / @page / @layer-block / etc → opaque
+        skipDepth = selStack.length; // remember the depth where skipping started
+        selStack.push(null);
       } else {
         selStack.push(prelude); // a style rule; prelude is the selector
       }
@@ -276,7 +309,7 @@ function parseDeclarations(css) {
 function findDead(decls) {
   const groups = new Map();
   decls.forEach((d, idx) => {
-    const key = `${d.context} ${d.selector} ${d.prop}`;
+    const key = `${d.context}\x00${d.selector}\x00${d.prop}`;
     if (!groups.has(key)) groups.set(key, []);
     groups.get(key).push({ ...d, idx });
   });
@@ -330,13 +363,20 @@ function applyExcisions(css, dead) {
     }
     ls = le + 1;
   }
-  let out = '';
+  // emit surviving content as contiguous slices, not per-char appends: deletions
+  // are sparse (a handful of spans in a ~1 MB file), so this copies a few dozen
+  // runs instead of ~10^6 single-char concatenations. Output is byte-identical.
+  const parts = [];
   let removed = 0;
+  let runStart = 0;
   for (let k = 0; k < n; k++) {
-    if (del[k]) { removed++; continue; }
-    out += css[k];
+    if (!del[k]) continue;
+    removed++;
+    if (k > runStart) parts.push(css.slice(runStart, k));
+    runStart = k + 1;
   }
-  return { css: out, removed };
+  if (n > runStart) parts.push(css.slice(runStart, n));
+  return { css: parts.join(''), removed };
 }
 
 // ---- empty style-rule removal ----------------------------------------------
@@ -368,26 +408,15 @@ function findEmptyStyleRules(css) {
       // husks (don't delete dev notes); it does NOT set preludeStart, so the
       // removal span still starts at the selector, leaving a leading comment.
       markParentContent();
-      const e = css.indexOf('*/', i + 2); i = e === -1 ? n : e + 2; continue;
+      i = skipComment(css, i, n); continue;
     }
     if (ch === '"' || ch === "'") {
-      const q = ch; let j = i + 1;
-      while (j < n) { if (css[j] === '\\') { j += 2; continue; } if (css[j] === q) break; j++; }
       markPrelude(i); markParentContent();
-      i = j + 1; continue;
+      i = skipString(css, i, n) + 1; continue;
     }
     if (ch === '(') {
-      let depth = 0, j = i;
-      while (j < n) {
-        const c = css[j];
-        if (c === '/' && css[j + 1] === '*') { const e = css.indexOf('*/', j + 2); j = e === -1 ? n : e + 2; continue; }
-        if (c === '"' || c === "'") { const q = c; let k = j + 1; while (k < n) { if (css[k] === '\\') { k += 2; continue; } if (css[k] === q) break; k++; } j = k + 1; continue; }
-        if (c === '(') depth++;
-        else if (c === ')') { depth--; if (depth === 0) { j++; break; } }
-        j++;
-      }
       markPrelude(i); markParentContent();
-      i = j; continue;
+      i = skipParen(css, i, n); continue;
     }
     if (ch === '{') {
       const prelude = css.slice(preludeStart < 0 ? i : preludeStart, i).replace(/\/\*[\s\S]*?\*\//g, '').replace(/\s+/g, ' ').trim();
@@ -395,13 +424,10 @@ function findEmptyStyleRules(css) {
       preludeStart = -1;
       if (skipDepth !== -1) { stack.push({ kind: 'skip' }); i++; continue; }
       markParentContent(); // this nested block is content for its parent
-      if (prelude.startsWith('@')) {
-        const at = prelude.slice(1).split(/[\s(]/, 1)[0].toLowerCase();
-        if (at === 'media' || at === 'supports' || at === 'container') stack.push({ kind: 'at', preludeStart: pStart, braceStart: i, hasContent: false });
-        else { skipDepth = stack.length; stack.push({ kind: 'skip' }); }
-      } else {
-        stack.push({ kind: 'style', preludeStart: pStart, braceStart: i, hasContent: false });
-      }
+      const kind = atRuleKind(prelude);
+      if (kind === 'transparent') stack.push({ kind: 'at', preludeStart: pStart, braceStart: i, hasContent: false });
+      else if (kind === 'opaque') { skipDepth = stack.length; stack.push({ kind: 'skip' }); }
+      else stack.push({ kind: 'style', preludeStart: pStart, braceStart: i, hasContent: false });
       i++; continue;
     }
     if (ch === '}') {
