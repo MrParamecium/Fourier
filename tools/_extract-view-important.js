@@ -8,6 +8,11 @@
  * Reuses parseDeclarations from the hardened scanner — same lexical core that
  * proved render-neutral on the redecl sweeps, so selector/context/important
  * attribution is trustworthy.
+ *
+ * Per-surface scratch: set VIEWS (below) to the view currently under strip, then
+ * run this BEFORE the cascade probe — it (re)writes the gitignored
+ * _view-important.json that _view-cascade-probe.js reads to build PROP_LIST.
+ * VIEWS is left at the last surface worked (not a shipped config).
  */
 'use strict';
 const fs = require('fs');
@@ -18,7 +23,7 @@ const FILE = path.join(__dirname, '..', 'app', 'style.css');
 const css = fs.readFileSync(FILE, 'utf8');
 const decls = parseDeclarations(css);
 
-const VIEWS = ['#feedbackView'];
+const VIEWS = ['#feedbackView'];  // ← set to the surface currently under strip (see header)
 
 for (const view of VIEWS) {
   // !important decls whose selector mentions this view ID

@@ -12,7 +12,10 @@
  *
  *   node tools/_strip-view-important.js --view=courseTracker   # strip that view
  *   node tools/_strip-view-important.js --view=preference
- *   node tools/_strip-view-important.js --view=both
+ *   node tools/_strip-view-important.js --view=settings
+ *   node tools/_strip-view-important.js --view=mistakeNotebook
+ *   node tools/_strip-view-important.js --view=feedback
+ *   node tools/_strip-view-important.js --view=both            # every view in VIEW_IDS
  * Reads keep-set from tools/_keep-important.json (array of pristine line numbers).
  */
 'use strict';
@@ -25,7 +28,7 @@ const VIEW_IDS = { courseTracker: '#courseTrackerView', preference: '#preference
 const viewArg = (process.argv.find((a) => a.startsWith('--view=')) || '--view=both').split('=')[1];
 const views = viewArg === 'both' ? Object.values(VIEW_IDS)
   : VIEW_IDS[viewArg] ? [VIEW_IDS[viewArg]] : null;
-if (!views) { console.error(`--view must be courseTracker | preference | both (got "${viewArg}")`); process.exit(2); }
+if (!views) { console.error(`--view must be one of: ${Object.keys(VIEW_IDS).join(' | ')} | both (got "${viewArg}")`); process.exit(2); }
 
 const FILE = path.join(__dirname, '..', 'app', 'style.css');
 const KEEP_FILE = path.join(__dirname, '_keep-important.json');
