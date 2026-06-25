@@ -196,10 +196,21 @@ function parseDeclarations(css) {
     if (sel === null || sel === '__AT__' || sel === undefined) return; // not inside a style rule
     const colon = text.indexOf(':');
     if (colon === -1) return; // not a declaration (e.g. stray token)
-    const prop = text.slice(0, colon).trim().toLowerCase();
+    const propRaw = text.slice(0, colon).trim();
+    // regular property names are ASCII case-insensitive; CSS CUSTOM properties
+    // (--x) are case-SENSITIVE — do not fold their case or --Gap and --gap merge.
+    const prop = propRaw.startsWith('--') ? propRaw : propRaw.toLowerCase();
     if (!prop) return;
     const value = text.slice(colon + 1).trim();
-    const important = /!\s*important\b/i.test(value);
+    // strip string literals before the !important test so a string value like
+    // content:"!important" cannot be mistaken for a real !important declaration.
+    const valForImp = value.replace(/"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'/g, '');
+    const important = /!\s*important\b/i.test(valForImp);
+    // group by the full nesting path of style-rule selectors (length 1 for flat
+    // CSS — unchanged behavior; >1 only under native nesting, where keeping the
+    // parent chain prevents two same-named child rules under DIFFERENT parents
+    // from colliding into one group → never over-deletes across nesting).
+    const selector = selStack.filter((s) => s && s !== '__AT__').map(norm).join(' >> ');
     // exact byte span of the declaration, for surgical excision. declStart and
     // contentEnd index the real source (skipping leading/trailing ws AND any
     // elided comments), so the span never bleeds into a neighbouring comment.
@@ -208,7 +219,7 @@ function parseDeclarations(css) {
     const spanEnd = isSemicolon ? termOffset + 1 : contentEnd + 1;
     decls.push({
       context: ctxStack.join(' || '),
-      selector: norm(sel),
+      selector,
       prop,
       important,
       line: lineOf(declStart),
@@ -246,7 +257,7 @@ function findDead(decls) {
     const winner = tier.reduce((a, b) => (b.idx > a.idx ? b : a));
     for (const m of members) {
       if (m.idx === winner.idx) continue;
-      dead.push({ ...m, winnerLine: winner.line, winnerImportant: winner.important });
+      dead.push({ ...m, winnerLine: winner.line });
     }
   }
   dead.sort((a, b) => a.line - b.line);
@@ -353,17 +364,23 @@ function findEmptyStyleRules(css) {
       markParentContent(); // this nested block is content for its parent
       if (prelude.startsWith('@')) {
         const at = prelude.slice(1).split(/[\s(]/, 1)[0].toLowerCase();
-        if (at === 'media' || at === 'supports' || at === 'container') stack.push({ kind: 'at', preludeStart: pStart, hasContent: false });
+        if (at === 'media' || at === 'supports' || at === 'container') stack.push({ kind: 'at', preludeStart: pStart, braceStart: i, hasContent: false });
         else { skipDepth = stack.length; stack.push({ kind: 'skip' }); }
       } else {
-        stack.push({ kind: 'style', preludeStart: pStart, hasContent: false });
+        stack.push({ kind: 'style', preludeStart: pStart, braceStart: i, hasContent: false });
       }
       i++; continue;
     }
     if (ch === '}') {
+      // reset preludeStart FIRST: after a block closes, the next prelude starts
+      // fresh. Without this, a block whose last decl lacks a trailing ';' leaves
+      // preludeStart pointing INTO it, so a following husk's span starts mid-prior
+      // block and applyExcisions corrupts the file. (Mirror of the flushDecl fix.)
+      preludeStart = -1;
       const blk = stack.pop();
       if (blk && blk.kind === 'style' && !blk.hasContent) {
-        out.push({ start: blk.preludeStart, end: i + 1, selector: css.slice(blk.preludeStart, i).replace(/\/\*[\s\S]*?\*\//g, '').replace(/\s+/g, ' ').trim() });
+        // selector slice ends at the '{' (braceStart), not the '}', so it never leaks a brace
+        out.push({ start: blk.preludeStart, end: i + 1, selector: css.slice(blk.preludeStart, blk.braceStart).replace(/\/\*[\s\S]*?\*\//g, '').replace(/\s+/g, ' ').trim() });
       }
       if (skipDepth !== -1 && stack.length <= skipDepth) skipDepth = -1;
       i++; continue;
@@ -418,10 +435,20 @@ function main() {
     const want = selArg.slice('--selector='.length);
     dead = dead.filter((d) => d.selector.includes(want));
   }
-  const minArg = args.find((a) => a.startsWith('--min-line='));
-  if (minArg) { const v = Number(minArg.split('=')[1]); dead = dead.filter((d) => d.line >= v); }
-  const maxArg = args.find((a) => a.startsWith('--max-line='));
-  if (maxArg) { const v = Number(maxArg.split('=')[1]); dead = dead.filter((d) => d.line <= v); }
+  const lineBound = (flag) => {
+    const a = args.find((x) => x.startsWith(flag + '='));
+    if (!a) return null;
+    const v = Number(a.split('=')[1]);
+    if (!Number.isInteger(v) || v < 1) {
+      console.error(`${flag} must be a positive integer (got "${a.split('=')[1]}") — refusing to silently filter to zero`);
+      process.exit(2);
+    }
+    return v;
+  };
+  const minV = lineBound('--min-line');
+  if (minV !== null) dead = dead.filter((d) => d.line >= minV);
+  const maxV = lineBound('--max-line');
+  if (maxV !== null) dead = dead.filter((d) => d.line <= maxV);
 
   if (args.includes('--write')) {
     const before = css.split('\n').length;
@@ -452,40 +479,49 @@ function main() {
 }
 
 function validate() {
-  // Ground truth: on main (pre-collapse) .learn-explain-toggle-btn declared
-  // `height` 11× at top level, per PHASE3.6_SPEC §0. Verify the detector finds
-  // exactly that (the toggle-btn family was deleted on the collapse branch).
-  const { execFileSync } = require('child_process');
-  let css;
-  try {
-    css = execFileSync('git', ['show', 'main:app/style.css'], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
-  } catch (e) {
-    console.error('validate: could not read main:app/style.css —', e.message);
-    process.exit(2);
-  }
-  const decls = parseDeclarations(css);
-  const dead = findDead(decls);
-  // Ground-truth group: the EXACT top-level selector-list that PHASE3.6_SPEC §0
-  // names as the toggle-btn height pileup. (The spec's "11×" lumped together
-  // specificity variants; the precise cascade-safe group is this exact list.)
-  const SEL = '.learn-explain-toggle-btn, #learnFocusBtn, .learn-side-restore-explain, .learn-side-restore-chat';
-  const heightGroup = decls.filter((d) => d.selector === SEL && d.prop === 'height' && d.context === '');
-  const heightDead = dead.filter((d) => d.selector === SEL && d.prop === 'height' && d.context === '');
-  // Regression guard: the skipDepth bug truncated parsing to ~1.7k decls / 3
-  // contexts after the first @keyframes. A healthy parse sees the whole file.
-  const parsedWholeFile = decls.length > 20000 && new Set(decls.map((d) => d.context)).size > 20;
-  console.log('VALIDATION against main:app/style.css');
-  console.log(`  whole-file parse (regression guard): ${decls.length} decls, ${new Set(decls.map((d) => d.context)).size} contexts → ${parsedWholeFile ? 'OK' : 'TRUNCATED'}`);
-  console.log(`  "${SEL}" { height } top-level declarations: ${heightGroup.length}`);
-  console.log(`  …of which dead (all but the winner):       ${heightDead.length}`);
-  const ok = parsedWholeFile && heightGroup.length >= 6 && heightDead.length === heightGroup.length - 1;
-  console.log(`  expected: whole-file OK, ≥6 declarations, dead = count-1`);
-  console.log(ok ? '  PASS ✓' : '  FAIL ✗');
-  console.log('');
-  console.log(`  total dead declarations on main: ${dead.length} (${dead.filter((d) => d.important).length} !important)`);
-  console.log(`    top-level:   ${dead.filter((d) => classify(d) === 'top-level').length}`);
-  console.log(`    media-gated: ${dead.filter((d) => classify(d) === 'media-gated').length}`);
-  process.exit(ok ? 0 : 1);
+  // SELF-CONTAINED self-test over synthetic fixtures — no dependency on the
+  // evolving content of any real file (the earlier version anchored to a
+  // toggle-btn pileup on `main` that THIS tool's collapse deletes, so it would
+  // have gone permanently red post-merge). Each case asserts the full
+  // detect→collapse round-trip, including the exact bug classes found in review.
+  const collapse = (css) => applyExcisions(css, findDead(parseDeclarations(css))).css;
+  const stripEmpty = (css) => applyExcisions(css, findEmptyStyleRules(css)).css;
+  let pass = 0;
+  let fail = 0;
+  const eq = (name, got, want) => {
+    if (got === want) { pass++; return; }
+    fail++;
+    console.log(`  FAIL ${name}\n    got : ${JSON.stringify(got)}\n    want: ${JSON.stringify(want)}`);
+  };
+
+  // --- redeclaration collapse ---
+  eq('simple pileup', collapse('.x {\n  color: red;\n  color: blue;\n}\n'), '.x {\n  color: blue;\n}\n');
+  eq('!important beats later normal', collapse('.x {\n  color: red !important;\n  color: blue;\n}\n'), '.x {\n  color: red !important;\n}\n');
+  eq('last !important wins', collapse('.x {\n  color: red !important;\n  color: green !important;\n}\n'), '.x {\n  color: green !important;\n}\n');
+  eq('different selectors kept', collapse('.x { color: red; }\n#y { color: blue; }\n'), '.x { color: red; }\n#y { color: blue; }\n');
+  eq('content:"}" string safe', collapse('.x {\n  content: "}";\n  color: red;\n  color: blue;\n}\n'), '.x {\n  content: "}";\n  color: blue;\n}\n');
+  eq('data-uri safe', collapse('.x {\n  background: url(data:image/svg+xml;utf8,<svg></svg>);\n  color: red;\n  color: blue;\n}\n'), '.x {\n  background: url(data:image/svg+xml;utf8,<svg></svg>);\n  color: blue;\n}\n');
+  eq('@keyframes opaque', collapse('@keyframes a { 0% { opacity: 0; } 100% { opacity: 1; } }\n.x { color: red; color: blue; }\n'), '@keyframes a { 0% { opacity: 0; } 100% { opacity: 1; } }\n.x { color: blue; }\n');
+  eq('media context isolates', collapse('.x { color: red; }\n@media (max-width: 600px) { .x { color: blue; } }\n'), '.x { color: red; }\n@media (max-width: 600px) { .x { color: blue; } }\n');
+  eq('media internal pileup', collapse('@media (max-width: 600px) {\n  .x { color: red; color: blue; }\n}\n'), '@media (max-width: 600px) {\n  .x { color: blue; }\n}\n');
+  eq('comment before dead decl preserved', collapse('.x {\n  --a: 1;\n  /* C */\n  --b: 2;\n  --b: 3;\n}\n'), '.x {\n  --a: 1;\n  /* C */\n  --b: 3;\n}\n');
+  // review fix: !important inside a STRING value must not be read as important
+  eq('string !important not real', collapse('.x {\n  content: "!important";\n  content: "real";\n}\n'), '.x {\n  content: "real";\n}\n');
+  // review fix: custom-property names are CASE-SENSITIVE (--Gap != --gap)
+  eq('custom-prop case sensitive', collapse(':root {\n  --Gap: 10px;\n  --gap: 20px;\n}\n'), ':root {\n  --Gap: 10px;\n  --gap: 20px;\n}\n');
+  // review fix: native nesting must not collide same child under different parents
+  eq('nesting no cross-parent collide', collapse('.a { & .c { color: red; } }\n.b { & .c { color: green; } }\n'), '.a { & .c { color: red; } }\n.b { & .c { color: green; } }\n');
+
+  // --- empty-rule husks ---
+  eq('empty husk removed', stripEmpty('.x { }\n.y { color: red; }\n'), '.y { color: red; }\n');
+  eq('comment-only husk kept', stripEmpty('.x { /* note */ }\n'), '.x { /* note */ }\n');
+  eq('empty @media kept', stripEmpty('@media (max-width: 600px) { }\n'), '@media (max-width: 600px) { }\n');
+  // review fix: a husk after a semicolon-less block must not corrupt that block
+  eq('husk after semicolon-less block', stripEmpty('.a { color: red }\n.b { }\n.c { color: blue }\n'), '.a { color: red }\n.c { color: blue }\n');
+
+  console.log(`VALIDATION (self-contained): ${pass} passed, ${fail} failed`);
+  console.log(fail === 0 ? '  PASS ✓' : '  FAIL ✗');
+  process.exit(fail === 0 ? 0 : 1);
 }
 
 if (require.main === module) main();
