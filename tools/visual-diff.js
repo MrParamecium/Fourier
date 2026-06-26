@@ -396,26 +396,30 @@ const sharedViews = [
             return btn ? getComputedStyle(btn).transform : null;
         });
         await page.hover('#preferenceSaveBtn');
-        // CRITICAL ORDER: wait for the 150ms transform transition
-        // (style.css L13969) to settle BEFORE reading `after`. Reading
-        // earlier captures the start-of-transition value (effectively
-        // translateY(0), serializing to `matrix(1, 0, 0, 1, 0, 0)`) and
-        // the literal-match assert below would falsely fail. 500ms
-        // covers transition + settle slack (was 350ms; observed flake
-        // at matrix(1, 0, 0, 1, 0, -0.99288) suggesting the ease curve
-        // tail is being caught mid-flight).
-        await page.waitForTimeout(500);
+        // POLL-UNTIL-SETTLED: wait for the 150ms transform transition
+        // (style.css L13969) to fully settle. A fixed waitForTimeout has
+        // proven flaky in WSL Chromium because mouse-event → :active
+        // latency varies (observed values 0.969-0.992 at 500ms wait —
+        // ease-curve tail still in flight). Polling the computed style
+        // exits as soon as the transition reaches the target, so this
+        // is both faster on the common case and reliable on slow runs.
+        // Expected literal: 'matrix(1, 0, 0, 1, 0, -1)' from L35558's
+        // translateY(-1px) !important. If a future §3b.iv delete makes
+        // L13985 (translateY(-2px), non-important) the winner instead,
+        // waitForFunction times out and the assertion below surfaces.
+        const EXPECTED = 'matrix(1, 0, 0, 1, 0, -1)';
+        await page.waitForFunction(
+            (exp) => {
+                const btn = document.getElementById('preferenceSaveBtn');
+                return Boolean(btn) && getComputedStyle(btn).transform === exp;
+            },
+            EXPECTED,
+            { timeout: 5000 },
+        ).catch(() => {});
         const after = await page.evaluate(() => {
             const btn = document.getElementById('preferenceSaveBtn');
             return btn ? getComputedStyle(btn).transform : null;
         });
-        // Expected literal: 'matrix(1, 0, 0, 1, 0, -1)' from L35558's
-        // translateY(-1px) !important. If a future §3b.iv delete makes
-        // L13985 (translateY(-2px), non-important) the winner instead,
-        // `after` becomes 'matrix(1, 0, 0, 1, 0, -2)' and this exact-
-        // match check fails LOUDLY rather than silently passing under
-        // pixel-diff.
-        const EXPECTED = 'matrix(1, 0, 0, 1, 0, -1)';
         assertOrThrow(before === 'none',
             `view 12b: #preferenceSaveBtn resting transform should be 'none' (no base transform on .preference-primary-btn) but is "${before}" — has a new base transform rule been added?`);
         assertOrThrow(after === EXPECTED,
@@ -470,13 +474,21 @@ const sharedViews = [
             return btn ? getComputedStyle(btn).transform : null;
         });
         await page.hover('#preferenceResetBtn');
-        // Wait BEFORE reading `after` — see view 12b for the rationale.
-        await page.waitForTimeout(500);
+        // Poll until the transition settles — see view 12b for the
+        // rationale (fixed wait was flaky under variable CDP latency).
+        const EXPECTED = 'matrix(1, 0, 0, 1, 0, -1)';
+        await page.waitForFunction(
+            (exp) => {
+                const btn = document.getElementById('preferenceResetBtn');
+                return Boolean(btn) && getComputedStyle(btn).transform === exp;
+            },
+            EXPECTED,
+            { timeout: 5000 },
+        ).catch(() => {});
         const after = await page.evaluate(() => {
             const btn = document.getElementById('preferenceResetBtn');
             return btn ? getComputedStyle(btn).transform : null;
         });
-        const EXPECTED = 'matrix(1, 0, 0, 1, 0, -1)';
         assertOrThrow(before === 'none',
             `view 12d: #preferenceResetBtn resting transform should be 'none' but is "${before}"`);
         assertOrThrow(after === EXPECTED,
@@ -524,20 +536,27 @@ const sharedViews = [
         // realistic mousedown frame.
         await page.hover('#preferenceSaveBtn');
         await page.mouse.down();
-        // Wait BEFORE reading `after` — covers the 150ms transform
-        // transition between :hover and :active states. 500ms aligned
-        // with view 12b after observed ease-curve-tail flake at
-        // matrix(1, 0, 0, 1, 0, 0.969277).
-        await page.waitForTimeout(500);
-        const after = await page.evaluate(() => {
-            const btn = document.getElementById('preferenceSaveBtn');
-            return btn ? getComputedStyle(btn).transform : null;
-        });
+        // Poll until the :active transition settles — see view 12b for
+        // the rationale. The :hover → :active transition has the same
+        // 150ms duration but CDP latency for the mousedown event has
+        // shifted the observed flake values (0.969-0.992 at 500ms).
         // Expected literal: L35463's translateY(1px) !important wins over
         // L35458's :hover translateY(-1px). If L35463 is deleted with no
         // replacement, the :hover rule wins → 'matrix(1, 0, 0, 1, 0, -1)'.
         // If both are deleted, falls through to base 'none'.
         const EXPECTED = 'matrix(1, 0, 0, 1, 0, 1)';
+        await page.waitForFunction(
+            (exp) => {
+                const btn = document.getElementById('preferenceSaveBtn');
+                return Boolean(btn) && getComputedStyle(btn).transform === exp;
+            },
+            EXPECTED,
+            { timeout: 5000 },
+        ).catch(() => {});
+        const after = await page.evaluate(() => {
+            const btn = document.getElementById('preferenceSaveBtn');
+            return btn ? getComputedStyle(btn).transform : null;
+        });
         assertOrThrow(before === 'none',
             `view 12e: #preferenceSaveBtn resting transform should be 'none' (no base transform on .preference-primary-btn) but is "${before}" — has a new base transform rule been added?`);
         assertOrThrow(after === EXPECTED,
@@ -1320,53 +1339,63 @@ const sharedViews = [
     // `tutorRecentSessions` (recent-conversations.js L262) and calls the
     // exposed `window.loadHistoricalSession(timestamp)` (L539) to restore
     // it. Bounds the cross-module restore surface that B4 lesson-render.js
-    // extraction will rely on: `setLessonLessonContent` + `renderLearnPages`
-    // are external callers of the moved engine (B4 plan L162-163).
+    // extraction will rely on: `setLearnLessonContent` + `renderLearnPages`
+    // are external callers of the moved engine (B4 plan §"External callers").
     //
-    // Why Page B (not Page A): per HARNESS_INTERACTIVE_PLAN.md §"Deferred
-    // sibling flow views" L134, Page A is sticky on 1.1-1 and a restore-
-    // then-reopen flow would conflict with view 26's KP cursor.
+    // Why Page B (not Page A): per HARNESS_INTERACTIVE_PLAN.md
+    // §"Deferred sibling flow views", Page A is sticky on 1.1-1 and a
+    // restore-then-reopen flow would conflict with view 26's KP cursor.
     //
     // Placement: AFTER view 25 (the last Page B view today, quizOverlay).
     // View 29's setup defensively hides every sibling view before triggering
     // the restore so no upstream Page B chrome bleeds into the screenshot.
     // After view 29, Page B is left in learn-view state; view 03b is Page A
-    // (different page) so the bleed-forward concern doesn't apply.
+    // (different page) so the bleed-forward concern doesn't apply. The setup
+    // tail ALSO removes the seeded `tutorRecentSessions` key — a future
+    // Page B view appended after 29 would otherwise inherit the seeded
+    // session in the sidebar's recent-conversations list.
     //
-    // Assertion strategy (HARNESS_INTERACTIVE_PLAN.md L134 blocker):
-    // text content is masked by MASK_CSS, so we gate on STRUCTURAL markers
-    // — #learnView un-hidden AND #learnExplainContent has rendered HTML.
-    // The seeded markdown is intentionally MathJax-free (no $...$, no $$)
-    // and demo-free (no ```interactive ... ```) so the rendered DOM
-    // settles synchronously after markdownToHtml — avoids the typeset-
-    // latency flake that lesson views fight (0.061% AA noise floor per
-    // reference-visual-diff-baseline-noise).
+    // Assertion strategy (resolves the HARNESS_INTERACTIVE_PLAN.md blocker
+    // for this view): text content is masked by MASK_CSS, so we gate on
+    // STRUCTURAL markers — #learnView un-hidden AND #learnExplainContent
+    // has rendered HTML. The seeded markdown is intentionally MathJax-free
+    // (no $...$, no $$) and demo-free (no ```interactive ... ```) so the
+    // rendered DOM settles synchronously after markdownToHtml.
+    //
+    // Settle order:
+    //   1. structural gate (#learnView + #learnExplainContent)
+    //   2. document.fonts loaded
+    //   3. fixed 300ms beyond renderCurrentKnowledgePoint's 60ms setTimeout
+    //      tail (app.js: MathJax typeset + buildTocFromContent + scroll
+    //      reset) so the sidebar TOC is finalized before the screenshot
     //
     // failRatio 0.001 (CALIBRATED: 3 baseline runs all measured 0.000%
-    // noise — restored chrome is fully static, no MathJax typesetting
-    // and no interactive demos seeded in the markdown, so the screenshot
-    // settles immediately after document.fonts.status === 'loaded'.
-    // Held above the 0.061% lesson-AA floor in case future Chromium AA
-    // drift surfaces on this view; 5x tighter than the 0.500% default
-    // so a real restore regression surfaces).
+    // noise). Held above the 0.061% lesson-AA floor in case future
+    // Chromium AA drift surfaces on this view; 5x tighter than the
+    // 0.500% default so a real restore regression surfaces.
+    //
+    // Source-of-truth for the seeded session shape: the `currentSession`
+    // object literal inside `saveCurrentLearnSession` in
+    // app/recent-conversations.js (around L509). If that schema gains a
+    // required field, the seed below must add it.
     { name: '29-recent-conversations-restore', page: 'B', failRatio: 0.001, setup: async (page) => {
         await page.mouse.move(0, 0);
-        // Clear Page B chrome — view 25 left #quizOverlay visible.
+        // Single round-trip: clear sibling chrome AND seed AND trigger the
+        // restore. Keeps the setup atomic (no microtask interleaving between
+        // chrome-hide and the seed visible to the page).
         await page.evaluate(() => {
             const overlay = document.getElementById('quizOverlay');
             if (overlay) overlay.style.display = 'none';
             ['answerScreen','feedbackView','preferenceView','courseTrackerView',
              'mistakeNotebookView','settingsView','welcomeScreen','loginView']
                 .forEach(id => document.getElementById(id)?.classList.add('hidden'));
-        });
-        // Seed + trigger restore. Constants live in the evaluate scope so
-        // the page sees them as literals (page.evaluate's arg-pass works,
-        // but inlining keeps the assertion's `SEEDED_TITLE` discoverable
-        // from a flake-investigator's grep without round-tripping).
-        await page.evaluate(() => {
             const SEEDED_TS = 1700000000000;
-            const SEEDED_SECTION = '1.2-1';
-            const SEEDED_TITLE = '1.2-1 Harness Restore Probe';
+            // Synthetic sectionId — chosen so no current or future regex
+            // (e.g. forceB8TextbookOnlyLesson's `\bB\.8\b(?!-\d)` or any
+            // future section-range gate) can accidentally match and
+            // replace the seeded markdown.
+            const SEEDED_SECTION = 'harness-probe-29';
+            const SEEDED_TITLE = 'Harness Restore Probe';
             const SEEDED_MD = '# Harness Restore Probe\n\nThis lesson is seeded by view 29 to exercise the recent-conversations restore path (recent-conversations.js loadHistoricalSession at L539). The harness asserts the learn view becomes visible and #learnExplainContent receives the rendered markdown.\n\n## Second section\n\nA second paragraph for a stable two-block layout — no MathJax, no interactive demos, so the rendered DOM settles synchronously.';
             const session = {
                 id: `${SEEDED_SECTION}-${SEEDED_TS}`,
@@ -1398,13 +1427,20 @@ const sharedViews = [
             null,
             { timeout: 5000 },
         );
-        // Settle font + any layout flush so the screenshot is final.
-        // No MathJax in the seeded markdown so no typesetPromise to await.
         await page.waitForFunction(
             () => document.fonts && document.fonts.status === 'loaded',
             null,
             { timeout: 3000 },
         ).catch(() => {});
+        // Cover renderCurrentKnowledgePoint's 60ms setTimeout tail
+        // (MathJax typeset no-op for our markdown + buildTocFromContent
+        // + scroll reset). 300ms is comfortably past that tail.
+        await page.waitForTimeout(300);
+        // Clear the seeded key so any future Page B view appended after
+        // view 29 doesn't inherit the probe session.
+        await page.evaluate(() => {
+            try { localStorage.removeItem('tutorRecentSessions'); } catch (_) {}
+        });
     } },
     // ----- Phase 3.5 v3 — late-Page-A state-variant captures -----
     // View 03b — Page A — OPENED mistake-case workspace (Phase 3.5 v3 §9c
