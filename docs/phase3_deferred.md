@@ -2099,3 +2099,63 @@ Est. effort: 1 line once the owner decides.
 > orphan-deletion footgun in app.js; matches mistake-notebook.js convention),
 > dropped the dead `type:'thread'/'reply'` discriminator (no consumer reads it),
 > and corrected three stale `app.js L####` comment pointers in tools/visual-diff.js.
+
+## 17. Phase 3.6a — Visual-diff intermittent flakiness on STRICT views 14c-14f
+
+**Status: deferred 2026-06-26 in PR #117 / Phase 3.6a (defer rule D2 — harness blindspot).**
+
+**What:** During the §3.6a sidebar `!important`-strip work, visual-diff `--check`
+on pristine main produced reproducible failures on 4 STRICT-threshold
+(failRatio: 0.0005) feedback views:
+- `14c-feedback-board-thread1-contexts` — 9196/1024000 = 0.898%
+- `14d-feedback-compose-input-focused` — 9228/1024000 = 0.901%
+- `14e-feedback-compose-btn-hover` — 9228/1024000 = 0.901%
+- `14f-feedback-input-focused` — 9228/1024000 = 0.901%
+
+These ~9k-pixel mismatches reproduce on UNCHANGED `app/style.css` against a
+freshly captured baseline (`git checkout app/style.css && node tools/visual-diff.js --baseline`
+→ no CSS edits → `node tools/visual-diff.js --check` shows 4 fails). The
+mismatched region is the THREAD CARDS column on the right side of the populated
+feedback board (compose card on the left + sidebar are clean); pixel-diff shows
+red text-shift across thread author names, timestamps, body text. The same
+sub-views can ALSO pass cleanly (`37/37 PASS at 0.000%`) on a subsequent run —
+intermittent, not deterministic.
+
+**Why deferred (D2 — harness blindspot):** the test render is non-deterministic
+across runs at the sub-pixel level on the seeded multi-thread feedback fixture,
+in a way that occasionally crosses the STRICT 0.05% threshold. Suspected causes
+(not pinned down):
+1. `formatFeedbackTime(item.createdAt)` — uses `date.toLocaleString([], {…})`
+   on UTC-pinned timestamps, but the screenshots show `Jan 18` for fixture
+   timestamps that should format as `Jan 15` under `2024-01-15T10:30:00Z`.
+   Either the fixture's `createdAt` is being overwritten somewhere in the
+   GET/render pipeline, or the relative-time rendering has implicit
+   `Date.now()` fallback.
+2. Font subpixel positioning under text-AA at a populated thread density —
+   small differences in text rasterization between captures cascade through
+   `.feedback-thread-meta` width and downstream layout.
+3. Anti-aliasing of the multi-tone thread card backgrounds (.tone-0..5) varying
+   between captures.
+
+Crossing the STRICT 0.05% threshold makes these flaps highly visible; the
+DEFAULT 0.5% threshold would have absorbed them. The 14c-f views were tightened
+to STRICT specifically to catch the documented feedback cascade blindspot
+(see `reference-feedback-input-outline-cascade` memory), so the right fix is
+NOT to loosen the threshold but to make the rendering deterministic.
+
+The Phase 3.6a sidebar strip itself was independently verified render-neutral
+via the cascade arbiter (`tools/_view-cascade-probe.js`) — 240 states
+byte-identical across 3 themes × 5 viewports × interaction states on the
+sidebar-expanded + sidebar-collapsed + feedback subtrees. The cascade arbiter
+is the load-bearing gate per `docs/PHASE3.6_SPEC.md` §4; visual-diff is the
+catch-all spatial-identity check. Both gates pass on the post-strip --check
+that produced this commit (37/37).
+
+**Next-session entry point:** Investigate the suspected `formatFeedbackTime`
+inconsistency first — `app/feedback-board.js:47-51` + `app/user-memory.js:195`
+(publicFeedbackItem) + `app/ws-bridge.js:5128-5136` (/api/feedback GET) — diff
+the actual `item.createdAt` value reaching the client against the fixture file
+content, then save a determinism-pinning solution (freeze the captured time
+via a probe hook, or pin Date.now in the test page via a Playwright init
+script). Once that pass, re-baseline 14c-14f once and they should stay stable.
+Est. effort: 1-2h investigation + 1h fix + re-baseline.
