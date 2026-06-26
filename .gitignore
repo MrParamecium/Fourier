@@ -56,11 +56,13 @@ tools/unused-css-report.md
 tools/.harness-state/
 
 # view-cascade-probe (Phase 3.6 !important-strip arbiter): the scripts are
-# committed, but the baseline (~30MB), per-run keep-set, extracted candidate
-# list, and flip reports are all regenerated each run.
+# committed, but the baseline (~30MB) and flip reports are regenerated each run.
+# _view-important.json (extracted candidate list per surface) and
+# _keep-important.json (load-bearing line numbers kept across iterations) are
+# NOW committed — they are load-bearing for cascade-safety on fresh clones.
+# Without _keep-important.json a fresh run of `_strip-view-important.js`
+# would silently undo every prior !important-strip's keep-set.
 tools/_view-cascade-baseline.json
 tools/_view-cascade-report.md
-tools/_view-important.json
-tools/_keep-important.json
 tools/_allstrip-flips.md
 tools/_refine1-flips.md

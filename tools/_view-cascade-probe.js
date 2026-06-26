@@ -96,22 +96,10 @@ const VIEWS = [
       { label: 'input-focus', focus: '#feedbackView .feedback-input' },
       { label: 'textarea-focus', focus: '#feedbackView .feedback-textarea' },
       { label: 'replyinput-focus', focus: '#feedbackView .feedback-reply-input' },
-      // The submit btn carries 1 :active + 4 :disabled !important candidates
-      // (transform/cursor/filter/opacity/transform). Without these states the
-      // arbiter can't witness a strip on the disabled/pressed button.
-      // NOTE: `submit-active` (mouse.down) + `submit-disabled` (el.disabled=true)
-      // interactions were both tried and REMOVED — they produced reproducible
-      // false-positive flips:
-      //   - submit-active: dusk-1280-only flake on `:hover i` icon transform
-      //     (mouse.move hover-state timing flaky in that one theme/viewport)
-      //   - submit-disabled: feedbackStatus height 22→36px under synthetic
-      //     el.disabled=true with no JS handler firing (Playwright attribute
-      //     side effect not matching real flow `await postFeedback() →
-      //     setFeedbackStatus(...)`)
-      // The 5 :active/:disabled candidates on submit btn (L25240 transform +
-      // L25244-25247 cursor/opacity/filter/transform) are force-kept in
-      // _keep-important.json, so dropping these probes loses no protection on
-      // load-bearing rules.
+      // submit btn :active/:disabled (L25240, L25244-25247) are NOT probed
+      // here — synthetic mouse.down + el.disabled=true produced false-positive
+      // flips that didn't match the real submit flow. The 5 lines are
+      // protected by _keep-important.json (now committed; see .gitignore).
     ],
   },
   // -------------------------------------------------------------------------
@@ -125,11 +113,27 @@ const VIEWS = [
   // default after enterGuestMode (no navigation needed).
   {
     id: 'sidebar-expanded', root: '.app .sidebar',
+    // ORDER-DEPENDENCE WARNING: this view does NOT navigate or reset DOM state
+    // — it reads the page in whatever state the prior view left active. VIEWS
+    // must keep `feedback` first so sidebar-expanded inherits feedback-active
+    // chrome (a side effect baked into the baseline). Reordering VIEWS or
+    // adding a view between feedback and sidebar-expanded would silently shift
+    // the baseline. A deterministic state-reset (page.evaluate that toggles
+    // view-class via DOM directly without firing app handlers / animations)
+    // is the right long-term fix — recorded as Phase 3.6a §18 in
+    // docs/phase3_deferred.md. Naive `page.click('#navHomeBtn')` triggers
+    // showWelcome() async animations that race the snapshot.
+    //
+    // Real DOM IDs in app/index.html: the prior list named `.sidebar-toggle`,
+    // `#navRecentConversationsBtn`, `#navSettingsBtn` — none exist (real IDs
+    // are `#menuToggleBtn`, `#navRecentBtn`, `#sidebarSettingsBtn`). The
+    // missing selectors silently skipped via present(), so 3 label-cells were
+    // baselined as duplicates of `rest`.
     interactions: [
       { label: 'rest' },
-      { label: 'toggle-hover', hover: '.app .sidebar .sidebar-toggle' },
-      { label: 'recent-hover', hover: '.app .sidebar #navRecentConversationsBtn' },
-      { label: 'settings-hover', hover: '.app .sidebar #navSettingsBtn' },
+      { label: 'menu-toggle-hover', hover: '#menuToggleBtn' },
+      { label: 'recent-hover', hover: '#navRecentBtn' },
+      { label: 'settings-hover', hover: '#sidebarSettingsBtn' },
       { label: 'feedback-hover', hover: '.app .sidebar #navFeedbackBtn' },
     ],
   },
@@ -151,7 +155,7 @@ const VIEWS = [
     },
     interactions: [
       { label: 'rest' },
-      { label: 'toggle-hover', hover: '.app .sidebar .sidebar-toggle' },
+      { label: 'menu-toggle-hover', hover: '#menuToggleBtn' },
     ],
   },
 ];
@@ -224,10 +228,6 @@ async function captureView(page, view, snapFn) {
           document.activeElement?.blur?.();
           const ss = document.querySelector('.preference-save-state');
           if (ss) ss.removeAttribute('data-tone');
-          // Undo any prior `disabled` flag the previous interaction set on a probed btn.
-          for (const el of document.querySelectorAll('[data-probe-disabled="1"]')) {
-            el.disabled = false; el.removeAttribute('data-probe-disabled');
-          }
         });
         await page.evaluate((t) => document.documentElement.setAttribute('data-theme', t), theme);
         await page.setViewportSize({ width: vp, height: 800 });
@@ -249,12 +249,6 @@ async function captureView(page, view, snapFn) {
           const el = await present(act.active);
           const box = el && await el.boundingBox().catch(() => null);
           if (box) { await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2); await page.mouse.down().catch(() => {}); }
-        }
-        if (act.disabled) {
-          await page.evaluate((sel) => {
-            const el = document.querySelector(sel);
-            if (el) { el.disabled = true; el.setAttribute('data-probe-disabled', '1'); }
-          }, act.disabled);
         }
         if (act.tone) {
           await page.evaluate((tone) => {
@@ -395,6 +389,10 @@ process.once('SIGTERM', () => cleanup('SIGTERM'));
       const aNil = va == null, bNil = vb == null;
       if (aNil !== bNil) return false;
       if (aNil && bNil) continue;
+      // Reject non-finite values explicitly — `Math.abs('auto' - 0)` is NaN,
+      // and `NaN > PX_TOL` is false, which would silently treat a real flip
+      // as equal. Guard so any non-numeric survivor flags as unequal.
+      if (!Number.isFinite(va) || !Number.isFinite(vb)) return false;
       if (Math.abs(va - vb) > PX_TOL) return false;
     }
     return true;
@@ -423,17 +421,28 @@ process.once('SIGTERM', () => cleanup('SIGTERM'));
   } else {
     // Stream the diffs to disk in chunks — spreading 100k+ lines into one push
     // overflows the call stack, and diffs.join() builds a huge intermediate string.
-    fs.writeFileSync(REPORT, header.join('\n') + '\n' + `**FAIL — ${diffs.length} cascade flips:**\n\n`);
-    const fd = fs.openSync(REPORT, 'a');
+    // Wrap in try/catch so a transient Windows EBUSY (AV holding the file briefly
+    // between the truncate-write and the append-open) doesn't leave a truncated
+    // report on disk that poisons the next grow-keep parse.
     try {
-      const CHUNK = 1000;
-      for (let i = 0; i < diffs.length; i += CHUNK) {
-        const slice = diffs.slice(i, i + CHUNK);
-        let s = '';
-        for (const d of slice) s += '- ' + d + '\n';
-        fs.writeSync(fd, s);
-      }
-    } finally { fs.closeSync(fd); }
+      fs.writeFileSync(REPORT, header.join('\n') + '\n' + `**FAIL — ${diffs.length} cascade flips:**\n\n`);
+      const fd = fs.openSync(REPORT, 'a');
+      try {
+        const CHUNK = 1000;
+        for (let i = 0; i < diffs.length; i += CHUNK) {
+          const slice = diffs.slice(i, i + CHUNK);
+          let s = '';
+          for (const d of slice) s += '- ' + d + '\n';
+          fs.writeSync(fd, s);
+        }
+      } finally { fs.closeSync(fd); }
+    } catch (err) {
+      // Partial report on disk would mislead the next iteration; clean it up
+      // and surface the error so the run aborts visibly rather than silently.
+      try { fs.unlinkSync(REPORT); } catch (_) {}
+      console.error(`[view-probe] failed to write report: ${err.message}`);
+      process.exit(2);
+    }
     console.log(`\n[view-probe] FAIL — ${diffs.length} flips (see ${REPORT})`);
     for (const d of diffs.slice(0, 20)) console.log(`  ✗ ${d}`);
   }
