@@ -825,7 +825,6 @@ document.getElementById('learnChatShrinkBtn')?.remove();
 document.getElementById('learnChatMinimizeBtn')?.remove();
 document.querySelectorAll('.learn-chat-window-actions').forEach(node => node.remove());
 const learnKpTitle        = document.getElementById('learnKpTitle');
-const learnFocusPageIndicator = document.getElementById('learnFocusPageIndicator');
 const learnTopbarActions = document.querySelector('#learnView .learn-topbar-actions');
 const learnToolbarCenter = document.querySelector('#learnExplainToolbar .learn-toolbar-center');
 const learnViewSelectorEl = document.getElementById('learnViewSelector');
@@ -837,17 +836,9 @@ if (learnTopbarActions && learnViewSelectorEl && !learnTopbarActions.contains(le
 const lecturePrevOverlayBtn = document.getElementById('lecturePrevOverlayBtn');
 const lectureNextOverlayBtn = document.getElementById('lectureNextOverlayBtn');
 const lectureFocusOverlayBtn = document.getElementById('lectureFocusOverlayBtn');
-const learnFocusBtn       = document.getElementById('learnFocusBtn');
 const learnExplainToggleBtn = document.getElementById('learnExplainToggleBtn');
 const learnExplainRestoreBtn = document.getElementById('learnExplainRestoreBtn');
 const learnChatRestoreBtn = document.getElementById('learnChatRestoreBtn');
-const learnFocusModal     = document.getElementById('learnFocusModal');
-const learnFocusBackdrop  = document.getElementById('learnFocusBackdrop');
-const learnFocusClose     = document.getElementById('learnFocusClose');
-const learnFocusPrevBtn   = document.getElementById('learnFocusPrevBtn');
-const learnFocusNextBtn   = document.getElementById('learnFocusNextBtn');
-const learnFocusTitle     = document.getElementById('learnFocusTitle');
-const learnFocusContent   = document.getElementById('learnFocusContent');
 // textbook focus-mode DOM consts + state (textbookFocus*, isTextbookFocusQaOpen)
 // moved to the sibling module textbook-focus.js. app.js still wires the buttons +
 // keyboard shortcuts below, reaching those consts/functions cross-scope.
@@ -2177,7 +2168,6 @@ function renderCurrentKnowledgePoint() {
   window.__ftutorRefreshPager?.();
 
   if (learnExplainScroll) learnExplainScroll.scrollTop = 0;
-  syncFocusModeContent();
 
   const startTestBtn = learnExplainContent.querySelector('#startTestBtn');
   if (startTestBtn) {
@@ -2217,9 +2207,9 @@ function bindStartTestBtnIfPresent() {
 
     startTestBtn.addEventListener('click', () => {
       let opened = false;
-      const root = (learnFocusContent && learnFocusContent.contains(startTestBtn))
-        ? learnFocusContent
-        : ((learnExplainContent && learnExplainContent.contains(startTestBtn)) ? learnExplainContent : document);
+      const root = (learnExplainContent && learnExplainContent.contains(startTestBtn))
+        ? learnExplainContent
+        : document;
       const testBannerCard = startTestBtn.closest('#testBannerCard') || root.querySelector('#testBannerCard');
       const quizPlanNode = root.querySelector('.kc-quiz-plan') || document.querySelector('.kc-quiz-plan');
       const pregenCards = root.querySelectorAll('.kc-container');
@@ -2504,32 +2494,6 @@ function buildLessonTestBannerHtml() {
       <button id="startTestBtn" style="background: #2563EB; color: white; border: none; padding: 10px 24px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; transition: background 0.2s; box-shadow: 0 2px 4px rgba(37,99,235,0.2);">Start Quick Check</button>
     </div>
   `;
-}
-
-function syncFocusModeContent() {
-  if (!learnFocusModal || learnFocusModal.classList.contains('hidden') || !learnFocusContent) return;
-  const activeBlock = learnKnowledgePoints[currentKnowledgePointIndex];
-  learnFocusContent.innerHTML = activeBlock?.html || learnExplainContent?.innerHTML || '';
-  if (learnFocusTitle) learnFocusTitle.textContent = activeBlock?.title || learnKpTitle?.textContent || 'Knowledge Point';
-  bindExpandableLessonImages(learnFocusContent);
-  decorateLectureContent(learnFocusContent);
-  enhanceVisualMetadataUI(learnFocusContent);
-  hydrateInteractiveDemos(learnFocusContent);
-  if (learnFocusPrevBtn) learnFocusPrevBtn.disabled = currentKnowledgePointIndex === 0;
-  if (learnFocusNextBtn) learnFocusNextBtn.disabled = currentKnowledgePointIndex >= learnKnowledgePoints.length - 1;
-  if (learnFocusPageIndicator) learnFocusPageIndicator.textContent = `${currentKnowledgePointIndex + 1} / ${learnKnowledgePoints.length || 1}`;
-  setTimeout(() => {
-    if (window.MathJax && window.MathJax.typesetPromise) {
-      window.MathJax.typesetPromise([learnFocusContent]).catch(() => {});
-    }
-  }, 40);
-}
-
-
-function closeLearnFocusMode() {
-  if (!learnFocusModal) return;
-  learnFocusModal.classList.add('hidden');
-  document.body.style.overflow = '';
 }
 
 function setChapterOverviewLayoutActive(active) {
@@ -2934,8 +2898,6 @@ function clearLearnRenderedContent(message = 'Preparing lesson...') {
   if (learnKpNextBtn) learnKpNextBtn.disabled = true;
   if (lecturePrevOverlayBtn) lecturePrevOverlayBtn.disabled = true;
   if (lectureNextOverlayBtn) lectureNextOverlayBtn.disabled = true;
-  if (learnFocusContent) learnFocusContent.innerHTML = '';
-  if (learnFocusPageIndicator) learnFocusPageIndicator.textContent = '';
 }
 
 function isCurrentLearnRequest(requestSeq, sectionId, sectionTitle, allowedModes = null) {
@@ -3834,7 +3796,6 @@ async function startLesson(options = {}) {
 function closeLearnMode() {
   if (learnAbort) learnAbort.abort();
   hideSplash();
-  closeLearnFocusMode();
   closeTextbookFocusMode();
   resetLearnKnowledgePointState();
   _learnLayoutMode = 'lesson';
@@ -3849,7 +3810,6 @@ function closeLearnMode() {
 function handleLearnBack() {
   if (learnAbort) learnAbort.abort();
   hideSplash();
-  closeLearnFocusMode();
   closeTextbookFocusMode();
   resetLearnKnowledgePointState();
   if (_learnLayoutMode === 'lesson' && learnParentOverviewContext) {
@@ -4137,7 +4097,6 @@ if (learnKpNextBtn) {
 document.addEventListener('pointerdown', handleLectureOverlayNavEvent, true);
 document.addEventListener('click', handleLectureOverlayNavEvent, true);
 if (lectureFocusOverlayBtn) lectureFocusOverlayBtn.addEventListener('click', () => advanceLearnPanelFocus('qa'));
-if (learnFocusBtn) learnFocusBtn.addEventListener('click', () => advanceLearnPanelFocus('qa'));
 if (learnExplainToggleBtn) learnExplainToggleBtn.addEventListener('click', () => advanceLearnPanelFocus('lecture'));
 if (learnExplainRestoreBtn) learnExplainRestoreBtn.addEventListener('click', () => advanceLearnPanelFocus('lecture'));
 if (learnChatRestoreBtn) learnChatRestoreBtn.addEventListener('click', openLearnQaSidebar);
@@ -4166,8 +4125,6 @@ if (learnChatPopoverCloseBtn) {
 
 enableFloatingDrag(learnChatPopoverHead, learnChatPopover, { right: 28, bottom: 110 });
 enableFloatingDrag(textbookFocusQaHead, textbookFocusQaPanel, null);
-if (learnFocusClose) learnFocusClose.addEventListener('click', closeLearnFocusMode);
-if (learnFocusBackdrop) learnFocusBackdrop.addEventListener('click', closeLearnFocusMode);
 if (textbookFocusClose) textbookFocusClose.addEventListener('click', closeTextbookFocusMode);
 if (textbookFocusBackdrop) textbookFocusBackdrop.addEventListener('click', closeTextbookFocusMode);
   if (textbookFocusZoomOutBtn) textbookFocusZoomOutBtn.addEventListener('click', () => stepTextbookFocusZoom(-0.15));
@@ -4189,22 +4146,6 @@ if (textbookFocusQaInput) {
   });
   if (textbookFocusQaSend) textbookFocusQaSend.disabled = !textbookFocusQaInput.value.trim();
 }
-if (learnFocusPrevBtn) {
-  learnFocusPrevBtn.addEventListener('click', () => {
-    if (currentKnowledgePointIndex > 0) {
-      currentKnowledgePointIndex -= 1;
-      renderCurrentKnowledgePoint();
-    }
-  });
-}
-if (learnFocusNextBtn) {
-  learnFocusNextBtn.addEventListener('click', () => {
-    if (currentKnowledgePointIndex < learnKnowledgePoints.length - 1) {
-      currentKnowledgePointIndex += 1;
-      renderCurrentKnowledgePoint();
-    }
-  });
-}
 document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && document.getElementById('attachmentImageModal')) {
     closeAttachmentImageModal();
@@ -4213,22 +4154,6 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && document.getElementById('mainBookSourceModal')) {
     closeMainBookSourceModal();
     return;
-  }
-  if (learnFocusModal && !learnFocusModal.classList.contains('hidden')) {
-    if (e.key === 'Escape') {
-      closeLearnFocusMode();
-      return;
-    }
-    if (e.key === 'ArrowLeft' && currentKnowledgePointIndex > 0) {
-      currentKnowledgePointIndex -= 1;
-      renderCurrentKnowledgePoint();
-      return;
-    }
-    if (e.key === 'ArrowRight' && currentKnowledgePointIndex < learnKnowledgePoints.length - 1) {
-      currentKnowledgePointIndex += 1;
-      renderCurrentKnowledgePoint();
-      return;
-    }
   }
   if (textbookFocusModal && !textbookFocusModal.classList.contains('hidden')) {
     if (e.key === 'Escape') {

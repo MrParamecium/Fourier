@@ -278,10 +278,10 @@ const sharedViews = [
         // sentinel "is at end" state without leaving the lesson:
         // hover the next-button to surface its hover treatment.
         await page.evaluate(() => {
-            const nextBtn = document.querySelector('#learnKpNextBtn, #learnFocusNextBtn');
+            const nextBtn = document.querySelector('#learnKpNextBtn');
             if (nextBtn) nextBtn.scrollIntoView({ block: 'center' });
         });
-        const nextBtn = page.locator('#learnKpNextBtn, #learnFocusNextBtn').first();
+        const nextBtn = page.locator('#learnKpNextBtn').first();
         await nextBtn.hover({ force: true }).catch(() => {});
         await page.waitForTimeout(300);
     } },
@@ -1548,9 +1548,7 @@ async function collectLessonFamilies(page, { earlyExitOn } = {}) {
         // Collect families on the current KP page + read priorKey in one
         // round-trip. priorKey: article.lesson-page-frame's data-lesson-page
         // attribute (set in buildLessonPageFrameHtml at app/app.js L3308 =
-        // `${currentKnowledgePointIndex + 1}`). The IDs
-        // #learnFocusPageIndicator / #learnLecturePageIndicator are only
-        // populated by the learn-focus modal flow, not the regular pager.
+        // `${currentKnowledgePointIndex + 1}`).
         // NOTE: clicking next-btn is deliberately kept in a second evaluate
         // below, AFTER the early-exit / loop-back checks. Merging the click
         // into this read would advance the pager one step past the early-
