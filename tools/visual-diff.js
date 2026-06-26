@@ -1315,6 +1315,97 @@ const sharedViews = [
         });
         await page.waitForSelector('#quizOverlay', { timeout: 3000, state: 'visible' });
     } },
+    // View 29 — Page B — RECENT-CONVERSATIONS RESTORE flow gate.
+    // Seeds a fake learn-origin session into localStorage's
+    // `tutorRecentSessions` (recent-conversations.js L262) and calls the
+    // exposed `window.loadHistoricalSession(timestamp)` (L539) to restore
+    // it. Bounds the cross-module restore surface that B4 lesson-render.js
+    // extraction will rely on: `setLessonLessonContent` + `renderLearnPages`
+    // are external callers of the moved engine (B4 plan L162-163).
+    //
+    // Why Page B (not Page A): per HARNESS_INTERACTIVE_PLAN.md §"Deferred
+    // sibling flow views" L134, Page A is sticky on 1.1-1 and a restore-
+    // then-reopen flow would conflict with view 26's KP cursor.
+    //
+    // Placement: AFTER view 25 (the last Page B view today, quizOverlay).
+    // View 29's setup defensively hides every sibling view before triggering
+    // the restore so no upstream Page B chrome bleeds into the screenshot.
+    // After view 29, Page B is left in learn-view state; view 03b is Page A
+    // (different page) so the bleed-forward concern doesn't apply.
+    //
+    // Assertion strategy (HARNESS_INTERACTIVE_PLAN.md L134 blocker):
+    // text content is masked by MASK_CSS, so we gate on STRUCTURAL markers
+    // — #learnView un-hidden AND #learnExplainContent has rendered HTML.
+    // The seeded markdown is intentionally MathJax-free (no $...$, no $$)
+    // and demo-free (no ```interactive ... ```) so the rendered DOM
+    // settles synchronously after markdownToHtml — avoids the typeset-
+    // latency flake that lesson views fight (0.061% AA noise floor per
+    // reference-visual-diff-baseline-noise).
+    //
+    // failRatio 0.001 (CALIBRATED: 3 baseline runs all measured 0.000%
+    // noise — restored chrome is fully static, no MathJax typesetting
+    // and no interactive demos seeded in the markdown, so the screenshot
+    // settles immediately after document.fonts.status === 'loaded'.
+    // Held above the 0.061% lesson-AA floor in case future Chromium AA
+    // drift surfaces on this view; 5x tighter than the 0.500% default
+    // so a real restore regression surfaces).
+    { name: '29-recent-conversations-restore', page: 'B', failRatio: 0.001, setup: async (page) => {
+        await page.mouse.move(0, 0);
+        // Clear Page B chrome — view 25 left #quizOverlay visible.
+        await page.evaluate(() => {
+            const overlay = document.getElementById('quizOverlay');
+            if (overlay) overlay.style.display = 'none';
+            ['answerScreen','feedbackView','preferenceView','courseTrackerView',
+             'mistakeNotebookView','settingsView','welcomeScreen','loginView']
+                .forEach(id => document.getElementById(id)?.classList.add('hidden'));
+        });
+        // Seed + trigger restore. Constants live in the evaluate scope so
+        // the page sees them as literals (page.evaluate's arg-pass works,
+        // but inlining keeps the assertion's `SEEDED_TITLE` discoverable
+        // from a flake-investigator's grep without round-tripping).
+        await page.evaluate(() => {
+            const SEEDED_TS = 1700000000000;
+            const SEEDED_SECTION = '1.2-1';
+            const SEEDED_TITLE = '1.2-1 Harness Restore Probe';
+            const SEEDED_MD = '# Harness Restore Probe\n\nThis lesson is seeded by view 29 to exercise the recent-conversations restore path (recent-conversations.js loadHistoricalSession at L539). The harness asserts the learn view becomes visible and #learnExplainContent receives the rendered markdown.\n\n## Second section\n\nA second paragraph for a stable two-block layout — no MathJax, no interactive demos, so the rendered DOM settles synchronously.';
+            const session = {
+                id: `${SEEDED_SECTION}-${SEEDED_TS}`,
+                origin: 'learn',
+                title: SEEDED_TITLE,
+                summaryTitle: SEEDED_TITLE,
+                customTitle: '',
+                starred: false,
+                timestamp: SEEDED_TS,
+                sectionId: SEEDED_SECTION,
+                sectionTitle: SEEDED_TITLE,
+                lessonMarkdown: SEEDED_MD,
+                bookPages: [],
+                webSources: [],
+                attachments: [],
+                history: [],
+            };
+            localStorage.setItem('tutorRecentSessions', JSON.stringify([session]));
+            window.loadHistoricalSession(SEEDED_TS);
+        });
+        // Structural gate (see header note re: assertion strategy).
+        await page.waitForFunction(
+            () => {
+                const v = document.getElementById('learnView');
+                const c = document.getElementById('learnExplainContent');
+                return Boolean(v) && !v.classList.contains('hidden')
+                    && Boolean(c) && c.innerHTML.trim().length > 0;
+            },
+            null,
+            { timeout: 5000 },
+        );
+        // Settle font + any layout flush so the screenshot is final.
+        // No MathJax in the seeded markdown so no typesetPromise to await.
+        await page.waitForFunction(
+            () => document.fonts && document.fonts.status === 'loaded',
+            null,
+            { timeout: 3000 },
+        ).catch(() => {});
+    } },
     // ----- Phase 3.5 v3 — late-Page-A state-variant captures -----
     // View 03b — Page A — OPENED mistake-case workspace (Phase 3.5 v3 §9c
     // gap 1). Seeds localStorage with a fixture mistake and navigates back
