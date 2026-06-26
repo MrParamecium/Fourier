@@ -229,8 +229,21 @@ async function resetLessonChromeState(page) {
         window.dispatchEvent(new Event('resize'));
     });
     // One rAF + small slack for layout to settle.
-    await page.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
+    await settleRaf(page);
     await page.waitForTimeout(100);
+}
+
+// Wait for one full layout-flush cycle by chaining two requestAnimationFrame
+// callbacks inside an in-page Promise. Two frames is the established floor
+// for letting browser layout, MathJax mid-typeset, and inline style
+// mutations propagate before a screenshot. Extracted here because the same
+// pattern appears in resetLessonChromeState, settleLesson, and runFlow —
+// a future tuning patch (triple-rAF for late-decoding images, swap to
+// document.timeline.currentTime, etc.) should land in one place.
+async function settleRaf(page) {
+    await page.evaluate(
+        () => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)))
+    );
 }
 
 // Wait until MathJax typesetting + font loading + 2x rAF have all settled,
@@ -268,7 +281,7 @@ async function settleLesson(page) {
             try { await window.MathJax.typesetPromise(); } catch (_) {}
         }
     });
-    await page.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
+    await settleRaf(page);
     await page.waitForTimeout(150);
 }
 
@@ -314,6 +327,12 @@ async function clickUntilLog(page, locatorOrSelector, logRegex, opts = {}) {
     page.on('console', listener);
     try {
         for (let i = 0; i < maxTries; i++) {
+            // Reset sentinel BEFORE each click so a late log from the prior
+            // iteration (or any unrelated matching log emitted before this
+            // attempt) doesn't falsely confirm the click contract — this
+            // helper documents "clicks until a NEW log appears" per iteration,
+            // not "any matching log ever seen".
+            sawLog.value = false;
             try { await target.click(); } catch (_) { /* tolerate transient detached/disabled */ }
             const t0 = Date.now();
             while (Date.now() - t0 < perTryMs) {
@@ -322,7 +341,11 @@ async function clickUntilLog(page, locatorOrSelector, logRegex, opts = {}) {
             }
         }
     } finally {
-        page.off('console', listener);
+        // Detach defensively — page.off itself rarely throws in playwright
+        // 1.60, but if the page/context was torn down mid-flight (AFK
+        // cleanup race) we must NOT swallow the more informative
+        // "click never triggered" error below.
+        try { page.off('console', listener); } catch (_) {}
     }
     throw new Error(`click never triggered ${logRegex} after ${maxTries} tries (perTryMs=${perTryMs})`);
 }
@@ -373,9 +396,7 @@ async function runFlow(page, steps, opts = {}) {
             if (settleMode === 'lesson') {
                 await settleLesson(page);
             } else if (settleMode === 'rAF') {
-                await page.evaluate(
-                    () => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)))
-                );
+                await settleRaf(page);
             }
             const timeoutMs = typeof step.timeoutMs === 'number' ? step.timeoutMs : 5000;
             const deadline = Date.now() + timeoutMs;

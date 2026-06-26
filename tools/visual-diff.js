@@ -1598,6 +1598,18 @@ process.once('SIGTERM', () => signalCleanupRestore('SIGTERM'));
                 // STRICT_FAIL_RATIO continues to bound regression. A failed
                 // step throws (caught below) and leaves a per-step PNG in
                 // DIFF_DIR for AFK debug.
+                //
+                // NO TEARDOWN CONTRACT: pages are cached per pageKey (L1711+)
+                // and reused across every view sharing that key. A flow
+                // step that mutates persistent DOM state (open dialog,
+                // typed-in input, scroll offset, localStorage) WILL leak
+                // into the next view on the same pageKey. Flow-using views
+                // MUST either (a) put themselves last in their pageKey's
+                // view order, (b) restore the chrome state inside their own
+                // view.setup (parallel to resetLessonChromeState in views
+                // 15/16), or (c) declare a dedicated pageKey. There is no
+                // per-flow teardown hook in PR-1; PR-2 may add view.flow.
+                // teardown if the B4 views surface a need.
                 if (view.flow && Array.isArray(view.flow.steps)) {
                     flowResult = await runFlow(page, view.flow.steps, {
                         traceLabel: view.name,
@@ -1625,7 +1637,7 @@ process.once('SIGTERM', () => signalCleanupRestore('SIGTERM'));
                     const baselinePath = path.join(BASELINE_DIR, `${view.name}.png`);
                     if (!fs.existsSync(baselinePath)) {
                         results.push({ view: view.name, status: 'no-baseline',
-                                       stepLog: flowResult?.stepLog || null });
+                                       stepLog: flowResult?.stepLog?.length ? flowResult.stepLog : null });
                         return;
                     }
                     const diffPath = path.join(DIFF_DIR, `${view.name}.png`);
@@ -1635,13 +1647,13 @@ process.once('SIGTERM', () => signalCleanupRestore('SIGTERM'));
                     results.push({ view: view.name, status: pass ? 'pass' : 'fail',
                                    mismatch: cmp.mismatch, total: cmp.total,
                                    ratio: cmp.ratio, threshold, error: cmp.error,
-                                   stepLog: flowResult?.stepLog || null });
+                                   stepLog: flowResult?.stepLog?.length ? flowResult.stepLog : null });
                     if (!pass) exitCode = 1;
                 }
             } catch (err) {
                 console.log(`  ✗ ${view.name}: ${err.message}`);
                 results.push({ view: view.name, status: 'error', error: err.message,
-                               stepLog: flowResult?.stepLog || null });
+                               stepLog: flowResult?.stepLog?.length ? flowResult.stepLog : null });
                 exitCode = 1;
             }
         };

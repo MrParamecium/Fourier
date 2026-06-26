@@ -31,21 +31,26 @@ function fail(label, reason) {
 
 function makeStubPage() {
     return {
-        // The runner uses page.evaluate to do the rAF wrap. We execute the
-        // function inline so the runner thinks it succeeded; no real DOM.
+        // Mirrors Playwright's page.evaluate(fn, ...args). The runner uses
+        // it for two things: (1) the rAF wrap via settleRaf, (2) caller-
+        // supplied assert/action evaluates if any. We execute the function
+        // inline. If fn returns a Promise (rAF wrap), the Promise's
+        // executor runs synchronously and throws ReferenceError because
+        // requestAnimationFrame is not defined in Node — we attach a
+        // .catch() so Node doesn't flag the rejection as unhandled at exit.
         evaluate: async (fn, ...args) => {
-            try {
-                const result = fn(...args);
-                if (result && typeof result.then === 'function') {
-                    // The runner's rAF wrap returns a Promise that resolves
-                    // inside requestAnimationFrame; in node there's no rAF,
-                    // so resolve immediately. Calling .then on the returned
-                    // promise wouldn't help (it never resolves without rAF),
-                    // so we short-circuit by returning undefined here.
-                    return undefined;
-                }
-                return result;
-            } catch (_) { return undefined; }
+            let result;
+            try { result = fn(...args); } catch (_) { return undefined; }
+            if (result && typeof result.then === 'function') {
+                // Mark the rejection handled BEFORE returning so Node's
+                // unhandledRejection handler doesn't crash the test
+                // process at exit. We deliberately don't await — the
+                // runner only cares that "some settle completed", and
+                // the stub has no animation frame to wait for.
+                result.catch(() => {});
+                return undefined;
+            }
+            return result;
         },
         waitForTimeout: async (_ms) => {},
         screenshot: async () => {},
@@ -134,5 +139,25 @@ function makeStubPage() {
         if (r.stepLog.length !== 0) fail('empty', `empty step list should produce empty stepLog`);
     }
 
-    console.log('PASS — runFlow unit smoke clean (6/6 cases)');
+    // ---- 7. Default-settle ('rAF') invokes page.evaluate exactly once -----
+    // Exercises the rAF branch through the stub (the previous 6 cases all
+    // explicitly passed settle:null, leaving the runner's default-settle
+    // path uncovered). The stub records every evaluate() call so we can
+    // assert the rAF wrap fires per step.
+    {
+        const page = makeStubPage();
+        page.evaluateCalls = 0;
+        const baseEvaluate = page.evaluate;
+        page.evaluate = async (...args) => { page.evaluateCalls++; return baseEvaluate(...args); };
+        const r = await runFlow(page, [
+            // No `settle` field → default to 'rAF' per the runner contract.
+            { name: 'raf-default', action: async () => {}, assert: async () => true },
+        ]);
+        if (!r.passed) fail('raf-default', `expected pass, got ${JSON.stringify(r)}`);
+        if (page.evaluateCalls !== 1) {
+            fail('raf-default', `expected exactly 1 evaluate() call (the rAF wrap), got ${page.evaluateCalls}`);
+        }
+    }
+
+    console.log('PASS — runFlow unit smoke clean (7/7 cases)');
 })();
