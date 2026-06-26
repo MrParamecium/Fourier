@@ -96,6 +96,11 @@ const VIEWS = [
       { label: 'input-focus', focus: '#feedbackView .feedback-input' },
       { label: 'textarea-focus', focus: '#feedbackView .feedback-textarea' },
       { label: 'replyinput-focus', focus: '#feedbackView .feedback-reply-input' },
+      // The submit btn carries 1 :active + 4 :disabled !important candidates
+      // (transform/cursor/filter/opacity/transform). Without these states the
+      // arbiter can't witness a strip on the disabled/pressed button.
+      { label: 'submit-active', active: '#feedbackView #feedbackSubmitBtn' },
+      { label: 'submit-disabled', disabled: '#feedbackView #feedbackSubmitBtn' },
     ],
   },
 ];
@@ -166,6 +171,10 @@ async function captureView(page, view, snapFn) {
           document.activeElement?.blur?.();
           const ss = document.querySelector('.preference-save-state');
           if (ss) ss.removeAttribute('data-tone');
+          // Undo any prior `disabled` flag the previous interaction set on a probed btn.
+          for (const el of document.querySelectorAll('[data-probe-disabled="1"]')) {
+            el.disabled = false; el.removeAttribute('data-probe-disabled');
+          }
         });
         await page.evaluate((t) => document.documentElement.setAttribute('data-theme', t), theme);
         await page.setViewportSize({ width: vp, height: 800 });
@@ -187,6 +196,12 @@ async function captureView(page, view, snapFn) {
           const el = await present(act.active);
           const box = el && await el.boundingBox().catch(() => null);
           if (box) { await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2); await page.mouse.down().catch(() => {}); }
+        }
+        if (act.disabled) {
+          await page.evaluate((sel) => {
+            const el = document.querySelector(sel);
+            if (el) { el.disabled = true; el.setAttribute('data-probe-disabled', '1'); }
+          }, act.disabled);
         }
         if (act.tone) {
           await page.evaluate((tone) => {

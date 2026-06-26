@@ -20945,7 +20945,7 @@ body {
     inset 0 -1px 0 rgba(14, 165, 233, 0.12),
     0 10px 24px rgba(14, 165, 233, 0.13) !important;
   backdrop-filter: blur(18px) saturate(1.65) !important;
-  -webkit-backdrop-filter: blur(18px) saturate(1.65) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(1.65);
   transition: transform 170ms ease, box-shadow 170ms ease, border-color 170ms ease !important;
 }
 
@@ -20955,7 +20955,7 @@ body {
   inset: 4px !important;
   border-radius: inherit !important;
   border: 1px solid rgba(255, 255, 255, 0.62) !important;
-  pointer-events: none !important;
+  pointer-events: none;
 }
 
 #feedbackView .feedback-refresh-icon-btn:hover {
@@ -20974,7 +20974,7 @@ body {
 #feedbackView .feedback-refresh-icon-btn i {
   display: block !important;
   position: relative !important;
-  z-index: 1 !important;
+  z-index: 1;
   font-size: 17px !important;
   line-height: 1 !important;
   transition: transform 180ms ease !important;
@@ -25174,7 +25174,7 @@ body {
     linear-gradient(135deg, rgba(34,211,238,0.84), rgba(37,99,235,0.70) 58%, rgba(99,102,241,0.62)) !important;
   color: #ffffff !important;
   font-size: 15px !important;
-  font-weight: 800 !important;
+  font-weight: 800;
   letter-spacing: 0 !important;
   line-height: 1 !important;
   justify-content: center !important;
@@ -25184,9 +25184,9 @@ body {
     0 6px 14px rgba(14,165,233,0.18),
     inset 0 1px 0 rgba(255,255,255,0.64),
     inset 0 -1px 0 rgba(15,23,42,0.12) !important;
-  text-shadow: 0 1px 10px rgba(15,23,42,0.18) !important;
+  text-shadow: 0 1px 10px rgba(15,23,42,0.18);
   backdrop-filter: blur(20px) saturate(180%) brightness(1.04) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(180%) brightness(1.04) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) brightness(1.04);
   position: relative !important;
   overflow: hidden !important;
 }
@@ -25198,13 +25198,13 @@ body {
   border-radius: 15px !important;
   background:
     linear-gradient(180deg, rgba(255,255,255,0.34), rgba(255,255,255,0.04) 42%, transparent 72%) !important;
-  pointer-events: none !important;
+  pointer-events: none;
 }
 
 #feedbackView .feedback-compose-card #feedbackSubmitBtn.feedback-primary-btn span,
 #feedbackView .feedback-compose-card #feedbackSubmitBtn.feedback-primary-btn i {
   position: relative !important;
-  z-index: 1 !important;
+  z-index: 1;
 }
 
 #feedbackView .feedback-compose-card #feedbackSubmitBtn.feedback-primary-btn i {
@@ -26976,21 +26976,21 @@ body {
 #feedbackView .feedback-card-kicker {
   margin-bottom: 10px !important;
   color: rgba(51, 65, 85, 0.62) !important;
-  font-family: "DM Mono", "SFMono-Regular", monospace !important;
+  font-family: "DM Mono", "SFMono-Regular", monospace;
   font-size: 12px !important;
-  font-weight: 700 !important;
+  font-weight: 700;
   letter-spacing: 0.22em !important;
-  text-transform: uppercase !important;
+  text-transform: uppercase;
 }
 
 #feedbackView .feedback-title {
   margin: 0 0 12px !important;
   color: rgba(15, 23, 42, 0.90) !important;
-  font-family: "Quicksand", "Nunito", sans-serif !important;
+  font-family: "Quicksand", "Nunito", sans-serif;
   font-size: clamp(48px, 5.6vw, 84px) !important;
   line-height: 0.92 !important;
   letter-spacing: 0 !important;
-  text-shadow: 0 1px 0 rgba(255,255,255,0.58) !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.58);
 }
 
 #feedbackView .feedback-subtitle {
@@ -26999,7 +26999,7 @@ body {
   color: rgba(51, 65, 85, 0.72) !important;
   font-size: 17px !important;
   line-height: 1.62 !important;
-  font-weight: 760 !important;
+  font-weight: 760;
 }
 
 #feedbackView #feedbackCloseBtn.feature-close-btn {
@@ -27012,7 +27012,7 @@ body {
     inset 0 1px 0 rgba(255,255,255,0.82),
     inset 0 -1px 0 rgba(255,255,255,0.18) !important;
   backdrop-filter: blur(24px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
 }
 
 #feedbackView .feedback-grid {
@@ -27034,13 +27034,13 @@ body {
     inset 0 1px 0 rgba(255,255,255,0.82),
     inset 0 -1px 0 rgba(255,255,255,0.18) !important;
   backdrop-filter: blur(34px) saturate(190%) brightness(1.05) !important;
-  -webkit-backdrop-filter: blur(34px) saturate(190%) brightness(1.05) !important;
+  -webkit-backdrop-filter: blur(34px) saturate(190%) brightness(1.05);
   overflow: hidden !important;
 }
 
 #feedbackView .feedback-compose-card,
 #feedbackView .feedback-board-card {
-  border-radius: 34px !important;
+  border-radius: 34px;
   padding: clamp(26px, 3vw, 38px) !important;
 }
 
@@ -27063,12 +27063,12 @@ body {
   position: absolute !important;
   inset: 1px !important;
   border-radius: inherit !important;
-  pointer-events: none !important;
+  pointer-events: none;
   background:
     radial-gradient(540px 180px at 14% 0%, rgba(255,255,255,0.56), transparent 72%),
     radial-gradient(460px 160px at 98% 100%, rgba(255,255,255,0.20), transparent 74%) !important;
   opacity: .76 !important;
-  mix-blend-mode: screen !important;
+  mix-blend-mode: screen;
 }
 
 #feedbackView .feedback-compose-card::after,
@@ -27076,20 +27076,20 @@ body {
   content: "" !important;
   position: absolute !important;
   inset: 1px !important;
-  border-radius: inherit !important;
-  pointer-events: none !important;
+  border-radius: inherit;
+  pointer-events: none;
   background:
     linear-gradient(112deg, transparent 0 18%, rgba(255,255,255,0.26) 19%, transparent 33%),
     repeating-linear-gradient(112deg, rgba(255,255,255,0.045) 0 1px, transparent 1px 12px) !important;
   opacity: .52 !important;
-  mix-blend-mode: screen !important;
+  mix-blend-mode: screen;
 }
 
 #feedbackView .feedback-compose-card > *,
 #feedbackView .feedback-board-card > *,
 #feedbackView .feedback-thread > * {
   position: relative !important;
-  z-index: 1 !important;
+  z-index: 1;
 }
 
 #feedbackView .feedback-tape,
@@ -27105,7 +27105,7 @@ body {
 #feedbackView .feedback-board-head h2 {
   margin: 4px 0 8px !important;
   color: rgba(15, 23, 42, 0.88) !important;
-  font-family: "Quicksand", "Nunito", sans-serif !important;
+  font-family: "Quicksand", "Nunito", sans-serif;
   font-size: clamp(26px, 2.4vw, 34px) !important;
   line-height: 1.06 !important;
   letter-spacing: 0 !important;
@@ -27116,7 +27116,7 @@ body {
   color: rgba(51,65,85,0.72) !important;
   font-size: 16px !important;
   line-height: 1.58 !important;
-  font-weight: 720 !important;
+  font-weight: 720;
 }
 
 #feedbackView .feedback-input,
@@ -27133,7 +27133,7 @@ body {
     inset 0 -1px 0 rgba(255,255,255,0.15),
     0 12px 26px rgba(15,23,42,0.055) !important;
   backdrop-filter: blur(20px) saturate(170%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(170%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
 }
 
 #feedbackView .feedback-input,
@@ -27153,7 +27153,7 @@ body {
   flex: 1 1 260px !important;
   min-height: 260px !important;
   padding: 18px !important;
-  resize: vertical !important;
+  resize: vertical;
 }
 
 #feedbackView .feedback-input::placeholder,
@@ -27188,7 +27188,7 @@ body {
     0 12px 26px rgba(15,23,42,0.08),
     inset 0 1px 0 rgba(255,255,255,0.76) !important;
   backdrop-filter: blur(18px) saturate(170%) !important;
-  -webkit-backdrop-filter: blur(18px) saturate(170%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
   transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease !important;
 }
 
@@ -27251,12 +27251,12 @@ body {
   max-height: min(66vh, 760px) !important;
   overflow: auto !important;
   padding: 2px 4px 2px 2px !important;
-  scrollbar-gutter: stable !important;
+  scrollbar-gutter: stable;
 }
 
 #feedbackView .feedback-empty {
   padding: 28px !important;
-  border-radius: 24px !important;
+  border-radius: 24px;
   color: rgba(71,85,105,0.70) !important;
 }
 
@@ -27290,7 +27290,7 @@ body {
 
 #feedbackView .feedback-thread h3 {
   margin: 0 0 7px !important;
-  font-family: "Quicksand", "Nunito", sans-serif !important;
+  font-family: "Quicksand", "Nunito", sans-serif;
   font-size: clamp(20px, 1.8vw, 28px) !important;
   line-height: 1.14 !important;
   letter-spacing: 0 !important;
@@ -27312,10 +27312,10 @@ body {
   border: 1px solid rgba(255,255,255,0.62) !important;
   border-radius: 999px !important;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.74) !important;
-  font-family: "DM Mono", monospace !important;
+  font-family: "DM Mono", monospace;
   font-size: 12px !important;
-  font-weight: 700 !important;
-  text-align: center !important;
+  font-weight: 700;
+  text-align: center;
 }
 
 #feedbackView .feedback-thread-body {
@@ -27364,7 +27364,7 @@ body {
 
 #feedbackView .feedback-reply-input {
   max-height: 130px !important;
-  resize: vertical !important;
+  resize: vertical;
 }
 
 #feedbackView .feedback-reply-btn {
@@ -27428,7 +27428,7 @@ body {
 
   #feedbackView .feedback-compose-card,
   #feedbackView .feedback-board-card {
-    border-radius: 26px !important;
+    border-radius: 26px;
     padding: 22px !important;
   }
 
@@ -27458,8 +27458,8 @@ body {
     0 10px 24px rgba(15,23,42,0.045),
     inset 0 1px 0 rgba(255,255,255,0.66),
     inset 0 -1px 0 rgba(255,255,255,0.14) !important;
-  backdrop-filter: blur(18px) saturate(165%) brightness(1.04) !important;
-  -webkit-backdrop-filter: blur(18px) saturate(165%) brightness(1.04) !important;
+  backdrop-filter: blur(18px) saturate(165%) brightness(1.04);
+  -webkit-backdrop-filter: blur(18px) saturate(165%) brightness(1.04);
 }
 
 #feedbackView .feedback-reply::before {
@@ -27473,7 +27473,7 @@ body {
   position: absolute !important;
   inset: 1px !important;
   border-radius: inherit !important;
-  pointer-events: none !important;
+  pointer-events: none;
   background:
     radial-gradient(260px 90px at 14% 0%, rgba(255,255,255,0.42), transparent 72%) !important;
   opacity: .68 !important;
@@ -27482,7 +27482,7 @@ body {
 #feedbackView .feedback-reply-meta,
 #feedbackView .feedback-reply-body {
   position: relative !important;
-  z-index: 1 !important;
+  z-index: 1;
 }
 
 #feedbackView .feedback-reply-body {
@@ -27491,7 +27491,7 @@ body {
 
 /* FEEDBACK THREADED REPLY LOCK: clicking a note chooses who the reply targets. */
 #feedbackView .feedback-click-reply {
-  cursor: pointer !important;
+  cursor: pointer;
   transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease, background .16s ease !important;
 }
 
@@ -27512,7 +27512,7 @@ body {
 }
 
 #feedbackView .feedback-thread-body.feedback-click-reply {
-  cursor: pointer !important;
+  cursor: pointer;
 }
 
 #feedbackView .feedback-replies {
@@ -27534,7 +27534,7 @@ body {
 
 #feedbackView .feedback-reply-context {
   position: relative !important;
-  z-index: 1 !important;
+  z-index: 1;
   width: max-content !important;
   max-width: 100% !important;
   margin: 7px 0 2px !important;
@@ -27544,11 +27544,11 @@ body {
   background: rgba(255,255,255,0.22) !important;
   color: rgba(71,85,105,0.62) !important;
   font-size: 11px !important;
-  font-weight: 750 !important;
+  font-weight: 750;
   line-height: 1.2 !important;
   overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  white-space: nowrap !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 #feedbackView .feedback-reply-target {
@@ -27562,8 +27562,8 @@ body {
   border: 1px solid rgba(125,211,252,0.50) !important;
   border-radius: 16px !important;
   color: rgba(30,41,59,0.76) !important;
-  backdrop-filter: blur(18px) saturate(165%) !important;
-  -webkit-backdrop-filter: blur(18px) saturate(165%) !important;
+  backdrop-filter: blur(18px) saturate(165%);
+  -webkit-backdrop-filter: blur(18px) saturate(165%);
 }
 
 #feedbackView .feedback-reply-target.hidden {
@@ -27572,19 +27572,19 @@ body {
 
 #feedbackView .feedback-reply-target-name {
   grid-column: 1 !important;
-  font-family: "DM Mono", monospace !important;
+  font-family: "DM Mono", monospace;
   font-size: 12px !important;
-  font-weight: 750 !important;
+  font-weight: 750;
 }
 
 #feedbackView .feedback-reply-target-text {
   grid-column: 1 !important;
   color: rgba(71,85,105,0.66) !important;
   font-size: 12px !important;
-  font-weight: 700 !important;
+  font-weight: 700;
   overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  white-space: nowrap !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 #feedbackView .feedback-reply-target-clear {
@@ -27598,7 +27598,7 @@ body {
   color: rgba(71,85,105,0.72) !important;
   font-size: 18px !important;
   line-height: 1 !important;
-  cursor: pointer !important;
+  cursor: pointer;
 }
 
 @media (max-width: 760px) {
@@ -27632,7 +27632,7 @@ body {
   border-radius: 0 999px 999px 0 !important;
   background: linear-gradient(180deg, #38bdf8, #2563eb) !important;
   opacity: 0.82 !important;
-  pointer-events: none !important;
+  pointer-events: none;
 }
 
 #feedbackView .feedback-thread-head {
@@ -27674,7 +27674,7 @@ body {
   background:
     linear-gradient(180deg, transparent, rgba(148,163,184,0.34), transparent) !important;
   transform: translateX(-50%) !important;
-  pointer-events: none !important;
+  pointer-events: none;
 }
 
 #feedbackView .feedback-reply {
