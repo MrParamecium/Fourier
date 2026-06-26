@@ -3,6 +3,7 @@
   "version": "1.4.1",
   "private": true,
   "description": "Fourier Tutor Agent web UI and API bridge",
+  "//": "playwright pinned EXACT (no caret) — see docs/HARNESS_INTERACTIVE_PLAN.md red flag #1. The visual-diff 35-view baseline is pinned to this Playwright's Chromium build; a minor/patch bump can shift font AA and invalidate the 0.061% noise-floor calibration. Bumping requires rebaking baselines.",
   "main": "app/ws-bridge.js",
   "scripts": {
     "start": "node app/ws-bridge.js",
@@ -19,7 +20,6 @@
     "test:css-probe:check": "node tools/css-probe.js --check"
   },
   "devDependencies": {
-    "//playwright": "PINNED EXACT (no caret). The visual-diff 35-view baseline is pinned to this Playwright's Chromium build; a minor/patch bump can shift font AA and invalidate the 0.061% noise-floor calibration. Bumping requires rebaking baselines — see docs/HARNESS_INTERACTIVE_PLAN.md red flag #1.",
     "pixelmatch": "^7.2.0",
     "playwright": "1.60.0",
     "pngjs": "^7.0.0"
