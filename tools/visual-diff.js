@@ -1020,6 +1020,114 @@ const sharedViews = [
             requestAnimationFrame(() => requestAnimationFrame(r))));
         await page.waitForTimeout(200);
     } },
+    // View 26 — Page A — FLOW view, first of the harness. Bounds the B4
+    // lesson-render.js extraction by exercising the KP pager engine through
+    // real clicks: page-frame data-lesson-page must change, prev/next
+    // disabled state must update, the 720ms page-turn animation lock must
+    // resolve so the second click registers. Covers B4 §6
+    // (renderCurrentKnowledgePoint) + §11 (runLearnPageTurn) +
+    // KP-state writes (learnKnowledgePoints / currentKnowledgePointIndex).
+    //
+    // Setup mirrors view 21's chrome reset (strip view 20's sidebar-
+    // collapsed + clear chapter-overview-active) then rewinds the pager
+    // to KP 0 via a defensive prev-loop. The lesson is open from view 06
+    // (1.1-1 Signal Energy, 5+ KPs). After this view, the pager sits at
+    // KP 2 — view 21's advanceLessonUntil handles any starting KP.
+    //
+    // failRatio CALIBRATED: 3 baseline runs all measured 0.000% noise
+    // (the screenshot at KP 2 is fully settled — settle:'lesson' fires
+    // font rasterization + MathJax typesetting before capture). Default
+    // would be 0.500%; we tighten to 0.100% — comfortably above the
+    // 0.061% lesson-AA noise floor recorded for views 06-08 (in case
+    // future Chromium drift surfaces AA jitter on this view too) but
+    // 5x tighter than default so a real KP-render regression surfaces.
+    { name: '26-kp-pager-advance', page: 'A', failRatio: 0.001,
+      setup: async (page) => {
+        await resetLessonChromeState(page);
+        await page.evaluate(() => {
+            document.querySelector('.app')?.classList.remove('sidebar-collapsed');
+            document.getElementById('leftSidebar')?.classList.remove('collapsed');
+        });
+        // Rewind to KP 0. Bounded to 25 iterations so a buggy disabled-
+        // state contract can't infinite-loop the harness.
+        for (let i = 0; i < 25; i++) {
+            const clicked = await page.evaluate(() => {
+                const btn = document.querySelector('#learnKpPrevBtn:not([disabled])');
+                if (!btn) return false;
+                btn.click();
+                return true;
+            });
+            if (!clicked) break;
+            await page.waitForTimeout(150);
+        }
+      },
+      flow: { steps: [
+        // Step 0 — assert pager is at KP 0 BEFORE any flow click. prev
+        // disabled / next enabled is the canonical first-page contract
+        // emitted by renderCurrentKnowledgePoint (app.js L2172-2173).
+        {
+            name: 'assert-pager-at-kp-0',
+            action: async () => {},
+            assert: async (p) => p.evaluate(() => {
+                const prev = document.getElementById('learnKpPrevBtn');
+                const next = document.getElementById('learnKpNextBtn');
+                return prev?.disabled === true && next?.disabled === false;
+            }),
+            settle: 'rAF',
+            timeoutMs: 3000,
+        },
+        // Step 1 — first KP advance. Action commits to clicking ONLY if
+        // the button is currently enabled (the :not([disabled]) selector
+        // guards against advancing past end). Assert observes the prev
+        // button flipping enabled, which is the KP-state-write side
+        // effect we care about for B4.
+        {
+            name: 'click-next-advance-from-kp-0',
+            action: async (p) => {
+                const ok = await p.evaluate(() => {
+                    const btn = document.querySelector('#learnKpNextBtn:not([disabled])');
+                    if (!btn) return false;
+                    btn.click();
+                    return true;
+                });
+                if (!ok) throw new Error('next button unexpectedly disabled at KP 0');
+            },
+            assert: async (p) => p.evaluate(() =>
+                document.getElementById('learnKpPrevBtn')?.disabled === false),
+            settle: 'lesson',
+            timeoutMs: 4000,
+        },
+        // Step 2 — second KP advance. Second click within the 720ms
+        // page-turn animation window historically swallowed the click;
+        // settle:'lesson' lets the animation resolve before the next
+        // action attempts. This step is the page-turn-animation gate
+        // for B4 §11.
+        {
+            name: 'click-next-advance-from-kp-1',
+            action: async (p) => {
+                const ok = await p.evaluate(() => {
+                    const btn = document.querySelector('#learnKpNextBtn:not([disabled])');
+                    if (!btn) return false;
+                    btn.click();
+                    return true;
+                });
+                if (!ok) throw new Error('next button unexpectedly disabled at KP 1');
+            },
+            // Assert both: still mid-pager (prev enabled) AND a lesson
+            // page-frame exists (proves renderCurrentKnowledgePoint
+            // re-emitted the frame). Combined check tightens the
+            // contract against a future B4 bug where the frame is
+            // skipped on subsequent KPs.
+            assert: async (p) => p.evaluate(() => {
+                const prev = document.getElementById('learnKpPrevBtn');
+                const frame = document.querySelector('#learnExplainContent .lesson-page-frame');
+                return prev?.disabled === false && Boolean(frame);
+            }),
+            settle: 'lesson',
+            timeoutMs: 4000,
+        },
+      ] },
+    },
     // View 21 — Page A — paginate to the SUMMARY KP page (where
     // parseLessonKnowledgePoints at app.js L2179-2192 emits a {type:
     // 'summary', title: '📌 Key Takeaways'} block containing the bullet

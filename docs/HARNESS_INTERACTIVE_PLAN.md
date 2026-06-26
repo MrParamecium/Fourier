@@ -103,19 +103,36 @@ pin + `check` entry. Zero changes to `app/` or `sharedViews`.
 
 ## PR-2 — `feat(harness): seed B4 flow views`
 
-**Scope:** 5 new view entries appended to `sharedViews` + 5 new PNG
-baselines. `failRatio: 0.005` placeholder per owner choice; calibrate
-per-view after first 3 baseline runs measure the noise floor + 50%
-margin (matches the empirical method from `feedback-input outline
-cascade` memory).
+> **Status update 2026-06-26 (post-PR-1):** Scope cut from 5 views to
+> **1 view (view 26 `kp-pager-advance`)** during selector verification.
+> The other 4 views were deferred — see the *Deferred sibling flow
+> views* table below for selector gaps + suggested resolution. View 26
+> alone still bounds the highest-risk B4 surface (KP engine + page-turn
+> animation lock + KP-state writeback at app.js L2172-2173) since every
+> other B4 §§3/10/14 entry is reached transitively through KP rendering.
+
+**Scope:** 1 new view entry appended to `sharedViews` + 1 new PNG
+baseline. `failRatio: 0.001` (CALIBRATED — 3 runs measured 0.000% noise;
+held above 0.061% lesson-AA floor to absorb future Chromium AA drift).
+
+### Shipped in PR-2
 
 | View | Page | Steps | Why |
 |---|---|---|---|
-| `26-kp-pager-advance` | A | open subtopic → click next twice → assert `dataset.lessonPage === '3'` | B4 §11 page-turn block + KP-state mutation |
-| `27-focus-mode-modal-open` | A | open subtopic → click focus-mode trigger → assert `#focusModeDialog:not(.hidden)` | B4 §3 `enhanceVisualMetadataUI` |
-| `28-focus-mode-modal-decoration` | A | (27) + assert `[data-lecture-decorated="1"]` count > 0 | B4 §2 `decorateLectureContent` |
-| `29-recent-conversations-restore` | A | open subtopic → save session → reload → click recent entry → assert lesson body restored | B4 §10 `setLearnLessonContent` + cross-module `renderLearnPages` caller |
-| `30-chapter-overview-kp-writeback` | A | open chapter overview → assert `learnKnowledgePoints.length > 0` via `page.evaluate` | B4 must-stay state: confirms KP-state lets stay writable from non-engine code |
+| `26-kp-pager-advance` | A | Step 0: assert `learnKpPrevBtn.disabled && !learnKpNextBtn.disabled` (KP 0 contract); Step 1: click `#learnKpNextBtn:not([disabled])`, assert `!learnKpPrevBtn.disabled`; Step 2: click again, assert `!learnKpPrevBtn.disabled && #learnExplainContent .lesson-page-frame` exists | B4 §6 (`renderCurrentKnowledgePoint`) + §11 (`runLearnPageTurn` animation lock) + KP-state writes (`learnKnowledgePoints` + `currentKnowledgePointIndex`). Inserted between view 20 and view 21 — view 21 + 22's `advanceLessonUntil` continues from KP 2 cleanly. |
+
+### Deferred sibling flow views (selector verification gap)
+
+Each blocked because the originally-planned selector either does not
+exist or the open-path is non-trivial. Selectors below were verified
+against the post-PR-1 codebase (`grep` of `app/app.js` + `app/index.html`).
+
+| Planned view | Blocker (verified) | Resolution path |
+|---|---|---|
+| `27-focus-mode-modal-open` | `#focusModeDialog` does NOT exist. `#learnFocusModal` (HTML L1476) opens via a click handler that is NOT bound to a standalone trigger button — opens implicitly via lesson UI / overlay path I couldn't isolate. `learnFocusBtn` (L840) triggers `advanceLearnPanelFocus('qa')`, NOT the modal. | Either (a) add a `__ftutorOpenLearnFocus` window helper that calls the modal's open path so the harness can drive it deterministically, or (b) identify the actual open trigger via a manual session capture and document the gesture. |
+| `28-focus-mode-modal-decoration` | Depends on 27. Once 27 lands, the assert is `learnFocusContent.dataset.lectureDecorated === '1'` (decorateLectureContent at app.js L1232 sets this — verified). | After 27. |
+| `29-recent-conversations-restore` | `window.loadHistoricalSession` is exposed (recent-conversations.js L539) and `saveCurrentLearnSession` (L471) exists. BUT the flow requires localStorage seeding before `page.goto`, the session timestamp must already exist, and the assertion against "restored lesson body" needs a stable DOM marker (not just text — text is masked / Mathjax-typeset). | Build a small `seedHistoricalSession(page, sectionId, markdown)` helper in test-utils.js that does the localStorage write before bootstrap, then add `30-recent-conv-restore` as a Page B view with its own bootstrap (Page A is sticky on 1.1-1 and a restore-then-reopen flow would conflict with view 26's KP cursor). |
+| `30-chapter-overview-kp-writeback` | `learnKnowledgePoints` is module-scoped (`let` at app.js L873) — NOT on `window`. Cannot read directly. The KP-write side effect is observable through `#learnExplainContent` post-overview-click. The open path for a real overview-bearing section needs a different `SUBTOPIC` constant (the 1.1-1 default is a leaf subtopic, no overview). | Pick a section ID with a chapter overview (e.g. `1.5` or `1.12`) — verify a `chapter-overview-subcard` renders — then assert `learnExplainContent.dataset.lectureDecorated === '1'` after clicking the subcard. Likely a clean follow-up PR once a section is chosen. |
 
 **Verification:**
 1. All 5 flow views pass against the current `main` (pre-B4) — proves
