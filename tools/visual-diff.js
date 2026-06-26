@@ -400,9 +400,11 @@ const sharedViews = [
         // (style.css L13969) to settle BEFORE reading `after`. Reading
         // earlier captures the start-of-transition value (effectively
         // translateY(0), serializing to `matrix(1, 0, 0, 1, 0, 0)`) and
-        // the literal-match assert below would falsely fail. 350ms
-        // covers transition + small settle slack.
-        await page.waitForTimeout(350);
+        // the literal-match assert below would falsely fail. 500ms
+        // covers transition + settle slack (was 350ms; observed flake
+        // at matrix(1, 0, 0, 1, 0, -0.99288) suggesting the ease curve
+        // tail is being caught mid-flight).
+        await page.waitForTimeout(500);
         const after = await page.evaluate(() => {
             const btn = document.getElementById('preferenceSaveBtn');
             return btn ? getComputedStyle(btn).transform : null;
@@ -431,8 +433,9 @@ const sharedViews = [
     // page.mouse.move(0,0) clears view 12b's lingering hover on
     // #preferenceSaveBtn so the only state-variant visible in this frame is
     // the focused editor.
-    // 350ms wait covers the 150ms box-shadow transition on
-    // .preference-profile-editor (style.css cascade) + a small settle slack.
+    // 500ms wait covers the 150ms box-shadow transition on
+    // .preference-profile-editor (style.css cascade) + settle slack
+    // (was 350ms; aligned with view 12b after observed ease-curve-tail flake).
     { name: '12c-preference-editor-focused', page: 'B', failRatio: 0.0005, setup: async (page) => {
         await page.mouse.move(0, 0);
         await page.focus('#preferenceProfileEditor');
@@ -441,7 +444,7 @@ const sharedViews = [
             return Boolean(t) && document.activeElement === t;
         });
         assertOrThrow(focused, 'view 12c: #preferenceProfileEditor is not document.activeElement after page.focus()');
-        await page.waitForTimeout(350);
+        await page.waitForTimeout(500);
     } },
     // View 12d — Page B — preference page, .preference-secondary-btn :hover.
     // Hovers #preferenceResetBtn (the "Reset Draft" button) to close the
@@ -468,7 +471,7 @@ const sharedViews = [
         });
         await page.hover('#preferenceResetBtn');
         // Wait BEFORE reading `after` — see view 12b for the rationale.
-        await page.waitForTimeout(350);
+        await page.waitForTimeout(500);
         const after = await page.evaluate(() => {
             const btn = document.getElementById('preferenceResetBtn');
             return btn ? getComputedStyle(btn).transform : null;
@@ -522,8 +525,10 @@ const sharedViews = [
         await page.hover('#preferenceSaveBtn');
         await page.mouse.down();
         // Wait BEFORE reading `after` — covers the 150ms transform
-        // transition between :hover and :active states.
-        await page.waitForTimeout(350);
+        // transition between :hover and :active states. 500ms aligned
+        // with view 12b after observed ease-curve-tail flake at
+        // matrix(1, 0, 0, 1, 0, 0.969277).
+        await page.waitForTimeout(500);
         const after = await page.evaluate(() => {
             const btn = document.getElementById('preferenceSaveBtn');
             return btn ? getComputedStyle(btn).transform : null;

@@ -5479,11 +5479,6 @@ body.answer-compare-resizing {
     width: 100%;
   }
 
-  .learn-focus-btn {
-    width: 100%;
-    justify-content: center;
-  }
-
   .learn-focus-dialog {
     width: min(100vw - 24px, 920px);
     max-height: calc(100vh - 24px);
@@ -6848,25 +6843,16 @@ body {
 }
 
 
-:root[data-theme="light"] .lecture-overlay-btn,
-:root[data-theme="light"] .learn-focus-btn {
+:root[data-theme="light"] .lecture-overlay-btn {
   border-color: #d6d6d3;
   background: rgba(255, 255, 255, 0.98);
   color: #111111;
   box-shadow: 0 14px 34px rgba(17, 17, 17, 0.08), 0 2px 8px rgba(17, 17, 17, 0.04);
 }
 
-:root[data-theme="light"] .lecture-overlay-btn:hover,
-:root[data-theme="light"] .learn-focus-btn:hover {
+:root[data-theme="light"] .lecture-overlay-btn:hover {
   background: #f3f3f2;
   border-color: #bdbdb8;
-}
-
-:root[data-theme="light"] .learn-focus-btn.is-collapsed {
-  background: #111111;
-  color: #ffffff;
-  border-color: #111111;
-  box-shadow: 0 18px 38px rgba(17, 17, 17, 0.16), 0 4px 12px rgba(17, 17, 17, 0.08);
 }
 
 :root[data-theme="light"] #learnViewSelector {
