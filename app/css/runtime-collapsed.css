@@ -156,9 +156,8 @@
     }
     #learnView .stamp-page-btn:disabled::before { border-color: #cbd5e1 !important; }
     #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn,
-    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn,
-    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle,
-    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle {
+
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn{
       position: relative !important;
       display: inline-flex !important;
       align-items: center !important;
@@ -182,9 +181,8 @@
       transform: translateY(-50%) rotate(2deg) !important;
     }
     #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn::before,
-    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn::before,
-    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle::before,
-    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle::before {
+
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn::before{
       content: "" !important;
       position: absolute !important;
       border: 0 !important;
@@ -196,16 +194,14 @@
       pointer-events: none !important;
     }
     #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn::after,
-    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn::after,
-    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle::after,
-    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle::after {
+
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn::after{
       content: none !important;
       display: none !important;
     }
     #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label,
-    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label,
-    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-label,
-    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-label {
+
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label{
       position: relative !important;
       z-index: 2 !important;
       display: inline-block !important;
@@ -215,9 +211,8 @@
       text-transform: none !important;
     }
     #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label::after,
-    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label::after,
-    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-label::after,
-    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-label::after {
+
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label::after{
       content: "" !important;
       position: absolute !important;
       left: -5% !important;
@@ -230,9 +225,8 @@
       pointer-events: none !important;
     }
     #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon,
-    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon,
-    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon,
-    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon {
+
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon{
       position: relative !important;
       z-index: 2 !important;
       flex: 0 0 auto !important;
@@ -246,54 +240,40 @@
       transition: transform 0.3s ease !important;
     }
     #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon svg,
-    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon svg,
-    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon svg,
-    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon svg {
+
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon svg{
       width: 24px !important;
       height: 24px !important;
       stroke: currentColor !important;
     }
     #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn:hover .learn-edge-toggle-label::after,
-    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn:hover .learn-edge-toggle-label::after,
-    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle:hover .learn-edge-toggle-label::after,
-    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle:hover .learn-edge-toggle-label::after {
+
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn:hover .learn-edge-toggle-label::after{
       background: #6ee7b7 !important;
     }
     #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn:hover .learn-edge-toggle-icon,
     #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn:hover .learn-edge-toggle-icon {
       transform: translateX(6px) !important;
     }
-    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle:hover .learn-edge-toggle-icon,
-    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle:hover .learn-edge-toggle-icon {
-      transform: translateX(-6px) !important;
-    }
     #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn:active,
     #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn:active {
       transform: translateY(calc(-50% + 4px)) rotate(0deg) !important;
       box-shadow: 0 0 0 #1e293b !important;
     }
-    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle:active,
-    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle:active {
-      transform: translateY(4px) rotate(0deg) !important;
-      box-shadow: 0 0 0 #1e293b !important;
-    }
 
     #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label,
-    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label,
-    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-label,
-    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-label {
+
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label{
       font-weight: 800 !important;
     }
     #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon svg,
-    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon svg,
-    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon svg,
-    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon svg {
+
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon svg{
       stroke-width: 3.2 !important;
     }
     #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn,
-    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn,
-    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle,
-    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle {
+
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn{
       gap: 5px !important;
       height: 32px !important;
       min-height: 32px !important;
@@ -307,14 +287,9 @@
       left: 12px !important;
       right: auto !important;
     }
-    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle,
-    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle {
-      margin-left: auto !important;
-    }
     #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn::before,
-    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn::before,
-    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle::before,
-    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle::before {
+
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn::before{
       top: -6px !important;
       left: -6px !important;
       width: 30px !important;
@@ -322,37 +297,30 @@
       background: repeating-linear-gradient(90deg, #f9a8d4, #f9a8d4 4px, rgba(255,255,255,0.42) 4px, rgba(255,255,255,0.42) 8px) !important;
     }
     #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label,
-    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label,
-    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-label,
-    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-label {
+
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label{
       font-size: 12px !important;
       line-height: 1 !important;
     }
     #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label::after,
-    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label::after,
-    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-label::after,
-    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-label::after {
+
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-label::after{
       bottom: 0 !important;
       height: 7px !important;
     }
     #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon,
+
     #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon,
-    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon,
-    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon,
+
     #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon svg,
-    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon svg,
-    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon svg,
-    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle .learn-edge-toggle-icon svg {
+
+    #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn .learn-edge-toggle-icon svg{
       width: 14px !important;
       height: 14px !important;
     }
     #learnView #learnBody:not(.chapter-overview-active) #learnExplainToggleBtn.learn-explain-toggle-btn:hover,
     #learnView #learnBody.chapter-overview-split-active #learnExplainToggleBtn.learn-explain-toggle-btn:hover {
       transform: translateY(calc(-50% - 1px)) rotate(0deg) !important;
-      box-shadow: 3px 3px 0 #1e293b !important;
-    }
-    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle:hover,
-    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle:hover {
       box-shadow: 3px 3px 0 #1e293b !important;
     }
     #learnView #learnBody:not(.chapter-overview-active) .learn-chat-topbar,
@@ -385,19 +353,6 @@
       content: none !important;
       display: none !important;
     }
-    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle,
-    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle {
-      position: relative !important;
-      right: auto !important;
-      left: auto !important;
-      margin: 0 !important;
-      transform: rotate(1deg) !important;
-      pointer-events: auto !important;
-    }
-    #learnView #learnBody:not(.chapter-overview-active) #learnFocusBtn.learn-chat-corner-toggle:hover,
-    #learnView #learnBody.chapter-overview-split-active #learnFocusBtn.learn-chat-corner-toggle:hover {
-      transform: translateY(-1px) rotate(0deg) !important;
-    }
 
     #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .learn-toolbar-center,
     #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .learn-toolbar-center {
@@ -426,13 +381,18 @@
       cursor: pointer !important;
     }
     #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-left,
+
     #learnView #learnBody:not(.chapter-overview-active) #learnExplainToolbar .lecture-overlay-btn-right,
+
     #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-left,
+
     #learnView #learnBody.chapter-overview-split-active #learnExplainToolbar .lecture-overlay-btn-right,
+
     #learnView #learnExplainToolbar .lecture-overlay-btn-left,
+
     #learnView #learnExplainToolbar .lecture-overlay-btn-right,
-    #learnView #learnExplainToolbar #learnExplainToggleBtn,
-    #learnView #learnExplainToolbar #learnFocusBtn {
+
+    #learnView #learnExplainToolbar #learnExplainToggleBtn{
       position: relative !important;
       z-index: 80 !important;
       pointer-events: auto !important;
