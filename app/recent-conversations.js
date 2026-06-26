@@ -520,7 +520,9 @@ function saveCurrentLearnSession(source = 'unknown') {
     bookPages: snapshot.bookPages,
     webSources: snapshot.webSources,
     attachments: snapshot.attachments,
-    history: JSON.parse(JSON.stringify(snapshot.history))
+    // Drop per-turn image data URLs from persisted history (the session-level
+    // `attachments` already covers restore; keeping base64 here would bloat localStorage).
+    history: (snapshot.history || []).map(({ images, ...m }) => ({ ...m }))
   };
 
   if (existingIdx !== -1) {
