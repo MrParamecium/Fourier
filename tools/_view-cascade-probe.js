@@ -99,8 +99,59 @@ const VIEWS = [
       // The submit btn carries 1 :active + 4 :disabled !important candidates
       // (transform/cursor/filter/opacity/transform). Without these states the
       // arbiter can't witness a strip on the disabled/pressed button.
-      { label: 'submit-active', active: '#feedbackView #feedbackSubmitBtn' },
-      { label: 'submit-disabled', disabled: '#feedbackView #feedbackSubmitBtn' },
+      // NOTE: `submit-active` (mouse.down) + `submit-disabled` (el.disabled=true)
+      // interactions were both tried and REMOVED — they produced reproducible
+      // false-positive flips:
+      //   - submit-active: dusk-1280-only flake on `:hover i` icon transform
+      //     (mouse.move hover-state timing flaky in that one theme/viewport)
+      //   - submit-disabled: feedbackStatus height 22→36px under synthetic
+      //     el.disabled=true with no JS handler firing (Playwright attribute
+      //     side effect not matching real flow `await postFeedback() →
+      //     setFeedbackStatus(...)`)
+      // The 5 :active/:disabled candidates on submit btn (L25240 transform +
+      // L25244-25247 cursor/opacity/filter/transform) are force-kept in
+      // _keep-important.json, so dropping these probes loses no protection on
+      // load-bearing rules.
+    ],
+  },
+  // -------------------------------------------------------------------------
+  // .app .sidebar — NOT DOM-isolated. The sidebar paints on every navigated
+  // view; cascade competitors live both within the .sidebar subtree (own
+  // descendants) AND in cross-cutting grouped rules (.learn-close, .book-nav-btn,
+  // .feature-close-btn-compact, .syllabus-section, etc.) that share a rule
+  // with sidebar arms — those 51 mixed candidates are force-kept upfront by
+  // _grow-keep-from-report.js's --force-mixed flag. The expanded + collapsed
+  // contexts cover the two sidebar layout modes; the home subtree is the
+  // default after enterGuestMode (no navigation needed).
+  {
+    id: 'sidebar-expanded', root: '.app .sidebar',
+    interactions: [
+      { label: 'rest' },
+      { label: 'toggle-hover', hover: '.app .sidebar .sidebar-toggle' },
+      { label: 'recent-hover', hover: '.app .sidebar #navRecentConversationsBtn' },
+      { label: 'settings-hover', hover: '.app .sidebar #navSettingsBtn' },
+      { label: 'feedback-hover', hover: '.app .sidebar #navFeedbackBtn' },
+    ],
+  },
+  {
+    id: 'sidebar-collapsed', root: '.app .sidebar',
+    preNav: async (page) => {
+      await page.evaluate(() => {
+        document.querySelector('.app')?.classList.add('sidebar-collapsed');
+        document.getElementById('leftSidebar')?.classList.add('collapsed');
+      });
+    },
+    // Ensure the collapsed class is reapplied after each viewport resize —
+    // some app-level resize handlers reset chrome state.
+    ensureState: async (page) => {
+      await page.evaluate(() => {
+        document.querySelector('.app')?.classList.add('sidebar-collapsed');
+        document.getElementById('leftSidebar')?.classList.add('collapsed');
+      });
+    },
+    interactions: [
+      { label: 'rest' },
+      { label: 'toggle-hover', hover: '.app .sidebar .sidebar-toggle' },
     ],
   },
 ];
@@ -157,9 +208,11 @@ async function captureView(page, view, snapFn) {
   await page.setViewportSize({ width: 1280, height: 800 });
   await settle(page);
   if (view.preNav) await view.preNav(page);   // e.g. seed a localStorage fixture before opening
-  await page.click(view.nav);
-  await page.waitForSelector(`${view.root}:not(.hidden)`, { timeout: 8000 });
-  await page.waitForFunction(view.ready, { timeout: 8000 });
+  if (view.nav) {
+    await page.click(view.nav);
+    await page.waitForSelector(`${view.root}:not(.hidden)`, { timeout: 8000 });
+  }
+  if (view.ready) await page.waitForFunction(view.ready, { timeout: 8000 });
 
   for (const theme of THEMES) {
     for (const vp of VIEWPORTS) {
@@ -331,7 +384,21 @@ process.once('SIGTERM', () => cleanup('SIGTERM'));
     }
     return true;
   }
-  const rectEq = (a, b) => a.length === b.length && a.every((v, i) => Math.abs(v - b[i]) <= PX_TOL);
+  const rectEq = (a, b) => {
+    if (a.length !== b.length) return false;
+    for (let i = 0; i < a.length; i++) {
+      const va = a[i], vb = b[i];
+      // SVG elements expose `undefined` for offsetLeft/Top/Width/Height; both
+      // sides see the same undefined → null round-trip, so treat null==null
+      // as equal explicitly (`Math.abs(null - null)` is 0 but NaN once one
+      // side survives as undefined in memory).
+      const aNil = va == null, bNil = vb == null;
+      if (aNil !== bNil) return false;
+      if (aNil && bNil) continue;
+      if (Math.abs(va - vb) > PX_TOL) return false;
+    }
+    return true;
+  };
 
   const diffs = [];
   for (const state of Object.keys(base)) {
@@ -348,15 +415,27 @@ process.once('SIGTERM', () => cleanup('SIGTERM'));
       if (!valEq(eb.placeholder, ec.placeholder)) diffs.push(`${tag} | ::placeholder "${eb.placeholder}" → "${ec.placeholder}"`);
     }
   }
-  const lines = [`# view-cascade-probe report`, ``, `states: ${Object.keys(base).length}  props/element: ${PROP_LIST.length}`, ``];
+  const header = [`# view-cascade-probe report`, ``, `states: ${Object.keys(base).length}  props/element: ${PROP_LIST.length}`, ``];
   if (diffs.length === 0) {
-    lines.push(`**PASS — byte-identical across all states.**`);
+    header.push(`**PASS — byte-identical across all states.**`);
+    fs.writeFileSync(REPORT, header.join('\n') + '\n');
     console.log(`\n[view-probe] PASS — ${Object.keys(base).length} states byte-identical`);
   } else {
-    lines.push(`**FAIL — ${diffs.length} cascade flips:**`, ``, ...diffs.map((d) => `- ${d}`));
+    // Stream the diffs to disk in chunks — spreading 100k+ lines into one push
+    // overflows the call stack, and diffs.join() builds a huge intermediate string.
+    fs.writeFileSync(REPORT, header.join('\n') + '\n' + `**FAIL — ${diffs.length} cascade flips:**\n\n`);
+    const fd = fs.openSync(REPORT, 'a');
+    try {
+      const CHUNK = 1000;
+      for (let i = 0; i < diffs.length; i += CHUNK) {
+        const slice = diffs.slice(i, i + CHUNK);
+        let s = '';
+        for (const d of slice) s += '- ' + d + '\n';
+        fs.writeSync(fd, s);
+      }
+    } finally { fs.closeSync(fd); }
     console.log(`\n[view-probe] FAIL — ${diffs.length} flips (see ${REPORT})`);
-    for (const d of diffs.slice(0, 40)) console.log(`  ✗ ${d}`);
+    for (const d of diffs.slice(0, 20)) console.log(`  ✗ ${d}`);
   }
-  fs.writeFileSync(REPORT, lines.join('\n') + '\n');
   process.exit(diffs.length ? 1 : 0);
 })();

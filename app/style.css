@@ -9117,7 +9117,7 @@ h6,
 }
 
 .sidebar{
-  backdrop-filter: none !important;
+  backdrop-filter: none;
   border: 0 !important;
   border-radius: 0 !important;
   box-shadow: none !important;
@@ -11814,7 +11814,7 @@ h6,
   overflow-y: auto !important;
   overflow-x: hidden !important;
   scrollbar-width: thin !important;
-  scrollbar-color: rgba(148, 163, 184, 0.58) transparent !important;
+  scrollbar-color: rgba(148, 163, 184, 0.58) transparent;
   padding-right: 10px !important;
 }
 
@@ -11837,7 +11837,7 @@ h6,
 }
 
 :root[data-theme="dark"] .sidebar-nav-shell {
-  scrollbar-color: rgba(96, 165, 250, 0.42) transparent !important;
+  scrollbar-color: rgba(96, 165, 250, 0.42) transparent;
 }
 
 :root[data-theme="dark"] .sidebar-nav-shell::-webkit-scrollbar-thumb {
@@ -17174,7 +17174,7 @@ h6,
   opacity: 1 !important;
   margin: 0 !important;
   padding: 0 !important;
-  pointer-events: auto !important;
+  pointer-events: auto;
   overflow: hidden !important;
   transition:
     flex-basis var(--workspace-sidebar-duration) var(--workspace-sidebar-ease),
@@ -17194,7 +17194,7 @@ h6,
   margin: 0 !important;
   padding: 0 !important;
   border-right-color: var(--sidebar-border) !important;
-  pointer-events: auto !important;
+  pointer-events: auto;
 }
 
 .app .sidebar-top,
@@ -17203,7 +17203,7 @@ h6,
 .app .sidebar-journal-decor {
   opacity: 1 !important;
   transform: translateX(0) !important;
-  filter: none !important;
+  filter: none;
   transition:
     opacity 180ms ease 110ms,
     transform 260ms var(--workspace-sidebar-ease) 80ms !important;
@@ -17219,7 +17219,7 @@ h6,
 .app .sidebar.collapsed .sidebar-journal-decor {
   opacity: 1 !important;
   transform: none !important;
-  filter: none !important;
+  filter: none;
   transition:
     opacity 120ms ease,
     transform 180ms var(--workspace-sidebar-ease) !important;
@@ -17264,7 +17264,7 @@ h6,
   border-radius: 0 0 8px 0 !important;
   background: #38bdf8 !important;
   box-shadow: 4px 0 16px rgba(37, 99, 235, 0.22) !important;
-  pointer-events: none !important;
+  pointer-events: none;
 }
 
 .app.sidebar-collapsed .sidebar .sidebar-top,
@@ -17911,18 +17911,18 @@ and tape. */
   height: 34px !important;
   flex: 0 0 34px !important;
   transform: none !important;
-  cursor: default !important;
+  cursor: default;
 }
 
 .app .sidebar .logo-icon-brand img,
 .app .sidebar .aquarius-sticker-svg {
-  filter: none !important;
+  filter: none;
   border-radius: 50% !important;
 }
 
 .app.sidebar-collapsed .sidebar .logo-icon-brand,
 .app .sidebar.collapsed .logo-icon-brand {
-  cursor: pointer !important;
+  cursor: pointer;
 }
 
 .app.sidebar-collapsed .sidebar .logo-icon-brand:hover,
@@ -17932,7 +17932,7 @@ and tape. */
 
 .app .sidebar .logo-icon-brand:focus-visible {
   outline: 2px solid rgba(14, 165, 233, 0.7) !important;
-  outline-offset: 4px !important;
+  outline-offset: 4px;
 }
 
 .app .sidebar .logo-text-brand {
@@ -19997,7 +19997,7 @@ body {
 
 .app .sidebar{
     position: relative !important;
-    z-index: 2 !important;
+    z-index: 2;
 }
 
 .app .main {
@@ -20030,7 +20030,7 @@ body {
     display: block !important;
     width: 100% !important;
     height: 100% !important;
-    object-fit: cover !important;
+    object-fit: cover;
     border-radius: 12px !important;
     margin: 0 !important;
     box-shadow: none !important;
@@ -20153,7 +20153,7 @@ body {
     position: absolute !important;
     left: -15px !important;
     top: 50% !important;
-    z-index: 2 !important;
+    z-index: 2;
     width: 14px !important;
     min-width: 14px !important;
     height: 22px !important;
@@ -22925,8 +22925,8 @@ body {
   background-image: var(--theme-page-surface) !important;
   border-right: 1px solid var(--theme-pane-border) !important;
   box-shadow: var(--theme-pane-shadow) !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 .topbar,
@@ -24636,8 +24636,8 @@ body {
   background-image: none !important;
   color: #6b778a !important;
   box-shadow: none !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 .app .sidebar .sidebar-home-link#navHomeBtn:not(.active)::after {
@@ -25083,8 +25083,8 @@ body {
   box-shadow:
     0 10px 24px rgba(14,165,233,0.08),
     inset 0 1px 0 rgba(255,255,255,0.78) !important;
-  backdrop-filter: blur(18px) saturate(160%) !important;
-  -webkit-backdrop-filter: blur(18px) saturate(160%) !important;
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
 }
 
 .app .sidebar .sidebar-home-link#navHomeBtn::after {
@@ -25095,7 +25095,7 @@ body {
   bottom: -8px !important;
   height: 1px !important;
   background: linear-gradient(90deg, transparent, rgba(14,165,233,0.22), transparent) !important;
-  pointer-events: none !important;
+  pointer-events: none;
 }
 
 .app .sidebar .sidebar-home-link#navHomeBtn:hover,
@@ -28772,7 +28772,7 @@ body {
 .app .sidebar .logo-icon-brand img {
   width: 42px !important;
   height: 42px !important;
-  object-fit: contain !important;
+  object-fit: contain;
   border-radius: 0 !important;
   transform: none !important;
 }
@@ -29721,7 +29721,7 @@ body {
     margin: 0 !important;
     border: 0 !important;
     transform: translateX(-100%) !important;
-    pointer-events: none !important;
+    pointer-events: none;
   }
 
   .app .main {
@@ -30261,15 +30261,15 @@ body {
   box-shadow:
     18px 0 54px rgba(148, 47, 62, 0.12),
     inset -1px 0 0 rgba(255, 255, 255, 0.42) !important;
-  backdrop-filter: blur(30px) saturate(185%) brightness(1.04) !important;
-  -webkit-backdrop-filter: blur(30px) saturate(185%) brightness(1.04) !important;
+  backdrop-filter: blur(30px) saturate(185%) brightness(1.04);
+  -webkit-backdrop-filter: blur(30px) saturate(185%) brightness(1.04);
 }
 
 .app .sidebar::before {
   content: "" !important;
   position: absolute !important;
   inset: 0 !important;
-  pointer-events: none !important;
+  pointer-events: none;
   background:
     linear-gradient(110deg, rgba(255, 255, 255, 0.30), transparent 36%, rgba(255, 255, 255, 0.14) 72%, transparent),
     linear-gradient(180deg, rgba(255, 255, 255, 0.34), transparent 42%) !important;
@@ -30278,7 +30278,7 @@ body {
 
 .app .sidebar > * {
   position: relative !important;
-  z-index: 1 !important;
+  z-index: 1;
 }
 
 .app .sidebar .logo {
@@ -30289,8 +30289,8 @@ body {
   box-shadow:
     0 18px 40px rgba(148, 47, 62, 0.12),
     var(--answer-glass-inset) !important;
-  backdrop-filter: blur(24px) saturate(165%) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(165%) !important;
+  backdrop-filter: blur(24px) saturate(165%);
+  -webkit-backdrop-filter: blur(24px) saturate(165%);
   transform: none !important;
 }
 
@@ -30319,8 +30319,8 @@ body {
   box-shadow:
     0 14px 32px rgba(148, 47, 62, 0.11),
     inset 0 1px 0 rgba(255, 255, 255, 0.78) !important;
-  backdrop-filter: blur(22px) saturate(155%) !important;
-  -webkit-backdrop-filter: blur(22px) saturate(155%) !important;
+  backdrop-filter: blur(22px) saturate(155%);
+  -webkit-backdrop-filter: blur(22px) saturate(155%);
 }
 
 .app .sidebar-link-icon,
@@ -31586,8 +31586,8 @@ body {
     0 18px 38px rgba(15, 23, 42, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.74),
     inset 0 -1px 0 rgba(255, 255, 255, 0.16) !important;
-  backdrop-filter: blur(24px) saturate(170%) !important;
-  -webkit-backdrop-filter: blur(24px) saturate(170%) !important;
+  backdrop-filter: blur(24px) saturate(170%);
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
   overflow: hidden !important;
 }
 
@@ -31595,7 +31595,7 @@ body {
 .app #leftSidebar.sidebar.collapsed .menu-toggle {
   display: none !important;
   visibility: hidden !important;
-  pointer-events: none !important;
+  pointer-events: none;
 }
 
 .app.sidebar-collapsed #leftSidebar .logo-icon-brand,
@@ -31620,7 +31620,7 @@ body {
   width: 42px !important;
   height: 42px !important;
   display: block !important;
-  object-fit: contain !important;
+  object-fit: contain;
   transform: none !important;
 }
 

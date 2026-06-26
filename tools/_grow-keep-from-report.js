@@ -28,7 +28,8 @@ const REPORT = path.join(__dirname, '_view-cascade-report.md');
 const KEEP = path.join(__dirname, '_keep-important.json');
 const CAND = path.join(__dirname, '_view-important.json');
 
-const report = fs.readFileSync(REPORT, 'utf8');
+const FORCE_MIXED = process.argv.includes('--force-mixed');
+const report = fs.existsSync(REPORT) ? fs.readFileSync(REPORT, 'utf8') : '';
 const cand = JSON.parse(fs.readFileSync(CAND, 'utf8'));
 const keep = new Set(fs.existsSync(KEEP) ? JSON.parse(fs.readFileSync(KEEP, 'utf8')) : []);
 const startSize = keep.size;
@@ -37,6 +38,21 @@ const startSize = keep.size;
 const candidates = [];
 for (const [view, list] of Object.entries(cand)) {
   for (const d of list) candidates.push({ view, ...d });
+}
+
+// --force-mixed: pre-load the keep-set with every candidate whose selector has
+// a non-target arm (cross-cutting grouped rules). Stripping !important from
+// such a rule affects every arm (cascade-arbiter would only catch the flips
+// on probed subtrees), so force-keep them up front.
+if (FORCE_MIXED) {
+  let mixedAdded = 0;
+  for (const c of candidates) {
+    const arms = c.selector.split(',').map(s => s.trim()).filter(Boolean);
+    const target = c.view;          // e.g. '.sidebar' or '#feedbackView'
+    const isMixed = arms.some(arm => !arm.includes(target) && !arm.startsWith(':root') && !arm.startsWith('@'));
+    if (isMixed && !keep.has(c.line)) { keep.add(c.line); mixedAdded++; }
+  }
+  console.log(`[grow-keep --force-mixed] force-kept ${mixedAdded} cross-cutting candidates`);
 }
 
 // Parse element-desc tokens from `tagName[#id][.class.class…]`.
