@@ -131,20 +131,26 @@ const PSEUDO_PROPS = new Set([
 
 // `desc` lives in a state row like `feedback | dawn | 1280 | rest | [N] desc`;
 // derive the candidate-view from the state's first segment so tagless fallback
-// uses the right view root (this PR added `.sidebar` as a second view; the
-// old hardcoded `#feedbackView` sentinel silently broke sidebar tagless flips).
-// For backwards compat fall through to the first available view if mapping fails.
-const VIEW_BY_STATE_PREFIX = {};
-for (const c of candidates) VIEW_BY_STATE_PREFIX[c.view.replace(/^[#.]/, '')] = c.view;
+// uses the right view root. The state-prefix is the probe's view.id (e.g.
+// `feedback`, `sidebar-expanded`, `sidebar-collapsed`) while `c.view` is the
+// candidate selector (e.g. `#feedbackView`, `.sidebar`). They typically share
+// a descriptive substring — `feedback` ⊂ `#feedbackView`, `sidebar` ⊂ `.sidebar`.
+// Match by case-insensitive substring containment so a contributor adding a
+// new view doesn't have to update this mapping. Sort candidate views by stripped-
+// length DESC so the LONGEST-matching candidate wins (avoids `sidebar` losing to
+// a hypothetical `side` candidate inserted earlier).
+const VIEW_KEYS = [...new Set(candidates.map(c => c.view))]
+  .map(v => ({ view: v, lc: v.replace(/^[#.]/, '').toLowerCase() }))
+  .sort((a, b) => b.lc.length - a.lc.length);
 function viewRootFor(state) {
-  // state is like `feedback | dawn | 1280 | rest` or `sidebar-expanded | dawn | ...`.
-  const first = state.split('|')[0].trim();
-  // Match the longest known view-root key whose state prefix starts with it.
-  if (VIEW_BY_STATE_PREFIX[first]) return VIEW_BY_STATE_PREFIX[first];
-  for (const [k, v] of Object.entries(VIEW_BY_STATE_PREFIX)) {
-    if (first.startsWith(k)) return v;
+  const first = state.split('|')[0].trim().toLowerCase();
+  for (const { view, lc } of VIEW_KEYS) {
+    if (first.includes(lc) || lc.includes(first)) return view;
   }
-  return Object.values(VIEW_BY_STATE_PREFIX)[0] || '#feedbackView';
+  // No view matched — should not happen in practice; return a sentinel that
+  // won't accidentally match real selectors (so tagless flips on unknown
+  // states simply add no candidates rather than poisoning a real view's set).
+  return '__unknown_view__';
 }
 
 // elementFlips key is `desc`; we also need to remember which STATE each
