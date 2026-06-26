@@ -1086,6 +1086,13 @@ const sharedViews = [
         await page.evaluate(() => {
             document.querySelector('.app')?.classList.remove('sidebar-collapsed');
             document.getElementById('leftSidebar')?.classList.remove('collapsed');
+            // Defensive: clear any stale stash from a hypothetical prior
+            // run of view 26 on the same shared Page A. Page A persists
+            // across all views per pageMap cache; step 1's assert is the
+            // only writer today, but if step 1 ever early-returns without
+            // writing (e.g. transient empty framePage on a B4 regression),
+            // step 2 could otherwise compare against a stale value.
+            try { delete window.__ftutorFlowKp1Page; } catch (_) {}
         });
         // Rewind to KP 0. Mirrors advanceLessonUntil's pattern: capture
         // current data-lesson-page, click prev, wait for the value to
@@ -1185,7 +1192,14 @@ const sharedViews = [
                     () => !document.querySelector('#learnExplainContent.learn-page-turn-active'),
                     null,
                     { timeout: 2000 },
-                ).catch(() => {});
+                ).catch((err) => {
+                    // Don't throw — let the downstream stale-frame assert
+                    // surface the failure. But log so a B4 regression in
+                    // clearLearnPageTurnClasses (which fires the 720ms
+                    // timeout at app.js L2334+) is debuggable without
+                    // chasing the KP-render path first.
+                    console.warn(`[flow:26-kp-pager-advance] learn-page-turn-active never cleared within 2000ms: ${err?.message || err}`);
+                });
                 const ok = await p.evaluate(() => {
                     const btn = document.querySelector('#learnKpNextBtn:not([disabled])');
                     if (!btn) return false;
