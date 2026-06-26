@@ -39,6 +39,7 @@ const {
     seedFeedbackFixture,
     restoreFeedbackBoard,
     FEEDBACK_FIXTURE_POPULATED_PATH,
+    runFlow,
 } = require('./test-utils.js');
 
 const PORT = Number(process.env.TUTOR_VDIFF_PORT || 9125);
@@ -1588,8 +1589,29 @@ process.once('SIGTERM', () => signalCleanupRestore('SIGTERM'));
         const browser = await chromium.launch();
         const captureView = async (view, page) => {
             const dest = path.join(outDir, `${view.name}.png`);
+            let flowResult = null;
             try {
                 await view.setup(page);
+                // Optional flow runner — drives interactive steps after setup,
+                // before the screenshot. The FINAL DOM state is still pixel-
+                // diffed via the existing screenshot path, so per-view
+                // STRICT_FAIL_RATIO continues to bound regression. A failed
+                // step throws (caught below) and leaves a per-step PNG in
+                // DIFF_DIR for AFK debug.
+                if (view.flow && Array.isArray(view.flow.steps)) {
+                    flowResult = await runFlow(page, view.flow.steps, {
+                        traceLabel: view.name,
+                        artifactDir: DIFF_DIR,
+                    });
+                    if (!flowResult.passed) {
+                        const stepName = view.flow.steps[flowResult.failedAt]?.name
+                            || `step ${flowResult.failedAt}`;
+                        throw new Error(
+                            `[flow:${view.name}] failed at step ${flowResult.failedAt}` +
+                            ` (${stepName}): ${flowResult.error?.message || 'unknown'}`
+                        );
+                    }
+                }
                 // Page C views call settleLesson inside collectLessonFamilies
                 // (per KP) + a 200ms slack via closeSyllabusForCapture, so
                 // they skip the redundant ~300-400ms settle here. Derived
@@ -1602,7 +1624,8 @@ process.once('SIGTERM', () => signalCleanupRestore('SIGTERM'));
                 if (MODE === 'check') {
                     const baselinePath = path.join(BASELINE_DIR, `${view.name}.png`);
                     if (!fs.existsSync(baselinePath)) {
-                        results.push({ view: view.name, status: 'no-baseline' });
+                        results.push({ view: view.name, status: 'no-baseline',
+                                       stepLog: flowResult?.stepLog || null });
                         return;
                     }
                     const diffPath = path.join(DIFF_DIR, `${view.name}.png`);
@@ -1611,12 +1634,14 @@ process.once('SIGTERM', () => signalCleanupRestore('SIGTERM'));
                     const pass = !cmp.error && cmp.ratio <= threshold;
                     results.push({ view: view.name, status: pass ? 'pass' : 'fail',
                                    mismatch: cmp.mismatch, total: cmp.total,
-                                   ratio: cmp.ratio, threshold, error: cmp.error });
+                                   ratio: cmp.ratio, threshold, error: cmp.error,
+                                   stepLog: flowResult?.stepLog || null });
                     if (!pass) exitCode = 1;
                 }
             } catch (err) {
                 console.log(`  ✗ ${view.name}: ${err.message}`);
-                results.push({ view: view.name, status: 'error', error: err.message });
+                results.push({ view: view.name, status: 'error', error: err.message,
+                               stepLog: flowResult?.stepLog || null });
                 exitCode = 1;
             }
         };
@@ -1724,16 +1749,37 @@ process.once('SIGTERM', () => signalCleanupRestore('SIGTERM'));
             .filter(v => v.failRatio != null)
             .map(v => `${v.name}=${(v.failRatio * 100).toFixed(3)}%`)
             .join(', ') || 'none';
+        // Optional Steps column — present only when at least one view used
+        // view.flow. Existing 35-view reports keep their byte-identical
+        // column layout when no flow view is present.
+        const anyFlow = results.some(r => Array.isArray(r.stepLog));
+        const header = anyFlow
+            ? '| View | Status | Mismatch | Ratio | Threshold | Steps | Note |'
+            : '| View | Status | Mismatch | Ratio | Threshold | Note |';
+        const sep = anyFlow
+            ? '|---|---|---|---|---|---|---|'
+            : '|---|---|---|---|---|---|';
         const lines = ['# Visual-diff report', '',
             `Default threshold: ≤${(FAIL_RATIO * 100).toFixed(2)}% mismatched pixels per view`,
             `Strict-threshold overrides: ${strictList}`,
-            '', '| View | Status | Mismatch | Ratio | Threshold | Note |',
-            '|---|---|---|---|---|---|'];
+            '', header, sep];
+        const stepsCell = (log) => {
+            if (!Array.isArray(log) || log.length === 0) return '—';
+            const okCount = log.filter(s => s.ok).length;
+            const failIdx = log.findIndex(s => !s.ok);
+            return failIdx >= 0
+                ? `${okCount}/${log.length} fail@${failIdx}`
+                : `${okCount}/${log.length} ok`;
+        };
         for (const r of results) {
             const ratio = r.ratio != null ? (r.ratio * 100).toFixed(3) + '%' : '—';
             const mismatch = r.mismatch != null ? `${r.mismatch}/${r.total}` : '—';
             const threshold = r.threshold != null ? (r.threshold * 100).toFixed(3) + '%' : '—';
-            lines.push(`| ${r.view} | ${r.status} | ${mismatch} | ${ratio} | ${threshold} | ${r.error || ''} |`);
+            if (anyFlow) {
+                lines.push(`| ${r.view} | ${r.status} | ${mismatch} | ${ratio} | ${threshold} | ${stepsCell(r.stepLog)} | ${r.error || ''} |`);
+            } else {
+                lines.push(`| ${r.view} | ${r.status} | ${mismatch} | ${ratio} | ${threshold} | ${r.error || ''} |`);
+            }
         }
         fs.writeFileSync(REPORT_PATH, lines.join('\n') + '\n');
 
