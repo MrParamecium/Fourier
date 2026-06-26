@@ -229,8 +229,21 @@ async function resetLessonChromeState(page) {
         window.dispatchEvent(new Event('resize'));
     });
     // One rAF + small slack for layout to settle.
-    await page.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
+    await settleRaf(page);
     await page.waitForTimeout(100);
+}
+
+// Wait for one full layout-flush cycle by chaining two requestAnimationFrame
+// callbacks inside an in-page Promise. Two frames is the established floor
+// for letting browser layout, MathJax mid-typeset, and inline style
+// mutations propagate before a screenshot. Extracted here because the same
+// pattern appears in resetLessonChromeState, settleLesson, and runFlow —
+// a future tuning patch (triple-rAF for late-decoding images, swap to
+// document.timeline.currentTime, etc.) should land in one place.
+async function settleRaf(page) {
+    await page.evaluate(
+        () => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)))
+    );
 }
 
 // Wait until MathJax typesetting + font loading + 2x rAF have all settled,
@@ -268,12 +281,153 @@ async function settleLesson(page) {
             try { await window.MathJax.typesetPromise(); } catch (_) {}
         }
     });
-    await page.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
+    await settleRaf(page);
     await page.waitForTimeout(150);
 }
 
 function assertOrThrow(condition, msg) {
     if (!condition) throw new Error(msg);
+}
+
+// Wait until the app's IIFE bootstrap has finished — both window.* helpers
+// from ui-friction-fixes.js AND the every-chapter-button-hooked invariant
+// from the deferred 250ms pass. Lifted verbatim from
+// test-ui-friction-v123.js so future Playwright scripts share one ready
+// gate instead of forking it. Throws if not ready within timeoutMs (default
+// 25000 — same value the v123 test settled on after observing slow boots
+// on cold WSL/Render).
+async function waitForBoot(page, timeoutMs = 25000) {
+    await page.waitForFunction(() => {
+        if (typeof window.__ftutorMarkCompleted !== 'function') return false;
+        const syl = document.getElementById('courseSyllabus');
+        if (!syl) return false;
+        const chs = syl.querySelectorAll('.syllabus-chapter');
+        if (!chs.length) return false;
+        return Array.from(chs).every(b => b.dataset.ftutorChapterHook === '1');
+    }, null, { timeout: timeoutMs });
+}
+
+// Click a target up to opts.maxTries times, waiting up to opts.perTryMs
+// for a console log matching logRegex after each click. Encodes the
+// "animation-swallowed-click" workaround from test-lesson-open-no-hang.js
+// L100-107 and the inline copy in openSubtopic L142-156 — a card whose
+// onclick fires openLearnMode is silently ignored while a 720ms page-turn
+// animation is in flight, so we retry up to 5 times against an
+// observable side-effect (the [openLearnMode] log).
+//
+// Returns true on success; throws after exhausting retries so the caller
+// can decide whether to halt the surrounding flow.
+async function clickUntilLog(page, locatorOrSelector, logRegex, opts = {}) {
+    const { maxTries = 5, perTryMs = 2000, pollMs = 100 } = opts;
+    const target = typeof locatorOrSelector === 'string'
+        ? page.locator(locatorOrSelector)
+        : locatorOrSelector;
+    const sawLog = { value: false };
+    const listener = m => { try { if (logRegex.test(m.text())) sawLog.value = true; } catch (_) {} };
+    page.on('console', listener);
+    try {
+        for (let i = 0; i < maxTries; i++) {
+            // Reset sentinel BEFORE each click so a late log from the prior
+            // iteration (or any unrelated matching log emitted before this
+            // attempt) doesn't falsely confirm the click contract — this
+            // helper documents "clicks until a NEW log appears" per iteration,
+            // not "any matching log ever seen".
+            sawLog.value = false;
+            try { await target.click(); } catch (_) { /* tolerate transient detached/disabled */ }
+            const t0 = Date.now();
+            while (Date.now() - t0 < perTryMs) {
+                if (sawLog.value) return true;
+                await page.waitForTimeout(pollMs);
+            }
+        }
+    } finally {
+        // Detach defensively — page.off itself rarely throws in playwright
+        // 1.60, but if the page/context was torn down mid-flight (AFK
+        // cleanup race) we must NOT swallow the more informative
+        // "click never triggered" error below.
+        try { page.off('console', listener); } catch (_) {}
+    }
+    throw new Error(`click never triggered ${logRegex} after ${maxTries} tries (perTryMs=${perTryMs})`);
+}
+
+// FlowStep runner. Drives a sequence of {action, assert} steps against a
+// Playwright page. The contract is documented at
+// docs/HARNESS_INTERACTIVE_PLAN.md — every wait is a polled assert (no
+// page.waitForTimeout inside step bodies) so the runner is deterministic
+// in baseline mode.
+//
+//   steps: Array<{
+//     name: string,
+//     action: async (page) => void,
+//     assert: async (page) => any,     // truthy = step passed
+//     settle?: 'lesson'|'rAF'|null,    // default 'rAF'
+//     timeoutMs?: number,              // default 5000; cap on assert poll
+//   }>
+//   opts: {
+//     traceLabel?: string,             // used for failure screenshot file
+//     artifactDir?: string|null,       // where to dump <label>__step-<i>.png on fail
+//   }
+//
+// Returns { passed, failedAt, error, stepLog }. On failure, leaves a
+// per-step PNG in artifactDir (if provided) so AFK debugging can inspect
+// the DOM state at the failure point without re-running.
+async function runFlow(page, steps, opts = {}) {
+    const { traceLabel = 'flow', artifactDir = null } = opts;
+    const fs2 = require('fs');
+    const path2 = require('path');
+    const stepLog = [];
+    const dumpArtifact = async (i) => {
+        if (!artifactDir) return;
+        try {
+            fs2.mkdirSync(artifactDir, { recursive: true });
+            await page.screenshot({
+                path: path2.join(artifactDir, `${traceLabel}__step-${i}.png`),
+                fullPage: false,
+            });
+        } catch (_) { /* artifact dump is best-effort; never mask the real error */ }
+    };
+
+    for (let i = 0; i < steps.length; i++) {
+        const step = steps[i];
+        const t0 = Date.now();
+        try {
+            await step.action(page);
+            const settleMode = step.settle === undefined ? 'rAF' : step.settle;
+            if (settleMode === 'lesson') {
+                await settleLesson(page);
+            } else if (settleMode === 'rAF') {
+                await settleRaf(page);
+            }
+            const timeoutMs = typeof step.timeoutMs === 'number' ? step.timeoutMs : 5000;
+            const deadline = Date.now() + timeoutMs;
+            let ok = false;
+            let assertErr = null;
+            while (Date.now() < deadline) {
+                try {
+                    const v = await step.assert(page);
+                    if (v) { ok = true; break; }
+                } catch (e) {
+                    assertErr = e;
+                    break;
+                }
+                await page.waitForTimeout(100);
+            }
+            const ms = Date.now() - t0;
+            stepLog.push({ i, name: step.name, ms, ok });
+            if (!ok) {
+                const err = assertErr || new Error(
+                    `step "${step.name}" assert never became truthy within ${timeoutMs}ms`
+                );
+                await dumpArtifact(i);
+                return { passed: false, failedAt: i, error: err, stepLog };
+            }
+        } catch (err) {
+            stepLog.push({ i, name: step.name, ms: Date.now() - t0, ok: false });
+            await dumpArtifact(i);
+            return { passed: false, failedAt: i, error: err, stepLog };
+        }
+    }
+    return { passed: true, failedAt: null, error: null, stepLog };
 }
 
 // Path to the on-disk feedback-board fixture used by /api/feedback GET.
@@ -394,6 +548,7 @@ function resolveLessonCachePath(repoRoot, sectionId) {
 module.exports = {
     MASK_CSS,
     waitForHealth,
+    dismissIntro,
     enterGuestMode,
     enterLoginView,
     ensureSyllabusOpen,
@@ -410,4 +565,7 @@ module.exports = {
     HARNESS_STATE_DIR,
     seedFeedbackFixture,
     restoreFeedbackBoard,
+    waitForBoot,
+    clickUntilLog,
+    runFlow,
 };
