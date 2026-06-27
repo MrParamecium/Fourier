@@ -27310,7 +27310,7 @@ body {
   min-width: 90px !important;
   padding: 7px 12px !important;
   border: 1px solid rgba(255,255,255,0.62) !important;
-  border-radius: 999px !important;
+  border-radius: 999px;
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.74) !important;
   font-family: "DM Mono", monospace;
   font-size: 12px !important;
@@ -27358,7 +27358,7 @@ body {
   height: 44px !important;
   min-height: 44px !important;
   padding: 11px 13px !important;
-  border-radius: 15px !important;
+  border-radius: 15px;
   font-size: 13px !important;
 }
 
@@ -27372,7 +27372,7 @@ body {
   height: 44px !important;
   min-height: 44px !important;
   padding: 0 12px !important;
-  border-radius: 15px !important;
+  border-radius: 15px;
   color: #1d4ed8 !important;
   font-size: 14px !important;
 }
@@ -27506,7 +27506,7 @@ body {
 
 #feedbackView .feedback-thread-click-target {
   border: 1px solid transparent !important;
-  border-radius: 18px !important;
+  border-radius: 18px;
   padding: 2px 8px 4px !important;
   margin: -2px -8px -4px !important;
 }
@@ -27540,7 +27540,7 @@ body {
   margin: 7px 0 2px !important;
   padding: 5px 9px !important;
   border: 1px solid rgba(255,255,255,0.42) !important;
-  border-radius: 999px !important;
+  border-radius: 999px;
   background: rgba(255,255,255,0.22) !important;
   color: rgba(71,85,105,0.62) !important;
   font-size: 11px !important;
@@ -27560,7 +27560,7 @@ body {
   margin-bottom: 2px !important;
   padding: 10px 12px !important;
   border: 1px solid rgba(125,211,252,0.50) !important;
-  border-radius: 16px !important;
+  border-radius: 16px;
   color: rgba(30,41,59,0.76) !important;
   backdrop-filter: blur(18px) saturate(165%);
   -webkit-backdrop-filter: blur(18px) saturate(165%);
@@ -27593,7 +27593,7 @@ body {
   width: 28px !important;
   height: 28px !important;
   border: 1px solid rgba(255,255,255,0.54) !important;
-  border-radius: 999px !important;
+  border-radius: 999px;
   background: rgba(255,255,255,0.34) !important;
   color: rgba(71,85,105,0.72) !important;
   font-size: 18px !important;
