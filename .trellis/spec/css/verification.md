@@ -27,6 +27,43 @@ opens the view and asserts it is active, and list **every property touched by a 
 the visible pixel). State-setting code lives at `app.js` L2686-2738 (`openLearnMode` / `applyLearnPanelFocusState`)
 and L3990-3992 (`is-chat-active`); DOM IDs at `index.html` L655/674/713/732/760/1495.
 
+### Authoring a cross-view probe state (the `#feedbackView` precedent)
+
+Every pre-existing probe state mutates the **same lesson page** the runner opens once at startup. A state that
+**navigates to a different top-level view** (the feedback board was the first such state added) carries four extra
+contracts, learned building the permanent `#feedbackView` floor guard:
+
+1. **Append it LAST in `PROBE_STATES`.** The runner enters guest mode + opens a subtopic once, then loops the states
+   in array order. A cross-view-nav state hides `#learnView`; any in-lesson state running *after* it reads
+   `__MISSING__` and the run fails closed. All cross-view states go after the last in-lesson state (`N4`).
+2. **Assert a WINNER sentinel, not presence.** The `enter()` assert-as-entered must pin a **discriminating floor
+   value the `!important` actually wins** — e.g. `getComputedStyle(isLeftBefore,'::before').left === '-5px'` (the
+   `!important` rule) vs the base `-9px` it beats — NOT a presence check like `.feedback-thread count > 0`. A
+   presence assert **fails open**: the baseline bakes whatever value is live (even a broken or inactive floor) and
+   `--check` forever-passes it. Derive the sentinel from `_extract-view-important.js` output so it pins a real
+   load-bearing decl that has a known competitor.
+3. **Server-fetched data → `page.route` interception, never localStorage.** If the view re-fetches its data on every
+   navigation (feedback: `showFeedbackView()` → `loadFeedbackBoard()` → `fetch('/api/feedback')`), any localStorage
+   or pre-render injection is clobbered by the nav fetch. Register
+   `await page.route('**/api/<endpoint>', r => r.fulfill({ contentType:'application/json', body: JSON.stringify(fixture) }))`
+   **before** the nav click. This touches no disk, so there is **no restore step and no restore failure mode.**
+4. **Settle hover/focus transforms before snapshot.** A `:hover`/`:focus` state whose floor decl carries a
+   `transition` reads **mid-tween** at snapshot (`translateY(-0.9px)` instead of the resting `-2px`). Wait past the
+   transition duration, then `el.getAnimations().forEach(a => a.finish())` + a double-`requestAnimationFrame` before
+   probing — distinct from the `animation:none` freeze used for CSS `@keyframes` states above.
+
+> **Additive-only ≠ restore proof.** After adding a state, `git diff tools/css-probe-baseline.json` showing only the
+> new keys proves *no shared-chrome leak within the snapshot* — it does **NOT** prove any seeded fixture was
+> restored. A view's live data file may be **gitignored** (feedback: `app/users/feedback-board.json`), so a missed
+> restore is invisible to `git status` and `git checkout`. Guarantee restoration by *mechanism* (route interception
+> writes nothing) or by an explicit filesystem byte-equality assertion — never by `git status`.
+
+> **Gotcha — `_extract-view-important.js` writes its output.** Running it to read a view's floor property list
+> **overwrites `tools/_view-important.json`** as a side-effect (and a fresh extract may differ from the committed
+> copy — e.g. `.sidebar` 656→620). For inspection, read its stdout; after any intentional-or-accidental regen,
+> `git checkout tools/_view-important.json` to keep the change set scoped — `css-probe.js` consumes only the
+> `#feedbackView` key, so the `.sidebar` drift is correctness-neutral for a feedback task.
+
 ## visual-diff — spatial identity (catch-all)
 
 `visual-diff --check` is the layout/positioning catch-all. 35 views cover live chrome. Render-neutral = 0.000% on
