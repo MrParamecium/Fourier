@@ -86,6 +86,35 @@ must be UNCHANGED before/after the edit
 This catches loss in harness-uncaptured states (e.g. `data-panel-focus="lecture-full"`) that a raw `-`-line diff
 or pixel-diff will MISS. Run it for every live sibling of a deleted orphan.
 
+## Gates for a residual per-view `!important` strip (all five — none sufficient alone)
+
+When a measured-floor pass (cascade-and-collapse.md Rule 6) finds strippable residual, a render-neutral strip
+needs **all five**:
+
+1. **Cascade competitor analysis** — the only gate that covers *unprobed* states. For each stripped decl,
+   enumerate every same-property rule on that element (`parseDeclarations` from `find-dead-redeclarations.js`
+   on `git show HEAD:app/style.css`) and confirm the post-strip winner resolves the **same value**: `NOCOMP`
+   (sole rule), higher-specificity-same-value normal rule, or a surviving same-value `!important` competitor.
+   **CRITICAL: confirm every competitor is top-level (`ctx==""` — no `@media`, no extra state pseudo).** Only
+   then is neutrality viewport- and state-independent rather than merely true at the probed states. A
+   competitor in an `@media` block, or with a different value, means NOT neutral → keep the `!important`.
+2. **arbiter `_view-cascade-probe.js --check`** byte-identical (empirical, 240 states).
+3. **css-probe `--check`** byte-identical against the **committed pre-strip baseline** — the baseline taken
+   *before* the edit is what makes this a true before/after computed-value comparison (the durable guard).
+4. **visual-diff `--check`** render-neutral on the view's STRICT (0.050%) states. Run `npm run pregen:bg-ch1`
+   first — visual-diff fails closed on a missing lesson cache.
+5. **Inline-style audit** — grep all `app/*.js` for `.style` / `.setProperty` / `.cssText` /
+   `setAttribute('style'` writing the stripped property on the affected elements (a JS inline write would
+   interact with the cascade change), and confirm the stripped prop's `@media` breakpoints fall within the
+   probed viewports {1280,1180,980,820,760}.
+
+> **Worked example (`#feedbackView` D2):** stripped 7 `border-radius !important` (4 NOCOMP, 1
+> higher-spec-same-value, 2 same-value-`!important`-competitor; **all competitors top-level**). All five gates
+> green; feedback `!important` 472 → 465. The 2 same-value-`!important` cases are the subtle ones: removing
+> `!important` drops the rule out of the important tier, but the cascade then picks the *later of the equal-spec
+> surviving `!important` rules* (same value), not a lower different-valued rule — provable only because every
+> competitor is top-level.
+
 ## Sequencing (per tranche)
 
 1. On the pre-change HEAD: `css-probe --baseline` + `visual-diff --baseline` together; commit both; **then** branch.

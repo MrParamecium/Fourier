@@ -66,6 +66,45 @@ Known phantom IDs (exist in NO HTML/JS — dead-CSS deletion candidates, big lin
 `#learnExplainBottomRail`, `#learnToolbarPagination`. The real one is `#learnFocusPageIndicator`. Treat all three
 phantoms as dead together (the per-ID plans mislabel sibling phantoms as "live").
 
+## Rule 6 — Per-view "measured floor" proof (the arbiter loop + carve-out filter)
+
+When a view's `!important` keep-set is asserted "at floor" (every decl load-bearing), prove it by
+**measurement**, not by trusting the keep-set proxy. The arbiter `tools/_view-cascade-probe.js` (target
+view = `VIEWS[0]`) renders themes × 5 viewports × 9 interactions × a populated fixture and byte-compares
+computed styles.
+
+1. **The loop.** Reset **only the arbiter-reachable** keep lines → `--baseline` on pristine HEAD →
+   `_strip-view-important.js --view=<v>` → `--check` → on flips `_grow-keep-from-report.js` → repeat to
+   byte-identical. The converged **stripped** set is the measured NOCOMP residual; the **kept** set is
+   measured-load-bearing. `_strip-view-important.js` strips from `git show HEAD:` and removes only the
+   ` !important` token (line count unchanged), so keep-set **line-numbers are a stable key** across iterations.
+
+2. **Carve-out filter — preserve arbiter-unreachable decls by construction, at the DECLARATION level.**
+   The arbiter cannot render every state, so never reset a keep line it physically cannot flip (a
+   reset-and-regrow would strip it *untested*). A keep line is **carve-out** (preserve, do not reset) iff:
+   - **(a) cross-view override** — the selector names a *non-target* view id (e.g. the 7-way grouped
+     close-button `border:0 !important` at L24702, shared with learn/topbar/settings/preference/
+     courseTracker/mistakeNotebook). Carve out **regardless of reachability**: a per-view strip's blast
+     radius exceeds the per-view arbiter's coverage, so stripping it silently regresses the *other* views.
+     This is the generalized L24702 hazard.
+   - **(b) state beyond the 9 interactions** — `:active`, `:disabled`, `:focus-visible`, `:checked`,
+     `.is-target`, or `:hover`/`:focus` on an element outside the driven set {card, primary-btn,
+     secondary-btn, refresh-icon-btn, thread-pin, input, textarea, reply-input}.
+   - **Evaluate per declaration, NEVER per substring.** A grouped decl is carve-out only if **NONE** of its
+     comma-separated compounds is arbiter-driven; a grouped rule that *also* lists a driven control is
+     REACHABLE. The naive "any compound matches a gated pattern" filter over-carves grouped driven+non-driven
+     rules — for `#feedbackView` it yields **21** vs the correct **15**. Assert the exact split before proceeding.
+
+3. **Commit the MINIMAL keep-set, not the over-grown loop output.** `_grow-keep-from-report.js` over-keeps by
+   design; the committed keep-set must be `backup minus measured-residual` (the original with only the
+   proven-strippable lines removed), not the larger reset-then-regrown file.
+
+4. **Honest outcome.** A converged `kept == original` is a *successful* "reproducible-within-coverage" proof
+   (the floor is genuinely load-bearing) — **not** a failure, and never papered over with a manufactured
+   strip. But the measurement can also expose real headroom the proxy hid: the `#feedbackView` pass found
+   **7 over-kept `border-radius !important`** decls a prior increment's defensive over-keep had retained
+   (feedback 472 → 465). A residual strip then goes through the five gates in verification.md.
+
 ## State-gating reality
 
 Doubled-ID rules are gated by classes on `#learnBody` (`data-panel-focus`, `chat-collapsed`, `explain-collapsed`,
