@@ -1,0 +1,4 @@
+{"file": ".trellis/spec/css/verification.md", "reason": "The two mandatory gates: css-probe byte-identical + visual-diff render-neutral; the noise-floor caveat; set-difference invariant"}
+{"file": ".trellis/spec/css/index.md", "reason": "CSS-layer Quality Check section — both gates must pass, no orphan selector blocks"}
+{"file": ".trellis/spec/css/cascade-and-collapse.md", "reason": "Verify no DEFENSIVE (load-bearing) !important was stripped; verify cross-file specificity invariant preserved"}
+{"file": ".trellis/spec/app/index.md", "reason": "Repo-wide Quality Check (npm run check, scope discipline)"}

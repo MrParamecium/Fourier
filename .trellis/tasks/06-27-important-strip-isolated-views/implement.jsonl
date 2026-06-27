@@ -1,0 +1,4 @@
+{"file": ".trellis/spec/css/index.md", "reason": "CSS-layer pre-dev checklist: baseline-first, scope-by-token, classify before stripping"}
+{"file": ".trellis/spec/css/cascade-and-collapse.md", "reason": "The cascade rules — NOCOMP/LOSES/DEFENSIVE classification, scope-by-token, @layer trap, cross-file lockstep invariant"}
+{"file": ".trellis/spec/css/verification.md", "reason": "Must capture css-probe + visual-diff baseline BEFORE editing; how to add a per-view probe state"}
+{"file": ".trellis/spec/app/conventions.md", "reason": "Repo rules: vanilla CSS, no build step, npm run check, Windows-illegal filenames"}

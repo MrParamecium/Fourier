@@ -1,0 +1,32 @@
+{
+  "id": "important-strip-isolated-views",
+  "name": "important-strip-isolated-views",
+  "title": "Strip safe !important on courseTracker + preference views",
+  "description": "Phase 3.6 CSS-collapse next tranche: remove NOCOMP-safe !important + decorative doubled-IDs on #courseTrackerView (74.9% NOCOMP) and #preferenceView (69.8% NOCOMP), zero visual regression, gated by a new per-view css-probe state + visual-diff. Converted from docs/PHASE3.6_SPEC.md.",
+  "status": "planning",
+  "dev_type": "refactor",
+  "scope": "app/style.css :: #courseTrackerView + #preferenceView",
+  "package": "css",
+  "priority": "P2",
+  "creator": "FlyM1ss",
+  "assignee": "FlyM1ss",
+  "createdAt": "2026-06-27",
+  "completedAt": null,
+  "branch": null,
+  "base_branch": "trial/trellis",
+  "worktree_path": null,
+  "commit": null,
+  "pr_url": null,
+  "subtasks": [],
+  "children": [],
+  "parent": null,
+  "relatedFiles": [
+    "app/style.css",
+    "app/css/runtime-collapsed.css",
+    "tools/css-probe.js",
+    "tools/visual-diff.js",
+    "docs/PHASE3.6_SPEC.md"
+  ],
+  "notes": "Complex task: design.md + implement.md must be produced via trellis-brainstorm and reviewed before task.py start. Seeded by the Trellis trial (see .trellis/workspace).",
+  "meta": {}
+}
