@@ -64,6 +64,15 @@ contracts, learned building the permanent `#feedbackView` floor guard:
 > `git checkout tools/_view-important.json` to keep the change set scoped — `css-probe.js` consumes only the
 > `#feedbackView` key, so the `.sidebar` drift is correctness-neutral for a feedback task.
 
+> **Gotcha — regenerating `_view-important.json` after a strip silently shrinks css-probe coverage.**
+> `css-probe.js` derives its rest-probe set from `_view-important.json['#feedbackView']`. After a strip removes
+> `!important` from a decl, a fresh `_extract-view-important.js` run drops that decl from the floor list — so
+> re-extracting **and** re-baselining together would silently remove that property's probe from the durable guard
+> (e.g. the 7 D2 `border-radius` probes). The committed stale `_view-important.json` is currently **fail-closed
+> and beneficial** (it keeps those probes; a run missing them yields `__MISSING__` ≠ baseline → `--check` FAIL).
+> **Rule:** never regenerate `_view-important.json` + re-baseline `css-probe` in the same step without confirming
+> every previously-stripped property still appears in the rest-probe set.
+
 ## visual-diff — spatial identity (catch-all)
 
 `visual-diff --check` is the layout/positioning catch-all. 35 views cover live chrome. Render-neutral = 0.000% on
