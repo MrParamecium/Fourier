@@ -11,7 +11,7 @@ Fourier Tutor Agent (formerly **Aquarius** — legacy identifiers like `AQUARIUS
 ```bash
 npm install
 npm start                  # node app/ws-bridge.js — serves UI + API on http://127.0.0.1:9000 (/health to verify)
-npm run check              # node --check on ws-bridge.js and app.js — the only static check; run before committing
+npm run check              # node --check on 53 files (ws-bridge.js, app.js, all app/ modules + several tools/*.js incl. css-probe.js — but NOT the arbiter/strip tools) + a smoke test; the only static check; run before committing
 npm run build:section-ocr  # rebuild per-section OCR from page OCR
 npm run pregen:bg-ch1      # pre-generate Background + Chapter 1 lesson cache
 node tools/test-lesson-open-no-hang.js   # Playwright e2e regression: section open must not hang (needs npx playwright install chromium)
