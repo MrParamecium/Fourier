@@ -1,0 +1,4 @@
+{"_example": "Fill with {\"file\": \"<path>\", \"reason\": \"<why>\"}. Put spec/research files only — no code paths. Run `python3 .trellis/scripts/get_context.py --mode packages` to list available specs. Delete this line once real entries are added."}
+{"file": ".trellis/spec/css/verification.md", "reason": "5-gate verification + assert-as-entered fail-closed sentinel discipline the S13/S14 probe states must follow"}
+{"file": ".trellis/spec/css/cascade-and-collapse.md", "reason": "doubled-ID / cross-file specificity rules; which .learn-textbook-active occurrences the probe must pin and why"}
+{"file": ".trellis/spec/css/index.md", "reason": "CSS layer entry point + pre-development checklist"}

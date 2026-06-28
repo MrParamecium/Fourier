@@ -152,15 +152,22 @@ verifies against a `main` baseline. Source of truth: `PHASE3.6_SPEC.md §4`.
 | `panelFocus` desync fix (= §C2) | Drive S2/S3 through `applyLearnPanelFocusState()` (app.js:2725) instead of hand-setting `dataset.panelFocus`; have `resetLessonChromeState` also clear `chat-collapsed`/`explain-collapsed`. | **A4** (correct composer-state capture) |
 | Narrow per-selector probes | Extend N0–N4 (currently only 3 learn-chrome selectors on a §1.1-1 DOM) to the home-ask / feedback / login / MN / chapter-overview / settings families; add ≤560px state + an `@container lecture-panel` panel-width driver. | **A2** (narrow tranches) + **A5** (media-gated slice) |
 
-`css-probe` states on the branch today (20): `S2-qa-wide`, `S3-qa-full`,
+`css-probe` states on the branch today (21): `S2-qa-wide`, `S3-qa-full`,
 `S4-normal-chat`, `S6-chat-empty`, `S7-chat-active`, `S9-explain-collapsed`,
 `S10-overview-active`, `S11-overview-split`, `S12-textbook-qa-open`,
-`S-page-corner`, `N0–N4`, `S-feedback-*`. The S4–S11 baseline was captured
+`S13-textbook-active`, `S-page-corner`, `N0–N4`, `S-feedback-*`. The S4–S11 baseline was captured
 **additively** off the §C2 branch (which is itself off pre-collapse `main`):
 `git diff css-probe-baseline.json` = +264/−0, every pre-existing key byte-identical.
-**Still missing for the full A2 `NEEDS-STATE-MATRIX` tranche: a `.learn-textbook-active`
-state** (the 13 explain-rail rules — see A2 below; gated by textbook-active, NOT
-chapter-overview-active).
+**`S13-textbook-active` SHIPPED (2026-06-28, pending PR)** — drives the real `_setLearnMode('textbook')`
+with `_learnLayoutMode='lesson'`; fail-closed sentinel = `#learnExplainScroll` Band-1 2-radial gradient
+(L25124, empirically ≠ base ≠ overview); additive `+56/−0`. Covers the **7 Band-1 (textbook-normal)
+`.learn-textbook-active` doubled-IDs** (L25118–25157). **`S14-textbook-overview` (the 7 Band-2
+`.chapter-overview-active.learn-textbook-active` combined-band occurrences, L24575–24609) was DROPPED**
+— no fail-closed sentinel constructible (every Band-2 winner used-value-collapses to the overview-alone
+fallback, is inline-masked, is also provided by Band-1, or is `__MISSING__`; S5 discipline). **Named
+coverage gap:** those 7 Band-2 doubled-IDs carry **no css-probe witness** → A2's Band-2 strip must lean
+on visual-diff + a fresh arbiter keep-set. (Corrects earlier "13 explain-rail rules": the measured count
+is **14 occurrences in two cascade bands**.)
 
 #### A1 — `#feedbackView` `!important` strip (next target)
 
@@ -179,7 +186,7 @@ and gating:
 | Residual COLLAPSE-SAFE-NOW | ~3 | small new probes | close-btns L34088/34089 + composer `.bottom-actions` L33233 (z-index/overflow). |
 | Dead-code deletion subset | 22 | DOM grep + visual-diff | `#learnLecturePageIndicator` / `#learnExplainBottomRail` / `#learnToolbarPagination` chains — IDs in **no HTML/JS**. **Line-reducing** (not collapse). Mostly cleared by #105 sweeps; finish the remainder. |
 | NEEDS-NARROW-VIEWPORT | 12 | A0 narrow probes | MN L34808/34838/34842 + composer 33277 (≤1180); MN L34848+ + topbar L34297+ (≤820). |
-| NEEDS-STATE-MATRIX | 28 | A0 S4–S11 | S10/S11 + `.is-chat-active` (S6/S7) + `.panel-normal` (S4) now **probe-covered** (2026-06-28). Remaining: a **`.learn-textbook-active`** state (the biggest single sub-tranche, 13 explain-rail rules — gated by textbook-active, distinct from the shipped overview states) + `[data-custom-split]`. |
+| NEEDS-STATE-MATRIX | 28 | A0 S4–S11 + S13 | S10/S11 + `.is-chat-active` (S6/S7) + `.panel-normal` (S4) + `.learn-textbook-active` **Band 1** (S13, 7 occ) now **probe-covered** (2026-06-28). Remaining: the **7 Band-2** `.chapter-overview-active.learn-textbook-active` occurrences (**named gap — no css-probe witness**, S14 dropped; cover via visual-diff + a fresh arbiter keep-set) + `[data-custom-split]`. |
 | NEEDS-NEW-VIEW | ~7 | isolated-view bootstraps | settings/preference/courseTracker close-btns; open-mode-menu composer. |
 | LOAD-BEARING (never touch) | 20 | — | cite-and-skip: composer L33191/33213-16/33238/37415-26, MN L34770/34784/34816+, topbar L34088/34176-78/34193-94, close-btn L34091. |
 

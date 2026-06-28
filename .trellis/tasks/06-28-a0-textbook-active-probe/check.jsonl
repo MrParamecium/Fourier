@@ -1,0 +1,3 @@
+{"_example": "Fill with {\"file\": \"<path>\", \"reason\": \"<why>\"}. Put spec/research files only — no code paths. Run `python3 .trellis/scripts/get_context.py --mode packages` to list available specs. Delete this line once real entries are added."}
+{"file": ".trellis/spec/css/verification.md", "reason": "the gate the check must enforce: additive-only baseline, byte-identical pre-existing keys, fail-closed sentinels, no production/shared-helper edits"}
+{"file": ".trellis/spec/css/index.md", "reason": "CSS layer Quality Check section"}

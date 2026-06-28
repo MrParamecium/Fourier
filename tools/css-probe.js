@@ -113,6 +113,24 @@ async function resetLearnChrome(page) {
         // typeof-guarded so a future rename fails in a state's winner sentinel (loud),
         // not here (a silent floor).
         try { if (typeof _learnLayoutMode !== 'undefined') _learnLayoutMode = 'lesson'; } catch (_) {}
+        // A0 S13: undo textbook mode through the REAL production path, but ONLY when a prior
+        // state actually left .learn-textbook-active on #learnBody. _setLearnMode('lecture')
+        // re-runs the full lecture-chrome path (applyLearnPanelFocusState + inline writes on
+        // #learnExplainCol/#learnChatCol/#learnBookCol, app.js:2481-2524), which the other
+        // states' own drivers (openLearnQaSidebar / applyLearnExplainCollapsedState) do NOT
+        // expect to follow — so calling it unconditionally perturbs S4/S9. Gating on the class
+        // makes it a TRUE no-op for every non-textbook state (the resting §1.1-1 lesson and
+        // S2-S12 all rest without .learn-textbook-active) and fires only to clean up after S13:
+        // it clears .learn-textbook-active + restores the inline styles _setLearnMode wrote on
+        // #learnBookOverlay / #learnExplainContent (app.js:2460/2469). Kept LOCAL to css-probe →
+        // zero visual-diff blast radius; typeof-guarded so a rename fails LOUD in S13's winner
+        // sentinel, not silently here.
+        try {
+            const lb = document.getElementById('learnBody');
+            if (lb && lb.classList.contains('learn-textbook-active') && typeof _setLearnMode === 'function') {
+                _setLearnMode('lecture');
+            }
+        } catch (_) {}
         // A0 S7: clear any chat bubble a prior is-chat-active state appended, then
         // re-sync is-chat-active / empty-state through the production path so each
         // state starts from the natural empty (not-chat-active) chat. The §1.1-1
@@ -206,6 +224,59 @@ const OVERVIEW_PROBES = [
     ['#learnChatCol', null, 'display'],                 // none (S10) / flex (S11)
     ['#learnChatCol', null, 'padding'],                 // 0px 0px 18px (overview is-chat-active)
 ];
+
+// ---------- A0 S13 .learn-textbook-active (Band 1, normal textbook) probe set ----------
+// Empirically derived (2026-06-28, tools/_explore-textbook.js cross-state matrix
+// base/S13/S10/S14; provenance + matrix in .trellis/tasks/06-28-a0-textbook-active-probe/
+// results.md). Pins the Band-1 doubled-ID winners (style.css L25118-25157, gated by
+// #learnBody.learn-textbook-active) that _setLearnMode('textbook') makes the live cascade.
+//   • #learnExplainScroll background-image = the Band-1 2-radial signature (L25124:
+//     `18% 6% ...0.82` + `82% 16% ...0.44`) — DISTINCT from the base 2-radial (L24030:
+//     `20% 8% ...0.86` + `82% 18% ...0.22`); the primary winner sentinel. NOT JS-inlined.
+//   • #learnBookOverlay position relative (L25131) / min-height 100% (L25135) / padding 0
+//     (L25137) — CSS-only winners, DISTINCT from base absolute / 0 / 12px 14px.
+//   • #lecturePrev/NextOverlayBtn display none (L25151) — Band-1-exclusive, CSS-only.
+// DELIBERATELY EXCLUDED (inline-masked — non-discriminating, design §2 AVOID list):
+//   #learnExplainContent display (JS sets it inline, app.js:2469) and #learnBookOverlay
+//   display (app.js:2460). padding-top is base-equal (L24029/L24886 force 0 at rest) — a
+//   fail-OPEN companion, so #learnExplainScroll padding is kept only as the rule's decl, not
+//   asserted as the sentinel. .textbook-pages-flow is __MISSING__ in a §1.1-1 lesson DOM
+//   (no book-page nodes rendered) → not probed (a __MISSING__ baseline is refused fail-closed).
+const S13_PROBES = [
+    ['#learnExplainScroll', null, 'background-image'], // Band-1 2-radial signature (winner sentinel)
+    ['#learnExplainScroll', null, 'padding'],          // 0px (L25120) — base-equal companion, not load-bearing
+    ['#learnExplainScroll', null, 'overflow-y'],       // auto (L25122)
+    ['#learnBookOverlay', null, 'position'],           // relative (L25131) vs base absolute
+    ['#learnBookOverlay', null, 'min-height'],         // 100% (L25135)
+    ['#learnBookOverlay', null, 'padding'],            // 0px (L25137) vs base 12px 14px
+    ['#learnBookOverlay', null, 'background-color'],   // transparent (L25139)
+    ['#lecturePrevOverlayBtn', null, 'display'],       // none (L25151) — Band-1-exclusive
+    ['#lectureNextOverlayBtn', null, 'display'],       // none (L25151)
+];
+
+// ---------- A0 S14 .chapter-overview-active.learn-textbook-active (Band 2) — DROPPED ----------
+// S14 (the combined-selector (6,2,0) Band, style.css L24575-24609) is DROPPED under the §3
+// ship/drop gate (the S5 discipline): NO fail-closed Band-2 winner sentinel is constructible
+// in a §1.1-1 lesson DOM. The empirical matrix (tools/_explore-textbook.js, recorded in
+// results.md) showed EVERY Band-2-exclusive winner is one of:
+//   (a) used-value-collapsed to the post-deletion fallback — #learnExplainScroll height:100%
+//       (L24577) and #learnBookOverlay height:auto (L24592) both resolve to the SAME 738px as
+//       the overview-alone fallback (calc(100dvh-60px) → 738px); min-height:0 (L24578) equals
+//       the base 0px. A used-value tie cannot witness the Band-2 rule's deletion (fail-OPEN);
+//   (b) inline-masked — #learnExplainContent display:none (L24603) is also written inline by
+//       _setLearnMode (app.js:2469), so CSS and JS resolve the same value (design §2 AVOID);
+//   (c) already provided by overview-alone — #learnChatCol/#learnResizer display:none
+//       (L24606-08) is ALSO set by the overview-alone rule (S10 already shows none) and inline
+//       by setChapterOverviewLayoutActive itself (Risk #5), so removing Band-2 changes nothing;
+//   (d) __MISSING__ — .textbook-pages-flow min-height/padding (L24598-99) has no rendered node
+//       in this lesson DOM (no book-page flow), so it cannot be probed at all.
+// The remaining Band-2 decls (#learnBookOverlay position:relative / min-height:100% / padding:0
+// at L24587/91/79... — actually padding lives only in Band-1) are NOT Band-2-exclusive: Band-1
+// (gated by .learn-textbook-active alone, still present in the S14 DOM) provides the same value,
+// so they survive a Band-2 deletion (fail-OPEN against the true Band-2-removed fallback).
+// CONSEQUENCE (named coverage gap, see prd "Residual risk"): the 7 Band-2 doubled-ID occurrences
+// carry NO css-probe witness. A2's later Band-2 strip must lean on visual-diff + the arbiter
+// keep-set, not a computed-style baseline. "documented-dropped" is an honest gap, not "covered".
 
 // ---------- viewport-banded learn-chrome states (docs/phase3_deferred.md §14 prerequisite 1) ----------
 // The `!important` / doubled-ID wall's single largest remaining lever is the redeclaration pileup
@@ -907,6 +978,46 @@ const PROBE_STATES = [
                 `S11-overview-split: chat col is display:none — split layout should keep chat visible (distinguishes from S10). State invalid.`);
         },
         probes: OVERVIEW_PROBES,
+    },
+    {
+        // S13 — .learn-textbook-active (Band 1, normal textbook mode). Driven via the
+        // REAL production fn _setLearnMode('textbook') (app.js:2449) with _learnLayoutMode
+        // floored to 'lesson' by resetLearnChrome — supportsTextbookLayout is then true so
+        // _setLearnMode toggles .learn-textbook-active ON #learnBody (app.js:2456), making
+        // the Band-1 doubled-ID rules (L25118-25157) the live cascade winners. NOT the
+        // combined overview+textbook Band (that is the dropped S14 — see the comment block
+        // above S13_PROBES). Winner sentinel: #learnExplainScroll background-image carries
+        // the Band-1 2-radial signature (distinct from the base 2-radial), proving the
+        // Band-1 cascade — not the resting-lecture base — is live before any probe is trusted.
+        state: 'S13-textbook-active',
+        enter: async (page) => {
+            await resetLearnChrome(page);
+            const driven = await page.evaluate(() => {
+                if (typeof _setLearnMode !== 'function') return false;
+                _setLearnMode('textbook'); // _learnLayoutMode is 'lesson' (resetLearnChrome floor)
+                window.dispatchEvent(new Event('resize'));
+                return true;
+            });
+            assertOrThrow(driven, 'S13-textbook-active: _setLearnMode not reachable from the page — app.js not loaded or symbol renamed');
+            await page.waitForTimeout(400);
+            const ok = await page.evaluate(() => {
+                const b = document.getElementById('learnBody');
+                return !!b && b.classList.contains('learn-textbook-active')
+                    && !b.classList.contains('chapter-overview-active')
+                    && !b.classList.contains('chapter-overview-split-active');
+            });
+            assertOrThrow(ok, 'S13-textbook-active: #learnBody not .learn-textbook-active (or a chapter-overview-* class leaked in — Band-1 cascade not isolated)');
+            const bg = await page.evaluate(() => {
+                const s = document.getElementById('learnExplainScroll');
+                return s ? getComputedStyle(s).backgroundImage : '__MISSING__';
+            });
+            // Band-1 L25124 signature (`circle at 18% 6% ...0.82` + `circle at 82% 16% ...0.44`),
+            // DISTINCT from the base L24030 2-radial (`20% 8% ...0.86` + `82% 18% ...0.22`).
+            assertOrThrow(bg.includes('circle at 18% 6%') && bg.includes('rgba(255, 255, 255, 0.82)')
+                && bg.includes('circle at 82% 16%') && bg.includes('rgba(255, 255, 255, 0.44)'),
+                `S13-textbook-active: #learnExplainScroll background lacks the Band-1 textbook 2-radial signature ("circle at 18% 6% ...0.82" + "circle at 82% 16% ...0.44"); got "${bg}". Band-1 cascade not winning — baseline invalid.`);
+        },
+        probes: S13_PROBES,
     },
 
     // ---- #feedbackView floor guard (D1). Appended LAST — these are the FIRST

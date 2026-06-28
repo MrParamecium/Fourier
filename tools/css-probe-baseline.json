@@ -737,6 +737,62 @@
       "value": "0px"
     }
   ],
+  "S13-textbook-active": [
+    {
+      "sel": "#learnExplainScroll",
+      "pseudo": null,
+      "prop": "background-image",
+      "value": "radial-gradient(circle at 18% 6%, rgba(255, 255, 255, 0.82), rgba(0, 0, 0, 0) 34%), radial-gradient(circle at 82% 16%, rgba(255, 255, 255, 0.44), rgba(0, 0, 0, 0) 36%), radial-gradient(760px 520px at 10% 0%, rgba(186, 230, 253, 0.56), rgba(0, 0, 0, 0) 74%), radial-gradient(820px 620px at 86% 88%, rgba(187, 247, 208, 0.42), rgba(0, 0, 0, 0) 76%), linear-gradient(rgb(217, 243, 255) 0%, rgb(234, 249, 244) 54%, rgb(213, 248, 232) 100%)"
+    },
+    {
+      "sel": "#learnExplainScroll",
+      "pseudo": null,
+      "prop": "padding",
+      "value": "0px"
+    },
+    {
+      "sel": "#learnExplainScroll",
+      "pseudo": null,
+      "prop": "overflow-y",
+      "value": "auto"
+    },
+    {
+      "sel": "#learnBookOverlay",
+      "pseudo": null,
+      "prop": "position",
+      "value": "relative"
+    },
+    {
+      "sel": "#learnBookOverlay",
+      "pseudo": null,
+      "prop": "min-height",
+      "value": "100%"
+    },
+    {
+      "sel": "#learnBookOverlay",
+      "pseudo": null,
+      "prop": "padding",
+      "value": "0px"
+    },
+    {
+      "sel": "#learnBookOverlay",
+      "pseudo": null,
+      "prop": "background-color",
+      "value": "rgba(0, 0, 0, 0)"
+    },
+    {
+      "sel": "#lecturePrevOverlayBtn",
+      "pseudo": null,
+      "prop": "display",
+      "value": "none"
+    },
+    {
+      "sel": "#lectureNextOverlayBtn",
+      "pseudo": null,
+      "prop": "display",
+      "value": "none"
+    }
+  ],
   "S-feedback-rest": [
     {
       "sel": "#feedbackView .feedback-compose-card",
