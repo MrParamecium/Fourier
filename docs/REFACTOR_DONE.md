@@ -28,7 +28,7 @@ triaged backlog.
 > This doc's §1 checklist + §3 workstreams stay valid; only counts/status move since the 2026-06-25 draft:
 > - **#118** (`2d7a757`) shipped a **partial** feedback+sidebar strip (feedback 528→472, sidebar 656→620) — so **A1 and A3 are STARTED, not complete**; A1 is no longer "the next untouched target."
 > - **Workstream B is COMPLETE** — B4 (`app/lesson-render.js`) shipped in **#116**; `app/app.js` = **5,720** lines (marginally above the ~5,100 stretch target; "reasonably split" met). The §1 `app.js` box can be checked.
-> - **Landmine C1** (unclosed `.learn-followup-bar {` brace, §C1) shipped in **#111** (`bd56ef9`). **C2** (panelFocus desync) still OPEN — still gates A4.
+> - **Landmine C1** (unclosed `.learn-followup-bar {` brace, §C1) shipped in **#111** (`bd56ef9`). **C2** (panelFocus desync) **FIXED on branch `fix/c2-panelfocus-desync` (2026-06-28, pending PR)** — probe-neutral, baseline unchanged (see §C2). A4's C2 prerequisite is now met; A4 still also needs the S4–S11 harness expansion.
 > - Current metrics (supersede §2's 06-25 table): `app/style.css` **32,279** lines / **9,286** `!important`-lines / **404** doubled-IDs; `runtime-collapsed.css` **1,523** / **876** / **58**.
 > - §2 per-view dispositions are git-CONFIRMED (per-view trajectory in `PHASE3.6_SPEC.md` top STATUS block): settings & MN were ✅ stripped by #106 — **do not re-seed them**. Genuinely-next strip = **A1 `#feedbackView` completion**.
 
@@ -253,6 +253,17 @@ obsolete and the block is dead.
 **Action:** **delete** L5465–L5635, keep `.learn-followup-bar { display:flex; flex-direction:column; gap:6px; flex-shrink:0; }`. Render-neutral (the activated decls still lose); verify with visual-diff + css-probe (expect text-AA noise floor only). Sev-3, standalone correctness PR.
 
 #### C2 — css-probe S2/S3 `panelFocus` desync (FIX — also an A0 gate)
+
+> **✅ FIXED on branch `fix/c2-panelfocus-desync` (2026-06-28, pending PR).** S2/S3
+> `enter()` now drive the real `learnPanelFocus = '<focus>'; applyLearnPanelFocusState()`
+> path and `resetLessonChromeState` clears `chat-collapsed`/`explain-collapsed`; the
+> assert-as-entered was upgraded to a fail-closed state+winner check. Outcome was
+> **probe-neutral — `css-probe --check` byte-identical incl. S2/S3, baseline unchanged**
+> (the corrected DOM yields the same FOLLOWUP_PROBES values, confirming the desync was
+> latent on the probed cascade). `visual-diff` render-neutral, proven via stash-trick on
+> the 5 `resetLessonChromeState`-using views (15/16/20/21/26). `npm run check` green.
+> Live line numbers re-measured (the L206–240 / app.js:2725 below had drifted post-B):
+> S2/S3 enter `css-probe.js:383–418`, `applyLearnPanelFocusState` `app.js:1116`.
 
 **File:** `tools/css-probe.js` L206–240 (S2/S3 enter), `tools/test-utils.js` L219–234 (`resetLessonChromeState`).
 **Finding (verified):** enter() hand-sets only `dataset.panelFocus`, omitting the
