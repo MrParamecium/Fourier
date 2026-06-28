@@ -148,7 +148,8 @@ const FOLLOWUP_PROBES = [
 ];
 
 // ---------- A0 S4–S11 composer / explain-rail / overview probe sets ----------
-// Empirically derived (2026-06-28, tools/_explore-s4-s11.js): the §3d composer
+// Empirically derived (2026-06-28, via a throwaway cross-state matrix; provenance
+// preserved in .trellis/tasks/06-28-a0-s4-s11-probe-states/): the §3d composer
 // chrome (#learnFollowupBar + #learnChatCol bg/shadow/isolation) is BYTE-IDENTICAL
 // across S2/S3/S4/S6/S7/S9/S10/S11 at desktop — it is panel-invariant. So each new
 // state pins only what its gated rule actually changes (the cascade winner), never a
@@ -685,8 +686,8 @@ const PROBE_STATES = [
     // suspenders). Each enter() drives the REAL production function and fail-closed
     // asserts a discriminating cascade winner before snapshot (R8), exactly as S2/S3.
     //
-    // SCOPE (2026-06-28, scope decided with FlyM1ss, sentinels derived empirically via
-    // tools/_explore-s4-s11.js): S4,S6,S7,S9,S10,S11.
+    // SCOPE (2026-06-28, scope decided with FlyM1ss, sentinels derived empirically via a
+    // throwaway matrix — record in .trellis/tasks/06-28-a0-s4-s11-probe-states/): S4,S6,S7,S9,S10,S11.
     //   • S5 (focus-within) DROPPED — focus engages and `.input-wrapper:focus-within`
     //     matches, but every focus-within declaration LOSES to the !important wall
     //     (wrapper resolves to border:0 / box-shadow:none / transparent bg, identical
