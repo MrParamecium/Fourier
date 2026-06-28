@@ -10,7 +10,7 @@ Reduce the doubled-ID count in `app/style.css` by collapsing the subset that is
 provably redundant (not defending a cascade competitor and not part of the
 A4-blocked cross-file arms race), gated by css-probe + visual-diff + arbiter.
 
-## Confirmed facts (ground-truth, HEAD `e2f3431`, measured this session — NOT from docs)
+## Confirmed facts (ground-truth, HEAD `62ddf06`, measured this session — NOT from docs)
 
 - **404 doubled-ID occurrences / 264 selector lines / 19 distinct IDs** in `app/style.css`
   (`grep -E '#(id)#\1'`). Matches the doc's "404" — but that is the only number that matched; the
@@ -47,7 +47,7 @@ A4-blocked cross-file arms race), gated by css-probe + visual-diff + arbiter.
 - **5-gate verification** for any change: cascade-competitor (top-level only) + arbiter `--check` +
   css-probe `--check` + visual-diff `--check` + inline-style/`@media` audit (verification.md).
 
-## Scope decision (SETTLED 2026-06-28, re-derived at HEAD 3ac692d)
+## Scope decision (SETTLED 2026-06-28, re-derived at HEAD `62ddf06`)
 
 Numbers reproduce **exactly** at HEAD (404 / 264 lines / 19 IDs — zero drift). Per-occurrence line
 inspection (not token counts) decomposes the 33 "actionable" into three groups:
