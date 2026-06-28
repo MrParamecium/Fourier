@@ -383,16 +383,29 @@ const PROBE_STATES = [
         state: 'S2-qa-wide',
         enter: async (page) => {
             await resetLearnChrome(page);
-            await page.evaluate(() => {
-                const shell = document.getElementById('learnBody');
-                if (shell) shell.dataset.panelFocus = 'qa-wide';
+            // C2 (REFACTOR_DONE §C2): drive the REAL production path (see S3 below) so
+            // the probe DOM equals the app's rendered qa-wide composer — panel-qa-wide
+            // class added AND chat-/explain-collapsed cleared in lockstep, not a bare
+            // dataset.panelFocus poke that the app's applyLearnPanelFocusState never
+            // produces on its own.
+            const driven = await page.evaluate(() => {
+                if (typeof applyLearnPanelFocusState !== 'function') return false;
+                learnPanelFocus = 'qa-wide';
+                applyLearnPanelFocusState();
                 window.dispatchEvent(new Event('resize'));
+                return true;
             });
+            assertOrThrow(driven, 'S2-qa-wide: applyLearnPanelFocusState() not reachable from the page — app.js not loaded or symbol renamed');
             await page.waitForTimeout(400);
-            const ok = await page.evaluate(() =>
-                document.getElementById('learnBody')?.dataset.panelFocus === 'qa-wide'
-                && !!document.getElementById('learnFollowupBar'));
-            assertOrThrow(ok, 'S2-qa-wide: panelFocus not applied or #learnFollowupBar missing');
+            const ok = await page.evaluate(() => {
+                const b = document.getElementById('learnBody');
+                return !!b
+                    && b.dataset.panelFocus === 'qa-wide'
+                    && b.classList.contains('panel-qa-wide')
+                    && !b.classList.contains('chat-collapsed')
+                    && !!document.getElementById('learnFollowupBar');
+            });
+            assertOrThrow(ok, 'S2-qa-wide: qa-wide composer DOM not rendered (need panel-qa-wide class + chat-collapsed cleared + #learnFollowupBar present)');
             await assertFollowupBarWinner(page, 'S2-qa-wide');
         },
         probes: FOLLOWUP_PROBES,
@@ -403,16 +416,30 @@ const PROBE_STATES = [
         state: 'S3-qa-full',
         enter: async (page) => {
             await resetLearnChrome(page);
-            await page.evaluate(() => {
-                const shell = document.getElementById('learnBody');
-                if (shell) shell.dataset.panelFocus = 'qa-full';
+            // C2 (REFACTOR_DONE §C2): drive the REAL production path (app.js:1116
+            // applyLearnPanelFocusState, reading the module-global learnPanelFocus)
+            // instead of a bare dataset.panelFocus poke, so the probe DOM equals the
+            // app's rendered qa-full composer — panel-qa-full class added AND
+            // chat-/explain-collapsed cleared in lockstep. The hand-poke omitted all
+            // of that (latent today, but a forward trap for A4's composer diff).
+            const driven = await page.evaluate(() => {
+                if (typeof applyLearnPanelFocusState !== 'function') return false;
+                learnPanelFocus = 'qa-full';
+                applyLearnPanelFocusState();
                 window.dispatchEvent(new Event('resize'));
+                return true;
             });
+            assertOrThrow(driven, 'S3-qa-full: applyLearnPanelFocusState() not reachable from the page — app.js not loaded or symbol renamed');
             await page.waitForTimeout(400);
-            const ok = await page.evaluate(() =>
-                document.getElementById('learnBody')?.dataset.panelFocus === 'qa-full'
-                && !!document.getElementById('learnFollowupBar'));
-            assertOrThrow(ok, 'S3-qa-full: panelFocus not applied or #learnFollowupBar missing');
+            const ok = await page.evaluate(() => {
+                const b = document.getElementById('learnBody');
+                return !!b
+                    && b.dataset.panelFocus === 'qa-full'
+                    && b.classList.contains('panel-qa-full')
+                    && !b.classList.contains('chat-collapsed')
+                    && !!document.getElementById('learnFollowupBar');
+            });
+            assertOrThrow(ok, 'S3-qa-full: qa-full composer DOM not rendered (need panel-qa-full class + chat-collapsed cleared + #learnFollowupBar present)');
             await assertFollowupBarWinner(page, 'S3-qa-full');
         },
         probes: FOLLOWUP_PROBES,

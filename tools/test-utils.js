@@ -222,6 +222,11 @@ async function resetLessonChromeState(page) {
         if (!body) return;
         delete body.dataset.panelFocus;
         body.classList.remove('chapter-overview-active', 'chapter-overview-split-active');
+        // C2 (REFACTOR_DONE §C2): also clear the collapse classes so a sticky
+        // chat-/explain-collapsed state from a prior view cannot leak into the next
+        // state's DOM. The app drops these in lockstep with panelFocus via
+        // applyLearnPanelFocusState(); the floor between probe states must mirror it.
+        body.classList.remove('chat-collapsed', 'explain-collapsed');
         // Force any pager refresh observer to recompute against the reset state.
         if (typeof window.__ftutorRefreshPager === 'function') {
             window.__ftutorRefreshPager();
