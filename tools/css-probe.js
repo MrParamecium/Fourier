@@ -1008,17 +1008,17 @@ const PROBE_STATES = [
             });
             assertOrThrow(driven, 'S13-textbook-active: _setLearnMode not reachable from the page — app.js not loaded or symbol renamed');
             await page.waitForTimeout(400);
-            const ok = await page.evaluate(() => {
+            // One round-trip for both reads: the entered-class check and the winner-sentinel
+            // background-image (both read the same settled frame after the 400ms wait).
+            const { ok, bg } = await page.evaluate(() => {
                 const b = document.getElementById('learnBody');
-                return !!b && b.classList.contains('learn-textbook-active')
+                const ok = !!b && b.classList.contains('learn-textbook-active')
                     && !b.classList.contains('chapter-overview-active')
                     && !b.classList.contains('chapter-overview-split-active');
+                const s = document.getElementById('learnExplainScroll');
+                return { ok, bg: s ? getComputedStyle(s).backgroundImage : '__MISSING__' };
             });
             assertOrThrow(ok, 'S13-textbook-active: #learnBody not .learn-textbook-active (or a chapter-overview-* class leaked in — Band-1 cascade not isolated)');
-            const bg = await page.evaluate(() => {
-                const s = document.getElementById('learnExplainScroll');
-                return s ? getComputedStyle(s).backgroundImage : '__MISSING__';
-            });
             // Band-1 L25124 signature (`circle at 18% 6% ...0.82` + `circle at 82% 16% ...0.44`),
             // DISTINCT from the base L24030 2-radial (`20% 8% ...0.86` + `82% 18% ...0.22`).
             assertOrThrow(bg.includes('circle at 18% 6%') && bg.includes('rgba(255, 255, 255, 0.82)')
