@@ -208,12 +208,25 @@ function bandState(id, width, sentinel) {
 // appended LAST in PROBE_STATES (after N4): any learn/band state running after a
 // feedback nav would find #learnView hidden → __MISSING__.
 const FEEDBACK_FIXTURE = require(FEEDBACK_FIXTURE_POPULATED_PATH);
+// Stringified once at load — the route handler reuses this body for every intercepted
+// request instead of re-serialising the fixture per navigation.
+const FEEDBACK_FIXTURE_BODY = JSON.stringify(FEEDBACK_FIXTURE);
 
 // The 55 floor-carrying property names (extracted by _extract-view-important.js with
 // its VIEWS const = ['#feedbackView']; the committed tools/_view-important.json is its
 // output). Rest probes are DERIVED from this so the guard covers every floor property
 // and stays tied to the actual floor declarations (the mutation check exercises this).
 const FEEDBACK_FLOOR = require('./_view-important.json')['#feedbackView'];
+// Fail loud, not cryptic: this durable guard derives its entire rest-probe set from the
+// frozen `#feedbackView` floor list. If _view-important.json is ever regenerated for
+// another surface (the strip pipeline rotates VIEWS), this key goes undefined and the
+// guard would otherwise die with "undefined is not iterable" at buildFeedbackRestProbes.
+if (!Array.isArray(FEEDBACK_FLOOR)) {
+    throw new Error(
+        'css-probe: tools/_view-important.json no longer carries the "#feedbackView" key. '
+        + 'The durable feedback guard needs that frozen floor list; do not regenerate '
+        + '_view-important.json for another surface without giving this guard its own snapshot.');
+}
 
 // Selectors whose cascade state the populated REST board does not render (they belong
 // to dedicated focus/hover/disabled states below, or to nodes absent when the board is
@@ -246,7 +259,7 @@ function buildFeedbackRestProbes() {
         if (first.startsWith('#learnView')) first = '#feedbackView #feedbackCloseBtn.feature-close-btn';
         let pseudo = null;
         const pm = first.match(/::(before|after|placeholder)$/);
-        if (pm) { pseudo = '::' + pm[1]; first = first.replace(/::(before|after|placeholder)$/, ''); }
+        if (pm) { pseudo = pm[0]; first = first.slice(0, pm.index); }
         const key = `${first}||${pseudo || ''}||${decl.prop}`;
         if (seen.has(key)) continue;
         seen.add(key);
@@ -268,7 +281,7 @@ async function openFeedbackBoard(page) {
     if (!page.__feedbackRouteRegistered) {
         await page.route('**/api/feedback', (route) => route.fulfill({
             contentType: 'application/json',
-            body: JSON.stringify(FEEDBACK_FIXTURE),
+            body: FEEDBACK_FIXTURE_BODY,
         }));
         page.__feedbackRouteRegistered = true;
     }
@@ -304,6 +317,21 @@ async function settleFeedbackHover(page) {
         document.getAnimations().forEach((a) => { try { a.finish(); } catch (_) {} });
     });
     await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+}
+
+// Single-property winner sentinel (R8) for the focus/disabled/hover interaction states:
+// read `prop` on `sel` and fail closed unless it equals the discriminating floor value
+// `expected`, so the baseline cannot bake an inactive floor that --check forever-passes.
+// `ref` names the floor source line + pseudo-class for the failure message. One uniform
+// getPropertyValue read replaces the per-state ad-hoc .outlineStyle/.cursor/.transform
+// accessors. (Probes are unchanged — this only gates whether the state is trusted.)
+async function assertFeedbackSentinel(page, label, sel, prop, expected, ref) {
+    const got = await page.evaluate(([s, p]) => {
+        const el = document.querySelector(s);
+        return el ? getComputedStyle(el).getPropertyValue(p) : '__MISSING__';
+    }, [sel, prop]);
+    assertOrThrow(got === expected,
+        `${label}: ${sel} { ${prop} } is "${got}", expected "${expected}" (${ref}). The floor !important rule is not winning — baseline invalid.`);
 }
 
 // Winner sentinel (R8 — non-negotiable, mirrors assertFollowupBarWinner / S12): assert
@@ -568,12 +596,8 @@ const PROBE_STATES = [
         enter: async (page) => {
             await openFeedbackBoard(page);
             await page.focus('#feedbackView .feedback-input');
-            const outline = await page.evaluate(() => {
-                const el = document.querySelector('#feedbackView .feedback-input');
-                return el ? getComputedStyle(el).outlineStyle : '__MISSING__';
-            });
-            assertOrThrow(outline === 'none',
-                `S-feedback-input-focus: focused .feedback-input outline-style is "${outline}", expected "none" (L27177 floor). The :focus !important rule is not winning — baseline invalid.`);
+            await assertFeedbackSentinel(page, 'S-feedback-input-focus',
+                '#feedbackView .feedback-input', 'outline-style', 'none', 'L27177 :focus floor');
         },
         probes: [
             ['#feedbackView .feedback-input', null, 'outline'],
@@ -594,12 +618,8 @@ const PROBE_STATES = [
                 const btn = document.getElementById('feedbackSubmitBtn');
                 if (btn) btn.disabled = true;
             });
-            const cur = await page.evaluate(() => {
-                const btn = document.getElementById('feedbackSubmitBtn');
-                return btn ? getComputedStyle(btn).cursor : '__MISSING__';
-            });
-            assertOrThrow(cur === 'wait',
-                `S-feedback-submit-disabled: disabled #feedbackSubmitBtn cursor is "${cur}", expected "wait" (L25244 floor). The :disabled !important rule is not winning — baseline invalid.`);
+            await assertFeedbackSentinel(page, 'S-feedback-submit-disabled',
+                '#feedbackSubmitBtn', 'cursor', 'wait', 'L25244 :disabled floor');
         },
         probes: [
             ['#feedbackView #feedbackSubmitBtn.feedback-primary-btn', null, 'cursor'],
@@ -619,13 +639,10 @@ const PROBE_STATES = [
             // Jump every running transition/animation to its end state so the probe
             // reads the SETTLED cascade-determined value, not a mid-tween frame.
             await settleFeedbackHover(page);
-            const tf = await page.evaluate(() => {
-                const el = document.querySelector('#feedbackView .feedback-refresh-icon-btn');
-                return el ? getComputedStyle(el).transform : '__MISSING__';
-            });
             // translateY(-1px) → matrix(1, 0, 0, 1, 0, -1)
-            assertOrThrow(tf === 'matrix(1, 0, 0, 1, 0, -1)',
-                `S-feedback-refresh-hover: hovered refresh button transform is "${tf}", expected "matrix(1, 0, 0, 1, 0, -1)" (L20962 translateY(-1px) floor). The :hover !important rule is not winning — baseline invalid.`);
+            await assertFeedbackSentinel(page, 'S-feedback-refresh-hover',
+                '#feedbackView .feedback-refresh-icon-btn', 'transform', 'matrix(1, 0, 0, 1, 0, -1)',
+                'L20962 :hover translateY(-1px) floor');
         },
         probes: [
             ['#feedbackView .feedback-refresh-icon-btn', null, 'transform'],
@@ -645,13 +662,10 @@ const PROBE_STATES = [
             // Settle the animated hover transform (transition floor decl L25221) so the
             // probe reads the settled end value, not a mid-tween frame.
             await settleFeedbackHover(page);
-            const tf = await page.evaluate(() => {
-                const el = document.querySelector('#feedbackView #feedbackSubmitBtn');
-                return el ? getComputedStyle(el).transform : '__MISSING__';
-            });
             // translateY(-2px) → matrix(1, 0, 0, 1, 0, -2)
-            assertOrThrow(tf === 'matrix(1, 0, 0, 1, 0, -2)',
-                `S-feedback-submit-hover: hovered submit button transform is "${tf}", expected "matrix(1, 0, 0, 1, 0, -2)" (L25225 translateY(-2px) floor). The :hover !important rule is not winning — baseline invalid.`);
+            await assertFeedbackSentinel(page, 'S-feedback-submit-hover',
+                '#feedbackView #feedbackSubmitBtn', 'transform', 'matrix(1, 0, 0, 1, 0, -2)',
+                'L25225 :hover translateY(-2px) floor');
         },
         probes: [
             ['#feedbackView #feedbackSubmitBtn.feedback-primary-btn', null, 'transform'],
