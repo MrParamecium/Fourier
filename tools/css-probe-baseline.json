@@ -473,6 +473,270 @@
       "value": "14px"
     }
   ],
+  "S4-normal-chat": [
+    {
+      "sel": "#learnChatCol",
+      "pseudo": null,
+      "prop": "background-image",
+      "value": "radial-gradient(760px 520px at 10% 0%, rgba(186, 230, 253, 0.56), rgba(0, 0, 0, 0) 74%), radial-gradient(820px 620px at 86% 88%, rgba(187, 247, 208, 0.42), rgba(0, 0, 0, 0) 76%), linear-gradient(rgb(217, 243, 255) 0%, rgb(234, 249, 244) 54%, rgb(213, 248, 232) 100%)"
+    },
+    {
+      "sel": "#learnFollowupBar",
+      "pseudo": null,
+      "prop": "min-height",
+      "value": "152px"
+    },
+    {
+      "sel": "#learnFollowupBar",
+      "pseudo": null,
+      "prop": "border-top-left-radius",
+      "value": "28px"
+    },
+    {
+      "sel": "#learnFollowupBar",
+      "pseudo": null,
+      "prop": "background-image",
+      "value": "linear-gradient(145deg, rgba(255, 255, 255, 0.54), rgba(255, 255, 255, 0.18)), radial-gradient(520px 180px at 18% 0%, rgba(255, 255, 255, 0.54), rgba(0, 0, 0, 0) 72%), linear-gradient(105deg, rgba(125, 211, 252, 0.1), rgba(251, 113, 133, 0.12) 62%, rgba(167, 139, 250, 0.08))"
+    },
+    {
+      "sel": "#learnFollowupBar",
+      "pseudo": null,
+      "prop": "box-shadow",
+      "value": "rgba(148, 47, 62, 0.18) 0px 30px 82px 0px, rgba(15, 23, 42, 0.08) 0px 12px 30px 0px, rgba(255, 255, 255, 0.92) 0px 1px 0px 0px inset, rgba(255, 255, 255, 0.24) 0px -1px 0px 0px inset"
+    },
+    {
+      "sel": "#learnFollowupBar",
+      "pseudo": null,
+      "prop": "backdrop-filter",
+      "value": "blur(36px) saturate(1.95) brightness(1.06)"
+    },
+    {
+      "sel": "#learnFollowupBar",
+      "pseudo": null,
+      "prop": "z-index",
+      "value": "40"
+    },
+    {
+      "sel": "#learnFollowupBar",
+      "pseudo": null,
+      "prop": "overflow",
+      "value": "visible"
+    },
+    {
+      "sel": "#learnChatCol",
+      "pseudo": null,
+      "prop": "isolation",
+      "value": "isolate"
+    },
+    {
+      "sel": "#learnChatCol",
+      "pseudo": null,
+      "prop": "overflow",
+      "value": "hidden"
+    },
+    {
+      "sel": "#learnExplainScroll",
+      "pseudo": null,
+      "prop": "background-image",
+      "value": "radial-gradient(circle at 20% 8%, rgba(255, 255, 255, 0.86), rgba(0, 0, 0, 0) 34%), radial-gradient(circle at 82% 18%, rgba(244, 232, 205, 0.22), rgba(0, 0, 0, 0) 34%), radial-gradient(760px 520px at 10% 0%, rgba(186, 230, 253, 0.56), rgba(0, 0, 0, 0) 74%), radial-gradient(820px 620px at 86% 88%, rgba(187, 247, 208, 0.42), rgba(0, 0, 0, 0) 76%), linear-gradient(rgb(217, 243, 255) 0%, rgb(234, 249, 244) 54%, rgb(213, 248, 232) 100%)"
+    }
+  ],
+  "S6-chat-empty": [
+    {
+      "sel": "#learnChatEmptyState",
+      "pseudo": null,
+      "prop": "display",
+      "value": "flex"
+    },
+    {
+      "sel": "#learnChatEmptyState",
+      "pseudo": null,
+      "prop": "opacity",
+      "value": "1"
+    },
+    {
+      "sel": "#learnChatEmptyState",
+      "pseudo": null,
+      "prop": "visibility",
+      "value": "visible"
+    },
+    {
+      "sel": "#learnChatEmptyState",
+      "pseudo": null,
+      "prop": "background-image",
+      "value": "none"
+    },
+    {
+      "sel": "#learnChatEmptyState",
+      "pseudo": null,
+      "prop": "border-top-left-radius",
+      "value": "0px"
+    },
+    {
+      "sel": "#learnChatCol",
+      "pseudo": null,
+      "prop": "padding",
+      "value": "0px"
+    },
+    {
+      "sel": "#learnChatCol",
+      "pseudo": null,
+      "prop": "overflow",
+      "value": "hidden"
+    },
+    {
+      "sel": "#learnChatContent",
+      "pseudo": null,
+      "prop": "min-height",
+      "value": "auto"
+    },
+    {
+      "sel": "#learnChatScroll",
+      "pseudo": null,
+      "prop": "overflow-y",
+      "value": "auto"
+    }
+  ],
+  "S7-chat-active": [
+    {
+      "sel": "#learnChatEmptyState",
+      "pseudo": null,
+      "prop": "display",
+      "value": "none"
+    },
+    {
+      "sel": "#learnChatEmptyState",
+      "pseudo": null,
+      "prop": "opacity",
+      "value": "0"
+    },
+    {
+      "sel": "#learnChatEmptyState",
+      "pseudo": null,
+      "prop": "visibility",
+      "value": "hidden"
+    },
+    {
+      "sel": "#learnChatEmptyState",
+      "pseudo": null,
+      "prop": "background-image",
+      "value": "none"
+    },
+    {
+      "sel": "#learnChatEmptyState",
+      "pseudo": null,
+      "prop": "border-top-left-radius",
+      "value": "0px"
+    },
+    {
+      "sel": "#learnChatCol",
+      "pseudo": null,
+      "prop": "padding",
+      "value": "0px 0px 18px"
+    },
+    {
+      "sel": "#learnChatCol",
+      "pseudo": null,
+      "prop": "overflow",
+      "value": "hidden"
+    },
+    {
+      "sel": "#learnChatContent",
+      "pseudo": null,
+      "prop": "min-height",
+      "value": "0px"
+    },
+    {
+      "sel": "#learnChatScroll",
+      "pseudo": null,
+      "prop": "overflow-y",
+      "value": "auto"
+    }
+  ],
+  "S9-explain-collapsed": [
+    {
+      "sel": "#learnExplainRestoreBtn",
+      "pseudo": null,
+      "prop": "display",
+      "value": "flex"
+    },
+    {
+      "sel": "#learnExplainRestoreBtn",
+      "pseudo": null,
+      "prop": "opacity",
+      "value": "1"
+    },
+    {
+      "sel": "#learnExplainRestoreBtn",
+      "pseudo": null,
+      "prop": "background-image",
+      "value": "linear-gradient(rgba(255, 253, 247, 0.99), rgba(248, 242, 232, 0.97))"
+    },
+    {
+      "sel": "#learnExplainRestoreBtn",
+      "pseudo": null,
+      "prop": "border-top-left-radius",
+      "value": "18px"
+    },
+    {
+      "sel": "#learnExplainRestoreBtn",
+      "pseudo": null,
+      "prop": "box-shadow",
+      "value": "rgba(145, 156, 178, 0.14) 0px 12px 24px 0px, rgba(145, 156, 178, 0.08) 0px 3px 8px 0px, rgba(255, 255, 255, 0.94) 0px 1px 0px 0px inset"
+    },
+    {
+      "sel": "#learnExplainCol",
+      "pseudo": null,
+      "prop": "display",
+      "value": "flex"
+    },
+    {
+      "sel": "#learnBody",
+      "pseudo": null,
+      "prop": "--learn-edge-tab-top",
+      "value": "22px"
+    }
+  ],
+  "S10-overview-active": [
+    {
+      "sel": "#learnExplainScroll",
+      "pseudo": null,
+      "prop": "background-image",
+      "value": "radial-gradient(780px 520px at 8% 0%, rgba(186, 230, 253, 0.56), rgba(0, 0, 0, 0) 74%), radial-gradient(840px 620px at 86% 90%, rgba(187, 247, 208, 0.42), rgba(0, 0, 0, 0) 76%), linear-gradient(rgb(217, 243, 255) 0%, rgb(234, 249, 244) 54%, rgb(213, 248, 232) 100%)"
+    },
+    {
+      "sel": "#learnChatCol",
+      "pseudo": null,
+      "prop": "display",
+      "value": "none"
+    },
+    {
+      "sel": "#learnChatCol",
+      "pseudo": null,
+      "prop": "padding",
+      "value": "0px"
+    }
+  ],
+  "S11-overview-split": [
+    {
+      "sel": "#learnExplainScroll",
+      "pseudo": null,
+      "prop": "background-image",
+      "value": "radial-gradient(780px 520px at 8% 0%, rgba(186, 230, 253, 0.56), rgba(0, 0, 0, 0) 74%), radial-gradient(840px 620px at 86% 90%, rgba(187, 247, 208, 0.42), rgba(0, 0, 0, 0) 76%), linear-gradient(rgb(217, 243, 255) 0%, rgb(234, 249, 244) 54%, rgb(213, 248, 232) 100%)"
+    },
+    {
+      "sel": "#learnChatCol",
+      "pseudo": null,
+      "prop": "display",
+      "value": "flex"
+    },
+    {
+      "sel": "#learnChatCol",
+      "pseudo": null,
+      "prop": "padding",
+      "value": "0px"
+    }
+  ],
   "S-feedback-rest": [
     {
       "sel": "#feedbackView .feedback-compose-card",

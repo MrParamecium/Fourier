@@ -103,6 +103,24 @@ async function resetLearnChrome(page) {
     await page.evaluate(() => {
         document.getElementById('textbookFocusModal')?.classList.add('hidden');
         document.body.classList.remove('textbook-focus-active');
+        // A0 S4–S11: floor the JS layout-mode var. resetLessonChromeState already
+        // clears the chapter-overview-* CLASSES, but not the matching JS state
+        // `_learnLayoutMode` — an overview state (S10/S11) leaves it as 'overview',
+        // which a later composer driver (applyLearnChatCollapsedState app.js:1200 /
+        // updateLearnChatEmptyState app.js:2086) branches on, silently rendering the
+        // wrong DOM. Kept LOCAL to css-probe (not pushed into the shared
+        // resetLessonChromeState) so it carries zero visual-diff blast radius.
+        // typeof-guarded so a future rename fails in a state's winner sentinel (loud),
+        // not here (a silent floor).
+        try { if (typeof _learnLayoutMode !== 'undefined') _learnLayoutMode = 'lesson'; } catch (_) {}
+        // A0 S7: clear any chat bubble a prior is-chat-active state appended, then
+        // re-sync is-chat-active / empty-state through the production path so each
+        // state starts from the natural empty (not-chat-active) chat. The §1.1-1
+        // lesson rests with an empty chat, so this is a no-op for the pre-existing
+        // states (proven byte-identical by --check against the committed baseline).
+        const chat = document.getElementById('learnChatContent');
+        if (chat) chat.replaceChildren();
+        if (typeof updateLearnChatEmptyState === 'function') updateLearnChatEmptyState();
     });
 }
 
@@ -127,6 +145,65 @@ const FOLLOWUP_PROBES = [
     ['#learnFollowupBar', null, 'backdrop-filter'], // blur(36) vs blur(34)
     ['#learnFollowupBar', null, 'z-index'],         // 40 (L33213 8-ID) vs runtime 3
     ['#learnFollowupBar', null, 'overflow'],        // visible (L33213)
+];
+
+// ---------- A0 S4–S11 composer / explain-rail / overview probe sets ----------
+// Empirically derived (2026-06-28, tools/_explore-s4-s11.js): the §3d composer
+// chrome (#learnFollowupBar + #learnChatCol bg/shadow/isolation) is BYTE-IDENTICAL
+// across S2/S3/S4/S6/S7/S9/S10/S11 at desktop — it is panel-invariant. So each new
+// state pins only what its gated rule actually changes (the cascade winner), never a
+// 5th redundant copy of FOLLOWUP_PROBES. S5 (focus-within) and S1/S8 (resting) are
+// intentionally absent — see the PROBE_STATES note below S3.
+
+// S4 (normal split, chat visible): the §3d composer chain via the normal /
+// no-data-panel-focus selector path S2/S3 (qa-wide/qa-full) never exercise, PLUS the
+// normal-mode explain-rail backdrop (5-layer gradient) that pairs with S10/S11's
+// 3-layer overview backdrop across the overview boundary.
+const S4_PROBES = [
+    ...FOLLOWUP_PROBES,
+    ['#learnChatCol', null, 'isolation'],
+    ['#learnChatCol', null, 'overflow'],
+    ['#learnExplainScroll', null, 'background-image'], // 5-layer normal gradient (vs S10/S11 3-layer)
+];
+
+// S6/S7 (chat empty vs is-chat-active): the §3d empty-state + is-chat-active cascade
+// (A4-gated). Both states pin the same property set; their VALUES differ. S7's winner
+// sentinel keys off #learnChatCol padding / #learnChatContent min-height — PURE-CSS
+// (L19955/L19966 is-chat-active) winners, NOT the empty-state display which JS also
+// forces inline (an inline-masked property cannot witness a CSS-cascade change).
+const CHAT_STATE_PROBES = [
+    ['#learnChatEmptyState', null, 'display'],          // flex (S6) / none (S7)
+    ['#learnChatEmptyState', null, 'opacity'],          // 1 / 0
+    ['#learnChatEmptyState', null, 'visibility'],       // visible / hidden
+    ['#learnChatEmptyState', null, 'background-image'],
+    ['#learnChatEmptyState', null, 'border-top-left-radius'],
+    ['#learnChatCol', null, 'padding'],                 // 0px (S6) / 0px 0px 18px (S7) — pure-CSS winner
+    ['#learnChatCol', null, 'overflow'],
+    ['#learnChatContent', null, 'min-height'],          // auto (S6) / 0px (S7) — pure-CSS winner
+    ['#learnChatScroll', null, 'overflow-y'],
+];
+
+// S9 (explain-collapsed, not chat-collapsed): the explain-rail collapse cascade —
+// the restore tab (#learnExplainRestoreBtn) is shown ONLY here (display:flex), the
+// discriminating winner for `.explain-collapsed:not(.chat-collapsed)`.
+const EXPLAIN_COLLAPSE_PROBES = [
+    ['#learnExplainRestoreBtn', null, 'display'],       // flex (unique to S9)
+    ['#learnExplainRestoreBtn', null, 'opacity'],
+    ['#learnExplainRestoreBtn', null, 'background-image'],
+    ['#learnExplainRestoreBtn', null, 'border-top-left-radius'],
+    ['#learnExplainRestoreBtn', null, 'box-shadow'],
+    ['#learnExplainCol', null, 'display'],
+    ['#learnBody', null, '--learn-edge-tab-top'],       // edge-tab custom prop
+];
+
+// S10/S11 (chapter-overview-active / -split-active): the overview explain-rail
+// backdrop (3-layer gradient, distinct from S4's 5-layer normal) + chat-col state
+// (hidden in S10, visible in S11). Only literal cascade values — NOT #learnExplainCol
+// width (a viewport-derived USED value that drifts across machines).
+const OVERVIEW_PROBES = [
+    ['#learnExplainScroll', null, 'background-image'],  // 3-layer overview gradient
+    ['#learnChatCol', null, 'display'],                 // none (S10) / flex (S11)
+    ['#learnChatCol', null, 'padding'],                 // 0px 0px 18px (overview is-chat-active)
 ];
 
 // ---------- viewport-banded learn-chrome states (docs/phase3_deferred.md §14 prerequisite 1) ----------
@@ -598,6 +675,238 @@ const PROBE_STATES = [
         { sel: '.learn-body', prop: '--learn-edge-tab-top', expected: '14px' }),
     bandState('N4-toolbar-700', 700,
         { sel: '.learn-explain-toolbar', prop: 'grid-template-areas', expected: '"center" "left" "right"' }),
+
+    // ---- A0 S4–S11 composer / explain-rail / overview states (REFACTOR_DONE §A0
+    // gate 2 for A4). In-lesson (they mutate the one open §1.1-1 page) so they slot
+    // AFTER the N-band states and BEFORE the cross-view feedback block. Composer/
+    // explain states (S4/S6/S7/S9) run first in NORMAL mode; the overview states
+    // (S10/S11) run LAST so their _learnLayoutMode / inline-style residue cannot leak
+    // into a composer state (belt; resetLearnChrome's _learnLayoutMode floor is the
+    // suspenders). Each enter() drives the REAL production function and fail-closed
+    // asserts a discriminating cascade winner before snapshot (R8), exactly as S2/S3.
+    //
+    // SCOPE (2026-06-28, scope decided with FlyM1ss, sentinels derived empirically via
+    // tools/_explore-s4-s11.js): S4,S6,S7,S9,S10,S11.
+    //   • S5 (focus-within) DROPPED — focus engages and `.input-wrapper:focus-within`
+    //     matches, but every focus-within declaration LOSES to the !important wall
+    //     (wrapper resolves to border:0 / box-shadow:none / transparent bg, identical
+    //     to non-focus). No gated rule wins → no fail-closed sentinel is constructible
+    //     → a probe state would be fail-open. Pixel coverage stays in visual-diff view 09.
+    //   • S1/S8 (resting lesson) deferred — view 06 pixel-covers resting; add a
+    //     computed-style resting state later only if A4's gate needs one.
+    {
+        // S4 — normal split, chat visible. S2/S3 only cover qa-wide/qa-full; a collapse
+        // that breaks the NORMAL-mode composer cascade slips past them. The §3d chrome
+        // values equal S2's (panel-invariant at desktop — itself a pinned invariant);
+        // what S4 uniquely exercises is the normal / no-data-panel-focus selector path.
+        state: 'S4-normal-chat',
+        enter: async (page) => {
+            await resetLearnChrome(page);
+            const driven = await page.evaluate(() => {
+                if (typeof openLearnQaSidebar !== 'function') return false;
+                openLearnQaSidebar();                 // learnPanelFocus='normal', chat un-collapsed
+                window.dispatchEvent(new Event('resize'));
+                return true;
+            });
+            assertOrThrow(driven, 'S4-normal-chat: openLearnQaSidebar() not reachable — app.js not loaded or symbol renamed');
+            await page.waitForTimeout(400);
+            const ok = await page.evaluate(() => {
+                const b = document.getElementById('learnBody');
+                const col = document.getElementById('learnChatCol');
+                return !!b
+                    && !b.dataset.panelFocus
+                    && !b.classList.contains('chat-collapsed')
+                    && !b.classList.contains('explain-collapsed')
+                    && !b.classList.contains('chapter-overview-active')
+                    && !b.classList.contains('chapter-overview-split-active')
+                    && !!col && getComputedStyle(col).display !== 'none'
+                    && !!document.getElementById('learnFollowupBar');
+            });
+            assertOrThrow(ok, 'S4-normal-chat: normal-split composer DOM not rendered (need no panel-focus / no collapse / no overview class + chat col visible + #learnFollowupBar)');
+            await assertFollowupBarWinner(page, 'S4-normal-chat'); // 152px §3d winner, normal-mode path
+        },
+        probes: S4_PROBES,
+    },
+    {
+        // S6 — qa-wide, chat EMPTY (not .is-chat-active). Pins the empty-state node's
+        // VISIBLE cascade. updateLearnChatEmptyState() clears the inline display props
+        // in non-overview-empty, so CSS controls and the probe reads the real winner.
+        state: 'S6-chat-empty',
+        enter: async (page) => {
+            await resetLearnChrome(page);
+            const driven = await page.evaluate(() => {
+                if (typeof applyLearnPanelFocusState !== 'function' || typeof updateLearnChatEmptyState !== 'function') return false;
+                learnPanelFocus = 'qa-wide';
+                applyLearnPanelFocusState();
+                const chat = document.getElementById('learnChatContent');
+                if (chat) chat.replaceChildren();     // ensure empty
+                updateLearnChatEmptyState();          // not-is-chat-active branch
+                window.dispatchEvent(new Event('resize'));
+                return true;
+            });
+            assertOrThrow(driven, 'S6-chat-empty: applyLearnPanelFocusState/updateLearnChatEmptyState not reachable');
+            await page.waitForTimeout(400);
+            const ok = await page.evaluate(() => {
+                const col = document.getElementById('learnChatCol');
+                return !!col && !col.classList.contains('is-chat-active') && !!document.getElementById('learnChatEmptyState');
+            });
+            assertOrThrow(ok, 'S6-chat-empty: #learnChatCol unexpectedly .is-chat-active or #learnChatEmptyState missing');
+            const win = await page.evaluate(() => {
+                const e = document.getElementById('learnChatEmptyState');
+                const cs = e ? getComputedStyle(e) : null;
+                return cs ? { d: cs.display, v: cs.visibility } : null;
+            });
+            assertOrThrow(win && win.d === 'flex' && win.v === 'visible',
+                `S6-chat-empty: empty-state not shown (display=${win && win.d}, visibility=${win && win.v}, expected flex/visible). not-is-chat-active cascade not winning — baseline invalid.`);
+        },
+        probes: CHAT_STATE_PROBES,
+    },
+    {
+        // S7 — qa-wide, chat ACTIVE (.is-chat-active). Pins the is-chat-active composer
+        // cascade. Winner sentinel keys off PURE-CSS literals (#learnChatCol padding
+        // L19955, #learnChatContent min-height L19966) — NOT the empty-state display,
+        // which JS also forces inline (an inline-masked prop can't witness a CSS change).
+        // The bubble child flips is-chat-active through the production observer/path;
+        // resetLearnChrome clears it before the next state.
+        state: 'S7-chat-active',
+        enter: async (page) => {
+            await resetLearnChrome(page);
+            const driven = await page.evaluate(() => {
+                if (typeof applyLearnPanelFocusState !== 'function' || typeof updateLearnChatEmptyState !== 'function') return false;
+                learnPanelFocus = 'qa-wide';
+                applyLearnPanelFocusState();
+                const chat = document.getElementById('learnChatContent');
+                if (chat) {
+                    const b = document.createElement('div');
+                    b.className = 'followup-bubble';
+                    b.textContent = 'probe';
+                    chat.appendChild(b);
+                }
+                updateLearnChatEmptyState();          // is-chat-active branch
+                window.dispatchEvent(new Event('resize'));
+                return true;
+            });
+            assertOrThrow(driven, 'S7-chat-active: applyLearnPanelFocusState/updateLearnChatEmptyState not reachable');
+            await page.waitForTimeout(400);
+            const ok = await page.evaluate(() => {
+                const col = document.getElementById('learnChatCol');
+                return !!col && col.classList.contains('is-chat-active');
+            });
+            assertOrThrow(ok, 'S7-chat-active: #learnChatCol did not gain .is-chat-active after appending a chat bubble');
+            const win = await page.evaluate(() => {
+                const col = document.getElementById('learnChatCol');
+                const content = document.getElementById('learnChatContent');
+                return {
+                    pad: col ? getComputedStyle(col).padding : null,
+                    mh: content ? getComputedStyle(content).minHeight : null,
+                };
+            });
+            assertOrThrow(win.pad === '0px 0px 18px',
+                `S7-chat-active: #learnChatCol padding is "${win.pad}", expected "0px 0px 18px" (L19955 is-chat-active floor). Rule not winning — baseline invalid.`);
+            assertOrThrow(win.mh === '0px',
+                `S7-chat-active: #learnChatContent min-height is "${win.mh}", expected "0px" (L19966 is-chat-active floor). Rule not winning — baseline invalid.`);
+        },
+        probes: CHAT_STATE_PROBES,
+    },
+    {
+        // S9 — explain-collapsed (NOT chat-collapsed). Pins the explain-rail collapse
+        // cascade; the restore tab (#learnExplainRestoreBtn) is shown ONLY here — the
+        // discriminating winner for `.explain-collapsed:not(.chat-collapsed)`.
+        state: 'S9-explain-collapsed',
+        enter: async (page) => {
+            await resetLearnChrome(page);
+            const driven = await page.evaluate(() => {
+                if (typeof openLearnQaSidebar !== 'function' || typeof applyLearnExplainCollapsedState !== 'function') return false;
+                openLearnQaSidebar();                 // normal, chat visible
+                isLearnExplainCollapsed = true;
+                applyLearnExplainCollapsedState();
+                window.dispatchEvent(new Event('resize'));
+                return true;
+            });
+            assertOrThrow(driven, 'S9-explain-collapsed: openLearnQaSidebar/applyLearnExplainCollapsedState not reachable');
+            await page.waitForTimeout(400);
+            const ok = await page.evaluate(() => {
+                const b = document.getElementById('learnBody');
+                return !!b && b.classList.contains('explain-collapsed') && !b.classList.contains('chat-collapsed')
+                    && !b.classList.contains('chapter-overview-active') && !b.classList.contains('chapter-overview-split-active');
+            });
+            assertOrThrow(ok, 'S9-explain-collapsed: #learnBody not .explain-collapsed:not(.chat-collapsed) (or an overview class present)');
+            const disp = await page.evaluate(() => {
+                const r = document.getElementById('learnExplainRestoreBtn');
+                return r ? getComputedStyle(r).display : '__MISSING__';
+            });
+            assertOrThrow(disp === 'flex',
+                `S9-explain-collapsed: #learnExplainRestoreBtn display is "${disp}", expected "flex" (explain-collapsed restore tab). Collapse cascade not winning — baseline invalid.`);
+        },
+        probes: EXPLAIN_COLLAPSE_PROBES,
+    },
+    {
+        // S10 — chapter-overview-active. The overview explain-rail backdrop (3-layer
+        // gradient, distinct from S4's 5-layer normal) + chat col hidden. Driven via
+        // _learnLayoutMode='overview' THEN setChapterOverviewLayoutActive(true) — which
+        // reads _learnLayoutMode on its first line (app.js:1063) to pick active vs split.
+        state: 'S10-overview-active',
+        enter: async (page) => {
+            await resetLearnChrome(page);
+            const driven = await page.evaluate(() => {
+                if (typeof setChapterOverviewLayoutActive !== 'function') return false;
+                _learnLayoutMode = 'overview';
+                setChapterOverviewLayoutActive(true);
+                window.dispatchEvent(new Event('resize'));
+                return true;
+            });
+            assertOrThrow(driven, 'S10-overview-active: setChapterOverviewLayoutActive not reachable');
+            await page.waitForTimeout(400);
+            const ok = await page.evaluate(() => {
+                const b = document.getElementById('learnBody');
+                return !!b && b.classList.contains('chapter-overview-active') && !b.classList.contains('chapter-overview-split-active');
+            });
+            assertOrThrow(ok, 'S10-overview-active: #learnBody not .chapter-overview-active (or split-active leaked)');
+            const bg = await page.evaluate(() => {
+                const s = document.getElementById('learnExplainScroll');
+                return s ? getComputedStyle(s).backgroundImage : '__MISSING__';
+            });
+            assertOrThrow(bg.includes('780px 520px at 8% 0%'),
+                `S10-overview-active: #learnExplainScroll background lacks the overview gradient signature "780px 520px at 8% 0%" (got "${bg}"). Overview cascade not winning — baseline invalid.`);
+        },
+        probes: OVERVIEW_PROBES,
+    },
+    {
+        // S11 — chapter-overview-split-active. Overview explain-rail backdrop (3-layer)
+        // WITH the chat col visible (vs S10's hidden chat). Driven via
+        // _learnLayoutMode='overview_lesson'.
+        state: 'S11-overview-split',
+        enter: async (page) => {
+            await resetLearnChrome(page);
+            const driven = await page.evaluate(() => {
+                if (typeof setChapterOverviewLayoutActive !== 'function') return false;
+                _learnLayoutMode = 'overview_lesson';
+                setChapterOverviewLayoutActive(true);
+                window.dispatchEvent(new Event('resize'));
+                return true;
+            });
+            assertOrThrow(driven, 'S11-overview-split: setChapterOverviewLayoutActive not reachable');
+            await page.waitForTimeout(400);
+            const ok = await page.evaluate(() => {
+                const b = document.getElementById('learnBody');
+                return !!b && b.classList.contains('chapter-overview-split-active') && !b.classList.contains('chapter-overview-active');
+            });
+            assertOrThrow(ok, 'S11-overview-split: #learnBody not .chapter-overview-split-active (or active leaked)');
+            const v = await page.evaluate(() => {
+                const s = document.getElementById('learnExplainScroll');
+                const col = document.getElementById('learnChatCol');
+                return {
+                    bg: s ? getComputedStyle(s).backgroundImage : '__MISSING__',
+                    chat: col ? getComputedStyle(col).display : '__MISSING__',
+                };
+            });
+            assertOrThrow(v.bg.includes('780px 520px at 8% 0%'),
+                `S11-overview-split: #learnExplainScroll background lacks the overview gradient signature (got "${v.bg}"). Overview cascade not winning — baseline invalid.`);
+            assertOrThrow(v.chat !== 'none',
+                `S11-overview-split: chat col is display:none — split layout should keep chat visible (distinguishes from S10). State invalid.`);
+        },
+        probes: OVERVIEW_PROBES,
+    },
 
     // ---- #feedbackView floor guard (D1). Appended LAST — these are the FIRST
     // cross-view-navigating states (they leave the lesson page for #feedbackView). ----

@@ -28,7 +28,7 @@ triaged backlog.
 > This doc's §1 checklist + §3 workstreams stay valid; only counts/status move since the 2026-06-25 draft:
 > - **#118** (`2d7a757`) shipped a **partial** feedback+sidebar strip (feedback 528→472, sidebar 656→620) — so **A1 and A3 are STARTED, not complete**; A1 is no longer "the next untouched target."
 > - **Workstream B is COMPLETE** — B4 (`app/lesson-render.js`) shipped in **#116**; `app/app.js` = **5,720** lines (marginally above the ~5,100 stretch target; "reasonably split" met). The §1 `app.js` box can be checked.
-> - **Landmine C1** (unclosed `.learn-followup-bar {` brace, §C1) shipped in **#111** (`bd56ef9`). **C2** (panelFocus desync) **FIXED on branch `fix/c2-panelfocus-desync` (2026-06-28, pending PR)** — probe-neutral, baseline unchanged (see §C2). A4's C2 prerequisite is now met; A4 still also needs the S4–S11 harness expansion.
+> - **Landmine C1** (unclosed `.learn-followup-bar {` brace, §C1) shipped in **#111** (`bd56ef9`). **C2** (panelFocus desync) **FIXED on branch `fix/c2-panelfocus-desync` (2026-06-28, pending PR)** — probe-neutral, baseline unchanged (see §C2). A4's C2 prerequisite is now met; the S4–S11 harness expansion (A4's second gate) is **also SHIPPED (2026-06-28, pending PR, stacked on §C2)** — A4's composer-state matrix is now in place (S5 dropped as non-constructible, S1/S8 deferred; see §A0).
 > - Current metrics (supersede §2's 06-25 table): `app/style.css` **32,279** lines / **9,286** `!important`-lines / **404** doubled-IDs; `runtime-collapsed.css` **1,523** / **876** / **58**.
 > - §2 per-view dispositions are git-CONFIRMED (per-view trajectory in `PHASE3.6_SPEC.md` top STATUS block): settings & MN were ✅ stripped by #106 — **do not re-seed them**. Genuinely-next strip = **A1 `#feedbackView` completion**.
 
@@ -148,13 +148,19 @@ verifies against a `main` baseline. Source of truth: `PHASE3.6_SPEC.md §4`.
 | Gate | What | Unblocks |
 |---|---|---|
 | Feedback probe state + fixture | A `css-probe` state that opens `#feedbackView` and reads computed style on a **seeded multi-tone feedback-thread fixture** (tone-0..5, is-left/is-right, reply-context, is-target). Mirror visual-diff view 14b's seeding. | **A1** (`#feedbackView` strip — mandatory, pixel-diff is blind here) |
-| `css-probe` states S4/S6/S7/S9 | The §3d composer states marked "NEW" in `PHASE3.6_SPEC.md §4.2`: S4 (normal + chat visible, radial war), S6 (empty-state not chat-active), S7 (is-chat-active), S9 (explain-collapsed). Add computed-style states for S1/S8/S10/S11 (today pixel-only via views 06/15/16) and S5 (`:focus-within`). | **A4** (composer chain) |
+| `css-probe` states S4/S6/S7/S9/S10/S11 | ✅ **SHIPPED (2026-06-28, pending PR; stacked on §C2).** S4 (normal + chat visible), S6 (empty-state not chat-active), S7 (is-chat-active), S9 (explain-collapsed), S10 (chapter-overview-active), S11 (chapter-overview-split-active) — each drives the **real** production fn (`openLearnQaSidebar` / `applyLearnPanelFocusState` / `updateLearnChatEmptyState` / `applyLearnExplainCollapsedState` / `setChapterOverviewLayoutActive`) + fail-closed winner sentinel, sentinels derived empirically. **S5 (`:focus-within`) DROPPED** — focus engages and `:focus-within` matches but every focus-within decl loses to the `!important` wall (no constructible winner → would be fail-open; visual-diff view 09 retains pixel cover). **S1/S8 deferred** (view 06 pixel-covers resting). Empirical finding: the §3d composer chrome is **panel-invariant** at desktop (S4≡S2 values), so the new states pin only the cascade each gates. | **A4** (composer chain) — gate now met |
 | `panelFocus` desync fix (= §C2) | Drive S2/S3 through `applyLearnPanelFocusState()` (app.js:2725) instead of hand-setting `dataset.panelFocus`; have `resetLessonChromeState` also clear `chat-collapsed`/`explain-collapsed`. | **A4** (correct composer-state capture) |
 | Narrow per-selector probes | Extend N0–N4 (currently only 3 learn-chrome selectors on a §1.1-1 DOM) to the home-ask / feedback / login / MN / chapter-overview / settings families; add ≤560px state + an `@container lecture-panel` panel-width driver. | **A2** (narrow tranches) + **A5** (media-gated slice) |
 
-`css-probe` states on the branch today: `S2-qa-wide`, `S3-qa-full`,
-`S12-textbook-qa-open`, `S-page-corner`, `N0–N4`. **Re-baseline S4–S11 on
-pre-collapse `main` before touching the composer.**
+`css-probe` states on the branch today (20): `S2-qa-wide`, `S3-qa-full`,
+`S4-normal-chat`, `S6-chat-empty`, `S7-chat-active`, `S9-explain-collapsed`,
+`S10-overview-active`, `S11-overview-split`, `S12-textbook-qa-open`,
+`S-page-corner`, `N0–N4`, `S-feedback-*`. The S4–S11 baseline was captured
+**additively** off the §C2 branch (which is itself off pre-collapse `main`):
+`git diff css-probe-baseline.json` = +264/−0, every pre-existing key byte-identical.
+**Still missing for the full A2 `NEEDS-STATE-MATRIX` tranche: a `.learn-textbook-active`
+state** (the 13 explain-rail rules — see A2 below; gated by textbook-active, NOT
+chapter-overview-active).
 
 #### A1 — `#feedbackView` `!important` strip (next target)
 
@@ -173,7 +179,7 @@ and gating:
 | Residual COLLAPSE-SAFE-NOW | ~3 | small new probes | close-btns L34088/34089 + composer `.bottom-actions` L33233 (z-index/overflow). |
 | Dead-code deletion subset | 22 | DOM grep + visual-diff | `#learnLecturePageIndicator` / `#learnExplainBottomRail` / `#learnToolbarPagination` chains — IDs in **no HTML/JS**. **Line-reducing** (not collapse). Mostly cleared by #105 sweeps; finish the remainder. |
 | NEEDS-NARROW-VIEWPORT | 12 | A0 narrow probes | MN L34808/34838/34842 + composer 33277 (≤1180); MN L34848+ + topbar L34297+ (≤820). |
-| NEEDS-STATE-MATRIX | 28 | A0 S4–S11 | biggest single unlock = a `.learn-textbook-active` state (13 explain-rail rules); + S10/S11, `.is-chat-active`, `[data-custom-split]`/`.panel-normal`. |
+| NEEDS-STATE-MATRIX | 28 | A0 S4–S11 | S10/S11 + `.is-chat-active` (S6/S7) + `.panel-normal` (S4) now **probe-covered** (2026-06-28). Remaining: a **`.learn-textbook-active`** state (the biggest single sub-tranche, 13 explain-rail rules — gated by textbook-active, distinct from the shipped overview states) + `[data-custom-split]`. |
 | NEEDS-NEW-VIEW | ~7 | isolated-view bootstraps | settings/preference/courseTracker close-btns; open-mode-menu composer. |
 | LOAD-BEARING (never touch) | 20 | — | cite-and-skip: composer L33191/33213-16/33238/37415-26, MN L34770/34784/34816+, topbar L34088/34176-78/34193-94, close-btn L34091. |
 
