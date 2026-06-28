@@ -120,11 +120,19 @@ async function resetLearnChrome(page) {
         // states' own drivers (openLearnQaSidebar / applyLearnExplainCollapsedState) do NOT
         // expect to follow — so calling it unconditionally perturbs S4/S9. Gating on the class
         // makes it a TRUE no-op for every non-textbook state (the resting §1.1-1 lesson and
-        // S2-S12 all rest without .learn-textbook-active) and fires only to clean up after S13:
-        // it clears .learn-textbook-active + restores the inline styles _setLearnMode wrote on
-        // #learnBookOverlay / #learnExplainContent (app.js:2460/2469). Kept LOCAL to css-probe →
-        // zero visual-diff blast radius; typeof-guarded so a rename fails LOUD in S13's winner
-        // sentinel, not silently here.
+        // S2-S12 all rest without .learn-textbook-active). When it DOES fire it cleans up after a
+        // textbook state — clears .learn-textbook-active + restores the inline styles
+        // _setLearnMode wrote on #learnBookOverlay / #learnExplainContent (app.js:2460/2469).
+        // NOTE: in the CURRENT ordering this branch is DORMANT — nothing calls resetLearnChrome
+        // after S13 (S13 is the last resetLearnChrome state; the S-feedback-* block uses
+        // openFeedbackBoard, which does not reset learn chrome). It is defensive cover that only
+        // activates if a future learn-chrome state is inserted after a textbook state.
+        // ORDERING CONTRACT: S13 must stay the last learn-chrome state. Its textbook class +
+        // inline styles persist across the cross-view nav into #feedbackView (benign today — the
+        // feedback probes read only #feedbackView nodes, proven byte-identical by --check), so any
+        // learn-chrome state appended AFTER the feedback block would inherit leaked textbook mode
+        // unless it resets first. Kept LOCAL to css-probe → zero visual-diff blast radius;
+        // typeof-guarded so a rename fails LOUD in S13's winner sentinel, not silently here.
         try {
             const lb = document.getElementById('learnBody');
             if (lb && lb.classList.contains('learn-textbook-active') && typeof _setLearnMode === 'function') {
@@ -1022,6 +1030,11 @@ const PROBE_STATES = [
 
     // ---- #feedbackView floor guard (D1). Appended LAST — these are the FIRST
     // cross-view-navigating states (they leave the lesson page for #feedbackView). ----
+    // CONTRACT: do NOT append a learn-chrome state after this block. S13 leaves
+    // .learn-textbook-active + textbook inline styles on the (now-hidden) lesson DOM, and the
+    // feedback states use openFeedbackBoard (no resetLearnChrome), so a later learn state would
+    // start from leaked textbook mode. New learn-chrome states belong BEFORE S13; see the S13
+    // cleanup floor in resetLearnChrome for the full rationale.
     {
         // S-feedback-rest — the populated multi-tone board at desktop rest. Pins the
         // literal cascade-winning value of every rest-reachable floor property (52 of
