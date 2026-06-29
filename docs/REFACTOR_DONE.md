@@ -238,7 +238,11 @@ byte-identical to main):
 >   fallback was `height:auto` (content-grown → no scroll), but the real winner is the overview-alone
 >   rule `height: calc(100dvh − var(--header-height))` (3 IDs out-specify the `.learn-explain-scroll`
 >   class), resolving to the **identical 738px** → render-neutral (arbiter root offsetHeight unchanged;
->   visual-diff 0.000%). NOT at-risk; no keep-set entry.
+>   visual-diff 0.000%). NOT at-risk; no keep-set entry. **A4 must re-confirm at a 2nd height:** this
+>   `calc(100dvh − header) == 100%`-of-parent equivalence was MEASURED only at the harness's pinned
+>   800h, and both harnesses render no other viewport height — a divergence at an unrendered height is
+>   invisible to these gates. Before A4 actually deletes L24577, spot-check the equivalence at one more
+>   viewport height (e.g. 700h / 1000h) so the NOCOMP verdict isn't 800h-only.
 > - `.textbook-pages-flow` **min-height:100% (L24598) = load-bearing** (arbiter prop flip `100%→0px`, 30
 >   cells; note: geometrically inert vs the `height:auto` overlay parent, but kept — over-keep is safe).
 > - `.textbook-pages-flow` **padding-bottom (L24599) = load-bearing** (deletion ⇒ Band-1 fallback 40px ⇒

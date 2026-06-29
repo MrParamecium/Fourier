@@ -372,6 +372,12 @@ async function enterTextbookOverflowState(page, opts = {}) {
     // clamp(48px,8vh,86px) = 64px @800h, NOT the Band-1 clamp(32,5vh,58) = 40px.
     // (Used value — fine for a sentinel at a pinned viewport; this is why the
     // witness is visual-diff+arbiter, not css-probe.)
+    // HEIGHT COUPLING: the '64px' literal is 8vh of an 800px-tall viewport. BOTH
+    // callers pin height=800 — visual-diff at 1280x800, the arbiter at every
+    // VIEWPORTS width with setViewportSize({ height: 800 }) (_view-cascade-probe.js).
+    // If a non-800h viewport is ever added to either harness, recompute this literal
+    // (8vh of the new height, clamped to [48,86]) or the desktop witness fails-closed
+    // here for the wrong reason.
     assertOrThrow(result.paddingBottom === '64px',
         `enterTextbookOverflowState: .textbook-pages-flow padding-bottom is ${result.paddingBottom}, expected 64px `
         + `(Band-2 winner @800h). Band-1's 40px means the doubled-ID Band-2 rule is not winning — witness invalid.`);
