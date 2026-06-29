@@ -1,5 +1,0 @@
-{"file": ".trellis/tasks/06-29-a4-s14-tall-witness/research/witness-subsystem-map.md", "reason": "the 5-agent file:line map of all 5 witness subsystems (visual-diff/arbiter/css-probe/Band-2 CSS/app combined-state) — the two-tool witness contract, the 2 at-risk decls, the min-height/overflow tension, determinism gotchas"}
-{"file": ".trellis/spec/css/verification.md", "reason": "the 5 gates (cascade-competitor + arbiter --check + css-probe --check + visual-diff --check + inline-style audit); how to add a probe state + per-view STRICT_FAIL_RATIO; the fullPage:false off-screen-clip trap (view 14c pattern)"}
-{"file": ".trellis/spec/css/cascade-and-collapse.md", "reason": "Rule 6 measured-floor arbiter/keep-set loop + Rule 6.3 commit-the-MINIMAL-keep-set; doubled-ID specificity model; classify-before-touch — context for the fresh keep-set derivation"}
-{"file": ".trellis/spec/css/index.md", "reason": "CSS layer entry point + pre-development checklist"}
-{"file": "docs/REFACTOR_DONE.md", "reason": "§A4 HARD PRECONDITION (L223-230) + §A0 S14 closure (L164-181) — the authoritative spec the witness satisfies; update §A4 at finish"}
