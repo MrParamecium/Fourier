@@ -1,3 +1,0 @@
-{"file": ".trellis/spec/css/cascade-and-collapse.md", "reason": "doubled-ID / cross-file specificity rules — Rule 3 classify-before-strip (per-occurrence NOCOMP/LOSES/DEFENSIVE), Rule 4 style.css>runtime-collapsed invariant, Rule 6; decides which #x#x occurrences are safe to de-double"}
-{"file": ".trellis/spec/css/verification.md", "reason": "5-gate verification (cascade-competitor + arbiter + css-probe + visual-diff + inline-style/@media audit) every de-doubled occurrence must pass byte-identical"}
-{"file": ".trellis/spec/css/index.md", "reason": "CSS layer entry point + pre-development checklist"}
