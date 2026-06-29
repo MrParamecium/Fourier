@@ -285,6 +285,27 @@ const S13_PROBES = [
 // CONSEQUENCE (named coverage gap, see prd "Residual risk"): the 7 Band-2 doubled-ID occurrences
 // carry NO css-probe witness. A2's later Band-2 strip must lean on visual-diff + the arbiter
 // keep-set, not a computed-style baseline. "documented-dropped" is an honest gap, not "covered".
+//
+// ── 2026-06-29 re-verification + closure decision (FlyM1ss) ──
+// Re-attacked the drop with a property the 2026-06-28 matrix never evaluated:
+// #learnExplainScroll `overscroll-behavior` (Band-2 sets `contain`, L24582; the three S14-DOM
+// competitors — overview-alone L15024, base L18832, Band-1 L25118 — all set NONE). It LOOKS
+// fail-closed but is NOT: #learnExplainScroll carries class `learn-explain-scroll` (index.html:686),
+// and `.learn-explain-scroll` (L12102-12104, !important) already sets overscroll-behavior:contain /
+// overflow-x:hidden / -webkit-overflow-scrolling:touch — so deleting Band-2 leaves the CLASS rule
+// supplying the same values (fail-OPEN). A new death-mode (same-element class backstop), distinct
+// from (a)-(d); the no-witness conclusion is now TWICE-verified.
+// NARROWED RISK SURFACE: only TWO Band-2 decls are both unique AND geometric — #learnExplainScroll
+// height:100% (scroll-cap vs content-grown auto) and .textbook-pages-flow min-height:100% + larger
+// padding-bottom (L24598-99). The other 5 are Band-1-redundant (Band-1 is itself S13-guarded) or
+// inline-masked → transitively backstopped through a de-double. Those two are observable by NO tool
+// (css-probe, arbiter, OR visual-diff) without a fixture rendering a TALL chapter-level textbook page
+// flow — the arbiter is used-value + offset-rect keyed (see its header), sharing the collapse
+// blindness and catching the height delta only once content overflows.
+// → A4 PRECONDITION (docs/REFACTOR_DONE.md §A0/§A4): before stripping the 7 Band-2 doubled-IDs,
+//   build that tall-content combined-state witness (visual-diff view + fresh arbiter keep-set)
+//   covering those two decls. Do NOT ship Band-2 on the current harness. Deferred here with NO
+//   speculative pre-build, per the closure decision.
 
 // ---------- viewport-banded learn-chrome states (docs/phase3_deferred.md §14 prerequisite 1) ----------
 // The `!important` / doubled-ID wall's single largest remaining lever is the redeclaration pileup

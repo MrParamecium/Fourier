@@ -1,0 +1,4 @@
+{"file": ".trellis/spec/css/verification.md", "reason": "the gates the check enforces: npm run check + css-probe --check (21 states byte-identical) + visual-diff --check (new views within floor, pre-existing unperturbed) + arbiter --check + inline-style audit — all fail-closed"}
+{"file": ".trellis/spec/css/cascade-and-collapse.md", "reason": "Rule 6.3/6.4 the check re-verifies: the committed keep-set is the MINIMAL measured set, re-derived fresh (not seeded); a small/zero yield is success not failure"}
+{"file": ".trellis/tasks/06-29-a4-s14-tall-witness/research/witness-subsystem-map.md", "reason": "the witnessing theory + the 2 at-risk decls + the min-height-inert-on-overflow trap the check must confirm is actually covered (not vacuously passing on use-value-collapsed short content)"}
+{"file": ".trellis/spec/css/index.md", "reason": "CSS layer Quality Check section"}

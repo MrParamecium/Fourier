@@ -227,6 +227,24 @@ async function resetLessonChromeState(page) {
         // state's DOM. The app drops these in lockstep with panelFocus via
         // applyLearnPanelFocusState(); the floor between probe states must mirror it.
         body.classList.remove('chat-collapsed', 'explain-collapsed');
+        // A4 S14 witness (task 06-29-a4-s14-tall-witness): tear down the combined
+        // overview+textbook state the tall-witness views inject, so a sticky
+        // learn-textbook-active / textbook-mode / un-hidden #learnBookOverlay cannot
+        // leak into a later Page A view's DOM. resetLessonChromeState is the single
+        // floor between visual-diff views; NO pre-existing view sets these (only
+        // css-probe S13, which uses its own resetLearnChrome), so clearing them here
+        // is a no-op for every committed baseline and only recovers from the witness.
+        body.classList.remove('learn-textbook-active');
+        const _scroll = document.getElementById('learnExplainScroll');
+        if (_scroll) _scroll.classList.remove('textbook-mode');
+        const _overlay = document.getElementById('learnBookOverlay');
+        if (_overlay) {
+            _overlay.classList.add('hidden');
+            _overlay.style.display = '';   // drop the inline block; .hidden hides it
+            _overlay.innerHTML = '';
+        }
+        const _explain = document.getElementById('learnExplainContent');
+        if (_explain) _explain.style.display = '';
         // Force any pager refresh observer to recompute against the reset state.
         if (typeof window.__ftutorRefreshPager === 'function') {
             window.__ftutorRefreshPager();
@@ -288,6 +306,90 @@ async function settleLesson(page) {
     });
     await settleRaf(page);
     await page.waitForTimeout(150);
+}
+
+// A4 S14 witness (task 06-29-a4-s14-tall-witness). Drive #learnBody into the
+// combined `chapter-overview-active.learn-textbook-active` (Band-2) state with a
+// SYNTHETIC, fixed-height `.textbook-pages-flow` injected into #learnBookOverlay,
+// so the two at-risk Band-2 doubled-ID decls become observable:
+//   (a) #learnExplainScroll height:100%  (style.css L24577)  — needs OVERFLOW
+//   (b) .textbook-pages-flow min-height:100% + padding-bottom (L24598-24599)
+// Pure-synthetic (no production fn, no /api/section prelude, no real-scan decode,
+// no scroll-reset timers) for determinism — mirrors the view-15/16 class-flip
+// philosophy. The lesson layout (opened by view 06) already bounds
+// #learnExplainScroll (.learn-explain-scroll flex scroll container, style.css
+// L12097), so Band-2 height:100% resolves against a bounded parent → tall content
+// overflows. Fixed-height cards (inline style beats the stylesheet) remove all
+// image-decode non-determinism; the 1x1 transparent GIF keeps the production
+// `.textbook-page-card > img` structure without a network fetch.
+//
+// variant 'tall' (default): content >> container → witnesses (a) + padding-bottom.
+// variant 'fill': content < container → tests whether min-height:100% does work.
+// Returns the geometry probe so a caller can record it. Throws (fail-closed) if
+// the combined classes aren't set, Band-2 isn't the live cascade winner, or the
+// overflow/fill precondition for the variant isn't met (a vacuous use-value-
+// collapse would otherwise pass the witness for the wrong reason).
+const _S14_CARD_IMG = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+async function enterTextbookOverflowState(page, opts = {}) {
+    const variant = opts.variant === 'fill' ? 'fill' : 'tall';
+    const cards = opts.cards ?? (variant === 'fill' ? 1 : 4);
+    const cardHeight = opts.cardHeight ?? (variant === 'fill' ? 220 : 1400);
+    await resetLessonChromeState(page);
+    const result = await page.evaluate(({ cards, cardHeight, img }) => {
+        const body = document.getElementById('learnBody');
+        const scroll = document.getElementById('learnExplainScroll');
+        const explain = document.getElementById('learnExplainContent');
+        const overlay = document.getElementById('learnBookOverlay');
+        if (!body || !scroll || !overlay) {
+            return { ok: false, reason: 'missing #learnBody / #learnExplainScroll / #learnBookOverlay' };
+        }
+        body.classList.add('chapter-overview-active', 'learn-textbook-active');
+        scroll.classList.add('textbook-mode');
+        if (explain) explain.style.display = 'none';     // mirror _setLearnMode (Band-2 L24603 is inline-masked anyway)
+        overlay.classList.remove('hidden');
+        overlay.style.display = 'block';
+        const card = `<div class="textbook-page-card" style="width:680px;height:${cardHeight}px;background:#9aa4b2;border-radius:8px;flex:0 0 auto;">`
+            + `<img src="${img}" alt="" style="display:block;width:100%;height:100%;"></div>`;
+        overlay.innerHTML = `<div class="textbook-pages-flow">${card.repeat(cards)}</div>`;
+        void overlay.offsetHeight;                        // force synchronous layout
+        const flow = overlay.querySelector('.textbook-pages-flow');
+        return {
+            ok: true,
+            hasBothClasses: body.classList.contains('chapter-overview-active')
+                && body.classList.contains('learn-textbook-active'),
+            paddingBottom: flow ? getComputedStyle(flow).paddingBottom : '__no-flow__',
+            scrollHeight: scroll.scrollHeight,
+            clientHeight: scroll.clientHeight,
+        };
+    }, { cards, cardHeight, img: _S14_CARD_IMG });
+
+    assertOrThrow(result.ok, `enterTextbookOverflowState: ${result.reason || 'core textbook DOM missing'}`);
+    assertOrThrow(result.hasBothClasses,
+        'enterTextbookOverflowState: combined chapter-overview-active + learn-textbook-active not both set on #learnBody');
+    // Band-2 must be the LIVE cascade winner: padding-bottom resolves to the Band-2
+    // clamp(48px,8vh,86px) = 64px @800h, NOT the Band-1 clamp(32,5vh,58) = 40px.
+    // (Used value — fine for a sentinel at a pinned viewport; this is why the
+    // witness is visual-diff+arbiter, not css-probe.)
+    // HEIGHT COUPLING: the '64px' literal is 8vh of an 800px-tall viewport. BOTH
+    // callers pin height=800 — visual-diff at 1280x800, the arbiter at every
+    // VIEWPORTS width with setViewportSize({ height: 800 }) (_view-cascade-probe.js).
+    // If a non-800h viewport is ever added to either harness, recompute this literal
+    // (8vh of the new height, clamped to [48,86]) or the desktop witness fails-closed
+    // here for the wrong reason.
+    assertOrThrow(result.paddingBottom === '64px',
+        `enterTextbookOverflowState: .textbook-pages-flow padding-bottom is ${result.paddingBottom}, expected 64px `
+        + `(Band-2 winner @800h). Band-1's 40px means the doubled-ID Band-2 rule is not winning — witness invalid.`);
+    if (variant === 'tall') {
+        assertOrThrow(result.scrollHeight > result.clientHeight + 200,
+            `enterTextbookOverflowState(tall): not overflowing (scrollHeight ${result.scrollHeight} <= clientHeight `
+            + `${result.clientHeight}+200). height:100%/padding-bottom would use-value-collapse → vacuous (fail-open) witness.`);
+    } else {
+        assertOrThrow(result.scrollHeight <= result.clientHeight + 2,
+            `enterTextbookOverflowState(fill): content overflows (scrollHeight ${result.scrollHeight} > clientHeight `
+            + `${result.clientHeight}+2). min-height:100% is inert on overflowing content — lower cardHeight.`);
+    }
+    await settleLesson(page);
+    return result;
 }
 
 function assertOrThrow(condition, msg) {
@@ -560,6 +662,7 @@ module.exports = {
     openSubtopic,
     resetHomeChromeState,
     resetLessonChromeState,
+    enterTextbookOverflowState,
     settleLesson,
     assertOrThrow,
     resolveLessonCachePath,

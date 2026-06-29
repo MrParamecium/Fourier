@@ -31,6 +31,7 @@ const {
     openSubtopic,
     resetHomeChromeState,
     resetLessonChromeState,
+    enterTextbookOverflowState,
     settleLesson,
     assertOrThrow,
     resolveLessonCachePath,
@@ -975,6 +976,65 @@ const sharedViews = [
             document.getElementById('learnBody')?.classList.add('chapter-overview-split-active');
         });
         await page.waitForTimeout(300);
+    } },
+    // Views 17t/17f — Page A — A4 §S14 PRECONDITION: the tall-content combined
+    // overview+textbook witness (task 06-29-a4-s14-tall-witness). These are the
+    // ONLY views that drive `#learnBody.chapter-overview-active.learn-textbook-active`
+    // (Band-2, style.css L24575-24609). They render a SYNTHETIC fixed-height
+    // `.textbook-pages-flow` (no production fn / no /api prelude / no real-scan
+    // decode) so the two at-risk Band-2 doubled-ID decls become observable:
+    //   (a) #learnExplainScroll height:100% (L24577) — only with OVERFLOW
+    //   (b) .textbook-pages-flow min-height:100% + padding-bottom (L24598-24599)
+    // The rigorous offset-box witness is the arbiter (_view-cascade-probe.js, scroll-
+    // invariant offsetHeight); these visual-diff views are the human-visible catch-
+    // all. enterTextbookOverflowState() fails closed if the combined classes aren't
+    // set, Band-2 isn't the live winner (padding-bottom != 64px @800h), or the
+    // overflow/fill precondition isn't met. resetLessonChromeState (extended for
+    // this task) tears the state down for the next Page A view (view 20 resets).
+    //
+    // 17t (tall): content >> container; scroll #learnExplainScroll to the bottom so
+    // the last card + the Band-2 padding-bottom whitespace (the visible signal of
+    // decl (b)) is in frame — fullPage:false clips to 1280x800 and only the inner
+    // container overflows, so we bring the bottom into the viewport (view-14c
+    // pattern) and assert it before screenshot. failRatio 0.0005: synthetic solid
+    // cards carry ~0 AA noise; deleting padding-bottom shifts the last-card bottom
+    // band (~24px × 680px ≈ 1.6% of frame) far above this floor — calibrated post-
+    // baseline.
+    { name: '17t-textbook-overview-tall', page: 'A', failRatio: 0.0005, setup: async (page) => {
+        await enterTextbookOverflowState(page, { variant: 'tall' });
+        const probe = await page.evaluate(() => {
+            const scroll = document.getElementById('learnExplainScroll');
+            // Force INSTANT scroll — #learnExplainScroll inherits scroll-behavior:smooth,
+            // so `scrollTop = …` would animate and read back ~0 (view-14c documents the
+            // same trap). scrollTo({behavior:'instant'}) + style override pins it now.
+            scroll.style.scrollBehavior = 'auto';
+            scroll.scrollTo({ top: scroll.scrollHeight, behavior: 'instant' });
+            const flow = scroll.querySelector('.textbook-pages-flow');
+            const cards = flow ? flow.querySelectorAll('.textbook-page-card') : [];
+            const last = cards.length ? cards[cards.length - 1] : null;
+            const sr = scroll.getBoundingClientRect();
+            const lr = last ? last.getBoundingClientRect() : null;
+            return {
+                atBottom: Math.abs((scroll.scrollTop + scroll.clientHeight) - scroll.scrollHeight) <= 2,
+                lastBottomInView: lr ? (lr.bottom <= sr.bottom + 1 && lr.bottom >= sr.top) : false,
+                probe: { cards: cards.length, lastBottom: lr ? Math.round(lr.bottom) : null, scrollBottom: Math.round(sr.bottom) },
+            };
+        });
+        await page.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
+        assertOrThrow(probe.atBottom,
+            `view 17t: did not pin #learnExplainScroll to the bottom; ${JSON.stringify(probe.probe)}`);
+        assertOrThrow(probe.lastBottomInView,
+            `view 17t: last card bottom not inside the scroll viewport after scroll-to-bottom (padding-bottom band off-screen); ${JSON.stringify(probe.probe)}`);
+    } },
+    // 17f (fill): content < container so Band-2 min-height:100% pads the flow box UP
+    // to fill (inert on overflowing content). The rigorous witness for min-height:100%
+    // is the arbiter's .textbook-pages-flow offsetHeight (transparent bgs make the
+    // pixel delta sub-threshold); this view is the render-neutrality catch-all for
+    // the fill DOM state. Scroll pinned to top.
+    { name: '17f-textbook-overview-fill', page: 'A', failRatio: 0.0005, setup: async (page) => {
+        await enterTextbookOverflowState(page, { variant: 'fill' });
+        await page.evaluate(() => { document.getElementById('learnExplainScroll').scrollTop = 0; });
+        await page.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
     } },
     // ----- Page C (Chapter 2+ family-routed lessons) -----
     // View 17 — Page C — Chapter 3 §3.8-1 with hard-asserted family routing

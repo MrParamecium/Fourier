@@ -168,6 +168,17 @@ fallback, is inline-masked, is also provided by Band-1, or is `__MISSING__`; S5 
 coverage gap:** those 7 Band-2 doubled-IDs carry **no css-probe witness** → A2's Band-2 strip must lean
 on visual-diff + a fresh arbiter keep-set. (Corrects earlier "13 explain-rail rules": the measured count
 is **14 occurrences in two cascade bands**.)
+> **S14 closure decision (2026-06-29, FlyM1ss):** drop **re-verified** by attacking it with a property
+> the original matrix never tried — `#learnExplainScroll` `overscroll-behavior` (Band-2 L24582; no S14-DOM
+> competitor sets it). It still fails: `#learnExplainScroll` carries class `learn-explain-scroll`
+> (index.html:686) and `.learn-explain-scroll` (style.css L12102-12104, !important) already supplies
+> `overscroll-behavior:contain` — a *same-element class backstop* (a 5th death-mode). The gap is now
+> twice-verified. **Risk narrowed:** only **2** Band-2 decls are unique+geometric (`#learnExplainScroll`
+> height:100%, `.textbook-pages-flow` min-height/padding-bottom, L24598-99); the other 5 are
+> Band-1-redundant (Band-1 is S13-guarded) or inline-masked → backstopped through a de-double. Those 2 are
+> witnessable by **no** tool (css-probe/arbiter/visual-diff all collapse) without a **tall-content
+> combined-state fixture**. **Resolution = defer to A4 with a hard precondition (no speculative pre-build);
+> see §A4.**
 
 #### A1 — `#feedbackView` `!important` strip (next target)
 
@@ -209,6 +220,37 @@ selectors** — a true cross-file specificity war. Five named war-pairs
 5. `#learnChatEmptyState` transform: runtime-internal (rcc L2036 beats style L33057).
 **Invariant to preserve on every pair:** *style.css effective specificity > runtime-collapsed effective specificity* (runtime loads last).
 **Gate:** full css-probe S2–S12 byte-identical (A0) — this is the load-bearing gate; visual-diff is catch-all only.
+**HARD PRECONDITION — Band-2 textbook slice (S14 gap, folded in from A2 Group C):** ✅ **SATISFIED
+2026-06-29 (task `06-29-a4-s14-tall-witness`, branch `a4/s14-tall-witness`).** The tall-content
+combined-state witness is BUILT, gate-verified, and MEASURED the at-risk decls' real load-bearing status
+(the prior "un-witnessable, twice-verified" framing held only for the SHORT-content harness; a tall
+overflowing fixture makes them observable). The witness instruments (all additive, `style.css`
+byte-identical to main):
+> - **visual-diff** views `17t-textbook-overview-tall` + `17f-textbook-overview-fill` (synthetic
+>   fixed-height `.textbook-pages-flow` injected into `#learnBookOverlay`; fail-closed sentinel =
+>   `.textbook-pages-flow` padding-bottom `64px @800h` ⇒ Band-2 winner; 0.000% baseline).
+> - **arbiter** VIEWs `learn-textbook-overview-tall` + `-fill` in `_view-cascade-probe.js` (offset-box +
+>   PROP_LIST on `#learnExplainScroll` subtree, all themes × viewports).
+> - **fresh minimal keep-set** `tools/_keep-important.json` += **24598, 24599** (re-derived, not seeded).
+>
+> **MEASURED verdict (Step-4 deletion tests, reverted):**
+> - `#learnExplainScroll` **height:100% (L24577) = NOCOMP-safe** — the plan assumed the deletion
+>   fallback was `height:auto` (content-grown → no scroll), but the real winner is the overview-alone
+>   rule `height: calc(100dvh − var(--header-height))` (3 IDs out-specify the `.learn-explain-scroll`
+>   class), resolving to the **identical 738px** → render-neutral (arbiter root offsetHeight unchanged;
+>   visual-diff 0.000%). NOT at-risk; no keep-set entry. **A4 must re-confirm at a 2nd height:** this
+>   `calc(100dvh − header) == 100%`-of-parent equivalence was MEASURED only at the harness's pinned
+>   800h, and both harnesses render no other viewport height — a divergence at an unrendered height is
+>   invisible to these gates. Before A4 actually deletes L24577, spot-check the equivalence at one more
+>   viewport height (e.g. 700h / 1000h) so the NOCOMP verdict isn't 800h-only.
+> - `.textbook-pages-flow` **min-height:100% (L24598) = load-bearing** (arbiter prop flip `100%→0px`, 30
+>   cells; note: geometrically inert vs the `height:auto` overlay parent, but kept — over-keep is safe).
+> - `.textbook-pages-flow` **padding-bottom (L24599) = load-bearing** (deletion ⇒ Band-1 fallback 40px ⇒
+>   the visual-diff + arbiter SENTINEL errors in BOTH harnesses — a tighter fail-closed guard than a diff).
+>
+> **For A4:** de-double Band-2 with `css-probe --check` + the two new harnesses as gates; the keep-set
+> protects the 2 load-bearing decls. The other 5 Band-2 decls are Band-1-redundant (S13-guarded) or
+> inline-masked → safe through a de-double. Do **not** strip Band-2 on the S2–S13 harness alone.
 
 #### A5 — Media-gated dead-redeclaration slice (78 style + 6 runtime) — ✅ SHIPPED in #106
 
