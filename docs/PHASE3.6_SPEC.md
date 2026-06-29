@@ -179,6 +179,13 @@ transform `#X#X(#X) → #X` because the doubled rule is later in source order.
 - panel-normal (~12): L42959-42990.
 
 ### Surface 6 — learn-view §3d composer chain (LAST; cross-file LOCKSTEP, mandatory)
+> **STALE ANCHORS / SUPERSEDED 2026-06-29 — A4 CLOSED as verified irreducible-by-design.**
+> Every line number below drifted out of range (cited `L41334`/`rcc L1976/L2036` on files of
+> 32,514 / 1,562 lines). A 24-agent adversarial re-derivation proved the war-pairs are
+> IRREDUCIBLE / NO_BENEFIT (the doubled-ID repetition IS the load-bearing mechanism, not the
+> tiebreak the prose below assumes). Authoritative re-derived anchors + verdicts:
+> **`docs/A4_COMPOSER_IRREDUCIBLE.md`** and `REFACTOR_DONE.md §A4`. The prose below is historical.
+
 The only region where runtime-collapsed.css sets DIFFERENT values on the SAME selectors.
 Transform each war-pair in lockstep, preserving the invariant
 **style.css effective specificity > runtime-collapsed effective specificity**

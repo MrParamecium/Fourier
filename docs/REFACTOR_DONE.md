@@ -63,8 +63,8 @@ floor *is* the load-bearing set we intend to keep.
 ### CSS structural collapse (Full Phase 3.6)
 - [ ] **`#feedbackView`** — non-load-bearing `!important` stripped, arbiter-verified against a seeded multi-tone feedback fixture (§A1).
 - [ ] **`.app .sidebar`** — non-load-bearing `!important` stripped, verified under multi-view + sidebar-collapsed-state probe coverage (§A3).
-- [ ] **§3d composer chain** — the five cross-file war-pairs reconciled in lockstep; css-probe states S2–S12 byte-identical; the invariant *style.css effective specificity > runtime-collapsed effective specificity* preserved on every pair (§A4).
-- [ ] **Doubled-ID inventory fully dispositioned** — every instance in `PHASE3.6_SPEC.md §6.2` is either collapsed (COLLAPSE-SAFE-NOW / NEEDS-NARROW / NEEDS-STATE / NEEDS-NEW-VIEW under its probe) or explicitly retained as one of the **20 LOAD-BEARING** "cite-and-skip" rules. Residual doubled-IDs == only that documented floor.
+- [x] **§3d composer chain — verified IRREDUCIBLE-by-design (A4 CLOSED 2026-06-29, docs-only).** A 24-agent adversarial re-derivation proved the doubled-ID repetition IS the load-bearing cross-file specificity-war mechanism, not removable debt — every war-pair is IRREDUCIBLE / NO_BENEFIT in isolation; the only reductions need new witnesses + a high-risk two-file lockstep for ~0 net gain. The invariant *style.css eff-specificity > rcc eff-specificity* is preserved precisely BY the repetition. Proof + re-derived anchors: `docs/A4_COMPOSER_IRREDUCIBLE.md` (§A4).
+- [x] **Doubled-ID inventory fully dispositioned** — the composer cluster (the bulk, ~368/402) is the documented LOAD-BEARING floor (A4, irreducible-by-design); the non-composer subset (MN-band, close-btn, learn-internal) was settled by A2 #124 (`3b4d7d8`) as pervasively load-bearing (N=2 de-doubled, rest proven-DEFENSIVE-kept). Residual doubled-IDs (402) == that documented floor.
 - [ ] **Media-gated dead-redeclaration slice** (78 style + 6 runtime) deleted under narrow/`@container` probe coverage, or documented as provably unreachable (§A5).
 - [ ] **Both harnesses green at the full matrix** — `css-probe --check` and `visual-diff --check` pass across S1–S12 + N0–N4; pre-collapse baselines committed on `main`.
 
@@ -207,19 +207,49 @@ and gating:
 **Risk:** **NOT isolated** — 169 `.app .sidebar` chains + 193 comma-grouped arms pair sidebar selectors with bare-class arms reachable from the **syllabus tree** (`.sidebar .syllabus-*, .syllabus-*`) and gate **learn-view layout** via `.app.sidebar-collapsed #learnView #learnBody.chat-collapsed .lesson-page-frame`. Stripping a sidebar `!important` can flip the cascade on the syllabus tree and on collapsed learn-view geometry.
 **Gate:** multi-view arbiter coverage **including a sidebar-collapsed state** + the syllabus tree, before any strip. ~639 candidates; spec quotes 44.2% safe — the highest blast radius of the view strips.
 
-#### A4 — §3d learn-view composer chain (HARDEST, mandatory-last)
+#### A4 — §3d learn-view composer chain — ✅ CLOSED 2026-06-29 (verified IRREDUCIBLE-by-design)
 
-**Files:** `app/style.css` ↔ `app/css/runtime-collapsed.css` in **lockstep**.
-The only region where runtime-collapsed.css sets **different values on the same
-selectors** — a true cross-file specificity war. Five named war-pairs
-(`PHASE3.6_SPEC.md §3 Surface 6`):
-1. Followup-bar geometry: style L41334 (12 IDs) ↔ rcc L1976 (8 IDs) — width `calc(100%-36px)` vs `min(820px,…)`, min-height 152 vs 112, radius 28 vs 18, pink vs white glass. Distinct depth is 4 **on both sides** — repetition is the *only* thing making style.css win; collapse to plain depth-4 → ties → runtime wins on source order → 8+ props regress.
-2. Followup-bar z-index/overflow: style L33213 ↔ rcc L1634.
-3. `#learnChatCol` background: L33191 (dead) ↔ L37417 (live, within-file) — co-transform preserving source order or the radial-gradient resurfaces.
-4. `#learnModeMenu` position: style L33238 ↔ rcc L1790.
-5. `#learnChatEmptyState` transform: runtime-internal (rcc L2036 beats style L33057).
-**Invariant to preserve on every pair:** *style.css effective specificity > runtime-collapsed effective specificity* (runtime loads last).
-**Gate:** full css-probe S2–S12 byte-identical (A0) — this is the load-bearing gate; visual-diff is catch-all only.
+> **DONE = irreducible-by-design, docs-only (task `06-29-a4-composer-chain`).** A
+> 24-agent adversarial re-derivation at HEAD `9c27ba0` (8 mappers × 2 skeptics) proved
+> the §3d composer-chain doubled-ID pattern is **the load-bearing cross-file
+> specificity-war mechanism, not removable debt** — safe reduction yield is ~0. Full
+> proof + per-surface cascade evidence: **`docs/A4_COMPOSER_IRREDUCIBLE.md`**. The
+> "collapse-and-merge the five war-pairs in lockstep" goal below was the *plan*; the
+> *measured* outcome is that every war-pair is IRREDUCIBLE / NO_BENEFIT in isolation.
+> Decision (FlyM1ss, 2026-06-29): document-and-close, no production change.
+
+**Files:** `app/style.css` ↔ `app/css/runtime-collapsed.css`. The only region where
+runtime-collapsed.css (loads LAST) sets **different values on the same selectors** — a
+true cross-file specificity war. **Invariant** (preserved precisely BY the doubled-ID
+repetition): *style.css effective specificity > rcc effective specificity*. Remove the
+repetition → ties/loses to rcc on source order → regress by construction.
+
+**Re-derived anchors (the prior anchors below were STALE/out-of-range — `style L41334` /
+`rcc L1976/L2036` on files of 32,514 / 1,562 lines):**
+
+| War-pair | style.css winner | rcc competitor | FINAL verdict |
+|---|---|---|---|
+| WP1 followup geometry | L30901-30920 `(12,0,0)` | L1435-1462 `(8,0,0)` | **IRREDUCIBLE**; `width` fail-open |
+| WP2 followup z-index/overflow | L23940-23947 `(8,0,0)` z40 | L1089-1113 `(4,0,0)` z3 | IRREDUCIBLE iso; LOCKSTEP-able; **witnessed** |
+| WP3 #learnChatCol bg | L27795-27801 `(6,0,0)` | L890-911 *same value* | SAFE but **≈0 benefit** |
+| WP4 #learnModeMenu pos | L23954-23977 + later L30860 | L1250-1276 `(2,1,0)` | **IRREDUCIBLE** (skeptic-refuted); fail-open |
+| WP5 #learnChatEmptyState transform | L23795-23798 (loser) | L1494-1498 (winner) | NO_BENEFIT |
+| Group A close-btn | L24685-24706 + L27005 | (same-file) | NO_BENEFIT (#feedbackView arm irreducible) |
+| Group C learn-internal | L27795/L27803 (glass DEAD) | L1435/L1503/L1511 | NO_BENEFIT (skeptic-refuted) |
+| Band-2 textbook | L24575-24609; fallback L23115 | (none) | IRREDUCIBLE (keep-set L24598/24599) |
+
+**Band-2 NOCOMP note:** `#learnExplainScroll height:100%` (L24577) is a dead decl
+(fallback = overview-alone `calc(100dvh−header)` @L23115 = identical 738px) — **safe to
+remove anytime but LEFT IN PLACE**: removal yields 0 doubled-ID reduction and shifts 564
+committed keep-set line-refs >24577 (pure churn). If ever removed, first re-confirm the
+`calc==100%-of-parent` equivalence at a 2nd viewport height (700h/1000h) — MEASURED only @800h (#125).
+
+**Gate (had a reduction shipped):** css-probe S2–S13 byte-identical is the load-bearing
+gate; visual-diff is catch-all. WP2 is the only war-pair witnessed today; WP1 `width`,
+WP4 menu position, WP5 transform are **fail-open** (see backlog §4.4).
+
+<details><summary><b>Historical — S14 witness build (#125), the precondition that made the verdict measurable</b></summary>
+
 **HARD PRECONDITION — Band-2 textbook slice (S14 gap, folded in from A2 Group C):** ✅ **SATISFIED
 2026-06-29 (task `06-29-a4-s14-tall-witness`, branch `a4/s14-tall-witness`).** The tall-content
 combined-state witness is BUILT, gate-verified, and MEASURED the at-risk decls' real load-bearing status
@@ -248,9 +278,13 @@ byte-identical to main):
 > - `.textbook-pages-flow` **padding-bottom (L24599) = load-bearing** (deletion ⇒ Band-1 fallback 40px ⇒
 >   the visual-diff + arbiter SENTINEL errors in BOTH harnesses — a tighter fail-closed guard than a diff).
 >
-> **For A4:** de-double Band-2 with `css-probe --check` + the two new harnesses as gates; the keep-set
-> protects the 2 load-bearing decls. The other 5 Band-2 decls are Band-1-redundant (S13-guarded) or
-> inline-masked → safe through a de-double. Do **not** strip Band-2 on the S2–S13 harness alone.
+> **Superseded (A4 CLOSED 2026-06-29):** A4 did NOT de-double Band-2 — the re-derivation
+> MEASURED the slice as IRREDUCIBLE (min-height L24598 + padding-bottom L24599 regress on a
+> naive de-double; no lockstep escape since rcc has no overview selectors) and height:100%
+> L24577 as NOCOMP-but-not-worth-removing (0 doubled-ID gain + 564 keep-set line-shifts).
+> See the §A4 CLOSED verdict above + `docs/A4_COMPOSER_IRREDUCIBLE.md`.
+
+</details>
 
 #### A5 — Media-gated dead-redeclaration slice (78 style + 6 runtime) — ✅ SHIPPED in #106
 
@@ -353,6 +387,7 @@ Parked deliberately. Triage by the Gated Timebox protocol
    - `complex_plane` / `sinusoid_phasor` / `phasor` demos pixel-unverified (`§1a`).
    - §11 sidebar-drift **Option-B root fix** (a `lessonLayoutStable` sentinel) — today masked, not fixed; restoring sidebar coverage on lesson views needs it.
    - De-duplicate the css-probe/visual-diff shared bridge-spawn/mask/report machinery (`§13a`) to stop drift.
+   - **§3d composer fail-open gaps (Sev-3, surfaced by A4 2026-06-29 — see `docs/A4_COMPOSER_IRREDUCIBLE.md`).** Five composer props have NO witness, so any future edit touching them is unsafe until one is built (the S14-witness pattern, #125): (1) `#learnFollowupBar` **width** — add to `FOLLOWUP_PROBES` (css-probe.js) in S2/S3/S4 (the load-bearing gate currently omits it); (2) `#learnModeMenu` **position/right/bottom/z-index** — needs a css-probe state that adds `.show` + a same-file competitor check (later L30860 ties a de-doubled menu); (3) `#learnChatEmptyState` **transform** — add to `CHAT_STATE_PROBES` (freeze animation); (4) the **6 close-btn arms** display/visibility/size — no state asserts the hidden buttons; (5) `#learnChatCol` **background shorthand** (only background-image probed). None block DONE (A4 makes no edit here).
 5. **View-04 dead-JS/markup tidy** (C3 above) — optional cleanup, do not re-enable the buttons.
 
 ---
