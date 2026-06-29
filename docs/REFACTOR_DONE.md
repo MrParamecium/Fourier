@@ -168,6 +168,17 @@ fallback, is inline-masked, is also provided by Band-1, or is `__MISSING__`; S5 
 coverage gap:** those 7 Band-2 doubled-IDs carry **no css-probe witness** → A2's Band-2 strip must lean
 on visual-diff + a fresh arbiter keep-set. (Corrects earlier "13 explain-rail rules": the measured count
 is **14 occurrences in two cascade bands**.)
+> **S14 closure decision (2026-06-29, FlyM1ss):** drop **re-verified** by attacking it with a property
+> the original matrix never tried — `#learnExplainScroll` `overscroll-behavior` (Band-2 L24582; no S14-DOM
+> competitor sets it). It still fails: `#learnExplainScroll` carries class `learn-explain-scroll`
+> (index.html:686) and `.learn-explain-scroll` (style.css L12102-12104, !important) already supplies
+> `overscroll-behavior:contain` — a *same-element class backstop* (a 5th death-mode). The gap is now
+> twice-verified. **Risk narrowed:** only **2** Band-2 decls are unique+geometric (`#learnExplainScroll`
+> height:100%, `.textbook-pages-flow` min-height/padding-bottom, L24598-99); the other 5 are
+> Band-1-redundant (Band-1 is S13-guarded) or inline-masked → backstopped through a de-double. Those 2 are
+> witnessable by **no** tool (css-probe/arbiter/visual-diff all collapse) without a **tall-content
+> combined-state fixture**. **Resolution = defer to A4 with a hard precondition (no speculative pre-build);
+> see §A4.**
 
 #### A1 — `#feedbackView` `!important` strip (next target)
 
@@ -209,6 +220,14 @@ selectors** — a true cross-file specificity war. Five named war-pairs
 5. `#learnChatEmptyState` transform: runtime-internal (rcc L2036 beats style L33057).
 **Invariant to preserve on every pair:** *style.css effective specificity > runtime-collapsed effective specificity* (runtime loads last).
 **Gate:** full css-probe S2–S12 byte-identical (A0) — this is the load-bearing gate; visual-diff is catch-all only.
+**HARD PRECONDITION — Band-2 textbook slice (S14 gap, folded in from A2 Group C):** the 7
+`#learnBody.chapter-overview-active.learn-textbook-active` doubled-IDs (style.css L24575-24609) have
+**no css-probe witness** and one is **un-witnessable by every current tool** (twice-verified — see §A0
+S14 closure). Before de-doubling them, A4 **MUST** first build a **tall-content combined-state witness**
+(a visual-diff view rendering a chapter-level textbook page flow that overflows + a fresh arbiter
+keep-set), covering the only two at-risk decls — `#learnExplainScroll` height:100% and
+`.textbook-pages-flow` min-height/padding-bottom. The other 5 Band-2 decls are Band-1-redundant
+(S13-guarded) or inline-masked → safe through a de-double. Do **not** strip Band-2 on the S2–S13 harness.
 
 #### A5 — Media-gated dead-redeclaration slice (78 style + 6 runtime) — ✅ SHIPPED in #106
 

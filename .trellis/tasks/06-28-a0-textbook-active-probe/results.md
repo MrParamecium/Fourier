@@ -154,3 +154,31 @@ genuine no-op (had any old key moved, the floor would still be perturbing them).
   textbook-mode floor.
 - `tools/css-probe-baseline.json` — regenerated additive (+`S13-textbook-active`, +56/−0).
 - `tools/_explore-textbook.js` — throwaway matrix tool, **deleted**.
+
+## 8. S14 closure (2026-06-29 session, FlyM1ss)
+
+Reopened the dropped S14 slice to decide whether to genuinely close the no-css-probe-witness
+gap. Outcome: **deferred to A4 with a hard precondition — no speculative pre-build.**
+
+- **Re-verification (didn't trust the prior drop).** Attacked the gap with a property the
+  2026-06-28 matrix never evaluated: `#learnExplainScroll` `overscroll-behavior`. Band-2 sets
+  `contain` (L24582) and the three S14-DOM competitors — overview-alone (L15024), base (L18832),
+  Band-1 (L25118) — set none, so it *looked* fail-closed. It is not: `#learnExplainScroll` carries
+  class `learn-explain-scroll` (`app/index.html:686`), and `.learn-explain-scroll`
+  (L12102-12104, !important) already supplies `overscroll-behavior:contain` /
+  `overflow-x:hidden` / `-webkit-overflow-scrolling:touch`. Deleting Band-2 leaves the **class
+  rule** supplying the same values → **fail-OPEN**. This is a *fifth* death-mode (same-element
+  class backstop), distinct from §3's (a)-(d). The no-witness conclusion is now **twice-verified**.
+- **Risk surface narrowed to 2 decls.** Final pass over all 7 Band-2 decls: only
+  `#learnExplainScroll` height:100% (scroll-cap vs content-grown `auto`) and `.textbook-pages-flow`
+  min-height:100% + larger padding-bottom (L24598-99) are both Band-2-unique AND geometric. The
+  other 5 are Band-1-redundant (and Band-1 is S13-computed-style-guarded) or inline-masked →
+  **transitively backstopped** through a de-double.
+- **No tool can witness those 2 in the current fixture.** css-probe (used-value), the arbiter
+  (used-value + offset-rect, header L10-14), and visual-diff all need a fixture rendering a **tall**
+  chapter-level textbook page flow before height:100% / `.textbook-pages-flow` become observable
+  and distinct. `.textbook-pages-flow` is `__MISSING__` in a §1.1-1 lesson DOM.
+- **Decision.** Building that fixture now is speculative pre-work for a strip A2 already deferred to
+  A4. Recorded as a **hard A4 precondition** (`docs/REFACTOR_DONE.md` §A4) + a dated addendum in
+  `tools/css-probe.js` S14 block. S13 ships; S14 stays a documented, scoped, twice-verified named
+  gap with a concrete A4-time mitigation. **Task complete; advance to A4.**
