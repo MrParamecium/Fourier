@@ -43,7 +43,40 @@ const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
 const { chromium } = require('playwright');
-const { MASK_CSS, waitForHealth, enterGuestMode, seedFeedbackFixture, restoreFeedbackBoard, FEEDBACK_FIXTURE_POPULATED_PATH } = require('./test-utils.js');
+const { MASK_CSS, waitForHealth, enterGuestMode, openSubtopic, enterTextbookOverflowState, seedFeedbackFixture, restoreFeedbackBoard, FEEDBACK_FIXTURE_POPULATED_PATH } = require('./test-utils.js');
+
+// A4 S14 witness (task 06-29-a4-s14-tall-witness): the lesson the textbook-overview
+// VIEWs open. Same §1.1-1 the visual-diff harness uses (cache present).
+const S14_SUBTOPIC = { id: '1_1-1', title: '1.1-1 Signal Energy',
+  chapter: 'Chapter 1: Signals and Systems', section: '1.1 Size of a Signal' };
+// openSubtopic (~25s) only if the lesson view isn't already visible — the `fill`
+// VIEW inherits the open lesson from `tall`, so it skips the re-open.
+async function s14EnsureLessonOpen(page) {
+  // The sidebar-collapsed VIEW (immediately before these) leaves `.app.sidebar-collapsed`
+  // set, which hides the syllabus → openSubtopic's chapter click fails "not visible".
+  // Expand the sidebar first (deterministic: both baseline + check do the same).
+  await page.evaluate(() => {
+    document.querySelector('.app')?.classList.remove('sidebar-collapsed');
+    document.getElementById('leftSidebar')?.classList.remove('collapsed');
+  });
+  const open = await page.evaluate(() => {
+    const v = document.getElementById('learnView');
+    return !!(v && getComputedStyle(v).display !== 'none' && v.offsetParent !== null);
+  });
+  if (!open) await openSubtopic(page, S14_SUBTOPIC);
+}
+// Re-inject the combined state after each viewport resize. Strict at desktop
+// (>=1180 must establish cleanly, or the witness is invalid); tolerant of narrow
+// responsive layouts (the arbiter compares baseline vs check at the SAME viewport,
+// so a degraded narrow cell stays self-consistent and still flags real flips).
+async function s14ReassertState(page, variant) {
+  try {
+    await enterTextbookOverflowState(page, { variant });
+  } catch (e) {
+    const w = await page.evaluate(() => window.innerWidth).catch(() => 0);
+    if (w >= 1180) throw e;
+  }
+}
 
 const PORT = Number(process.env.TUTOR_VIEWPROBE_PORT || 9127);
 const BASE = `http://127.0.0.1:${PORT}`;
@@ -159,6 +192,44 @@ const VIEWS = [
       { label: 'rest' },
       { label: 'menu-toggle-hover', hover: '#menuToggleBtn' },
     ],
+  },
+  // A4 S14 witness (task 06-29-a4-s14-tall-witness): the combined overview+textbook
+  // (Band-2) state — the ONLY arbiter coverage of style.css L24575-24609. APPENDED LAST
+  // (per the order-dependence warning above): these navigate to a lesson, so nothing
+  // after them inherits feedback/sidebar chrome. The arbiter pins scrollTop=0 before
+  // each snapshot, but offset-box geometry is scroll-invariant, so the 3 at-risk decls
+  // are witnessed via rect.height: tall → #learnExplainScroll offsetHeight 738
+  // (height:100% — MEASURED NOCOMP: deleting it leaves both offsetHeight and the
+  // probed `height` computed value at 738, the calc(100dvh-60px) fallback resolving
+  // identically, so this decl is excluded from the keep-set) + .textbook-pages-flow
+  // offsetHeight (padding-bottom);
+  // fill → .textbook-pages-flow offsetHeight 738 (min-height:100% pads it up, fallback ~300).
+  // enterTextbookOverflowState re-runs in ensureState (re-inject after each viewport resize).
+  {
+    id: 'learn-textbook-overview-tall', root: '#learnExplainScroll',
+    preNav: async (page) => {
+      await s14EnsureLessonOpen(page);
+      await enterTextbookOverflowState(page, { variant: 'tall' });
+    },
+    ready: () => {
+      const b = document.getElementById('learnBody');
+      return !!b && b.classList.contains('chapter-overview-active') && b.classList.contains('learn-textbook-active');
+    },
+    ensureState: async (page) => { await s14ReassertState(page, 'tall'); },
+    interactions: [{ label: 'rest' }],
+  },
+  {
+    id: 'learn-textbook-overview-fill', root: '#learnExplainScroll',
+    preNav: async (page) => {
+      await s14EnsureLessonOpen(page);
+      await enterTextbookOverflowState(page, { variant: 'fill' });
+    },
+    ready: () => {
+      const b = document.getElementById('learnBody');
+      return !!b && b.classList.contains('chapter-overview-active') && b.classList.contains('learn-textbook-active');
+    },
+    ensureState: async (page) => { await s14ReassertState(page, 'fill'); },
+    interactions: [{ label: 'rest' }],
   },
 ];
 
