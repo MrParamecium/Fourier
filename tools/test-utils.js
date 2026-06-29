@@ -360,8 +360,6 @@ async function enterTextbookOverflowState(page, opts = {}) {
             paddingBottom: flow ? getComputedStyle(flow).paddingBottom : '__no-flow__',
             scrollHeight: scroll.scrollHeight,
             clientHeight: scroll.clientHeight,
-            flowHeight: flow ? flow.offsetHeight : 0,
-            scrollHeightProp: getComputedStyle(scroll).height,
         };
     }, { cards, cardHeight, img: _S14_CARD_IMG });
 
