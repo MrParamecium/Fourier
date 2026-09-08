@@ -413,24 +413,185 @@ function resetLearnKnowledgePointState() {
   // down any live demo so its rAF loop + window resize listener stop — otherwise
   // they run indefinitely after the user exits the lesson (SP-1/PH-6).
   window.__ftutorTeardownInteractiveDemos?.(document.getElementById('learnExplainContent'));
+  teardownContinuousLesson24Progress();
   learnKnowledgePoints = [];
   currentKnowledgePointIndex = 0;
   currentFullLessonHtml = '';
   currentLessonTrailingHtml = '';
   convolutionLastLessonIndex = 1;
   learnBody?.classList.remove('convolution-guided-flow-active');
+  learnBody?.classList.remove('lesson-continuous-mode');
   window.resetConvolutionFocusWorkspace?.();
   if (learnKpTitle) learnKpTitle.textContent = 'Preparing lesson...';
   if (learnKpPrevBtn) learnKpPrevBtn.disabled = true;
   if (learnKpNextBtn) learnKpNextBtn.disabled = true;
 }
 
+let continuousLesson24ProgressObserver = null;
+let continuousLesson24ProgressRoot = null;
+const CONTINUOUS_LESSON_24_KEY = 'ftutor:continuous-lesson:2.4:completed';
+
+function teardownContinuousLesson24Progress() {
+  continuousLesson24ProgressObserver?.disconnect?.();
+  continuousLesson24ProgressObserver = null;
+  continuousLesson24ProgressRoot = null;
+}
+
+function isContinuousLesson24Complete() {
+  try {
+    return localStorage.getItem(CONTINUOUS_LESSON_24_KEY) === '1';
+  } catch (_) {
+    return false;
+  }
+}
+
+function markContinuousLesson24Complete() {
+  try { localStorage.setItem(CONTINUOUS_LESSON_24_KEY, '1'); } catch (_) {}
+}
+
+function buildContinuousLesson24Html(lessonHtml, sectionCode = '2.4') {
+  const normalizedLessonHtml = normalizeContinuousLesson24Html(lessonHtml);
+  const code = String(sectionCode || '2.4');
+  const title = String(learnSectionTitle || code);
+  return `
+    <section class="lesson-continuous-progress" data-continuous-progress data-continuous-section="${escapeHtml(code)}" aria-label="${escapeHtml(code)} 阅读进度">
+      <div class="lesson-continuous-progress-topline">
+        <div class="lesson-continuous-progress-title">${escapeHtml(title)}</div>
+        <div class="lesson-continuous-progress-meta">
+          <div class="lesson-continuous-progress-label" data-continuous-progress-label>当前第 1/1 节 · 0%</div>
+          <button type="button" class="lesson-continuous-theme" data-continuous-theme aria-label="切换深浅色主题" title="切换深浅色主题"><span aria-hidden="true">☾</span></button>
+        </div>
+      </div>
+      <div class="lesson-continuous-progress-track" aria-hidden="true">
+        <span class="lesson-continuous-progress-bar" data-continuous-progress-bar></span>
+      </div>
+      <p class="lesson-continuous-progress-note" data-continuous-progress-note>滚动只更新当前位置；读完后点“完成阅读”记录进度。</p>
+    </section>
+    <article class="lesson-continuous-document" data-continuous-document>
+      ${normalizedLessonHtml || '<p class="ghost">No explanation available.</p>'}
+    </article>
+  `;
+}
+
+function normalizeContinuousLesson24Html(lessonHtml) {
+  const holder = document.createElement('div');
+  holder.innerHTML = String(lessonHtml || '');
+
+  // 2.4 is a continuous-reading surface, so an old quiz card must never be
+  // allowed to re-enter through a parallel lesson request or restored HTML.
+  holder.querySelectorAll('.lesson-test-banner, #testBannerCard').forEach((node) => node.remove());
+
+  // The markdown engine intentionally treats arbitrary HTML as text. Convert
+  // the lesson's standalone separator paragraphs back into real <hr> nodes.
+  holder.querySelectorAll('p').forEach((paragraph) => {
+    if (compactWhitespace(paragraph.textContent || '') !== '<hr>') return;
+    paragraph.replaceWith(document.createElement('hr'));
+  });
+  return holder.innerHTML;
+}
+
+function mountContinuousLesson24Progress(root) {
+  teardownContinuousLesson24Progress();
+  const documentRoot = root?.querySelector?.('[data-continuous-document]');
+  const progress = root?.querySelector?.('[data-continuous-progress]');
+  if (!documentRoot || !progress) return;
+
+  // Count numbered teaching sections. This remains stable if
+  // markdown rendering or a visual decorator changes the heading level.
+  const headings = Array.from(documentRoot.querySelectorAll('h1, h2, h3, h4, h5, h6'))
+    .filter((heading) => /^\s*\d+[.)]\s+/.test(heading.textContent || ''));
+  const total = Math.max(headings.length, 1);
+  const label = progress.querySelector('[data-continuous-progress-label]');
+  const bar = progress.querySelector('[data-continuous-progress-bar]');
+  const completeButton = progress.querySelector('[data-continuous-complete]');
+  const themeButton = progress.querySelector('[data-continuous-theme]');
+  const note = progress.querySelector('[data-continuous-progress-note]');
+  let completed = isContinuousLesson24Complete();
+  let current = 0;
+
+  headings.forEach((heading, index) => {
+    heading.dataset.continuousSection = String(index + 1);
+    heading.id = heading.id || `continuous-2-4-${index + 1}`;
+  });
+
+  const update = (index) => {
+    current = Math.max(0, Math.min(total - 1, Number(index) || 0));
+    const position = current + 1;
+    const percent = Math.round((position / total) * 100);
+    if (label) label.textContent = `当前第 ${position}/${total} 节 · ${percent}%`;
+    if (bar) bar.style.width = `${percent}%`;
+    if (completeButton) {
+      completeButton.textContent = completed ? '已完成' : '完成阅读';
+      completeButton.disabled = completed;
+      completeButton.setAttribute('aria-pressed', completed ? 'true' : 'false');
+    }
+    if (note) note.textContent = completed
+      ? '本节已记录完成。你可以继续向下复习公式。'
+      : '滚动只更新当前位置；读完后点“完成阅读”记录进度。';
+  };
+
+  update(0);
+  const syncThemeButton = () => {
+    if (!themeButton) return;
+    const dusk = document.documentElement.getAttribute('data-theme') === 'dusk';
+    themeButton.querySelector('span').textContent = dusk ? '☀' : '☾';
+  };
+  syncThemeButton();
+  themeButton?.addEventListener('click', () => {
+    const next = document.documentElement.getAttribute('data-theme') === 'dusk' ? 'dawn' : 'dusk';
+    applyTheme(next);
+    syncThemeButton();
+  });
+  completeButton?.addEventListener('click', () => {
+    markContinuousLesson24Complete();
+    completed = true;
+    update(current);
+  }, { once: true });
+
+  if ('IntersectionObserver' in window && headings.length) {
+    continuousLesson24ProgressObserver = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter(entry => entry.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+      if (visible) update(headings.indexOf(visible.target));
+    }, { root: learnExplainScroll || null, rootMargin: '-12% 0px -70% 0px', threshold: 0 });
+    headings.forEach((heading) => continuousLesson24ProgressObserver.observe(heading));
+  }
+  continuousLesson24ProgressRoot = root;
+}
+
+function renderContinuousLesson24(sectionCode = '2.4') {
+  const learnExplainContent = document.getElementById('learnExplainContent');
+  const learnExplainScroll = document.getElementById('learnExplainScroll');
+  if (!learnExplainContent) return;
+  const lessonRenderGen = beginLessonRenderGen();
+  teardownContinuousLesson24Progress();
+  learnBody?.classList.add('lesson-continuous-mode');
+  replaceLearnContent(learnExplainContent, buildContinuousLesson24Html(currentFullLessonHtml, sectionCode));
+  delete learnExplainContent.dataset.lectureDecorated;
+  bindExpandableLessonImages(learnExplainContent);
+  decorateLectureContent(learnExplainContent);
+  enhanceVisualMetadataUI(learnExplainContent);
+  hydrateInteractiveDemos(learnExplainContent);
+  mountContinuousLesson24Progress(learnExplainContent);
+  if (learnKpTitle) learnKpTitle.textContent = `${sectionCode} 连续讲义`;
+  if (learnKpPrevBtn) learnKpPrevBtn.disabled = true;
+  if (learnKpNextBtn) learnKpNextBtn.disabled = true;
+  window.__ftutorRefreshPager?.();
+  if (learnExplainScroll) learnExplainScroll.scrollTop = 0;
+  window.setTimeout(() => {
+    settleLessonAfterTypeset(learnExplainContent, lessonRenderGen);
+    buildTocFromContent(learnExplainContent);
+    if (learnExplainScroll) learnExplainScroll.scrollTop = 0;
+  }, 60);
+}
+
 const CONVOLUTION_GUIDED_SECTION_ID = '2.4-2';
 const CONVOLUTION_LESSON_PAGE_COUNT = 18;
 const CONVOLUTION_STATE_STORAGE_KEY = 'ftutor:convolution-lesson:v6';
 const CONVOLUTION_PHASES = Object.freeze([
-  { id: 'what', label: 'WHAT', start: 1, end: 2 },
-  { id: 'why', label: 'WHY', start: 3, end: 4 },
+  { id: 'what', label: 'WHAT', start: 2, end: 2 },
+  { id: 'why', label: 'WHY', start: 1, end: 4 },
   { id: 'how', label: 'HOW', start: 5, end: 18 },
 ]);
 const CONVOLUTION_STAGE_LABELS = Object.freeze({
@@ -1477,6 +1638,8 @@ function renderCurrentKnowledgePoint() {
   const learnExplainContent = document.getElementById('learnExplainContent');
   const learnExplainScroll = document.getElementById('learnExplainScroll');
   if (!learnExplainContent) return;
+  teardownContinuousLesson24Progress();
+  learnBody?.classList.remove('lesson-continuous-mode');
   const lessonRenderGen = beginLessonRenderGen();
   if (!learnKnowledgePoints.length) {
     replaceLearnContent(learnExplainContent, buildLessonPageFrameHtml(currentFullLessonHtml || '<p class="ghost">No explanation available.</p>', { type: 'full' }, 0, 1));
@@ -1630,6 +1793,14 @@ function bindStartTestBtnIfPresent() {
 
 function setLearnLessonContent(fullHtml, options = {}) {
   currentFullLessonHtml = String(fullHtml || '');
+  const continuousSectionCode = getCurrentLessonSectionCode();
+  if (['2.4', '2.4-1', '2.4-2'].includes(continuousSectionCode)) {
+    learnKnowledgePoints = [];
+    currentLessonTrailingHtml = '';
+    currentKnowledgePointIndex = 0;
+    renderContinuousLesson24(continuousSectionCode);
+    return;
+  }
   try {
     const parsed = parseLessonKnowledgePoints(currentFullLessonHtml);
     if (getCurrentLessonSectionCode() === CONVOLUTION_GUIDED_SECTION_ID

@@ -104,6 +104,20 @@
       "source": "b_8-10/new__track=standard~math=calculus_ok.v21.en.md",
       "target": "b_8-10/new__aquarius_visual_latex_v2.aquarius_visual_latex_v2.en.md",
       "reason": "The newest format-valid standard content in this directory."
+    },
+    {
+      "sectionId": "2.4",
+      "cacheVariant": "lesson",
+      "source": "workspace/materials/chapter-tutor/2_4/lesson.md",
+      "target": "2_4/new__aquarius_visual_latex_v2.aquarius_visual_latex_v2.en.md",
+      "reason": "Regenerated textbook-grounded continuous lesson approved for the convolution teaching pass."
+    },
+    {
+      "sectionId": "2.4-1",
+      "cacheVariant": "lesson",
+      "source": "workspace/materials/chapter-tutor/2_4-1/lesson.md",
+      "target": "2_4-1/new__aquarius_visual_latex_v2.aquarius_visual_latex_v2.en.md",
+      "reason": "Regenerated textbook-grounded continuous lesson approved for the convolution teaching pass."
     }
   ]
 }
