@@ -67,12 +67,13 @@
     }
   </script>
   <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,500;0,700;1,600&family=Fira+Code:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=1704">
+  <link rel="stylesheet" href="style.css?v=1716">
   <link rel="stylesheet" href="css/ui-friction-v123.css?v=1222">
   <link rel="icon" type="image/png" href="logo.png?v=1778674347">
 
   <link rel="stylesheet" href="css/inline-styles.css?v=1335">
   <link rel="stylesheet" href="css/runtime-collapsed.css?v=1600">
+  <link rel="stylesheet" href="lesson-continuous.css?v=3">
 </head>
 <body class="app-booting">
   <div id="introLanding" class="intro-landing-new hidden font-body text-ink overflow-x-hidden">
@@ -477,7 +478,7 @@
                 <span class="guidance-toggle-label">Guided</span>
                 <span class="guidance-toggle-switch" aria-hidden="true"><span></span></span>
               </button>
-              <button id="webSearchToggleBtnMain" class="icon-toggle-btn active search-box-web-toggle home-ask-web-toggle" title="Enable Web Search">
+              <button id="webSearchToggleBtnMain" class="icon-toggle-btn active search-box-web-toggle home-ask-web-toggle" title="Web Search: ON" aria-label="Web Search: On" aria-pressed="true">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"></circle>
                   <path d="M3.5 12h17M12 3.5c2.3 2.4 3.4 5.2 3.4 8.5s-1.1 6.1-3.4 8.5C9.7 18.1 8.6 15.3 8.6 12S9.7 5.9 12 3.5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path>
@@ -760,59 +761,16 @@
                   <button class="btn-clip" id="attachBtnLearn" title="Attach image, PDF, or Word (.docx)">
                     <svg class="qa-button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.4 12.7 13.8 7.3a3.1 3.1 0 0 1 4.4 4.4l-7.1 7.1a5 5 0 0 1-7.1-7.1l7.4-7.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                   </button>
-                  <textarea class="input-field" id="learnFollowupInput" placeholder="Ask a question about this page..." rows="1" wrap="off"></textarea>
+                  <textarea class="input-field" id="learnFollowupInput" placeholder="Type a message..." rows="1" wrap="off"></textarea>
                   <button class="btn-send" id="learnFollowupBtn" disabled>
                     <svg class="qa-button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 20 4l-5.2 16-3.2-6.9L4 12Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m11.6 13.1 4.6-4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
                   </button>
                 </div>
 
-                <div class="bottom-actions">
-                  <!-- 保留隐藏的原生 select 以免破坏 JS -->
-                  <select id="answerLengthToggleLearn" class="hidden" style="display:none;">
-                    <option value="fast">Fast</option>
-                    <option value="balanced" selected>Balanced</option>
-                    <option value="detailed">Detailed</option>
-                  </select>
-
-                  <div class="edu-mode-menu" id="learnModeMenu" aria-label="Explanation style menu">
-                    <button class="edu-mode-option" type="button" data-learn-mode="fast">
-                      <span class="edu-mode-icon icon-fast"><i class="ph-bold ph-lightning"></i></span>
-                      <div class="edu-mode-text">
-                        <strong>Fast</strong>
-                        <small>Quick & concise answers</small>
-                      </div>
-                    </button>
-                    <button class="edu-mode-option selected" type="button" data-learn-mode="balanced">
-                      <span class="edu-mode-icon icon-balanced"><i class="ph-bold ph-scales"></i></span>
-                      <div class="edu-mode-text">
-                        <strong>Balanced</strong>
-                        <small>Optimal detail & speed</small>
-                      </div>
-                    </button>
-                    <button class="edu-mode-option" type="button" data-learn-mode="detailed">
-                      <span class="edu-mode-icon icon-detailed"><i class="ph-bold ph-magnifying-glass"></i></span>
-                      <div class="edu-mode-text">
-                        <strong>Detailed</strong>
-                        <small>Deep & thorough analysis</small>
-                      </div>
-                    </button>
-                  </div>
-
-                  <button class="action-chip edu-mode-toggle" id="learnModeToggleBtn" type="button" aria-expanded="false" aria-controls="learnModeMenu">
-                    <span class="edu-mode-icon icon-balanced" id="learnModeCurrentIcon" aria-hidden="true"><i class="ph-bold ph-scales"></i></span>
-                    <span id="learnModeCurrentText">Balanced</span>
-                    <svg class="qa-caret-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 14 5-5 5 5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  </button>
-
-                  <button id="guidanceToggleBtnLearn" class="action-chip guidance-toggle" type="button" data-guidance-toggle data-guidance-scope="learn" title="Guidance mode: Off" aria-label="Toggle answer guidance mode" aria-pressed="false">
-                    <span class="guidance-toggle-label">Guided</span>
-                    <span class="guidance-toggle-switch" aria-hidden="true"><span></span></span>
-                  </button>
-
-                  <button id="webSearchToggleBtnLearn" class="action-chip network-on" title="Web Search: ON">
-                    <svg class="qa-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.5 12h17M12 3.5c2.3 2.4 3.4 5.2 3.4 8.5s-1.1 6.1-3.4 8.5C9.7 18.1 8.6 15.3 8.6 12S9.7 5.9 12 3.5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-                  </button>
-                </div>
+                <!-- Internal compatibility value. Tutor teaching style is now automatic. -->
+                <select id="answerLengthToggleLearn" class="hidden" style="display:none;" aria-hidden="true" tabindex="-1">
+                  <option value="balanced" selected>Balanced</option>
+                </select>
               </div>
               <input type="file" id="fileInputLearn" accept="image/*,.pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" style="display:none">
             </div>
@@ -852,24 +810,8 @@
                   <button class="attach-btn" id="attachBtnLearnPopover" title="Attach image, PDF, or Word (.docx) — max 20MB">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
                   </button>
-                  <select id="answerLengthToggleLearnPopover" class="select-css learn-chat-popover-select" title="Explanation Style">
-                    <option value="fast">Fast</option>
-                    <option value="balanced" selected>Balanced</option>
-                    <option value="detailed">Detailed</option>
-                  </select>
-                  <button id="guidanceToggleBtnLearnPopover" class="guidance-toggle icon-toggle-btn" type="button" data-guidance-toggle data-guidance-scope="learn" title="Guidance mode: Off" aria-label="Toggle answer guidance mode" aria-pressed="false">
-                    <span class="guidance-toggle-label">Guided</span>
-                    <span class="guidance-toggle-switch" aria-hidden="true"><span></span></span>
-                  </button>
-                  <button id="webSearchToggleBtnLearnPopover" class="icon-toggle-btn active" title="Enable Web Search">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                      <circle cx="12" cy="12" r="10"></circle>
-                      <line x1="2" y1="12" x2="22" y2="12"></line>
-                      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                    </svg>
-                  </button>
                 </div>
-                <textarea class="learn-followup-input" id="learnFollowupInputPopover" placeholder="start a question" rows="1" wrap="off"></textarea>
+                <textarea class="learn-followup-input" id="learnFollowupInputPopover" placeholder="Type a message..." rows="1" wrap="off"></textarea>
                 <button class="learn-followup-send" id="learnFollowupBtnPopover" disabled>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="22" y1="2" x2="11" y2="13"></line>
@@ -1419,25 +1361,6 @@
         </div>
         <div class="textbook-focus-qa-scroll" id="textbookFocusQaScroll"></div>
         <div class="textbook-focus-qa-compose">
-          <div class="textbook-focus-qa-tools" aria-label="Q&A settings">
-            <select id="answerLengthToggleTextbookFocus" class="select-css textbook-focus-qa-select" title="Explanation Style">
-              <option value="fast">Fast</option>
-              <option value="balanced" selected>Balanced</option>
-              <option value="detailed">Detailed</option>
-            </select>
-            <button id="guidanceToggleBtnTextbookFocus" class="guidance-toggle icon-toggle-btn textbook-focus-qa-guidance" type="button" data-guidance-toggle data-guidance-scope="learn" title="Guidance mode: Off" aria-label="Toggle answer guidance mode" aria-pressed="false">
-              <span class="guidance-toggle-label">Guided</span>
-              <span class="guidance-toggle-switch" aria-hidden="true"><span></span></span>
-            </button>
-            <button id="webSearchToggleBtnTextbookFocus" class="icon-toggle-btn active textbook-focus-qa-web" title="Enable Web Search" type="button" aria-label="Toggle web search">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="2" y1="12" x2="22" y2="12"></line>
-                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-              </svg>
-              <span>Web</span>
-            </button>
-          </div>
           <textarea class="textbook-focus-qa-input" id="textbookFocusQaInput" rows="1" placeholder="Ask about this textbook page"></textarea>
           <button class="textbook-focus-qa-send" id="textbookFocusQaSend" type="button" title="Send question" aria-label="Send question">↗</button>
         </div>
@@ -1559,8 +1482,8 @@
   <script src="convolution-lesson-interactions.js?v=1000"></script>
   <script src="convolution-practice.js?v=1800"></script>
   <script src="convolution-exit-check.js?v=1900"></script>
-  <script src="lesson-render.js?v=1611"></script>
-  <script src="app.js?v=1703"></script>
+  <script src="lesson-render.js?v=1614"></script>
+  <script src="app.js?v=1707"></script>
   <script src="ui-friction-fixes.js?v=1607"></script>
 </body>
 </html>

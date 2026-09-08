@@ -55,6 +55,10 @@ const APPROVED_IMAGES = [
     width: 1153,
     height: 2048,
   },
+  { filename: 'figure-2-7.png', url: '/lesson-illustrations/2_4-2/figure-2-7.png', page: 6, altToken: 'Figure 2.7', width: 585, height: 950 },
+  { filename: 'figure-2-8.png', url: '/lesson-illustrations/2_4-2/figure-2-8.png', page: 7, altToken: 'Figure 2.8', width: 605, height: 930 },
+  { filename: 'figure-2-9.png', url: '/lesson-illustrations/2_4-2/figure-2-9.png', page: 8, altToken: 'Figure 2.9', width: 610, height: 935 },
+  { filename: 'figure-2-10.png', url: '/lesson-illustrations/2_4-2/figure-2-10.png', page: 10, altToken: 'Figure 2.10', width: 585, height: 945 },
 ];
 const EXPECTED_HEADINGS = [
   'Why Use Graphical Convolution?',
