@@ -1,0 +1,239 @@
+/* 2.4 continuous lesson surface. Loaded after the legacy lesson skin so this
+   scoped mode can change the reading flow without changing other sections. */
+#learnView #learnBody.lesson-continuous-mode #learnExplainToolbar .learn-kp-nav,
+#learnView #learnBody.lesson-continuous-mode #learnExplainPager {
+  display: none !important;
+}
+
+#learnView #learnBody.lesson-continuous-mode .learn-explain-scroll {
+  background: var(--lesson-continuous-page, #ffffff) !important;
+  background-image: none !important;
+  padding: 0 0 72px !important;
+  scroll-behavior: smooth;
+}
+
+#learnView #learnBody.lesson-continuous-mode .learn-explain-body {
+  width: 100% !important;
+  max-width: none !important;
+  background: var(--lesson-continuous-page, #ffffff) !important;
+  color: var(--lesson-continuous-ink, #1f2937) !important;
+  font-family: "Noto Sans SC", "PingFang SC", system-ui, sans-serif !important;
+}
+
+#learnView #learnBody.lesson-continuous-mode .lesson-continuous-progress {
+  position: sticky;
+  top: 0;
+  z-index: 8;
+  width: 100%;
+  padding: 28px clamp(22px, 5vw, 72px) 22px;
+  background: var(--lesson-continuous-page, #ffffff);
+  border-bottom: 1px solid var(--lesson-continuous-line, #dbe4eb);
+  box-shadow: none;
+}
+
+#learnView #learnBody.lesson-continuous-mode .lesson-continuous-progress-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: min(100%, 1120px);
+  min-height: 42px;
+  margin: 0 auto;
+}
+
+#learnView #learnBody.lesson-continuous-mode .lesson-continuous-progress-title {
+  color: var(--lesson-continuous-ink, #1f2937);
+  font-size: clamp(20px, 2vw, 30px);
+  line-height: 1.25;
+  font-weight: 760;
+}
+
+#learnView #learnBody.lesson-continuous-mode .lesson-continuous-progress-meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+#learnView #learnBody.lesson-continuous-mode .lesson-continuous-progress-label {
+  margin: 0;
+  color: var(--lesson-continuous-muted, #5f6875);
+  font-size: clamp(14px, 1.5vw, 21px);
+  line-height: 1.2;
+  font-weight: 650;
+}
+
+#learnView #learnBody.lesson-continuous-mode .lesson-continuous-theme {
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--lesson-continuous-line, #dbe4eb);
+  border-radius: 10px;
+  color: var(--lesson-continuous-muted, #5f6875);
+  background: var(--lesson-continuous-surface, #f5f7fa);
+  font-size: 20px;
+  cursor: pointer;
+}
+
+#learnView #learnBody.lesson-continuous-mode .lesson-continuous-progress-track {
+  width: min(100%, 1120px);
+  height: 8px;
+  margin: 18px auto 0;
+  overflow: hidden;
+  background: var(--lesson-continuous-track, #e8eef3);
+  border-radius: 999px;
+}
+
+#learnView #learnBody.lesson-continuous-mode .lesson-continuous-progress-bar {
+  display: block;
+  width: 12%;
+  height: 100%;
+  background: #6d9df5;
+  border-radius: inherit;
+  transition: width 180ms ease;
+}
+
+#learnView #learnBody.lesson-continuous-mode .lesson-continuous-progress-note {
+  display: none;
+}
+
+#learnView #learnBody.lesson-continuous-mode .lesson-continuous-complete {
+  display: none;
+}
+
+#learnView #learnBody.lesson-continuous-mode .lesson-continuous-complete:hover:not(:disabled) {
+  background: #d9fbe9;
+  border-color: #5eead4;
+}
+
+#learnView #learnBody.lesson-continuous-mode .lesson-continuous-complete:disabled {
+  color: #0f766e;
+  background: #f0fdfa;
+  cursor: default;
+}
+
+#learnView #learnBody.lesson-continuous-mode .lesson-continuous-document {
+  width: min(100%, 840px);
+  margin: 0 auto;
+  padding: 38px clamp(22px, 5vw, 48px) 96px;
+}
+
+#learnView #learnBody.lesson-continuous-mode {
+  --lesson-continuous-page: #ffffff;
+  --lesson-continuous-surface: #f5f7fa;
+  --lesson-continuous-ink: #1f2937;
+  --lesson-continuous-muted: #5f6875;
+  --lesson-continuous-line: #dbe4eb;
+  --lesson-continuous-track: #e8eef3;
+}
+
+#learnView #learnBody.lesson-continuous-mode[data-theme="dusk"],
+[data-theme="dusk"] #learnView #learnBody.lesson-continuous-mode {
+  --lesson-continuous-page: #121212;
+  --lesson-continuous-surface: #242424;
+  --lesson-continuous-ink: #f7f7f7;
+  --lesson-continuous-muted: #b8b8b8;
+  --lesson-continuous-line: #373737;
+  --lesson-continuous-track: #353535;
+}
+
+#learnView #learnBody.lesson-continuous-mode .lesson-continuous-document > h1 {
+  margin: 0 0 18px;
+  color: #0f172a;
+  font-size: 2.1rem;
+  line-height: 1.3;
+  font-weight: 760;
+}
+
+#learnView #learnBody.lesson-continuous-mode .lesson-continuous-document > h2 {
+  margin: 58px 0 14px;
+  padding-top: 8px;
+  color: #0f172a;
+  font-size: 1.48rem;
+  line-height: 1.45;
+  font-weight: 760;
+  scroll-margin-top: 112px;
+}
+
+#learnView #learnBody.lesson-continuous-mode .lesson-continuous-document > hr {
+  margin: 0 0 26px;
+  border: 0;
+  border-top: 2px solid #dbe4eb;
+}
+
+#learnView #learnBody.lesson-continuous-mode .lesson-continuous-document > p,
+#learnView #learnBody.lesson-continuous-mode .lesson-continuous-document > li,
+#learnView #learnBody.lesson-continuous-mode .lesson-continuous-document > ul {
+  color: #334155;
+  font-size: 1rem;
+  line-height: 1.95;
+}
+
+#learnView #learnBody.lesson-continuous-mode .lesson-continuous-document > p {
+  margin: 0 0 18px;
+}
+
+#learnView #learnBody.lesson-continuous-mode .lesson-continuous-document > ul {
+  margin: 0 0 22px;
+  padding-left: 1.3em;
+}
+
+#learnView #learnBody.lesson-continuous-mode .lesson-continuous-document strong {
+  color: #0f766e;
+  font-weight: 760;
+}
+
+#learnView #learnBody.lesson-continuous-mode .lesson-continuous-document .math-block {
+  width: 100%;
+  margin: 28px 0;
+  padding: 14px 10px;
+  overflow-x: auto;
+  color: #0f172a;
+  background: #f8fafc;
+  border-left: 3px solid #2f6fed;
+}
+
+#learnView #learnBody.lesson-continuous-mode .lesson-continuous-document .lesson-figure,
+#learnView #learnBody.lesson-continuous-mode .lesson-continuous-document figure {
+  margin: 30px 0;
+  text-align: center;
+}
+
+#learnView #learnBody.lesson-continuous-mode .lesson-continuous-document img {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #dbe4eb;
+  border-radius: 4px;
+  background: #ffffff;
+}
+
+#learnView #learnBody.lesson-continuous-mode .lesson-continuous-document figcaption,
+#learnView #learnBody.lesson-continuous-mode .lesson-continuous-document .lesson-figure-description {
+  margin: 8px auto 0;
+  color: #64748b;
+  font-size: 0.86rem;
+  line-height: 1.65;
+}
+
+@media (max-width: 700px) {
+  #learnView #learnBody.lesson-continuous-mode .lesson-continuous-progress {
+    padding: 6px 16px 5px;
+  }
+
+  #learnView #learnBody.lesson-continuous-mode .lesson-continuous-progress-topline {
+    align-items: center;
+    gap: 6px;
+  }
+
+  #learnView #learnBody.lesson-continuous-mode .lesson-continuous-document {
+    padding: 28px 18px 72px;
+  }
+
+  #learnView #learnBody.lesson-continuous-mode .lesson-continuous-document > h2 {
+    margin-top: 44px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #learnView #learnBody.lesson-continuous-mode .lesson-continuous-progress-bar {
+    transition: none;
+  }
+}
