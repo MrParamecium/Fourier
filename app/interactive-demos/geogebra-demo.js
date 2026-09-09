@@ -220,7 +220,9 @@ function renderGeoGebraDemo(node, demo) {
         <div class="geogebra-demo-loading" data-geogebra-loading role="status">Loading the GeoGebra construction...</div>
         <div class="geogebra-demo-mount" data-geogebra-mount aria-label="Interactive GeoGebra construction"></div>
         <div class="geogebra-demo-fallback" data-geogebra-fallback hidden>
-          <img src="${escapeHtml(spec.fallbackFigure)}" alt="Textbook graphical convolution reference">
+          <div class="geogebra-demo-fallback-figure">
+            <img src="${escapeHtml(spec.fallbackFigure)}" alt="Textbook graphical convolution reference">
+          </div>
           <div class="geogebra-demo-fallback-copy">
             <strong>The interactive construction is unavailable.</strong>
             <span>Use the three layer labels and the formula on this page to continue.</span>
@@ -265,6 +267,22 @@ function renderGeoGebraDemo(node, demo) {
     });
   }
 
+  const TIME_SLIDER_TASKS = new Set([
+    'slide', 'multiply', 'integrate', 'worked-example', 'guided-sequence',
+    'segments', 'cases', 'contact-points', 'integration-limits',
+    'piecewise-output', 'commutativity', 'support-transfer',
+    'shift-transfer', 'practice-builder',
+  ]);
+
+  function syncTimeControlEnabled() {
+    if (!range) return;
+    if (spec.task === 'guided-sequence') {
+      range.disabled = guidedState.step < 3;
+      return;
+    }
+    range.disabled = !TIME_SLIDER_TASKS.has(spec.task);
+  }
+
   function renderGuidedControls() {
     if (spec.task !== 'guided-sequence') return;
     node.querySelectorAll('[data-guided-step]').forEach((button) => {
@@ -293,7 +311,7 @@ function renderGeoGebraDemo(node, demo) {
             ? 'Slide to a checkpoint. Predict the overlap before checking the output.'
             : `Predict the output at t = ${formatGeoGebraValue(guidedState.t, 2)}, then check your interval.`;
     }
-    if (range) range.disabled = guidedState.step < 3 || guidedState.completed;
+    syncTimeControlEnabled();
   }
 
   function evaluateGuidedPrediction(value, answer) {
@@ -480,7 +498,7 @@ function renderGeoGebraDemo(node, demo) {
       loading.hidden = true;
       fallback.hidden = true;
       mount.hidden = false;
-      range.disabled = !['slide', 'multiply', 'integrate', 'worked-example'].includes(spec.task);
+      syncTimeControlEnabled();
       resizeObserver = new ResizeObserver(() => {
         if (!appletHandle || cleaned) return;
         const nextSize = getAppletSize();
@@ -515,6 +533,25 @@ function renderGeoGebraDemo(node, demo) {
   }, { signal: uiAbort.signal });
 
   node.addEventListener('click', (event) => {
+    const stepButton = event.target.closest('[data-guided-step]');
+    if (stepButton && spec.task === 'guided-sequence' && !stepButton.disabled) {
+      const next = Number(stepButton.dataset.guidedStep);
+      const maxUnlocked = guidedState.completed ? 5 : Math.min(5, guidedState.step + 1);
+      if (Number.isFinite(next) && next >= 1 && next <= maxUnlocked) {
+        guidedState.step = next;
+        scene?.setStep?.(next);
+        persistGuidedState();
+        renderGuidedControls();
+        feedback.textContent = next < 3
+          ? 'Read the two signals, then select Flip.'
+          : next < 4
+            ? 'Slide t with the shared slider or a checkpoint button.'
+            : next < 5
+              ? 'Predict the overlap, then check a checkpoint.'
+              : 'Explore the completed construction with the shared t slider.';
+      }
+      return;
+    }
     const flip = event.target.closest('[data-guided-step-action="complete-flip"]');
     if (flip && spec.task === 'guided-sequence') {
       guidedState.step = Math.max(guidedState.step, 3);
