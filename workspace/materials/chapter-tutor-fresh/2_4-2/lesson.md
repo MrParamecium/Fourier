@@ -1,5 +1,3 @@
-%%KC_BLOCK%%<div class="kc-visual-meta" data-visual-kind="lesson_package" data-teaching-role="concept_anchor" style="display:none;"></div>%%KC_END%%
-
 # 2.4-2 · Graphical Understanding of Convolution Operation
 
 ---
@@ -22,6 +20,7 @@ The important area is the **signed area under the product**, not the area betwee
 
 **Keep this:** no overlap means zero product. Overlap does not always mean a nonzero result: positive and negative contributions can cancel.
 
+CHECKPOINT:why
 
 ## 2. Two time variables, two different jobs
 
@@ -37,6 +36,7 @@ At $t=1$, the upper plot contains $x(\tau)$ and $g(1-\tau)$. At $t=2$, it contai
 
 **A useful analogy:** freeze one video frame to measure its area. The slider selects the frame; the integral scans across that frame.
 
+CHECKPOINT:time
 
 ## 3. Four actions for one output point
 
@@ -57,8 +57,9 @@ The textbook lists repetition as a fifth action. Here repetition is the **Play**
 
 The original figure specifies the shape graphically, not its full analytic decay law. The demo uses $g(s)=2e^{-(s+2)}u(s+2)$ as an explicitly labelled analytic realization of that shape. The edge locations and overlap cases come directly from the textbook; numerical areas in this demo use that realization.
 
-![Figure 2.7 (a-i), textbook p. 179: original signals, reflection, shifted overlap, and output points.](/lessons/2_4-2/assets/textbook-crops/figure-2-7.png)
+![Figure 2.7 (a-i), textbook p. 179: original signals, reflection, shifted overlap, and output points.](assets/figure-2-7.png)
 
+DEMO:figure27
 
 The overlap must satisfy $\tau\ge-1$ and $\tau\le t+2$. Therefore it starts only when $t>-3$. For the stated demo realization:
 
@@ -66,6 +67,7 @@ $$ c(t)=\begin{cases}0,&t\le-3,\\2\left(1-e^{-(t+3)}\right),&t>-3.\end{cases} $$
 
 **Try:** compare $t=-4$, $-2$, and $1$. Negative output time does not automatically mean zero: these signals start before zero.
 
+CHECKPOINT:workflow
 
 ## 4. Example 2.10 · Two causal exponentials
 
@@ -78,8 +80,9 @@ $$ c(t)=\begin{cases}0,&t\le-3,\\2\left(1-e^{-(t+3)}\right),&t>-3.\end{cases} $$
 
 Keep $x(\tau)$ fixed. Flip $h$ and then shift it. The fixed signal requires $\tau\ge0$; the moving signal requires $t-\tau\ge0$, or $\tau\le t$.
 
-![Figure 2.8 (a-f), textbook p. 182: causal inputs, no overlap for negative t, positive-time overlap, and the output.](/lessons/2_4-2/assets/textbook-crops/figure-2-8.png)
+![Figure 2.8 (a-f), textbook p. 182: causal inputs, no overlap for negative t, positive-time overlap, and the output.](assets/figure-2-8.png)
 
+DEMO:example210
 
 - **For $t<0$:** the inequalities cannot both hold. No overlap, so $y(t)=0$.
 - **For $t\ge0$:** the intersection is $0\le\tau\le t$. These are the integration limits.
@@ -90,6 +93,7 @@ $$ y(t)=\left(e^{-t}-e^{-2t}\right)u(t) $$
 
 **Check the shape:** it starts at zero, rises, and decays back toward zero. The overlap interval grows, but its signal weights also change; overlap length alone is not the answer.
 
+CHECKPOINT:causal
 
 ## 5. Example 2.11 · Positive and negative contributions
 
@@ -103,8 +107,9 @@ $$ y(t)=\left(e^{-t}-e^{-2t}\right)u(t) $$
 
 The textbook deliberately flips the more complicated two-sided signal. Keep $x(\tau)$ fixed: only $\tau\ge0$ contributes. The moving signal changes formula at $\tau=t$.
 
-![Figure 2.9 (a-f), textbook p. 184: the two branches, reflection, positive and negative contributions, and the output.](/lessons/2_4-2/assets/textbook-crops/figure-2-9.png)
+![Figure 2.9 (a-f), textbook p. 184: the two branches, reflection, positive and negative contributions, and the output.](assets/figure-2-9.png)
 
+DEMO:example211
 
 **For $t<0$**, the positive branch ends to the left of the fixed step. Only the negative branch overlaps:
 
@@ -118,6 +123,7 @@ $$ c(t)=\begin{cases}-e^{2t},&t<0,\\1-2e^{-t},&t\ge0.\end{cases} $$
 
 Both pieces give $c(0)=-1$. At $t=\ln2$, the positive and negative areas cancel exactly, despite overlap. Infinite tails are evaluated analytically; the plotted window shows only a finite part of each tail.
 
+CHECKPOINT:signed
 
 ## 6. Example 2.12 · Edges decide the cases
 
@@ -132,8 +138,9 @@ Use commutativity to flip the simpler rectangle: calculate $g*x$. Keep the ramp 
 
 The rectangle is symmetric, so flipping it leaves the outline unchanged. The endpoint markers exchange sides to show the reflection. After shifting, its edges are $t-1$ and $t+1$.
 
-![Figure 2.10 (a-i), textbook p. 186: original signals, entering, passing, leaving, separation, and the piecewise output.](/lessons/2_4-2/assets/textbook-crops/figure-2-10.png)
+![Figure 2.10 (a-i), textbook p. 186: original signals, entering, passing, leaving, separation, and the piecewise output.](assets/figure-2-10.png)
 
+DEMO:example212
 
 **Find the interval before integrating.** The overlap is the intersection of $[0,3]$ with $[t-1,t+1]$:
 
@@ -153,6 +160,7 @@ $$ c(t)=\begin{cases}0,&t<-1,\\(t+1)^2/6,&-1\le t<1,\\2t/3,&1\le t<2,\\[9-(t-1)^
 
 Think of the rectangle as a window sliding across the ramp. During the middle case, the window width stays 2 but covers taller parts of the ramp. That is why the area keeps increasing.
 
+CHECKPOINT:finite
 
 ## 7. Transfer the method
 
@@ -175,3 +183,4 @@ The last pages of this section also explain why the reversal makes physical sens
 
 In Section 2.4-3 you will use convolution to combine interconnected systems. This section supplies the graphical method; the next section uses it to connect systems together.
 
+CHECKPOINT:transfer

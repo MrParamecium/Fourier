@@ -459,7 +459,7 @@ function buildContinuousLesson24Html(lessonHtml, sectionCode = '2.4') {
         <div class="lesson-continuous-progress-title">${escapeHtml(title)}</div>
         <div class="lesson-continuous-progress-meta">
           <div class="lesson-continuous-progress-label" data-continuous-progress-label>当前第 1/1 节 · 0%</div>
-          <button type="button" class="lesson-continuous-theme" data-continuous-theme aria-label="切换深浅色主题" title="切换深浅色主题"><span aria-hidden="true">☾</span></button>
+          <button type="button" class="lesson-continuous-theme" data-continuous-theme aria-label="切换深浅色主题" title="切换深浅色主题"><svg class="continuous-theme-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.3 15.2A8.7 8.7 0 0 1 8.8 3.7 8.7 8.7 0 1 0 20.3 15.2Z"/></svg><svg class="continuous-theme-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3M5 5l2 2m10 10 2 2M5 19l2-2M17 7l2-2"/></svg></button>
         </div>
       </div>
       <div class="lesson-continuous-progress-track" aria-hidden="true">
@@ -534,7 +534,8 @@ function mountContinuousLesson24Progress(root) {
   const syncThemeButton = () => {
     if (!themeButton) return;
     const dusk = document.documentElement.getAttribute('data-theme') === 'dusk';
-    themeButton.querySelector('span').textContent = dusk ? '☀' : '☾';
+    themeButton.querySelector('.continuous-theme-moon')?.classList.toggle('hidden', dusk);
+    themeButton.querySelector('.continuous-theme-sun')?.classList.toggle('hidden', !dusk);
   };
   syncThemeButton();
   themeButton?.addEventListener('click', () => {

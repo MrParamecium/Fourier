@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2.4-2 · Graphical Understanding of Convolution Operation</title>
+<script>try{document.documentElement.dataset.theme=localStorage.getItem('fourier-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){}</script>
+<link rel="stylesheet" href="lesson.css?v=fresh-20260909">
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script></head>
+<body data-lesson-revision="fresh-20260909"><header class="progress-shell"><div class="progress-inner"><div class="progress-title">2.4-2 · Graphical Understanding of Convolution Operation</div><div class="progress-meta"><div class="progress-text"><span id="progress-position">Current 1/7</span><span>·</span><span id="progress-completed">Completed 0/7</span><span>·</span><span id="progress-percent">14%</span></div><button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode"><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3M5 5l2 2m10 10 2 2M5 19l2-2M17 7l2-2"/></svg><svg class="moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.5 15.5A8.5 8.5 0 0 1 8.5 4.5a8.5 8.5 0 1 0 11 11Z"/></svg></button></div><div class="track"><div class="bar" id="progress-bar"></div></div></div></header>
+<main><h1>2.4-2 · Graphical Understanding of Convolution Operation</h1>
+<hr>
+<p>You already know the convolution integral. Here you will turn that integral into a picture you can move, inspect, and calculate from.</p>
+<p><strong>Your goal:</strong> choose a time, find the overlap, and calculate one output value. Repeat across the important time intervals to build the entire output.</p>
+<p><strong>Route:</strong> one worked visual process, three textbook examples, then a short transfer check. The upper plot always uses the integration variable <span class="math"><span class="math">\(\tau\)</span></span>; the lower plot uses output time <span class="math"><span class="math">\(t\)</span></span>.</p>
+<h2 id="section-1" data-section="1">1. Why draw a convolution?</h2>
+<hr>
+<ul>
+<li><strong>Handle complicated signals.</strong> A graph helps identify which pieces actually contribute to the integral.</li>
+<li><strong>Predict the output shape.</strong> See where the result begins, grows, changes direction, and ends before doing all the algebra.</li>
+<li><strong>Work from measured curves.</strong> When no exact formula is available, the graphical description still lets us estimate the product integral.</li>
+</ul>
+<p>The important area is the <strong>signed area under the product</strong>, not the area between two curves. Below the horizontal axis, contributions count negatively.</p>
+<p><strong>Keep this:</strong> no overlap means zero product. Overlap does not always mean a nonzero result: positive and negative contributions can cancel.</p>
+<fieldset class="checkpoint" data-checkpoint="why"><legend>Quick check</legend><p>What area does convolution add?</p><div class="answers"><button type="button" data-correct="true" data-feedback="Correct. Multiply the two heights first, then integrate with its sign.">The signed product area</button><button type="button" data-correct="false" data-feedback="The gap is not the integrand. We need the pointwise product.">The gap between the curves</button></div><p class="feedback" aria-live="polite">Choose an answer to check this section.</p></fieldset>
+<h2 id="section-2" data-section="2">2. Two time variables, two different jobs</h2>
+<hr>
+<div class="equation">\[c(t)=\int_{-\infty}^{\infty}x(\tau)g(t-\tau)\,d\tau\]</div>
+<ul>
+<li><span class="math"><span class="math">\(t\)</span></span> chooses the output instant. Hold it fixed while evaluating one integral.</li>
+<li><span class="math"><span class="math">\(\tau\)</span></span> runs along the upper plot. It is the variable being integrated out.</li>
+<li>The answer is one number <span class="math"><span class="math">\(c(t)\)</span></span>, placed at time <span class="math"><span class="math">\(t\)</span></span> in the lower plot.</li>
+</ul>
+<p>At <span class="math"><span class="math">\(t=1\)</span></span>, the upper plot contains <span class="math"><span class="math">\(x(\tau)\)</span></span> and <span class="math"><span class="math">\(g(1-\tau)\)</span></span>. At <span class="math"><span class="math">\(t=2\)</span></span>, it contains <span class="math"><span class="math">\(x(\tau)\)</span></span> and <span class="math"><span class="math">\(g(2-\tau)\)</span></span>. Changing <span class="math"><span class="math">\(t\)</span></span> moves the second curve; it does not rename the upper axis.</p>
+<p><strong>A useful analogy:</strong> freeze one video frame to measure its area. The slider selects the frame; the integral scans across that frame.</p>
+<fieldset class="checkpoint" data-checkpoint="time"><legend>Quick check</legend><p>Which variable moves through the integral at a fixed output time?</p><div class="answers"><button type="button" data-correct="true" data-feedback="Correct. τ is integrated out; t selects the output instant.">τ</button><button type="button" data-correct="false" data-feedback="Hold t fixed for one integral. τ runs through the upper graph.">t</button></div><p class="feedback" aria-live="polite">Choose an answer to check this section.</p></fieldset>
+<h2 id="section-3" data-section="3">3. Four actions for one output point</h2>
+<hr>
+<ul>
+<li><strong>1 · Read and fix.</strong> Draw both signals against <span class="math"><span class="math">\(\tau\)</span></span>, and choose which one stays fixed.</li>
+<li><strong>2 · Flip.</strong> Reflect the other signal about <span class="math"><span class="math">\(\tau=0\)</span></span>, giving <span class="math"><span class="math">\(g(-\tau)\)</span></span>.</li>
+<li><strong>3 · Shift.</strong> Move the flipped signal by <span class="math"><span class="math">\(t\)</span></span>: right for positive <span class="math"><span class="math">\(t\)</span></span>, left for negative <span class="math"><span class="math">\(t\)</span></span>.</li>
+<li><strong>4 · Multiply and integrate.</strong> Multiply the heights at each <span class="math"><span class="math">\(\tau\)</span></span> and add their signed contributions over the overlap.</li>
+</ul>
+<p>Why does a right shift produce <span class="math"><span class="math">\(g(t-\tau)\)</span></span>? Write <span class="math"><span class="math">\(\phi(\tau)=g(-\tau)\)</span></span> first. Then:</p>
+<div class="equation">\[\phi(\tau-t)=g\bigl(-(\tau-t)\bigr)=g(t-\tau)\]</div>
+<p>The textbook lists repetition as a fifth action. Here repetition is the <strong>Play</strong> action within step 4: each new <span class="math"><span class="math">\(t\)</span></span> supplies another point on <span class="math"><span class="math">\(c(t)\)</span></span>.</p>
+<p><strong>Figure 2.7:</strong> the fixed step begins at <span class="math"><span class="math">\(\tau=-1\)</span></span>; the original decaying signal begins at <span class="math"><span class="math">\(-2\)</span></span> with height 2. Its reflected edge is at <span class="math"><span class="math">\(+2\)</span></span>, and its shifted edge is at <span class="math"><span class="math">\(t+2\)</span></span>.</p>
+<p>The original figure specifies the shape graphically, not its full analytic decay law. The demo uses <span class="math"><span class="math">\(g(s)=2e^{-(s+2)}u(s+2)\)</span></span> as an explicitly labelled analytic realization of that shape. The edge locations and overlap cases come directly from the textbook; numerical areas in this demo use that realization.</p>
+<figure class="lesson-figure"><img src="assets/textbook-crops/figure-2-7.png" alt="Figure 2.7 (a-i), textbook p. 179: original signals, reflection, shifted overlap, and output points." loading="lazy"><figcaption>Figure 2.7 (a-i), textbook p. 179: original signals, reflection, shifted overlap, and output points.</figcaption></figure>
+<section class="demo" data-demo="figure27" aria-label="Figure 2.7 · The graphical procedure" id="demo-figure27">
+<div class="demo-head"><h3>Figure 2.7 · The graphical procedure</h3><div class="stepbar" role="group" aria-label="Convolution steps"><button type="button" data-step="1" aria-pressed="false">1 · Read and fix</button><button type="button" data-step="2" aria-pressed="false">2 · Flip</button><button type="button" data-step="3" aria-pressed="false">3 · Shift and overlap</button><button type="button" data-step="4" aria-pressed="false">4 · Multiply and integrate</button></div></div>
+<div class="demo-controls"><b>Signals</b><ul data-functions></ul><div class="time-controls"><label>Time t = <output data-time-value>0.00</output><input type="range" aria-label="Figure 2.7 · The graphical procedure time" disabled></label><button data-play type="button" hidden>Play</button><button data-reset type="button">Reset</button></div>
+<div class="readouts"><div>Current interval<output data-interval></output></div><div>Integration bounds<output data-bounds></output></div><div>Signed area<output data-area-value></output></div></div><p data-step-note></p><div data-times aria-label="Important times"></div></div>
+<div class="legend"><span class="blue">Fixed signal</span><span class="orange">Moving signal</span><span class="purple">Product area</span></div><div data-status role="status">Scroll here to load this independent GeoGebra demo.</div>
+<div class="plot-host" data-upper id="figure27-upper"></div><div class="linked-divider">Same t: the upper product area becomes the lower output value</div><div class="plot-host" data-lower id="figure27-lower"></div><div class="demo-note" data-model-note></div></section>
+<p>The overlap must satisfy <span class="math"><span class="math">\(\tau\ge-1\)</span></span> and <span class="math"><span class="math">\(\tau\le t+2\)</span></span>. Therefore it starts only when <span class="math"><span class="math">\(t&gt;-3\)</span></span>. For the stated demo realization:</p>
+<div class="equation">\[c(t)=\begin{cases}0,&amp;t\le-3,\\2\left(1-e^{-(t+3)}\right),&amp;t&gt;-3.\end{cases}\]</div>
+<p><strong>Try:</strong> compare <span class="math"><span class="math">\(t=-4\)</span></span>, <span class="math"><span class="math">\(-2\)</span></span>, and <span class="math"><span class="math">\(1\)</span></span>. Negative output time does not automatically mean zero: these signals start before zero.</p>
+<fieldset class="checkpoint" data-checkpoint="workflow"><legend>Quick check</legend><p>The fixed support starts at −1; the moving edge ends at t+2. When can overlap begin?</p><div class="answers"><button type="button" data-correct="true" data-feedback="Correct: t+2 &gt; −1. Touching at −3 has zero area.">t &gt; −3</button><button type="button" data-correct="false" data-feedback="Both original signals start before zero. Solve t+2 &gt; −1.">Only t &gt; 0</button></div><p class="feedback" aria-live="polite">Choose an answer to check this section.</p></fieldset>
+<h2 id="section-4" data-section="4">4. Example 2.10 · Two causal exponentials</h2>
+<hr>
+<p><strong>Textbook signals</strong></p>
+<ul>
+<li><span class="math"><span class="math">\(x(t)=e^{-t}u(t)\)</span></span>.</li>
+<li><span class="math"><span class="math">\(h(t)=e^{-2t}u(t)\)</span></span>.</li>
+</ul>
+<p>Keep <span class="math"><span class="math">\(x(\tau)\)</span></span> fixed. Flip <span class="math"><span class="math">\(h\)</span></span> and then shift it. The fixed signal requires <span class="math"><span class="math">\(\tau\ge0\)</span></span>; the moving signal requires <span class="math"><span class="math">\(t-\tau\ge0\)</span></span>, or <span class="math"><span class="math">\(\tau\le t\)</span></span>.</p>
+<figure class="lesson-figure"><img src="assets/textbook-crops/figure-2-8.png" alt="Figure 2.8 (a-f), textbook p. 182: causal inputs, no overlap for negative t, positive-time overlap, and the output." loading="lazy"><figcaption>Figure 2.8 (a-f), textbook p. 182: causal inputs, no overlap for negative t, positive-time overlap, and the output.</figcaption></figure>
+<section class="demo" data-demo="example210" aria-label="Example 2.10 · Two causal exponentials" id="demo-example210">
+<div class="demo-head"><h3>Example 2.10 · Two causal exponentials</h3><div class="stepbar" role="group" aria-label="Convolution steps"><button type="button" data-step="1" aria-pressed="false">1 · Read and fix</button><button type="button" data-step="2" aria-pressed="false">2 · Flip</button><button type="button" data-step="3" aria-pressed="false">3 · Shift and overlap</button><button type="button" data-step="4" aria-pressed="false">4 · Multiply and integrate</button></div></div>
+<div class="demo-controls"><b>Signals</b><ul data-functions></ul><div class="time-controls"><label>Time t = <output data-time-value>0.00</output><input type="range" aria-label="Example 2.10 · Two causal exponentials time" disabled></label><button data-play type="button" hidden>Play</button><button data-reset type="button">Reset</button></div>
+<div class="readouts"><div>Current interval<output data-interval></output></div><div>Integration bounds<output data-bounds></output></div><div>Signed area<output data-area-value></output></div></div><p data-step-note></p><div data-times aria-label="Important times"></div></div>
+<div class="legend"><span class="blue">Fixed signal</span><span class="orange">Moving signal</span><span class="purple">Product area</span></div><div data-status role="status">Scroll here to load this independent GeoGebra demo.</div>
+<div class="plot-host" data-upper id="example210-upper"></div><div class="linked-divider">Same t: the upper product area becomes the lower output value</div><div class="plot-host" data-lower id="example210-lower"></div><div class="demo-note" data-model-note></div></section>
+<ul>
+<li><strong>For <span class="math"><span class="math">\(t&lt;0\)</span></span>:</strong> the inequalities cannot both hold. No overlap, so <span class="math"><span class="math">\(y(t)=0\)</span></span>.</li>
+<li><strong>For <span class="math"><span class="math">\(t\ge0\)</span></span>:</strong> the intersection is <span class="math"><span class="math">\(0\le\tau\le t\)</span></span>. These are the integration limits.</li>
+</ul>
+<div class="equation">\[\begin{aligned}y(t)&amp;=\int_0^t e^{-\tau}e^{-2(t-\tau)}\,d\tau\\&amp;=e^{-2t}\int_0^t e^{\tau}\,d\tau\\&amp;=e^{-t}-e^{-2t},\qquad t\ge0.\end{aligned}\]</div>
+<div class="equation">\[y(t)=\left(e^{-t}-e^{-2t}\right)u(t)\]</div>
+<p><strong>Check the shape:</strong> it starts at zero, rises, and decays back toward zero. The overlap interval grows, but its signal weights also change; overlap length alone is not the answer.</p>
+<fieldset class="checkpoint" data-checkpoint="causal"><legend>Quick check</legend><p>At t=2 in Example 2.10, which interval contributes?</p><div class="answers"><button type="button" data-correct="true" data-feedback="Correct. Intersect τ ≥ 0 with τ ≤ t.">0 ≤ τ ≤ 2</button><button type="button" data-correct="false" data-feedback="The fixed causal signal vanishes for negative τ.">−2 ≤ τ ≤ 0</button></div><p class="feedback" aria-live="polite">Choose an answer to check this section.</p></fieldset>
+<h2 id="section-5" data-section="5">5. Example 2.11 · Positive and negative contributions</h2>
+<hr>
+<p><strong>Textbook signals</strong></p>
+<ul>
+<li><span class="math"><span class="math">\(x(t)=u(t)\)</span></span>.</li>
+<li><span class="math"><span class="math">\(g(t)=2e^{-t}\)</span></span> for <span class="math"><span class="math">\(t\ge0\)</span></span> (segment A).</li>
+<li><span class="math"><span class="math">\(g(t)=-2e^{2t}\)</span></span> for <span class="math"><span class="math">\(t&lt;0\)</span></span> (segment B).</li>
+</ul>
+<p>The textbook deliberately flips the more complicated two-sided signal. Keep <span class="math"><span class="math">\(x(\tau)\)</span></span> fixed: only <span class="math"><span class="math">\(\tau\ge0\)</span></span> contributes. The moving signal changes formula at <span class="math"><span class="math">\(\tau=t\)</span></span>.</p>
+<figure class="lesson-figure"><img src="assets/textbook-crops/figure-2-9.png" alt="Figure 2.9 (a-f), textbook p. 184: the two branches, reflection, positive and negative contributions, and the output." loading="lazy"><figcaption>Figure 2.9 (a-f), textbook p. 184: the two branches, reflection, positive and negative contributions, and the output.</figcaption></figure>
+<section class="demo" data-demo="example211" aria-label="Example 2.11 · A two-sided signal" id="demo-example211">
+<div class="demo-head"><h3>Example 2.11 · A two-sided signal</h3><div class="stepbar" role="group" aria-label="Convolution steps"><button type="button" data-step="1" aria-pressed="false">1 · Read and fix</button><button type="button" data-step="2" aria-pressed="false">2 · Flip</button><button type="button" data-step="3" aria-pressed="false">3 · Shift and overlap</button><button type="button" data-step="4" aria-pressed="false">4 · Multiply and integrate</button></div></div>
+<div class="demo-controls"><b>Signals</b><ul data-functions></ul><div class="time-controls"><label>Time t = <output data-time-value>0.00</output><input type="range" aria-label="Example 2.11 · A two-sided signal time" disabled></label><button data-play type="button" hidden>Play</button><button data-reset type="button">Reset</button></div>
+<div class="readouts"><div>Current interval<output data-interval></output></div><div>Integration bounds<output data-bounds></output></div><div>Signed area<output data-area-value></output></div></div><p data-step-note></p><div data-times aria-label="Important times"></div></div>
+<div class="legend"><span class="blue">Fixed signal</span><span class="orange">Moving signal</span><span class="purple">Product area</span></div><div data-status role="status">Scroll here to load this independent GeoGebra demo.</div>
+<div class="plot-host" data-upper id="example211-upper"></div><div class="linked-divider">Same t: the upper product area becomes the lower output value</div><div class="plot-host" data-lower id="example211-lower"></div><div class="demo-note" data-model-note></div></section>
+<p><strong>For <span class="math"><span class="math">\(t&lt;0\)</span></span></strong>, the positive branch ends to the left of the fixed step. Only the negative branch overlaps:</p>
+<div class="equation">\[c(t)=\int_0^{\infty}-2e^{2(t-\tau)}\,d\tau=-e^{2t}.\]</div>
+<p><strong>For <span class="math"><span class="math">\(t\ge0\)</span></span></strong>, split the integral at the moving branch boundary <span class="math"><span class="math">\(\tau=t\)</span></span>:</p>
+<div class="equation">\[\begin{aligned}c(t)&amp;=\int_0^t2e^{-(t-\tau)}\,d\tau+\int_t^{\infty}-2e^{2(t-\tau)}\,d\tau\\&amp;=2(1-e^{-t})-1=1-2e^{-t}.\end{aligned}\]</div>
+<div class="equation">\[c(t)=\begin{cases}-e^{2t},&amp;t&lt;0,\\1-2e^{-t},&amp;t\ge0.\end{cases}\]</div>
+<p>Both pieces give <span class="math"><span class="math">\(c(0)=-1\)</span></span>. At <span class="math"><span class="math">\(t=\ln2\)</span></span>, the positive and negative areas cancel exactly, despite overlap. Infinite tails are evaluated analytically; the plotted window shows only a finite part of each tail.</p>
+<fieldset class="checkpoint" data-checkpoint="signed"><legend>Quick check</legend><p>At t=0 in Example 2.11, what is c(0)?</p><div class="answers"><button type="button" data-correct="true" data-feedback="Correct. Only the negative branch contributes, with integral −1.">−1</button><button type="button" data-correct="false" data-feedback="Area below zero is negative. Do not take its absolute value.">+1</button></div><p class="feedback" aria-live="polite">Choose an answer to check this section.</p></fieldset>
+<h2 id="section-6" data-section="6">6. Example 2.12 · Edges decide the cases</h2>
+<hr>
+<p><strong>Textbook signals</strong></p>
+<ul>
+<li><span class="math"><span class="math">\(x(t)=1\)</span></span> for <span class="math"><span class="math">\(-1\le t\le1\)</span></span>, and zero elsewhere.</li>
+<li><span class="math"><span class="math">\(g(t)=t/3\)</span></span> for <span class="math"><span class="math">\(0\le t\le3\)</span></span>, and zero elsewhere.</li>
+</ul>
+<p>Use commutativity to flip the simpler rectangle: calculate <span class="math"><span class="math">\(g*x\)</span></span>. Keep the ramp <span class="math"><span class="math">\(g(\tau)\)</span></span> fixed and move <span class="math"><span class="math">\(x(t-\tau)\)</span></span>.</p>
+<p>The rectangle is symmetric, so flipping it leaves the outline unchanged. The endpoint markers exchange sides to show the reflection. After shifting, its edges are <span class="math"><span class="math">\(t-1\)</span></span> and <span class="math"><span class="math">\(t+1\)</span></span>.</p>
+<figure class="lesson-figure"><img src="assets/textbook-crops/figure-2-10.png" alt="Figure 2.10 (a-i), textbook p. 186: original signals, entering, passing, leaving, separation, and the piecewise output." loading="lazy"><figcaption>Figure 2.10 (a-i), textbook p. 186: original signals, entering, passing, leaving, separation, and the piecewise output.</figcaption></figure>
+<section class="demo" data-demo="example212" aria-label="Example 2.12 · A rectangle and a ramp" id="demo-example212">
+<div class="demo-head"><h3>Example 2.12 · A rectangle and a ramp</h3><div class="stepbar" role="group" aria-label="Convolution steps"><button type="button" data-step="1" aria-pressed="false">1 · Read and fix</button><button type="button" data-step="2" aria-pressed="false">2 · Flip</button><button type="button" data-step="3" aria-pressed="false">3 · Shift and overlap</button><button type="button" data-step="4" aria-pressed="false">4 · Multiply and integrate</button></div></div>
+<div class="demo-controls"><b>Signals</b><ul data-functions></ul><div class="time-controls"><label>Time t = <output data-time-value>0.00</output><input type="range" aria-label="Example 2.12 · A rectangle and a ramp time" disabled></label><button data-play type="button" hidden>Play</button><button data-reset type="button">Reset</button></div>
+<div class="readouts"><div>Current interval<output data-interval></output></div><div>Integration bounds<output data-bounds></output></div><div>Signed area<output data-area-value></output></div></div><p data-step-note></p><div data-times aria-label="Important times"></div></div>
+<div class="legend"><span class="blue">Fixed signal</span><span class="orange">Moving signal</span><span class="purple">Product area</span></div><div data-status role="status">Scroll here to load this independent GeoGebra demo.</div>
+<div class="plot-host" data-upper id="example212-upper"></div><div class="linked-divider">Same t: the upper product area becomes the lower output value</div><div class="plot-host" data-lower id="example212-lower"></div><div class="demo-note" data-model-note></div></section>
+<p><strong>Find the interval before integrating.</strong> The overlap is the intersection of <span class="math"><span class="math">\([0,3]\)</span></span> with <span class="math"><span class="math">\([t-1,t+1]\)</span></span>:</p>
+<div class="equation">\[L=\max(0,t-1),\qquad R=\min(3,t+1).\]</div>
+<p>If <span class="math"><span class="math">\(R\le L\)</span></span>, the area is zero. Otherwise the product equals <span class="math"><span class="math">\(\tau/3\)</span></span> inside the overlap:</p>
+<div class="equation">\[c(t)=\int_L^R\frac{\tau}{3}\,d\tau=\frac{R^2-L^2}{6}.\]</div>
+<ul>
+<li><strong>Entering, <span class="math"><span class="math">\(-1\le t&lt;1\)</span></span>:</strong> <span class="math"><span class="math">\(L=0\)</span></span>, <span class="math"><span class="math">\(R=t+1\)</span></span>, so <span class="math"><span class="math">\(c(t)=(t+1)^2/6\)</span></span>.</li>
+<li><strong>Passing, <span class="math"><span class="math">\(1\le t&lt;2\)</span></span>:</strong> <span class="math"><span class="math">\(L=t-1\)</span></span>, <span class="math"><span class="math">\(R=t+1\)</span></span>, so <span class="math"><span class="math">\(c(t)=2t/3\)</span></span>.</li>
+<li><strong>Leaving, <span class="math"><span class="math">\(2\le t&lt;4\)</span></span>:</strong> <span class="math"><span class="math">\(L=t-1\)</span></span>, <span class="math"><span class="math">\(R=3\)</span></span>, so <span class="math"><span class="math">\(c(t)=[9-(t-1)^2]/6\)</span></span>.</li>
+</ul>
+<div class="equation">\[c(t)=\begin{cases}0,&amp;t&lt;-1,\\(t+1)^2/6,&amp;-1\le t&lt;1,\\2t/3,&amp;1\le t&lt;2,\\[9-(t-1)^2]/6,&amp;2\le t&lt;4,\\0,&amp;t\ge4.\end{cases}\]</div>
+<p><strong>Verify the joins:</strong> <span class="math"><span class="math">\(c(-1)=c(4)=0\)</span></span>, <span class="math"><span class="math">\(c(1)=2/3\)</span></span>, and <span class="math"><span class="math">\(c(2)=4/3\)</span></span>. The support spans <span class="math"><span class="math">\([-1,4]\)</span></span>, of width <span class="math"><span class="math">\(5=2+3\)</span></span>.</p>
+<p>Think of the rectangle as a window sliding across the ramp. During the middle case, the window width stays 2 but covers taller parts of the ramp. That is why the area keeps increasing.</p>
+<fieldset class="checkpoint" data-checkpoint="finite"><legend>Quick check</legend><p>At t=1.5 in Example 2.12, what are the overlap and area?</p><div class="answers"><button type="button" data-correct="true" data-feedback="Correct. Integrate τ/3 from 0.5 to 2.5.">0.5 ≤ τ ≤ 2.5; area = 1</button><button type="button" data-correct="false" data-feedback="The rectangle covers only [t−1,t+1], not the whole ramp.">0 ≤ τ ≤ 3; area = 1.5</button></div><p class="feedback" aria-live="polite">Choose an answer to check this section.</p></fieldset>
+<h2 id="section-7" data-section="7">7. Transfer the method</h2>
+<hr>
+<p>Use the same four actions without copying a worked solution. These short exercises follow the textbook&#x27;s drills on p. 187-188:</p>
+<ul>
+<li><strong>Drill 2.10:</strong> reverse the order in Example 2.11. Fix <span class="math"><span class="math">\(g(\tau)\)</span></span> and integrate it up to <span class="math"><span class="math">\(\tau=t\)</span></span>; split at zero when <span class="math"><span class="math">\(t\ge0\)</span></span>.</li>
+<li><strong>Figure 2.11:</strong> convolve <span class="math"><span class="math">\(e^{-t}u(t)\)</span></span> with <span class="math"><span class="math">\(u(t)\)</span></span>. The overlap is <span class="math"><span class="math">\([0,t]\)</span></span> for <span class="math"><span class="math">\(t\ge0\)</span></span>, giving <span class="math"><span class="math">\((1-e^{-t})u(t)\)</span></span>.</li>
+<li><strong>Figure 2.12:</strong> convolve <span class="math"><span class="math">\(e^{-t}u(t)\)</span></span> with <span class="math"><span class="math">\(u(-t)\)</span></span>. The lower limit is <span class="math"><span class="math">\(\max(0,t)\)</span></span>; the result is 1 for <span class="math"><span class="math">\(t&lt;0\)</span></span> and <span class="math"><span class="math">\(e^{-t}\)</span></span> for <span class="math"><span class="math">\(t\ge0\)</span></span>.</li>
+<li><strong>Figure 2.13:</strong> convolve <span class="math"><span class="math">\(u(t-T)\)</span></span> with <span class="math"><span class="math">\(u(t+T)\)</span></span>. The opposite shifts cancel and the result is <span class="math"><span class="math">\(tu(t)\)</span></span>.</li>
+</ul>
+<p>The last pages of this section also explain why the reversal makes physical sense (Figure 2.14, p. 190): <span class="math"><span class="math">\(h(t-\tau)\)</span></span> weights an input according to its age at observation time <span class="math"><span class="math">\(t\)</span></span>. For a response that fades to zero after one second, inputs older than <span class="math"><span class="math">\(t-1\)</span></span> no longer contribute.</p>
+<p><strong>Before moving on, you should be able to:</strong></p>
+<ul>
+<li>State which signal is fixed and which is reflected.</li>
+<li>Derive the overlap inequalities and identify every case boundary.</li>
+<li>Integrate the signed product and test the joins of the output pieces.</li>
+</ul>
+<p>In Section 2.4-3 you will use convolution to combine interconnected systems. This section supplies the graphical method; the next section uses it to connect systems together.</p>
+<fieldset class="checkpoint" data-checkpoint="transfer"><legend>Quick check</legend><p>For supports [a,b] and [c,d], where can the convolution be nonzero?</p><div class="answers"><button type="button" data-correct="true" data-feedback="Correct. Add the beginning edges and the ending edges.">[a+c,b+d]</button><button type="button" data-correct="false" data-feedback="Those differences describe another overlap arrangement; output support adds the original supports.">[a−d,b−c]</button></div><p class="feedback" aria-live="polite">Choose an answer to check this section.</p></fieldset><footer>Source: Lathi &amp; Green, Linear Systems and Signals, Third Edition, §2.4-2, pp. 178–190. Four independently controlled GeoGebra demonstrations. Reading position and checked completion are separate.</footer></main>
+<script src="demo-models.js?v=fresh-20260909"></script><script src="demo.js?v=fresh-20260909"></script><script src="lesson.js?v=fresh-20260909"></script></body></html>
