@@ -29866,17 +29866,17 @@ body {
 .welcome.home-ask-workspace #searchBox.home-ask-composer {
   width: min(680px, 56vw) !important;
   max-width: 680px !important;
-  min-height: 126px !important;
-  margin-top: 42px !important;
-  padding: 15px 12px 14px 20px !important;
+  min-height: 96px !important;
+  margin-top: 30px !important;
+  padding: 10px 12px 10px 20px !important;
   border-radius: 16px !important;
 }
 
 .welcome.home-ask-workspace .home-ask-input-row,
 .welcome.home-ask-workspace .search-box-row.home-ask-input-row {
   grid-template-columns: 30px minmax(0, 1fr) 40px !important;
-  min-height: 48px !important;
-  gap: 12px !important;
+  min-height: 40px !important;
+  gap: 10px !important;
 }
 
 .welcome.home-ask-workspace .home-ask-attach {
@@ -29895,22 +29895,22 @@ body {
 }
 
 .welcome.home-ask-workspace #userInput.search-input {
-  min-height: 46px !important;
-  padding-top: 4px !important;
+  min-height: 38px !important;
+  padding-top: 2px !important;
   font-size: 16px !important;
   line-height: 1.28 !important;
 }
 
 .welcome.home-ask-workspace .home-ask-toolbar {
-  min-height: 42px !important;
-  padding-bottom: 3px !important;
+  min-height: 34px !important;
+  padding-bottom: 1px !important;
   gap: 8px !important;
 }
 
 .welcome.home-ask-workspace .home-mode-toggle,
 .welcome.home-ask-workspace #webSearchToggleBtnMain.home-ask-web-toggle {
-  height: 42px !important;
-  min-height: 42px !important;
+  height: 34px !important;
+  min-height: 34px !important;
   border-radius: 14px !important;
 }
 
@@ -33246,13 +33246,16 @@ body.learn-resizing #learnView #learnBody #learnChatCol {
 }
 
 .learn-tutor-minimize:focus-visible,
-.app.convolution-focus-workspace-active #learnChatFab:focus-visible {
+.app.convolution-focus-workspace-active #learnChatFab:focus-visible,
+.app.learn-browser-fullscreen #learnChatFab:focus-visible {
   outline: 3px solid rgba(37, 99, 235, 0.38) !important;
   outline-offset: 3px !important;
 }
 
 .app.convolution-focus-workspace-active #mainContent #learnView #learnBody.convolution-focus-workspace-active[data-convolution-focus="true"].chat-collapsed #learnChatFab,
-.app.convolution-focus-workspace-active #mainContent #learnView #learnBody.convolution-focus-workspace-active[data-convolution-focus="true"].chat-collapsed .learn-chat-fab {
+.app.convolution-focus-workspace-active #mainContent #learnView #learnBody.convolution-focus-workspace-active[data-convolution-focus="true"].chat-collapsed .learn-chat-fab,
+.app.learn-browser-fullscreen.app.learn-browser-fullscreen #mainContent #learnView #learnBody.chat-collapsed #learnChatFab,
+.app.learn-browser-fullscreen.app.learn-browser-fullscreen #mainContent #learnView #learnBody.chat-collapsed .learn-chat-fab {
   position: fixed !important;
   inset: auto 24px 24px auto !important;
   z-index: 130 !important;
@@ -33278,7 +33281,8 @@ body.learn-resizing #learnView #learnBody #learnChatCol {
   cursor: pointer !important;
 }
 
-.app.convolution-focus-workspace-active #learnChatFab .tutor-agent-mark {
+.app.convolution-focus-workspace-active #learnChatFab .tutor-agent-mark,
+.app.learn-browser-fullscreen #learnChatFab .tutor-agent-mark {
   position: relative;
   display: inline-flex;
   width: 46px;
@@ -33287,12 +33291,14 @@ body.learn-resizing #learnView #learnBody #learnChatCol {
   justify-content: center;
 }
 
-.app.convolution-focus-workspace-active #learnChatFab .tutor-agent-main-icon {
+.app.convolution-focus-workspace-active #learnChatFab .tutor-agent-main-icon,
+.app.learn-browser-fullscreen #learnChatFab .tutor-agent-main-icon {
   font-size: 35px;
   line-height: 1;
 }
 
-.app.convolution-focus-workspace-active #learnChatFab .tutor-agent-ai-badge {
+.app.convolution-focus-workspace-active #learnChatFab .tutor-agent-ai-badge,
+.app.learn-browser-fullscreen #learnChatFab .tutor-agent-ai-badge {
   position: absolute;
   right: -4px;
   bottom: -2px;
@@ -33312,7 +33318,8 @@ body.learn-resizing #learnView #learnBody #learnChatCol {
   line-height: 1;
 }
 
-.app.convolution-focus-workspace-active #learnChatFab .tutor-agent-tooltip {
+.app.convolution-focus-workspace-active #learnChatFab .tutor-agent-tooltip,
+.app.learn-browser-fullscreen #learnChatFab .tutor-agent-tooltip {
   position: absolute;
   right: 74px;
   top: 50%;
@@ -33333,14 +33340,16 @@ body.learn-resizing #learnView #learnBody #learnChatCol {
   transition: opacity 140ms ease, transform 140ms ease;
 }
 
-.app.convolution-focus-workspace-active #learnChatFab:is(:hover, :focus-visible) {
+.app.convolution-focus-workspace-active #learnChatFab:is(:hover, :focus-visible),
+.app.learn-browser-fullscreen #learnChatFab:is(:hover, :focus-visible) {
   transform: translateY(-2px) !important;
   box-shadow:
     0 0 0 4px rgba(186, 230, 253, 0.86),
     0 20px 38px rgba(14, 116, 144, 0.24) !important;
 }
 
-.app.convolution-focus-workspace-active #learnChatFab:is(:hover, :focus-visible) .tutor-agent-tooltip {
+.app.convolution-focus-workspace-active #learnChatFab:is(:hover, :focus-visible) .tutor-agent-tooltip,
+.app.learn-browser-fullscreen #learnChatFab:is(:hover, :focus-visible) .tutor-agent-tooltip {
   opacity: 1;
   transform: translate(0, -50%);
 }
@@ -33697,6 +33706,7 @@ body.learn-resizing #learnView #learnBody #learnChatCol {
 @media (prefers-reduced-motion: reduce) {
   .app.convolution-focus-workspace-active #leftSidebar,
   .app.convolution-focus-workspace-active #learnChatFab,
+  .app.learn-browser-fullscreen #learnChatFab,
   .app.convolution-focus-workspace-active :is(.learn-explain-col, .learn-chat-col, .learn-resizer) {
     transition: none !important;
   }
@@ -34161,4 +34171,196 @@ body.learn-resizing #learnView #learnBody #learnChatCol {
     0 5px 12px rgba(5, 150, 105, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.94),
     inset 0 -1px 0 rgba(110, 231, 183, 0.22);
+}
+.embedded-lesson-frame {
+  display: block;
+  width: 100%;
+  height: 100% !important;
+  min-height: 100% !important;
+  flex: 1 1 auto !important;
+  box-sizing: border-box;
+  border: 0;
+  background: #fff;
+}
+
+/* Final Q&A composer contract: compact at rest, grows upward, then scrolls. */
+#learnView#learnView#learnView #learnBody#learnBody#learnBody #learnChatCol#learnChatCol#learnChatCol #learnFollowupBar#learnFollowupBar#learnFollowupBar {
+  min-height: 76px !important;
+  height: auto !important;
+  max-height: 220px !important;
+  margin: 0 12px 12px !important;
+  padding: 8px 12px !important;
+  overflow: visible !important;
+  box-sizing: border-box !important;
+}
+
+#learnView#learnView#learnView #learnBody#learnBody#learnBody #learnChatCol#learnChatCol#learnChatCol #learnFollowupBar#learnFollowupBar#learnFollowupBar .input-wrapper {
+  display: grid !important;
+  grid-template-columns: 42px minmax(0, 1fr) 42px !important;
+  align-items: end !important;
+  min-height: 44px !important;
+  height: auto !important;
+  max-height: 196px !important;
+  gap: 10px !important;
+  overflow: visible !important;
+}
+
+#learnView#learnView#learnView #learnBody#learnBody#learnBody #learnChatCol#learnChatCol#learnChatCol #learnFollowupBar#learnFollowupBar#learnFollowupBar .input-field,
+#learnView#learnView#learnView #learnBody#learnBody#learnBody #learnChatCol#learnChatCol#learnChatCol #learnFollowupBar#learnFollowupBar#learnFollowupBar #learnFollowupInput {
+  min-width: 0 !important;
+  min-height: 44px !important;
+  height: 44px !important;
+  max-height: 180px !important;
+  padding: 10px 2px !important;
+  overflow-y: hidden !important;
+  overflow-x: hidden !important;
+  resize: none !important;
+  white-space: pre-wrap !important;
+  overflow-wrap: anywhere !important;
+  word-break: break-word !important;
+  box-sizing: border-box !important;
+  align-self: end !important;
+}
+
+#learnView#learnView#learnView #learnBody#learnBody#learnBody #learnChatCol#learnChatCol#learnChatCol #learnFollowupBar#learnFollowupBar#learnFollowupBar .btn-clip,
+#learnView#learnView#learnView #learnBody#learnBody#learnBody #learnChatCol#learnChatCol#learnChatCol #learnFollowupBar#learnFollowupBar#learnFollowupBar .btn-send {
+  align-self: end !important;
+  flex: 0 0 42px !important;
+  width: 42px !important;
+  height: 42px !important;
+  min-height: 42px !important;
+  margin-bottom: 1px !important;
+}
+
+#learnView#learnView#learnView #learnBody#learnBody#learnBody #learnChatCol#learnChatCol#learnChatCol #learnChatEmptyState#learnChatEmptyState.hidden,
+#learnView#learnView#learnView #learnBody#learnBody#learnBody #learnChatCol#learnChatCol#learnChatCol.is-chat-active #learnChatEmptyState#learnChatEmptyState {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+#learnView#learnView#learnView #learnBody#learnBody#learnBody #learnChatCol#learnChatCol#learnChatCol:not(.is-chat-active) #learnChatEmptyState#learnChatEmptyState:not(.hidden) {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: none !important;
+}
+
+/* Browser-native fullscreen lesson workspace. The duplicated app token keeps
+   the confirmed fullscreen state ahead of the older focus-workspace rules. */
+.app.learn-browser-fullscreen.app.learn-browser-fullscreen {
+  display: block !important;
+  width: 100vw !important;
+  min-width: 0 !important;
+  min-height: 100dvh !important;
+  overflow: hidden !important;
+}
+
+.app.learn-browser-fullscreen.app.learn-browser-fullscreen #leftSidebar,
+.app.learn-browser-fullscreen.app.learn-browser-fullscreen #tocSidebar {
+  display: none !important;
+  width: 0 !important;
+  min-width: 0 !important;
+  max-width: 0 !important;
+  pointer-events: none !important;
+}
+
+.app.learn-browser-fullscreen.app.learn-browser-fullscreen > .main,
+.app.learn-browser-fullscreen.app.learn-browser-fullscreen #mainContent,
+.app.learn-browser-fullscreen.app.learn-browser-fullscreen #learnView,
+.app.learn-browser-fullscreen.app.learn-browser-fullscreen #learnBody {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  min-height: 100dvh !important;
+}
+
+.app.learn-browser-fullscreen.app.learn-browser-fullscreen #mainContent {
+  grid-column: 1 !important;
+  overflow: hidden !important;
+}
+
+.app.learn-browser-fullscreen.app.learn-browser-fullscreen #learnView {
+  overflow: hidden !important;
+}
+
+.app.learn-browser-fullscreen.app.learn-browser-fullscreen #learnBody {
+  height: 100dvh !important;
+  max-height: 100dvh !important;
+  overflow: hidden !important;
+}
+
+.learn-fullscreen-btn {
+  display: inline-flex;
+  min-width: 112px;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+  border: 1px solid rgba(109, 128, 145, 0.28);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.74);
+  color: #334155;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.learn-fullscreen-btn:hover:not(:disabled),
+.learn-fullscreen-btn:focus-visible,
+.app.learn-browser-fullscreen .learn-fullscreen-btn {
+  border-color: rgba(37, 99, 235, 0.38);
+  background: rgba(239, 246, 255, 0.94);
+  color: #1d4ed8;
+}
+
+.learn-fullscreen-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.learn-fullscreen-btn:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.28);
+  outline-offset: 3px;
+}
+
+.learn-fullscreen-btn:disabled {
+  cursor: default;
+  opacity: 0.58;
+}
+
+html:fullscreen,
+html:fullscreen body {
+  width: 100%;
+  min-width: 0;
+  min-height: 100%;
+  overflow: hidden;
+}
+
+@media (max-width: 900px) {
+  .learn-fullscreen-btn {
+    min-width: 40px;
+    width: 40px;
+    padding: 0;
+    font-size: 0;
+  }
+
+  .learn-fullscreen-btn::before {
+    content: '↗';
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  .app.learn-browser-fullscreen.app.learn-browser-fullscreen #learnBody {
+    height: 100dvh !important;
+    max-height: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .learn-fullscreen-btn {
+    transition: none;
+  }
 }

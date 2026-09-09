@@ -667,8 +667,15 @@ function escapeHtml(value) {
 }
 
 function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = `${Math.min(el.scrollHeight, 180)}px`;
+  if (!el) return;
+  const minHeight = 44;
+  const maxHeight = 180;
+  el.style.setProperty('height', 'auto', 'important');
+  const contentHeight = Math.max(Number(el.scrollHeight) || 0, minHeight);
+  const nextHeight = Math.min(contentHeight, maxHeight);
+  el.style.setProperty('height', `${nextHeight}px`, 'important');
+  el.style.setProperty('overflow-y', contentHeight > maxHeight ? 'auto' : 'hidden', 'important');
+  el.style.setProperty('overflow-x', 'hidden', 'important');
 }
 
 function setSendState() {
@@ -733,6 +740,7 @@ const learnKpTitle        = document.getElementById('learnKpTitle');
 const learnTopbarActions = document.querySelector('#learnView .learn-topbar-actions');
 const learnToolbarCenter = document.querySelector('#learnExplainToolbar .learn-toolbar-center');
 const learnViewSelectorEl = document.getElementById('learnViewSelector');
+const learnFullscreenBtn = document.getElementById('learnFullscreenBtn');
 if (learnTopbarActions && learnViewSelectorEl && !learnTopbarActions.contains(learnViewSelectorEl)) {
   learnTopbarActions.insertBefore(learnViewSelectorEl, learnTopbarActions.firstChild);
 } else if (!learnTopbarActions && learnToolbarCenter && learnViewSelectorEl && !learnToolbarCenter.contains(learnViewSelectorEl)) {
@@ -751,6 +759,10 @@ let learnPanelFocus = 'normal';
 let isLearnChatPopoverOpen = false;
 let isConvolutionFocusWorkspaceActive = false;
 let convolutionFocusSidebarState = null;
+let isLearnBrowserFullscreen = false;
+let learnFullscreenSidebarState = null;
+let learnFullscreenReturnFocus = null;
+let learnFullscreenPending = false;
 let _learnViewMode = 'lecture';
 let _learnLayoutMode = 'lesson';
 const learnMobilePanelQuery = typeof window.matchMedia === 'function'
@@ -1232,7 +1244,8 @@ function applyLearnChatCollapsedState() {
   syncBtn(lectureFocusOverlayBtn);
 
   if (isLearnChatCollapsed) resetLearnChatFabPosition();
-  const showTutorOrb = shell?.classList.contains('convolution-focus-workspace-active') && isLearnChatCollapsed;
+  const showTutorOrb = (shell?.classList.contains('convolution-focus-workspace-active') || isLearnBrowserFullscreen)
+    && isLearnChatCollapsed;
   if (learnChatFab) learnChatFab.classList.toggle('hidden', !showTutorOrb);
   if (learnChatRestoreBtn) learnChatRestoreBtn.classList.add('hidden');
   if (!isLearnChatCollapsed && learnChatPopover) learnChatPopover.classList.add('hidden');
@@ -1248,7 +1261,8 @@ function applyLearnChatCollapsedState() {
     learnTutorMinimizeBtn.setAttribute('aria-expanded', String(!isLearnChatCollapsed));
     learnTutorMinimizeBtn.classList.toggle(
       'hidden',
-      !shell?.classList.contains('convolution-focus-workspace-active') || isLearnChatCollapsed
+      !(shell?.classList.contains('convolution-focus-workspace-active') || isLearnBrowserFullscreen)
+        || isLearnChatCollapsed
     );
   }
 
@@ -1381,6 +1395,123 @@ function resetConvolutionFocusWorkspace() {
 
 window.syncConvolutionFocusWorkspace = syncConvolutionFocusWorkspace;
 window.resetConvolutionFocusWorkspace = resetConvolutionFocusWorkspace;
+
+function updateLearnFullscreenButton() {
+  if (!learnFullscreenBtn) return;
+  const supported = typeof document.documentElement?.requestFullscreen === 'function';
+  const active = isLearnBrowserFullscreen;
+  const pending = learnFullscreenPending;
+  const label = active ? 'Exit fullscreen' : (pending ? 'Opening…' : 'Fullscreen');
+  const title = active ? 'Exit fullscreen' : (pending ? 'Opening fullscreen' : (supported ? 'Enter fullscreen' : 'Fullscreen is unavailable'));
+  learnFullscreenBtn.textContent = label;
+  learnFullscreenBtn.title = title;
+  learnFullscreenBtn.setAttribute('aria-label', title);
+  learnFullscreenBtn.setAttribute('aria-pressed', String(active));
+  learnFullscreenBtn.disabled = !supported || pending;
+}
+
+function restoreLearnFullscreenSidebarState() {
+  const savedState = learnFullscreenSidebarState;
+  if (!savedState) return;
+  const appContainer = document.querySelector('.app');
+  const leftSidebar = document.getElementById('leftSidebar');
+  const tocSidebar = document.getElementById('tocSidebar');
+  appContainer?.classList.toggle('sidebar-collapsed', Boolean(savedState.appCollapsed));
+  leftSidebar?.classList.toggle('collapsed', Boolean(savedState.sidebarCollapsed));
+  tocSidebar?.classList.toggle('collapsed', Boolean(savedState.tocCollapsed));
+  syncConvolutionFocusSidebarControls(Boolean(savedState.appCollapsed || savedState.sidebarCollapsed));
+  learnFullscreenSidebarState = null;
+}
+
+function syncLearnBrowserFullscreenState() {
+  const root = document.documentElement;
+  const appContainer = document.querySelector('.app');
+  const isRootFullscreen = document.fullscreenElement === root;
+  const inLesson = learnView && !learnView.classList.contains('hidden');
+  const wasActive = isLearnBrowserFullscreen;
+  const wasPending = learnFullscreenPending;
+
+  if (isRootFullscreen && inLesson) {
+    isLearnBrowserFullscreen = true;
+    learnFullscreenPending = false;
+    appContainer?.classList.add('learn-browser-fullscreen');
+    appContainer?.classList.add('sidebar-collapsed');
+    document.getElementById('leftSidebar')?.classList.add('collapsed');
+    document.getElementById('tocSidebar')?.classList.add('collapsed');
+  } else {
+    isLearnBrowserFullscreen = false;
+    learnFullscreenPending = false;
+    appContainer?.classList.remove('learn-browser-fullscreen');
+    if (wasActive || wasPending || learnFullscreenSidebarState) restoreLearnFullscreenSidebarState();
+  }
+
+  // Fullscreen changes the CSS state that controls the Tutor minimize button
+  // and restore orb. Re-apply the shared chat state contract immediately so
+  // both controls reflect the confirmed browser state in the same frame.
+  applyLearnChatCollapsedState();
+  updateLearnFullscreenButton();
+  notifyConvolutionFocusLayoutChange();
+
+  if (wasActive && !isLearnBrowserFullscreen) {
+    const returnFocus = learnFullscreenReturnFocus;
+    learnFullscreenReturnFocus = null;
+    requestAnimationFrame(() => {
+      const target = returnFocus?.isConnected ? returnFocus : learnFullscreenBtn;
+      target?.focus?.({ preventScroll: true });
+    });
+  }
+}
+
+async function requestLearnBrowserFullscreen() {
+  const root = document.documentElement;
+  if (!learnFullscreenBtn || typeof root.requestFullscreen !== 'function' || isLearnBrowserFullscreen || learnFullscreenPending) return;
+  learnFullscreenSidebarState = readConvolutionFocusSidebarState();
+  learnFullscreenReturnFocus = document.activeElement;
+  learnFullscreenPending = true;
+  updateLearnFullscreenButton();
+  try {
+    await root.requestFullscreen({ navigationUI: 'hide' });
+  } catch (error) {
+    learnFullscreenPending = false;
+    learnFullscreenSidebarState = null;
+    learnFullscreenReturnFocus = null;
+    updateLearnFullscreenButton();
+    console.warn('[lesson] fullscreen request failed', error);
+  }
+}
+
+async function exitLearnBrowserFullscreen() {
+  if (document.fullscreenElement === document.documentElement && typeof document.exitFullscreen === 'function') {
+    await document.exitFullscreen();
+  } else {
+    syncLearnBrowserFullscreenState();
+  }
+}
+
+function cleanupLearnBrowserFullscreen() {
+  const shouldRestore = isLearnBrowserFullscreen || learnFullscreenPending || Boolean(learnFullscreenSidebarState);
+  const root = document.documentElement;
+  if (document.fullscreenElement === root && typeof document.exitFullscreen === 'function') {
+    document.exitFullscreen().catch(() => {});
+  }
+  isLearnBrowserFullscreen = false;
+  learnFullscreenPending = false;
+  document.querySelector('.app')?.classList.remove('learn-browser-fullscreen');
+  if (shouldRestore) restoreLearnFullscreenSidebarState();
+  learnFullscreenReturnFocus = null;
+  updateLearnFullscreenButton();
+  notifyConvolutionFocusLayoutChange();
+}
+
+document.addEventListener('fullscreenchange', syncLearnBrowserFullscreenState);
+document.addEventListener('fullscreenerror', () => {
+  learnFullscreenPending = false;
+  learnFullscreenSidebarState = null;
+  learnFullscreenReturnFocus = null;
+  document.querySelector('.app')?.classList.remove('learn-browser-fullscreen');
+  updateLearnFullscreenButton();
+});
+updateLearnFullscreenButton();
 
 
 function applyLearnExplainCollapsedState() {
@@ -2182,12 +2313,14 @@ function updateLearnChatEmptyState() {
   if (!learnChatEmptyState || !learnChatContent) return;
   const hasChat = Boolean(learnChatContent.children.length || learnChatContent.textContent.trim());
   learnChatEmptyState.classList.toggle('hidden', hasChat);
+  const shouldShowEmptyState = !hasChat && _learnLayoutMode !== 'overview';
+  learnChatEmptyState.setAttribute('aria-hidden', shouldShowEmptyState ? 'false' : 'true');
   if (hasChat) {
     learnChatEmptyState.style.setProperty('display', 'none', 'important');
     learnChatEmptyState.style.setProperty('visibility', 'hidden', 'important');
     learnChatEmptyState.style.setProperty('opacity', '0', 'important');
   } else {
-    if (_learnLayoutMode === 'overview') {
+    if (!shouldShowEmptyState) {
       learnChatEmptyState.style.setProperty('display', 'none', 'important');
       learnChatEmptyState.style.setProperty('visibility', 'hidden', 'important');
       learnChatEmptyState.style.setProperty('opacity', '0', 'important');
@@ -2383,6 +2516,28 @@ async function startLesson(options = {}) {
   if (learnAbort) learnAbort.abort();
   learnAbort = new AbortController();
 
+  // 2.4-2 ships as a self-contained lesson package so its four interactive
+  // demos, progress state, and theme controls stay on the same source of
+  // truth as the reviewed HTML preview.
+  if (/^2\.4-2\b|2_4-2$/i.test(String(requestSectionId || ''))
+      || /2\.4-2\bGraphical Understanding of Convolution Operation/i.test(String(requestSectionTitle || ''))) {
+    if (requestSeq !== learnRequestSeq) return;
+    learnBody.classList.remove('hidden');
+    tutorState.learnSectionId = learnSectionId;
+    tutorState.sessionStartTime = Date.now();
+    tutorState.learnSectionTitle = learnSectionTitle;
+    tutorState.learnLessonMarkdown = '';
+    learnExplainContent.innerHTML = '<iframe class="embedded-lesson-frame" title="2.4-2 Graphical Understanding of Convolution Operation" src="/lessons/2_4-2/lesson.html?v=fresh-20260909-2"></iframe>';
+    if (typeof replaceLearnContent === 'function') replaceLearnContent(learnExplainContent, learnExplainContent.innerHTML);
+    const tutorEmpty = document.getElementById('learnChatEmptyState');
+    if (tutorEmpty) {
+      tutorEmpty.setAttribute('aria-hidden', 'false');
+      tutorEmpty.style.display = 'flex';
+    }
+    hideSplash();
+    return;
+  }
+
   try {
     // Pure cache read for guests; with a token the backend may also repair a
     // format-broken cache entry (generation stays gated for guests).
@@ -2505,6 +2660,12 @@ function handleLearnBack() {
 // Learn mode events
 learnClose.addEventListener('click', handleLearnBack);
 learnStartBtn.addEventListener('click', startLesson);
+if (learnFullscreenBtn) {
+  learnFullscreenBtn.addEventListener('click', () => {
+    if (isLearnBrowserFullscreen) exitLearnBrowserFullscreen();
+    else requestLearnBrowserFullscreen();
+  });
+}
 
 // ── LECTURE vs TEXTBOOK SWITCH ──
 const _btnLecture = document.getElementById('btnLectureView');
@@ -3159,6 +3320,8 @@ if (learnFollowupInputPopover) {
     }
   });
 }
+autoResize(learnFollowupInput);
+autoResize(learnFollowupInputPopover);
 learnFollowupBtn.addEventListener('click', () => {
   if (!learnFollowupInput.value.trim()) return;
   sendLearnFollowup(learnFollowupInput.value.trim());
@@ -4317,6 +4480,7 @@ document.addEventListener('keydown', e => {
 
 // ── View switcher ───────────────────────────────────────────────────────────
 function leaveConvolutionFocusBeforeWorkspaceNavigation() {
+  cleanupLearnBrowserFullscreen();
   const appContainer = document.querySelector('.app');
   if (isConvolutionFocusWorkspaceActive || appContainer?.classList.contains('convolution-focus-workspace-active')) {
     resetConvolutionFocusWorkspace();
