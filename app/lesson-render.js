@@ -1795,7 +1795,9 @@ function bindStartTestBtnIfPresent() {
 function setLearnLessonContent(fullHtml, options = {}) {
   currentFullLessonHtml = String(fullHtml || '');
   const continuousSectionCode = getCurrentLessonSectionCode();
-  if (['2.4', '2.4-1', '2.4-2'].includes(continuousSectionCode)) {
+  // 2.4 / 2.4-1 are continuous reading. 2.4-2 is the guided graphical-convolution
+  // lesson (Overview → Lesson → Practice) and must keep its stage map.
+  if (['2.4', '2.4-1'].includes(continuousSectionCode)) {
     learnKnowledgePoints = [];
     currentLessonTrailingHtml = '';
     currentKnowledgePointIndex = 0;

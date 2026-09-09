@@ -7782,6 +7782,14 @@ body.learn-resizing .learn-resizer::before {
   padding: 20px;
 }
 
+.geogebra-demo-fallback-figure {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .geogebra-demo-fallback img {
   background: #ffffff;
   border: 1px solid #cbd5e1;
@@ -27914,6 +27922,37 @@ body {
   text-align: left;
 }
 
+#learnView .lesson-page-frame[data-lesson-section="2.4-2"] .geogebra-demo-fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  min-height: 0;
+  height: 100%;
+}
+
+#learnView .lesson-page-frame[data-lesson-section="2.4-2"] .geogebra-demo-fallback-figure {
+  flex: 1 1 auto;
+  height: 0;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+#learnView .lesson-page-frame[data-lesson-section="2.4-2"] .geogebra-demo-fallback img {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100% !important;
+  max-width: none !important;
+  height: 100% !important;
+  max-height: none !important;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  object-fit: contain;
+}
+
 .convolution-practice-builder {
   display: grid;
   grid-template-columns: minmax(170px, 0.32fr) minmax(0, 1fr);
@@ -33582,15 +33621,35 @@ body.learn-resizing #learnView #learnBody #learnChatCol {
     padding: 4px 6px;
   }
 
-  .lesson-page-frame[data-lesson-section="2.4-2"].convolution-demo-page .geogebra-demo-fallback {
-    grid-template-columns: minmax(0, 1.35fr) minmax(180px, 0.65fr);
+  #learnView .lesson-page-frame[data-lesson-section="2.4-2"].convolution-demo-page .geogebra-demo-fallback {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
     gap: 8px;
     padding: 8px;
     overflow: hidden;
   }
 
-  .lesson-page-frame[data-lesson-section="2.4-2"].convolution-demo-page .geogebra-demo-fallback img {
-    max-height: 184px;
+  #learnView .lesson-page-frame[data-lesson-section="2.4-2"].convolution-demo-page .geogebra-demo-fallback-figure {
+    flex: 1 1 auto;
+    height: 0;
+    min-height: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  #learnView .lesson-page-frame[data-lesson-section="2.4-2"].convolution-demo-page .geogebra-demo-fallback img {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100% !important;
+    max-width: none !important;
+    height: 100% !important;
+    max-height: none !important;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    object-fit: contain;
   }
 
   .lesson-page-frame[data-lesson-section="2.4-2"].convolution-demo-page .geogebra-demo-fallback-copy {
@@ -33606,7 +33665,7 @@ body.learn-resizing #learnView #learnBody #learnChatCol {
   }
 
   .lesson-page-frame[data-lesson-section="2.4-2"].convolution-demo-page .geogebra-demo-fallback-copy code {
-    max-height: 48px;
+    max-height: none;
     padding: 4px 6px;
     overflow: auto;
     font-size: 0.58rem;
@@ -33892,6 +33951,66 @@ body.learn-resizing #learnView #learnBody #learnChatCol {
 }
 .convolution-time-preview,
 .convolution-contact-diagram { min-height: 170px; margin-top: 14px; border: 1px solid var(--convolution-line, #d9e1e5); border-radius: 8px; background: var(--convolution-tool-surface, #f5f7f8); }
+.convolution-time-preview {
+  display: grid;
+  gap: 10px;
+  padding: 12px 14px;
+}
+.convolution-contact-diagram {
+  display: grid;
+  gap: 8px;
+  padding: 12px 14px;
+}
+.convolution-preview-kicker {
+  color: var(--convolution-muted, #58687e);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+.convolution-preview-track,
+.convolution-contact-track {
+  position: relative;
+  height: 18px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(109, 128, 145, 0.14);
+}
+.convolution-preview-track i,
+.convolution-contact-track i {
+  position: absolute;
+  top: 3px;
+  width: 22%;
+  height: 12px;
+  border-radius: 999px;
+  background: var(--convolution-input, #1f64d7);
+  transition: left 160ms ease, width 160ms ease;
+}
+.convolution-preview-track--overlap i {
+  width: 16%;
+  background: var(--convolution-action, #167b64);
+}
+.convolution-preview-track--output i {
+  width: 12px;
+  border-radius: 50%;
+  background: var(--convolution-output, #b45309);
+}
+[data-convolution-moving-signal][data-position="t1"] .convolution-preview-track i,
+[data-convolution-overlap-preview][data-position="t1"] .convolution-preview-track i,
+[data-convolution-output-dot][data-output-point="t1"] .convolution-preview-track i { left: 8%; }
+[data-convolution-moving-signal][data-position="t2"] .convolution-preview-track i,
+[data-convolution-overlap-preview][data-position="t2"] .convolution-preview-track i,
+[data-convolution-output-dot][data-output-point="t2"] .convolution-preview-track i { left: 40%; }
+[data-convolution-moving-signal][data-position="t3"] .convolution-preview-track i,
+[data-convolution-overlap-preview][data-position="t3"] .convolution-preview-track i,
+[data-convolution-output-dot][data-output-point="t3"] .convolution-preview-track i { left: 72%; }
+[data-convolution-overlap-preview][data-position="t1"] .convolution-preview-track i { width: 12%; }
+[data-convolution-overlap-preview][data-position="t2"] .convolution-preview-track i { width: 28%; }
+[data-convolution-overlap-preview][data-position="t3"] .convolution-preview-track i { width: 18%; }
+.convolution-contact-track--fixed i { left: 28%; width: 36%; background: var(--convolution-input, #1f64d7); }
+.convolution-contact-track--moving i { width: 30%; background: var(--convolution-response, #7c3aed); }
+[data-convolution-contact-diagram][data-contact="first"] .convolution-contact-track--moving i { left: 8%; }
+[data-convolution-contact-diagram][data-contact="full"] .convolution-contact-track--moving i { left: 31%; }
+[data-convolution-contact-diagram][data-contact="last"] .convolution-contact-track--moving i { left: 58%; }
 .convolution-analogy-panel[hidden] { display: none; }
 .convolution-analogy-image { display: block; width: min(100%, 300px); height: auto; margin: 12px auto; border-radius: 8px; }
 .geogebra-guided-sequence { margin: 10px 0; padding: 10px; border: 1px solid var(--convolution-line, #d9e1e5); border-radius: 8px; background: var(--convolution-glass-strong, rgba(245, 249, 250, 0.9)); }

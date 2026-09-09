@@ -5,6 +5,30 @@
 (function initConvolutionLessonInteractions(root) {
   const controllers = new WeakMap();
 
+  function fillIfEmpty(node, html) {
+    if (!node || node.querySelector('.convolution-preview-track, .convolution-contact-track')) return;
+    node.innerHTML = html;
+  }
+
+  function paintChoiceVisuals(rootElement) {
+    fillIfEmpty(
+      rootElement.querySelector('[data-convolution-moving-signal]'),
+      '<span class="convolution-preview-kicker">Moving signal g(t−τ)</span><span class="convolution-preview-track"><i></i></span>'
+    );
+    fillIfEmpty(
+      rootElement.querySelector('[data-convolution-overlap-preview]'),
+      '<span class="convolution-preview-kicker">Overlap</span><span class="convolution-preview-track convolution-preview-track--overlap"><i></i></span>'
+    );
+    fillIfEmpty(
+      rootElement.querySelector('[data-convolution-output-dot]'),
+      '<span class="convolution-preview-kicker">Output c(t)</span><span class="convolution-preview-track convolution-preview-track--output"><i></i></span>'
+    );
+    fillIfEmpty(
+      rootElement.querySelector('[data-convolution-contact-diagram]'),
+      '<span class="convolution-preview-kicker">Fixed x(τ)</span><span class="convolution-contact-track convolution-contact-track--fixed"><i></i></span><span class="convolution-preview-kicker">Moving g(t−τ)</span><span class="convolution-contact-track convolution-contact-track--moving"><i></i></span>'
+    );
+  }
+
   function selectTime(rootElement, value) {
     const next = String(value || 't1');
     rootElement.querySelectorAll('[data-convolution-time-choice]').forEach((button) => {
@@ -45,6 +69,7 @@
   function mount(rootElement) {
     if (!rootElement) return;
     destroy(rootElement);
+    paintChoiceVisuals(rootElement);
     const controller = new AbortController();
     controllers.set(rootElement, controller);
     rootElement.addEventListener('click', (event) => {
