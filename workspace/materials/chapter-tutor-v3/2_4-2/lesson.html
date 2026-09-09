@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2.4-2 · Graphical Understanding of Convolution Operation 教学讲义</title>
+<script>
+(() => {
+  const saved = (() => { try { return localStorage.getItem('fourier-theme'); } catch (error) { return null; } })();
+  const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  document.documentElement.dataset.theme = saved === 'dark' || saved === 'light' ? saved : system;
+})();
+</script>
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style>
+:root {
+  color-scheme: dark;
+  --page:#121212;
+  --surface:#181818;
+  --surface-2:#242424;
+  --ink:#f7f7f7;
+  --muted:#b8b8b8;
+  --soft:#8f8f8f;
+  --line:#373737;
+  --track:#353535;
+  --accent:#7ba7f8;
+  --accent-strong:#6ea0f5;
+}
+:root[data-theme="dark"] { color-scheme:dark; }
+:root[data-theme="light"] {
+  color-scheme:light;
+  --page:#ffffff;
+  --surface:#f7f7f8;
+  --surface-2:#f0f0f1;
+  --ink:#202124;
+  --muted:#5f6368;
+  --soft:#777b82;
+  --line:#dedfe2;
+  --track:#e1e3e6;
+  --accent:#4f86e8;
+  --accent-strong:#3d73d8;
+}
+* { box-sizing:border-box; }
+html { background:var(--page); }
+body { margin:0; color:var(--ink); background:var(--page); font-family:system-ui,-apple-system,"PingFang SC","Noto Sans SC",sans-serif; line-height:2.05; }
+body::-webkit-scrollbar { width:10px; }
+body::-webkit-scrollbar-track { background:var(--surface); }
+body::-webkit-scrollbar-thumb { background:var(--line); border-radius:999px; }
+.progress-shell { position:sticky; top:0; z-index:10; padding:34px 48px 28px; background:var(--page); border-bottom:1px solid var(--line); }
+.progress-label { max-width:1100px; margin:0 auto 20px; display:grid; grid-template-columns:minmax(0,1.22fr) minmax(300px,.78fr); align-items:start; gap:44px; color:var(--muted); font-size:1.38rem; line-height:1.95; letter-spacing:.01em; }
+.progress-label > span { min-width:0; }
+.progress-meta { min-width:0; display:flex; align-items:center; justify-content:flex-end; gap:14px; }
+.theme-toggle { display:inline-flex; align-items:center; justify-content:center; flex:0 0 36px; width:36px; height:36px; padding:0; color:var(--muted); background:var(--surface-2); border:1px solid var(--line); border-radius:8px; font:500 1rem/1 system-ui,-apple-system,"PingFang SC","Noto Sans SC",sans-serif; cursor:pointer; transition:color .16s ease, border-color .16s ease, background .16s ease; }
+.theme-toggle:hover { color:var(--ink); border-color:var(--accent); background:var(--surface); }
+.theme-toggle:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+.theme-icon { font-size:1.05rem; line-height:1; }
+.track { max-width:1100px; height:10px; margin:auto; border-radius:999px; background:var(--track); overflow:hidden; }
+.bar { width:14%; height:100%; background:var(--accent); transition:width .2s ease; }
+main { max-width:1100px; margin:0 auto; padding:126px 48px 160px; }
+h1 { margin:0 0 38px; color:var(--muted); font-size:2.35rem; line-height:1.35; font-weight:720; letter-spacing:.01em; }
+h2 { margin:132px 0 22px; color:var(--ink); font-size:3.05rem; line-height:1.25; font-weight:780; letter-spacing:.01em; scroll-margin-top:180px; }
+hr { border:0; border-top:2px solid var(--line); margin:0 0 54px; }
+p, ul { margin:0 0 30px; color:var(--ink); font-size:1.55rem; line-height:2.05; }
+ul { padding-left:1.35em; }
+li { padding-left:.18em; }
+li::marker { color:var(--ink); }
+.equation { margin:58px auto; padding:20px 8px; color:var(--ink); text-align:center; font:1.55rem/1.55 "STIX Two Math","Cambria Math",Georgia,"Times New Roman",serif; overflow-x:auto; }
+.math { font-family:"STIX Two Math","Cambria Math",Georgia,"Times New Roman",serif; white-space:nowrap; }
+.lesson-figure { margin:58px 0; text-align:center; }
+.lesson-figure img { max-width:100%; height:auto; border:1px solid var(--line); border-radius:8px; background:var(--surface); }
+.lesson-figure figcaption { margin-top:14px; color:var(--soft); font-size:1.05rem; line-height:1.7; }
+code { color:var(--ink); font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:.88em; }
+strong { color:var(--ink); }
+@media (max-width:760px) {
+  .progress-shell { padding:20px 22px 18px; }
+  .progress-label { grid-template-columns:1fr; gap:4px; margin-bottom:14px; font-size:1rem; line-height:1.55; }
+  .progress-meta { justify-content:space-between; gap:10px; }
+  .theme-toggle { flex-basis:34px; width:34px; height:34px; }
+  .track { height:7px; }
+  main { padding:72px 22px 100px; }
+  h1 { font-size:1.8rem; margin-bottom:28px; }
+  h2 { margin-top:82px; font-size:2.1rem; scroll-margin-top:122px; }
+  p, ul { font-size:1.18rem; line-height:1.9; margin-bottom:24px; }
+  .equation { margin:42px auto; font-size:1.18rem; }
+}
+</style>
+</head>
+<body data-total="7" data-verified="0">
+<header class="progress-shell">
+  <div class="progress-label">
+    <span>2.4-2 · Graphical Understanding of Convolution Operation</span>
+    <span class="progress-meta">
+      <span id="progress-text">当前第 1/7 节 · 已完成 0/7 节 · 14%</span>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="切换到浅色模式" title="切换到浅色模式">
+        <span class="theme-icon" aria-hidden="true">☀</span>
+      </button>
+    </span>
+  </div>
+  <div class="track"><div class="bar" id="progress-bar"></div></div>
+</header>
+<main><h1>2.4-2 · Graphical Understanding of Convolution Operation</h1>
+<hr>
+<p>这一小节把上一节的积分变成“看得见的操作”。目标不是每个时刻都画一张图，而是掌握一套可以重复的移动、重叠、求面积流程。</p>
+<p>本节目标：给定一个时刻 t，能画出被积的两条曲线；能指出重叠区；能把重叠面积写成卷积在该时刻的一个输出值。</p>
+<p>学习路线：先读懂教材图，再用四步按钮操作同一组函数，最后用三个例题检查“重叠区决定积分限”。</p>
+<h2 id="section-1" data-section="1">1. 为什么需要图形卷积</h2>
+<hr>
+<p>教材给出的三个理由可以压缩成三句话：</p>
+<ul>
+<li><strong>处理复杂信号</strong>：信号难以直接写成或计算成公式时，图形能帮助我们评估积分。</li>
+<li><strong>看清结果</strong>：把卷积结果画出来，有助于理解采样、滤波等问题中的形状。</li>
+<li><strong>没有精确公式时仍能工作</strong>：有些信号只能用图描述；两个这样的信号卷积时，只能用图形方法。</li>
+</ul>
+<h2 id="section-2" data-section="2">2. 先固定观察时刻：<code>t</code> 是参数</h2>
+<hr>
+<p>教材用 <code>x(t)</code> 和 <code>g(t)</code> 说明流程：</p>
+<div class="equation">\[c(t)=x(t)*g(t)=\int_{-\infty}^{\infty}x(\tau)g(t-\tau)\,d\tau\]</div>
+<p>计算某个 <code>t=t_0</code> 时，真正要画的是 <code>x(τ)</code> 和 <code>g(t_0−τ)</code>，两条曲线都以 <code>τ</code> 为横轴。<code>x(τ)</code> 与 <code>x(t)</code> 形状相同；<code>g(τ)</code> 与 <code>g(t)</code> 形状相同。改变的是第二条曲线的位置，不是积分变量的名字。</p>
+<h2 id="section-3" data-section="3">3. 一帧图的五步读法</h2>
+<hr>
+<p>1. <strong>固定</strong> <code>x(τ)</code>，不要让它跟着移动。 2. 从 <code>g(τ)</code> 开始，关于 <code>τ=0</code> 做时间反转，得到 <code>g(−τ)</code>。 3. 沿 <code>τ</code> 轴移动 <code>t_0</code>，得到 <code>g(t_0−τ)</code>；<code>t_0&gt;0</code> 向右，<code>t_0&lt;0</code> 向左。 4. 只看两条曲线的重叠区：乘积 <code>x(τ)g(t_0−τ)</code> 的面积就是 <code>c(t_0)</code>。 5. 改变 <code>t_0</code>，重复这套操作，把每个面积放到 <code>c(t)</code> 的对应位置，连成整条结果曲线。</p>
+<p>先做一个最小检查：如果移动后的曲线和固定曲线完全没有重叠，乘积在所有位置都为零，因此这一帧的卷积值就是零。</p>
+<figure class="lesson-figure"><img src="assets/math/2.4-2-overlap-t1.png" alt="固定 x(τ)，反转并平移 g(τ)，再对重叠乘积求面积的示意图" loading="lazy"><figcaption>固定 x(τ)，反转并平移 g(τ)，再对重叠乘积求面积的示意图</figcaption></figure>
+<p>图里的颜色只用来区分角色：蓝色是固定的 <code>x(τ)</code>，橙色是移动后的 <code>g(t_0−τ)</code>，紫色是乘积。真正决定结果的是重叠范围和面积，不是颜色。</p>
+<figure class="lesson-figure"><img src="assets/textbook-crops/figure-2-7.png" alt="教材 Figure 2.7：固定、反转、正负平移和输出曲线" loading="lazy"><figcaption>教材 Figure 2.7：固定、反转、正负平移和输出曲线</figcaption></figure>
+<p>下面的 Demo 把 Figure 2.7 拆成四个按钮：固定并读信号 → 翻转 → 平移并找重叠 → 相乘并积分。第 4 步才显示播放，因为播放的是“面积如何累积成结果曲线”。</p>
+<iframe src="geogebra-comparison.html" title="Example 2.12 GeoGebra graphical convolution demo" style="width:100%;height:980px;border:1px solid #dfe3ea;border-radius:12px;background:#fff;"></iframe>
+<h2 id="section-4" data-section="4">4. 例 2.10：两个因果函数</h2>
+<hr>
+<p>例题取 <code>x(t)=e^{-t}u(t)</code>、<code>h(t)=e^{-2t}u(t)</code>，与例 2.8 相同，但这次强调图形步骤。</p>
+<ul>
+<li><code>t&lt;0</code>：左移后的 <code>h(−τ)</code> 与 <code>x(τ)</code> 不重叠，所以 <code>y(t)=0</code>。</li>
+<li><code>t≥0</code>：重叠区是 <code>0≤τ≤t</code>，乘积面积为 <code>∫_0^t x(τ)h(t−τ)dτ</code>。</li>
+<li>代入并化简得到 <code>y(t)=(e^{-t}-e^{-2t})u(t)</code>。</li>
+</ul>
+<p>这里“先判重叠，再写积分限”比一上来展开指数更重要。</p>
+<p>做题顺序固定为：先画支撑区 → 再找交集 → 最后才代入函数表达式。</p>
+<figure class="lesson-figure"><img src="assets/textbook-crops/figure-2-8.png" alt="教材 Figure 2.8：两个因果函数的图形卷积" loading="lazy"><figcaption>教材 Figure 2.8：两个因果函数的图形卷积</figcaption></figure>
+<h2 id="section-5" data-section="5">5. 例 2.11：因果函数与双边函数</h2>
+<hr>
+<p>教材设 <code>x(t)=u(t)</code>，并把双边的 <code>g(t)</code> 分成两段：</p>
+<div class="equation">\[g(t)=2e^{-t}\ (t\ge 0),\qquad g(t)=-2e^{2t}\ (t&lt;0)\]</div>
+<p>为了让分段更简单，固定 <code>x(τ)=1</code>，只追踪 <code>g(t−τ)</code> 的两段何时落入重叠区。</p>
+<ul>
+<li><code>t≥0</code>：A 段覆盖 <code>0&lt;τ&lt;t</code>，B 段覆盖 <code>t&lt;τ&lt;∞</code>，所以 <code>c(t)=∫_0^t2e^{-(t-τ)}dτ+∫_t^∞-2e^{2(t-τ)}dτ=1-2e^{-t}</code>。</li>
+<li><code>t≤0</code>：重叠区只包含 B 段，所以 <code>c(t)=∫_0^∞-2e^{2(t-τ)}dτ=-e^{2t}</code>。</li>
+</ul>
+<p>最终结果是：</p>
+<div class="equation">\[c(t)=1-2e^{-t}\ (t\ge 0),\qquad c(t)=-e^{2t}\ (t\le 0)\]</div>
+<p>这题训练的是“同一条移动曲线跨过不同分段时，积分表达式要随重叠区改变”。</p>
+<figure class="lesson-figure"><img src="assets/textbook-crops/figure-2-9.png" alt="教材 Figure 2.9：因果函数与双边函数的图形卷积" loading="lazy"><figcaption>教材 Figure 2.9：因果函数与双边函数的图形卷积</figcaption></figure>
+<h2 id="section-6" data-section="6">6. 例 2.12：两个有限持续时间函数</h2>
+<hr>
+<p>这里 <code>x(t)</code> 是宽度为 2 的矩形，<code>g(t)=\frac13t</code> 只在 <code>0≤t≤3</code> 有效。教材选择反转更简单的 <code>x(t)</code>，计算 <code>g(t)*x(t)</code>。</p>
+<p>移动 <code>x(−τ)</code> 后，边缘位于 <code>τ=-1+t</code> 和 <code>τ=1+t</code>。随着 <code>t</code> 增大，重叠边界依次改变，因此结果分三段：</p>
+<ul>
+<li><code>−1≤t&lt;1</code>：重叠为 <code>0≤τ≤1+t</code>，<code>c(t)=\frac16(t+1)^2</code>。</li>
+<li><code>1≤t&lt;2</code>：重叠为 <code>−1+t≤τ≤1+t</code>，<code>c(t)=\frac23t</code>。</li>
+<li><code>2≤t&lt;4</code>：重叠为 <code>−1+t≤τ≤3</code>，<code>c(t)=−\frac16(t^2−2t−8)</code>。</li>
+<li>其他时间没有重叠，<code>c(t)=0</code>。</li>
+</ul>
+<p>边界检查：在 <code>t=1</code>，前两段都给 <code>c(1)=2/3</code>；在 <code>t=2</code>，后两段都给 <code>c(2)=4/3</code>。没有冲激时，卷积在这些转换点应保持连续。</p>
+<figure class="lesson-figure"><img src="assets/textbook-crops/figure-2-10.png" alt="教材 Figure 2.10：有限持续时间函数的分段卷积" loading="lazy"><figcaption>教材 Figure 2.10：有限持续时间函数的分段卷积</figcaption></figure>
+<h2 id="section-7" data-section="7">7. 把“看起来很复杂”变成固定动作</h2>
+<hr>
+<p>教材的完整流程可以缩成一条链：</p>
+<p><strong>固定 <code>x(τ)</code> → 反转 <code>g(τ)</code> → 平移到 <code>g(t_0−τ)</code> → 找重叠 → 对乘积求面积 → 改变 <code>t_0</code> 重复。</strong></p>
+<p>利用交换律，优先反转数学描述更简单的信号。就像搬家时先搬轻箱子：目标没变，但每一步更省力。</p>
+<p><strong>现在只记住</strong></p>
+<ul>
+<li>卷积的一个输出点 = 一帧重叠乘积的面积。</li>
+<li>没有重叠，卷积就是零。</li>
+<li>有限宽度信号的结果宽度等于两者宽度之和。</li>
+</ul>
+<p><strong>10 秒检查</strong>：当两条有限宽度曲线刚好完全分离时，卷积值是多少？为什么？</p>
+<p>本节必须掌握：不看公式也能口述“固定—反转—平移—重叠—求面积—重复”，并能用这条链解释例 2.10、2.11、2.12 的分段范围。</p></main>
+<script>
+const headings = [...document.querySelectorAll('[data-section]')];
+const total = Number(document.body.dataset.total) || headings.length || 1;
+const verified = Number(document.body.dataset.verified) || 0;
+const themeToggle = document.getElementById('theme-toggle');
+const themeIcon = themeToggle.querySelector('.theme-icon');
+const setTheme = theme => {
+  document.documentElement.dataset.theme = theme;
+  const dark = theme === 'dark';
+  themeIcon.textContent = dark ? '☀' : '☾';
+  const nextLabel = dark ? '切换到浅色模式' : '切换到深色模式';
+  themeToggle.setAttribute('aria-label', nextLabel);
+  themeToggle.setAttribute('title', nextLabel);
+};
+setTheme(document.documentElement.dataset.theme === 'light' ? 'light' : 'dark');
+themeToggle.addEventListener('click', () => {
+  const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+  setTheme(next);
+  try { localStorage.setItem('fourier-theme', next); } catch (error) { /* private browsing may block storage */ }
+});
+const update = current => {
+  const safe = Math.max(1, Math.min(total, current));
+  const percent = Math.round(100 * safe / total);
+  document.getElementById('progress-text').textContent = `当前第 ${safe}/${total} 节 · 已完成 ${verified}/${total} 节 · ${percent}%`;
+  document.getElementById('progress-bar').style.width = `${percent}%`;
+};
+if (headings.length) {
+  const observer = new IntersectionObserver(entries => {
+    const visible = entries.filter(entry => entry.isIntersecting).sort((a,b) => a.boundingClientRect.top-b.boundingClientRect.top)[0];
+    if (visible) update(Number(visible.target.dataset.section));
+  }, { rootMargin:'-100px 0px -65% 0px', threshold:0 });
+  headings.forEach(heading => observer.observe(heading));
+}
+</script>
+</body>
+</html>
