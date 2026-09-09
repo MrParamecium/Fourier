@@ -34185,7 +34185,10 @@ body.learn-resizing #learnView #learnBody #learnChatCol {
 
 /* Final Q&A composer contract: compact at rest, grows upward, then scrolls. */
 #learnView#learnView#learnView #learnBody#learnBody#learnBody #learnChatCol#learnChatCol#learnChatCol #learnFollowupBar#learnFollowupBar#learnFollowupBar {
-  min-height: 76px !important;
+  transform: none !important;
+  translate: none !important;
+  transition: border-color .15s, box-shadow .15s !important;
+  min-height: 64px !important;
   height: auto !important;
   max-height: 220px !important;
   margin: 0 12px 12px !important;
@@ -34194,10 +34197,12 @@ body.learn-resizing #learnView #learnBody #learnChatCol {
   box-sizing: border-box !important;
 }
 
-#learnView#learnView#learnView #learnBody#learnBody#learnBody #learnChatCol#learnChatCol#learnChatCol #learnFollowupBar#learnFollowupBar#learnFollowupBar .input-wrapper {
+#learnView#learnView#learnView #learnBody#learnBody#learnBody #learnChatCol#learnChatCol#learnChatCol #learnFollowupBar#learnFollowupBar#learnFollowupBar .input-wrapper,
+#learnView#learnView#learnView #learnBody#learnBody#learnBody #learnChatCol#learnChatCol#learnChatCol #learnFollowupBar#learnFollowupBar#learnFollowupBar .input-wrapper:focus-within {
   display: grid !important;
   grid-template-columns: 42px minmax(0, 1fr) 42px !important;
-  align-items: end !important;
+  align-items: center !important;
+  padding: 0 !important;
   min-height: 44px !important;
   height: auto !important;
   max-height: 196px !important;
@@ -34224,12 +34229,12 @@ body.learn-resizing #learnView #learnBody #learnChatCol {
 
 #learnView#learnView#learnView #learnBody#learnBody#learnBody #learnChatCol#learnChatCol#learnChatCol #learnFollowupBar#learnFollowupBar#learnFollowupBar .btn-clip,
 #learnView#learnView#learnView #learnBody#learnBody#learnBody #learnChatCol#learnChatCol#learnChatCol #learnFollowupBar#learnFollowupBar#learnFollowupBar .btn-send {
-  align-self: end !important;
+  align-self: center !important;
   flex: 0 0 42px !important;
   width: 42px !important;
   height: 42px !important;
   min-height: 42px !important;
-  margin-bottom: 1px !important;
+  margin: 0 !important;
 }
 
 #learnView#learnView#learnView #learnBody#learnBody#learnBody #learnChatCol#learnChatCol#learnChatCol #learnChatEmptyState#learnChatEmptyState.hidden,
@@ -34273,40 +34278,88 @@ body.learn-resizing #learnView #learnBody #learnChatCol {
   width: 100% !important;
   min-width: 0 !important;
   max-width: none !important;
-  min-height: 100dvh !important;
+  min-height: 0 !important;
 }
 
 .app.learn-browser-fullscreen.app.learn-browser-fullscreen #mainContent {
+  height: 100dvh !important;
   grid-column: 1 !important;
   overflow: hidden !important;
 }
 
 .app.learn-browser-fullscreen.app.learn-browser-fullscreen #learnView {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
   overflow: hidden !important;
 }
 
 .app.learn-browser-fullscreen.app.learn-browser-fullscreen #learnBody {
-  height: 100dvh !important;
-  max-height: 100dvh !important;
+  flex: 1 1 0 !important;
+  height: auto !important;
+  max-height: none !important;
   overflow: hidden !important;
+}
+
+.app.learn-browser-fullscreen.app.learn-browser-fullscreen .learn-topbar {
+  flex: 0 0 auto !important;
+}
+
+.app .sidebar-top {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
 }
 
 .learn-fullscreen-btn {
   display: inline-flex;
-  min-width: 112px;
-  min-height: 40px;
+  width: 34px !important;
+  min-width: 34px !important;
+  height: 34px !important;
+  min-height: 34px !important;
   align-items: center;
   justify-content: center;
-  padding: 0 14px;
+  padding: 0 !important;
+  margin: 0 0 10px !important;
   border: 1px solid rgba(109, 128, 145, 0.28);
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.74);
   color: #334155;
-  font-size: 13px;
-  font-weight: 700;
   line-height: 1;
   cursor: pointer;
   transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.learn-fullscreen-icon {
+  width: 18px;
+  height: 18px;
+  display: block;
+  flex: 0 0 18px;
+}
+
+.learn-fullscreen-icon-exit,
+.learn-fullscreen-btn[aria-pressed="false"] .learn-fullscreen-icon-exit {
+  display: none;
+}
+
+.learn-fullscreen-btn[aria-pressed="true"] .learn-fullscreen-icon-enter {
+  display: none;
+}
+
+.learn-fullscreen-btn[aria-pressed="true"] .learn-fullscreen-icon-exit {
+  display: block;
+}
+
+.learn-fullscreen-label {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
 }
 
 .learn-fullscreen-btn:hover:not(:disabled),
@@ -34331,6 +34384,18 @@ body.learn-resizing #learnView #learnBody #learnChatCol {
   opacity: 0.58;
 }
 
+.app.sidebar-collapsed .sidebar-top .learn-fullscreen-btn,
+.app .sidebar.collapsed .sidebar-top .learn-fullscreen-btn {
+  align-self: center !important;
+  margin-bottom: 9px !important;
+}
+
+:root[data-theme="dark"] .learn-fullscreen-btn {
+  border-color: rgba(148, 163, 184, 0.28);
+  background: rgba(25, 38, 56, 0.82);
+  color: #dbeafe;
+}
+
 html:fullscreen,
 html:fullscreen body {
   width: 100%;
@@ -34341,20 +34406,14 @@ html:fullscreen body {
 
 @media (max-width: 900px) {
   .learn-fullscreen-btn {
-    min-width: 40px;
-    width: 40px;
-    padding: 0;
-    font-size: 0;
-  }
-
-  .learn-fullscreen-btn::before {
-    content: '↗';
-    font-size: 18px;
-    line-height: 1;
+    width: 36px !important;
+    min-width: 36px !important;
+    height: 36px !important;
+    min-height: 36px !important;
   }
 
   .app.learn-browser-fullscreen.app.learn-browser-fullscreen #learnBody {
-    height: 100dvh !important;
+    height: auto !important;
     max-height: none !important;
   }
 }
@@ -34363,4 +34422,475 @@ html:fullscreen body {
   .learn-fullscreen-btn {
     transition: none;
   }
+}
+/* TUTOR PANEL SIMPLIFICATION LOCK: keep questions compact and let answers use the full reading width. */
+#learnView#learnView#learnView #learnBody#learnBody#learnBody #learnChatCol#learnChatCol#learnChatCol #learnChatContent#learnChatContent .followup-bubble .fub-a,
+#learnView#learnView#learnView #learnBody#learnBody#learnBody #learnChatCol#learnChatCol#learnChatCol #learnChatContent#learnChatContent .followup-bubble .fub-a.learn-explain-content,
+#learnView #learnChatPopoverScroll .followup-bubble .fub-a,
+#textbookFocusModal #textbookFocusQaScroll .followup-bubble .fub-a {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 4px 0 0 !important;
+  overflow: visible !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+#learnView#learnView#learnView #learnBody#learnBody#learnBody #learnChatCol#learnChatCol#learnChatCol #learnChatContent#learnChatContent .followup-bubble .fub-a::before,
+#learnView#learnView#learnView #learnBody#learnBody#learnBody #learnChatCol#learnChatCol#learnChatCol #learnChatContent#learnChatContent .followup-bubble .fub-a::after {
+  content: none !important;
+  display: none !important;
+  border: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+
+#learnView#learnView#learnView #learnChatContent#learnChatContent .followup-bubble .fub-a::before,
+#learnView #learnChatPopoverScroll .followup-bubble .fub-a::before,
+#textbookFocusModal #textbookFocusQaScroll .followup-bubble .fub-a::before {
+  content: none !important;
+  display: none !important;
+}
+
+#learnView .guidance-path-chip,
+#learnView #learnFollowupBar .bottom-actions {
+  display: none !important;
+}
+
+/* TUTOR COMPACT CHAT LOCK: edge-aligned messages and a one-line thinking state. */
+#learnView#learnView #learnChatCol#learnChatCol .learn-chat-scroll,
+#learnView#learnView #learnChatCol#learnChatCol #learnChatContent,
+#learnView #learnChatPopoverScroll,
+#textbookFocusModal #textbookFocusQaScroll {
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+}
+
+#learnView#learnView#learnView #learnChatContent#learnChatContent .followup-bubble,
+#learnView #learnChatPopoverScroll .followup-bubble,
+#textbookFocusModal #textbookFocusQaScroll .followup-bubble {
+  display: flow-root !important;
+  width: 100% !important;
+  margin: 12px 0 20px !important;
+  padding: 0 !important;
+}
+
+#learnView#learnView#learnView #learnChatContent#learnChatContent .followup-bubble .fub-q,
+#learnView #learnChatPopoverScroll .followup-bubble .fub-q,
+#textbookFocusModal #textbookFocusQaScroll .followup-bubble .fub-q {
+  display: block !important;
+  float: right !important;
+  clear: both !important;
+  width: fit-content !important;
+  min-width: 0 !important;
+  max-width: calc(100% - 20px) !important;
+  margin: 0 0 12px auto !important;
+  padding: 8px 12px !important;
+  border-radius: 15px 15px 5px 15px !important;
+  font-size: 15px !important;
+  line-height: 1.35 !important;
+  white-space: normal !important;
+}
+
+#learnView#learnView#learnView #learnChatContent#learnChatContent .followup-bubble .fub-a,
+#learnView #learnChatPopoverScroll .followup-bubble .fub-a,
+#textbookFocusModal #textbookFocusQaScroll .followup-bubble .fub-a {
+  clear: both !important;
+  padding: 2px 0 0 !important;
+  font-size: 15px !important;
+  line-height: 1.55 !important;
+}
+
+.tutor-thinking {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 28px;
+  color: #22314d;
+  font-size: 15px;
+  font-weight: 650;
+}
+
+.tutor-thinking-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  height: 18px;
+}
+
+.tutor-thinking-dots i {
+  display: block;
+  width: 4px;
+  height: 9px;
+  border-radius: 999px;
+  background: #5b9df9;
+  transform-origin: center;
+  animation: tutor-thinking-float 780ms ease-in-out infinite;
+}
+
+.tutor-thinking-dots i:nth-child(2) {
+  animation-delay: 110ms;
+}
+
+.tutor-thinking-dots i:nth-child(3) {
+  animation-delay: 220ms;
+}
+
+@keyframes tutor-thinking-float {
+  0%, 100% { transform: translateY(2px) scaleY(0.65); opacity: 0.45; }
+  50% { transform: translateY(-2px) scaleY(1.15); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tutor-thinking-dots i {
+    animation: none;
+    opacity: 0.72;
+  }
+}
+
+/* TUTOR LIGHT READING SURFACE: remove the legacy thinking frame and ambient tint. */
+:root:not([data-theme="dark"]) #learnView #learnBody #learnChatCol,
+:root:not([data-theme="dark"]) #learnView #learnBody #learnChatCol .learn-chat-scroll,
+:root:not([data-theme="dark"]) #learnView #learnBody #learnChatCol #learnChatContent,
+:root:not([data-theme="dark"]) #learnView #learnBody #learnChatCol #learnChatEmptyState {
+  background: transparent !important;
+  background-image: none !important;
+}
+
+:root:not([data-theme="dark"]) #learnView #learnBody #learnChatCol #learnFollowupBar {
+  background: rgba(224, 255, 247, 0.26) !important;
+  background-image: linear-gradient(135deg, rgba(255,255,255,.34), rgba(173,246,222,.22)) !important;
+  border: 1px solid rgba(255,255,255,.48) !important;
+  box-shadow: 0 8px 24px rgba(45, 115, 110, .08), inset 0 1px 0 rgba(255,255,255,.42) !important;
+  backdrop-filter: blur(18px) saturate(135%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(135%) !important;
+}
+
+/* Restored Tutor conversation treatment: compact question bubble and open answer text. */
+:root:not([data-theme="dark"]) #learnView #learnChatContent .followup-bubble .fub-q {
+  align-self: flex-end !important;
+  width: fit-content !important;
+  max-width: 82% !important;
+  padding: 9px 14px !important;
+  border: 0 !important;
+  border-radius: 16px 16px 0 16px !important;
+  background: #eff6ff !important;
+  color: #111827 !important;
+  box-shadow: none !important;
+  font-size: 15px !important;
+  line-height: 1.45 !important;
+}
+:root:not([data-theme="dark"]) #learnView #learnChatContent .followup-bubble .fub-a,
+:root:not([data-theme="dark"]) #learnView #learnChatContent .followup-bubble .fub-a.ghost {
+  border: 0 !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+:root:not([data-theme="dark"]) #learnView #learnChatContent .followup-bubble .tutor-thinking {
+  display: flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  border: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+:root:not([data-theme="dark"]) #learnView #learnBody #learnChatCol .ambient-background {
+  display: none !important;
+}
+
+:root:not([data-theme="dark"]) #learnView #learnBody #learnChatCol::before,
+:root:not([data-theme="dark"]) #learnView #learnBody #learnChatCol::after,
+:root:not([data-theme="dark"]) #learnView #learnBody #learnChatCol .learn-chat-scroll::before,
+:root:not([data-theme="dark"]) #learnView #learnBody #learnChatCol .learn-chat-scroll::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+}
+
+:root:not([data-theme="dark"]) #learnView #learnBody #learnChatCol #learnChatContent .followup-bubble,
+:root:not([data-theme="dark"]) #learnView #learnBody #learnChatCol #learnChatContent .followup-bubble .fub-a,
+:root:not([data-theme="dark"]) #learnView #learnBody #learnChatCol #learnChatContent .followup-bubble .fub-a.ghost {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+:root:not([data-theme="dark"]) #learnView #learnBody #learnChatCol #learnChatContent .followup-bubble .tutor-thinking {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+#learnView:has(.embedded-lesson-frame) #learnFullscreenBtn{display:none!important}
+/* The embedded lesson owns these controls; its scroll state updates them. */
+#learnView .learn-topbar:has(.embedded-lesson-controls){display:flex!important;flex-wrap:wrap!important;gap:12px 20px!important;height:auto!important;min-height:62px!important;padding:14px 24px!important}
+#learnView .learn-topbar:has(.embedded-lesson-controls) .learn-topbar-left{flex:1 1 420px!important;min-width:0!important}
+#learnView .learn-topbar:has(.embedded-lesson-controls) #learnTitle{white-space:normal!important;overflow-wrap:anywhere;font-size:20px!important;line-height:1.3!important}
+#learnView .embedded-lesson-controls{position:static;flex:0 1 260px;min-width:200px;margin:0;padding:0;background:none;border:0}
+#learnView .embedded-lesson-controls .progress-title{display:none}
+#learnView .embedded-lesson-controls .progress-inner{display:grid;grid-template-columns:minmax(110px,1fr) 76px;align-items:center;gap:5px 12px}
+#learnView .embedded-lesson-controls .progress-meta{display:contents}
+#learnView .embedded-lesson-controls .progress-text{grid-column:1;grid-row:1;display:flex;gap:5px;font-size:12px;line-height:18px;color:inherit}
+#learnView .embedded-lesson-controls .lesson-tools{grid-column:2;grid-row:1 / 3;display:flex;gap:8px}
+#learnView .embedded-lesson-controls .theme-toggle{display:grid;place-items:center;width:34px;height:34px;min-width:34px;padding:6px;border:1px solid #cbd5e1;border-radius:8px;background:#f8fafc;color:#475569;cursor:pointer}
+#learnView .embedded-lesson-controls .theme-toggle svg{display:block;grid-area:1/1;width:20px;height:20px;margin:0;transform:none}
+#learnView .embedded-lesson-controls .sun{display:none!important}
+#learnView .embedded-lesson-controls[data-theme=dark] .sun{display:block!important}
+#learnView .embedded-lesson-controls[data-theme=dark] .moon{display:none!important}
+#learnView .embedded-lesson-controls .track{grid-column:1;grid-row:2;height:5px;overflow:hidden;border-radius:4px;background:#dce3eb}
+#learnView .embedded-lesson-controls .bar{height:100%;background:#5285e5;transition:width .16s}
+
+
+/* Restored latest Tutor UI from Fourier-tier-3 local version. */
+
+/* Final reference treatment: match the compact pale-blue question bubble and
+   emphasize teaching keywords in the answer with blue bold text. */
+#learnView #learnChatContent {
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+}
+#learnView #learnChatContent .followup-bubble .fub-q {
+  display: inline-flex !important;
+  width: auto !important;
+  max-width: min(78%, 460px) !important;
+  margin: 0 0 16px auto !important;
+  padding: 9px 14px !important;
+  border: 0 !important;
+  border-radius: 16px 16px 0 16px !important;
+  background: #eff6ff !important;
+  color: #111 !important;
+  box-shadow: none !important;
+  font-size: 15px !important;
+  line-height: 1.45 !important;
+  font-weight: 400 !important;
+}
+#learnView#learnView#learnView #learnBody#learnBody#learnBody #learnChatCol#learnChatCol#learnChatCol #learnChatContent#learnChatContent .followup-bubble .fub-q {
+  display: inline-block !important;
+  width: auto !important;
+  max-width: 78% !important;
+  margin: 0 0 16px auto !important;
+  padding: 8px 14px !important;
+  border: 0 !important;
+  border-radius: 16px 16px 0 16px !important;
+  background: #eff6ff !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  color: #111 !important;
+  font-size: 15px !important;
+  line-height: 1.45 !important;
+  font-weight: 400 !important;
+  backdrop-filter: none !important;
+}
+#learnView#learnView#learnView #learnBody#learnBody#learnBody #learnChatCol#learnChatCol#learnChatCol #learnChatContent#learnChatContent .followup-bubble:has(.tutor-thinking),
+#learnView#learnView#learnView #learnBody#learnBody#learnBody #learnChatCol#learnChatCol#learnChatCol #learnChatContent#learnChatContent .followup-bubble:has(.tutor-thinking)::before,
+#learnView#learnView#learnView #learnBody#learnBody#learnBody #learnChatCol#learnChatCol#learnChatCol #learnChatContent#learnChatContent .followup-bubble:has(.tutor-thinking) .fub-a {
+  border: 0 !important;
+  outline: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+#learnView #learnChatContent .followup-bubble .fub-a,
+#learnView #learnChatContent .followup-bubble .fub-a * {
+  font-family: inherit !important;
+  font-size: 15px !important;
+  line-height: 1.45 !important;
+  letter-spacing: 0 !important;
+}
+#learnView #learnChatContent .followup-bubble .fub-a {
+  font-weight: 400 !important;
+  color: #111 !important;
+}
+#learnView #learnChatContent .followup-bubble .fub-a strong,
+#learnView #learnChatContent .followup-bubble .fub-a mark {
+  color: #0b57d0 !important;
+  font-weight: 800 !important;
+}
+#learnView#learnView#learnView #learnBody#learnBody#learnBody #learnChatCol#learnChatCol#learnChatCol #learnChatContent#learnChatContent .followup-bubble {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+#learnView#learnView#learnView #learnBody#learnBody#learnBody #learnChatCol#learnChatCol#learnChatCol #learnChatContent#learnChatContent .followup-bubble .fub-a,
+#learnView#learnView#learnView #learnBody#learnBody#learnBody #learnChatCol#learnChatCol#learnChatCol #learnChatContent#learnChatContent .followup-bubble .fub-a.learn-explain-content {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+#learnView #learnChatContent .followup-bubble .fub-q {
+  margin-right: 8px !important;
+}
+#learnView #learnChatContent .followup-bubble .fub-a {
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+}
+#learnView#learnView#learnView #learnBody#learnBody#learnBody #learnChatCol#learnChatCol#learnChatCol #learnChatContent#learnChatContent .followup-bubble .fub-a > * {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+#learnView #learnChatContent .followup-bubble .tutor-thinking,
+#learnView #learnChatContent .followup-bubble .tutor-thinking::before,
+#learnView #learnChatContent .followup-bubble .tutor-thinking::after {
+  border: 0 !important;
+  outline: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+#learnView #learnChatContent .followup-bubble .fub-a strong,
+#learnView #learnChatContent .followup-bubble .fub-a mark {
+  color: #0b57d0 !important;
+  font-weight: 800 !important;
+  background: transparent !important;
+}
+/* LEARN RIGHT CHAT MESSAGE GLASS LOCK: user, answer, and error states. */
+#learnView#learnView#learnView #learnBody#learnBody#learnBody #learnChatCol#learnChatCol#learnChatCol #learnChatContent#learnChatContent .followup-bubble,
+#learnView#learnView#learnView #learnChatCol#learnChatCol#learnChatCol #learnChatContent#learnChatContent .followup-bubble {
+  position: relative !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 18px 0 28px !important;
+  padding: 0 18px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+#learnView#learnView#learnView #learnChatContent#learnChatContent .followup-bubble::before {
+  content: none !important;
+  display: none !important;
+}
+
+#learnView#learnView#learnView #learnChatContent#learnChatContent .followup-bubble .fub-q {
+  display: inline-flex !important;
+  width: auto !important;
+  max-width: min(78%, 460px) !important;
+  margin: 0 0 16px auto !important;
+  padding: 13px 18px !important;
+  border: 1px solid rgba(125, 211, 252, 0.76) !important;
+  border-radius: 22px 22px 8px 22px !important;
+  background:
+    linear-gradient(145deg, rgba(240, 249, 255, 0.48), rgba(255, 255, 255, 0.16)),
+    radial-gradient(160px 70px at 20% 0%, rgba(125, 211, 252, 0.18), transparent 74%) !important;
+  box-shadow:
+    0 14px 34px rgba(14, 116, 144, 0.13),
+    inset 0 1px 0 rgba(255, 255, 255, 0.82),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.12) !important;
+  color: #075985 !important;
+  backdrop-filter: blur(28px) saturate(190%) brightness(1.04) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(190%) brightness(1.04) !important;
+}
+
+#learnView#learnView#learnView #learnChatContent#learnChatContent .followup-bubble .fub-a,
+#learnView#learnView#learnView #learnChatContent#learnChatContent .followup-bubble .fub-a.learn-explain-content,
+#learnView#learnView#learnView #learnBody#learnBody#learnBody #learnChatCol#learnChatCol#learnChatCol .followup-bubble .fub-a {
+  position: relative !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 22px 24px !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(255, 255, 255, 0.52) !important;
+  border-radius: 24px !important;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.07)),
+    radial-gradient(420px 180px at 0% 0%, rgba(125, 211, 252, 0.10), transparent 74%),
+    radial-gradient(360px 170px at 100% 10%, rgba(251, 207, 232, 0.08), transparent 76%) !important;
+  background-size: auto !important;
+  box-shadow:
+    0 18px 54px rgba(15, 23, 42, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.70),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.10) !important;
+  color: #24324a !important;
+  backdrop-filter: blur(38px) saturate(200%) brightness(1.04) !important;
+  -webkit-backdrop-filter: blur(38px) saturate(200%) brightness(1.04) !important;
+}
+
+#learnView#learnView#learnView #learnChatContent#learnChatContent .followup-bubble .fub-a::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  inset: 1px !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+  border-radius: inherit !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  background:
+    linear-gradient(128deg, rgba(255, 255, 255, 0.36), rgba(255, 255, 255, 0.04) 42%, transparent 72%) !important;
+  opacity: 0.72 !important;
+  box-shadow: none !important;
+}
+
+#learnView#learnView#learnView #learnChatContent#learnChatContent .followup-bubble .fub-a > * {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+#learnView#learnView#learnView #learnChatContent#learnChatContent .followup-bubble .fub-a.ghost::before {
+  content: "" !important;
+  display: block !important;
+}
+
+#learnView#learnView#learnView #learnChatContent#learnChatContent .followup-bubble .fub-a .error-box,
+#learnView#learnView#learnView #learnChatContent#learnChatContent .error-box,
+#learnView#learnView#learnView #learnChatCol#learnChatCol#learnChatCol .error-box {
+  position: relative !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 20px 22px !important;
+  border: 1px solid rgba(255, 255, 255, 0.54) !important;
+  border-radius: 22px !important;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.07)),
+    radial-gradient(320px 140px at 0% 0%, rgba(254, 205, 211, 0.18), transparent 74%) !important;
+  box-shadow:
+    0 16px 42px rgba(148, 47, 62, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.70),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.10) !important;
+  color: #172036 !important;
+  backdrop-filter: blur(36px) saturate(195%) brightness(1.04) !important;
+  -webkit-backdrop-filter: blur(36px) saturate(195%) brightness(1.04) !important;
+}
+
+#learnView#learnView#learnView #learnChatContent#learnChatContent .error-box strong {
+  display: inline-block !important;
+  margin: 0 0 10px !important;
+  color: #0f172a !important;
+  font-family: "Quicksand", "Nunito", sans-serif !important;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  background:
+    linear-gradient(180deg, transparent 58%, rgba(253, 224, 71, 0.48) 58%) !important;
+  border-radius: 5px !important;
+}
+
+#learnView#learnView#learnView #learnChatContent#learnChatContent .error-box p {
+  margin: 0 !important;
+  color: rgba(36, 50, 74, 0.88) !important;
+  font-family: "Nunito", "Quicksand", system-ui, sans-serif !important;
+  font-size: 16px !important;
+  line-height: 1.55 !important;
+  font-weight: 720 !important;
 }

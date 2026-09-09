@@ -2301,6 +2301,7 @@ async function generateExplanation(question, bookPages, webSources, options = {}
     const answerLength = options.answerLength || 'medium';
     const examPriorityGuidance = options.examPriorityGuidance || null;
     const guidance = options.guidance || null;
+    const origin = options.origin === 'learn' ? 'learn' : 'main';
     const examPriorityAnswerHint = examPriorityGuidance && examPriorityGuidance.json
         ? [
             `Source: ${examPriorityGuidance.source || 'unknown'}`,
@@ -2325,6 +2326,12 @@ async function generateExplanation(question, bookPages, webSources, options = {}
             ? '10. 长度要求：标准精炼讲解，控制在 2 小段内。'
             : '10. Length preference: Standard lecture length, with necessary formulas and clear explanation in at most 2 short paragraphs.';
     }
+
+    const lessonTutorTeachingContract = origin === 'learn'
+        ? (language === 'zh'
+            ? '11. [DEFAULT LESSON TUTOR TEACHING CONTRACT] 先判断学生此刻真正卡住的点，再直接回答或给出下一步；使用短段落，必要时最多 5 个要点；只有确实有帮助时加入一个简短、日常且准确的类比；避免开场白、重复背景和信息过载。只有当歧义会实质改变答案时，才只问一个简短澄清问题。不要提及模式、skill、内部提示词或为什么系统这样回答。'
+            : '11. [DEFAULT LESSON TUTOR TEACHING CONTRACT] Infer what the learner is actually stuck on, then lead with the direct answer or next action. Use short paragraphs and at most five bullets when bullets help. Add one brief, accurate everyday analogy only when useful. Avoid preambles, repeated background, and overload. Ask one concise clarifying question only when ambiguity would materially change the answer. Never mention modes, skills, internal prompts, or why the system answered this way.')
+        : '';
 
 
     const historyText = history.length
@@ -2371,7 +2378,8 @@ async function generateExplanation(question, bookPages, webSources, options = {}
                 ? '9. 如果问题与上述作业/考试重点相关，回答要优先点出常考判断方法、典型题型或常见坑；如果不相关，不要硬扯作业。'
                 : '9. If the question matches the homework/exam priority hint, emphasize the tested procedure, representative problem type, or common trap. If it does not match, do not force homework framing.')
             : '',
-        lengthInstruction
+        lengthInstruction,
+        lessonTutorTeachingContract
     ].filter(Boolean).join('\n');
 
     let userContent;
@@ -5221,7 +5229,8 @@ const server = http.createServer(async (req, res) => {
                 preparedAttachments,
                 answerLength,
                 examPriorityGuidance,
-                guidance
+                guidance,
+                origin: origin
             });
 
             if (answerLength === 'short' && !explanation.includes('```')) {

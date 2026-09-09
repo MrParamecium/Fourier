@@ -622,11 +622,19 @@
             <h2 class="learn-title" id="learnTitle">Section Title</h2>
           </div>
           <div class="learn-topbar-actions">
+        <button class="learn-fullscreen-btn" id="learnFullscreenBtn" type="button" aria-controls="learnBody" aria-pressed="false" title="进入全屏" aria-label="进入全屏">
+          <svg class="learn-fullscreen-icon learn-fullscreen-icon-enter" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M8 3H3v5M16 3h5v5M8 21H3v-5M21 16v5h-5" />
+          </svg>
+          <svg class="learn-fullscreen-icon learn-fullscreen-icon-exit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 3v6H3M15 3v6h6M9 21v-6H3M21 15h-6v6" />
+          </svg>
+          <span class="learn-fullscreen-label">进入全屏</span>
+        </button>
             <div class="learn-view-selector" id="learnViewSelector" aria-label="Lesson view">
               <button class="learn-view-btn active" id="btnLectureView">Lecture</button>
               <button class="learn-view-btn" id="btnTextbookView">Textbook</button>
             </div>
-            <button class="learn-fullscreen-btn" id="learnFullscreenBtn" type="button" aria-controls="learnBody" aria-pressed="false" title="Enter fullscreen">Fullscreen</button>
             <button class="learn-close" id="learnClose">Back</button>
           </div>
         </div>

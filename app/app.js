@@ -1398,16 +1398,19 @@ window.resetConvolutionFocusWorkspace = resetConvolutionFocusWorkspace;
 
 function updateLearnFullscreenButton() {
   if (!learnFullscreenBtn) return;
-  const supported = typeof document.documentElement?.requestFullscreen === 'function';
+  const inLesson = Boolean(learnView && !learnView.classList.contains('hidden'));
+  const supported = inLesson && typeof document.documentElement?.requestFullscreen === 'function';
   const active = isLearnBrowserFullscreen;
   const pending = learnFullscreenPending;
-  const label = active ? 'Exit fullscreen' : (pending ? 'Opening…' : 'Fullscreen');
-  const title = active ? 'Exit fullscreen' : (pending ? 'Opening fullscreen' : (supported ? 'Enter fullscreen' : 'Fullscreen is unavailable'));
-  learnFullscreenBtn.textContent = label;
+  const label = active ? '退出全屏' : (pending ? '正在打开全屏' : '进入全屏');
+  const title = active ? '退出全屏' : (pending ? '正在打开全屏' : (supported ? '进入全屏' : '全屏不可用'));
+  const labelNode = learnFullscreenBtn.querySelector('.learn-fullscreen-label');
+  if (labelNode) labelNode.textContent = label;
   learnFullscreenBtn.title = title;
   learnFullscreenBtn.setAttribute('aria-label', title);
   learnFullscreenBtn.setAttribute('aria-pressed', String(active));
   learnFullscreenBtn.disabled = !supported || pending;
+  learnFullscreenBtn.classList.toggle('hidden', !inLesson);
 }
 
 function restoreLearnFullscreenSidebarState() {
@@ -1511,6 +1514,12 @@ document.addEventListener('fullscreenerror', () => {
   document.querySelector('.app')?.classList.remove('learn-browser-fullscreen');
   updateLearnFullscreenButton();
 });
+if (learnView) {
+  new MutationObserver(updateLearnFullscreenButton).observe(learnView, {
+    attributes: true,
+    attributeFilter: ['class']
+  });
+}
 updateLearnFullscreenButton();
 
 
@@ -2312,23 +2321,18 @@ function bindOverviewSubsectionCards() {
 function updateLearnChatEmptyState() {
   if (!learnChatEmptyState || !learnChatContent) return;
   const hasChat = Boolean(learnChatContent.children.length || learnChatContent.textContent.trim());
-  learnChatEmptyState.classList.toggle('hidden', hasChat);
-  const shouldShowEmptyState = !hasChat && _learnLayoutMode !== 'overview';
+  const shouldShowEmptyState = !hasChat && _learnLayoutMode !== 'overview' && !isLearnChatCollapsed;
+  learnChatEmptyState.classList.toggle('hidden', !shouldShowEmptyState);
   learnChatEmptyState.setAttribute('aria-hidden', shouldShowEmptyState ? 'false' : 'true');
-  if (hasChat) {
+  if (!shouldShowEmptyState) {
     learnChatEmptyState.style.setProperty('display', 'none', 'important');
     learnChatEmptyState.style.setProperty('visibility', 'hidden', 'important');
     learnChatEmptyState.style.setProperty('opacity', '0', 'important');
   } else {
-    if (!shouldShowEmptyState) {
-      learnChatEmptyState.style.setProperty('display', 'none', 'important');
-      learnChatEmptyState.style.setProperty('visibility', 'hidden', 'important');
-      learnChatEmptyState.style.setProperty('opacity', '0', 'important');
-    } else {
-      learnChatEmptyState.style.removeProperty('display');
-      learnChatEmptyState.style.removeProperty('visibility');
-      learnChatEmptyState.style.removeProperty('opacity');
-    }
+    learnChatEmptyState.classList.remove('hidden');
+    learnChatEmptyState.style.removeProperty('display');
+    learnChatEmptyState.style.removeProperty('visibility');
+    learnChatEmptyState.style.removeProperty('opacity');
   }
   learnChatContent.classList.toggle('is-chat-active', hasChat);
   learnChatContent.closest('#learnChatCol')?.classList.toggle('is-chat-active', hasChat);
@@ -2529,11 +2533,16 @@ async function startLesson(options = {}) {
     tutorState.learnLessonMarkdown = '';
     learnExplainContent.innerHTML = '<iframe class="embedded-lesson-frame" title="2.4-2 Graphical Understanding of Convolution Operation" src="/lessons/2_4-2/lesson.html?v=fresh-20260909-2"></iframe>';
     if (typeof replaceLearnContent === 'function') replaceLearnContent(learnExplainContent, learnExplainContent.innerHTML);
+    if (learnChatContent) learnChatContent.innerHTML = '';
     const tutorEmpty = document.getElementById('learnChatEmptyState');
     if (tutorEmpty) {
+      tutorEmpty.classList.remove('hidden');
       tutorEmpty.setAttribute('aria-hidden', 'false');
-      tutorEmpty.style.display = 'flex';
+      tutorEmpty.style.removeProperty('display');
+      tutorEmpty.style.removeProperty('visibility');
+      tutorEmpty.style.removeProperty('opacity');
     }
+    updateLearnChatEmptyState();
     hideSplash();
     return;
   }
@@ -3084,7 +3093,7 @@ async function sendLearnFollowup(rawPrompt, options = {}) {
     <div class="followup-bubble" id="${answerId}">
       <div class="fub-q">${escapeHtml(prompt)}</div>
       <div class="fub-a ghost">
-        ${buildSearchProgressMarkup('followup', promptLang)}
+        ${buildSearchProgressMarkup('learn-followup', promptLang)}
       </div>
     </div>
   `);
@@ -3130,46 +3139,9 @@ async function sendLearnFollowup(rawPrompt, options = {}) {
     return;
   }
 
-  let selectedGuidance = window.guidanceMode?.getSelection('learn') || null;
-  if (window.guidanceMode?.isEnabled() && !selectedGuidance && answerDiv) {
-    const guidanceResult = await window.guidanceMode.requestChoice({
-      scope: 'learn',
-      signal: localLearnSignal,
-      mount: answerDiv,
-      payload: {
-        prompt,
-        history: tutorState.learnHistory.slice(-8).map(({ role, content }) => ({
-          role,
-          content: String(content || '').slice(0, 2000)
-        })),
-        sectionId: String(tutorState.learnSectionId || '').slice(0, 80),
-        sectionTitle: String(tutorState.learnSectionTitle || '').slice(0, 180),
-        lessonContext: compactWhitespace(tutorState.learnLessonMarkdown || '').slice(0, 1200),
-        bookSource: 'new',
-        language: promptLang
-      }
-    });
-    if (guidanceResult.status === 'cancelled') {
-      if (learnAbort !== localLearnController) return;
-      learnFollowupInput.value = prompt;
-      autoResize(learnFollowupInput);
-      learnFollowupBtn.disabled = false;
-      if (learnFollowupInputPopover) {
-        learnFollowupInputPopover.value = prompt;
-        autoResize(learnFollowupInputPopover);
-      }
-      if (learnFollowupBtnPopover) learnFollowupBtnPopover.disabled = false;
-      if (typeof textbookFocusQaInput !== 'undefined' && textbookFocusQaInput) textbookFocusQaInput.value = prompt;
-      attachments.forEach(item => attachmentsLearn.push(item));
-      renderAttachPreview(attachmentsLearn, 'attachPreviewLearn');
-      return;
-    }
-    selectedGuidance = guidanceResult.guidance || null;
-  }
-
   if (answerDiv) {
     answerDiv.className = 'fub-a ghost';
-    answerDiv.innerHTML = buildSearchProgressMarkup('followup', promptLang);
+    answerDiv.innerHTML = buildSearchProgressMarkup('learn-followup', promptLang);
   }
   if (learnChatPopoverScroll) learnChatPopoverScroll.innerHTML = learnChatContent.innerHTML || '';
   syncTextbookFocusQaFromLearnChat();
@@ -3202,9 +3174,6 @@ async function sendLearnFollowup(rawPrompt, options = {}) {
 
   try {
     const selectedAnswerLength = normalizeAnswerStyle(options.answerLength || document.getElementById('answerLengthToggleLearn')?.value || 'balanced');
-    const selectedUseWebSearch = typeof options.useWebSearch === 'boolean'
-      ? options.useWebSearch
-      : Boolean(webSearchBtnLearn?.classList.contains('active'));
     const data = await callAsk(prompt, localLearnSignal, {
       mode: 'followup',
       history: tutorState.learnHistory.slice(-8),
@@ -3213,12 +3182,11 @@ async function sendLearnFollowup(rawPrompt, options = {}) {
       lessonContext: tutorState.learnLessonMarkdown,
       bookPages: tutorState.learnBookPages,
       webSources: tutorState.learnWebSources,
-      useWebSearch: selectedUseWebSearch,
+      useWebSearch: false,
       answerLength: selectedAnswerLength,
       answerStyleInstruction: getAnswerStyleInstruction(selectedAnswerLength, detectLang(prompt)),
       language: detectLang(prompt),
       attachments: getModelReadableAttachments(attachments),
-      guidance: selectedGuidance || undefined,
       session_id: tutorState.learnSessionId || undefined,
       origin: 'learn'
     });
@@ -3264,8 +3232,6 @@ async function sendLearnFollowup(rawPrompt, options = {}) {
       { role: 'assistant', content: data.explanation || '' }
     );
     if (typeof data.session_id === 'string' && data.session_id) tutorState.learnSessionId = data.session_id;
-    window.guidanceMode?.markDone();
-
     if (Array.isArray(data.bookPages) && data.bookPages.length) {
       tutorState.learnBookPages = data.bookPages;
       currentBookPageIndex = 0;
@@ -4539,6 +4505,7 @@ function showLearnView() {
   if (topbar) topbar.classList.add('hidden');
   setWorkspaceAccountBarVisible(false);
   updateSidebarNavActive(null);
+  updateLearnFullscreenButton();
 }
 
 function showSettingsView() {
@@ -5160,6 +5127,16 @@ function replayLiveSearchEvents(container, events = [], finalSources = [], lang 
 
 function buildSearchProgressMarkup(context = 'answer', lang = 'en') {
   const isZh = lang === 'zh';
+  if (context === 'learn-followup') {
+    return `
+      <div class="tutor-thinking" role="status" aria-live="polite">
+        <span class="tutor-thinking-label">${isZh ? '思考中…' : 'Thinking…'}</span>
+        <span class="tutor-thinking-dots" aria-hidden="true">
+          <i></i><i></i><i></i>
+        </span>
+      </div>
+    `;
+  }
   if (context === 'thinking') {
     return `
     <div class="search-progress-card" aria-live="polite">
@@ -5754,8 +5731,8 @@ if (learnResizer && learnExplainCol && learnChatCol) {
   const MIN_CHAT_WIDTH = 260;
   const MIN_CHAT_RATIO = 0.16;
   const MAX_CHAT_RATIO = 0.78;
-  const DEFAULT_CHAT_RATIO = 0.45;
-  const DEFAULT_SPLIT_VERSION = '2026-06-14-flex-resizable-v2';
+  const DEFAULT_CHAT_RATIO = 1 / 3;
+  const DEFAULT_SPLIT_VERSION = '2026-09-09-lesson-two-thirds';
   try {
     const storedVersion = localStorage.getItem(`${LEARN_LAYOUT_KEY}-version`);
     if (storedVersion !== DEFAULT_SPLIT_VERSION) {

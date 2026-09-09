@@ -1,0 +1,44 @@
+{
+  "section": "2.4-2 · Graphical Understanding of Convolution Operation",
+  "source_pages": [
+    178,
+    179,
+    180,
+    181,
+    182,
+    183,
+    184,
+    185,
+    186,
+    187,
+    188,
+    189,
+    190
+  ],
+  "sources_markdown": "# Sources and visual inventory\n\nNew extraction from the owner-supplied Linear Systems and Signals, Third Edition PDF on 2026-09-09. This package was authored without loading the old lesson cache.\n\n| Figure | Printed/PDF page | Crop bounds (left,top,right,bottom), at 1080×1320 | Placement |\n|---|---|---|---|\n| 2.7 a–i | 179 / 199 | 300,195,885,1145 | Section 3, immediately before independent Demo 1 |\n| 2.8 a–f | 182 / 202 | 205,200,810,1130 | Section 4, immediately before independent Demo 2 |\n| 2.9 a–f | 184 / 204 | 205,200,815,1135 | Section 5, immediately before independent Demo 3 |\n| 2.10 a–i | 186 / 206 | 220,185,805,1130 | Section 6, immediately before independent Demo 4 |\n\nThe original rendered pages were visually inspected before clipping. Only figure regions are included, without surrounding prose or page headers.\n\nFigure 2.7 does not state a full analytic formula for its decaying curve. The demo explicitly uses 2 exp(−(t+2)) u(t+2) as an analytic realization, not an equation quoted from the book. Other examples use their textbook formulas exactly.\n\npp. 178–180: motivation, t versus τ, graphical process, repeated output points. p. 181: Example 2.10. p. 183: Example 2.11. pp. 185–187: Example 2.12 and width. pp. 187–188: drills and Figures 2.11–2.13. pp. 189–190: intuitive explanation and Figure 2.14 (part of §2.4-2, not a different section).\n\nNo generative image service used; no missing-asset placeholders.\n",
+  "checkpoints_markdown": "# Checkpoints\n\n- What area does convolution add?\n- Which variable moves through the integral at a fixed output time?\n- The fixed support starts at −1; the moving edge ends at t+2. When can overlap begin?\n- At t=2 in Example 2.10, which interval contributes?\n- At t=0 in Example 2.11, what is c(0)?\n- At t=1.5 in Example 2.12, what are the overlap and area?\n- For supports [a,b] and [c,d], where can the convolution be nonzero?",
+  "assets": [
+    {
+      "path": "assets/textbook-crops/figure-2-7.png",
+      "kind": "textbook_figure"
+    },
+    {
+      "path": "assets/textbook-crops/figure-2-8.png",
+      "kind": "textbook_figure"
+    },
+    {
+      "path": "assets/textbook-crops/figure-2-9.png",
+      "kind": "textbook_figure"
+    },
+    {
+      "path": "assets/textbook-crops/figure-2-10.png",
+      "kind": "textbook_figure"
+    }
+  ],
+  "placeholders": [],
+  "progress": {
+    "current": 1,
+    "total": 7,
+    "verified": 0
+  }
+}

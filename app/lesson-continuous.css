@@ -73,6 +73,16 @@
   cursor: pointer;
 }
 
+#learnView #learnBody.lesson-continuous-mode .lesson-continuous-theme svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+#learnView #learnBody.lesson-continuous-mode .lesson-continuous-theme .hidden {
+  display: none;
+}
+
 #learnView #learnBody.lesson-continuous-mode .lesson-continuous-progress-track {
   width: min(100%, 1120px);
   height: 8px;
