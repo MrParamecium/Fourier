@@ -741,6 +741,66 @@ const learnTopbarActions = document.querySelector('#learnView .learn-topbar-acti
 const learnToolbarCenter = document.querySelector('#learnExplainToolbar .learn-toolbar-center');
 const learnViewSelectorEl = document.getElementById('learnViewSelector');
 const learnFullscreenBtn = document.getElementById('learnFullscreenBtn');
+document.getElementById('tutorToolbar')?.addEventListener('click', async (event) => {
+  const action = event.target.closest('[data-tutor-action]')?.dataset.tutorAction;
+  if (!action) return;
+  const menu = document.getElementById('tutorMoreMenu');
+  const list = document.getElementById('tutorRecentList');
+  const toggle = (name, open) => document.querySelector(`[data-tutor-action="${name}"]`).setAttribute('aria-expanded', String(open));
+  if (action === 'more') {
+    menu.hidden = !menu.hidden;
+    toggle('more', !menu.hidden);
+    return;
+  }
+  menu.hidden = true;
+  toggle('more', false);
+  if (action === 'preferences') { showPreferenceView(); return; }
+  if (action === 'settings') { showSettingsView(); return; }
+  if (action === 'recent') {
+    list.hidden = !list.hidden;
+    toggle('recent', !list.hidden);
+    if (list.hidden) return;
+    list.replaceChildren();
+    const sessions = loadRecentConversations().filter(s => s.origin === 'learn');
+    if (!sessions.length) list.textContent = '暂无对话记录';
+    sessions.forEach(session => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.textContent = session.customTitle || session.summaryTitle || session.title || session.sectionTitle || '对话';
+      const subtitle = document.createElement('small');
+      subtitle.textContent = `${session.sectionTitle || ''} · ${new Date(session.timestamp).toLocaleDateString()}`;
+      button.append(subtitle);
+      button.addEventListener('click', async () => {
+        list.hidden = true;
+        toggle('recent', false);
+        await window.loadHistoricalSession(recentConversationKey(session));
+      });
+      list.append(button);
+    });
+    return;
+  }
+  if (action === 'new') {
+    saveCurrentLearnSession('tutor:new');
+    learnAbort?.abort();
+    learnAbort = null;
+    clearInterval(window.loadingTimerLearn);
+    tutorState.learnHistory = [];
+    tutorState.learnSessionId = null;
+    tutorState.learnSessionStartTime = Date.now();
+    learnChatContent.replaceChildren();
+    list.hidden = true;
+    toggle('recent', false);
+    updateLearnChatEmptyState();
+    syncTextbookFocusQaFromLearnChat();
+    learnFollowupInput.focus();
+  }
+});
+document.addEventListener('click', event => {
+  if (event.target.closest('#tutorToolbar')) return;
+  const menu = document.getElementById('tutorMoreMenu');
+  if (menu) menu.hidden = true;
+  document.querySelector('[data-tutor-action="more"]')?.setAttribute('aria-expanded', 'false');
+});
 if (learnTopbarActions && learnViewSelectorEl && !learnTopbarActions.contains(learnViewSelectorEl)) {
   learnTopbarActions.insertBefore(learnViewSelectorEl, learnTopbarActions.firstChild);
 } else if (!learnTopbarActions && learnToolbarCenter && learnViewSelectorEl && !learnToolbarCenter.contains(learnViewSelectorEl)) {
@@ -760,6 +820,7 @@ let isLearnChatPopoverOpen = false;
 let isConvolutionFocusWorkspaceActive = false;
 let convolutionFocusSidebarState = null;
 let isLearnBrowserFullscreen = false;
+let learnFullscreenChatCollapsed = null;
 let learnFullscreenSidebarState = null;
 let learnFullscreenReturnFocus = null;
 let learnFullscreenPending = false;
@@ -923,6 +984,7 @@ function setChapterOverviewLayoutActive(active) {
     learnBody.classList.toggle('chapter-overview-active', Boolean(active) && !isOverviewLesson);
     learnBody.classList.toggle('chapter-overview-split-active', Boolean(active) && isOverviewLesson);
   }
+  updateLearnFullscreenButton();
   if (!active) return;
 
   learnPanelFocus = 'normal';
@@ -1399,6 +1461,7 @@ window.resetConvolutionFocusWorkspace = resetConvolutionFocusWorkspace;
 function updateLearnFullscreenButton() {
   if (!learnFullscreenBtn) return;
   const inLesson = Boolean(learnView && !learnView.classList.contains('hidden'));
+  const inOverview = Boolean(learnBody?.matches('.chapter-overview-active, .chapter-overview-split-active'));
   const supported = inLesson && typeof document.documentElement?.requestFullscreen === 'function';
   const active = isLearnBrowserFullscreen;
   const pending = learnFullscreenPending;
@@ -1410,7 +1473,7 @@ function updateLearnFullscreenButton() {
   learnFullscreenBtn.setAttribute('aria-label', title);
   learnFullscreenBtn.setAttribute('aria-pressed', String(active));
   learnFullscreenBtn.disabled = !supported || pending;
-  learnFullscreenBtn.classList.toggle('hidden', !inLesson);
+  learnFullscreenBtn.classList.toggle('hidden', !inLesson || inOverview);
 }
 
 function restoreLearnFullscreenSidebarState() {
@@ -1435,6 +1498,11 @@ function syncLearnBrowserFullscreenState() {
   const wasPending = learnFullscreenPending;
 
   if (isRootFullscreen && inLesson) {
+    if (!wasActive && learnFullscreenChatCollapsed !== null) {
+      isLearnChatCollapsed = learnFullscreenChatCollapsed;
+      learnPanelFocus = 'normal';
+      isLearnChatPopoverOpen = false;
+    }
     isLearnBrowserFullscreen = true;
     learnFullscreenPending = false;
     appContainer?.classList.add('learn-browser-fullscreen');
@@ -1442,6 +1510,8 @@ function syncLearnBrowserFullscreenState() {
     document.getElementById('leftSidebar')?.classList.add('collapsed');
     document.getElementById('tocSidebar')?.classList.add('collapsed');
   } else {
+    // Capture fullscreen preference before the normal layout reopens Tutor.
+    if (wasActive) learnFullscreenChatCollapsed = isLearnChatCollapsed;
     isLearnBrowserFullscreen = false;
     learnFullscreenPending = false;
     appContainer?.classList.remove('learn-browser-fullscreen');
@@ -1451,7 +1521,11 @@ function syncLearnBrowserFullscreenState() {
   // Fullscreen changes the CSS state that controls the Tutor minimize button
   // and restore orb. Re-apply the shared chat state contract immediately so
   // both controls reflect the confirmed browser state in the same frame.
-  applyLearnChatCollapsedState();
+  if (wasActive && !isLearnBrowserFullscreen && inLesson) {
+    openLearnQaSidebar();
+  } else {
+    applyLearnChatCollapsedState();
+  }
   updateLearnFullscreenButton();
   notifyConvolutionFocusLayoutChange();
 
@@ -2073,7 +2147,7 @@ function getOverviewSummaryHtml(sectionId, sectionTitle, subsections = [], optio
   }).join('');
 
   const heroHtml = hasPreludePanel ? '' : `
-      <div class="chapter-overview-map">
+      <div class="chapter-overview-map chapter-overview-layout-b">
         <div class="chapter-overview-book-spread" aria-label="${escapeHtml(rawTitle || sectionTitle || sectionId)} overview">
           <section class="chapter-overview-hero chapter-overview-book-page chapter-overview-book-page-left">
             <div class="chapter-overview-page-rule" aria-hidden="true"></div>
@@ -2349,7 +2423,7 @@ if (learnChatContent && learnChatEmptyState) {
   updateLearnChatEmptyState();
 }
 
-function openChapterOverviewMode(sectionId, sectionTitle, subsections = []) {
+function openChapterOverviewMode(sectionId, sectionTitle, subsections = [], options = {}) {
   console.log('[openChapterOverviewMode]', { sectionId, sectionTitle, subsectionCount: subsections.length, currentBook });
   if (learnAbort) learnAbort.abort();
   window.guidanceMode?.resetScope('learn');
@@ -2382,8 +2456,11 @@ function openChapterOverviewMode(sectionId, sectionTitle, subsections = []) {
   subsections.forEach(sub => tocItems.push({ title: sub, depth: 2, anchor: '' }));
   buildToc(tocItems);
 
-  renderChapterOverviewContent(sectionId, sectionTitle, subsections);
-  loadChapterOverviewPrelude(sectionId, sectionTitle, subsections);
+  if (options.render) options.render();
+  else {
+    renderChapterOverviewContent(sectionId, sectionTitle, subsections);
+    loadChapterOverviewPrelude(sectionId, sectionTitle, subsections);
+  }
   if (learnExplainScroll) learnExplainScroll.scrollTop = 0;
 }
 
@@ -5237,13 +5314,8 @@ async function sendQuestion(rawPrompt, source = 'auto') {
     .filter(a => a && a.type === 'image' && a.dataUrl)
     .map(a => ({ dataUrl: a.dataUrl, name: a.name || 'image' }));
 
-  const answerStyleToggle = isFollowup
-    ? (document.getElementById('answerLengthToggleLearn')?.value || 'balanced')
-    : (answerLengthToggleMain?.value || document.getElementById('answerLengthToggleLearn')?.value || 'balanced');
-  const useWebSearch = isFollowup
-    ? Boolean(webSearchBtnLearn?.classList.contains('active'))
-    : Boolean(webSearchToggleBtnMain?.classList.contains('active'));
-  const answerLength = normalizeAnswerStyle(answerStyleToggle);
+  const useWebSearch = false;
+  const answerLength = 'balanced';
 
 
   userInput.value = prompt;
@@ -5313,46 +5385,7 @@ async function sendQuestion(rawPrompt, source = 'auto') {
     return;
   }
 
-  let selectedGuidance = window.guidanceMode?.getSelection('main') || null;
-  if (window.guidanceMode?.isEnabled() && !selectedGuidance) {
-    const guidanceMountId = `main-guidance-${Date.now()}`;
-    renderMainConversationThread({
-      pendingPrompt: prompt,
-      pendingImages: turnImages,
-      pendingAssistantHtml: `<div class="guidance-mount" id="${guidanceMountId}"></div>`,
-      pendingAssistantClass: 'main-chat-turn-pending'
-    });
-    const guidanceMount = document.getElementById(guidanceMountId);
-    const guidanceResult = await window.guidanceMode.requestChoice({
-      scope: 'main',
-      signal: questionAbortController.signal,
-      mount: guidanceMount,
-      payload: {
-        prompt,
-        history: tutorState.chatHistory.slice(-8).map(({ role, content }) => ({
-          role,
-          content: String(content || '').slice(0, 2000)
-        })),
-        bookSource: 'new',
-        language: detectLang(prompt)
-      }
-    });
-    if (guidanceResult.status === 'cancelled') {
-      if (currentAbortController !== questionAbortController) return;
-      currentAbortController = null;
-      stopBtn.classList.add('hidden');
-      setStatus('', 'idle');
-      const targetInput = isFollowup ? followupInput : userInput;
-      targetInput.value = prompt;
-      autoResize(targetInput);
-      const targetAttachments = isFollowup ? attachmentsFollowup : attachmentsMain;
-      visibleAttachments.forEach(item => targetAttachments.push(item));
-      renderAttachPreview(targetAttachments, isFollowup ? 'attachPreviewFollowup' : 'attachPreviewMain');
-      setSendState();
-      return;
-    }
-    selectedGuidance = guidanceResult.guidance || null;
-  }
+  const selectedGuidance = null;
   // Grounded turn: swap the neutral "Thinking…" card for the grounded one.
   renderMainConversationThread({
     pendingPrompt: prompt,
