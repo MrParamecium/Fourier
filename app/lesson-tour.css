@@ -1,0 +1,12 @@
+.lesson-tour-ring { position:fixed; z-index:20000; pointer-events:none; border:3px solid #76bb9a; border-radius:8px; box-shadow:0 0 0 100vmax rgba(19,40,51,.52); }
+.lesson-tour-dialog { position:fixed; z-index:20001; width:310px; max-width:calc(100vw - 24px); padding:20px; border:1px solid #ccdfd5; border-radius:8px; background:#fff; color:#263c47; box-shadow:0 12px 42px #172f3826; font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; letter-spacing:0; }
+.lesson-tour-dialog h2 { font-family:inherit; font-weight:600; font-size:19px; line-height:1.4; margin:10px 0; color:#263c47; }
+.lesson-tour-dialog p { margin:0 0 18px; color:#5c717a; }
+.lesson-tour-count { font-size:12px; color:#458366; font-weight:650; }
+.lesson-tour-actions { display:flex; align-items:center; gap:8px; }
+.lesson-tour-actions button { font:inherit; cursor:pointer; padding:8px 12px; border:1px solid #d6e2e2; border-radius:6px; background:white; color:#526873; }
+.lesson-tour-actions .lesson-tour-skip { margin-right:auto; border:0; padding-left:0; }
+.lesson-tour-actions .lesson-tour-next { background:#32795c; border-color:#32795c; color:white; }
+.lesson-tour-actions button:disabled { opacity:.5; cursor:default; }
+.lesson-tour-actions button:focus-visible { outline:3px solid #49a285; outline-offset:3px; }
+@media(max-width:700px) { .lesson-tour-dialog { top:auto!important; left:12px!important; bottom:12px; width:calc(100vw - 24px); padding:16px; } }

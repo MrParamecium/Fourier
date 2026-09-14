@@ -2788,6 +2788,54 @@ body.textbook-focus-active .learn-chat-popover {
   padding: 12px 0 34px;
 }
 
+/* Section overview option B: compact glass intro beside the study sequence. */
+.chapter-overview-layout-b {
+  display: grid !important;
+  grid-template-columns: minmax(260px, .85fr) minmax(360px, 1.15fr) !important;
+  gap: 36px !important;
+  align-items: start !important;
+  padding: 40px !important;
+  border: 1px solid rgba(255,255,255,.72) !important;
+  border-radius: 12px !important;
+  background: linear-gradient(135deg, rgba(255,255,255,.42), rgba(218,246,242,.32), rgba(227,239,255,.38)) !important;
+  box-shadow: 0 12px 30px rgba(42,76,92,.08) !important;
+  backdrop-filter: blur(22px) !important;
+  -webkit-backdrop-filter: blur(22px) !important;
+}
+.chapter-overview-layout-b::before,
+.chapter-overview-layout-b::after { display:none !important; }
+.chapter-overview-layout-b .chapter-overview-hero,
+.chapter-overview-layout-b .chapter-overview-list-block {
+  min-height: 0 !important;
+  padding: 8px 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+.chapter-overview-layout-b .chapter-overview-title {
+  max-width: 520px !important;
+  font-size: clamp(30px, 4vw, 52px) !important;
+  line-height: 1.08 !important;
+}
+.chapter-overview-layout-b .chapter-overview-summary { max-width: 560px !important; }
+.chapter-overview-layout-b .chapter-overview-grid { display:grid !important; gap:12px !important; }
+.chapter-overview-layout-b .chapter-overview-subcard {
+  min-height: 72px !important;
+  padding: 16px 18px !important;
+  border: 1px solid rgba(255,255,255,.78) !important;
+  border-radius: 8px !important;
+  background: rgba(255,255,255,.48) !important;
+  box-shadow: 0 3px 12px rgba(42,76,92,.05) !important;
+  transform:none !important;
+}
+.chapter-overview-layout-b .chapter-overview-subcard:hover { background:rgba(255,255,255,.78) !important; }
+.chapter-overview-layout-b .chapter-overview-note-pin { display:none !important; }
+@media (max-width: 820px) {
+  .chapter-overview-layout-b { grid-template-columns: 1fr !important; padding: 24px !important; gap: 20px !important; }
+}
+
 .chapter-overview-map {
   display: grid;
   grid-template-columns: minmax(280px, 0.72fr) minmax(360px, 1fr);
@@ -23216,7 +23264,7 @@ body {
 
 #learnView #learnBody:not(.chat-collapsed) #learnChatCol:not(.is-chat-active) #learnChatEmptyState,
 #learnView #learnBody:not(.chat-collapsed) #learnChatCol:not(.is-chat-active) .learn-chat-empty-state.edu-tutor-empty {
-  transform: translateY(clamp(18px, 3.2vh, 38px)) !important;
+  transform: translateY(clamp(-24px, -2vh, -12px)) !important;
 }
 
 #learnView #learnChatCol #learnFollowupBar,
@@ -24355,7 +24403,7 @@ body {
 }
 
 #mistakeNotebookView .mistake-list-item {
-  min-height: 96px !important;
+  min-height: 64px !important;
   scroll-snap-align: start;
 }
 
@@ -26303,6 +26351,7 @@ body {
 
 
 .welcome.home-ask-workspace .home-ask-toolbar {
+  display: none !important;
   position: relative !important;
   overflow: visible !important;
 }
@@ -29901,10 +29950,40 @@ body {
   line-height: 1.28 !important;
 }
 
-.welcome.home-ask-workspace .home-ask-toolbar {
-  min-height: 34px !important;
-  padding-bottom: 1px !important;
-  gap: 8px !important;
+#welcomeScreen #searchBox .home-ask-toolbar {
+  display: none !important;
+}
+
+#welcomeScreen #searchBox.home-ask-composer {
+  min-height: 96px !important;
+  height: auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  padding: 16px 20px !important;
+}
+
+#welcomeScreen #searchBox .home-ask-input-row {
+  display: grid !important;
+  grid-template-columns: 40px minmax(0, 1fr) 40px !important;
+  align-items: center !important;
+  gap: 12px !important;
+  flex: 0 0 auto !important;
+  margin: 0 !important;
+}
+
+#welcomeScreen #searchBox :is(.home-ask-attach, .home-ask-send) {
+  width: 40px !important;
+  height: 40px !important;
+  margin: 0 !important;
+  align-self: center !important;
+}
+
+#welcomeScreen #searchBox #userInput {
+  min-height: 40px !important;
+  line-height: 24px !important;
+  padding: 8px 0 !important;
+  margin: 0 !important;
 }
 
 .welcome.home-ask-workspace .home-mode-toggle,
@@ -33256,29 +33335,45 @@ body.learn-resizing #learnView #learnBody #learnChatCol {
 .app.convolution-focus-workspace-active #mainContent #learnView #learnBody.convolution-focus-workspace-active[data-convolution-focus="true"].chat-collapsed .learn-chat-fab,
 .app.learn-browser-fullscreen.app.learn-browser-fullscreen #mainContent #learnView #learnBody.chat-collapsed #learnChatFab,
 .app.learn-browser-fullscreen.app.learn-browser-fullscreen #mainContent #learnView #learnBody.chat-collapsed .learn-chat-fab {
-  position: fixed !important;
-  inset: auto 24px 24px auto !important;
+  position: absolute !important;
+  inset: 14px 14px auto auto !important;
   z-index: 130 !important;
   display: inline-flex !important;
-  width: 66px !important;
-  min-width: 66px !important;
-  height: 66px !important;
-  min-height: 66px !important;
+  width: 42px !important;
+  min-width: 42px !important;
+  height: 42px !important;
+  min-height: 42px !important;
   padding: 0 !important;
   align-items: center !important;
   justify-content: center !important;
-  border: 1px solid rgba(255, 255, 255, 0.7) !important;
-  border-radius: 50% !important;
-  background: #b9e3f5 !important;
+  gap: 8px !important;
+  border: 1px solid #accfbe !important;
+  border-radius: 8px !important;
+  background: #e5f3ee !important;
   background-image: none !important;
-  color: #184e77 !important;
+  color: #327158 !important;
   opacity: 1 !important;
   visibility: visible !important;
   pointer-events: auto !important;
-  box-shadow:
-    0 0 0 3px rgba(186, 230, 253, 0.68),
-    0 16px 34px rgba(14, 116, 144, 0.18) !important;
+  box-shadow: 0 2px 7px #21493912 !important;
   cursor: pointer !important;
+}
+
+#learnChatFab .tutor-capsule-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 21px;
+  height: 21px;
+  font-size: 21px;
+  line-height: 1;
+}
+
+#learnChatFab .tutor-capsule-label {
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
 }
 
 .app.convolution-focus-workspace-active #learnChatFab .tutor-agent-mark,
@@ -33343,9 +33438,7 @@ body.learn-resizing #learnView #learnBody #learnChatCol {
 .app.convolution-focus-workspace-active #learnChatFab:is(:hover, :focus-visible),
 .app.learn-browser-fullscreen #learnChatFab:is(:hover, :focus-visible) {
   transform: translateY(-2px) !important;
-  box-shadow:
-    0 0 0 4px rgba(186, 230, 253, 0.86),
-    0 20px 38px rgba(14, 116, 144, 0.24) !important;
+  box-shadow: 0 5px 16px #243a5024 !important;
 }
 
 .app.convolution-focus-workspace-active #learnChatFab:is(:hover, :focus-visible) .tutor-agent-tooltip,
@@ -34146,31 +34239,57 @@ body.learn-resizing #learnView #learnBody #learnChatCol {
   color: #94a3b8 !important;
 }
 
-/* Transparent glass chapter-progress badges remain readable over the sidebar. */
+/* Mint completion indicators, matching preview option A. */
+#learnChatCol .tutor-toolbar { position: relative; z-index: 20; display: flex; align-items: center; justify-content: flex-end; gap: 6px; flex: 0 0 62px; padding: 14px 54px 14px 14px; border-bottom: 0; }
+#learnChatCol:has(#learnTutorMinimizeBtn.hidden) .tutor-toolbar { padding-right: 14px; }
+#learnChatCol #learnTutorMinimizeBtn { position: absolute !important; inset: 14px 14px auto auto !important; width: 34px !important; min-width: 34px !important; height: 34px !important; padding: 0 !important; border: 0 !important; border-radius: 6px !important; background: transparent !important; color: inherit; box-shadow: none !important; backdrop-filter: none; }
+.tutor-panel-icon { display: inline-block; font-size: 20px; line-height: 1; transform: rotate(180deg); }
+.tutor-panel-direction { position: absolute; left: 8px; top: 12px; font-size: 10px; line-height: 1; }
+#learnChatFab .tutor-panel-direction { left: 12px; top: 16px; }
+#learnBody #learnChatFab { color: #327158 !important; }
+#learnChatCol .tutor-toolbar button { display: flex; align-items: center; justify-content: center; gap: 10px; width: 34px; height: 34px; padding: 6px; border: 0; border-radius: 6px; background: transparent; color: inherit; cursor: pointer; font-size: 20px; }
+#learnChatCol .tutor-toolbar button:hover { background: rgba(130,180,160,.15); }
+#tutorMoreMenu { position: absolute; right: 12px; top: 50px; width: 185px; padding: 6px; border: 1px solid #dce5e2; border-radius: 8px; background: #fff; color: #24313c; box-shadow: 0 8px 25px #203a3014; }
+#learnChatCol #tutorMoreMenu button { width: 100%; justify-content: flex-start; font-size: 14px; }
+#tutorRecentList { position: absolute; z-index: 19; top: 56px; left: 0; right: 0; max-height: 65%; overflow: auto; padding: 16px; background: #f2faf7; color: #24313c; border-bottom: 1px solid #dce5e2; }
+#tutorRecentList button { display: block; width: 100%; padding: 14px 0; border: 0; border-bottom: 1px solid #dce5e2; background: transparent; color: inherit; text-align: left; cursor: pointer; overflow-wrap: anywhere; }
+#tutorRecentList small { display: block; margin-top: 6px; color: #65776e; }
+#tutorMoreMenu[hidden], #tutorRecentList[hidden] { display: none !important; }
 #courseSyllabus .syllabus-chapter .chapter-progress {
-  color: #047857;
-  background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.56), rgba(255, 255, 255, 0.16)),
-    radial-gradient(circle at 24% 0%, rgba(255, 255, 255, 0.78), transparent 62%);
-  border-color: rgba(255, 255, 255, 0.74);
-  box-shadow:
-    0 5px 12px rgba(128, 53, 83, 0.10),
-    inset 0 1px 0 rgba(255, 255, 255, 0.92),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.24);
-  backdrop-filter: blur(14px) saturate(145%);
-  -webkit-backdrop-filter: blur(14px) saturate(145%);
+  color: #318764;
+  background: #e5f6ed;
+  border: 0;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 46px;
+  height: 25px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 #courseSyllabus .syllabus-chapter .chapter-progress.is-done {
-  color: #047857;
-  background:
-    linear-gradient(145deg, rgba(209, 250, 229, 0.66), rgba(167, 243, 208, 0.24)),
-    radial-gradient(circle at 24% 0%, rgba(255, 255, 255, 0.82), transparent 62%);
-  border-color: rgba(255, 255, 255, 0.80);
-  box-shadow:
-    0 5px 12px rgba(5, 150, 105, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.94),
-    inset 0 -1px 0 rgba(110, 231, 183, 0.22);
+  color: #318764;
+  background: #e5f6ed;
+}
+
+#courseSyllabus :is(.syllabus-subsection, .syllabus-section, .syllabus-chapter).is-completed::before {
+  background: #dcf2e6;
+  color: #318764;
+  border: 0;
+  width: 20px;
+  height: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  box-sizing: border-box;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 .embedded-lesson-frame {
   display: block;

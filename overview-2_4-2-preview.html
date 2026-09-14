@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en" data-theme="morning">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>2.4-2 Chapter Overview Preview</title>
+  <style>
+    :root { --bg:linear-gradient(135deg,#c7efff,#e6fbf4 52%,#c3f1dc); --ink:#243b45; --muted:#587174; --accent:#2c8b70; --glass:rgba(255,255,255,.36); --card:rgba(255,255,255,.43); --line:rgba(255,255,255,.72); --shadow:0 24px 70px rgba(53,96,88,.14); }
+    html[data-theme="dusk"] { --bg:linear-gradient(135deg,#ffd0c9,#ffe8ed 52%,#ffcbd9); --ink:#46383d; --muted:#775f66; --accent:#bb5f70; --glass:rgba(255,255,255,.34); --card:rgba(255,255,255,.42); --line:rgba(255,255,255,.7); --shadow:0 24px 70px rgba(148,47,62,.14); }
+    *{box-sizing:border-box} body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font:15px/1.6 Inter,ui-sans-serif,system-ui,-apple-system,sans-serif} .wrap{max-width:1220px;margin:0 auto;padding:42px clamp(20px,5vw,72px) 64px}
+    .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}.crumb{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:750}.theme{border:1px solid var(--line);border-radius:999px;padding:7px;background:rgba(255,255,255,.22);backdrop-filter:blur(16px);box-shadow:inset 0 1px rgba(255,255,255,.8)} .theme button{border:0;border-radius:999px;background:transparent;color:var(--muted);padding:7px 13px;cursor:pointer;font:inherit;font-size:12px}.theme button.active{background:rgba(255,255,255,.7);color:var(--ink);box-shadow:0 2px 8px rgba(57,70,72,.08)}
+    .glass{display:grid;grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);gap:clamp(34px,6vw,84px);padding:clamp(30px,5vw,64px);border:1px solid var(--line);border-radius:18px;background:var(--glass);backdrop-filter:blur(30px) saturate(150%);box-shadow:var(--shadow);position:relative;overflow:hidden}.glass:before{content:"";position:absolute;inset:1px;border-radius:17px;pointer-events:none;background:linear-gradient(120deg,rgba(255,255,255,.3),transparent 42%)} section{position:relative;z-index:1}.eyebrow{font-size:11px;letter-spacing:.13em;color:var(--accent);font-weight:800}.code{font:700 13px/1.2 ui-monospace,SFMono-Regular,monospace;color:var(--muted);margin-top:20px}.title{font-size:clamp(34px,4.2vw,56px);line-height:1.08;letter-spacing:-.02em;margin:10px 0 22px;max-width:560px}.summary{font-size:16px;line-height:1.75;color:var(--muted);max-width:520px;margin:0 0 30px}.goal-title{font-size:12px;text-transform:uppercase;letter-spacing:.11em;color:var(--accent);font-weight:800;margin:0 0 12px}.goals{display:grid;gap:9px;padding:0;margin:0;list-style:none}.goals li{display:flex;gap:10px;align-items:flex-start;color:var(--muted)}.goals li:before{content:"✓";color:var(--accent);font-weight:800}.sequence-title{font-size:21px;margin:0 0 18px}.diagram{border:1px solid var(--line);border-radius:14px;padding:18px 16px 14px;background:rgba(255,255,255,.18);box-shadow:inset 0 1px rgba(255,255,255,.7);margin-bottom:22px}.diagram svg{display:block;width:100%;height:auto}.caption{font-size:12px;color:var(--muted);margin:10px 2px 0}.steps{display:grid;gap:10px}.step{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:center;padding:13px 15px;border:1px solid var(--line);border-radius:10px;background:var(--card);backdrop-filter:blur(17px);box-shadow:inset 0 1px rgba(255,255,255,.65)}.num{width:27px;height:27px;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,.58);color:var(--accent);font-weight:800;font-size:12px}.step strong{display:block;font-size:14px}.step span{display:block;color:var(--muted);font-size:12px;margin-top:1px}.footer{display:flex;justify-content:space-between;align-items:center;margin-top:24px;color:var(--muted);font-size:12px}.start{border:1px solid rgba(81,155,126,.45);border-radius:9px;padding:10px 15px;color:var(--accent);background:rgba(225,249,237,.4);font:inherit;cursor:pointer;box-shadow:inset 0 1px rgba(255,255,255,.75)}
+    @media(max-width:820px){.glass{grid-template-columns:1fr;padding:28px 22px;gap:30px}.top{align-items:flex-start;gap:16px}.title{font-size:38px}.footer{align-items:flex-start;gap:16px;flex-direction:column}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="top"><div class="crumb">Chapter 2 · Section 2.4</div><div class="theme" aria-label="Theme"><button class="active" data-theme="morning">Morning</button><button data-theme="dusk">Dusk</button></div></div>
+    <article class="glass">
+      <section>
+        <div class="eyebrow">CHAPTER OVERVIEW</div><div class="code">2.4-2</div>
+        <h1 class="title">Graphical Understanding of Convolution Operation</h1>
+        <p class="summary">Convolution becomes easier to reason about when you draw the two signals, flip one, and slide it across the other. This section shows how overlap and signed area build one output value at a time.</p>
+        <h2 class="goal-title">After this overview</h2>
+        <ul class="goals"><li>Identify the interval where two signals overlap.</li><li>Track how shifting changes the product.</li><li>Use the signed area to explain the output.</li></ul>
+      </section>
+      <section>
+        <h2 class="sequence-title">The idea in one picture</h2>
+        <div class="diagram">
+          <svg viewBox="0 0 680 178" role="img" aria-label="Flip, shift, overlap, integrate diagram">
+            <defs><linearGradient id="flow" x1="0" x2="1"><stop stop-color="#56a4c4"/><stop offset="1" stop-color="#5ab18d"/></linearGradient></defs>
+            <g font-family="Inter,system-ui,sans-serif" text-anchor="middle"><g transform="translate(72 70)"><circle r="38" fill="rgba(255,255,255,.5)" stroke="rgba(255,255,255,.8)"/><path d="M-20 11h10V-16h10v27h10" fill="none" stroke="#3c8b88" stroke-width="4" stroke-linejoin="round"/><text y="64" fill="var(--ink)" font-size="13" font-weight="700">Flip</text></g><path d="M119 70h55" stroke="url(#flow)" stroke-width="3"/><path d="m166 62 10 8-10 8" fill="none" stroke="#5a9c87" stroke-width="3"/><g transform="translate(244 70)"><circle r="38" fill="rgba(255,255,255,.5)" stroke="rgba(255,255,255,.8)"/><path d="M-24 12h48M-12 12V-13M-12-13h25" fill="none" stroke="#3c8b88" stroke-width="4" stroke-linecap="round"/><text y="64" fill="var(--ink)" font-size="13" font-weight="700">Shift</text></g><path d="M291 70h55" stroke="url(#flow)" stroke-width="3"/><path d="m338 62 10 8-10 8" fill="none" stroke="#5a9c87" stroke-width="3"/><g transform="translate(416 70)"><circle r="38" fill="rgba(255,255,255,.5)" stroke="rgba(255,255,255,.8)"/><path d="M-24 12h48M-14 12V-8h28v20" fill="none" stroke="#3c8b88" stroke-width="4"/><path d="M-4-8h14" stroke="#d57679" stroke-width="5"/><text y="64" fill="var(--ink)" font-size="13" font-weight="700">Overlap</text></g><path d="M463 70h55" stroke="url(#flow)" stroke-width="3"/><path d="m510 62 10 8-10 8" fill="none" stroke="#5a9c87" stroke-width="3"/><g transform="translate(588 70)"><circle r="38" fill="rgba(255,255,255,.5)" stroke="rgba(255,255,255,.8)"/><path d="M-20 12h40M-14 12V-5l9-10 9 10v17" fill="none" stroke="#3c8b88" stroke-width="4" stroke-linejoin="round"/><text y="64" fill="var(--ink)" font-size="13" font-weight="700">Integrate</text></g></g>
+          </svg>
+          <p class="caption">One output point comes from the signed product area over the current overlap.</p>
+        </div>
+        <div class="steps"><div class="step"><div class="num">01</div><div><strong>Read and fix</strong><span>Choose the signal that stays against τ.</span></div></div><div class="step"><div class="num">02</div><div><strong>Flip and shift</strong><span>Move the reflected signal by output time t.</span></div></div><div class="step"><div class="num">03</div><div><strong>Measure the result</strong><span>Integrate the signed product and repeat.</span></div></div></div>
+      </section>
+    </article>
+    <div class="footer"><span>Lesson overview · reading time 1 min</span><button class="start" type="button">Start lesson ↗</button></div>
+  </main>
+  <script>document.querySelectorAll('[data-theme]').forEach(btn=>btn.addEventListener('click',()=>{document.documentElement.dataset.theme=btn.dataset.theme;document.querySelectorAll('[data-theme]').forEach(b=>b.classList.toggle('active',b===btn));}));</script>
+</body>
+</html>

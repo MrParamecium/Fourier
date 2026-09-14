@@ -67,7 +67,7 @@
     }
   </script>
   <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,500;0,700;1,600&family=Fira+Code:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=1716">
+  <link rel="stylesheet" href="style.css?v=20260910-home-compact">
   <link rel="stylesheet" href="css/ui-friction-v123.css?v=1222">
   <link rel="icon" type="image/png" href="logo.png?v=1778674347">
 
@@ -714,8 +714,19 @@
             <div class="learn-resizer" id="learnResizer"></div>
 
             <div class="learn-chat-col" id="learnChatCol">
+              <div class="tutor-toolbar" id="tutorToolbar">
+                <button type="button" data-tutor-action="new" title="新对话" aria-label="新对话"><i class="ph-bold ph-note-pencil" aria-hidden="true"></i></button>
+                <button type="button" data-tutor-action="recent" title="Recent" aria-label="Recent" aria-expanded="false"><i class="ph-bold ph-clock-counter-clockwise" aria-hidden="true"></i></button>
+                <button type="button" data-tutor-action="more" title="更多" aria-label="更多" aria-expanded="false"><i class="ph-bold ph-dots-three" aria-hidden="true"></i></button>
+                <div id="tutorMoreMenu" hidden>
+                  <button type="button" data-tutor-action="preferences"><i class="ph-bold ph-user-gear" aria-hidden="true"></i>Preferences</button>
+                  <button type="button" data-tutor-action="settings"><i class="ph-bold ph-gear" aria-hidden="true"></i>Settings</button>
+                </div>
+              </div>
+              <div id="tutorRecentList" hidden></div>
               <button class="learn-tutor-minimize hidden" id="learnTutorMinimizeBtn" type="button" title="Collapse Tutor" aria-label="Collapse Tutor" aria-controls="learnChatCol">
-                <i class="ph-bold ph-caret-right" aria-hidden="true"></i>
+                <i class="ph-bold ph-sidebar-simple tutor-panel-icon" aria-hidden="true"></i>
+                <i class="ph-bold ph-caret-right tutor-panel-direction" aria-hidden="true"></i>
               </button>
               <div class="ambient-background" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; overflow: hidden;">
                   <div class="orb orb-edu-blue" style="position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.45; width: 55vw; height: 55vh; background: #7DD3FC; top: -10%; left: -5%; animation: float 25s infinite alternate ease-in-out;"></div>
@@ -797,11 +808,8 @@
             </span>
           </button>
           <button class="learn-chat-fab hidden" id="learnChatFab" type="button" title="Open Tutor" aria-label="Open Tutor" aria-controls="learnChatCol">
-            <span class="tutor-agent-mark" aria-hidden="true">
-              <i class="ph-fill ph-student tutor-agent-main-icon"></i>
-              <span class="tutor-agent-ai-badge">AI</span>
-            </span>
-            <span class="tutor-agent-tooltip" role="tooltip">Tutor Agent</span>
+            <i class="ph-bold ph-sidebar-simple tutor-panel-icon" aria-hidden="true"></i>
+            <i class="ph-bold ph-caret-left tutor-panel-direction" aria-hidden="true"></i>
           </button>
           <div class="learn-chat-popover hidden" id="learnChatPopover">
             <div class="learn-chat-popover-head" id="learnChatPopoverHead">
@@ -1492,7 +1500,10 @@
   <script src="convolution-practice.js?v=1800"></script>
   <script src="convolution-exit-check.js?v=1900"></script>
   <script src="lesson-render.js?v=1614"></script>
-  <script src="app.js?v=1707"></script>
+  <script src="app.js?v=20260910-home-direct"></script>
   <script src="ui-friction-fixes.js?v=1607"></script>
+  <link rel="stylesheet" href="lesson-tour.css?v=1">
+  <script src="chapter-navigation.js?v=10"></script>
+  <script src="lesson-tour.js?v=2"></script>
 </body>
 </html>

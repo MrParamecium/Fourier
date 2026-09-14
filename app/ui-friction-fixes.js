@@ -107,13 +107,15 @@
       });
       let badge = chBtn.querySelector('.chapter-progress');
       if (total > 0) {
-        const wantText = done === total ? '✓ done' : (done + '/' + total);
+        const wantText = done === total ? '✓' : (done + '/' + total);
         if (!badge) {
           badge = document.createElement('span');
           badge.className = 'chapter-progress';
           chBtn.appendChild(badge);
         }
-        if (badge.textContent !== wantText) badge.textContent = wantText;
+        const degree = total ? Math.round(done / total * 360) : 0;
+        badge.style.setProperty('--progress-deg', `${degree}deg`);
+        if (badge.textContent !== wantText) badge.innerHTML = `<span>${wantText}</span>`;
         setClassIfChanged(badge, 'is-done', done === total);
       } else if (badge) {
         badge.remove();
