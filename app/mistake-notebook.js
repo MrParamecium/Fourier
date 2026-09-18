@@ -207,7 +207,7 @@ function renderMistakeNotebook() {
     ? items.filter(item => [item.title, item.tags, item.notes, item.aiDraftNotes, item.aiAnswer].join(' ').toLowerCase().includes(query))
     : items;
 
-  if (mistakeCountPill) mistakeCountPill.textContent = `${items.length} problem${items.length === 1 ? '' : 's'}`;
+  if (mistakeCountPill) mistakeCountPill.textContent = (window.FourierI18N ? window.FourierI18N.t('nb.count') : '{n} problems').replace('{n}', items.length);
 
   if (mistakeList) {
     mistakeList.innerHTML = filtered.length
@@ -220,7 +220,7 @@ function renderMistakeNotebook() {
           </span>
         </button>
       `).join('')
-      : `<div class="mistake-list-empty">${items.length ? 'No matching problems.' : 'Upload your first problem image.'}</div>`;
+      : `<div class="mistake-list-empty">${items.length ? (window.FourierI18N ? window.FourierI18N.t('nb.listMatch') : 'No matching problems.') : (window.FourierI18N ? window.FourierI18N.t('nb.listEmpty') : 'Upload your first problem image.')}</div>`;
 
     mistakeList.querySelectorAll('.mistake-list-item').forEach(btn => {
       btn.addEventListener('click', () => {

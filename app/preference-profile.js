@@ -1,11 +1,8 @@
 // User-authored teaching instructions. Signed-in users persist them server-side; guests keep them in the current tab.
 
 const MAX_TEACHING_INSTRUCTIONS_LENGTH = 1000;
+const tr = k => (window.FourierI18N ? window.FourierI18N.t(k) : k);
 
-const preferenceView = document.getElementById('preferenceView');
-const navPreferenceBtn = document.getElementById('navPreferenceBtn');
-const preferencePageBackBtn = document.getElementById('preferencePageBackBtn');
-const preferenceSidebarSummary = document.getElementById('preferenceSidebarSummary');
 const preferenceProfileEditor = document.getElementById('preferenceProfileEditor');
 const preferenceSaveBtn = document.getElementById('preferenceSaveBtn');
 const preferenceClearBtn = document.getElementById('preferenceClearBtn');
@@ -24,16 +21,7 @@ function summarizeTeachingInstructions(instructions) {
   return text.length > 88 ? `${text.slice(0, 86)}...` : text;
 }
 
-function updatePreferenceSidebarSummary() {
-  if (!preferenceSidebarSummary) return;
-  const kicker = document.createElement('div');
-  kicker.className = 'preference-sidebar-kicker';
-  kicker.textContent = 'Teaching instructions';
-  const summary = document.createElement('div');
-  summary.className = 'preference-sidebar-text';
-  summary.textContent = summarizeTeachingInstructions(getTeachingInstructions());
-  preferenceSidebarSummary.replaceChildren(kicker, summary);
-}
+function updatePreferenceSidebarSummary() {}
 
 function setPreferenceSaveState(message, tone = 'idle') {
   if (!preferenceSaveState) return;
@@ -53,7 +41,7 @@ function syncPreferenceEditorFromMemory() {
   updatePreferenceCharacterCount();
   updatePreferenceSidebarSummary();
   const updatedAt = userMemory && typeof userMemory.updatedAt === 'string' ? userMemory.updatedAt : '';
-  setPreferenceSaveState(updatedAt ? `Saved ${updatedAt.slice(0, 10)}` : 'Not saved', 'idle');
+  setPreferenceSaveState(updatedAt ? `${tr('settings.teaching.savedOn')} ${updatedAt.slice(0, 10)}` : tr('settings.teaching.notSaved'), 'idle');
 }
 
 function setPreferenceControlsBusy(isBusy) {
@@ -62,14 +50,14 @@ function setPreferenceControlsBusy(isBusy) {
 }
 
 async function saveTeachingInstructions(value) {
-  if (!currentUser) throw new Error('Sign in or continue as a guest first');
+  if (!currentUser) throw new Error(tr('settings.teaching.guestFirst'));
   const teachingInstructions = String(value || '').trim();
   if (teachingInstructions.length > MAX_TEACHING_INSTRUCTIONS_LENGTH) {
-    throw new Error(`Teaching instructions cannot exceed ${MAX_TEACHING_INSTRUCTIONS_LENGTH} characters`);
+    throw new Error(tr('settings.teaching.exceeds'));
   }
 
   setPreferenceControlsBusy(true);
-  setPreferenceSaveState('Saving...', 'working');
+  setPreferenceSaveState(tr('settings.teaching.saving'), 'working');
   try {
     if (currentUser.isGuest) {
       userMemory = {
@@ -78,14 +66,14 @@ async function saveTeachingInstructions(value) {
         updatedAt: new Date().toISOString()
       };
       saveGuestMemory(userMemory);
-      setPreferenceSaveState(teachingInstructions ? 'Saved in this tab' : 'Cleared', 'saved');
+      setPreferenceSaveState(teachingInstructions ? tr('settings.teaching.savedTab') : tr('settings.teaching.cleared'), 'saved');
     } else {
       const res = await apiFetch('/api/memory', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ teachingInstructions })
       });
-      if (res.status === 401) throw new Error('Your session expired. Please sign in again');
+      if (res.status === 401) throw new Error(tr('settings.teaching.sessionExpired'));
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || `Save failed (HTTP ${res.status})`);
       userMemory = data.memory || {
@@ -93,7 +81,7 @@ async function saveTeachingInstructions(value) {
         teachingInstructions,
         updatedAt: new Date().toISOString()
       };
-      setPreferenceSaveState(teachingInstructions ? 'Saved and active' : 'Cleared', 'saved');
+      setPreferenceSaveState(teachingInstructions ? tr('settings.teaching.saved') : tr('settings.teaching.cleared'), 'saved');
     }
 
     if (preferenceProfileEditor) preferenceProfileEditor.value = getTeachingInstructions();
@@ -109,7 +97,7 @@ function bindPreferenceControls() {
     preferenceProfileEditor.addEventListener('input', () => {
       updatePreferenceCharacterCount();
       const overLimit = preferenceProfileEditor.value.length > MAX_TEACHING_INSTRUCTIONS_LENGTH;
-      setPreferenceSaveState(overLimit ? 'Content exceeds 1000 characters. Shorten it before saving' : 'Unsaved changes', overLimit ? 'error' : 'working');
+      setPreferenceSaveState(overLimit ? tr('settings.teaching.overLimit') : tr('settings.teaching.unsaved'), overLimit ? 'error' : 'working');
     });
   }
 
@@ -118,7 +106,7 @@ function bindPreferenceControls() {
       try {
         await saveTeachingInstructions(preferenceProfileEditor ? preferenceProfileEditor.value : '');
       } catch (err) {
-        setPreferenceSaveState(err.message || 'Save failed', 'error');
+        setPreferenceSaveState(err.message || tr('settings.teaching.saveFailed'), 'error');
       }
     });
   }
@@ -128,7 +116,7 @@ function bindPreferenceControls() {
       try {
         await saveTeachingInstructions('');
       } catch (err) {
-        setPreferenceSaveState(err.message || 'Clear failed', 'error');
+        setPreferenceSaveState(err.message || tr('settings.teaching.clearFailed'), 'error');
       }
     });
   }

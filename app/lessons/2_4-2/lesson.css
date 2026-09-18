@@ -20,3 +20,10 @@ main>.equation{font-size:1.2rem}
 .theme-toggle svg{display:block;grid-area:1 / 1;transform:none;margin:0;flex:none}
 .embedded-lesson main>h1,.embedded-lesson main>h1+hr{display:none}
 .embedded-lesson main{padding-top:28px}
+.reading-modes{display:flex;gap:3px;padding:3px;border:1px solid #ffffff99;border-radius:8px;background:#ffffff26;backdrop-filter:blur(18px)}
+.reading-modes button{font:600 13px/1.4 system-ui;padding:8px;border:0;border-radius:5px;background:transparent;color:var(--ink)}
+.reading-modes button[aria-pressed=true]{background:#ffffff80}
+.reading-pager{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:5px;padding:5px 7px;border:1px solid color-mix(in srgb,var(--accent) 22%,#fff);border-radius:999px;background:color-mix(in srgb,var(--page) 62%,transparent);backdrop-filter:blur(24px) saturate(150%);-webkit-backdrop-filter:blur(24px) saturate(150%);box-shadow:0 12px 28px color-mix(in srgb,var(--ink) 10%,transparent),inset 0 1px 0 #ffffff99;z-index:30;font:700 13px/1 system-ui;color:var(--muted)}
+.reading-pager button{display:grid;place-items:center;width:32px;height:32px;padding:0;border:0;border-radius:50%;background:transparent;color:var(--ink);font:700 20px/1 system-ui;transition:background .18s,transform .18s}.reading-pager button:hover:not(:disabled){background:color-mix(in srgb,var(--accent) 14%,transparent);transform:translateY(-1px)}.reading-pager button:disabled{opacity:.3}.reading-pager span{min-width:42px;text-align:center;font-variant-numeric:tabular-nums;letter-spacing:.03em}
+html[data-reading-mode=pages] main{padding-bottom:100px}
+html[data-reading-mode=pages] main>h2{margin-top:28px}

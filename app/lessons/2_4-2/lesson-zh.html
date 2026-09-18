@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="zh" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2.4-2 · 卷积运算的图解理解</title>
+<script>try{document.documentElement.dataset.theme=localStorage.getItem('fourier-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){}</script>
+<link rel="stylesheet" href="lesson.css?v=20260916-reading">
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]}};</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script></head>
+<body data-lesson-revision="fresh-20260909"><header class="progress-shell"><div class="progress-inner"><div class="progress-title">2.4-2 · 卷积运算的图解理解</div><div class="progress-meta"><div class="progress-text"><span id="progress-position">当前 1/7</span><span>·</span><span id="progress-percent">14%</span></div><div class="lesson-tools"><button id="lesson-fullscreen" class="theme-toggle" type="button" aria-label="进入全屏" title="进入全屏"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M21 16v5h-5"/></svg></button><button class="theme-toggle" id="theme-toggle" type="button" aria-label="切换到深色模式"><svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3M5 5l2 2m10 10 2 2M5 19l2-2M17 7l2-2"/></svg><svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.464.402.807a6.25 6.25 0 0 0 8.268 8.268c.344-.215.83-.004.803.397Z"/></svg></button></div></div><div class="track"><div class="bar" id="progress-bar"></div></div></div></header>
+<main><h1>2.4-2 · 卷积运算的图解理解</h1>
+<hr>
+<p>你已经掌握了卷积积分。这一节要把这个积分变成一幅可以移动、检查、并据此计算的图。</p>
+<p><strong>你的目标：</strong>选定一个时刻，找出重叠区间，算出一个输出值。在所有重要的时间区间上重复这一过程，就能得到完整的输出。</p>
+<p><strong>路线：</strong>一个完整的可视化流程、三个教材例题、再加一个简短的迁移检验。上图始终使用积分变量 <span class="math"><span class="math">\(\tau\)</span></span>；下图使用输出时间 <span class="math"><span class="math">\(t\)</span></span>。</p>
+<h2 id="section-1" data-section="1">1. 为什么要画卷积？</h2>
+<hr>
+<ul>
+<li><strong>处理复杂信号。</strong> 图形能帮你分辨哪些部分真正对积分有贡献。</li>
+<li><strong>预判输出形状。</strong> 在动笔推导之前，先看出结果从哪里开始、增长、转向、结束。</li>
+<li><strong>从实测曲线出发。</strong> 没有精确公式时，图形描述仍能让我们估算乘积的积分。</li>
+</ul>
+<p>重要的量是<strong>乘积下方的带符号面积</strong>，而不是两条曲线之间的面积。位于横轴下方的部分按负值计入。</p>
+<p><strong>记住这一点：</strong>没有重叠就意味着乘积为零。但有重叠不一定意味着结果非零：正负贡献可能相互抵消。</p>
+<fieldset class="checkpoint" data-checkpoint="why"><legend>快速检测</legend><p>卷积累加的是哪种面积？</p><div class="answers"><button type="button" data-correct="true" data-feedback="正确。先把两个高度相乘，再连同符号一起积分。">乘积的带符号面积</button><button type="button" data-correct="false" data-feedback="间隙不是被积函数。我们需要的是逐点乘积。">两条曲线之间的间隙</button></div><p class="feedback" aria-live="polite">选择一个答案来检验本节。</p></fieldset>
+<h2 id="section-2" data-section="2">2. 两个时间变量，两种不同的分工</h2>
+<hr>
+<div class="equation">\[c(t)=\int_{-\infty}^{\infty}x(\tau)g(t-\tau)\,d\tau\]</div>
+<ul>
+<li><span class="math"><span class="math">\(t\)</span></span> 选定输出时刻。计算一个积分时把它固定不动。</li>
+<li><span class="math"><span class="math">\(\tau\)</span></span> 沿上图扫描。它是被积分掉的变量。</li>
+<li>结果是一个数 <span class="math"><span class="math">\(c(t)\)</span></span>，放在下图中时刻 <span class="math"><span class="math">\(t\)</span></span> 的位置。</li>
+</ul>
+<p>在 <span class="math"><span class="math">\(t=1\)</span></span> 时，上图包含 <span class="math"><span class="math">\(x(\tau)\)</span></span> 和 <span class="math"><span class="math">\(g(1-\tau)\)</span></span>。在 <span class="math"><span class="math">\(t=2\)</span></span> 时，上图包含 <span class="math"><span class="math">\(x(\tau)\)</span></span> 和 <span class="math"><span class="math">\(g(2-\tau)\)</span></span>。改变 <span class="math"><span class="math">\(t\)</span></span> 移动的是第二条曲线；上图坐标轴的名称并不改变。</p>
+<p><strong>一个有用的类比：</strong>把视频定格在一帧上来测量它的面积。滑块负责选帧，积分在这一帧内扫描。</p>
+<fieldset class="checkpoint" data-checkpoint="time"><legend>快速检测</legend><p>在固定的输出时刻下，哪个变量扫过积分？</p><div class="answers"><button type="button" data-correct="true" data-feedback="正确。τ 被积分掉；t 选定输出时刻。">τ</button><button type="button" data-correct="false" data-feedback="一个积分中 t 保持不变。τ 沿上图扫过。">t</button></div><p class="feedback" aria-live="polite">选择一个答案来检验本节。</p></fieldset>
+<h2 id="section-3" data-section="3">3. 得到一个输出点的四个动作</h2>
+<hr>
+<ul>
+<li><strong>1 · 读取并固定。</strong> 把两个信号都画在 <span class="math"><span class="math">\(\tau\)</span></span> 轴上，并选定哪一个保持固定。</li>
+<li><strong>2 · 翻转。</strong> 把另一个信号关于 <span class="math"><span class="math">\(\tau=0\)</span></span> 反射，得到 <span class="math"><span class="math">\(g(-\tau)\)</span></span>。</li>
+<li><strong>3 · 平移。</strong> 把翻转后的信号移动 <span class="math"><span class="math">\(t\)</span></span>：<span class="math"><span class="math">\(t\)</span></span> 为正向右移，<span class="math"><span class="math">\(t\)</span></span> 为负向左移。</li>
+<li><strong>4 · 相乘并积分。</strong> 在每个 <span class="math"><span class="math">\(\tau\)</span></span> 处把高度相乘，并把重叠区间上的带符号贡献累加起来。</li>
+</ul>
+<p>为什么向右平移会得到 <span class="math"><span class="math">\(g(t-\tau)\)</span></span>？先写 <span class="math"><span class="math">\(\phi(\tau)=g(-\tau)\)</span></span>。于是：</p>
+<div class="equation">\[\phi(\tau-t)=g\bigl(-(\tau-t)\bigr)=g(t-\tau)\]</div>
+<p>教材把“重复”列为第五个动作。这里重复就是第 4 步中的<strong>播放</strong>动作：每个新的 <span class="math"><span class="math">\(t\)</span></span> 给出 <span class="math"><span class="math">\(c(t)\)</span></span> 上的另一个点。</p>
+<p><strong>图 2.7：</strong>固定的台阶从 <span class="math"><span class="math">\(\tau=-1\)</span></span> 开始；原衰减信号从 <span class="math"><span class="math">\(-2\)</span></span> 开始、高度为 2。它的反射边缘在 <span class="math"><span class="math">\(+2\)</span></span>，平移后的边缘在 <span class="math"><span class="math">\(t+2\)</span></span>。</p>
+<p>原图只以图形方式给出了形状，没有给出完整的解析衰减规律。演示采用 <span class="math"><span class="math">\(g(s)=2e^{-(s+2)}u(s+2)\)</span></span> 作为该形状的显式解析实现。边缘位置和重叠情形直接来自教材；演示中的数值面积基于这一实现。</p>
+<figure class="lesson-figure"><img src="assets/textbook-crops/figure-2-7.png" alt="图 2.7 (a–i)，教材第 179 页：原始信号、反射、平移后的重叠以及输出点。" loading="lazy"><figcaption>图 2.7 (a–i)，教材第 179 页：原始信号、反射、平移后的重叠以及输出点。</figcaption></figure>
+<section class="demo" data-demo="figure27" aria-label="图 2.7 · 图解流程" id="demo-figure27">
+<div class="demo-head"><h3>图 2.7 · 图解流程</h3><div class="stepbar" role="group" aria-label="卷积步骤"><button type="button" data-step="1" aria-pressed="false">1 · 读取并固定</button><button type="button" data-step="2" aria-pressed="false">2 · 翻转</button><button type="button" data-step="3" aria-pressed="false">3 · 平移与重叠</button><button type="button" data-step="4" aria-pressed="false">4 · 相乘并积分</button></div></div>
+<div class="demo-controls"><b>信号</b><ul data-functions></ul><div class="time-controls"><label>时间 t = <output data-time-value>0.00</output><input type="range" aria-label="图 2.7 · 图解流程 时间" disabled></label><button data-play type="button" hidden>播放</button><button data-reset type="button">重置</button></div>
+<div class="readouts"><div>当前区间<output data-interval></output></div><div>积分上下限<output data-bounds></output></div><div>带符号面积<output data-area-value></output></div></div><p data-step-note></p><div data-times aria-label="重要时刻"></div></div>
+<div class="legend"><span class="blue">固定信号</span><span class="orange">移动信号</span><span class="purple">乘积面积</span></div><div data-status role="status">滚动到此处以加载这个独立的 GeoGebra 演示。</div>
+<div class="plot-host" data-upper id="figure27-upper"></div><div class="linked-divider">同一个 t：上图的乘积面积就是下图的输出值</div><div class="plot-host" data-lower id="figure27-lower"></div><div class="demo-note" data-model-note></div></section>
+<p>重叠必须满足 <span class="math"><span class="math">\(\tau\ge-1\)</span></span> 且 <span class="math"><span class="math">\(\tau\le t+2\)</span></span>。因此只有当 <span class="math"><span class="math">\(t&gt;-3\)</span></span> 时重叠才开始。对于演示中给定的实现：</p>
+<div class="equation">\[c(t)=\begin{cases}0,&amp;t\le-3,\\2\left(1-e^{-(t+3)}\right),&amp;t&gt;-3.\end{cases}\]</div>
+<p><strong>试一试：</strong>比较 <span class="math"><span class="math">\(t=-4\)</span></span>、<span class="math"><span class="math">\(-2\)</span></span> 和 <span class="math"><span class="math">\(1\)</span></span>。输出时间为负并不自动意味着零：这些信号在零之前就已经开始了。</p>
+<fieldset class="checkpoint" data-checkpoint="workflow"><legend>快速检测</legend><p>固定支集从 −1 开始；移动边缘在 t+2 结束。重叠何时开始？</p><div class="answers"><button type="button" data-correct="true" data-feedback="正确：t+2 &gt; −1。在 −3 处相切时面积为零。">t &gt; −3</button><button type="button" data-correct="false" data-feedback="两个原始信号都在零之前开始。解 t+2 &gt; −1。">只有 t &gt; 0</button></div><p class="feedback" aria-live="polite">选择一个答案来检验本节。</p></fieldset>
+<h2 id="section-4" data-section="4">4. 例题 2.10 · 两个因果指数信号</h2>
+<hr>
+<p><strong>教材信号</strong></p>
+<ul>
+<li><span class="math"><span class="math">\(x(t)=e^{-t}u(t)\)</span></span>。</li>
+<li><span class="math"><span class="math">\(h(t)=e^{-2t}u(t)\)</span></span>。</li>
+</ul>
+<p>保持 <span class="math"><span class="math">\(x(\tau)\)</span></span> 固定。先翻转 <span class="math"><span class="math">\(h\)</span></span> 再平移。固定信号要求 <span class="math"><span class="math">\(\tau\ge0\)</span></span>；移动信号要求 <span class="math"><span class="math">\(t-\tau\ge0\)</span></span>，即 <span class="math"><span class="math">\(\tau\le t\)</span></span>。</p>
+<figure class="lesson-figure"><img src="assets/textbook-crops/figure-2-8.png" alt="图 2.8 (a–f)，教材第 182 页：因果输入、负 t 时无重叠、正时间重叠以及输出。" loading="lazy"><figcaption>图 2.8 (a–f)，教材第 182 页：因果输入、负 t 时无重叠、正时间重叠以及输出。</figcaption></figure>
+<section class="demo" data-demo="example210" aria-label="例题 2.10 · 两个因果指数信号" id="demo-example210">
+<div class="demo-head"><h3>例题 2.10 · 两个因果指数信号</h3><div class="stepbar" role="group" aria-label="卷积步骤"><button type="button" data-step="1" aria-pressed="false">1 · 读取并固定</button><button type="button" data-step="2" aria-pressed="false">2 · 翻转</button><button type="button" data-step="3" aria-pressed="false">3 · 平移与重叠</button><button type="button" data-step="4" aria-pressed="false">4 · 相乘并积分</button></div></div>
+<div class="demo-controls"><b>信号</b><ul data-functions></ul><div class="time-controls"><label>时间 t = <output data-time-value>0.00</output><input type="range" aria-label="例题 2.10 · 两个因果指数信号 时间" disabled></label><button data-play type="button" hidden>播放</button><button data-reset type="button">重置</button></div>
+<div class="readouts"><div>当前区间<output data-interval></output></div><div>积分上下限<output data-bounds></output></div><div>带符号面积<output data-area-value></output></div></div><p data-step-note></p><div data-times aria-label="重要时刻"></div></div>
+<div class="legend"><span class="blue">固定信号</span><span class="orange">移动信号</span><span class="purple">乘积面积</span></div><div data-status role="status">滚动到此处以加载这个独立的 GeoGebra 演示。</div>
+<div class="plot-host" data-upper id="example210-upper"></div><div class="linked-divider">同一个 t：上图的乘积面积就是下图的输出值</div><div class="plot-host" data-lower id="example210-lower"></div><div class="demo-note" data-model-note></div></section>
+<ul>
+<li><strong>当 <span class="math"><span class="math">\(t&lt;0\)</span></span> 时：</strong>两个不等式无法同时成立。没有重叠，所以 <span class="math"><span class="math">\(y(t)=0\)</span></span>。</li>
+<li><strong>当 <span class="math"><span class="math">\(t\ge0\)</span></span> 时：</strong>交集为 <span class="math"><span class="math">\(0\le\tau\le t\)</span></span>。这就是积分上下限。</li>
+</ul>
+<div class="equation">\[\begin{aligned}y(t)&amp;=\int_0^t e^{-\tau}e^{-2(t-\tau)}\,d\tau\\&amp;=e^{-2t}\int_0^t e^{\tau}\,d\tau\\&amp;=e^{-t}-e^{-2t},\qquad t\ge0.\end{aligned}\]</div>
+<div class="equation">\[y(t)=\left(e^{-t}-e^{-2t}\right)u(t)\]</div>
+<p><strong>检查形状：</strong>从零开始，上升，然后衰减回零。重叠区间在变长，但信号的权重也在变化；仅凭重叠长度得不到答案。</p>
+<fieldset class="checkpoint" data-checkpoint="causal"><legend>快速检测</legend><p>在例题 2.10 中取 t=2，哪个区间有贡献？</p><div class="answers"><button type="button" data-correct="true" data-feedback="正确。把 τ ≥ 0 与 τ ≤ t 取交集。">0 ≤ τ ≤ 2</button><button type="button" data-correct="false" data-feedback="固定的因果信号在 τ 为负时为零。">−2 ≤ τ ≤ 0</button></div><p class="feedback" aria-live="polite">选择一个答案来检验本节。</p></fieldset>
+<h2 id="section-5" data-section="5">5. 例题 2.11 · 正贡献与负贡献</h2>
+<hr>
+<p><strong>教材信号</strong></p>
+<ul>
+<li><span class="math"><span class="math">\(x(t)=u(t)\)</span></span>。</li>
+<li><span class="math"><span class="math">\(g(t)=2e^{-t}\)</span></span>，当 <span class="math"><span class="math">\(t\ge0\)</span></span>（段 A）。</li>
+<li><span class="math"><span class="math">\(g(t)=-2e^{2t}\)</span></span>，当 <span class="math"><span class="math">\(t&lt;0\)</span></span>（段 B）。</li>
+</ul>
+<p>教材特意翻转更复杂的双边信号。保持 <span class="math"><span class="math">\(x(\tau)\)</span></span> 固定：只有 <span class="math"><span class="math">\(\tau\ge0\)</span></span> 有贡献。移动信号在 <span class="math"><span class="math">\(\tau=t\)</span></span> 处更换公式。</p>
+<figure class="lesson-figure"><img src="assets/textbook-crops/figure-2-9.png" alt="图 2.9 (a–f)，教材第 184 页：两段分支、反射、正负贡献以及输出。" loading="lazy"><figcaption>图 2.9 (a–f)，教材第 184 页：两段分支、反射、正负贡献以及输出。</figcaption></figure>
+<section class="demo" data-demo="example211" aria-label="例题 2.11 · 一个双边信号" id="demo-example211">
+<div class="demo-head"><h3>例题 2.11 · 一个双边信号</h3><div class="stepbar" role="group" aria-label="卷积步骤"><button type="button" data-step="1" aria-pressed="false">1 · 读取并固定</button><button type="button" data-step="2" aria-pressed="false">2 · 翻转</button><button type="button" data-step="3" aria-pressed="false">3 · 平移与重叠</button><button type="button" data-step="4" aria-pressed="false">4 · 相乘并积分</button></div></div>
+<div class="demo-controls"><b>信号</b><ul data-functions></ul><div class="time-controls"><label>时间 t = <output data-time-value>0.00</output><input type="range" aria-label="例题 2.11 · 一个双边信号 时间" disabled></label><button data-play type="button" hidden>播放</button><button data-reset type="button">重置</button></div>
+<div class="readouts"><div>当前区间<output data-interval></output></div><div>积分上下限<output data-bounds></output></div><div>带符号面积<output data-area-value></output></div></div><p data-step-note></p><div data-times aria-label="重要时刻"></div></div>
+<div class="legend"><span class="blue">固定信号</span><span class="orange">移动信号</span><span class="purple">乘积面积</span></div><div data-status role="status">滚动到此处以加载这个独立的 GeoGebra 演示。</div>
+<div class="plot-host" data-upper id="example211-upper"></div><div class="linked-divider">同一个 t：上图的乘积面积就是下图的输出值</div><div class="plot-host" data-lower id="example211-lower"></div><div class="demo-note" data-model-note></div></section>
+<p><strong>当 <span class="math"><span class="math">\(t&lt;0\)</span></span> 时</strong>，正分支的终点落到固定台阶的左侧。只有负分支发生重叠：</p>
+<div class="equation">\[c(t)=\int_0^{\infty}-2e^{2(t-\tau)}\,d\tau=-e^{2t}.\]</div>
+<p><strong>当 <span class="math"><span class="math">\(t\ge0\)</span></span> 时</strong>，在移动分支的边界 <span class="math"><span class="math">\(\tau=t\)</span></span> 处把积分拆开：</p>
+<div class="equation">\[\begin{aligned}c(t)&amp;=\int_0^t2e^{-(t-\tau)}\,d\tau+\int_t^{\infty}-2e^{2(t-\tau)}\,d\tau\\&amp;=2(1-e^{-t})-1=1-2e^{-t}.\end{aligned}\]</div>
+<div class="equation">\[c(t)=\begin{cases}-e^{2t},&amp;t&lt;0,\\1-2e^{-t},&amp;t\ge0.\end{cases}\]</div>
+<p>两个分段都给出 <span class="math"><span class="math">\(c(0)=-1\)</span></span>。在 <span class="math"><span class="math">\(t=\ln2\)</span></span> 时，正负面积恰好抵消——尽管存在重叠。无限长的尾段用解析方法计算；绘图窗口只显示每段尾部有限的一部分。</p>
+<fieldset class="checkpoint" data-checkpoint="signed"><legend>快速检测</legend><p>在例题 2.11 中取 t=0，c(0) 是多少？</p><div class="answers"><button type="button" data-correct="true" data-feedback="正确。只有负分支有贡献，积分为 −1。">−1</button><button type="button" data-correct="false" data-feedback="零轴下方的面积为负。不要取绝对值。">+1</button></div><p class="feedback" aria-live="polite">选择一个答案来检验本节。</p></fieldset>
+<h2 id="section-6" data-section="6">6. 例题 2.12 · 边缘决定分段</h2>
+<hr>
+<p><strong>教材信号</strong></p>
+<ul>
+<li><span class="math"><span class="math">\(x(t)=1\)</span></span>，当 <span class="math"><span class="math">\(-1\le t\le1\)</span></span>；其他处为零。</li>
+<li><span class="math"><span class="math">\(g(t)=t/3\)</span></span>，当 <span class="math"><span class="math">\(0\le t\le3\)</span></span>；其他处为零。</li>
+</ul>
+<p>利用交换律翻转更简单的矩形：计算 <span class="math"><span class="math">\(g*x\)</span></span>。保持斜坡 <span class="math"><span class="math">\(g(\tau)\)</span></span> 固定，移动 <span class="math"><span class="math">\(x(t-\tau)\)</span></span>。</p>
+<p>矩形是对称的，翻转后轮廓不变。端点标记交换位置以体现反射。平移后它的边缘是 <span class="math"><span class="math">\(t-1\)</span></span> 和 <span class="math"><span class="math">\(t+1\)</span></span>。</p>
+<figure class="lesson-figure"><img src="assets/textbook-crops/figure-2-10.png" alt="图 2.10 (a–i)，教材第 186 页：原始信号、进入、经过、离开、分离以及分段输出。" loading="lazy"><figcaption>图 2.10 (a–i)，教材第 186 页：原始信号、进入、经过、离开、分离以及分段输出。</figcaption></figure>
+<section class="demo" data-demo="example212" aria-label="例题 2.12 · 矩形与斜坡" id="demo-example212">
+<div class="demo-head"><h3>例题 2.12 · 矩形与斜坡</h3><div class="stepbar" role="group" aria-label="卷积步骤"><button type="button" data-step="1" aria-pressed="false">1 · 读取并固定</button><button type="button" data-step="2" aria-pressed="false">2 · 翻转</button><button type="button" data-step="3" aria-pressed="false">3 · 平移与重叠</button><button type="button" data-step="4" aria-pressed="false">4 · 相乘并积分</button></div></div>
+<div class="demo-controls"><b>信号</b><ul data-functions></ul><div class="time-controls"><label>时间 t = <output data-time-value>0.00</output><input type="range" aria-label="例题 2.12 · 矩形与斜坡 时间" disabled></label><button data-play type="button" hidden>播放</button><button data-reset type="button">重置</button></div>
+<div class="readouts"><div>当前区间<output data-interval></output></div><div>积分上下限<output data-bounds></output></div><div>带符号面积<output data-area-value></output></div></div><p data-step-note></p><div data-times aria-label="重要时刻"></div></div>
+<div class="legend"><span class="blue">固定信号</span><span class="orange">移动信号</span><span class="purple">乘积面积</span></div><div data-status role="status">滚动到此处以加载这个独立的 GeoGebra 演示。</div>
+<div class="plot-host" data-upper id="example212-upper"></div><div class="linked-divider">同一个 t：上图的乘积面积就是下图的输出值</div><div class="plot-host" data-lower id="example212-lower"></div><div class="demo-note" data-model-note></div></section>
+<p><strong>先找区间再积分。</strong>重叠是 <span class="math"><span class="math">\([0,3]\)</span></span> 与 <span class="math"><span class="math">\([t-1,t+1]\)</span></span> 的交集：</p>
+<div class="equation">\[L=\max(0,t-1),\qquad R=\min(3,t+1).\]</div>
+<p>若 <span class="math"><span class="math">\(R\le L\)</span></span>，面积为零。否则乘积在重叠内部等于 <span class="math"><span class="math">\(\tau/3\)</span></span>：</p>
+<div class="equation">\[c(t)=\int_L^R\frac{\tau}{3}\,d\tau=\frac{R^2-L^2}{6}.\]</div>
+<ul>
+<li><strong>进入，<span class="math"><span class="math">\(-1\le t&lt;1\)</span></span>：</strong><span class="math"><span class="math">\(L=0\)</span></span>，<span class="math"><span class="math">\(R=t+1\)</span></span>，所以 <span class="math"><span class="math">\(c(t)=(t+1)^2/6\)</span></span>。</li>
+<li><strong>经过，<span class="math"><span class="math">\(1\le t&lt;2\)</span></span>：</strong><span class="math"><span class="math">\(L=t-1\)</span></span>，<span class="math"><span class="math">\(R=t+1\)</span></span>，所以 <span class="math"><span class="math">\(c(t)=2t/3\)</span></span>。</li>
+<li><strong>离开，<span class="math"><span class="math">\(2\le t&lt;4\)</span></span>：</strong><span class="math"><span class="math">\(L=t-1\)</span></span>，<span class="math"><span class="math">\(R=3\)</span></span>，所以 <span class="math"><span class="math">\(c(t)=[9-(t-1)^2]/6\)</span></span>。</li>
+</ul>
+<div class="equation">\[c(t)=\begin{cases}0,&amp;t&lt;-1,\\(t+1)^2/6,&amp;-1\le t&lt;1,\\2t/3,&amp;1\le t&lt;2,\\\frac{9-(t-1)^2}{6},&amp;2\le t&lt;4,\\0,&amp;t\ge4.\end{cases}\]</div>
+<p><strong>验证拼接点：</strong><span class="math"><span class="math">\(c(-1)=c(4)=0\)</span></span>，<span class="math"><span class="math">\(c(1)=2/3\)</span></span>，<span class="math"><span class="math">\(c(2)=4/3\)</span></span>。支集横跨 <span class="math"><span class="math">\([-1,4]\)</span></span>，宽度 <span class="math"><span class="math">\(5=2+3\)</span></span>。</p>
+<p>把矩形想象成一个沿斜坡滑动的窗口。在中间那段，窗口宽度保持 2，但覆盖到斜坡更高的部分。这就是面积持续增长的原因。</p>
+<fieldset class="checkpoint" data-checkpoint="finite"><legend>快速检测</legend><p>在例题 2.12 中取 t=1.5，重叠区间和面积是多少？</p><div class="answers"><button type="button" data-correct="true" data-feedback="正确。对 τ/3 从 0.5 积到 2.5。">0.5 ≤ τ ≤ 2.5；面积 = 1</button><button type="button" data-correct="false" data-feedback="矩形只覆盖 [t−1,t+1]，不是整条斜坡。">0 ≤ τ ≤ 3；面积 = 1.5</button></div><p class="feedback" aria-live="polite">选择一个答案来检验本节。</p></fieldset>
+<h2 id="section-7" data-section="7">7. 迁移这套方法</h2>
+<hr>
+<p>不照搬例题解答，用同样的四个动作完成这些练习。它们对应教材第 187–188 页的习题：</p>
+<ul>
+<li><strong>习题 2.10：</strong>把例题 2.11 的顺序反过来。固定 <span class="math"><span class="math">\(g(\tau)\)</span></span> 并积分到 <span class="math"><span class="math">\(\tau=t\)</span></span>；当 <span class="math"><span class="math">\(t\ge0\)</span></span> 时在零处分段。</li>
+<li><strong>图 2.11：</strong>求 <span class="math"><span class="math">\(e^{-t}u(t)\)</span></span> 与 <span class="math"><span class="math">\(u(t)\)</span></span> 的卷积。当 <span class="math"><span class="math">\(t\ge0\)</span></span> 时重叠是 <span class="math"><span class="math">\([0,t]\)</span></span>，结果为 <span class="math"><span class="math">\((1-e^{-t})u(t)\)</span></span>。</li>
+<li><strong>图 2.12：</strong>求 <span class="math"><span class="math">\(e^{-t}u(t)\)</span></span> 与 <span class="math"><span class="math">\(u(-t)\)</span></span> 的卷积。积分下限是 <span class="math"><span class="math">\(\max(0,t)\)</span></span>；结果在 <span class="math"><span class="math">\(t&lt;0\)</span></span> 时为 1，在 <span class="math"><span class="math">\(t\ge0\)</span></span> 时为 <span class="math"><span class="math">\(e^{-t}\)</span></span>。</li>
+<li><strong>图 2.13：</strong>求 <span class="math"><span class="math">\(u(t-T)\)</span></span> 与 <span class="math"><span class="math">\(u(t+T)\)</span></span> 的卷积。相反的平移相互抵消，结果为 <span class="math"><span class="math">\(tu(t)\)</span></span>。</li>
+</ul>
+<p>本节最后几页还解释了为什么“反转”在物理上是合理的（图 2.14，第 190 页）：<span class="math"><span class="math">\(h(t-\tau)\)</span></span> 按输入在观察时刻 <span class="math"><span class="math">\(t\)</span></span> 的“年龄”给输入加权。对于一个一秒后就衰减到零的响应，比 <span class="math"><span class="math">\(t-1\)</span></span> 更早的输入不再有贡献。</p>
+<p><strong>继续之前，你应当能够：</strong></p>
+<ul>
+<li>说清哪个信号固定、哪个被反射。</li>
+<li>推出重叠不等式，并找出每一个分段边界。</li>
+<li>对带符号乘积积分，并检验输出各段的拼接。</li>
+</ul>
+<p>在 2.4-3 节中，你将用卷积组合互联系统。本节提供图解方法；下一节用它把系统连接起来。</p>
+<fieldset class="checkpoint" data-checkpoint="transfer"><legend>快速检测</legend><p>对支集 [a,b] 和 [c,d]，卷积在哪里可能非零？</p><div class="answers"><button type="button" data-correct="true" data-feedback="正确。起点边缘相加，终点边缘相加。">[a+c,b+d]</button><button type="button" data-correct="false" data-feedback="那组差值描述的是另一种重叠安排；输出支集是两个原始支集相加。">[a−d,b−c]</button></div><p class="feedback" aria-live="polite">选择一个答案来检验本节。</p></fieldset><footer>来源：Lathi &amp; Green,《Linear Systems and Signals》第三版，§2.4-2，第 178–190 页。四个可独立操作的 GeoGebra 演示。阅读位置与完成勾选相互独立。</footer></main>
+<script src="demo-models.js?v=20260918-zh"></script><script src="demo.js?v=20260918-zh"></script><script src="lesson.js?v=20260918-zh2"></script></body></html>

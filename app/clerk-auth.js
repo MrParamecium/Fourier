@@ -20,7 +20,7 @@
 //   - currentBook                     (app.js)
 //   - syllabusData                    (data/syllabus-data.js)
 //   - updatePreferenceSidebarSummary  (preference-profile.js, Phase 2 #14)
-//   - showLoginView, showWelcome, showSettingsView, showPreferenceView,
+//   - showLoginView, showWelcome, showSettingsView,
 //     hideIntroLanding, openLearnMode, openChapterOverviewMode,
 //     isB8TextbookOnlySection, shouldOpenSectionAsChapterOverview
 //                                       (app.js)
@@ -803,18 +803,21 @@ async function handleSignOut() {
 
 function renderUserBadge() {
   renderWorkspaceAccountBar();
+  const upgradeBlock = document.getElementById('settingsAccountUpgrade');
+  if (upgradeBlock) upgradeBlock.classList.toggle('hidden', Boolean(currentUser && !currentUser.isGuest));
   const card = document.getElementById('settingsUserCard');
   if (!card || !currentUser) return;
   const shortUid = currentUser.uid.includes('_') ? currentUser.uid.split('_')[1].substring(0,6) : currentUser.uid.substring(currentUser.uid.length-6);
+  const tr = k => (window.FourierI18N ? window.FourierI18N.t(k) : k);
   if (currentUser.isGuest) {
     card.innerHTML = `
       <div class="settings-user-card" style="display:flex; align-items:center; gap:16px; padding:20px; border:3px solid #cbd5e1; border-radius:24px; background:#fff; box-shadow: 0 6px 0 #cbd5e1;">
         <div class="settings-user-avatar" style="width:56px; height:56px; border-radius:50%; border:3px solid #94a3b8; display:flex; align-items:center; justify-content:center; font-size:24px; background:#f1f5f9;">👤</div>
         <div class="settings-user-body" style="flex:1;">
-          <div class="settings-user-name" style="font-family:'Quicksand', sans-serif; font-weight:800; font-size:18px; color:#1e293b;">Guest</div>
-          <div class="settings-user-meta" style="font-family:'DM Mono', monospace; font-size:11px; color:#94a3b8; font-weight:600; letter-spacing:1px; margin-top:4px;">UID: ${shortUid.toUpperCase()}</div>
+          <div class="settings-user-name" style="font-family:'Quicksand', sans-serif; font-weight:800; font-size:18px; color:#1e293b;">${tr('user.guest')}</div>
+          <div class="settings-user-meta" style="font-family:'DM Mono', monospace; font-size:11px; color:#94a3b8; font-weight:600; letter-spacing:1px; margin-top:4px;">${tr('user.uid')}: ${shortUid.toUpperCase()}</div>
         </div>
-        <button class="settings-user-link settings-user-danger" onclick="handleSignOut()" type="button" style="background:#fff1f2; border:2px solid #fca5a5; border-radius:10px; padding:6px 12px; font-weight:800; color:#e11d48; font-size:12px; box-shadow:0 2px 0 #fca5a5; cursor:pointer;">Exit</button>
+        <button class="settings-user-link settings-user-danger" onclick="handleSignOut()" type="button" style="background:#fff1f2; border:2px solid #fca5a5; border-radius:10px; padding:6px 12px; font-weight:800; color:#e11d48; font-size:12px; box-shadow:0 2px 0 #fca5a5; cursor:pointer;">${tr('settings.exit')}</button>
       </div>
     `;
   } else {
@@ -824,11 +827,10 @@ function renderUserBadge() {
         ${av}
         <div class="settings-user-body" style="flex:1;">
           <div class="settings-user-name" style="font-family:'Quicksand', sans-serif; font-weight:800; font-size:18px; color:#1e293b;">${currentUser.name}</div>
-          <div class="settings-user-meta" style="font-family:'DM Mono', monospace; font-size:11px; color:#94a3b8; font-weight:600; letter-spacing:1px; margin-top:4px;">ID: #${shortUid.toUpperCase()}</div>
+          <div class="settings-user-meta" style="font-family:'DM Mono', monospace; font-size:11px; color:#94a3b8; font-weight:600; letter-spacing:1px; margin-top:4px;">${tr('user.id')}: #${shortUid.toUpperCase()}</div>
         </div>
         <div class="settings-user-actions" style="display:flex; flex-direction:column; gap:8px;">
-          <button class="settings-user-link" onclick="showPreferenceView()" type="button" style="background:#f1f5f9; border:2px solid #cbd5e1; border-radius:10px; padding:6px 12px; font-weight:700; color:#475569; font-size:12px; box-shadow:0 2px 0 #cbd5e1; cursor:pointer;">Teaching instructions</button>
-          <button class="settings-user-link settings-user-danger" onclick="handleSignOut()" type="button" style="background:#fff1f2; border:2px solid #fca5a5; border-radius:10px; padding:6px 12px; font-weight:800; color:#e11d48; font-size:12px; box-shadow:0 2px 0 #fca5a5; cursor:pointer;">Sign out</button>
+          <button class="settings-user-link settings-user-danger" onclick="handleSignOut()" type="button" style="background:#fff1f2; border:2px solid #fca5a5; border-radius:10px; padding:6px 12px; font-weight:800; color:#e11d48; font-size:12px; box-shadow:0 2px 0 #fca5a5; cursor:pointer;">${tr('settings.signOut')}</button>
         </div>
       </div>
     `;

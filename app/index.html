@@ -67,7 +67,7 @@
     }
   </script>
   <link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,500;0,700;1,600&family=Fira+Code:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20260910-home-compact">
+  <link rel="stylesheet" href="style.css?v=20260918-i18n">
   <link rel="stylesheet" href="css/ui-friction-v123.css?v=1222">
   <link rel="icon" type="image/png" href="logo.png?v=1778674347">
 
@@ -296,59 +296,53 @@
             <span class="sidebar-link-icon">
               <i class="ph-bold ph-house-line" aria-hidden="true"></i>
             </span>
-            <span>Home</span>
+            <span data-i18n="nav.home">Home</span>
           </button>
-          <button class="sidebar-link" id="navSyllabusBtn" type="button" title="Syllabus">
+          <button class="sidebar-link" id="navSyllabusBtn" type="button" data-i18n-title="nav.syllabus">
             <span class="sidebar-link-icon">
               <i class="ph-bold ph-book-open-text" aria-hidden="true"></i>
             </span>
-            <span>Syllabus</span>
+            <span data-i18n="nav.syllabus">Syllabus</span>
           </button>
           <div class="sidebar-syllabus-panel hidden" id="sidebarSyllabusPanel">
             <div class="sidebar-syllabus-panel-inner">
               <div class="syllabus" id="courseSyllabus" style="flex:1; min-height:0;"></div>
             </div>
           </div>
-          <button class="sidebar-link" id="navRecentBtn" type="button" title="Recent">
+          <button class="sidebar-link" id="navRecentBtn" type="button" data-i18n-title="nav.recent">
             <span class="sidebar-link-icon">
               <i class="ph-bold ph-clock-counter-clockwise" aria-hidden="true"></i>
             </span>
-            <span>Recent</span>
+            <span data-i18n="nav.recent">Recent</span>
           </button>
           <div class="sidebar-recent-panel hidden" id="sidebarRecentPanel">
             <div class="sidebar-recent-panel-inner">
               <div id="recentConversationsNav" class="sidebar-recent-list">
-                <div class="sidebar-recent-empty">No recent queries yet.</div>
+                <div class="sidebar-recent-empty" data-i18n="recent.empty">No recent queries yet.</div>
               </div>
             </div>
           </div>
-          <button class="sidebar-link" id="navCourseTrackerBtn" type="button" title="Course Tracker">
+          <button class="sidebar-link" id="navCourseTrackerBtn" type="button" data-i18n-title="nav.courseTracker">
             <span class="sidebar-link-icon">
               <i class="ph-bold ph-calendar-check" aria-hidden="true"></i>
             </span>
-            <span>Course Tracker</span>
+            <span data-i18n="nav.courseTracker">Course Tracker</span>
           </button>
-          <button class="sidebar-link" id="navMistakeNotebookBtn" type="button" title="Mistake Notebook">
+          <button class="sidebar-link" id="navMistakeNotebookBtn" type="button" data-i18n-title="nav.mistakeNotebook">
             <span class="sidebar-link-icon">
               <i class="ph-bold ph-notebook" aria-hidden="true"></i>
             </span>
-            <span>Mistake Notebook</span>
-          </button>
-          <button class="sidebar-link sidebar-link-preference" id="navPreferenceBtn" type="button" title="Preferences">
-            <span class="sidebar-link-icon">
-              <i class="ph-bold ph-user" aria-hidden="true"></i>
-            </span>
-            <span>Preferences</span>
+            <span data-i18n="nav.mistakeNotebook">Mistake Notebook</span>
           </button>
         </div>
       </div>
 
       <div class="sidebar-footer" id="sidebarFooter">
-        <button class="sidebar-settings-btn" id="sidebarSettingsBtn" type="button" title="Settings">
+        <button class="sidebar-settings-btn" id="sidebarSettingsBtn" type="button" data-i18n-title="nav.settings">
           <span class="sidebar-settings-icon">
             <i class="ph-bold ph-gear" aria-hidden="true"></i>
           </span>
-          <span>Settings</span>
+          <span data-i18n="nav.settings">Settings</span>
         </button>
         <div class="sidebar-version-row">
           <span class="sidebar-version-dot"></span>
@@ -409,20 +403,20 @@
                 <path d="M19 10.25v4.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
               </svg>
             </div>
-            <h1>Ask your Tutor</h1>
-            <p>Paste a formula, a screenshot, or a confusing line.</p>
+            <h1 data-i18n="home.ask.title">Ask your Tutor</h1>
+            <p data-i18n="home.ask.sub">Paste a formula, a screenshot, or a confusing line.</p>
             <div class="home-ask-tags">
               <span class="home-ask-tag home-ask-tag-formula">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 18c2.5-1.2 3.2-11.2 7-11.2 2.1 0 2.2 2.9 4 2.9.9 0 1.7-.6 2.4-1.7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>
-                Formula
+                <span data-i18n="home.tag.formula">Formula</span>
               </span>
               <span class="home-ask-tag home-ask-tag-screenshot">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3v4H3M17 3v4h4M7 21v-4H3M17 21v-4h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path><rect x="7" y="7" width="10" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2"></rect></svg>
-                Screenshot
+                <span data-i18n="home.tag.screenshot">Screenshot</span>
               </span>
               <span class="home-ask-tag home-ask-tag-trap">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 21 20H3L12 4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path><path d="M12 9v5M12 17.5h.01" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>
-                Exam Trap
+                <span data-i18n="home.tag.trap">Exam Trap</span>
               </span>
             </div>
           </section>
@@ -433,7 +427,7 @@
               <button class="attach-btn home-ask-attach" id="attachBtnMain" title="Attach image, PDF, or Word (.docx) — max 20MB" aria-label="Attach image, PDF, or Word">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.4 12.7 13.8 7.3a3.1 3.1 0 0 1 4.4 4.4l-7.1 7.1a5 5 0 0 1-7.1-7.1l7.4-7.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
               </button>
-              <textarea class="search-input" id="userInput" placeholder="Ask a question about this course..." rows="1" wrap="off"></textarea>
+              <textarea class="search-input" id="userInput" data-i18n-placeholder="home.ask.placeholder" placeholder="Ask a question about this course..." rows="1" wrap="off"></textarea>
               <button class="search-send home-ask-send" id="sendBtn" disabled aria-label="Send question">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 20 4l-5.2 16-3.2-6.9L4 12Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path><path d="m11.6 13.1 4.6-4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>
               </button>
@@ -489,21 +483,21 @@
           <input type="file" id="fileInputMain" accept="image/*,.pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" style="display:none">
 
           <div class="home-feature-actions" aria-label="Tutor tools">
-            <button class="home-feature-chip" type="button" data-prompt="Explain the key concept from the section I am studying.">
+            <button class="home-feature-chip" type="button" data-i18n-prompt="home.feature.explain.prompt" data-prompt="Explain the key concept from the section I am studying.">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 15.5 14.5 5l4.5 4.5L8.5 20H4v-4.5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path><path d="m13 6.5 4.5 4.5" fill="none" stroke="currentColor" stroke-width="2"></path></svg>
-              <span>Concept Explanation</span>
+              <span data-i18n="home.feature.explain">Concept Explanation</span>
             </button>
-            <button class="home-feature-chip" type="button" data-prompt="Generate personal study materials for this topic.">
+            <button class="home-feature-chip" type="button" data-i18n-prompt="home.feature.materials.prompt" data-prompt="Generate personal study materials for this topic.">
               <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"></rect><path d="M8 8h8M8 12h8M8 16h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>
-              <span>Study Materials</span>
+              <span data-i18n="home.feature.materials">Study Materials</span>
             </button>
-            <button class="home-feature-chip" type="button" data-prompt="Help me solve a problem step by step.">
+            <button class="home-feature-chip" type="button" data-i18n-prompt="home.feature.solve.prompt" data-prompt="Help me solve a problem step by step.">
               <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="16" r="3" fill="none" stroke="currentColor" stroke-width="2"></circle><circle cx="17" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="2"></circle><path d="M9.5 14 14.5 10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>
-              <span>Problem Solving</span>
+              <span data-i18n="home.feature.solve">Problem Solving</span>
             </button>
-            <button class="home-feature-chip" type="button" data-prompt="Create a visualization for this concept.">
+            <button class="home-feature-chip" type="button" data-i18n-prompt="home.feature.visual.prompt" data-prompt="Create a visualization for this concept.">
               <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="2"></rect><path d="M8 16V9M12 16v-4M16 16V7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg>
-              <span>Visualization</span>
+              <span data-i18n="home.feature.visual">Visualization</span>
             </button>
           </div>
 
@@ -632,8 +626,8 @@
           <span class="learn-fullscreen-label">进入全屏</span>
         </button>
             <div class="learn-view-selector" id="learnViewSelector" aria-label="Lesson view">
-              <button class="learn-view-btn active" id="btnLectureView">Lecture</button>
-              <button class="learn-view-btn" id="btnTextbookView">Textbook</button>
+              <button class="learn-view-btn active" id="btnLectureView" data-i18n="learn.lecture">Lecture</button>
+              <button class="learn-view-btn" id="btnTextbookView" data-i18n="learn.textbook">Textbook</button>
             </div>
             <button class="learn-close" id="learnClose">Back</button>
           </div>
@@ -715,12 +709,11 @@
 
             <div class="learn-chat-col" id="learnChatCol">
               <div class="tutor-toolbar" id="tutorToolbar">
-                <button type="button" data-tutor-action="new" title="新对话" aria-label="新对话"><i class="ph-bold ph-note-pencil" aria-hidden="true"></i></button>
-                <button type="button" data-tutor-action="recent" title="Recent" aria-label="Recent" aria-expanded="false"><i class="ph-bold ph-clock-counter-clockwise" aria-hidden="true"></i></button>
-                <button type="button" data-tutor-action="more" title="更多" aria-label="更多" aria-expanded="false"><i class="ph-bold ph-dots-three" aria-hidden="true"></i></button>
+                <button type="button" data-tutor-action="new" data-i18n-title="tutor.new" title="New chat" aria-label="New chat"><i class="ph-bold ph-note-pencil" aria-hidden="true"></i></button>
+                <button type="button" data-tutor-action="recent" data-i18n-title="tutor.recent" title="Recent" aria-label="Recent" aria-expanded="false"><i class="ph-bold ph-clock-counter-clockwise" aria-hidden="true"></i></button>
+                <button type="button" data-tutor-action="more" data-i18n-title="tutor.more" title="More" aria-label="More" aria-expanded="false"><i class="ph-bold ph-dots-three" aria-hidden="true"></i></button>
                 <div id="tutorMoreMenu" hidden>
-                  <button type="button" data-tutor-action="preferences"><i class="ph-bold ph-user-gear" aria-hidden="true"></i>Preferences</button>
-                  <button type="button" data-tutor-action="settings"><i class="ph-bold ph-gear" aria-hidden="true"></i>Settings</button>
+                  <button type="button" data-tutor-action="settings"><i class="ph-bold ph-gear" aria-hidden="true"></i><span data-i18n="tutor.settings">Settings</span></button>
                 </div>
               </div>
               <div id="tutorRecentList" hidden></div>
@@ -754,20 +747,20 @@
                       <path d="M19 10.25v4.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
                     </svg>
                   </div>
-                  <h2 class="empty-title">Ask your Tutor</h2>
-                  <p class="empty-subtitle">Paste a formula, a screenshot, or a confusing line.</p>
+                  <h2 class="empty-title" data-i18n="home.ask.title">Ask your Tutor</h2>
+                  <p class="empty-subtitle" data-i18n="home.ask.sub">Paste a formula, a screenshot, or a confusing line.</p>
                   <div class="tag-group">
                     <span class="edu-tag tag-formula">
                       <svg class="qa-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 18c2.5-1.2 3.2-11.2 7-11.2 2.1 0 2.2 2.9 4 2.9.9 0 1.7-.6 2.4-1.7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                      Formula
+                      <span data-i18n="home.tag.formula">Formula</span>
                     </span>
                     <span class="edu-tag tag-screenshot">
                       <svg class="qa-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3v4H3M17 3v4h4M7 21v-4H3M17 21v-4h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><rect x="7" y="7" width="10" height="10" rx="2" fill="none" stroke="currentColor" stroke-width="2"/></svg>
-                      Screenshot
+                      <span data-i18n="home.tag.screenshot">Screenshot</span>
                     </span>
                     <span class="edu-tag tag-trap">
                       <svg class="qa-inline-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 21 20H3L12 4Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 9v5M12 17.5h.01" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                      Exam Trap
+                      <span data-i18n="home.tag.trap">Exam Trap</span>
                     </span>
                   </div>
                 </div>
@@ -781,7 +774,7 @@
                   <button class="btn-clip" id="attachBtnLearn" title="Attach image, PDF, or Word (.docx)">
                     <svg class="qa-button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.4 12.7 13.8 7.3a3.1 3.1 0 0 1 4.4 4.4l-7.1 7.1a5 5 0 0 1-7.1-7.1l7.4-7.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                   </button>
-                  <textarea class="input-field" id="learnFollowupInput" placeholder="Type a message..." rows="1" wrap="soft"></textarea>
+                  <textarea class="input-field" id="learnFollowupInput" data-i18n-placeholder="learn.typeMessage" placeholder="Type a message..." rows="1" wrap="soft"></textarea>
                   <button class="btn-send" id="learnFollowupBtn" disabled>
                     <svg class="qa-button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12 20 4l-5.2 16-3.2-6.9L4 12Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m11.6 13.1 4.6-4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
                   </button>
@@ -828,7 +821,7 @@
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
                   </button>
                 </div>
-                <textarea class="learn-followup-input" id="learnFollowupInputPopover" placeholder="Type a message..." rows="1" wrap="soft"></textarea>
+                <textarea class="learn-followup-input" id="learnFollowupInputPopover" data-i18n-placeholder="learn.typeMessage" placeholder="Type a message..." rows="1" wrap="soft"></textarea>
                 <button class="learn-followup-send" id="learnFollowupBtnPopover" disabled>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="22" y1="2" x2="11" y2="13"></line>
@@ -846,119 +839,96 @@
         <div class="settings-page-shell">
           <div class="settings-page-header">
             <div>
-              <div class="settings-page-eyebrow">Settings</div>
-              <h1 class="settings-page-title">Account & Preferences</h1>
-              <p class="settings-page-subtitle">Manage your account, sign-in state, and learning profile in one place.</p>
+              <div class="settings-page-eyebrow" data-i18n="settings.eyebrow">Settings</div>
+              <h1 class="settings-page-title" data-i18n="settings.title">Account & Learning</h1>
+              <p class="settings-page-subtitle" data-i18n="settings.subtitle">Manage your account, sign-in state, and learning profile in one place.</p>
             </div>
             <button class="feature-close-btn" id="settingsPageBackBtn" type="button" aria-label="Close settings">✕</button>
           </div>
 
           <div class="settings-page-grid">
-            <aside class="settings-page-nav">
-              <button class="settings-page-nav-item active" type="button">Account</button>
-              <button class="settings-page-nav-item" type="button">Learning</button>
-              <button class="settings-page-nav-item" type="button">About</button>
-            </aside>
-
             <div class="settings-page-content">
               <section class="settings-page-card">
                 <div class="settings-page-card-head">
                   <div>
-                    <div class="settings-page-card-eyebrow">Appearance</div>
-                    <h2 class="settings-page-card-title">Theme</h2>
+                    <div class="settings-page-card-eyebrow" data-i18n="settings.appearance">Appearance</div>
+                    <h2 class="settings-page-card-title" data-i18n="settings.theme">Theme</h2>
                   </div>
                 </div>
-                <p class="settings-page-copy">Switch the whole workspace between the soft morning gradient and the warm dusk gradient.</p>
+                <p class="settings-page-copy" data-i18n="settings.theme.copy">Switch the whole workspace between the soft morning gradient and the warm dusk gradient.</p>
                 <div class="theme-toggle-group" id="themeToggleGroup">
-                  <button class="theme-toggle-btn active" type="button" data-theme-value="dawn">Morning</button>
-                  <button class="theme-toggle-btn" type="button" data-theme-value="dusk">Dusk</button>
+                  <button class="theme-toggle-btn active" type="button" data-theme-value="dawn" data-i18n="settings.theme.morning">Morning</button>
+                  <button class="theme-toggle-btn" type="button" data-theme-value="dusk" data-i18n="settings.theme.dusk">Dusk</button>
                 </div>
               </section>
 
               <section class="settings-page-card">
                 <div class="settings-page-card-head">
                   <div>
-                    <div class="settings-page-card-eyebrow">Account</div>
-                    <h2 class="settings-page-card-title">Current access</h2>
+                    <div class="settings-page-card-eyebrow" data-i18n="settings.appearance">Language</div>
+                    <h2 class="settings-page-card-title" data-i18n="settings.language">Language</h2>
+                  </div>
+                </div>
+                <p class="settings-page-copy" data-i18n="settings.language.copy">Interface language. Lesson content stays in English.</p>
+                <div class="theme-toggle-group" id="langToggleGroup">
+                  <button class="theme-toggle-btn active" type="button" data-lang-value="en">English</button>
+                  <button class="theme-toggle-btn" type="button" data-lang-value="zh">中文</button>
+                </div>
+              </section>
+
+              <section class="settings-page-card">
+                <div class="settings-page-card-head">
+                  <div>
+                    <div class="settings-page-card-eyebrow" data-i18n="settings.account">Account</div>
+                    <h2 class="settings-page-card-title" data-i18n="settings.currentAccess">Current access</h2>
                   </div>
                 </div>
                 <div id="settingsUserCard"></div>
-              </section>
-
-              <section class="settings-page-card">
-                <div class="settings-page-card-head">
-                  <div>
-                    <div class="settings-page-card-eyebrow">Sign In</div>
-                    <h2 class="settings-page-card-title">Save progress across sessions</h2>
+                <div class="settings-account-upgrade" id="settingsAccountUpgrade">
+                  <p class="settings-page-copy" data-i18n="settings.upgrade.copy">Sign in to keep your memory, learning track, and future progress across sessions. Guest mode stays lightweight for quick use.</p>
+                  <div id="clerkMountSettings" style="display:none;margin-top:16px;"></div>
+                  <div class="settings-page-actions" id="settingsAuthActions">
+                    <button id="clerkSignInBtnSettings" class="settings-primary-btn" type="button">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                      <span data-i18n="settings.signIn">Sign in / Create account</span>
+                    </button>
                   </div>
                 </div>
-                <p class="settings-page-copy">Use an account if you want Fourier to keep your memory, learning track, and future progress. Guest mode stays lightweight for quick use.</p>
-                <div id="clerkMountSettings" style="display:none;margin-top:16px;"></div>
-                <div class="settings-page-actions" id="settingsAuthActions">
-                  <button id="clerkSignInBtnSettings" class="settings-primary-btn" type="button">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                    <span>Sign in / Create account</span>
-                  </button>
-                  <button id="guestModeBtnSettings" class="settings-secondary-btn" type="button">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                    <span>Continue as Guest</span>
-                  </button>
-                </div>
               </section>
 
               <section class="settings-page-card">
                 <div class="settings-page-card-head">
                   <div>
-                    <div class="settings-page-card-eyebrow">Personalization</div>
-                    <h2 class="settings-page-card-title">Teaching instructions</h2>
+                    <div class="settings-page-card-eyebrow" data-i18n="settings.personalization">Personalization</div>
+                    <h2 class="settings-page-card-title" data-i18n="settings.teaching">Teaching instructions</h2>
                   </div>
                 </div>
-                <button id="settingsPreferencesBtn" class="settings-inline-btn" type="button">Edit teaching instructions</button>
+                <p class="settings-page-copy" data-i18n="settings.teaching.copy">Tell Fourier how you prefer concepts, examples, and feedback to be explained.</p>
+                <div class="settings-teaching-editor">
+                  <div class="settings-teaching-editor-head">
+                    <label for="preferenceProfileEditor" data-i18n="settings.teaching.label">How should Fourier explain things?</label>
+                    <span class="preference-save-state" id="preferenceSaveState" data-i18n="settings.teaching.notSaved">Not saved</span>
+                  </div>
+                  <textarea id="preferenceProfileEditor" class="preference-profile-editor" spellcheck="true" data-i18n-placeholder="settings.teaching.placeholder" placeholder="Example: Start with intuition and diagrams, then provide a complete formula derivation; remind me when symbols are easy to confuse."></textarea>
+                  <div class="preference-field-meta"><span id="preferenceCharacterCount">0 / 1000</span></div>
+                  <div class="preference-profile-actions">
+                    <button id="preferenceSaveBtn" class="preference-primary-btn" type="button" data-i18n="settings.save">Save</button>
+                    <button id="preferenceClearBtn" class="preference-secondary-btn" type="button" data-i18n="settings.clear">Clear</button>
+                  </div>
+                </div>
               </section>
 
               <section class="settings-page-card">
                 <div class="settings-page-card-head">
                   <div>
-                    <div class="settings-page-card-eyebrow">About</div>
-                    <h2 class="settings-page-card-title">Version</h2>
+                    <div class="settings-page-card-eyebrow" data-i18n="settings.about">About</div>
+                    <h2 class="settings-page-card-title" data-i18n="settings.version">Version</h2>
                   </div>
                 </div>
                 <div class="settings-page-version">Fourier Tutor Agent <span>v1.5.0</span></div>
+                <button id="settingsReplayTourBtn" class="preference-secondary-btn" type="button" data-i18n="settings.replayTour" style="margin-top:14px;">Replay tour</button>
               </section>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="preference-view hidden" id="preferenceView">
-        <div class="preference-page-shell">
-          <div class="preference-page-header">
-            <div>
-              <div class="preference-page-eyebrow">Personalization memory</div>
-              <h1 class="preference-page-title">Teaching instructions</h1>
-            </div>
-            <button class="feature-close-btn" id="preferencePageBackBtn" type="button" aria-label="Close teaching instructions">✕</button>
-          </div>
-
-          <div class="preference-page-grid preference-page-grid-single">
-            <section class="preference-profile-card">
-              <div class="preference-card-tape" aria-hidden="true"></div>
-              <div class="preference-card-head">
-                <div>
-                  <div class="preference-card-eyebrow">Global settings</div>
-                  <label class="preference-card-title" for="preferenceProfileEditor">How should Fourier explain things?</label>
-                </div>
-                <div class="preference-save-state" id="preferenceSaveState">Not saved</div>
-              </div>
-              <textarea id="preferenceProfileEditor" class="preference-profile-editor" spellcheck="true" placeholder="Example: Start with intuition and diagrams, then provide a complete formula derivation; remind me when symbols are easy to confuse."></textarea>
-              <div class="preference-field-meta">
-                <span id="preferenceCharacterCount">0 / 1000</span>
-              </div>
-              <div class="preference-profile-actions">
-                <button id="preferenceSaveBtn" class="preference-primary-btn" type="button">Save</button>
-                <button id="preferenceClearBtn" class="preference-secondary-btn" type="button">Clear</button>
-              </div>
-            </section>
           </div>
         </div>
       </div>
@@ -967,9 +937,9 @@
         <div class="course-tracker-shell">
           <div class="course-tracker-header">
             <div>
-              <div class="course-tracker-eyebrow">Fall 2025 Syllabus</div>
-              <h1 class="course-tracker-title">Course Tracker</h1>
-              <p class="course-tracker-subtitle">Track Linear Systems &amp; Signals lectures, exam milestones, and grading weights from the course syllabus.</p>
+              <div class="course-tracker-eyebrow" data-i18n="tracker.eyebrow">Fall 2025 Syllabus</div>
+              <h1 class="course-tracker-title" data-i18n="tracker.title">Course Tracker</h1>
+              <p class="course-tracker-subtitle" data-i18n="tracker.subtitle">Track Linear Systems &amp; Signals lectures, exam milestones, and grading weights from the course syllabus.</p>
             </div>
             <button class="feature-close-btn" id="courseTrackerCloseBtn" type="button" aria-label="Close course tracker">✕</button>
           </div>
@@ -981,15 +951,15 @@
                 <small>/26</small>
               </div>
               <div class="course-tracker-hero-copy">
-                <div class="course-tracker-stat-label">Lecture Progress</div>
-                <h2>Keep the semester moving.</h2>
-                <p>Finish lectures, mark review spots, and keep the next exam visible without reading a wall of rows.</p>
+                <div class="course-tracker-stat-label" data-i18n="tracker.progress">Lecture Progress</div>
+                <h2 data-i18n="tracker.hero">Keep the semester moving.</h2>
+                <p data-i18n="tracker.hero.body">Finish lectures, mark review spots, and keep the next exam visible without reading a wall of rows.</p>
                 <div class="course-tracker-progress-bar" aria-hidden="true"><span id="courseProgressFill"></span></div>
               </div>
             </div>
 
             <div class="course-tracker-now-card">
-              <div class="course-tracker-card-kicker">Next up</div>
+              <div class="course-tracker-card-kicker" data-i18n="tracker.nextUp">Next up</div>
               <div class="course-tracker-stat-main" id="courseNextLecture">Lecture #1 · 9/2</div>
               <div class="course-tracker-stat-note" id="courseNextTopic">Math background: complex numbers, sinusoids</div>
               <div class="course-tracker-milestones" aria-label="Major milestones">
@@ -1005,8 +975,8 @@
               <section class="course-tracker-card course-grading-card">
                 <div class="course-tracker-card-head">
                   <div>
-                    <div class="course-tracker-card-kicker">Grade Policy</div>
-                    <h2>Score Rules</h2>
+                    <div class="course-tracker-card-kicker" data-i18n="tracker.gradePolicy">Grade Policy</div>
+                    <h2 data-i18n="tracker.scoreRules">Score Rules</h2>
                   </div>
                   <div class="course-tracker-source-chip">PDF</div>
                 </div>
@@ -1017,10 +987,10 @@
             <section class="course-tracker-card course-calendar-card">
               <div class="course-tracker-card-head">
                 <div>
-                  <div class="course-tracker-card-kicker">Roadmap</div>
-                  <h2>Lecture Schedule</h2>
+                  <div class="course-tracker-card-kicker" data-i18n="tracker.roadmap">Roadmap</div>
+                  <h2 data-i18n="tracker.schedule">Lecture Schedule</h2>
                 </div>
-                <button class="course-tracker-reset-btn" id="courseTrackerResetBtn" type="button">Reset Status</button>
+                <button class="course-tracker-reset-btn" id="courseTrackerResetBtn" type="button" data-i18n="tracker.reset">Reset Status</button>
               </div>
               <div class="course-tracker-timeline" id="courseTrackerTableBody"></div>
             </section>
@@ -1032,9 +1002,9 @@
         <div class="mistake-notebook-shell">
           <div class="mistake-notebook-header">
             <div>
-              <div class="mistake-notebook-eyebrow">Mistake Review</div>
-              <h1 class="mistake-notebook-title">Mistake Notebook</h1>
-              <p class="mistake-notebook-subtitle">Upload problem images, keep one note page per mistake, search your weak spots, and ask Fourier to solve or draft review notes.</p>
+              <div class="mistake-notebook-eyebrow" data-i18n="nb.eyebrow">Mistake Review</div>
+              <h1 class="mistake-notebook-title" data-i18n="nb.title">Mistake Notebook</h1>
+              <p class="mistake-notebook-subtitle" data-i18n="nb.subtitle">Upload problem images, keep one note page per mistake, search your weak spots, and ask Fourier to solve or draft review notes.</p>
             </div>
             <button class="feature-close-btn" id="mistakeNotebookCloseBtn" type="button" aria-label="Close mistake notebook">✕</button>
           </div>
@@ -1042,8 +1012,8 @@
           <div class="mistake-notebook-toolbar">
             <label class="mistake-upload-btn" for="mistakeImageInput">
               <span>＋</span>
-              <span>Add Problem Image</span>
-              <small>or paste screenshot</small>
+              <span data-i18n="nb.add">Add Problem Image</span>
+              <small data-i18n="nb.addSmall">or paste screenshot</small>
             </label>
             <input id="mistakeImageInput" type="file" accept="image/*" hidden>
             <div class="mistake-search-wrap">
@@ -1051,34 +1021,34 @@
                 <circle cx="11" cy="11" r="7"></circle>
                 <path d="M20 20l-3.5-3.5"></path>
               </svg>
-              <input id="mistakeSearchInput" type="search" placeholder="Search title, tags, notes, AI draft, or AI answer...">
+              <input id="mistakeSearchInput" type="search" data-i18n-placeholder="nb.searchPh" placeholder="Search title, tags, notes, AI draft, or AI answer...">
             </div>
             <div class="mistake-count-pill" id="mistakeCountPill">0 problems</div>
           </div>
 
           <div class="mistake-notebook-grid">
             <aside class="mistake-list-card">
-              <div class="mistake-card-kicker">Problem Pages</div>
+              <div class="mistake-card-kicker" data-i18n="nb.pages">Problem Pages</div>
               <div class="mistake-list" id="mistakeList"></div>
             </aside>
 
             <section class="mistake-detail-card" id="mistakeDetailCard">
               <div class="mistake-empty-panel" id="mistakeEmptyPanel">
                 <div class="mistake-empty-icon">✦</div>
-                <h2>Start with a screenshot</h2>
-                <p>Upload a problem image. Fourier will keep it as a page you can annotate, solve, and review later.</p>
+                <h2 data-i18n="nb.emptyTitle">Start with a screenshot</h2>
+                <p data-i18n="nb.emptyBody">Upload a problem image. Fourier will keep it as a page you can annotate, solve, and review later.</p>
               </div>
 
               <div class="mistake-detail-content hidden" id="mistakeDetailContent">
                 <div class="mistake-detail-head">
                   <div>
-                    <div class="mistake-card-kicker">Current Problem</div>
-                    <input id="mistakeTitleInput" class="mistake-title-input" type="text" placeholder="Problem title">
+                    <div class="mistake-card-kicker" data-i18n="nb.current">Current Problem</div>
+                    <input id="mistakeTitleInput" class="mistake-title-input" type="text" data-i18n-placeholder="nb.titlePh" placeholder="Problem title">
                   </div>
                   <div class="mistake-page-controls">
-                    <button id="mistakePrevBtn" class="mistake-mini-btn" type="button">← Prev</button>
+                    <button id="mistakePrevBtn" class="mistake-mini-btn" type="button">← <span data-i18n="nb.prev">Prev</span></button>
                     <span id="mistakePageIndicator">1 / 1</span>
-                    <button id="mistakeNextBtn" class="mistake-mini-btn" type="button">Next →</button>
+                    <button id="mistakeNextBtn" class="mistake-mini-btn" type="button"><span data-i18n="nb.next">Next</span> →</button>
                   </div>
                 </div>
 
@@ -1089,17 +1059,17 @@
                   </figure>
 
                   <div class="mistake-notes-panel">
-                    <label class="mistake-field-label" for="mistakeTagsInput">Tags</label>
-                    <input id="mistakeTagsInput" class="mistake-tags-input" type="text" placeholder="Example: Fourier, sign error, exam">
+                    <label class="mistake-field-label" for="mistakeTagsInput" data-i18n="nb.tags">Tags</label>
+                    <input id="mistakeTagsInput" class="mistake-tags-input" type="text" data-i18n-placeholder="nb.tagsPh" placeholder="Example: Fourier, sign error, exam">
 
                     <div class="mistake-note-columns">
                       <section class="mistake-user-note-card">
                         <div class="mistake-note-card-head">
-                          <label class="mistake-field-label" for="mistakeNotesInput">Your Notes</label>
-                          <label class="mistake-note-image-btn" for="mistakeNoteImageInput">Add Image</label>
+                          <label class="mistake-field-label" for="mistakeNotesInput" data-i18n="nb.yourNotes">Your Notes</label>
+                          <label class="mistake-note-image-btn" for="mistakeNoteImageInput" data-i18n="nb.addImage">Add Image</label>
                           <input id="mistakeNoteImageInput" type="file" accept="image/*" multiple hidden>
                         </div>
-                        <textarea id="mistakeNotesInput" class="mistake-notes-input" placeholder="What went wrong? What should future-you remember?"></textarea>
+                        <textarea id="mistakeNotesInput" class="mistake-notes-input" data-i18n-placeholder="nb.notesPh" placeholder="What went wrong? What should future-you remember?"></textarea>
                         <div id="mistakeNoteImages" class="mistake-note-images"></div>
                       </section>
 
@@ -1107,16 +1077,16 @@
 
                       <section class="mistake-ai-draft-card">
                         <div class="mistake-draft-head">
-                          <div class="mistake-field-label">AI Notes</div>
+                          <div class="mistake-field-label" data-i18n="nb.aiNotes">AI Notes</div>
                         </div>
-                        <div id="mistakeDraftNotesOutput" class="mistake-draft-notes-output">No AI notes yet.</div>
+                        <div id="mistakeDraftNotesOutput" class="mistake-draft-notes-output" data-i18n="nb.noAiNotes">No AI notes yet.</div>
                       </section>
                     </div>
 
                     <div class="mistake-actions">
-                      <button id="mistakeSolveBtn" class="mistake-primary-btn" type="button">AI Solve Problem</button>
-                      <button id="mistakeDraftNotesBtn" class="mistake-secondary-btn" type="button">Generate AI Notes</button>
-                      <button id="mistakeDeleteBtn" class="mistake-danger-btn" type="button">Delete</button>
+                      <button id="mistakeSolveBtn" class="mistake-primary-btn" type="button" data-i18n="nb.solve">AI Solve Problem</button>
+                      <button id="mistakeDraftNotesBtn" class="mistake-secondary-btn" type="button" data-i18n="nb.generate">Generate AI Notes</button>
+                      <button id="mistakeDeleteBtn" class="mistake-danger-btn" type="button" data-i18n="nb.delete">Delete</button>
                     </div>
                   </div>
                 </div>
@@ -1457,19 +1427,20 @@
     id="clerkScript">
   </script>
 
+  <script src="i18n.js?v=6"></script>
   <script src="config.js?v=1778524701"></script>
   <script src="data/course-metadata.js?v=1410"></script>
   <script src="data/syllabus-data.js?v=1222"></script>
   <script src="markdown-engine.js?v=1222"></script>
-  <script src="clerk-auth.js?v=1701"></script>
+  <script src="clerk-auth.js?v=1706"></script>
   <script src="api-client.js?v=1700"></script>
   <script src="guidance-mode.js?v=1700"></script>
-  <script src="mistake-notebook.js?v=1336"></script>
-  <script src="preference-profile.js?v=1700"></script>
+  <script src="mistake-notebook.js?v=1337"></script>
+  <script src="preference-profile.js?v=1702"></script>
   <script src="attachments.js?v=1338"></script>
   <script src="recent-conversations.js?v=1700"></script>
   <script src="textbook-focus.js?v=1606"></script>
-  <script src="syllabus-view.js?v=1608"></script>
+  <script src="syllabus-view.js?v=1609"></script>
   <script src="interactive-demos/helpers.js?v=1602"></script>
   <script src="interactive-demos/brief-fallback.js?v=1500"></script>
   <script src="interactive-demos/chapter-one.js?v=1604"></script>
@@ -1500,10 +1471,10 @@
   <script src="convolution-practice.js?v=1800"></script>
   <script src="convolution-exit-check.js?v=1900"></script>
   <script src="lesson-render.js?v=1614"></script>
-  <script src="app.js?v=20260910-home-direct"></script>
+  <script src="app.js?v=20260918-zh4"></script>
   <script src="ui-friction-fixes.js?v=1607"></script>
-  <link rel="stylesheet" href="lesson-tour.css?v=1">
-  <script src="chapter-navigation.js?v=10"></script>
-  <script src="lesson-tour.js?v=2"></script>
+  <link rel="stylesheet" href="lesson-tour.css?v=20260916-reading-tour">
+  <script src="chapter-navigation.js?v=14"></script>
+  <script src="lesson-tour.js?v=20260918-tourfix5"></script>
 </body>
 </html>

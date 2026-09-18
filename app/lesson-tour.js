@@ -2,27 +2,32 @@
   'use strict';
   const home = document.getElementById('welcomeScreen');
   const title = '2.4-2 Graphical Understanding of Convolution Operation';
+  const i18n = () => window.FourierI18N || { t: k => k };
   let step = 0, dialog, ring, target, frame, active = false, revision = 0;
   let removeTargetListener = () => {};
+  // Steps store i18n keys; copy resolves at render time to follow language switches.
   const steps = [
-    ['Open the syllabus', 'Today we will study 2.4-2: graphical convolution. Click Syllabus to find the lesson.', ''],
-    ['Open Chapter 2', 'Click Chapter 2 to see its sections.', ''],
-    ['Open section 2.4', 'Click 2.4 to see its lesson list.', ''],
-    ['Choose lesson 2.4-2', 'In the chapter overview, click Graphical Understanding of Convolution Operation.', ''],
-    ['Read the overview', 'Read the introduction, then click Start lesson to enter the explanation.', ''],
-    ['Start with one goal', 'Choose a time, find the overlap, and calculate one output value. Read this goal before continuing.', 'Next'],
-    ['Move the signal', 'Drag time t to see how the overlap and signed product area change.', 'Next'],
-    ['Ask your Tutor', 'Try asking: "Why do we flip the signal first?" Enter your question in the Tutor panel.', 'Start learning']
+    ['tour.openSyllabus', 'tour.openSyllabus.body', ''],
+    ['tour.openChapter2', 'tour.openChapter2.body', ''],
+    ['tour.openSection24', 'tour.openSection24.body', ''],
+    ['tour.chooseLesson', 'tour.chooseLesson.body', ''],
+    ['tour.readOverview', 'tour.readOverview.body', ''],
+    ['tour.oneGoal', 'tour.oneGoal.body', 'tour.next'],
+    ['tour.readingMode', 'tour.readingMode.body', 'tour.next'],
+    ['tour.focus', 'tour.focus.body', 'tour.next'],
+    ['tour.moveSignal', 'tour.moveSignal.body', 'tour.next'],
+    ['tour.askTutor', 'tour.askTutor.body', 'tour.startLearning']
   ];
   function stop() {
     active = false; revision++;
+    try { localStorage.setItem('aquarius-tour-done', '1'); } catch (_) {}
     removeTargetListener();
     dialog?.remove(); ring?.remove();
     window.removeEventListener('resize', position);
     window.removeEventListener('scroll', position, true);
     frame?.contentWindow?.removeEventListener('scroll', position);
     document.removeEventListener('keydown', keydown);
-    if (step === 7) document.getElementById('learnFollowupInput')?.focus();
+    if (step === 9) document.getElementById('learnFollowupInput')?.focus();
     else document.getElementById('navHomeBtn')?.focus();
   }
   function keydown(event) {
@@ -60,7 +65,7 @@
         for (let attempt = 0; attempt < 100; attempt++) {
           if (!active || token !== revision) return;
           target = step === 0 ? document.getElementById('navSyllabusBtn')
-            : step === 1 ? [...document.querySelectorAll('#courseSyllabus .syllabus-chapter')].find(e => /Chapter 2\b/.test(e.textContent))
+            : step === 1 ? document.querySelector('#courseSyllabus .syllabus-chapter[data-idx="2"]')
             : step === 2 ? document.querySelector('[data-course-title="2.4 System Response to External Input: The Zero-State Response"]')
             : step === 3 ? document.querySelector(`[data-course-title="${title}"]`)
             : document.getElementById('courseStartLesson');
@@ -86,26 +91,39 @@
         frame = await waitForFrame(token);
         if (!frame || !active || token !== revision) return;
         frame.contentWindow.addEventListener('scroll', position, {passive:true});
-        if (step === 7) {
+        if (step === 9) {
           openLearnQaSidebar();
           target = document.getElementById('learnFollowupBar');
         } else {
-          target = frame.contentDocument.querySelector(step === 5 ? 'main > p:nth-of-type(2)' : '#demo-figure27 .time-controls');
+          target = step === 5
+            ? frame.contentDocument.querySelector('main > p:nth-of-type(2)')
+            : step === 6
+              ? document.querySelector('.reading-modes')
+              : step === 7
+                ? (() => {
+                  // lesson.js moves the fullscreen button into the parent topbar when embedded;
+                  // resolve the first actually visible instance.
+                  const visible = el => el && el.getClientRects().length && el.getBoundingClientRect().width > 0;
+                  return [document.getElementById('lesson-fullscreen'),
+                    frame.contentDocument?.getElementById('lesson-fullscreen'),
+                    document.getElementById('learnFullscreenBtn')].find(visible) || document.querySelector('.reading-modes');
+                })()
+                : frame.contentDocument.querySelector('#demo-figure27 .time-controls');
         }
         target.scrollIntoView({block:'center',behavior:'instant'});
       }
       const copy = steps[step];
       dialog.querySelector('.lesson-tour-count').textContent = `${step+1} / ${steps.length}`;
-      dialog.querySelector('h2').textContent = copy[0];
-      dialog.querySelector('p').textContent = copy[1];
-      next.textContent = step < 5 ? ['Open syllabus', 'Open Chapter 2', 'Open section 2.4', 'Open lesson overview', 'Start lesson'][step] : copy[2];
+      dialog.querySelector('h2').textContent = i18n().t(copy[0]);
+      dialog.querySelector('p').textContent = i18n().t(copy[1]);
+      next.textContent = step < 5 ? i18n().t(['tour.openSyllabus.btn', 'tour.openChapter2.btn', 'tour.openSection24.btn', 'tour.chooseLesson.btn', 'tour.readOverview.btn'][step]) : i18n().t(copy[2]);
       next.hidden = false;
-      dialog.querySelector('.lesson-tour-back').hidden = step < 6;
+      dialog.querySelector('.lesson-tour-back').hidden = step < 5;
       requestAnimationFrame(position);
     } catch (_) {
-      dialog.querySelector('p').textContent = 'This section is still loading. Please try again.';
+      dialog.querySelector('p').textContent = i18n().t('tour.loading');
       next.hidden = false;
-      next.textContent = 'Retry';
+      next.textContent = i18n().t('tour.retry');
       next.dataset.retry = 'true';
     } finally { next.disabled = false; }
   }
@@ -116,7 +134,7 @@
     ring = document.createElement('div'); ring.className = 'lesson-tour-ring';
     dialog = document.createElement('section'); dialog.className = 'lesson-tour-dialog';
     dialog.setAttribute('role','dialog'); dialog.setAttribute('aria-label','Lesson 2.4-2 tour');
-    dialog.innerHTML = '<span class="lesson-tour-count"></span><h2></h2><p aria-live="polite"></p><div class="lesson-tour-actions"><button class="lesson-tour-skip">Skip tour</button><button class="lesson-tour-back" aria-label="Previous step" title="Previous step"><i class="ph-bold ph-arrow-left" aria-hidden="true"></i></button><button class="lesson-tour-next">Next</button></div>';
+    dialog.innerHTML = `<span class="lesson-tour-count"></span><h2></h2><p aria-live="polite"></p><div class="lesson-tour-actions"><button class="lesson-tour-skip">${i18n().t('tour.skip')}</button><button class="lesson-tour-back" aria-label="Previous step" title="Previous step"><i class="ph-bold ph-arrow-left" aria-hidden="true"></i></button><button class="lesson-tour-next">${i18n().t('tour.next')}</button></div>`;
     document.body.append(ring,dialog);
     dialog.querySelector('.lesson-tour-skip').onclick = stop;
     dialog.querySelector('.lesson-tour-back').onclick = () => { step=Math.max(0,step-1);show(); };
@@ -128,14 +146,15 @@
         else { target.focus(); target.click(); }
         return;
       }
-      if (step === 7) stop(); else { step++;show(); }
+      if (step === 9) stop(); else { step++;show(); }
     };
     window.addEventListener('resize',position);
     window.addEventListener('scroll',position,true);
     document.addEventListener('keydown',keydown);
     show(); dialog.querySelector('.lesson-tour-skip').focus();
   }
-  // Trigger once per home entry, not on every mutation while the home is open.
+  // Trigger once per page load; returning home later must not replay it.
+  let tourStarted = false;
   let wasHomeVisible = false;
   let scheduled = false;
   function syncHome() {
@@ -143,9 +162,14 @@
     const visible = Boolean(home?.getClientRects().length)
       && getComputedStyle(home).visibility !== 'hidden'
       && !document.getElementById('loginView')?.getClientRects().length;
-    if (visible && !wasHomeVisible && !active) start();
+    let tourDone = false;
+    try { tourDone = localStorage.getItem('aquarius-tour-done') === '1'; } catch (_) {}
+    if (visible && !wasHomeVisible && !active && !tourStarted && !tourDone) { tourStarted = true; start(); }
     wasHomeVisible = visible;
   }
+  window.FourierLessonTour = {
+    start: () => { tourStarted = true; start(); }
+  };
   const observer = new MutationObserver(() => {
     if (!scheduled) { scheduled = true; requestAnimationFrame(syncHome); }
   });
