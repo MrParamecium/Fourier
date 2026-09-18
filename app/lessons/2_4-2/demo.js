@@ -1,5 +1,7 @@
 /* Four independent constructions with isolated state and one shared runtime loader. */
 (() => {
+  const ZH = document.documentElement.lang === 'zh';
+  const T = (en, zh) => ZH ? zh : en;
   let loader;
   const waitForRuntime = () => loader ||= new Promise((resolve, reject) => {
     if (window.GGBApplet) return resolve();
@@ -20,18 +22,18 @@
     root.querySelector('[data-functions]').replaceChildren(...m.formulas.map(value=>{const li=document.createElement('li');li.textContent=value;return li;}));
     text(root,'[data-model-note]',m.note);
     m.checkpoints.forEach(value=>{const b=document.createElement('button');b.type='button';b.textContent=`t = ${Number(value.toFixed(2))}`;b.dataset.time=value;b.onclick=()=>{stop();t=value;slider.value=value;sync();};root.querySelector('[data-times]').append(b);});
-    function stop() { playing=false;cancelAnimationFrame(animation);animation=0;play.textContent='Play'; }
+    function stop() { playing=false;cancelAnimationFrame(animation);animation=0;play.textContent=T('Play','播放'); }
     function sync() {
       text(root,'[data-time-value]',t.toFixed(2));
-      text(root,'[data-interval]',step>=3?m.interval(t):'Read / flip at t = 0');
-      text(root,'[data-bounds]',step>=3?m.bounds(t):'Find the overlap in step 3');
-      text(root,'[data-area-value]',step===4?m.value(t).toFixed(4):'Integrate in step 4');
+      text(root,'[data-interval]',step>=3?m.interval(t):T('Read / flip at t = 0','在 t = 0 处读取 / 翻转'));
+      text(root,'[data-bounds]',step>=3?m.bounds(t):T('Find the overlap in step 3','在第 3 步中找出重叠区间'));
+      text(root,'[data-area-value]',step===4?m.value(t).toFixed(4):T('Integrate in step 4','在第 4 步中积分'));
       if(upper) {
         upper.setValue('t',t);
         upper.setValue('s',step);
         const [l,r]=m.limits(t);
         upper.setValue('L',l);upper.setValue('R',Math.max(l,r));
-        upper.setTextValue('caseLabel',step>=3?m.interval(t):step===1?'Original signals':'Time reversal about τ = 0');
+        upper.setTextValue('caseLabel',step>=3?m.interval(t):step===1?T('Original signals','原始信号'):T('Time reversal about τ = 0','关于 τ = 0 的时间反转'));
         upper.setTextValue('movingLabel',step===1?`${m.movingName}(τ)`:step===2?`${m.movingName}(−τ)`:`${m.movingName}(t−τ)`);
       }
       lower?.setValue('t',t);
@@ -39,10 +41,10 @@
     function setStep(next) {
       stop();cancelAnimationFrame(flipping);flipping=0;step=next;
       if(step<3){t=0;slider.value=0;}
-      const notes=[`Keep ${m.fixedLabel} fixed and read the original ${m.movingName}(τ).`,
-        m.movingName==='x'?'Flip x(τ) to x(−τ). The even rectangle keeps its shape; colored endpoints exchange sides.':'Flip about τ = 0. Watch the orange curve reflect and its endpoint markers change sides.',
-        `Drag t to shift ${m.movingName}(−τ) to ${m.movingName}(t−τ). Read the boundaries before integrating.`,
-        'The upper signed product area gives one lower output point. Press Play to trace the result as t changes.'];
+      const notes=[T(`Keep ${m.fixedLabel} fixed and read the original ${m.movingName}(τ).`, `保持 ${m.fixedLabel} 固定，读取原始的 ${m.movingName}(τ)。`),
+        m.movingName==='x'?T('Flip x(τ) to x(−τ). The even rectangle keeps its shape; colored endpoints exchange sides.','把 x(τ) 翻转为 x(−τ)。偶矩形形状不变，只有彩色端点交换左右。'):T('Flip about τ = 0. Watch the orange curve reflect and its endpoint markers change sides.','关于 τ = 0 翻转。观察橙色曲线的反射以及端点标记的交换。'),
+        T(`Drag t to shift ${m.movingName}(−τ) to ${m.movingName}(t−τ). Read the boundaries before integrating.`, `拖动 t，把 ${m.movingName}(−τ) 平移为 ${m.movingName}(t−τ)。积分之前先读出边界。`),
+        T('The upper signed product area gives one lower output point. Press Play to trace the result as t changes.','上图的带符号乘积面积给出下图的一个输出点。点击播放，跟随 t 的变化描出结果。')];
       text(root,'[data-step-note]',notes[step-1]);
       root.querySelectorAll('[data-step]').forEach(b=>{const active=+b.dataset.step===step;b.classList.toggle('active',active);b.setAttribute('aria-pressed',active);});
       slider.disabled=step<3||!loaded;
@@ -74,7 +76,7 @@
       if(playing){stop();return;}
       controllers.forEach(c=>c.stop());
       if(t>=m.max)t=m.min;
-      playing=true;play.textContent='Pause';let prev=0;
+      playing=true;play.textContent=T('Pause','暂停');let prev=0;
       const tick=now=>{if(!playing)return;if(!prev)prev=now;if(now-prev>=32){t=Math.min(m.max,t+(now-prev)*0.00055);prev=now;slider.value=t;sync();}if(t>=m.max){stop();return;}animation=requestAnimationFrame(tick);};
       animation=requestAnimationFrame(tick);
     };
@@ -84,7 +86,7 @@
     function startApplet(host,kind) {
       return new Promise((resolve,reject)=>{
         const timer=setTimeout(()=>reject(new Error('GeoGebra construction timed out.')),35000);
-        const applet=new window.GGBApplet({id:`fresh_${id}_${kind}`,appName:'classic',language:'en',perspective:'AG',showAuxiliaryObjects:false,width:Math.max(400,root.clientWidth-2),height:kind==='upper'?360:280,
+        const applet=new window.GGBApplet({id:`fresh_${id}_${kind}`,appName:'classic',language:ZH?'zh':'en',perspective:'AG',showAuxiliaryObjects:false,width:Math.max(400,root.clientWidth-2),height:kind==='upper'?360:280,
           showToolBar:false,showMenuBar:false,showAlgebraInput:false,showResetIcon:false,showZoomButtons:false,enableRightClick:false,enableLabelDrags:false,enableShiftDragZoom:false,
           appletOnLoad:api=>{try{
             if(kind==='upper') {
@@ -98,18 +100,18 @@
                 `rightLabel=Text("${m.rightLabel}",(${m.right},${ymin*0.65}))`,
                 `fixedLabel=Text("${m.fixedLabel}",(${xmin+0.4},${ymax-0.2}))`,
                 `movingLabel=Text("${m.movingName}(τ)",(${xmin+(xmax-xmin)*0.35},${ymax-0.2}))`,
-                `caseLabel=Text("Read the signals",(${xmin+(xmax-xmin)*0.50},${ymax-0.4}))`,
+                `caseLabel=Text("${T('Read the signals','读取信号')}",(${xmin+(xmax-xmin)*0.50},${ymax-0.4}))`,
                 `E=(q*${m.markers[0]},original(${m.markers[0]}))`,`F=(q*${m.markers[1]},original(${m.markers[1]}))`
               ].forEach(c=>command(api,c));
               api.setVisible('original',false);api.setVisible('p',false);
-              configure(api,m.view);api.setAxisLabels(1,'τ','Amplitude');
+              configure(api,m.view);api.setAxisLabels(1,'τ',T('Amplitude','幅值'));
               ['g','fixedLabel'].forEach(n=>api.setColor(n,52,120,216));
               ['r','flipCurve','movingLabel'].forEach(n=>api.setColor(n,223,133,47));
               ['p','shade','A'].forEach(n=>api.setColor(n,128,86,186));api.setFilling('shade',0.32);
               ['g','r','p'].forEach(n=>{api.setLineThickness(n,3);api.setLabelVisible(n,false);});
               ['edgeLeft','edgeRight'].forEach(n=>{api.setLineStyle(n,1);api.setColor(n,140,150,165);api.setLabelVisible(n,false);});
               api.setColor('E',195,72,100);api.setColor('F',36,140,158);
-              api.setCaption('E','Original left');api.setCaption('F','Original right');
+              api.setCaption('E',T('Original left','原信号左端'));api.setCaption('F',T('Original right','原信号右端'));
               ['E','F'].forEach(n=>{api.setPointSize(n,5);api.setLabelStyle(n,3);api.setLabelVisible(n,true);});
               hideHelpers(api,['g','r','A']);upper=api;
             } else {
@@ -126,14 +128,14 @@
       });
     }
     async function init() {
-      text(root,'[data-status]','Loading GeoGebra…');
+      text(root,'[data-status]',T('Loading GeoGebra…','正在加载 GeoGebra……'));
       try {
         await waitForRuntime();
         await startApplet(root.querySelector('[data-upper]'),'upper');
         await startApplet(root.querySelector('[data-lower]'),'lower');
         loaded=true;root.dataset.ready='true';text(root,'[data-status]','');setStep(step);
         const observer=new ResizeObserver(()=>{const width=Math.max(400,root.clientWidth-2);upper.setSize(width,360);lower.setSize(width,280);});observer.observe(root);
-      }catch(e){root.dataset.ready='error';text(root,'[data-status]',`${e.message} Reload this lesson to retry. The textbook figure remains available above.`);console.error(e);}
+      }catch(e){root.dataset.ready='error';text(root,'[data-status]',`${e.message} ${T('Reload this lesson to retry. The textbook figure remains available above.','重新加载本页即可重试。上方的教材原图仍然可用。')}`);console.error(e);}
     }
     setStep(1);
     const observer=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){observer.disconnect();init();}},{rootMargin:'250px'});observer.observe(root);

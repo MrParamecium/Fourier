@@ -19,6 +19,7 @@
 // ui-friction-fixes.js wraps it, so live re-renders run through the wrapped version.
 
 function renderSyllabus() {
+  const tt = t => (window.FourierI18N ? window.FourierI18N.tt(t) : t);
   let html = '';
   syllabusData.forEach((item, chIdx) => {
     const sections = item.sections.map(s => typeof s === 'string' ? { title: s, subsections: [] } : s);
@@ -28,7 +29,7 @@ function renderSyllabus() {
       const subsectionHtml = subsList.length ? `
         <div class="syllabus-subsections hidden" id="${sectionSlug}">
           ${subsList.map(sub => `
-            <button class="syllabus-subsection" data-subsection="${escapeHtml(sub)}">${escapeHtml(sub)}</button>
+            <button class="syllabus-subsection" data-subsection="${escapeHtml(sub)}">${escapeHtml(tt(sub))}</button>
           `).join('')}
         </div>
       ` : '';
@@ -36,7 +37,7 @@ function renderSyllabus() {
         <div class="syllabus-section-wrap">
           <div class="syllabus-section-row">
             ${subsList.length ? `<button class="syllabus-section-caret" data-target="${sectionSlug}" type="button">›</button>` : `<span class="syllabus-section-caret-placeholder"></span>`}
-            <button class="syllabus-section" data-section="${escapeHtml(sec.title)}" data-subsections="${escapeHtml(JSON.stringify(subsList))}">${escapeHtml(sec.title)}</button>
+            <button class="syllabus-section" data-section="${escapeHtml(sec.title)}" data-subsections="${escapeHtml(JSON.stringify(subsList))}">${escapeHtml(tt(sec.title))}</button>
           </div>${subsectionHtml}
         </div>`;
     }).join('');
@@ -45,7 +46,7 @@ function renderSyllabus() {
       <div class="syllabus-item">
         <button class="syllabus-chapter" data-idx="${chIdx}">
           <span class="caret">›</span>
-          <span>${escapeHtml(item.chapter)}</span>
+          <span>${escapeHtml(tt(item.chapter))}</span>
         </button>
         <div class="syllabus-sections hidden" id="syllabus-${chIdx}">
           ${sectionsHtml}

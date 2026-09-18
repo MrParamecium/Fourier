@@ -171,7 +171,6 @@ function maybeBootRestoreLastLocation() {
     const staticViews = {
       welcome: showWelcome,
       settings: showSettingsView,
-      preference: showPreferenceView,
       courseTracker: showCourseTrackerView,
       mistakeNotebook: showMistakeNotebookView
     };
@@ -249,6 +248,10 @@ function saveCourseTrackerState(state) {
 
 function renderCourseTracker() {
   if (!courseTrackerView) return;
+  const i18n = window.FourierI18N;
+  const ttx = x => (i18n ? i18n.tt(x) : x);
+  const tLecture = x => (i18n ? i18n.lectureLabel(x) : x);
+  const tStatus = x => (i18n ? i18n.statusLabel(x) : x);
   const state = loadCourseTrackerState();
   const doneCount = COURSE_SCHEDULE.filter(item => state[item.id] === 'Done').length;
   const progressRatio = COURSE_SCHEDULE.length > 0 ? doneCount / COURSE_SCHEDULE.length : 0;
@@ -261,15 +264,15 @@ function renderCourseTracker() {
     courseProgressRing.style.setProperty('--course-progress-deg', `${progressDegrees}deg`);
     courseProgressRing.style.setProperty('--course-progress-percent', `${progressPercent}%`);
   }
-  if (courseNextLecture && nextItem) courseNextLecture.textContent = `${nextItem.lecture} · ${nextItem.date}`;
-  if (courseNextTopic && nextItem) courseNextTopic.textContent = nextItem.topic;
+  if (courseNextLecture && nextItem) courseNextLecture.textContent = `${tLecture(nextItem.lecture)} · ${nextItem.date}`;
+  if (courseNextTopic && nextItem) courseNextTopic.textContent = ttx(nextItem.topic);
 
   if (courseGradeList) {
     courseGradeList.innerHTML = COURSE_GRADE_RULES.map(rule => `
       <div class="course-grade-row">
         <div>
-          <div class="course-grade-label">${escapeHtml(rule.label)}</div>
-          <div class="course-grade-detail">${escapeHtml(rule.detail)}</div>
+          <div class="course-grade-label">${escapeHtml(ttx(rule.label))}</div>
+          <div class="course-grade-detail">${escapeHtml(ttx(rule.detail))}</div>
         </div>
         <div class="course-grade-weight">${rule.weight}%</div>
       </div>
@@ -280,14 +283,9 @@ function renderCourseTracker() {
     let activeMonth = '';
     courseTrackerTableBody.innerHTML = COURSE_SCHEDULE.map(item => {
       const status = state[item.id] || 'Not started';
-      const options = COURSE_TRACKER_STATUSES.map(option => `<option value="${escapeHtml(option)}"${option === status ? ' selected' : ''}>${escapeHtml(option)}</option>`).join('');
+      const options = COURSE_TRACKER_STATUSES.map(option => `<option value="${escapeHtml(option)}"${option === status ? ' selected' : ''}>${escapeHtml(tStatus(option))}</option>`).join('');
       const month = item.date.split('/')[0];
-      const monthName = {
-        '9': 'September',
-        '10': 'October',
-        '11': 'November',
-        '12': 'December'
-      }[month] || month;
+      const monthName = (i18n ? i18n.t(`tracker.month.${month}`) : '') || month;
       const monthMarker = month !== activeMonth ? `<div class="course-month-marker">${escapeHtml(monthName)}</div>` : '';
       activeMonth = month;
       return `
@@ -296,10 +294,10 @@ function renderCourseTracker() {
           <div class="course-date-pill">${escapeHtml(item.date)}</div>
           <div class="course-timeline-body">
             <div class="course-timeline-topline">
-              <span class="course-lecture-label">${escapeHtml(item.lecture)}</span>
-              ${item.milestone ? `<span class="course-milestone-chip">${escapeHtml(item.milestone)}</span>` : ''}
+              <span class="course-lecture-label">${escapeHtml(tLecture(item.lecture))}</span>
+              ${item.milestone ? `<span class="course-milestone-chip">${escapeHtml(ttx(item.milestone))}</span>` : ''}
             </div>
-            <h3>${escapeHtml(item.topic)}</h3>
+            <h3>${escapeHtml(ttx(item.topic))}</h3>
             <div class="course-section-line">${escapeHtml(item.sections)}</div>
           </div>
           <div class="course-timeline-status">
@@ -393,7 +391,6 @@ const navSettingsBtn = document.getElementById('sidebarSettingsBtn');
 const sidebarSyllabusPanel = document.getElementById('sidebarSyllabusPanel');
 const welcomeCoverBtn = document.getElementById('welcomeCoverBtn');
 const settingsPageBackBtn = document.getElementById('settingsPageBackBtn');
-const settingsPreferencesBtn = document.getElementById('settingsPreferencesBtn');
 const courseTrackerCloseBtn = document.getElementById('courseTrackerCloseBtn');
 const courseTrackerResetBtn = document.getElementById('courseTrackerResetBtn');
 const courseTrackerTableBody = document.getElementById('courseTrackerTableBody');
@@ -493,22 +490,11 @@ if (navCourseTrackerBtn) {
 if (navMistakeNotebookBtn) {
   navMistakeNotebookBtn.addEventListener('click', showMistakeNotebookView);
 }
-if (navPreferenceBtn) {
-  navPreferenceBtn.addEventListener('click', showPreferenceView);
-}
 if (welcomeCoverBtn) {
   welcomeCoverBtn.addEventListener('click', () => toggleSyllabusPanel(true));
 }
 if (settingsPageBackBtn) {
   settingsPageBackBtn.addEventListener('click', () => {
-    showWelcome();
-  });
-}
-if (settingsPreferencesBtn) {
-  settingsPreferencesBtn.addEventListener('click', showPreferenceView);
-}
-if (preferencePageBackBtn) {
-  preferencePageBackBtn.addEventListener('click', () => {
     showWelcome();
   });
 }
@@ -754,7 +740,6 @@ document.getElementById('tutorToolbar')?.addEventListener('click', async (event)
   }
   menu.hidden = true;
   toggle('more', false);
-  if (action === 'preferences') { showPreferenceView(); return; }
   if (action === 'settings') { showSettingsView(); return; }
   if (action === 'recent') {
     list.hidden = !list.hidden;
@@ -2309,7 +2294,7 @@ async function openChapterParentLessonFromOverview(sectionId, sectionTitle, subs
   _learnLayoutMode = 'lesson';
   setChapterOverviewLayoutActive(false);
   _setLearnMode('lecture');
-  learnTitle.textContent = sectionTitle;
+  learnTitle.textContent = (window.FourierI18N ? window.FourierI18N.tt(sectionTitle) : sectionTitle);
   clearLearnRenderedContent('Preparing lesson...');
   setLearnLoading(true);
   if (learnExplainScroll) learnExplainScroll.scrollTop = 0;
@@ -2441,7 +2426,7 @@ function openChapterOverviewMode(sectionId, sectionTitle, subsections = [], opti
   setChapterOverviewLayoutActive(true);
   _setLearnMode('lecture');
 
-  learnTitle.textContent = sectionTitle;
+  learnTitle.textContent = (window.FourierI18N ? window.FourierI18N.tt(sectionTitle) : sectionTitle);
   clearLearnRenderedContent('');
   showLearnView();
   if (learnIntroCard) learnIntroCard.classList.add('hidden');
@@ -2485,7 +2470,7 @@ async function openLearnMode(sectionId, sectionTitle, subsections = [], options 
   setChapterOverviewLayoutActive(false);
   _setLearnMode('lecture');
 
-  learnTitle.textContent = sectionTitle;
+  learnTitle.textContent = (window.FourierI18N ? window.FourierI18N.tt(sectionTitle) : sectionTitle);
   if(learnIntroCard) learnIntroCard.classList.add('hidden');
   clearLearnRenderedContent('Preparing lesson...');
   showLearnView();
@@ -2608,7 +2593,7 @@ async function startLesson(options = {}) {
     tutorState.sessionStartTime = Date.now();
     tutorState.learnSectionTitle = learnSectionTitle;
     tutorState.learnLessonMarkdown = '';
-    learnExplainContent.innerHTML = '<iframe class="embedded-lesson-frame" title="2.4-2 Graphical Understanding of Convolution Operation" src="/lessons/2_4-2/lesson.html?v=fresh-20260909-2"></iframe>';
+    learnExplainContent.innerHTML = `<iframe class="embedded-lesson-frame" title="2.4-2 Graphical Understanding of Convolution Operation" src="${lesson242Src()}"></iframe>`;
     if (typeof replaceLearnContent === 'function') replaceLearnContent(learnExplainContent, learnExplainContent.innerHTML);
     if (learnChatContent) learnChatContent.innerHTML = '';
     const tutorEmpty = document.getElementById('learnChatEmptyState');
@@ -4537,7 +4522,6 @@ function showWelcome() {
   answerScreen.classList.add('hidden');
   learnView.classList.add('hidden');
   if (settingsView) settingsView.classList.add('hidden');
-  if (preferenceView) preferenceView.classList.add('hidden');
   if (courseTrackerView) courseTrackerView.classList.add('hidden');
   if (mistakeNotebookView) mistakeNotebookView.classList.add('hidden');
   if (loginView) loginView.classList.add('hidden');
@@ -4558,7 +4542,6 @@ function showAnswer(question) {
   answerScreen.classList.remove('hidden');
   learnView.classList.add('hidden');
   if (settingsView) settingsView.classList.add('hidden');
-  if (preferenceView) preferenceView.classList.add('hidden');
   if (courseTrackerView) courseTrackerView.classList.add('hidden');
   if (mistakeNotebookView) mistakeNotebookView.classList.add('hidden');
   if (loginView) loginView.classList.add('hidden');
@@ -4574,7 +4557,6 @@ function showLearnView() {
   answerScreen.classList.add('hidden');
   learnView.classList.remove('hidden');
   if (settingsView) settingsView.classList.add('hidden');
-  if (preferenceView) preferenceView.classList.add('hidden');
   if (courseTrackerView) courseTrackerView.classList.add('hidden');
   if (mistakeNotebookView) mistakeNotebookView.classList.add('hidden');
   if (loginView) loginView.classList.add('hidden');
@@ -4592,34 +4574,16 @@ function showSettingsView() {
   answerScreen.classList.add('hidden');
   learnView.classList.add('hidden');
   if (settingsView) settingsView.classList.remove('hidden');
-  if (preferenceView) preferenceView.classList.add('hidden');
   if (courseTrackerView) courseTrackerView.classList.add('hidden');
   if (mistakeNotebookView) mistakeNotebookView.classList.add('hidden');
   if (loginView) loginView.classList.add('hidden');
   if (topbar) topbar.classList.add('hidden');
   setWorkspaceAccountBarVisible(false);
   renderUserBadge();
+  syncPreferenceEditorFromMemory();
   clearToc();
   updateSidebarNavActive('settings');
   recordLastLocation('settings');
-}
-
-function showPreferenceView() {
-  leaveConvolutionFocusBeforeWorkspaceNavigation();
-  if (appShell) appShell.classList.remove('hidden');
-  welcomeScreen.classList.add('hidden');
-  answerScreen.classList.add('hidden');
-  learnView.classList.add('hidden');
-  if (settingsView) settingsView.classList.add('hidden');
-  if (preferenceView) preferenceView.classList.remove('hidden');
-  if (courseTrackerView) courseTrackerView.classList.add('hidden');
-  if (mistakeNotebookView) mistakeNotebookView.classList.add('hidden');
-  if (loginView) loginView.classList.add('hidden');
-  if (topbar) topbar.classList.add('hidden');
-  setWorkspaceAccountBarVisible(false);
-  updateSidebarNavActive('preference');
-  syncPreferenceEditorFromMemory();
-  recordLastLocation('preference');
 }
 
 function showCourseTrackerView() {
@@ -4629,7 +4593,6 @@ function showCourseTrackerView() {
   answerScreen.classList.add('hidden');
   learnView.classList.add('hidden');
   if (settingsView) settingsView.classList.add('hidden');
-  if (preferenceView) preferenceView.classList.add('hidden');
   if (courseTrackerView) courseTrackerView.classList.remove('hidden');
   if (mistakeNotebookView) mistakeNotebookView.classList.add('hidden');
   if (loginView) loginView.classList.add('hidden');
@@ -4648,7 +4611,6 @@ function showMistakeNotebookView() {
   answerScreen.classList.add('hidden');
   learnView.classList.add('hidden');
   if (settingsView) settingsView.classList.add('hidden');
-  if (preferenceView) preferenceView.classList.add('hidden');
   if (courseTrackerView) courseTrackerView.classList.add('hidden');
   if (mistakeNotebookView) mistakeNotebookView.classList.remove('hidden');
   if (loginView) loginView.classList.add('hidden');
@@ -4680,7 +4642,6 @@ function showLoginView() {
   answerScreen.classList.add('hidden');
   learnView.classList.add('hidden');
   if (settingsView) settingsView.classList.add('hidden');
-  if (preferenceView) preferenceView.classList.add('hidden');
   if (courseTrackerView) courseTrackerView.classList.add('hidden');
   if (mistakeNotebookView) mistakeNotebookView.classList.add('hidden');
   if (loginView) loginView.classList.remove('hidden');
@@ -4706,7 +4667,6 @@ function updateSidebarNavActive(key) {
   if (navRecentBtn) navRecentBtn.classList.toggle('active', key === 'recent');
   if (navCourseTrackerBtn) navCourseTrackerBtn.classList.toggle('active', key === 'course-tracker');
   if (navMistakeNotebookBtn) navMistakeNotebookBtn.classList.toggle('active', key === 'mistake-notebook');
-  if (navPreferenceBtn) navPreferenceBtn.classList.toggle('active', key === 'preference');
   if (navSettingsBtn) navSettingsBtn.classList.toggle('active', key === 'settings');
 }
 
@@ -5655,6 +5615,42 @@ document.querySelectorAll('.theme-toggle-btn').forEach((btn) => {
   btn.addEventListener('click', () => {
     applyTheme(btn.dataset.themeValue || 'dawn');
   });
+});
+
+// ── Language toggle (Settings) ────────────────────────────────
+function applyLang(lang) {
+  window.FourierI18N?.setLang(lang);
+  document.querySelectorAll('#langToggleGroup .theme-toggle-btn').forEach((btn) => {
+    btn.classList.toggle('active', btn.dataset.langValue === window.FourierI18N?.currentLang());
+  });
+}
+document.querySelectorAll('#langToggleGroup .theme-toggle-btn').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    applyLang(btn.dataset.langValue || 'en');
+  });
+});
+if (window.FourierI18N) {
+  window.FourierI18N.applyStatic();
+  document.querySelectorAll('#langToggleGroup .theme-toggle-btn').forEach((btn) => {
+    btn.classList.toggle('active', btn.dataset.langValue === window.FourierI18N.currentLang());
+  });
+}
+
+// Settings: replay the guided tour from a clean home state.
+document.getElementById('settingsReplayTourBtn')?.addEventListener('click', () => {
+  if (typeof showWelcome === 'function') showWelcome();
+  setTimeout(() => window.FourierLessonTour?.start(), 300);
+});
+
+// 2.4-2 embedded lesson ships in two language editions; pick by current UI language.
+function lesson242Src() {
+  const zh = window.FourierI18N && window.FourierI18N.currentLang() === 'zh';
+  return `${zh ? '/lessons/2_4-2/lesson-zh.html' : '/lessons/2_4-2/lesson.html'}?v=20260918-zh`;
+}
+document.addEventListener('fourier:langchange', () => {
+  const frame = document.querySelector('iframe.embedded-lesson-frame');
+  if (frame) frame.src = lesson242Src();
+  if (typeof renderSyllabus === 'function') renderSyllabus();
 });
 
 // ── Init attachment UI ────────────────────────────────────────
