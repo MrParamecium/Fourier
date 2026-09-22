@@ -499,6 +499,11 @@ function hideAuthOverlay() {
 function showAuthOverlay() {
   const intro = document.getElementById('introLanding');
   if (intro && !intro.classList.contains('hidden')) return;
+  // Already on the login screen? A Clerk "no user" event firing mid-click
+  // (guest button pressed, session not yet recorded) must not re-render the
+  // view and swallow the in-flight click.
+  const loginEl = document.getElementById('loginView');
+  if (loginEl && loginEl.getClientRects().length) return;
   // A live in-tab guest session owns the screen: Clerk firing its no-user
   // listener on a guest reload must not bounce the guest to the login view.
   // (Before the D2 intro gating this was masked by the intro overlay —
