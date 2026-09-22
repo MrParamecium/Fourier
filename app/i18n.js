@@ -485,11 +485,10 @@
   }
 
   function currentLang() {
+    // Default is English; Chinese only after an explicit choice in Settings.
     let stored = null;
     try { stored = localStorage.getItem(LANG_STORAGE_KEY); } catch (_) {}
-    if (stored) return normalize(stored);
-    const nav = (navigator.languages && navigator.languages[0]) || navigator.language || '';
-    return normalize(String(nav).toLowerCase().startsWith('zh') ? 'zh' : 'en');
+    return normalize(stored);
   }
 
   function t(key) {
