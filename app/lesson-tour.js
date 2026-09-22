@@ -20,7 +20,6 @@
   ];
   function stop() {
     active = false; revision++;
-    try { localStorage.setItem('aquarius-tour-done', '1'); } catch (_) {}
     removeTargetListener();
     dialog?.remove(); ring?.remove();
     window.removeEventListener('resize', position);
@@ -153,26 +152,39 @@
     document.addEventListener('keydown',keydown);
     show(); dialog.querySelector('.lesson-tour-skip').focus();
   }
-  // Trigger once per page load; returning home later must not replay it.
-  let tourStarted = false;
+  // Replay the tour on every return to the home screen. The tour may only
+  // start once the user has actually entered the workspace: boot renders the
+  // welcome screen behind the intro landing, so both a real interaction and a
+  // closed intro landing are required before the first home edge counts.
   let wasHomeVisible = false;
   let scheduled = false;
+  let interacted = false;
+  const markInteracted = () => { interacted = true; };
+  document.addEventListener('pointerdown', markInteracted, true);
+  document.addEventListener('keydown', markInteracted, true);
   function syncHome() {
     scheduled = false;
+    const introGone = !document.getElementById('introLanding')?.getClientRects().length;
     const visible = Boolean(home?.getClientRects().length)
       && getComputedStyle(home).visibility !== 'hidden'
-      && !document.getElementById('loginView')?.getClientRects().length;
-    let tourDone = false;
-    try { tourDone = localStorage.getItem('aquarius-tour-done') === '1'; } catch (_) {}
-    if (visible && !wasHomeVisible && !active && !tourStarted && !tourDone) { tourStarted = true; start(); }
+      && !document.getElementById('loginView')?.getClientRects().length
+      && interacted && introGone;
+    if (visible && !wasHomeVisible && !active) start();
     wasHomeVisible = visible;
   }
   window.FourierLessonTour = {
-    start: () => { tourStarted = true; start(); }
+    start: () => start(),
+    debug: () => ({ interacted, wasHomeVisible, active,
+      homeRects: home ? home.getClientRects().length : -1,
+      loginRects: document.getElementById('loginView')?.getClientRects().length ?? -1,
+      introRects: document.getElementById('introLanding')?.getClientRects().length ?? -1,
+      panelOpen: document.getElementById('sidebarSyllabusPanel')?.classList.contains('is-open') })
   };
-  const observer = new MutationObserver(() => {
-    if (!scheduled) { scheduled = true; requestAnimationFrame(syncHome); }
-  });
+  const schedule = () => { if (!scheduled) { scheduled = true; requestAnimationFrame(syncHome); } };
+  const observer = new MutationObserver(schedule);
   observer.observe(document.body, {subtree:true, attributes:true, attributeFilter:['class','style']});
-  syncHome();
+  // Clicks are the reliable signal for "user just navigated" — mutations alone
+  // can race the entry flow and skip the first home edge.
+  document.addEventListener('pointerup', schedule, true);
+  schedule();
 })();
