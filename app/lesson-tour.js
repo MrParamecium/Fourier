@@ -152,29 +152,29 @@
     document.addEventListener('keydown',keydown);
     show(); dialog.querySelector('.lesson-tour-skip').focus();
   }
-  // Replay the tour on every return to the home screen. The tour may only
-  // start once the user has actually entered the workspace: boot renders the
-  // welcome screen behind the intro landing, so both a real interaction and a
-  // closed intro landing are required before the first home edge counts.
+  // Replay the tour on every return to the home screen. The intro landing is
+  // the only state that must not be interrupted: when it covers the screen the
+  // tour stands down, and it restarts as soon as the user lands on home.
   let wasHomeVisible = false;
   let scheduled = false;
-  let interacted = false;
-  const markInteracted = () => { interacted = true; };
-  document.addEventListener('pointerdown', markInteracted, true);
-  document.addEventListener('keydown', markInteracted, true);
   function syncHome() {
     scheduled = false;
-    const introGone = !document.getElementById('introLanding')?.getClientRects().length;
+    const introEl = document.getElementById('introLanding');
+    const introVisible = Boolean(introEl?.getClientRects().length);
+    if (introVisible && active) { stop(); wasHomeVisible = false; return; }
     const visible = Boolean(home?.getClientRects().length)
       && getComputedStyle(home).visibility !== 'hidden'
       && !document.getElementById('loginView')?.getClientRects().length
-      && interacted && introGone;
-    if (visible && !wasHomeVisible && !active) start();
+      && !introVisible;
+    // Every arrival on home opens a fresh tour — even replacing one that is
+    // still active (e.g. left mid-step in the lesson view), so a stale active
+    // tour can never block the next replay.
+    if (visible && !wasHomeVisible) { if (active) stop(); start(); }
     wasHomeVisible = visible;
   }
   window.FourierLessonTour = {
     start: () => start(),
-    debug: () => ({ interacted, wasHomeVisible, active,
+    debug: () => ({ wasHomeVisible, active,
       homeRects: home ? home.getClientRects().length : -1,
       loginRects: document.getElementById('loginView')?.getClientRects().length ?? -1,
       introRects: document.getElementById('introLanding')?.getClientRects().length ?? -1,
