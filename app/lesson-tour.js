@@ -14,6 +14,7 @@
     ['tour.readOverview', 'tour.readOverview.body', ''],
     ['tour.oneGoal', 'tour.oneGoal.body', 'tour.next'],
     ['tour.readingMode', 'tour.readingMode.body', 'tour.next'],
+    ['tour.viewToggle', 'tour.viewToggle.body', 'tour.next'],
     ['tour.focus', 'tour.focus.body', 'tour.next'],
     ['tour.moveSignal', 'tour.moveSignal.body', 'tour.next'],
     ['tour.askTutor', 'tour.askTutor.body', 'tour.startLearning']
@@ -26,7 +27,7 @@
     window.removeEventListener('scroll', position, true);
     frame?.contentWindow?.removeEventListener('scroll', position);
     document.removeEventListener('keydown', keydown);
-    if (step === 9) document.getElementById('learnFollowupInput')?.focus();
+    if (step === 10) document.getElementById('learnFollowupInput')?.focus();
     else document.getElementById('navHomeBtn')?.focus();
   }
   function keydown(event) {
@@ -90,7 +91,7 @@
         frame = await waitForFrame(token);
         if (!frame || !active || token !== revision) return;
         frame.contentWindow.addEventListener('scroll', position, {passive:true});
-        if (step === 9) {
+        if (step === 10) {
           openLearnQaSidebar();
           target = document.getElementById('learnFollowupBar');
         } else {
@@ -99,6 +100,8 @@
             : step === 6
               ? document.querySelector('.reading-modes')
               : step === 7
+                ? document.getElementById('learnViewSelector')
+              : step === 8
                 ? (() => {
                   // lesson.js moves the fullscreen button into the parent topbar when embedded;
                   // resolve the first actually visible instance.
@@ -145,7 +148,7 @@
         else { target.focus(); target.click(); }
         return;
       }
-      if (step === 9) stop(); else { step++;show(); }
+      if (step === 10) stop(); else { step++;show(); }
     };
     window.addEventListener('resize',position);
     window.addEventListener('scroll',position,true);
@@ -186,5 +189,8 @@
   // Clicks are the reliable signal for "user just navigated" — mutations alone
   // can race the entry flow and skip the first home edge.
   document.addEventListener('pointerup', schedule, true);
+  // Safety net: a boot-time reload can swallow a mutation/rAF edge, so poll
+  // gently — the tour then appears within 500ms of any home entry.
+  setInterval(schedule, 500);
   schedule();
 })();
