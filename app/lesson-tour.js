@@ -29,6 +29,12 @@
     document.removeEventListener('keydown', keydown);
     if (step === 10) document.getElementById('learnFollowupInput')?.focus();
     else document.getElementById('navHomeBtn')?.focus();
+    // When the tour ends inside the lesson, return the reading position to the top.
+    try {
+      frame?.contentWindow?.scrollTo({ top: 0, behavior: 'instant' });
+      const sc = document.querySelector('#learnView .learn-explain-scroll');
+      if (sc) sc.scrollTop = 0;
+    } catch (_) {}
   }
   function keydown(event) {
     if (event.key === 'Escape') stop();

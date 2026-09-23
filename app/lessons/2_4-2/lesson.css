@@ -20,6 +20,7 @@ main>.equation{font-size:1.2rem}
 .theme-toggle svg{display:block;grid-area:1 / 1;transform:none;margin:0;flex:none}
 .embedded-lesson main>h1,.embedded-lesson main>h1+hr{display:none}
 .embedded-lesson main{padding-top:28px}
+.embedded-lesson main>h2[data-section="1"]{margin-top:0}
 .reading-modes{display:flex;gap:3px;padding:3px;border:1px solid #ffffff99;border-radius:8px;background:#ffffff26;backdrop-filter:blur(18px)}
 .reading-modes button{font:600 13px/1.4 system-ui;padding:8px;border:0;border-radius:5px;background:transparent;color:var(--ink)}
 .reading-modes button[aria-pressed=true]{background:#ffffff80}
