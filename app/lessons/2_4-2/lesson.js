@@ -102,6 +102,20 @@
   }
   previous.onclick = () => turn(-1);
   next.onclick = () => turn(1);
+  // Parent-side hook: let the guided tour bring a hidden section's demo on page.
+  window.lessonGoToPage = idx => {
+    readingMode = 'pages';
+    pageIndex = Math.max(0, Math.min(groups.length - 1, idx | 0));
+    renderReadingMode();
+    window.scrollTo(0, 0);
+  };
+  // Parent-side hook: let the guided tour bring a hidden section's demo on page.
+  window.lessonGoToPage = idx => {
+    readingMode = 'pages';
+    pageIndex = Math.max(0, Math.min(groups.length - 1, idx | 0));
+    renderReadingMode();
+    window.scrollTo(0, 0);
+  };
   window.addEventListener('keydown', event => {
     if (readingMode !== 'pages' || event.target.closest('input,textarea,select,button,[contenteditable],.demo')) return;
     if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') { event.preventDefault(); turn(event.key === 'ArrowLeft' ? -1 : 1); }

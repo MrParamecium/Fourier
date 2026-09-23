@@ -146,6 +146,10 @@
                 })()
                 : frame.contentDocument.querySelector('#demo-figure27 .time-controls');
         }
+        if (step === 9) {
+          // Pages mode hides the demo's section - turn the lesson to its page first.
+          try { frame.contentWindow.lessonGoToPage?.(2); } catch (_) {}
+        }
         target.scrollIntoView({block:'center',behavior:'instant'});
       }
       const copy = steps[step];
@@ -173,7 +177,14 @@
     dialog.innerHTML = `<span class="lesson-tour-count"></span><h2></h2><p aria-live="polite"></p><div class="lesson-tour-actions"><button class="lesson-tour-skip">${i18n().t('tour.skip')}</button><button class="lesson-tour-back" aria-label="Previous step" title="Previous step"><i class="ph-bold ph-arrow-left" aria-hidden="true"></i></button><button class="lesson-tour-next">${i18n().t('tour.next')}</button></div>`;
     document.body.append(ring,dialog);
     dialog.querySelector('.lesson-tour-skip').onclick = stop;
-    dialog.querySelector('.lesson-tour-back').onclick = () => { step=Math.max(0,step-1);show(); };
+    dialog.querySelector('.lesson-tour-back').onclick = () => {
+      const prev = Math.max(0, step - 1);
+      // Steps 4/5 target the lesson overview - if the lesson is open, go back to it first.
+      if ((prev === 4 || prev === 5) && document.querySelector('iframe.embedded-lesson-frame')) {
+        document.getElementById('courseLessonReturnTop')?.click();
+      }
+      step = prev; show();
+    };
     dialog.querySelector('.lesson-tour-next').onclick = event => {
       if (event.currentTarget.dataset.retry) { delete event.currentTarget.dataset.retry; show(); return; }
       if (step < 4) {
