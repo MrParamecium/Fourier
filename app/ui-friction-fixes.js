@@ -447,29 +447,10 @@
     if (el) new MutationObserver(refreshPager).observe(el, opts);
   });
 
-  // ── Issue 3: Auto-open syllabus panel after login ─────────────────
-  // Run once when the welcome screen first becomes visible, then disconnect.
-  // Returns true when the panel ends up open (already-open counts), so callers
-  // know to stop watching.
-  const welcomeEl = document.getElementById('welcomeScreen');
-  function autoOpenSyllabus() {
-    try {
-      const panel = document.getElementById('sidebarSyllabusPanel');
-      if (!panel || !welcomeEl) return false;
-      if (welcomeEl.classList.contains('hidden')) return false;
-      if (typeof isAccordionOpen === 'function' && isAccordionOpen(panel)) return true;
-      if (typeof toggleSyllabusPanel === 'function') {
-        toggleSyllabusPanel(true);
-        return true;
-      }
-    } catch(_) {}
-    return false;
-  }
-  if (welcomeEl) {
-    const wm = new MutationObserver(() => {
-      if (autoOpenSyllabus()) wm.disconnect();
-    });
-    wm.observe(welcomeEl, { attributes: true, attributeFilter: ['class'] });
-    setTimeout(() => { if (autoOpenSyllabus()) wm.disconnect(); }, 400);
-  }
+  // ── Issue 3: syllabus panel auto-open removed ────────────────────
+  // The panel used to be force-opened on the first home visit, but the entry
+  // path immediately closes it again (showWelcome → toggleSyllabusPanel(false)),
+  // producing an expand-then-collapse flash. It also fought with the guided
+  // tour, whose first step teaches the user to open the syllabus themselves.
+  // The panel now simply starts closed on home.
 })();
