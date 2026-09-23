@@ -11,8 +11,8 @@
     ['tour.openChapter2', 'tour.openChapter2.body', ''],
     ['tour.openSection24', 'tour.openSection24.body', ''],
     ['tour.chooseLesson', 'tour.chooseLesson.body', ''],
-    ['tour.readOverview', 'tour.readOverview.body', ''],
     ['tour.oneGoal', 'tour.oneGoal.body', 'tour.next'],
+    ['tour.readOverview', 'tour.readOverview.body', 'tour.readOverview.btn'],
     ['tour.readingMode', 'tour.readingMode.body', 'tour.next'],
     ['tour.viewToggle', 'tour.viewToggle.body', 'tour.next'],
     ['tour.focus', 'tour.focus.body', 'tour.next'],
@@ -61,14 +61,13 @@
     const next = dialog.querySelector('.lesson-tour-next');
     next.disabled = true;
     try {
-      if (step < 5) {
+      if (step < 4) {
         for (let attempt = 0; attempt < 100; attempt++) {
           if (!active || token !== revision) return;
           target = step === 0 ? document.getElementById('navSyllabusBtn')
             : step === 1 ? document.querySelector('#courseSyllabus .syllabus-chapter[data-idx="2"]')
             : step === 2 ? document.querySelector('[data-course-title="2.4 System Response to External Input: The Zero-State Response"]')
-            : step === 3 ? document.querySelector(`[data-course-title="${title}"]`)
-            : document.getElementById('courseStartLesson');
+            : document.querySelector(`[data-course-title="${title}"]`);
           if (target?.getClientRects().length) break;
           await new Promise(resolve => setTimeout(resolve,100));
         }
@@ -87,6 +86,37 @@
         document.addEventListener('click', clicked, true);
         removeTargetListener = () => document.removeEventListener('click', clicked, true);
       }
+      else if (step === 4) {
+        // The goal paragraph lives on the lesson overview now — highlight it there.
+        for (let attempt = 0; attempt < 100; attempt++) {
+          if (!active || token !== revision) return;
+          target = document.querySelector('#learnExplainContent [data-tour="goal"]');
+          if (target?.getClientRects().length) break;
+          await new Promise(resolve => setTimeout(resolve,100));
+        }
+        if (!target?.getClientRects().length) throw new Error('Overview goal not ready');
+        target.scrollIntoView({block:'center',behavior:'instant'});
+      }
+      else if (step === 5) {
+        for (let attempt = 0; attempt < 100; attempt++) {
+          if (!active || token !== revision) return;
+          target = document.getElementById('courseStartLesson');
+          if (target?.getClientRects().length) break;
+          await new Promise(resolve => setTimeout(resolve,100));
+        }
+        if (!target?.getClientRects().length) throw new Error('Start button not ready');
+        target.scrollIntoView({block:'center',behavior:'instant'});
+        const clickTarget = target;
+        const clicked = event => {
+          if (!clickTarget.contains(event.target)) return;
+          setTimeout(() => {
+            if (!active || token !== revision) return;
+            removeTargetListener(); step++; show();
+          }, 300);
+        };
+        document.addEventListener('click', clicked, true);
+        removeTargetListener = () => document.removeEventListener('click', clicked, true);
+      }
       else {
         frame = await waitForFrame(token);
         if (!frame || !active || token !== revision) return;
@@ -95,10 +125,8 @@
           openLearnQaSidebar();
           target = document.getElementById('learnFollowupBar');
         } else {
-          target = step === 5
-            ? frame.contentDocument.querySelector('main > p:nth-of-type(2)')
-            : step === 6
-              ? document.querySelector('.reading-modes')
+          target = step === 6
+            ? document.querySelector('.reading-modes')
               : step === 7
                 ? document.getElementById('learnViewSelector')
               : step === 8
@@ -118,7 +146,7 @@
       dialog.querySelector('.lesson-tour-count').textContent = `${step+1} / ${steps.length}`;
       dialog.querySelector('h2').textContent = i18n().t(copy[0]);
       dialog.querySelector('p').textContent = i18n().t(copy[1]);
-      next.textContent = step < 5 ? i18n().t(['tour.openSyllabus.btn', 'tour.openChapter2.btn', 'tour.openSection24.btn', 'tour.chooseLesson.btn', 'tour.readOverview.btn'][step]) : i18n().t(copy[2]);
+      next.textContent = step < 4 ? i18n().t(['tour.openSyllabus.btn', 'tour.openChapter2.btn', 'tour.openSection24.btn', 'tour.chooseLesson.btn'][step]) : i18n().t(copy[2]);
       next.hidden = false;
       dialog.querySelector('.lesson-tour-back').hidden = step < 5;
       requestAnimationFrame(position);
@@ -142,12 +170,13 @@
     dialog.querySelector('.lesson-tour-back').onclick = () => { step=Math.max(0,step-1);show(); };
     dialog.querySelector('.lesson-tour-next').onclick = event => {
       if (event.currentTarget.dataset.retry) { delete event.currentTarget.dataset.retry; show(); return; }
-      if (step < 5) {
+      if (step < 4) {
         const alreadyOpen = step === 0 && document.getElementById('sidebarSyllabusPanel')?.classList.contains('is-open');
         if (alreadyOpen) { step++; show(); }
         else { target.focus(); target.click(); }
         return;
       }
+      if (step === 5) { target.focus(); target.click(); return; }
       if (step === 10) stop(); else { step++;show(); }
     };
     window.addEventListener('resize',position);
