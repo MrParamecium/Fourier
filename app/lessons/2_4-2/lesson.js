@@ -59,7 +59,7 @@
     if (section >= 0) group = section;
     (groups[group] ||= []).push(node);
   });
-  let readingMode = 'scroll', pageIndex = 0;
+  let readingMode = 'pages', pageIndex = 0;
   const modes = document.createElement('div');
   modes.className = 'reading-modes';
   modes.setAttribute('role', 'group');
@@ -106,7 +106,7 @@
     if (readingMode !== 'pages' || event.target.closest('input,textarea,select,button,[contenteditable],.demo')) return;
     if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') { event.preventDefault(); turn(event.key === 'ArrowLeft' ? -1 : 1); }
   });
-  pager.hidden = true;
+  renderReadingMode();
   const checks=[...document.querySelectorAll('[data-checkpoint]')];
   const key='fourier:2.4-2:fresh-20260909:completed';
   let passed=new Set();
