@@ -11,9 +11,10 @@
     ['tour.openChapter2', 'tour.openChapter2.body', ''],
     ['tour.openSection24', 'tour.openSection24.body', ''],
     ['tour.chooseLesson', 'tour.chooseLesson.body', ''],
-    ['tour.readOverview', 'tour.readOverview.body', ''],
     ['tour.oneGoal', 'tour.oneGoal.body', 'tour.next'],
+    ['tour.readOverview', 'tour.readOverview.body', 'tour.readOverview.btn'],
     ['tour.readingMode', 'tour.readingMode.body', 'tour.next'],
+    ['tour.viewToggle', 'tour.viewToggle.body', 'tour.next'],
     ['tour.focus', 'tour.focus.body', 'tour.next'],
     ['tour.moveSignal', 'tour.moveSignal.body', 'tour.next'],
     ['tour.askTutor', 'tour.askTutor.body', 'tour.startLearning']
@@ -26,8 +27,15 @@
     window.removeEventListener('scroll', position, true);
     frame?.contentWindow?.removeEventListener('scroll', position);
     document.removeEventListener('keydown', keydown);
-    if (step === 9) document.getElementById('learnFollowupInput')?.focus();
+    if (step === 10) document.getElementById('learnFollowupInput')?.focus();
     else document.getElementById('navHomeBtn')?.focus();
+    // When the tour ends inside the lesson, return to page 1 (section 1) and the top.
+    try {
+      frame?.contentWindow?.lessonGoToPage?.(0);
+      frame?.contentWindow?.scrollTo({ top: 0, behavior: 'instant' });
+      const sc = document.querySelector('#learnView .learn-explain-scroll');
+      if (sc) sc.scrollTop = 0;
+    } catch (_) {}
   }
   function keydown(event) {
     if (event.key === 'Escape') stop();
@@ -60,14 +68,13 @@
     const next = dialog.querySelector('.lesson-tour-next');
     next.disabled = true;
     try {
-      if (step < 5) {
+      if (step < 4) {
         for (let attempt = 0; attempt < 100; attempt++) {
           if (!active || token !== revision) return;
           target = step === 0 ? document.getElementById('navSyllabusBtn')
             : step === 1 ? document.querySelector('#courseSyllabus .syllabus-chapter[data-idx="2"]')
             : step === 2 ? document.querySelector('[data-course-title="2.4 System Response to External Input: The Zero-State Response"]')
-            : step === 3 ? document.querySelector(`[data-course-title="${title}"]`)
-            : document.getElementById('courseStartLesson');
+            : document.querySelector(`[data-course-title="${title}"]`);
           if (target?.getClientRects().length) break;
           await new Promise(resolve => setTimeout(resolve,100));
         }
@@ -86,19 +93,50 @@
         document.addEventListener('click', clicked, true);
         removeTargetListener = () => document.removeEventListener('click', clicked, true);
       }
+      else if (step === 4) {
+        // The goal paragraph lives on the lesson overview now — highlight it there.
+        for (let attempt = 0; attempt < 100; attempt++) {
+          if (!active || token !== revision) return;
+          target = document.querySelector('#learnExplainContent [data-tour="goal"]');
+          if (target?.getClientRects().length) break;
+          await new Promise(resolve => setTimeout(resolve,100));
+        }
+        if (!target?.getClientRects().length) throw new Error('Overview goal not ready');
+        target.scrollIntoView({block:'center',behavior:'instant'});
+      }
+      else if (step === 5) {
+        for (let attempt = 0; attempt < 100; attempt++) {
+          if (!active || token !== revision) return;
+          target = document.getElementById('courseStartLesson');
+          if (target?.getClientRects().length) break;
+          await new Promise(resolve => setTimeout(resolve,100));
+        }
+        if (!target?.getClientRects().length) throw new Error('Start button not ready');
+        target.scrollIntoView({block:'center',behavior:'instant'});
+        const clickTarget = target;
+        const clicked = event => {
+          if (!clickTarget.contains(event.target)) return;
+          setTimeout(() => {
+            if (!active || token !== revision) return;
+            removeTargetListener(); step++; show();
+          }, 300);
+        };
+        document.addEventListener('click', clicked, true);
+        removeTargetListener = () => document.removeEventListener('click', clicked, true);
+      }
       else {
         frame = await waitForFrame(token);
         if (!frame || !active || token !== revision) return;
         frame.contentWindow.addEventListener('scroll', position, {passive:true});
-        if (step === 9) {
+        if (step === 10) {
           openLearnQaSidebar();
           target = document.getElementById('learnFollowupBar');
         } else {
-          target = step === 5
-            ? frame.contentDocument.querySelector('main > p:nth-of-type(2)')
-            : step === 6
-              ? document.querySelector('.reading-modes')
+          target = step === 6
+            ? document.querySelector('.reading-modes')
               : step === 7
+                ? document.getElementById('learnViewSelector')
+              : step === 8
                 ? (() => {
                   // lesson.js moves the fullscreen button into the parent topbar when embedded;
                   // resolve the first actually visible instance.
@@ -109,13 +147,17 @@
                 })()
                 : frame.contentDocument.querySelector('#demo-figure27 .time-controls');
         }
+        if (step === 9) {
+          // Pages mode hides the demo's section - turn the lesson to its page first.
+          try { frame.contentWindow.lessonGoToPage?.(2); } catch (_) {}
+        }
         target.scrollIntoView({block:'center',behavior:'instant'});
       }
       const copy = steps[step];
       dialog.querySelector('.lesson-tour-count').textContent = `${step+1} / ${steps.length}`;
       dialog.querySelector('h2').textContent = i18n().t(copy[0]);
       dialog.querySelector('p').textContent = i18n().t(copy[1]);
-      next.textContent = step < 5 ? i18n().t(['tour.openSyllabus.btn', 'tour.openChapter2.btn', 'tour.openSection24.btn', 'tour.chooseLesson.btn', 'tour.readOverview.btn'][step]) : i18n().t(copy[2]);
+      next.textContent = step < 4 ? i18n().t(['tour.openSyllabus.btn', 'tour.openChapter2.btn', 'tour.openSection24.btn', 'tour.chooseLesson.btn'][step]) : i18n().t(copy[2]);
       next.hidden = false;
       dialog.querySelector('.lesson-tour-back').hidden = step < 5;
       requestAnimationFrame(position);
@@ -136,16 +178,24 @@
     dialog.innerHTML = `<span class="lesson-tour-count"></span><h2></h2><p aria-live="polite"></p><div class="lesson-tour-actions"><button class="lesson-tour-skip">${i18n().t('tour.skip')}</button><button class="lesson-tour-back" aria-label="Previous step" title="Previous step"><i class="ph-bold ph-arrow-left" aria-hidden="true"></i></button><button class="lesson-tour-next">${i18n().t('tour.next')}</button></div>`;
     document.body.append(ring,dialog);
     dialog.querySelector('.lesson-tour-skip').onclick = stop;
-    dialog.querySelector('.lesson-tour-back').onclick = () => { step=Math.max(0,step-1);show(); };
+    dialog.querySelector('.lesson-tour-back').onclick = () => {
+      const prev = Math.max(0, step - 1);
+      // Steps 4/5 target the lesson overview - if the lesson is open, go back to it first.
+      if ((prev === 4 || prev === 5) && document.querySelector('iframe.embedded-lesson-frame')) {
+        document.getElementById('courseLessonReturnTop')?.click();
+      }
+      step = prev; show();
+    };
     dialog.querySelector('.lesson-tour-next').onclick = event => {
       if (event.currentTarget.dataset.retry) { delete event.currentTarget.dataset.retry; show(); return; }
-      if (step < 5) {
+      if (step < 4) {
         const alreadyOpen = step === 0 && document.getElementById('sidebarSyllabusPanel')?.classList.contains('is-open');
         if (alreadyOpen) { step++; show(); }
         else { target.focus(); target.click(); }
         return;
       }
-      if (step === 9) stop(); else { step++;show(); }
+      if (step === 5) { target.focus(); target.click(); return; }
+      if (step === 10) stop(); else { step++;show(); }
     };
     window.addEventListener('resize',position);
     window.addEventListener('scroll',position,true);
@@ -186,5 +236,8 @@
   // Clicks are the reliable signal for "user just navigated" — mutations alone
   // can race the entry flow and skip the first home edge.
   document.addEventListener('pointerup', schedule, true);
+  // Safety net: a boot-time reload can swallow a mutation/rAF edge, so poll
+  // gently — the tour then appears within 500ms of any home entry.
+  setInterval(schedule, 500);
   schedule();
 })();

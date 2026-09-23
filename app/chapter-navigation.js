@@ -66,7 +66,10 @@
     .course-overview .course-return,.course-overview .course-start,#courseLessonReturn{padding:9px 14px;border:1px solid rgba(115,174,149,.42);border-radius:8px;background:rgba(220,245,234,.46);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:inset 0 1px 0 rgba(255,255,255,.72),0 6px 18px rgba(48,78,70,.055);color:#286c52;cursor:pointer;margin:0;font:inherit}
     .course-overview .course-start{margin-top:24px}
     @media(max-width:900px){#learnExplainContent .course-glass{grid-template-columns:1fr;min-height:0;gap:28px;padding:24px}#learnExplainContent .course-glass h1{font-size:34px!important}#learnExplainContent .course-overview{height:auto;min-height:100%;padding:16px}#learnExplainContent .course-glass>section:last-child .course-list{max-height:none;overflow:visible;padding:0}}
-    @media(prefers-reduced-motion:reduce){#learnExplainContent .course-card{transition:none}}`;
+    @media(prefers-reduced-motion:reduce){#learnExplainContent .course-card{transition:none}}
+    .learn-back-btn{display:grid;place-items:center;width:34px;height:34px;margin-right:10px;padding:0;border:1px solid rgba(255,255,255,.66);border-radius:10px;background:linear-gradient(135deg,rgba(255,255,255,.5),rgba(255,255,255,.22));color:inherit;font:inherit;font-size:17px;line-height:1;cursor:pointer;backdrop-filter:blur(14px) saturate(160%);-webkit-backdrop-filter:blur(14px) saturate(160%);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 6px 16px rgba(15,23,42,.06);transition:transform .12s ease,background .15s ease}
+    .learn-back-btn:hover{background:rgba(255,255,255,.75);transform:translateY(-1px)}
+    .learn-back-btn[hidden]{display:none!important}`;
   document.head.append(style);
   const i18n = () => window.FourierI18N || { t: k => k, tt: k => k };
   let chapterIndex = 0;
@@ -75,12 +78,22 @@
   back.id = 'courseLessonReturn'; back.type = 'button'; back.textContent = `← ${i18n().t('overview.lessonOverview')}`; back.hidden = true;
   document.getElementById('learnExplainToolbar').prepend(back);
   back.onclick = () => showLesson(chapterIndex, lessonTitle);
+  // Compact back button in the learn topbar (visible for embedded lessons,
+  // where the legacy explain toolbar is hidden).
+  const backTop = document.createElement('button');
+  backTop.id = 'courseLessonReturnTop'; backTop.type = 'button'; backTop.className = 'learn-back-btn';
+  backTop.textContent = '←'; backTop.title = i18n().t('overview.lessonOverview');
+  backTop.setAttribute('aria-label', i18n().t('overview.lessonOverview'));
+  backTop.hidden = true;
+  backTop.onclick = () => showLesson(chapterIndex, lessonTitle);
+  const topbarLeft = document.querySelector('#learnView .learn-topbar-left');
+  if (topbarLeft) topbarLeft.prepend(backTop); else document.body.append(backTop);
   function entries(chapter) {
     return chapter.sections.map(s => typeof s === 'string' ? s : s.title);
   }
   function shell(index, title, render) {
     chapterIndex = index;
-    back.hidden = true;
+    back.hidden = true; backTop.hidden = true;
     root.querySelectorAll('.syllabus-chapter').forEach(b => {
       if (Number(b.dataset.idx) === index) b.setAttribute('aria-current', 'page');
       else b.removeAttribute('aria-current');
@@ -150,14 +163,14 @@
     const intro = preview?.en || `Explore ${title.replace(/^\S+\s+/, '')} through the explanation and examples in this lesson.`;
     const isConvolutionLesson = /^2\.4-2\b/.test(title);
     const lessonBody = isConvolutionLesson
-      ? `<section><p>${i18n().t('overview.beforeYouBegin').toUpperCase()}</p><h1 class="course-title">${escapeHtml(i18n().tt(title))}</h1><p class="course-summary">${i18n().t('overview.lesson242.summary')}</p><h2>${i18n().t('overview.afterOverview')}</h2><ul class="lesson-overview-goals"><li>${i18n().t('overview.goal1')}</li><li>${i18n().t('overview.goal2')}</li><li>${i18n().t('overview.goal3')}</li></ul></section><section><h2>${i18n().t('overview.onePicture')}</h2><div class="lesson-overview-visual"><svg viewBox="0 0 680 150" role="img" aria-label="Flip, shift, overlap, integrate diagram"><defs><linearGradient id="lessonFlow" x1="0" x2="1"><stop stop-color="#56a4c4"/><stop offset="1" stop-color="#5ab18d"/></linearGradient></defs><g font-family="Inter,system-ui,sans-serif" text-anchor="middle"><g transform="translate(72 58)"><circle r="34" fill="rgba(255,255,255,.5)" stroke="rgba(255,255,255,.8)"/><path d="M-20 10h10v-24h10v24h10" fill="none" stroke="#3c8b88" stroke-width="4" stroke-linejoin="round"/><text y="54" fill="var(--course-ink)" font-size="13" font-weight="700">${i18n().t('overview.flip')}</text></g><path d="M113 58h58" stroke="url(#lessonFlow)" stroke-width="3"/><path d="m164 50 10 8-10 8" fill="none" stroke="#5a9c87" stroke-width="3"/><g transform="translate(244 58)"><circle r="34" fill="rgba(255,255,255,.5)" stroke="rgba(255,255,255,.8)"/><path d="M-22 10h44M-11 10V-13M-11-13h24" fill="none" stroke="#3c8b88" stroke-width="4" stroke-linecap="round"/><text y="54" fill="var(--course-ink)" font-size="13" font-weight="700">${i18n().t('overview.shift')}</text></g><path d="M285 58h58" stroke="url(#lessonFlow)" stroke-width="3"/><path d="m336 50 10 8-10 8" fill="none" stroke="#5a9c87" stroke-width="3"/><g transform="translate(416 58)"><circle r="34" fill="rgba(255,255,255,.5)" stroke="rgba(255,255,255,.8)"/><path d="M-22 10h44M-13 10V-7h26v17" fill="none" stroke="#3c8b88" stroke-width="4"/><path d="M-3-7h13" stroke="#d57679" stroke-width="5"/><text y="54" fill="var(--course-ink)" font-size="13" font-weight="700">${i18n().t('overview.overlap')}</text></g><path d="M457 58h58" stroke="url(#lessonFlow)" stroke-width="3"/><path d="m508 50 10 8-10 8" fill="none" stroke="#5a9c87" stroke-width="3"/><g transform="translate(588 58)"><circle r="34" fill="rgba(255,255,255,.5)" stroke="rgba(255,255,255,.8)"/><path d="M-19 10h38M-13 10V-5l9-10 9 10v15" fill="none" stroke="#3c8b88" stroke-width="4" stroke-linejoin="round"/><text y="54" fill="var(--course-ink)" font-size="13" font-weight="700">${i18n().t('overview.integrate')}</text></g></g></svg><p class="lesson-overview-caption">${i18n().t('overview.caption')}</p></div><button type="button" class="course-start" id="courseStartLesson">${i18n().t('overview.startLesson')} ↗</button></section>`
+      ? `<section><p>${i18n().t('overview.beforeYouBegin').toUpperCase()}</p><h1 class="course-title">${escapeHtml(i18n().tt(title))}</h1><p class="course-summary">${i18n().t('overview.lesson242.opening')}</p><p class="course-summary" data-tour="goal"><strong>${i18n().t('overview.lesson242.goalLabel')}</strong> ${i18n().t('overview.lesson242.goal')}</p><p class="course-summary"><strong>${i18n().t('overview.lesson242.routeLabel')}</strong> ${i18n().t('overview.lesson242.route')}</p></section><section><h2>${i18n().t('overview.onePicture')}</h2><div class="lesson-overview-visual"><svg viewBox="0 0 680 150" role="img" aria-label="Flip, shift, overlap, integrate diagram"><defs><linearGradient id="lessonFlow" x1="0" x2="1"><stop stop-color="#56a4c4"/><stop offset="1" stop-color="#5ab18d"/></linearGradient></defs><g font-family="Inter,system-ui,sans-serif" text-anchor="middle"><g transform="translate(72 58)"><circle r="34" fill="rgba(255,255,255,.5)" stroke="rgba(255,255,255,.8)"/><path d="M-20 10h10v-24h10v24h10" fill="none" stroke="#3c8b88" stroke-width="4" stroke-linejoin="round"/><text y="54" fill="var(--course-ink)" font-size="13" font-weight="700">${i18n().t('overview.flip')}</text></g><path d="M113 58h58" stroke="url(#lessonFlow)" stroke-width="3"/><path d="m164 50 10 8-10 8" fill="none" stroke="#5a9c87" stroke-width="3"/><g transform="translate(244 58)"><circle r="34" fill="rgba(255,255,255,.5)" stroke="rgba(255,255,255,.8)"/><path d="M-22 10h44M-11 10V-13M-11-13h24" fill="none" stroke="#3c8b88" stroke-width="4" stroke-linecap="round"/><text y="54" fill="var(--course-ink)" font-size="13" font-weight="700">${i18n().t('overview.shift')}</text></g><path d="M285 58h58" stroke="url(#lessonFlow)" stroke-width="3"/><path d="m336 50 10 8-10 8" fill="none" stroke="#5a9c87" stroke-width="3"/><g transform="translate(416 58)"><circle r="34" fill="rgba(255,255,255,.5)" stroke="rgba(255,255,255,.8)"/><path d="M-22 10h44M-13 10V-7h26v17" fill="none" stroke="#3c8b88" stroke-width="4"/><path d="M-3-7h13" stroke="#d57679" stroke-width="5"/><text y="54" fill="var(--course-ink)" font-size="13" font-weight="700">${i18n().t('overview.overlap')}</text></g><path d="M457 58h58" stroke="url(#lessonFlow)" stroke-width="3"/><path d="m508 50 10 8-10 8" fill="none" stroke="#5a9c87" stroke-width="3"/><g transform="translate(588 58)"><circle r="34" fill="rgba(255,255,255,.5)" stroke="rgba(255,255,255,.8)"/><path d="M-19 10h38M-13 10V-5l9-10 9 10v15" fill="none" stroke="#3c8b88" stroke-width="4" stroke-linejoin="round"/><text y="54" fill="var(--course-ink)" font-size="13" font-weight="700">${i18n().t('overview.integrate')}</text></g></g></svg><p class="lesson-overview-caption">${i18n().t('overview.caption')}</p></div><h2 class="lesson-overview-after">${i18n().t('overview.afterOverview')}</h2><ul class="lesson-overview-goals"><li>${i18n().t('overview.goal1')}</li><li>${i18n().t('overview.goal2')}</li><li>${i18n().t('overview.goal3')}</li></ul><button type="button" class="course-start" id="courseStartLesson">${i18n().t('overview.startLesson')} ↗</button></section>`
       : `<section><p>${i18n().t('overview.overview').toUpperCase()}</p><h1 class="course-title">${escapeHtml(i18n().tt(title))}</h1><p class="course-summary">${escapeHtml(intro)}</p></section><section><h2>${i18n().t('overview.goals')}</h2><p>${escapeHtml(`The central idea of ${title.replace(/^\S+\s+/, '')}, and how to apply it in the lesson examples.`)}</p><button type="button" class="course-start" id="courseStartLesson">${i18n().t('overview.startLesson')} ↗</button></section>`;
     shell(index, title, () => {
       paint(`<div class="course-glass course-glass-with-return${isConvolutionLesson ? ' lesson-overview-glass' : ''}"><button class="course-return" type="button">← ${escapeHtml(i18n().tt(parent ? parent.title : syllabusData[index].chapter))}</button>${lessonBody}</div>`);
       learnExplainContent.querySelector('.course-return').onclick = () => parent ? showSection(index, parent) : showChapter(index);
       document.getElementById('courseStartLesson').onclick = () => {
         openLearnMode(title, title, []);
-        back.hidden = false;
+        back.hidden = false; backTop.hidden = false;
       };
     });
   }

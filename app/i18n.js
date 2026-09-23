@@ -86,6 +86,12 @@
     'learn.lecture': 'Lecture',
     'learn.textbook': 'Textbook',
 
+    'overview.lesson242.opening': 'You already know the convolution integral. Here you will turn that integral into a picture you can move, inspect, and calculate from.',
+    'overview.lesson242.goalLabel': 'Your goal:',
+    'overview.lesson242.goal': 'choose a time, find the overlap, and calculate one output value. Repeat across the important time intervals to build the entire output.',
+    'overview.lesson242.routeLabel': 'Route:',
+    'overview.lesson242.route': 'one worked visual process, three textbook examples, then a short transfer check. The upper plot always uses the integration variable \u03c4; the lower plot uses output time t.',
+
     'overview.chapter2.summary': 'This chapter builds the time-domain picture of continuous-time systems: first separate internal and external causes, then use impulse response and convolution to predict how a system reacts. It closes by connecting response, stability, and system time constants.',
     'overview.chapterDefault.summary': 'This chapter follows the key ideas, models, and tools that connect signals to system behavior. The sequence moves from the core representation to analysis, interpretation, and practical examples.',
     'overview.section24.summary': 'This section explains how an external input produces the zero-state response. Start with the convolution integral, build a graphical way to evaluate overlap, then connect individual systems and combine the resulting responses.',
@@ -192,6 +198,8 @@
     'tour.oneGoal.body': 'Choose a time, find the overlap, and calculate one output value. Read this goal before continuing.',
     'tour.readingMode': 'Choose a reading mode',
     'tour.readingMode.body': 'Use Scroll for a continuous lecture, or Pages to focus on one section at a time. You can switch whenever you want.',
+    'tour.viewToggle': 'Lecture or Textbook',
+    'tour.viewToggle.body': 'Lecture is the guided explanation; Textbook shows the original book pages. Switch anytime with the toggle at the top.',
     'tour.focus': 'Focus the lesson',
     'tour.focus.body': 'Use fullscreen when you want more room for the explanation and interactive figure. You can return to the normal workspace at any time.',
     'tour.moveSignal': 'Move the signal',
@@ -285,6 +293,12 @@
     'overview.integrate': '积分',
     'learn.lecture': '讲解',
     'learn.textbook': '教材',
+
+    'overview.lesson242.opening': '你已经掌握了卷积积分。这一节要把这个积分变成一幅可以移动、检查、并据此计算的图。',
+    'overview.lesson242.goalLabel': '你的目标：',
+    'overview.lesson242.goal': '选定一个时刻，找出重叠区间，算出一个输出值。在所有重要的时间区间上重复这一过程，就能得到完整的输出。',
+    'overview.lesson242.routeLabel': '路线：',
+    'overview.lesson242.route': '一个完整的可视化流程、三个教材例题、再加一个简短的迁移检验。上图始终使用积分变量 \u03c4；下图使用输出时间 t。',
 
     'overview.chapter2.summary': '本章建立连续时间系统的时域图景：先区分内部原因与外部输入，再用冲激响应与卷积预测系统的反应，最后把响应、稳定性与时间常数联系起来。',
     'overview.chapterDefault.summary': '本章梳理连接信号与系统行为的核心思想、模型与工具，从基本表示出发，逐步进入分析、解释与实际例子。',
@@ -392,6 +406,8 @@
     'tour.oneGoal.body': '选定一个时刻，找出重叠区间，算出一个输出值。继续之前先读懂这个目标。',
     'tour.readingMode': '选择阅读方式',
     'tour.readingMode.body': 'Scroll 是连续讲解，Pages 一次聚焦一节，随时可以切换。',
+    'tour.viewToggle': '讲解还是教材',
+    'tour.viewToggle.body': '「讲解」是引导式讲解，「教材」显示原书页面。随时可以用顶部的切换按钮互换。',
     'tour.focus': '进入专注模式',
     'tour.focus.body': '需要更大空间看讲解和交互图时可以使用全屏，随时可以返回正常工作区。',
     'tour.moveSignal': '移动信号',
