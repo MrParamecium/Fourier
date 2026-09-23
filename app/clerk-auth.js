@@ -680,27 +680,6 @@ async function initClerk() {
   if (primaryBtnLogin) primaryBtnLogin.onclick = mountDrawerSignIn;
   bindWorkspaceAccountBar();
 
-  const enterGuestMode = (afterEnter = null) => {
-    setLoginStatus('Entering guest mode...', 'info');
-    startGuestMode();
-    if (typeof afterEnter === 'function') afterEnter();
-  };
-
-  const guestBtn = document.getElementById('guestModeBtnSettings');
-  if (guestBtn && !guestBtn.dataset.boundGuestMode) {
-    guestBtn.dataset.boundGuestMode = '1';
-    guestBtn.addEventListener('click', () => {
-      enterGuestMode(() => showSettingsView());
-    });
-  }
-
-  const guestBtnLogin = document.getElementById('guestModeBtnLogin');
-  if (guestBtnLogin && !guestBtnLogin.dataset.boundGuestMode) {
-    guestBtnLogin.dataset.boundGuestMode = '1';
-    guestBtnLogin.addEventListener('click', () => {
-      enterGuestMode();
-    });
-  }
 }
 
 async function onUserSignedIn(user) {
@@ -757,6 +736,15 @@ async function syncCurrentUserWithoutNavigation(user) {
   // view. No-op unless the boot conditions hold (additive, one-shot).
   if (typeof maybeBootRestoreLastLocation === 'function') maybeBootRestoreLastLocation();
 }
+
+// Guest entry is pure local state — bind immediately at script load so the
+// buttons work even while Clerk is still loading on a cold start.
+document.addEventListener('click', (event) => {
+  const btn = event.target.closest('#guestModeBtnLogin, #guestModeBtnSettings');
+  if (!btn) return;
+  startGuestMode();
+  if (btn.id === 'guestModeBtnSettings') showSettingsView();
+});
 
 function startGuestMode() {
   authRedirectInProgress = false;

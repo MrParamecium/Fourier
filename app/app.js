@@ -5645,7 +5645,7 @@ document.getElementById('settingsReplayTourBtn')?.addEventListener('click', () =
 // 2.4-2 embedded lesson ships in two language editions; pick by current UI language.
 function lesson242Src() {
   const zh = window.FourierI18N && window.FourierI18N.currentLang() === 'zh';
-  return `${zh ? '/lessons/2_4-2/lesson-zh.html' : '/lessons/2_4-2/lesson.html'}?v=20260918-zh`;
+  return `${zh ? '/lessons/2_4-2/lesson-zh.html' : '/lessons/2_4-2/lesson.html'}?v=20260922-intro`;
 }
 document.addEventListener('fourier:langchange', () => {
   const frame = document.querySelector('iframe.embedded-lesson-frame');
