@@ -66,7 +66,10 @@
     .course-overview .course-return,.course-overview .course-start,#courseLessonReturn{padding:9px 14px;border:1px solid rgba(115,174,149,.42);border-radius:8px;background:rgba(220,245,234,.46);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:inset 0 1px 0 rgba(255,255,255,.72),0 6px 18px rgba(48,78,70,.055);color:#286c52;cursor:pointer;margin:0;font:inherit}
     .course-overview .course-start{margin-top:24px}
     @media(max-width:900px){#learnExplainContent .course-glass{grid-template-columns:1fr;min-height:0;gap:28px;padding:24px}#learnExplainContent .course-glass h1{font-size:34px!important}#learnExplainContent .course-overview{height:auto;min-height:100%;padding:16px}#learnExplainContent .course-glass>section:last-child .course-list{max-height:none;overflow:visible;padding:0}}
-    @media(prefers-reduced-motion:reduce){#learnExplainContent .course-card{transition:none}}`;
+    @media(prefers-reduced-motion:reduce){#learnExplainContent .course-card{transition:none}}
+    .learn-back-btn{display:grid;place-items:center;width:34px;height:34px;margin-right:10px;padding:0;border:1px solid rgba(255,255,255,.66);border-radius:10px;background:linear-gradient(135deg,rgba(255,255,255,.5),rgba(255,255,255,.22));color:inherit;font:inherit;font-size:17px;line-height:1;cursor:pointer;backdrop-filter:blur(14px) saturate(160%);-webkit-backdrop-filter:blur(14px) saturate(160%);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 6px 16px rgba(15,23,42,.06);transition:transform .12s ease,background .15s ease}
+    .learn-back-btn:hover{background:rgba(255,255,255,.75);transform:translateY(-1px)}
+    .learn-back-btn[hidden]{display:none!important}`;
   document.head.append(style);
   const i18n = () => window.FourierI18N || { t: k => k, tt: k => k };
   let chapterIndex = 0;
@@ -75,12 +78,22 @@
   back.id = 'courseLessonReturn'; back.type = 'button'; back.textContent = `← ${i18n().t('overview.lessonOverview')}`; back.hidden = true;
   document.getElementById('learnExplainToolbar').prepend(back);
   back.onclick = () => showLesson(chapterIndex, lessonTitle);
+  // Compact back button in the learn topbar (visible for embedded lessons,
+  // where the legacy explain toolbar is hidden).
+  const backTop = document.createElement('button');
+  backTop.id = 'courseLessonReturnTop'; backTop.type = 'button'; backTop.className = 'learn-back-btn';
+  backTop.textContent = '←'; backTop.title = i18n().t('overview.lessonOverview');
+  backTop.setAttribute('aria-label', i18n().t('overview.lessonOverview'));
+  backTop.hidden = true;
+  backTop.onclick = () => showLesson(chapterIndex, lessonTitle);
+  const topbarLeft = document.querySelector('#learnView .learn-topbar-left');
+  if (topbarLeft) topbarLeft.prepend(backTop); else document.body.append(backTop);
   function entries(chapter) {
     return chapter.sections.map(s => typeof s === 'string' ? s : s.title);
   }
   function shell(index, title, render) {
     chapterIndex = index;
-    back.hidden = true;
+    back.hidden = true; backTop.hidden = true;
     root.querySelectorAll('.syllabus-chapter').forEach(b => {
       if (Number(b.dataset.idx) === index) b.setAttribute('aria-current', 'page');
       else b.removeAttribute('aria-current');
@@ -157,7 +170,7 @@
       learnExplainContent.querySelector('.course-return').onclick = () => parent ? showSection(index, parent) : showChapter(index);
       document.getElementById('courseStartLesson').onclick = () => {
         openLearnMode(title, title, []);
-        back.hidden = false;
+        back.hidden = false; backTop.hidden = false;
       };
     });
   }
