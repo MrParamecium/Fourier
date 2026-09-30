@@ -212,6 +212,30 @@
       list.appendChild(button);
     });
     panel.appendChild(list);
+    const custom = doc.createElement('textarea');
+    custom.className = 'guidance-custom-input';
+    custom.placeholder = current.language === 'zh' ? '也可以自己描述你的卡点…' : 'Describe where you are stuck…';
+    custom.rows = 2;
+    panel.appendChild(custom);
+    const customSubmit = doc.createElement('button');
+    customSubmit.type = 'button';
+    customSubmit.className = 'guidance-action guidance-action-custom';
+    customSubmit.textContent = current.language === 'zh' ? '提交我的描述' : 'Submit my description';
+    customSubmit.disabled = true;
+    custom.addEventListener('input', () => { customSubmit.disabled = !custom.value.trim(); });
+    customSubmit.addEventListener('click', () => {
+      const text = custom.value.trim();
+      if (!text) return;
+      state = 'answering';
+      settle(current, { status: 'custom', guidance: { id: 'custom', title: text.slice(0, 24), instruction: `Student own description of the stuck point: ${text}`, source: 'custom' }, requestId: data.request_id || '' });
+    });
+    panel.appendChild(customSubmit);
+    const fromStart = doc.createElement('button');
+    fromStart.type = 'button';
+    fromStart.className = 'guidance-action guidance-action-from-start';
+    fromStart.textContent = current.language === 'zh' ? '还分不清，带我从头看' : 'I am not sure; start from the basics';
+    fromStart.addEventListener('click', () => settle(current, { status: 'from_start', guidance: { id: 'from_start', title: fromStart.textContent, instruction: 'Start from intuition and basics, then check understanding step by step.', source: 'from_start' }, requestId: data.request_id || '' }));
+    panel.appendChild(fromStart);
     const actions = doc.createElement('div');
     actions.className = 'guidance-actions';
     addAction(actions, words.skip, 'guidance-action guidance-action-primary', () => {
