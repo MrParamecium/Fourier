@@ -30,6 +30,7 @@
     "test:session-frontend": "node tools/test-session-frontend-contract.js",
     "test:ask-guidance": "node tools/test-ask-guidance.js",
     "test:guidance-ui": "node tools/test-guidance-ui.js",
+    "test:stuck-point-guidance": "node tools/test-stuck-point-guidance.js",
     "test:smoke": "node tools/smoke.js",
     "test:visual:baseline": "node tools/visual-diff.js --baseline",
     "test:visual:check": "node tools/visual-diff.js --check",

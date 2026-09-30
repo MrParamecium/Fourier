@@ -1,0 +1,10 @@
+'use strict';
+const assert = require('node:assert/strict');
+const { normalizeQuestion, shouldOfferStuckPointGuidance } = require('../app/stuck-point-guidance');
+assert.equal(normalizeQuestion(' Why?  h(τ)! '), 'why h τ');
+assert.equal(shouldOfferStuckPointGuidance({ question: '我不懂卷积' }).reason, 'explicit_stuck');
+assert.equal(shouldOfferStuckPointGuidance({ question: '为什么要翻转 h(τ)?' }).offer, false);
+assert.equal(shouldOfferStuckPointGuidance({ question: '卷积' }).reason, 'ambiguous');
+assert.equal(shouldOfferStuckPointGuidance({ question: '还是不会', history: [{ role: 'user', content: '还是不会' }] }).reason, 'repeated');
+assert.equal(shouldOfferStuckPointGuidance({ question: '我不懂', guidanceAlreadyShown: true }).offer, false);
+console.log('[stuck-point-guidance] PASS');
