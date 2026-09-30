@@ -21,6 +21,5 @@ function shouldOfferStuckPointGuidance({ question, history = [], guidanceAlready
   return { offer: false, reason: null };
 }
 
-module.exports = { normalizeQuestion, shouldOfferStuckPointGuidance };
-
+if (typeof module === 'object' && module.exports) module.exports = { normalizeQuestion, shouldOfferStuckPointGuidance };
 if (typeof window !== 'undefined') window.stuckPointGuidance = { normalizeQuestion, shouldOfferStuckPointGuidance };
