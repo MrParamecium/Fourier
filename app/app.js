@@ -2694,7 +2694,7 @@ async function startLesson(options = {}) {
     if (err.name === 'AbortError') return;
     if (!isCurrentLearnRequest(requestSeq, requestSectionId, requestSectionTitle, ['lesson'])) return;
     learnBody.classList.remove('hidden');
-    replaceLearnContent(learnExplainContent, `<div class="error-box"><strong>Failed to load lesson</strong><p>${escapeHtml(err.message)}</p></div>`);
+    replaceLearnContent(learnExplainContent, `<div class="error-box"><strong>Failed to load lesson</strong><p>${escapeHtml(localizedRequestError(err, detectLang(prompt)))}</p></div>`);
     document.documentElement.dataset.lessonLayoutStable = '1';   // static error box is "settled"
     setLearnLoading(false);
   }
@@ -3317,7 +3317,7 @@ async function sendLearnFollowup(rawPrompt, options = {}) {
       const answerDiv = target.querySelector('.fub-a') || target;
       answerDiv.className = 'fub-a';
       const failedTitle = promptLang === 'zh' ? '加载失败' : 'Loading failed';
-      answerDiv.innerHTML = `<div class="error-box"><strong>${failedTitle}</strong><p>${escapeHtml(err.message)}</p></div>`;
+      answerDiv.innerHTML = `<div class="error-box"><strong>${failedTitle}</strong><p>${escapeHtml(localizedRequestError(err, promptLang))}</p></div>`;
     }
   }
 }
@@ -5069,6 +5069,15 @@ function getAnswerStyleInstruction(style, lang = 'en') {
     }
   };
   return instructions[normalized]?.[lang] || instructions[normalized]?.en || instructions.balanced.en;
+}
+
+function localizedRequestError(error, lang = 'en') {
+  const isZh = lang === 'zh';
+  const message = String(error?.message || '').toLowerCase();
+  if (message.includes('failed to fetch') || message.includes('network') || message.includes('load failed')) {
+    return isZh ? '无法连接 Tutor 服务，请确认本地服务正在运行后重试。' : 'Unable to connect to the Tutor service. Make sure the local service is running, then try again.';
+  }
+  return isZh ? 'Tutor 暂时无法处理这条消息，请稍后重试。' : 'The Tutor could not process this message. Please try again.';
 }
 
 async function callAsk(prompt, signal, extra = {}) {

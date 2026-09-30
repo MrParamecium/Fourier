@@ -32,21 +32,10 @@
   try { enabled = storage && storage.getItem(storageKey) === '1'; } catch (_) {}
   state = enabled ? 'waiting' : 'closed';
 
-  function copy() {
+  function copy(language = 'en') {
+    const zh = language === 'zh';
     return {
-      loadingTitle: 'Preparing teaching paths',
-      loadingBody: 'Searching the full textbook before offering distinct ways to explain this.',
-      title: 'How should I explain this?',
-      empty: 'No direct textbook match was found. These paths are based on your question only.',
-      skip: 'Skip and answer now',
-      cancel: 'Cancel',
-      retry: 'Retry',
-      errorTitle: 'Guidance failed',
-      stage: 'Stage',
-      request: 'Request ID',
-      clear: 'Clear this teaching path',
-      selected: 'Teaching path',
-      cancelled: 'Cancelled. Your question is still in the input.',
+      loadingTitle: zh ? '正在准备教学路径' : 'Preparing teaching paths', loadingBody: zh ? '正在检索教材，为你准备不同的讲解方式。' : 'Searching the textbook before offering distinct ways to explain this.', title: zh ? '你希望我从哪里开始讲？' : 'How should I explain this?', empty: zh ? '教材中没有找到直接匹配；以下路径只根据你的问题生成。' : 'No direct textbook match was found. These paths are based on your question only.', skip: zh ? '跳过，直接回答' : 'Skip and answer now', cancel: zh ? '取消' : 'Cancel', retry: zh ? '重试' : 'Retry', errorTitle: zh ? '教学引导加载失败' : 'Guidance failed', stage: zh ? '阶段' : 'Stage', request: zh ? '请求编号' : 'Request ID', clear: zh ? '清除当前教学路径' : 'Clear this teaching path', selected: zh ? '教学路径' : 'Teaching path', cancelled: zh ? '已取消，你的问题仍保留在输入框中。' : 'Cancelled. Your question is still in the input.', networkError: zh ? '无法连接 Tutor 服务，请确认本地服务正在运行后重试。' : 'Unable to connect to the Tutor service. Make sure the local service is running, then try again.'
     };
   }
 
@@ -261,7 +250,7 @@
     panel.className = 'guidance-panel guidance-error';
     panel.setAttribute('role', 'alert');
     setText(panel, 'h3', 'guidance-title', words.errorTitle);
-    setText(panel, 'p', 'guidance-copy', error.message || words.errorTitle);
+    setText(panel, 'p', 'guidance-copy', /failed to fetch|network|load failed/i.test(error.message || '') ? words.networkError : words.errorTitle);
     const meta = doc.createElement('dl');
     meta.className = 'guidance-error-meta';
     setText(meta, 'dt', '', words.stage);
