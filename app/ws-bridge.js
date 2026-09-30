@@ -2218,15 +2218,15 @@ function parseGuidanceSelection(rawGuidance) {
     if (!rawGuidance || typeof rawGuidance !== 'object' || Array.isArray(rawGuidance)) {
         throw new Error('guidance must be an object');
     }
-    const allowedKeys = new Set(['id', 'title', 'instruction']);
+    const allowedKeys = new Set(['id', 'title', 'instruction', 'source']);
     const unknownKey = Object.keys(rawGuidance).find(key => !allowedKeys.has(key));
     if (unknownKey) throw new Error(`Unknown guidance field: ${unknownKey}`);
     const id = compactWhitespace(rawGuidance.id || '');
     const title = compactWhitespace(rawGuidance.title || '');
     const instruction = compactWhitespace(rawGuidance.instruction || '');
-    if (!/^path_[1-3]$/.test(id)) throw new Error('Invalid guidance id');
+    if (!/^(path_[1-3]|custom|from_start)$/.test(id)) throw new Error('Invalid guidance id');
     if (!title || title.length > 24) throw new Error('Invalid guidance title');
-    if (!instruction || instruction.length > 240) throw new Error('Invalid guidance instruction');
+    if (!instruction || instruction.length > 600) throw new Error('Invalid guidance instruction');
     return { id, title, instruction };
 }
 

@@ -3,7 +3,10 @@ const API_BASE = (() => {
   if (typeof configured === 'string' && configured.trim()) {
     return configured.trim().replace(/\/+$/, '');
   }
-  return window.location.hostname === 'localhost' ? 'http://127.0.0.1:9000' : window.location.origin;
+  // Same-origin on localhost: the UI server (ws-bridge) also serves the API,
+  // so new API routes are always available regardless of stray old servers
+  // that may still be listening on the legacy 9000 port.
+  return window.location.hostname === 'localhost' ? '' : window.location.origin;
 })();
 
 async function readApiJson(res, label = 'request') {
@@ -2694,7 +2697,7 @@ async function startLesson(options = {}) {
     if (err.name === 'AbortError') return;
     if (!isCurrentLearnRequest(requestSeq, requestSectionId, requestSectionTitle, ['lesson'])) return;
     learnBody.classList.remove('hidden');
-    replaceLearnContent(learnExplainContent, `<div class="error-box"><strong>Failed to load lesson</strong><p>${escapeHtml(err.message)}</p></div>`);
+    replaceLearnContent(learnExplainContent, `<div class="error-box"><strong>Failed to load lesson</strong><p>${escapeHtml(localizedRequestError(err, detectLang(prompt)))}</p></div>`);
     document.documentElement.dataset.lessonLayoutStable = '1';   // static error box is "settled"
     setLearnLoading(false);
   }
@@ -3174,6 +3177,26 @@ async function sendLearnFollowup(rawPrompt, options = {}) {
   const answerEl = document.getElementById(answerId);
   const answerDiv = answerEl?.querySelector('.fub-a') || answerEl;
 
+  let selectedLearnGuidance = null;
+  if (window.stuckPointGuidance?.isSpecificQuestion?.(prompt)) tutorState.learnStuckCardShown = false;
+  const learnGuidanceDecision = window.stuckPointGuidance?.shouldOfferStuckPointGuidance({ question: prompt, history: tutorState.learnHistory || [], guidanceAlreadyShown: Boolean(tutorState.learnStuckCardShown) });
+  if (learnGuidanceDecision?.offer && window.guidanceMode) {
+    tutorState.learnStuckCardShown = true;
+    const guidanceMount = document.createElement('div');
+    guidanceMount.className = 'stuck-point-guidance-mount';
+    answerDiv?.parentNode?.insertBefore(guidanceMount, answerDiv);
+    const guidanceResult = await window.guidanceMode.requestChoice({ scope: 'learn', bypassEnabled: true, mount: guidanceMount, signal: localLearnSignal, payload: { prompt, history: (tutorState.learnHistory || []).slice(-6).map(({ role, content }) => ({ role, content })), sectionTitle: tutorState.learnSectionTitle || '', language: promptLang } });
+    if (learnAbort !== localLearnController) return;
+    if (guidanceResult?.guidance) selectedLearnGuidance = guidanceResult.guidance;
+    window.guidanceMode.clearSelection?.('learn');
+  }
+  if (selectedLearnGuidance) {
+    const record = document.createElement('div');
+    record.className = 'fub-choice';
+    record.textContent = `📍 ${selectedLearnGuidance.title}`;
+    answerEl?.querySelector('.fub-q')?.insertAdjacentElement('afterend', record);
+  }
+
   let groundedTurn = true;
   let casualReply = '';
   if (getModelReadableAttachments(attachments).length === 0) {
@@ -3249,6 +3272,7 @@ async function sendLearnFollowup(rawPrompt, options = {}) {
       answerStyleInstruction: getAnswerStyleInstruction(selectedAnswerLength, detectLang(prompt)),
       language: detectLang(prompt),
       attachments: getModelReadableAttachments(attachments),
+      guidance: selectedLearnGuidance || undefined,
       session_id: tutorState.learnSessionId || undefined,
       origin: 'learn'
     });
@@ -3291,6 +3315,7 @@ async function sendLearnFollowup(rawPrompt, options = {}) {
 
     tutorState.learnHistory.push(
       { role: 'user', content: prompt },
+      ...(selectedLearnGuidance ? [{ role: 'user', content: `\ud83d\udcd3 ${selectedLearnGuidance.title}` }] : []),
       { role: 'assistant', content: data.explanation || '' }
     );
     if (typeof data.session_id === 'string' && data.session_id) tutorState.learnSessionId = data.session_id;
@@ -3317,7 +3342,7 @@ async function sendLearnFollowup(rawPrompt, options = {}) {
       const answerDiv = target.querySelector('.fub-a') || target;
       answerDiv.className = 'fub-a';
       const failedTitle = promptLang === 'zh' ? '加载失败' : 'Loading failed';
-      answerDiv.innerHTML = `<div class="error-box"><strong>${failedTitle}</strong><p>${escapeHtml(err.message)}</p></div>`;
+      answerDiv.innerHTML = `<div class="error-box"><strong>${failedTitle}</strong><p>${escapeHtml(localizedRequestError(err, promptLang))}</p></div>`;
     }
   }
 }
@@ -5071,6 +5096,15 @@ function getAnswerStyleInstruction(style, lang = 'en') {
   return instructions[normalized]?.[lang] || instructions[normalized]?.en || instructions.balanced.en;
 }
 
+function localizedRequestError(error, lang = 'en') {
+  const isZh = lang === 'zh';
+  const message = String(error?.message || '').toLowerCase();
+  if (message.includes('failed to fetch') || message.includes('network') || message.includes('load failed')) {
+    return isZh ? '无法连接 Tutor 服务，请确认本地服务正在运行后重试。' : 'Unable to connect to the Tutor service. Make sure the local service is running, then try again.';
+  }
+  return isZh ? 'Tutor 暂时无法处理这条消息，请稍后重试。' : 'The Tutor could not process this message. Please try again.';
+}
+
 async function callAsk(prompt, signal, extra = {}) {
   const fetchOptions = {
     method: 'POST',
@@ -5345,10 +5379,23 @@ async function sendQuestion(rawPrompt, source = 'auto') {
     return;
   }
 
-  const selectedGuidance = null;
+  let selectedGuidance = null;
+  if (window.stuckPointGuidance?.isSpecificQuestion?.(prompt)) tutorState.stuckCardShown = false;
+  const guidanceDecision = window.stuckPointGuidance?.shouldOfferStuckPointGuidance({ question: prompt, history: tutorState.chatHistory, guidanceAlreadyShown: Boolean(tutorState.stuckCardShown) });
+  if (guidanceDecision?.offer && window.guidanceMode) {
+    tutorState.stuckCardShown = true;
+    const guidanceMount = document.createElement('div');
+    guidanceMount.className = 'stuck-point-guidance-mount';
+    answerContent?.appendChild(guidanceMount);
+    const guidanceResult = await window.guidanceMode.requestChoice({ scope: 'main', bypassEnabled: true, mount: guidanceMount, signal: questionAbortController.signal, payload: { prompt, history: tutorState.chatHistory.slice(-6).map(({ role, content }) => ({ role, content })), language: detectLang(prompt) } });
+    if (currentAbortController !== questionAbortController) return;
+    if (guidanceResult?.guidance) selectedGuidance = guidanceResult.guidance;
+    window.guidanceMode.clearSelection?.('main');
+  }
+  const displayPrompt = selectedGuidance ? `${prompt}\n\n\ud83d\udcd3 ${selectedGuidance.title}` : prompt;
   // Grounded turn: swap the neutral "Thinking…" card for the grounded one.
   renderMainConversationThread({
-    pendingPrompt: prompt,
+    pendingPrompt: displayPrompt,
     pendingImages: turnImages,
     pendingAssistantHtml: buildSearchProgressMarkup(isFollowup ? 'followup' : 'answer', detectLang(prompt)),
     pendingAssistantClass: 'main-chat-turn-pending'
@@ -5395,6 +5442,7 @@ async function sendQuestion(rawPrompt, source = 'auto') {
 
     tutorState.chatHistory.push(
       { role: 'user', content: prompt, images: turnImages },
+      ...(selectedGuidance ? [{ role: 'user', content: `\ud83d\udcd3 ${selectedGuidance.title}` }] : []),
       { role: 'assistant', content: data.explanation || '' }
     );
     if (typeof data.session_id === 'string' && data.session_id) tutorState.chatSessionId = data.session_id;
