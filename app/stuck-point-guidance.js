@@ -8,7 +8,7 @@ const STUCK = [
   /\b(i (?:don'?t|do not) understand|still (?:don'?t|do not) understand|i'?m stuck|still stuck|i'?m confused|still confused|i can'?t do it|still can'?t|don'?t know how)\b/i,
   /(不懂|不理解|还是不会|不会做|卡住|困惑|搞不清|看不懂|不知道怎么做|没看懂)/u,
 ];
-const AMBIGUOUS = [/^(what is|explain|help me with|how do i learn)\b/i, /^(这是什么|讲一下|帮我看看|怎么学|不会)\s*$/u];
+const AMBIGUOUS = [/^(what is|explain|help me with|how do i learn)\b/i, /^(这是什么|讲一下|帮我看看|怎么学|不会)\s*$/u, /^(卷积|convolution|傅里叶|fourier)$/iu];
 
 function shouldOfferStuckPointGuidance({ question, history = [], guidanceAlreadyShown = false } = {}) {
   if (guidanceAlreadyShown) return { offer: false, reason: null };
@@ -22,3 +22,5 @@ function shouldOfferStuckPointGuidance({ question, history = [], guidanceAlready
 }
 
 module.exports = { normalizeQuestion, shouldOfferStuckPointGuidance };
+
+if (typeof window !== 'undefined') window.stuckPointGuidance = { normalizeQuestion, shouldOfferStuckPointGuidance };
