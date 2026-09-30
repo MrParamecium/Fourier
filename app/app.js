@@ -5345,7 +5345,17 @@ async function sendQuestion(rawPrompt, source = 'auto') {
     return;
   }
 
-  const selectedGuidance = null;
+  let selectedGuidance = null;
+  const guidanceDecision = window.stuckPointGuidance?.shouldOfferStuckPointGuidance({ question: prompt, history: tutorState.chatHistory });
+  if (guidanceDecision?.offer && window.guidanceMode) {
+    window.guidanceMode.setEnabled(true);
+    const guidanceMount = document.createElement('div');
+    guidanceMount.className = 'stuck-point-guidance-mount';
+    answerContent?.appendChild(guidanceMount);
+    const guidanceResult = await window.guidanceMode.requestChoice({ scope: 'main', mount: guidanceMount, signal: questionAbortController.signal, payload: { question: prompt, history: tutorState.chatHistory.slice(-6), language: detectLang(prompt) } });
+    if (currentAbortController !== questionAbortController) return;
+    if (guidanceResult?.guidance) selectedGuidance = guidanceResult.guidance;
+  }
   // Grounded turn: swap the neutral "Thinking…" card for the grounded one.
   renderMainConversationThread({
     pendingPrompt: prompt,
