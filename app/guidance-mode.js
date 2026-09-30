@@ -35,7 +35,7 @@
   function copy(language = 'en') {
     const zh = language === 'zh';
     return {
-      loadingTitle: zh ? '正在准备教学路径' : 'Preparing teaching paths', loadingBody: zh ? '正在检索教材，为你准备不同的讲解方式。' : 'Searching the textbook before offering distinct ways to explain this.', title: zh ? '你希望我从哪里开始讲？' : 'How should I explain this?', empty: zh ? '教材中没有找到直接匹配；以下路径只根据你的问题生成。' : 'No direct textbook match was found. These paths are based on your question only.', skip: zh ? '跳过，直接回答' : 'Skip and answer now', cancel: zh ? '取消' : 'Cancel', retry: zh ? '重试' : 'Retry', errorTitle: zh ? '教学引导加载失败' : 'Guidance failed', stage: zh ? '阶段' : 'Stage', request: zh ? '请求编号' : 'Request ID', clear: zh ? '清除当前教学路径' : 'Clear this teaching path', selected: zh ? '教学路径' : 'Teaching path', cancelled: zh ? '已取消，你的问题仍保留在输入框中。' : 'Cancelled. Your question is still in the input.', networkError: zh ? '无法连接 Tutor 服务，请确认本地服务正在运行后重试。' : 'Unable to connect to the Tutor service. Make sure the local service is running, then try again.'
+      loadingTitle: zh ? '正在准备教学路径' : 'Preparing teaching paths', loadingBody: zh ? '正在检索教材，为你准备不同的讲解方式。' : 'Searching the textbook before offering distinct ways to explain this.', title: zh ? '你卡在哪里？' : 'Where are you stuck?', empty: zh ? '教材中没有找到直接匹配；以下路径只根据你的问题生成。' : 'No direct textbook match was found. These paths are based on your question only.', skip: zh ? '跳过，直接回答' : 'Skip and answer now', cancel: zh ? '取消' : 'Cancel', retry: zh ? '重试' : 'Retry', errorTitle: zh ? '教学引导加载失败' : 'Guidance failed', stage: zh ? '阶段' : 'Stage', request: zh ? '请求编号' : 'Request ID', clear: zh ? '清除当前教学路径' : 'Clear this teaching path', selected: zh ? '教学路径' : 'Teaching path', cancelled: zh ? '已取消，你的问题仍保留在输入框中。' : 'Cancelled. Your question is still in the input.', networkError: zh ? '无法连接 Tutor 服务，请确认本地服务正在运行后重试。' : 'Unable to connect to the Tutor service. Make sure the local service is running, then try again.'
     };
   }
 
@@ -200,6 +200,18 @@
       });
       list.appendChild(button);
     });
+    list.addEventListener('keydown', (event) => {
+      const buttons = [...list.querySelectorAll('.guidance-option')];
+      const index = buttons.indexOf(doc.activeElement);
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        event.preventDefault();
+        const next = event.key === 'ArrowDown' ? Math.min(buttons.length - 1, index + 1) : Math.max(0, index - 1);
+        buttons[next]?.focus();
+      } else if (event.key === 'Enter' && index >= 0) {
+        event.preventDefault();
+        buttons[index].click();
+      }
+    });
     panel.appendChild(list);
     const custom = doc.createElement('textarea');
     custom.className = 'guidance-custom-input';
@@ -212,6 +224,9 @@
     customSubmit.textContent = current.language === 'zh' ? '提交我的描述' : 'Submit my description';
     customSubmit.disabled = true;
     custom.addEventListener('input', () => { customSubmit.disabled = !custom.value.trim(); });
+    custom.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' && !event.shiftKey && !customSubmit.disabled) { event.preventDefault(); customSubmit.click(); }
+    });
     customSubmit.addEventListener('click', () => {
       const text = custom.value.trim();
       if (!text) return;
@@ -279,7 +294,7 @@
     if (!data || !['hit', 'empty'].includes(data.status) || !Array.isArray(data.options)) {
       throw new Error('Invalid guidance response');
     }
-    if (data.options.length < 2 || data.options.length > 3) throw new Error('Invalid guidance option count');
+    if (data.options.length !== 3) throw new Error('Guidance must contain exactly 3 options');
     data.options.forEach((option) => {
       if (!option || !/^path_[1-3]$/.test(option.id) || !option.title || !option.description || !option.instruction) {
         throw new Error('Invalid guidance option');
@@ -323,8 +338,8 @@
     }
   }
 
-  function requestChoice({ scope = 'main', payload = {}, mount, signal = null } = {}) {
-    if (!enabled) return Promise.resolve({ status: 'disabled', guidance: null });
+  function requestChoice({ scope = 'main', payload = {}, mount, signal = null, bypassEnabled = false } = {}) {
+    if (!enabled && !bypassEnabled) return Promise.resolve({ status: 'disabled', guidance: null });
     const existing = scopeState(scope).selected;
     if (existing) return Promise.resolve({ status: 'selected', guidance: existing, reused: true });
     if (!doc || !mount || typeof request !== 'function') {

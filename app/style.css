@@ -35064,3 +35064,67 @@ html:fullscreen body {
   line-height: 1.55 !important;
   font-weight: 720 !important;
 }
+
+/* Stuck-point guidance card: custom textarea and mount placement. */
+.stuck-point-guidance-mount {
+  margin: 10px 0;
+}
+.stuck-point-guidance-mount .guidance-panel {
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.66);
+  border-radius: 16px;
+  padding: 14px 16px;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(14px) saturate(160%);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+}
+.guidance-custom-input {
+  width: 100%;
+  min-height: 56px;
+  margin-top: 10px;
+  padding: 9px 12px;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.66);
+  color: inherit;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.guidance-custom-input:focus {
+  border-color: rgba(125, 211, 252, 0.85);
+  box-shadow: 0 0 0 3px rgba(125, 211, 252, 0.16);
+}
+.guidance-action {
+  border: 1px solid rgba(255, 255, 255, 0.66);
+  border-radius: 999px;
+  padding: 8px 16px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.55);
+  color: inherit;
+  transition: background 0.15s ease, transform 0.12s ease;
+}
+.guidance-action:hover { background: rgba(255, 255, 255, 0.78); }
+.guidance-action:active { transform: scale(0.97); }
+.guidance-action-primary {
+  border-color: transparent;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.85), rgba(45, 212, 191, 0.55));
+  color: #fff;
+}
+.guidance-action-custom,
+.guidance-action-from-start {
+  width: 100%;
+  margin-top: 8px;
+  border-radius: 10px;
+}
+:root[data-theme="dusk"] .stuck-point-guidance-mount .guidance-panel,
+:root[data-theme="dark"] .stuck-point-guidance-mount .guidance-panel {
+  background: rgba(255, 255, 255, 0.4);
+  border-color: rgba(255, 255, 255, 0.5);
+}

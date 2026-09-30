@@ -38,9 +38,9 @@ module.exports = function createGuidanceService(deps = {}) {
             {
                 role: 'system',
                 content: [
-                    'You design teaching paths before Q&A; do not answer the question directly.',
+                    'You locate where a student is stuck before Q&A; do not answer the question directly.',
                     'Return strict JSON only. Do not use Markdown or code fences.',
-                    'Generate 2 to 3 materially different options for an undergraduate to choose from.',
+                    'Generate exactly 3 mutually exclusive stuck-point options describing WHERE the student is stuck with this topic (for example: the concept meaning, the graphical procedure, setting up the computation).',
                     input.language === 'zh' ? 'Write every option in Chinese.' : 'Write every option in English.',
                     'Every option must include title, description, and instruction.',
                     'Keep title under 24 characters, description under 100 characters, and instruction under 240 characters.',
@@ -73,8 +73,8 @@ module.exports = function createGuidanceService(deps = {}) {
             }
         }
         const rawOptions = parsed && Array.isArray(parsed.options) ? parsed.options : null;
-        if (!rawOptions || rawOptions.length < 2 || rawOptions.length > 3) {
-            throw new GuidanceServiceError('Guidance must contain 2 to 3 options', { stage: 'validation', requestId, statusCode: 502 });
+        if (!rawOptions || rawOptions.length !== 3) {
+            throw new GuidanceServiceError('Guidance must contain exactly 3 options', { stage: 'validation', requestId, statusCode: 502 });
         }
         const seen = new Set();
         const options = rawOptions.map((option, index) => {
